@@ -988,14 +988,14 @@ fn parse_type_specifier_non_array() {
 #[test]
 fn parse_type_specifier() {
     assert_ceq!(
-        ast::TypeSpecifier::parse("uint;"),
+        ast::TypeSpecifier::parse("uint"),
         Ok(ast::TypeSpecifier {
             ty: ast::TypeSpecifierNonArray::UInt,
             array_specifier: None
         })
     );
     assert_ceq!(
-        ast::TypeSpecifier::parse("iimage2DMSArray[35];"),
+        ast::TypeSpecifier::parse("iimage2DMSArray[35]"),
         Ok(ast::TypeSpecifier {
             ty: ast::TypeSpecifierNonArray::IImage2DMSArray,
             array_specifier: Some(ast::ArraySpecifier {

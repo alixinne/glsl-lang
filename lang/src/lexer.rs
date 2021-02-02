@@ -525,27 +525,27 @@ pub enum Token<'i> {
     #[regex("[a-zA-Z_][a-zA-Z_0-9]*")]
     Identifier(&'i str), // Also, TYPE_NAME and FIELD_SELECTION
     #[regex(
-        r"[+-]?([0-9]+\.[0-9]+|[0-9]+\.|\.[0-9]+)([eE][+-]?[0-9]+)?(f|F)?",
+        r"([0-9]+\.[0-9]+|[0-9]+\.|\.[0-9]+)([eE][+-]?[0-9]+)?(f|F)?",
         parse_f32
     )]
-    #[regex(r"[+-]?[0-9]+[eE][+-]?[0-9]+(f|F)?", parse_f32)]
+    #[regex(r"[0-9]+[eE][+-]?[0-9]+(f|F)?", parse_f32)]
     FloatConstant(f32),
-    #[regex(r"[+-]?0[0-7]*", |lex| parse_int(lex, 8))]
-    #[regex(r"[+-]?[1-9][0-9]*", |lex| parse_int(lex, 10))]
-    #[regex(r"[+-]?0[xX][0-9A-Fa-f]+", |lex| parse_int(lex, 16))]
+    #[regex(r"0[0-7]*", |lex| parse_int(lex, 8))]
+    #[regex(r"[1-9][0-9]*", |lex| parse_int(lex, 10))]
+    #[regex(r"0[xX][0-9A-Fa-f]+", |lex| parse_int(lex, 16))]
     IntConstant(i32),
-    #[regex(r"[+-]?0[0-7]*[uU]", |lex| parse_uint(lex, 8))]
-    #[regex(r"[+-]?[1-9][0-9]*[uU]", |lex| parse_uint(lex, 10))]
-    #[regex(r"[+-]?0[xX][0-9A-Fa-f]+[uU]", |lex| parse_uint(lex, 16))]
+    #[regex(r"0[0-7]*[uU]", |lex| parse_uint(lex, 8))]
+    #[regex(r"[1-9][0-9]*[uU]", |lex| parse_uint(lex, 10))]
+    #[regex(r"0[xX][0-9A-Fa-f]+[uU]", |lex| parse_uint(lex, 16))]
     UIntConstant(u32),
     #[token("true", |_| true)]
     #[token("false", |_| false)]
     BoolConstant(bool),
     #[regex(
-        r"[+-]?([0-9]+\.[0-9]+|[0-9]+\.|\.[0-9]+)([eE][+-]?[0-9]+)?(lf|LF)",
+        r"([0-9]+\.[0-9]+|[0-9]+\.|\.[0-9]+)([eE][+-]?[0-9]+)?(lf|LF)",
         parse_f64
     )]
-    #[regex(r"[+-]?[0-9]+[eE][+-]?[0-9]+(lf|LF)", parse_f64)]
+    #[regex(r"[0-9]+[eE][+-]?[0-9]+(lf|LF)", parse_f64)]
     DoubleConstant(f64),
     #[token("<<")]
     LeftOp,
@@ -650,7 +650,7 @@ pub enum Token<'i> {
     #[token("precision")]
     Precision,
 
-    #[regex("[ \t\r\n]+")]
+    #[regex("[ \t\r\n]+", logos::skip)]
     Whitespace,
     #[regex("\\\\\r?\n", logos::skip)]
     LineContinuation,
@@ -1761,28 +1761,6 @@ mod tests {
         check("1.03E+34F", Token::FloatConstant(1.03E+34));
         check("1.03e-34F", Token::FloatConstant(1.03e-34));
         check("1.03E-34F", Token::FloatConstant(1.03E-34));
-
-        check("-.035", Token::FloatConstant(-0.035));
-        check("-0.", Token::FloatConstant(-0.));
-        check("-0.035", Token::FloatConstant(-0.035));
-        check("-.035f", Token::FloatConstant(-0.035));
-        check("-0.f", Token::FloatConstant(-0.));
-        check("-0.035f", Token::FloatConstant(-0.035));
-        check("-.035F", Token::FloatConstant(-0.035));
-        check("-0.F", Token::FloatConstant(-0.));
-        check("-0.035F", Token::FloatConstant(-0.035));
-        check("-1.03e+34", Token::FloatConstant(-1.03e+34));
-        check("-1.03E+34", Token::FloatConstant(-1.03E+34));
-        check("-1.03e-34", Token::FloatConstant(-1.03e-34));
-        check("-1.03E-34", Token::FloatConstant(-1.03E-34));
-        check("-1.03e+34f", Token::FloatConstant(-1.03e+34));
-        check("-1.03E+34f", Token::FloatConstant(-1.03E+34));
-        check("-1.03e-34f", Token::FloatConstant(-1.03e-34));
-        check("-1.03E-34f", Token::FloatConstant(-1.03E-34));
-        check("-1.03e+34F", Token::FloatConstant(-1.03e+34));
-        check("-1.03E+34F", Token::FloatConstant(-1.03E+34));
-        check("-1.03e-34F", Token::FloatConstant(-1.03e-34));
-        check("-1.03E-34F", Token::FloatConstant(-1.03E-34));
     }
 
     #[test]
@@ -1803,20 +1781,11 @@ mod tests {
         check("13", Token::IntConstant(13));
         check("3", Token::IntConstant(3));
         check("42", Token::IntConstant(42));
-
-        check("-012", Token::IntConstant(-0o12));
-        check("-03", Token::IntConstant(-3));
-        check("-076556", Token::IntConstant(-0o76556));
-        check("-0x3", Token::IntConstant(-0x3));
-        check("-0x9ABCDEF", Token::IntConstant(-0x9ABCDEF));
-        check("-0x9abcdef", Token::IntConstant(-0x9abcdef));
-        check("-3", Token::IntConstant(-3));
     }
 
     #[test]
     fn lex_uint_constant() {
         check("0xffffffffU", Token::UIntConstant(0xffffffffu32));
-        check("-1u", Token::UIntConstant(0xffffffffu32));
     }
 
     #[test]
@@ -1835,21 +1804,6 @@ mod tests {
         check("1.03E+34LF", Token::DoubleConstant(1.03E+34));
         check("1.03e-34LF", Token::DoubleConstant(1.03e-34));
         check("1.03E-34LF", Token::DoubleConstant(1.03E-34));
-
-        check("-0.lf", Token::DoubleConstant(-0.));
-        check("-0.035lf", Token::DoubleConstant(-0.035));
-        check("-.035lf", Token::DoubleConstant(-0.035));
-        check("-.035LF", Token::DoubleConstant(-0.035));
-        check("-0.LF", Token::DoubleConstant(-0.));
-        check("-0.035LF", Token::DoubleConstant(-0.035));
-        check("-1.03e+34lf", Token::DoubleConstant(-1.03e+34));
-        check("-1.03E+34lf", Token::DoubleConstant(-1.03E+34));
-        check("-1.03e-34lf", Token::DoubleConstant(-1.03e-34));
-        check("-1.03E-34lf", Token::DoubleConstant(-1.03E-34));
-        check("-1.03e+34LF", Token::DoubleConstant(-1.03e+34));
-        check("-1.03E+34LF", Token::DoubleConstant(-1.03E+34));
-        check("-1.03e-34LF", Token::DoubleConstant(-1.03e-34));
-        check("-1.03E-34LF", Token::DoubleConstant(-1.03E-34));
     }
 
     #[test]

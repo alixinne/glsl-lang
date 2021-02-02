@@ -977,8 +977,11 @@ fn parse_type_specifier_non_array() {
         ast::TypeSpecifierNonArray::parse("uimageCubeArray"),
         Ok(ast::TypeSpecifierNonArray::UImageCubeArray)
     );
+
+    let opts = ParseOptions::default();
+    opts.type_names.add_type_name("ReturnType".to_owned());
     assert_ceq!(
-        ast::TypeSpecifierNonArray::parse("ReturnType"),
+        ast::TypeSpecifierNonArray::parse_with_options("ReturnType", 0, &opts),
         Ok(ast::TypeSpecifierNonArray::TypeName(ast::TypeName::from(
             "ReturnType"
         )))
@@ -1111,7 +1114,7 @@ fn parse_primary_expr_parens() {
 
 #[test]
 fn parse_postfix_function_call_no_args() {
-    let fun = ast::FunIdentifier::Identifier("vec3".into());
+    let fun = ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifierNonArray::Vec3.into());
     let args = Vec::new();
     let expected = ast::Expr::FunCall(fun, args);
 
@@ -1122,7 +1125,7 @@ fn parse_postfix_function_call_no_args() {
 
 #[test]
 fn parse_postfix_function_call_one_arg() {
-    let fun = ast::FunIdentifier::Identifier("foo".into());
+    let fun = ast::FunIdentifier::ident("foo");
     let args = vec![ast::Expr::IntConst(0)];
     let expected = ast::Expr::FunCall(fun, args);
 
@@ -1133,7 +1136,7 @@ fn parse_postfix_function_call_one_arg() {
 
 #[test]
 fn parse_postfix_function_call_multi_arg() {
-    let fun = ast::FunIdentifier::Identifier("foo".into());
+    let fun = ast::FunIdentifier::ident("foo");
     let args = vec![
         ast::Expr::IntConst(0),
         ast::Expr::BoolConst(false),
@@ -1151,12 +1154,7 @@ fn parse_postfix_function_call_multi_arg() {
 #[test]
 fn parse_postfix_expr_bracket() {
     let id = ast::Expr::Variable("foo".into());
-    let array_spec = ast::ArraySpecifier {
-        dimensions: vec![ast::ArraySpecifierDimension::ExplicitlySized(Box::new(
-            ast::Expr::IntConst(7354),
-        ))],
-    };
-    let expected = ast::Expr::Bracket(Box::new(id), array_spec);
+    let expected = ast::Expr::Bracket(Box::new(id), Box::new(ast::Expr::IntConst(7354)));
 
     assert_ceq!(ast::Expr::parse("foo[7354]"), Ok(expected.clone()));
     assert_ceq!(ast::Expr::parse("foo[\n  7354    ]"), Ok(expected));
@@ -1329,17 +1327,14 @@ fn parse_complex_expr() {
     let ray = ast::Expr::Variable("ray".into());
     let raydir = ast::Expr::Dot(Box::new(ray), "dir".into());
     let vec4 = ast::Expr::FunCall(
-        ast::FunIdentifier::Identifier("vec4".into()),
+        ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifierNonArray::Vec4.into()),
         vec![raydir, zero],
     );
     let view = ast::Expr::Variable("view".into());
-    let iview = ast::Expr::FunCall(ast::FunIdentifier::Identifier("inverse".into()), vec![view]);
+    let iview = ast::Expr::FunCall(ast::FunIdentifier::ident("inverse"), vec![view]);
     let mul = ast::Expr::Binary(ast::BinaryOp::Mult, Box::new(iview), Box::new(vec4));
     let xyz = ast::Expr::Dot(Box::new(mul), "xyz".into());
-    let normalize = ast::Expr::FunCall(
-        ast::FunIdentifier::Identifier("normalize".into()),
-        vec![xyz],
-    );
+    let normalize = ast::Expr::FunCall(ast::FunIdentifier::ident("normalize"), vec![xyz]);
     let expected = normalize;
 
     assert_ceq!(ast::Expr::parse(&input[..]), Ok(expected));
@@ -1347,7 +1342,7 @@ fn parse_complex_expr() {
 
 #[test]
 fn parse_function_identifier_typename() {
-    let expected = ast::FunIdentifier::Identifier("foo".into());
+    let expected = ast::FunIdentifier::ident("foo");
     assert_ceq!(ast::FunIdentifier::parse("foo"), Ok(expected.clone()));
     assert_ceq!(ast::FunIdentifier::parse("foo\n\t"), Ok(expected.clone()));
     assert_ceq!(ast::FunIdentifier::parse("foo\n "), Ok(expected));
@@ -1355,19 +1350,19 @@ fn parse_function_identifier_typename() {
 
 #[test]
 fn parse_function_identifier_cast() {
-    let expected = ast::FunIdentifier::Identifier("vec3".into());
+    let expected = ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifierNonArray::Vec3.into());
     assert_ceq!(ast::FunIdentifier::parse("vec3"), Ok(expected.clone()));
     assert_ceq!(ast::FunIdentifier::parse("vec3\t\n\n \t"), Ok(expected));
 }
 
 #[test]
 fn parse_function_identifier_cast_array_unsized() {
-    let expected = ast::FunIdentifier::Expr(Box::new(ast::Expr::Bracket(
-        Box::new(ast::Expr::Variable("vec3".into())),
-        ast::ArraySpecifier {
+    let expected = ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifier {
+        ty: ast::TypeSpecifierNonArray::Vec3,
+        array_specifier: Some(ast::ArraySpecifier {
             dimensions: vec![ast::ArraySpecifierDimension::Unsized],
-        },
-    )));
+        }),
+    });
 
     assert_ceq!(ast::FunIdentifier::parse("vec3[]"), Ok(expected.clone()));
     assert_ceq!(ast::FunIdentifier::parse("vec3  [\t\n]"), Ok(expected));
@@ -1375,14 +1370,14 @@ fn parse_function_identifier_cast_array_unsized() {
 
 #[test]
 fn parse_function_identifier_cast_array_sized() {
-    let expected = ast::FunIdentifier::Expr(Box::new(ast::Expr::Bracket(
-        Box::new(ast::Expr::Variable("vec3".into())),
-        ast::ArraySpecifier {
+    let expected = ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifier {
+        ty: ast::TypeSpecifierNonArray::Vec3,
+        array_specifier: Some(ast::ArraySpecifier {
             dimensions: vec![ast::ArraySpecifierDimension::ExplicitlySized(Box::new(
                 ast::Expr::IntConst(12),
             ))],
-        },
-    )));
+        }),
+    });
 
     assert_ceq!(ast::FunIdentifier::parse("vec3[12]"), Ok(expected.clone()));
     assert_ceq!(ast::FunIdentifier::parse("vec3  [\t 12\n]"), Ok(expected));
@@ -1733,9 +1728,9 @@ fn parse_selection_statement_if_else() {
         Box::new(ast::Expr::IntConst(10)),
     );
     let if_ret = Box::new(ast::Expr::FloatConst(0.));
-    let if_st = ast::Statement::Simple(Box::new(ast::SimpleStatementData::Jump(
-        ast::JumpStatement::Return(Some(if_ret)),
-    ).into()));
+    let if_st = ast::Statement::Simple(Box::new(
+        ast::SimpleStatementData::Jump(ast::JumpStatement::Return(Some(if_ret))).into(),
+    ));
     let if_body = ast::Statement::Compound(Box::new(
         ast::CompoundStatementData {
             statement_list: vec![if_st],
@@ -1743,9 +1738,9 @@ fn parse_selection_statement_if_else() {
         .into(),
     ));
     let else_ret = Box::new(ast::Expr::Variable("foo".into()));
-    let else_st = ast::Statement::Simple(Box::new(ast::SimpleStatementData::Jump(
-        ast::JumpStatement::Return(Some(else_ret)),
-    ).into()));
+    let else_st = ast::Statement::Simple(Box::new(
+        ast::SimpleStatementData::Jump(ast::JumpStatement::Return(Some(else_ret))).into(),
+    ));
     let else_body = ast::Statement::Compound(Box::new(
         ast::CompoundStatementData {
             statement_list: vec![else_st],
@@ -2081,9 +2076,12 @@ fn parse_function_definition() {
         parameters: Vec::new(),
     }
     .into();
-    let st0 = ast::Statement::Simple(Box::new(ast::SimpleStatementData::Jump(
-        ast::JumpStatement::Return(Some(Box::new(ast::Expr::Variable("bar".into())))),
-    ).into()));
+    let st0 = ast::Statement::Simple(Box::new(
+        ast::SimpleStatementData::Jump(ast::JumpStatement::Return(Some(Box::new(
+            ast::Expr::Variable("bar".into()),
+        ))))
+        .into(),
+    ));
     let expected: ast::FunctionDefinition = ast::FunctionDefinitionData {
         prototype: fp,
         statement: ast::CompoundStatementData {
@@ -2548,11 +2546,7 @@ fn parse_dot_field_expr_array() {
     let expected = ast::Expr::Dot(
         Box::new(ast::Expr::Bracket(
             Box::new(ast::Expr::Variable("a".into())),
-            ast::ArraySpecifier {
-                dimensions: vec![ast::ArraySpecifierDimension::ExplicitlySized(Box::new(
-                    ast::Expr::IntConst(0),
-                ))],
-            },
+            Box::new(ast::Expr::IntConst(0)),
         )),
         "xyz".into(),
     );
@@ -2563,14 +2557,14 @@ fn parse_dot_field_expr_array() {
 #[test]
 fn parse_dot_field_expr_statement() {
     let src = "vec3 v = smoothstep(vec3(border_width), vec3(0.0), v_barycenter).zyx;";
-    let fun = ast::FunIdentifier::Identifier("smoothstep".into());
+    let fun = ast::FunIdentifier::ident("smoothstep");
     let args = vec![
         ast::Expr::FunCall(
-            ast::FunIdentifier::Identifier("vec3".into()),
+            ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifierNonArray::Vec3.into()),
             vec![ast::Expr::Variable("border_width".into())],
         ),
         ast::Expr::FunCall(
-            ast::FunIdentifier::Identifier("vec3".into()),
+            ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifierNonArray::Vec3.into()),
             vec![ast::Expr::FloatConst(0.)],
         ),
         ast::Expr::Variable("v_barycenter".into()),

@@ -1,11 +1,12 @@
 use crate::lexer::Lexer;
 use crate::ast;
 use crate::parser;
-pub use crate::lexer::{LexicalError, Token};
+pub use crate::lexer::{LexicalError, Token, TypeNames};
 
-#[derive(Default, Debug, Clone, Copy, PartialEq)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ParseOptions {
   pub target_vulkan: bool,
+  pub type_names: TypeNames,
 }
 
 pub type ParseError<'i> = lalrpop_util::ParseError<(usize, usize), Token<'i>, LexicalError>;
@@ -41,7 +42,6 @@ impl_parse!(ast::CompoundStatement => parser::CompoundStatementParser);
 impl_parse!(ast::Declaration => parser::DeclarationParser);
 impl_parse!(ast::Expr => parser::ExprParser);
 impl_parse!(ast::ExternalDeclaration => parser::ExternalDeclarationParser);
-impl_parse!(ast::Identifier => parser::IdentifierParser);
 impl_parse!(ast::InterpolationQualifier => parser::InterpolationQualifierParser);
 impl_parse!(ast::LayoutQualifier => parser::LayoutQualifierParser);
 impl_parse!(ast::PrecisionQualifier => parser::PrecisionQualifierParser);
@@ -66,3 +66,11 @@ impl_parse!(ast::ExprStatement => parser::ExprStatementParser);
 impl_parse!(ast::SelectionStatement => parser::SelectionStatementParser);
 impl_parse!(ast::SwitchStatement => parser::SwitchStatementParser);
 impl_parse!(ast::FunctionDefinition => parser::FunctionDefinitionParser);
+
+impl Parse for ast::Identifier {
+    fn parse_with_options<'i>(source: &'i str, id: usize, opts: &ParseOptions) -> Result<Self, ParseError<'i>> {
+      let lexer = Lexer::new(source, id, opts.clone());
+      let parser = parser::IdentifierParser::new();
+      parser.parse(source, lexer).map(|(id, _)| id)
+    }
+}

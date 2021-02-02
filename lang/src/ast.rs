@@ -204,6 +204,15 @@ pub struct TypeSpecifier {
     pub array_specifier: Option<ArraySpecifier>,
 }
 
+impl From<TypeSpecifierNonArray> for TypeSpecifier {
+  fn from(ty: TypeSpecifierNonArray) -> Self {
+    Self {
+      ty,
+      array_specifier: None,
+    }
+  }
+}
+
 /// Struct specifier. Used to create new, user-defined types.
 #[derive(Clone, Debug, PartialEq, NodeContents)]
 pub struct StructSpecifier {
@@ -359,8 +368,14 @@ pub struct Block {
 /// Function identifier.
 #[derive(Clone, Debug, PartialEq, NodeContents)]
 pub enum FunIdentifier {
-    Identifier(Identifier),
+    TypeSpecifier(TypeSpecifier),
     Expr(Box<Expr>),
+}
+
+impl FunIdentifier {
+  pub fn ident(i: impl Into<Identifier>) -> Self {
+    Self::Expr(Box::new(Expr::Variable(i.into())))
+  }
 }
 
 /// Function prototype.
@@ -450,7 +465,7 @@ pub enum Expr {
     /// assignment operator and the value to associate with.
     Assignment(Box<Expr>, AssignmentOp, Box<Expr>),
     /// Add an array specifier to an expression.
-    Bracket(Box<Expr>, ArraySpecifier),
+    Bracket(Box<Expr>, Box<Expr>),
     /// A functional call. It has a function identifier and a list of expressions (arguments).
     FunCall(FunIdentifier, Vec<Expr>),
     /// An expression associated with a field selection (struct).

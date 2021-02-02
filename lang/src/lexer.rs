@@ -1,9 +1,31 @@
+use std::cell::RefCell;
+use std::collections::HashSet;
+use std::rc::Rc;
 use std::str::FromStr;
 
 use logos::Logos;
 use thiserror::Error;
 
 use crate::parse::ParseOptions;
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TypeNames {
+    names: Rc<RefCell<HashSet<String>>>,
+}
+
+impl TypeNames {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn is_type_name(&self, name: &str) -> bool {
+        self.names.borrow().contains(name)
+    }
+
+    pub fn add_type_name(&self, name: String) {
+        self.names.borrow_mut().insert(name);
+    }
+}
 
 pub struct LexerContext {
     source_id: usize,
@@ -30,7 +52,7 @@ impl<'i> Iterator for Lexer<'i> {
         let span = self.inner.span();
         let source_id = self.inner.extras.source_id;
 
-        let token = if self.inner.extras.opts.target_vulkan {
+        let mut token = if self.inner.extras.opts.target_vulkan {
             // Targetting Vulkan, nothing to change
             ((source_id, span.start), token, (source_id, span.end))
         } else {
@@ -49,15 +71,31 @@ impl<'i> Iterator for Lexer<'i> {
                     | UTextureCube | TextureCubeArray | ITextureCubeArray | UTextureCubeArray
                     | TextureBuffer | ITextureBuffer | UTextureBuffer | Sampler | SamplerShadow
                     | SubpassInput | ISubpassInput | USubpassInput | SubpassInputMS
-                    | ISubpassInputMS | USubpassInputMS => Identifier(self.inner.slice()),
+                    | ISubpassInputMS | USubpassInputMS => Identifier((
+                        self.inner.slice(),
+                        self.inner.extras.opts.type_names.clone(),
+                    )),
                     other => other,
                 },
                 (source_id, span.end),
             )
         };
 
+        // Transform the ident into a type name if needed
+        if let Token::Identifier((ident, ref tn)) = token.1 {
+            if tn.is_type_name(ident) {
+                token.1 = Token::TypeName(ident);
+            }
+        }
+
         Some(token)
     }
+}
+
+fn parse_ident<'i>(
+    lex: &mut logos::Lexer<'i, Token<'i>>,
+) -> Result<(&'i str, TypeNames), LexicalError> {
+    Ok((lex.slice(), lex.extras.opts.type_names.clone()))
 }
 
 fn parse_int<'i>(lex: &mut logos::Lexer<'i, Token<'i>>, radix: u32) -> Result<i32, LexicalError> {
@@ -130,7 +168,7 @@ pub enum LexicalError {
 
 // TODO: Support preprocessor directives
 
-#[derive(Debug, Copy, Clone, PartialEq, Logos)]
+#[derive(Debug, Clone, PartialEq, Logos)]
 #[logos(extras = LexerContext)]
 pub enum Token<'i> {
     #[token("const")]
@@ -522,8 +560,9 @@ pub enum Token<'i> {
     Default,
     #[token("subroutine")]
     Subroutine,
-    #[regex("[a-zA-Z_][a-zA-Z_0-9]*")]
-    Identifier(&'i str), // Also, TYPE_NAME and FIELD_SELECTION
+    #[regex("[a-zA-Z_][a-zA-Z_0-9]*", parse_ident)]
+    Identifier((&'i str, TypeNames)),
+    TypeName(&'i str), // Cast from Identifier depending on known type names
     #[regex(
         r"([0-9]+\.[0-9]+|[0-9]+\.|\.[0-9]+)([eE][+-]?[0-9]+)?(f|F)?",
         parse_f32
@@ -666,8 +705,16 @@ pub enum Token<'i> {
 impl<'i> Token<'i> {
     pub fn as_str(&self) -> &'i str {
         match self {
-            Self::Identifier(s) => s,
+            Self::Identifier((s, _)) => s,
+            Self::TypeName(s) => s,
             _ => panic!("cannot convert token {:?}, to str", self),
+        }
+    }
+
+    pub fn type_names(&self) -> TypeNames {
+        match self {
+            Self::Identifier((_, n)) => n.clone(),
+            _ => panic!("cannot get type_names for token {:?}", self),
         }
     }
 }
@@ -690,11 +737,29 @@ impl_into!(u32 => UIntConstant);
 impl_into!(f32 => FloatConstant);
 impl_into!(f64 => DoubleConstant);
 impl_into!(bool => BoolConstant);
-impl_into!(&'i str => Identifier);
 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    fn check_ident(input: &str) {
+        let mut lexer = Lexer::new(
+            input,
+            0,
+            ParseOptions {
+                target_vulkan: false,
+                ..Default::default()
+            },
+        );
+
+        assert_eq!(
+            lexer.next().map(|(_, n, _)| n),
+            Some(Token::Identifier((
+                input,
+                lexer.inner.extras.opts.type_names
+            )))
+        );
+    }
 
     fn check(input: &str, token: Token) {
         let mut lexer = Lexer::new(
@@ -702,6 +767,7 @@ mod tests {
             0,
             ParseOptions {
                 target_vulkan: false,
+                ..Default::default()
             },
         );
         assert_eq!(lexer.next().map(|(_, n, _)| n), Some(token));
@@ -713,6 +779,7 @@ mod tests {
             0,
             ParseOptions {
                 target_vulkan: true,
+                ..Default::default()
             },
         );
         assert_eq!(lexer.next().map(|(_, n, _)| n), Some(token));
@@ -1407,247 +1474,247 @@ mod tests {
     #[test]
     fn lex_texture_1d() {
         check_vulkan("texture1D", Token::Texture1D);
-        check("texture1D", Token::Identifier("texture1D"));
+        check_ident("texture1D");
     }
 
     #[test]
     fn lex_texture_1d_array() {
         check_vulkan("texture1DArray", Token::Texture1DArray);
-        check("texture1DArray", Token::Identifier("texture1DArray"));
+        check_ident("texture1DArray");
     }
 
     #[test]
     fn lex_itexture_1d() {
         check_vulkan("itexture1D", Token::ITexture1D);
-        check("itexture1D", Token::Identifier("itexture1D"));
+        check_ident("itexture1D");
     }
 
     #[test]
     fn lex_itexture_1d_array() {
         check_vulkan("itexture1DArray", Token::ITexture1DArray);
-        check("itexture1DArray", Token::Identifier("itexture1DArray"));
+        check_ident("itexture1DArray");
     }
 
     #[test]
     fn lex_utexture_1d() {
         check_vulkan("utexture1D", Token::UTexture1D);
-        check("utexture1D", Token::Identifier("utexture1D"));
+        check_ident("utexture1D");
     }
 
     #[test]
     fn lex_utexture_1d_array() {
         check_vulkan("utexture1DArray", Token::UTexture1DArray);
-        check("utexture1DArray", Token::Identifier("utexture1DArray"));
+        check_ident("utexture1DArray");
     }
 
     #[test]
     fn lex_texture_2d() {
         check_vulkan("texture2D", Token::Texture2D);
-        check("texture2D", Token::Identifier("texture2D"));
+        check_ident("texture2D");
     }
 
     #[test]
     fn lex_texture_2d_array() {
         check_vulkan("texture2DArray", Token::Texture2DArray);
-        check("texture2DArray", Token::Identifier("texture2DArray"));
+        check_ident("texture2DArray");
     }
 
     #[test]
     fn lex_itexture_2d() {
         check_vulkan("itexture2D", Token::ITexture2D);
-        check("itexture2D", Token::Identifier("itexture2D"));
+        check_ident("itexture2D");
     }
 
     #[test]
     fn lex_itexture_2d_array() {
         check_vulkan("itexture2DArray", Token::ITexture2DArray);
-        check("itexture2DArray", Token::Identifier("itexture2DArray"));
+        check_ident("itexture2DArray");
     }
 
     #[test]
     fn lex_utexture_2d() {
         check_vulkan("utexture2D", Token::UTexture2D);
-        check("utexture2D", Token::Identifier("utexture2D"));
+        check_ident("utexture2D");
     }
 
     #[test]
     fn lex_utexture_2d_array() {
         check_vulkan("utexture2DArray", Token::UTexture2DArray);
-        check("utexture2DArray", Token::Identifier("utexture2DArray"));
+        check_ident("utexture2DArray");
     }
 
     #[test]
     fn lex_texture_2d_rect() {
         check_vulkan("texture2DRect", Token::Texture2DRect);
-        check("texture2DRect", Token::Identifier("texture2DRect"));
+        check_ident("texture2DRect");
     }
 
     #[test]
     fn lex_itexture_2d_rect() {
         check_vulkan("itexture2DRect", Token::ITexture2DRect);
-        check("itexture2DRect", Token::Identifier("itexture2DRect"));
+        check_ident("itexture2DRect");
     }
 
     #[test]
     fn lex_utexture_2d_rect() {
         check_vulkan("utexture2DRect", Token::UTexture2DRect);
-        check("utexture2DRect", Token::Identifier("utexture2DRect"));
+        check_ident("utexture2DRect");
     }
 
     #[test]
     fn lex_texture_2dms() {
         check_vulkan("texture2DMS", Token::Texture2DMS);
-        check("texture2DMS", Token::Identifier("texture2DMS"));
+        check_ident("texture2DMS");
     }
 
     #[test]
     fn lex_itexture_2dms() {
         check_vulkan("itexture2DMS", Token::ITexture2DMS);
-        check("itexture2DMS", Token::Identifier("itexture2DMS"));
+        check_ident("itexture2DMS");
     }
 
     #[test]
     fn lex_utexture_2dms() {
         check_vulkan("utexture2DMS", Token::UTexture2DMS);
-        check("utexture2DMS", Token::Identifier("utexture2DMS"));
+        check_ident("utexture2DMS");
     }
 
     #[test]
     fn lex_texture_2dms_array() {
         check_vulkan("texture2DMSArray", Token::Texture2DMSArray);
-        check("texture2DMSArray", Token::Identifier("texture2DMSArray"));
+        check_ident("texture2DMSArray");
     }
 
     #[test]
     fn lex_itexture_2dms_array() {
         check_vulkan("itexture2DMSArray", Token::ITexture2DMSArray);
-        check("itexture2DMSArray", Token::Identifier("itexture2DMSArray"));
+        check_ident("itexture2DMSArray");
     }
 
     #[test]
     fn lex_utexture_2dms_array() {
         check_vulkan("utexture2DMSArray", Token::UTexture2DMSArray);
-        check("utexture2DMSArray", Token::Identifier("utexture2DMSArray"));
+        check_ident("utexture2DMSArray");
     }
 
     #[test]
     fn lex_texture_3d() {
         check_vulkan("texture3D", Token::Texture3D);
-        check("texture3D", Token::Identifier("texture3D"));
+        check_ident("texture3D");
     }
 
     #[test]
     fn lex_itexture_3d() {
         check_vulkan("itexture3D", Token::ITexture3D);
-        check("itexture3D", Token::Identifier("itexture3D"));
+        check_ident("itexture3D");
     }
 
     #[test]
     fn lex_utexture_3d() {
         check_vulkan("utexture3D", Token::UTexture3D);
-        check("utexture3D", Token::Identifier("utexture3D"));
+        check_ident("utexture3D");
     }
 
     #[test]
     fn lex_texture_cube() {
         check_vulkan("textureCube", Token::TextureCube);
-        check("textureCube", Token::Identifier("textureCube"));
+        check_ident("textureCube");
     }
 
     #[test]
     fn lex_itexture_cube() {
         check_vulkan("itextureCube", Token::ITextureCube);
-        check("itextureCube", Token::Identifier("itextureCube"));
+        check_ident("itextureCube");
     }
 
     #[test]
     fn lex_utexture_cube() {
         check_vulkan("utextureCube", Token::UTextureCube);
-        check("utextureCube", Token::Identifier("utextureCube"));
+        check_ident("utextureCube");
     }
 
     #[test]
     fn lex_texture_cube_array() {
         check_vulkan("textureCubeArray", Token::TextureCubeArray);
-        check("textureCubeArray", Token::Identifier("textureCubeArray"));
+        check_ident("textureCubeArray");
     }
 
     #[test]
     fn lex_itexture_cube_array() {
         check_vulkan("itextureCubeArray", Token::ITextureCubeArray);
-        check("itextureCubeArray", Token::Identifier("itextureCubeArray"));
+        check_ident("itextureCubeArray");
     }
 
     #[test]
     fn lex_utexture_cube_array() {
         check_vulkan("utextureCubeArray", Token::UTextureCubeArray);
-        check("utextureCubeArray", Token::Identifier("utextureCubeArray"));
+        check_ident("utextureCubeArray");
     }
 
     #[test]
     fn lex_texture_buffer() {
         check_vulkan("textureBuffer", Token::TextureBuffer);
-        check("textureBuffer", Token::Identifier("textureBuffer"));
+        check_ident("textureBuffer");
     }
 
     #[test]
     fn lex_itexture_buffer() {
         check_vulkan("itextureBuffer", Token::ITextureBuffer);
-        check("itextureBuffer", Token::Identifier("itextureBuffer"));
+        check_ident("itextureBuffer");
     }
 
     #[test]
     fn lex_utexture_buffer() {
         check_vulkan("utextureBuffer", Token::UTextureBuffer);
-        check("utextureBuffer", Token::Identifier("utextureBuffer"));
+        check_ident("utextureBuffer");
     }
 
     #[test]
     fn lex_sampler() {
         check_vulkan("sampler", Token::Sampler);
-        check("sampler", Token::Identifier("sampler"));
+        check_ident("sampler");
     }
 
     #[test]
     fn lex_sampler_shadow() {
         check_vulkan("samplerShadow", Token::SamplerShadow);
-        check("samplerShadow", Token::Identifier("samplerShadow"));
+        check_ident("samplerShadow");
     }
 
     #[test]
     fn lex_subpass_input() {
         check_vulkan("subpassInput", Token::SubpassInput);
-        check("subpassInput", Token::Identifier("subpassInput"));
+        check_ident("subpassInput");
     }
 
     #[test]
     fn lex_isubpass_input() {
         check_vulkan("isubpassInput", Token::ISubpassInput);
-        check("isubpassInput", Token::Identifier("isubpassInput"));
+        check_ident("isubpassInput");
     }
 
     #[test]
     fn lex_usubpass_input() {
         check_vulkan("usubpassInput", Token::USubpassInput);
-        check("usubpassInput", Token::Identifier("usubpassInput"));
+        check_ident("usubpassInput");
     }
 
     #[test]
     fn lex_subpass_input_ms() {
         check_vulkan("subpassInputMS", Token::SubpassInputMS);
-        check("subpassInputMS", Token::Identifier("subpassInputMS"));
+        check_ident("subpassInputMS");
     }
 
     #[test]
     fn lex_isubpass_input_ms() {
         check_vulkan("isubpassInputMS", Token::ISubpassInputMS);
-        check("isubpassInputMS", Token::Identifier("isubpassInputMS"));
+        check_ident("isubpassInputMS");
     }
 
     #[test]
     fn lex_usubpass_input_ms() {
         check_vulkan("usubpassInputMS", Token::USubpassInputMS);
-        check("usubpassInputMS", Token::Identifier("usubpassInputMS"));
+        check_ident("usubpassInputMS");
     }
     // End Vulkan-target keywords
 
@@ -1728,11 +1795,11 @@ mod tests {
 
     #[test]
     fn lex_identifier() {
-        check("a", Token::Identifier("a"));
-        check("ab_cd", Token::Identifier("ab_cd"));
-        check("Ab_cd", Token::Identifier("Ab_cd"));
-        check("Ab_c8d", Token::Identifier("Ab_c8d"));
-        check("Ab_c8d9", Token::Identifier("Ab_c8d9"));
+        check_ident("a");
+        check_ident("ab_cd");
+        check_ident("Ab_cd");
+        check_ident("Ab_c8d");
+        check_ident("Ab_c8d9");
     }
 
     #[test]

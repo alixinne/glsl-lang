@@ -1,5 +1,5 @@
 use crate::ast::{self, NodeContents};
-use crate::lexer::{Token, LexicalError};
+use crate::lexer::{Token, LexicalError, TypeNames};
 
 grammar<'i>(text: &'i str);
 
@@ -14,60 +14,16 @@ comma<T>: Vec<T> = {
     }
 };
 
-pub Identifier: ast::Identifier = {
-    <l:@L> <i:identifier> <r:@R> => ast::IdentifierData::from(i.as_str()).spanned(l, r),
-    <l:@L> "bool" <r:@R> => ast::IdentifierData::from("bool").spanned(l, r),
-    <l:@L> "float" <r:@R> => ast::IdentifierData::from("float").spanned(l, r),
-    <l:@L> "int" <r:@R> => ast::IdentifierData::from("int").spanned(l, r),
-    <l:@L> "uint" <r:@R> => ast::IdentifierData::from("uint").spanned(l, r),
-    <l:@L> "double" <r:@R> => ast::IdentifierData::from("double").spanned(l, r),
-    <l:@L> "bvec2" <r:@R> => ast::IdentifierData::from("bvec2").spanned(l, r),
-    <l:@L> "bvec3" <r:@R> => ast::IdentifierData::from("bvec3").spanned(l, r),
-    <l:@L> "bvec4" <r:@R> => ast::IdentifierData::from("bvec4").spanned(l, r),
-    <l:@L> "ivec2" <r:@R> => ast::IdentifierData::from("ivec2").spanned(l, r),
-    <l:@L> "ivec3" <r:@R> => ast::IdentifierData::from("ivec3").spanned(l, r),
-    <l:@L> "ivec4" <r:@R> => ast::IdentifierData::from("ivec4").spanned(l, r),
-    <l:@L> "uvec2" <r:@R> => ast::IdentifierData::from("uvec2").spanned(l, r),
-    <l:@L> "uvec3" <r:@R> => ast::IdentifierData::from("uvec3").spanned(l, r),
-    <l:@L> "uvec4" <r:@R> => ast::IdentifierData::from("uvec4").spanned(l, r),
-    <l:@L> "vec2" <r:@R> => ast::IdentifierData::from("vec2").spanned(l, r),
-    <l:@L> "vec3" <r:@R> => ast::IdentifierData::from("vec3").spanned(l, r),
-    <l:@L> "vec4" <r:@R> => ast::IdentifierData::from("vec4").spanned(l, r),
-    <l:@L> "mat2" <r:@R> => ast::IdentifierData::from("mat2").spanned(l, r),
-    <l:@L> "mat3" <r:@R> => ast::IdentifierData::from("mat3").spanned(l, r),
-    <l:@L> "mat4" <r:@R> => ast::IdentifierData::from("mat4").spanned(l, r),
-    <l:@L> "mat2x2" <r:@R> => ast::IdentifierData::from("mat2x2").spanned(l, r),
-    <l:@L> "mat2x3" <r:@R> => ast::IdentifierData::from("mat2x3").spanned(l, r),
-    <l:@L> "mat2x4" <r:@R> => ast::IdentifierData::from("mat2x4").spanned(l, r),
-    <l:@L> "mat3x2" <r:@R> => ast::IdentifierData::from("mat3x2").spanned(l, r),
-    <l:@L> "mat3x3" <r:@R> => ast::IdentifierData::from("mat3x3").spanned(l, r),
-    <l:@L> "mat3x4" <r:@R> => ast::IdentifierData::from("mat3x4").spanned(l, r),
-    <l:@L> "mat4x2" <r:@R> => ast::IdentifierData::from("mat4x2").spanned(l, r),
-    <l:@L> "mat4x3" <r:@R> => ast::IdentifierData::from("mat4x3").spanned(l, r),
-    <l:@L> "mat4x4" <r:@R> => ast::IdentifierData::from("mat4x4").spanned(l, r),
-    <l:@L> "dvec2" <r:@R> => ast::IdentifierData::from("dvec2").spanned(l, r),
-    <l:@L> "dvec3" <r:@R> => ast::IdentifierData::from("dvec3").spanned(l, r),
-    <l:@L> "dvec4" <r:@R> => ast::IdentifierData::from("dvec4").spanned(l, r),
-    <l:@L> "dmat2" <r:@R> => ast::IdentifierData::from("dmat2").spanned(l, r),
-    <l:@L> "dmat3" <r:@R> => ast::IdentifierData::from("dmat3").spanned(l, r),
-    <l:@L> "dmat4" <r:@R> => ast::IdentifierData::from("dmat4").spanned(l, r),
-    <l:@L> "dmat2x2" <r:@R> => ast::IdentifierData::from("dmat2x2").spanned(l, r),
-    <l:@L> "dmat2x3" <r:@R> => ast::IdentifierData::from("dmat2x3").spanned(l, r),
-    <l:@L> "dmat2x4" <r:@R> => ast::IdentifierData::from("dmat2x4").spanned(l, r),
-    <l:@L> "dmat3x2" <r:@R> => ast::IdentifierData::from("dmat3x2").spanned(l, r),
-    <l:@L> "dmat3x3" <r:@R> => ast::IdentifierData::from("dmat3x3").spanned(l, r),
-    <l:@L> "dmat3x4" <r:@R> => ast::IdentifierData::from("dmat3x4").spanned(l, r),
-    <l:@L> "dmat4x2" <r:@R> => ast::IdentifierData::from("dmat4x2").spanned(l, r),
-    <l:@L> "dmat4x3" <r:@R> => ast::IdentifierData::from("dmat4x3").spanned(l, r),
-    <l:@L> "dmat4x4" <r:@R> => ast::IdentifierData::from("dmat4x4").spanned(l, r),
+pub Identifier: (ast::Identifier, TypeNames) = {
+    <l:@L> <i:identifier> <r:@R> => (ast::IdentifierData::from(i.as_str()).spanned(l, r), i.type_names()),
 };
 
 pub TypeName: ast::TypeName = {
-    <l:@L> <i:identifier> <r:@R> => ast::TypeNameData::from(i.as_str()).spanned(l, r),
+    <l:@L> <i:type_name> <r:@R> => ast::TypeNameData::from(i.as_str()).spanned(l, r),
 };
 
 primary_expression: ast::Expr = {
-    Identifier => ast::Expr::Variable(<>),
+    Identifier => ast::Expr::Variable(<>.0),
     double_constant => ast::Expr::DoubleConst(<>.into()),
     float_constant => ast::Expr::FloatConst(<>.into()),
     uint_constant => ast::Expr::UIntConst(<>.into()),
@@ -76,17 +32,13 @@ primary_expression: ast::Expr = {
     "(" <Expr> ")",
 };
 
-postfix_part: ast::Expr = {
+postfix_expression: ast::Expr = {
     primary_expression,
+    <l:postfix_expression> "[" <a:Expr> "]" => ast::Expr::Bracket(Box::new(l), Box::new(a)),
     function_call,
-    <l:postfix_expression> "." <r:Identifier> => ast::Expr::Dot(Box::new(l), r),
+    <l:postfix_expression> "." <r:Identifier> => ast::Expr::Dot(Box::new(l), r.0),
     <postfix_expression> "++" => ast::Expr::PostInc(Box::new(<>)),
     <postfix_expression> "--" => ast::Expr::PostDec(Box::new(<>)),
-};
-
-postfix_expression: ast::Expr = {
-    postfix_part,
-    <l:postfix_part> <a:ArraySpecifier> => ast::Expr::Bracket(Box::new(l), a),
 };
 
 integer_expression = {
@@ -269,13 +221,8 @@ pub FullySpecifiedType: ast::FullySpecifiedType = {
 };
 
 pub FunIdentifier: ast::FunIdentifier = {
-    postfix_expression => {
-        let inner = <>;
-        match inner {
-            ast::Expr::Variable(ident) => ast::FunIdentifier::Identifier(ident),
-            other => ast::FunIdentifier::Expr(Box::new(other)),
-        }
-    }
+    TypeSpecifier => ast::FunIdentifier::TypeSpecifier(<>),
+    postfix_expression => ast::FunIdentifier::Expr(Box::new(<>)),
 };
 
 unary_expression: ast::Expr = {
@@ -293,7 +240,7 @@ pub UnaryOp: ast::UnaryOp = {
 };
 
 pub ArrayedIdentifier: ast::ArrayedIdentifier = {
-    <i:Identifier> <a:ArraySpecifier?> => ast::ArrayedIdentifier { ident: i, array_spec: a },
+    <i:Identifier> <a:ArraySpecifier?> => ast::ArrayedIdentifier { ident: i.0, array_spec: a },
 };
 
 multiplicative_expression: ast::Expr = {
@@ -444,13 +391,13 @@ initializer_list: Vec<ast::Initializer> = {
 
 initializer: ast::Initializer = {
     <assignment_expression> => ast::Initializer::Simple(Box::new(<>)),
-    "{" <initializer_list> ","? "}" => ast::Initializer::List(<>),
+    // TODO: Trailing comma
+    "{" <initializer_list> "}" => ast::Initializer::List(<>),
 };
 
 condition: ast::Condition = {
     <Expr> => ast::Condition::Expr(Box::new(<>)),
-    // TODO: This makes the grammar ambiguous
-    //<t:FullySpecifiedType> <i:Identifier> "=" <e:initializer> => ast::Condition::Assignment(t, i, e),
+    <t:FullySpecifiedType> <i:Identifier> "=" <e:initializer> => ast::Condition::Assignment(t, i.0, e),
 }
 
 for_init_statement: ast::ForInitStatement = {
@@ -466,7 +413,7 @@ pub IterationStatement: ast::IterationStatement = {
     "while" "(" <c:condition> ")" <s:Statement> => ast::IterationStatement::While(c, Box::new(s)),
     "do" <s:Statement> "while" "(" <c:Expr> ")" ";" => ast::IterationStatement::DoWhile(Box::new(s), Box::new(c)),
     "for" "(" <init:for_init_statement> <rest:for_rest_statement> ")" <s:Statement> =>
-        ast::IterationStatement::For(init,  rest, Box::new(s)),
+        ast::IterationStatement::For(init, rest, Box::new(s)),
 };
 
 pub JumpStatement: ast::JumpStatement = {
@@ -489,24 +436,10 @@ pub SimpleStatement: ast::SimpleStatement = {
 pub CompoundStatement: ast::CompoundStatement = {
 //    <l:@L> "{" <s:Statement*> "}" <r:@R> => ast::CompoundStatementData { statement_list: <> }.spanned(l, r),
 };
-//
-//pub Statement: ast::Statement = {
+
+pub Statement: ast::Statement = {
 //    <s:CompoundStatement> => ast::Statement::Compound(Box::new(<>)),
 //    <s:SimpleStatement> => ast::Statement::Simple(Box::new(<>)),
-//};
-
-open_statement: ast::Statement = {
-};
-
-closed_statement: ast::Statement = {
-};
-
-non_if_statement: ast::Statement = {
-};
-
-pub Statement = {
-    open_statement,
-    closed_statement,
 };
 
 pub InterpolationQualifier: ast::InterpolationQualifier = {
@@ -542,8 +475,8 @@ pub StorageQualifier: ast::StorageQualifier = {
 
 layout_qualifier_spec: ast::LayoutQualifierSpec = {
     "shared" => ast::LayoutQualifierSpec::Shared,
-    <i:Identifier> "=" <c:conditional_expression> => ast::LayoutQualifierSpec::Identifier(i, Some(Box::new(c))),
-    <Identifier> => ast::LayoutQualifierSpec::Identifier(<>, None),
+    <i:Identifier> "=" <c:conditional_expression> => ast::LayoutQualifierSpec::Identifier(i.0, Some(Box::new(c))),
+    <Identifier> => ast::LayoutQualifierSpec::Identifier(<>.0, None),
 };
 
 pub LayoutQualifier: ast::LayoutQualifier = {
@@ -554,14 +487,69 @@ precision_declaration: ast::DeclarationData = {
     "precision" <q:PrecisionQualifier> <t:TypeSpecifier> => ast::DeclarationData::Precision(q, t),
 };
 
+function_parameter_declarator: ast::FunctionParameterDeclarator = {
+    <s:TypeSpecifier> <i:ArrayedIdentifier> => ast::FunctionParameterDeclarator {
+        ty: s,
+        ident: i,
+    }
+};
+
+function_parameter_declaration: ast::FunctionParameterDeclaration = {
+    <l:@L> <q:TypeQualifier?> <s:TypeSpecifier> <r:@R> =>
+        ast::FunctionParameterDeclarationData::Unnamed(q, s).spanned(l, r),
+    <l:@L> <q:TypeQualifier?> <d:function_parameter_declarator> <r:@R> =>
+        ast::FunctionParameterDeclarationData::Named(q, d).spanned(l, r),
+}
+
+FunctionPrototype: ast::FunctionPrototype = {
+    <l:@L> <rt:FullySpecifiedType> <n:Identifier> "(" <p:comma<function_parameter_declaration>> ")" <r:@R> =>
+        ast::FunctionPrototypeData {
+            ty: rt,
+            name: n.0,
+            parameters: p,
+        }.spanned(l, r)
+};
+
+single_declaration: ast::SingleDeclaration = {
+    <t:FullySpecifiedType> <i:ArrayedIdentifier> <e:("=" <initializer>)?> => ast::SingleDeclaration {
+        ty: t,
+        name: Some(i.ident),
+        array_specifier: i.array_spec,
+        initializer: e,
+    },
+    <t:FullySpecifiedType> => ast::SingleDeclaration {
+        ty: t,
+        name: None,
+        array_specifier: None,
+        initializer: None,
+    },
+};
+
+single_declaration_no_type: ast::SingleDeclarationNoType = {
+    <i:ArrayedIdentifier> <e:("=" <initializer>)?> => ast::SingleDeclarationNoType {
+        ident: i,
+        initializer: e,
+    }
+};
+
+InitDeclaratorList: ast::InitDeclaratorList = {
+    <h:single_declaration> <t:("," <single_declaration_no_type>)*> => ast::InitDeclaratorList {
+        head: h,
+        tail: t,
+    }
+};
+
 pub Declaration: ast::Declaration = {
-    //<l:@L> <p:FunctionPrototype> ";" <r:@R> => ast::DeclarationData::FunctionPrototype(p).spanned(l, r),
-    //<l:@L> <i:InitDeclaratorList> ";" <r:@R> => ast::DeclarationData::InitDeclaratorList(i).spanned(l, r),
+    <l:@L> <p:FunctionPrototype> ";" <r:@R> => ast::DeclarationData::FunctionPrototype(p).spanned(l, r),
+    <l:@L> <i:InitDeclaratorList> ";" <r:@R> => ast::DeclarationData::InitDeclaratorList(i).spanned(l, r),
     <l:@L> <p:precision_declaration> ";" <r:@R> => p.spanned(l, r),
 };
 
-// TODO
 pub FunctionDefinition: ast::FunctionDefinition = {
+    <l:@L> <p:FunctionPrototype> <s:CompoundStatement> <r:@R> => ast::FunctionDefinitionData {
+        prototype: p,
+        statement: s,
+    }.spanned(l, r)
 };
 
 pub ExternalDeclaration: ast::ExternalDeclaration = {
@@ -584,7 +572,8 @@ extern {
     type Error = LexicalError;
 
     enum Token<'i> {
-        identifier => Token::Identifier(_),
+        identifier => Token::Identifier((_, _)),
+        type_name => Token::TypeName(_),
         int_constant => Token::IntConstant(_),
         uint_constant => Token::UIntConstant(_),
         bool_constant => Token::BoolConstant(_),

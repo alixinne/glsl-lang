@@ -149,18 +149,6 @@ fn parse_array_specifier_sized_multiple() {
     )
 }
 
-/*
-#[test]
-fn parse_precise_qualifier() {
-    assert_ceq!(precise_qualifier("precise "), Ok((" ", ())));
-}
-
-#[test]
-fn parse_invariant_qualifier() {
-    assert_ceq!(invariant_qualifier("invariant "), Ok((" ", ())));
-}
-*/
-
 #[test]
 fn parse_interpolation_qualifier() {
     assert_ceq!(

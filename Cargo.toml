@@ -1,0 +1,11 @@
+[workspace]
+members = [
+	"lang",
+	"lang-impl",
+	"lang-quote",
+]
+
+[patch.crates-io]
+glsl-lang = { path = "lang" }
+glsl-lang-impl = { path = "lang-impl" }
+glsl-lang-quote = { path = "lang-quote" }

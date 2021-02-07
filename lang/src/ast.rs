@@ -556,14 +556,7 @@ pub struct CompoundStatementData {
 
 /// Statement.
 #[derive(Clone, Debug, PartialEq, NodeContents)]
-pub enum Statement {
-    Compound(Box<CompoundStatement>),
-    Simple(Box<SimpleStatement>),
-}
-
-/// Simple statement.
-#[derive(Clone, Debug, PartialEq, NodeContents)]
-pub enum SimpleStatementData {
+pub enum StatementData {
     Declaration(Declaration),
     Expression(ExprStatement),
     Selection(SelectionStatement),
@@ -571,6 +564,7 @@ pub enum SimpleStatementData {
     CaseLabel(CaseLabel),
     Iteration(IterationStatement),
     Jump(JumpStatement),
+    Compound(CompoundStatement),
 }
 
 /// Expression statement.

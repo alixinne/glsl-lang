@@ -45,7 +45,6 @@ impl_parse!(ast::ExternalDeclaration => parser::ExternalDeclarationParser);
 impl_parse!(ast::InterpolationQualifier => parser::InterpolationQualifierParser);
 impl_parse!(ast::LayoutQualifier => parser::LayoutQualifierParser);
 impl_parse!(ast::PrecisionQualifier => parser::PrecisionQualifierParser);
-impl_parse!(ast::SimpleStatement => parser::SimpleStatementParser);
 impl_parse!(ast::Statement => parser::StatementParser);
 impl_parse!(ast::StorageQualifier => parser::StorageQualifierParser);
 impl_parse!(ast::StructSpecifier => parser::StructSpecifierParser);

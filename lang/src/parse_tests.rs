@@ -1683,16 +1683,14 @@ fn parse_selection_statement_if() {
         Box::new(ast::Expr::IntConst(10)),
     );
     let ret = Box::new(ast::Expr::BoolConst(false));
-    let st = ast::Statement::Simple(Box::new(
-        ast::SimpleStatementData::Jump(ast::JumpStatement::Return(Some(ret))).into(),
-    ));
-    let body = ast::Statement::Compound(Box::new(
+    let st = ast::StatementData::Jump(ast::JumpStatement::Return(Some(ret)));
+    let body = ast::StatementData::Compound(
         ast::CompoundStatementData {
-            statement_list: vec![st],
+            statement_list: vec![st.into()],
         }
         .into(),
-    ));
-    let rest = ast::SelectionRestStatement::Statement(Box::new(body));
+    );
+    let rest = ast::SelectionRestStatement::Statement(Box::new(body.into()));
     let expected = ast::SelectionStatement {
         cond: Box::new(cond),
         rest,
@@ -1716,26 +1714,23 @@ fn parse_selection_statement_if_else() {
         Box::new(ast::Expr::IntConst(10)),
     );
     let if_ret = Box::new(ast::Expr::FloatConst(0.));
-    let if_st = ast::Statement::Simple(Box::new(
-        ast::SimpleStatementData::Jump(ast::JumpStatement::Return(Some(if_ret))).into(),
-    ));
-    let if_body = ast::Statement::Compound(Box::new(
+    let if_st = ast::StatementData::Jump(ast::JumpStatement::Return(Some(if_ret)));
+    let if_body = ast::StatementData::Compound(
         ast::CompoundStatementData {
-            statement_list: vec![if_st],
+            statement_list: vec![if_st.into()],
         }
         .into(),
-    ));
+    );
     let else_ret = Box::new(ast::Expr::Variable("foo".into()));
-    let else_st = ast::Statement::Simple(Box::new(
-        ast::SimpleStatementData::Jump(ast::JumpStatement::Return(Some(else_ret))).into(),
-    ));
-    let else_body = ast::Statement::Compound(Box::new(
+    let else_st = ast::StatementData::Jump(ast::JumpStatement::Return(Some(else_ret)));
+    let else_body = ast::StatementData::Compound(
         ast::CompoundStatementData {
-            statement_list: vec![else_st],
+            statement_list: vec![else_st.into()],
         }
         .into(),
-    ));
-    let rest = ast::SelectionRestStatement::Else(Box::new(if_body), Box::new(else_body));
+    );
+    let rest =
+        ast::SelectionRestStatement::Else(Box::new(if_body.into()), Box::new(else_body.into()));
     let expected = ast::SelectionStatement {
         cond: Box::new(cond),
         rest,
@@ -1778,23 +1773,16 @@ fn parse_switch_statement_empty() {
 #[test]
 fn parse_switch_statement_cases() {
     let head = Box::new(ast::Expr::Variable("foo".into()));
-    let case0 = ast::Statement::Simple(Box::new(
-        ast::SimpleStatementData::CaseLabel(ast::CaseLabel::Case(Box::new(ast::Expr::IntConst(0))))
-            .into(),
-    ));
-    let case1 = ast::Statement::Simple(Box::new(
-        ast::SimpleStatementData::CaseLabel(ast::CaseLabel::Case(Box::new(ast::Expr::IntConst(1))))
-            .into(),
-    ));
-    let ret = ast::Statement::Simple(Box::new(
-        ast::SimpleStatementData::Jump(ast::JumpStatement::Return(Some(Box::new(
-            ast::Expr::UIntConst(12),
-        ))))
-        .into(),
-    ));
+    let case0 =
+        ast::StatementData::CaseLabel(ast::CaseLabel::Case(Box::new(ast::Expr::IntConst(0))));
+    let case1 =
+        ast::StatementData::CaseLabel(ast::CaseLabel::Case(Box::new(ast::Expr::IntConst(1))));
+    let ret = ast::StatementData::Jump(ast::JumpStatement::Return(Some(Box::new(
+        ast::Expr::UIntConst(12),
+    ))));
     let expected = ast::SwitchStatement {
         head,
-        body: vec![case0, case1, ret],
+        body: vec![case0.into(), case1.into(), ret.into()],
     };
 
     assert_ceq!(
@@ -1827,13 +1815,13 @@ fn parse_iteration_statement_while_empty() {
         Box::new(ast::Expr::Variable("a".into())),
         Box::new(ast::Expr::Variable("b".into())),
     )));
-    let st = ast::Statement::Compound(Box::new(
+    let st = ast::StatementData::Compound(
         ast::CompoundStatementData {
             statement_list: Vec::new(),
         }
         .into(),
-    ));
-    let expected = ast::IterationStatement::While(cond, Box::new(st));
+    );
+    let expected = ast::IterationStatement::While(cond, Box::new(st.into()));
 
     assert_ceq!(
         ast::IterationStatement::parse("while (a >= b) {}"),
@@ -1851,18 +1839,18 @@ fn parse_iteration_statement_while_empty() {
 
 #[test]
 fn parse_iteration_statement_do_while_empty() {
-    let st = ast::Statement::Compound(Box::new(
+    let st = ast::StatementData::Compound(
         ast::CompoundStatementData {
             statement_list: Vec::new(),
         }
         .into(),
-    ));
+    );
     let cond = Box::new(ast::Expr::Binary(
         ast::BinaryOp::GTE,
         Box::new(ast::Expr::Variable("a".into())),
         Box::new(ast::Expr::Variable("b".into())),
     ));
-    let expected = ast::IterationStatement::DoWhile(Box::new(st), cond);
+    let expected = ast::IterationStatement::DoWhile(Box::new(st.into()), cond);
 
     assert_ceq!(
         ast::IterationStatement::parse("do {} while (a >= b);"),
@@ -1911,13 +1899,13 @@ fn parse_iteration_statement_for_empty() {
             Box::new(ast::Expr::Variable("i".into())),
         ))),
     };
-    let st = ast::Statement::Compound(Box::new(
+    let st = ast::StatementData::Compound(
         ast::CompoundStatementData {
             statement_list: Vec::new(),
         }
         .into(),
-    ));
-    let expected = ast::IterationStatement::For(init, rest, Box::new(st));
+    );
+    let expected = ast::IterationStatement::For(init, rest, Box::new(st.into()));
 
     assert_ceq!(
         ast::IterationStatement::parse("for (float i = 0.f; i <= 10.f; ++i) {}"),
@@ -1959,9 +1947,9 @@ fn parse_jump_return() {
 
 #[test]
 fn parse_jump_empty_return() {
-    let expected: ast::SimpleStatement =
-        ast::SimpleStatementData::Jump(ast::JumpStatement::Return(None)).into();
-    assert_ceq!(ast::SimpleStatement::parse("return;"), Ok(expected));
+    let expected: ast::Statement =
+        ast::StatementData::Jump(ast::JumpStatement::Return(None)).into();
+    assert_ceq!(ast::Statement::parse("return;"), Ok(expected));
 }
 
 #[test]
@@ -1975,10 +1963,10 @@ fn parse_jump_discard() {
 #[test]
 fn parse_simple_statement_return() {
     let e = ast::Expr::BoolConst(false);
-    let expected: ast::SimpleStatement =
-        ast::SimpleStatementData::Jump(ast::JumpStatement::Return(Some(Box::new(e)))).into();
+    let expected: ast::Statement =
+        ast::StatementData::Jump(ast::JumpStatement::Return(Some(Box::new(e)))).into();
 
-    assert_ceq!(ast::SimpleStatement::parse("return false;"), Ok(expected));
+    assert_ceq!(ast::Statement::parse("return false;"), Ok(expected));
 }
 
 #[test]
@@ -1993,49 +1981,41 @@ fn parse_compound_statement_empty() {
 
 #[test]
 fn parse_compound_statement() {
-    let st0 = ast::Statement::Simple(Box::new(
-        ast::SimpleStatementData::Selection(ast::SelectionStatement {
-            cond: Box::new(ast::Expr::BoolConst(true)),
-            rest: ast::SelectionRestStatement::Statement(Box::new(ast::Statement::Compound(
-                Box::new(
-                    ast::CompoundStatementData {
-                        statement_list: Vec::new(),
-                    }
-                    .into(),
-                ),
-            ))),
+    let st0 = ast::StatementData::Selection(ast::SelectionStatement {
+        cond: Box::new(ast::Expr::BoolConst(true)),
+        rest: ast::SelectionRestStatement::Statement(Box::new(
+            ast::StatementData::Compound(
+                ast::CompoundStatementData {
+                    statement_list: Vec::new(),
+                }
+                .into(),
+            )
+            .into(),
+        )),
+    });
+    let st1 = ast::StatementData::Declaration(
+        ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
+            head: ast::SingleDeclaration {
+                ty: ast::FullySpecifiedType {
+                    qualifier: None,
+                    ty: ast::TypeSpecifier {
+                        ty: ast::TypeSpecifierNonArray::ISampler3D,
+                        array_specifier: None,
+                    },
+                },
+                name: Some("x".into()),
+                array_specifier: None,
+                initializer: None,
+            },
+            tail: Vec::new(),
         })
         .into(),
-    ));
-    let st1 = ast::Statement::Simple(Box::new(
-        ast::SimpleStatementData::Declaration(
-            ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
-                head: ast::SingleDeclaration {
-                    ty: ast::FullySpecifiedType {
-                        qualifier: None,
-                        ty: ast::TypeSpecifier {
-                            ty: ast::TypeSpecifierNonArray::ISampler3D,
-                            array_specifier: None,
-                        },
-                    },
-                    name: Some("x".into()),
-                    array_specifier: None,
-                    initializer: None,
-                },
-                tail: Vec::new(),
-            })
-            .into(),
-        )
-        .into(),
-    ));
-    let st2 = ast::Statement::Simple(Box::new(
-        ast::SimpleStatementData::Jump(ast::JumpStatement::Return(Some(Box::new(
-            ast::Expr::IntConst(42),
-        ))))
-        .into(),
-    ));
+    );
+    let st2 = ast::StatementData::Jump(ast::JumpStatement::Return(Some(Box::new(
+        ast::Expr::IntConst(42),
+    ))));
     let expected: ast::CompoundStatement = ast::CompoundStatementData {
-        statement_list: vec![st0, st1, st2],
+        statement_list: vec![st0.into(), st1.into(), st2.into()],
     }
     .into();
 
@@ -2064,16 +2044,13 @@ fn parse_function_definition() {
         parameters: Vec::new(),
     }
     .into();
-    let st0 = ast::Statement::Simple(Box::new(
-        ast::SimpleStatementData::Jump(ast::JumpStatement::Return(Some(Box::new(
-            ast::Expr::Variable("bar".into()),
-        ))))
-        .into(),
-    ));
+    let st0 = ast::StatementData::Jump(ast::JumpStatement::Return(Some(Box::new(
+        ast::Expr::Variable("bar".into()),
+    ))));
     let expected: ast::FunctionDefinition = ast::FunctionDefinitionData {
         prototype: fp,
         statement: ast::CompoundStatementData {
-            statement_list: vec![st0],
+            statement_list: vec![st0.into()],
         }
         .into(),
     }
@@ -2573,16 +2550,14 @@ fn parse_dot_field_expr_statement() {
         array_specifier: None,
         initializer: Some(ini),
     };
-    let expected = ast::Statement::Simple(Box::new(
-        ast::SimpleStatementData::Declaration(
-            ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
-                head: sd,
-                tail: Vec::new(),
-            })
-            .into(),
-        )
+    let expected: ast::Statement = ast::StatementData::Declaration(
+        ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
+            head: sd,
+            tail: Vec::new(),
+        })
         .into(),
-    ));
+    )
+    .into();
 
     assert_ceq!(ast::Statement::parse(src), Ok(expected));
 }

@@ -423,23 +423,23 @@ pub JumpStatement: ast::JumpStatement = {
     "return" <e:Expr?> ";" => ast::JumpStatement::Return(e.map(Box::new)),
 };
 
-pub SimpleStatement: ast::SimpleStatement = {
-//    <l:@L> <s:JumpStatement>        <r:@R> => ast::SimpleStatementData::Jump(s).spanned(l, r),
-//    <l:@L> <s:IterationStatement>   <r:@R> => ast::SimpleStatementData::Iteration(s).spanned(l, r),
-//    <l:@L> <s:CaseLabel>            <r:@R> => ast::SimpleStatementData::CaseLabel(s).spanned(l, r),
-//    <l:@L> <s:SwitchStatement>      <r:@R> => ast::SimpleStatementData::Switch(s).spanned(l, r),
-//    <l:@L> <s:SelectionStatement>   <r:@R> => ast::SimpleStatementData::Selection(s).spanned(l, r),
-//    <l:@L> <s:Declaration>          <r:@R> => ast::SimpleStatementData::Declaration(s).spanned(l, r),
-//    <l:@L> <s:ExprStatement>        <r:@R> => ast::SimpleStatementData::Expression(s).spanned(l, r),
+simple_statement: ast::Statement = {
+    <l:@L> <s:JumpStatement>        <r:@R> => ast::StatementData::Jump(s).spanned(l, r),
+    <l:@L> <s:IterationStatement>   <r:@R> => ast::StatementData::Iteration(s).spanned(l, r),
+    <l:@L> <s:CaseLabel>            <r:@R> => ast::StatementData::CaseLabel(s).spanned(l, r),
+    <l:@L> <s:SwitchStatement>      <r:@R> => ast::StatementData::Switch(s).spanned(l, r),
+    <l:@L> <s:SelectionStatement>   <r:@R> => ast::StatementData::Selection(s).spanned(l, r),
+    <l:@L> <s:Declaration>          <r:@R> => ast::StatementData::Declaration(s).spanned(l, r),
+    <l:@L> <s:ExprStatement>        <r:@R> => ast::StatementData::Expression(s).spanned(l, r),
 };
-//
+
 pub CompoundStatement: ast::CompoundStatement = {
-//    <l:@L> "{" <s:Statement*> "}" <r:@R> => ast::CompoundStatementData { statement_list: <> }.spanned(l, r),
+    <l:@L> "{" <s:Statement*> "}" <r:@R> => ast::CompoundStatementData { statement_list: s }.spanned(l, r),
 };
 
 pub Statement: ast::Statement = {
-//    <s:CompoundStatement> => ast::Statement::Compound(Box::new(<>)),
-//    <s:SimpleStatement> => ast::Statement::Simple(Box::new(<>)),
+    CompoundStatement => <>.map_spanned(ast::StatementData::Compound),
+    simple_statement,
 };
 
 pub InterpolationQualifier: ast::InterpolationQualifier = {

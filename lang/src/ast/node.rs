@@ -106,6 +106,16 @@ impl<T: NodeContents> Node<T> {
             span: self.span,
         }
     }
+
+    /// Map this contents of this node into a new node with the same span
+    pub fn map_spanned<U: NodeContents>(self, f: impl FnOnce(Self) -> U) -> Node<U> {
+        let span = self.span;
+
+        Node {
+            contents: f(self),
+            span,
+        }
+    }
 }
 
 impl<T: NodeContents> std::ops::Deref for Node<T> {

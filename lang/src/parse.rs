@@ -1,12 +1,12 @@
-use crate::lexer::Lexer;
 use crate::ast;
-use crate::parser;
+use crate::lexer::Lexer;
 pub use crate::lexer::{LexicalError, Token, TypeNames};
+use crate::parser;
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ParseOptions {
-  pub target_vulkan: bool,
-  pub type_names: TypeNames,
+    pub target_vulkan: bool,
+    pub type_names: TypeNames,
 }
 
 pub type ParseError<'i> = lalrpop_util::ParseError<(usize, usize), Token<'i>, LexicalError>;
@@ -17,22 +17,30 @@ pub trait Parse: Sized {
     }
 
     fn parse_with_id(source: &str, id: usize) -> Result<Self, ParseError> {
-      <Self as Parse>::parse_with_options(source, id, &Default::default())
+        <Self as Parse>::parse_with_options(source, id, &Default::default())
     }
 
-    fn parse_with_options<'i>(source: &'i str, id: usize, opts: &ParseOptions)  -> Result<Self, ParseError<'i>>;
+    fn parse_with_options<'i>(
+        source: &'i str,
+        id: usize,
+        opts: &ParseOptions,
+    ) -> Result<Self, ParseError<'i>>;
 }
 
 macro_rules! impl_parse {
-  ($t:ty => $p:ty) => {
-    impl Parse for $t {
-      fn parse_with_options<'i>(source: &'i str, id: usize, opts: &ParseOptions) -> Result<Self, ParseError<'i>> {
-        let lexer = Lexer::new(source, id, opts.clone());
-        let parser = <$p>::new();
-        parser.parse(source, lexer)
-      }
-    }
-  }
+    ($t:ty => $p:ty) => {
+        impl Parse for $t {
+            fn parse_with_options<'i>(
+                source: &'i str,
+                id: usize,
+                opts: &ParseOptions,
+            ) -> Result<Self, ParseError<'i>> {
+                let lexer = Lexer::new(source, id, opts.clone());
+                let parser = <$p>::new();
+                parser.parse(source, lexer)
+            }
+        }
+    };
 }
 
 impl_parse!(ast::ArraySpecifier => parser::ArraySpecifierParser);
@@ -67,9 +75,13 @@ impl_parse!(ast::SwitchStatement => parser::SwitchStatementParser);
 impl_parse!(ast::FunctionDefinition => parser::FunctionDefinitionParser);
 
 impl Parse for ast::Identifier {
-    fn parse_with_options<'i>(source: &'i str, id: usize, opts: &ParseOptions) -> Result<Self, ParseError<'i>> {
-      let lexer = Lexer::new(source, id, opts.clone());
-      let parser = parser::IdentifierParser::new();
-      parser.parse(source, lexer).map(|(id, _)| id)
+    fn parse_with_options<'i>(
+        source: &'i str,
+        id: usize,
+        opts: &ParseOptions,
+    ) -> Result<Self, ParseError<'i>> {
+        let lexer = Lexer::new(source, id, opts.clone());
+        let parser = parser::IdentifierParser::new();
+        parser.parse(source, lexer).map(|(id, _)| id)
     }
 }

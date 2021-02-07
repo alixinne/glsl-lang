@@ -205,12 +205,12 @@ pub struct TypeSpecifier {
 }
 
 impl From<TypeSpecifierNonArray> for TypeSpecifier {
-  fn from(ty: TypeSpecifierNonArray) -> Self {
-    Self {
-      ty,
-      array_specifier: None,
+    fn from(ty: TypeSpecifierNonArray) -> Self {
+        Self {
+            ty,
+            array_specifier: None,
+        }
     }
-  }
 }
 
 /// Struct specifier. Used to create new, user-defined types.
@@ -236,23 +236,23 @@ pub struct ArrayedIdentifier {
 }
 
 impl ArrayedIdentifier {
-  pub fn new<I, AS>(ident: I, array_spec: AS) -> Self
-  where
-    I: Into<Identifier>,
-    AS: Into<Option<ArraySpecifier>>,
-  {
-    ArrayedIdentifier {
-      ident: ident.into(),
-      array_spec: array_spec.into(),
+    pub fn new<I, AS>(ident: I, array_spec: AS) -> Self
+    where
+        I: Into<Identifier>,
+        AS: Into<Option<ArraySpecifier>>,
+    {
+        ArrayedIdentifier {
+            ident: ident.into(),
+            array_spec: array_spec.into(),
+        }
     }
-  }
 }
 
 impl From<&str> for ArrayedIdentifier {
     fn from(ident: &str) -> Self {
         ArrayedIdentifier {
             ident: ident.into(),
-            array_spec: None
+            array_spec: None,
         }
     }
 }
@@ -373,9 +373,9 @@ pub enum FunIdentifier {
 }
 
 impl FunIdentifier {
-  pub fn ident(i: impl Into<Identifier>) -> Self {
-    Self::Expr(Box::new(Expr::Variable(i.into())))
-  }
+    pub fn ident(i: impl Into<Identifier>) -> Self {
+        Self::Expr(Box::new(Expr::Variable(i.into())))
+    }
 }
 
 /// Function prototype.

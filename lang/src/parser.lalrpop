@@ -362,7 +362,7 @@ pub ExprStatement: ast::ExprStatement = {
 };
 
 selection_statement_else<S>: ast::SelectionStatement = {
-    "if" "(" <e:Expr> ")" <r:StatementNoShortIf> "else" <s:S> => ast::SelectionStatement {
+    "if" "(" <e:Expr> ")" <r:statement_no_short_if> "else" <s:S> => ast::SelectionStatement {
         cond: Box::new(e),
         rest: ast::SelectionRestStatement::Else(Box::new(r), Box::new(s)),
     }
@@ -451,9 +451,9 @@ pub Statement: ast::Statement = {
     simple_statement<Statement, selection_statement<Statement>>,
 };
 
-StatementNoShortIf: ast::Statement = {
+statement_no_short_if: ast::Statement = {
     CompoundStatement => <>.map_spanned(ast::StatementData::Compound),
-    simple_statement<StatementNoShortIf, selection_statement_else<StatementNoShortIf>>,
+    simple_statement<statement_no_short_if, selection_statement_else<statement_no_short_if>>,
 };
 
 pub InterpolationQualifier: ast::InterpolationQualifier = {
@@ -515,7 +515,7 @@ function_parameter_declaration: ast::FunctionParameterDeclaration = {
         ast::FunctionParameterDeclarationData::Named(q, d).spanned(l, r),
 }
 
-FunctionPrototype: ast::FunctionPrototype = {
+function_prototype: ast::FunctionPrototype = {
     <l:@L> <rt:FullySpecifiedType> <n:Identifier> "(" <p:comma<function_parameter_declaration>> ")" <r:@R> =>
         ast::FunctionPrototypeData {
             ty: rt,
@@ -546,7 +546,7 @@ single_declaration_no_type: ast::SingleDeclarationNoType = {
     }
 };
 
-InitDeclaratorList: ast::InitDeclaratorList = {
+init_declarator_list: ast::InitDeclaratorList = {
     <h:single_declaration> <t:("," <single_declaration_no_type>)*> => ast::InitDeclaratorList {
         head: h,
         tail: t,
@@ -554,13 +554,13 @@ InitDeclaratorList: ast::InitDeclaratorList = {
 };
 
 pub Declaration: ast::Declaration = {
-    <l:@L> <p:FunctionPrototype> ";" <r:@R> => ast::DeclarationData::FunctionPrototype(p).spanned(l, r),
-    <l:@L> <i:InitDeclaratorList> ";" <r:@R> => ast::DeclarationData::InitDeclaratorList(i).spanned(l, r),
+    <l:@L> <p:function_prototype> ";" <r:@R> => ast::DeclarationData::FunctionPrototype(p).spanned(l, r),
+    <l:@L> <i:init_declarator_list> ";" <r:@R> => ast::DeclarationData::InitDeclaratorList(i).spanned(l, r),
     <l:@L> <p:precision_declaration> ";" <r:@R> => p.spanned(l, r),
 };
 
 pub FunctionDefinition: ast::FunctionDefinition = {
-    <l:@L> <p:FunctionPrototype> <s:CompoundStatement> <r:@R> => ast::FunctionDefinitionData {
+    <l:@L> <p:function_prototype> <s:CompoundStatement> <r:@R> => ast::FunctionDefinitionData {
         prototype: p,
         statement: s,
     }.spanned(l, r)

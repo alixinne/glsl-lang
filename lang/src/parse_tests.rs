@@ -587,7 +587,7 @@ fn parse_type_specifier_non_array() {
     );
     assert_ceq!(
         ast::TypeSpecifierNonArray::parse("mat2x2"),
-        Ok(ast::TypeSpecifierNonArray::Mat2)
+        Ok(ast::TypeSpecifierNonArray::Mat22)
     );
     assert_ceq!(
         ast::TypeSpecifierNonArray::parse("mat2x3"),
@@ -603,7 +603,7 @@ fn parse_type_specifier_non_array() {
     );
     assert_ceq!(
         ast::TypeSpecifierNonArray::parse("mat3x3"),
-        Ok(ast::TypeSpecifierNonArray::Mat3)
+        Ok(ast::TypeSpecifierNonArray::Mat33)
     );
     assert_ceq!(
         ast::TypeSpecifierNonArray::parse("mat3x4"),
@@ -619,7 +619,7 @@ fn parse_type_specifier_non_array() {
     );
     assert_ceq!(
         ast::TypeSpecifierNonArray::parse("mat4x4"),
-        Ok(ast::TypeSpecifierNonArray::Mat4)
+        Ok(ast::TypeSpecifierNonArray::Mat44)
     );
     assert_ceq!(
         ast::TypeSpecifierNonArray::parse("dmat2"),
@@ -635,7 +635,7 @@ fn parse_type_specifier_non_array() {
     );
     assert_ceq!(
         ast::TypeSpecifierNonArray::parse("dmat2x2"),
-        Ok(ast::TypeSpecifierNonArray::DMat2)
+        Ok(ast::TypeSpecifierNonArray::DMat22)
     );
     assert_ceq!(
         ast::TypeSpecifierNonArray::parse("dmat2x3"),
@@ -651,7 +651,7 @@ fn parse_type_specifier_non_array() {
     );
     assert_ceq!(
         ast::TypeSpecifierNonArray::parse("dmat3x3"),
-        Ok(ast::TypeSpecifierNonArray::DMat3)
+        Ok(ast::TypeSpecifierNonArray::DMat33)
     );
     assert_ceq!(
         ast::TypeSpecifierNonArray::parse("dmat3x4"),
@@ -667,7 +667,7 @@ fn parse_type_specifier_non_array() {
     );
     assert_ceq!(
         ast::TypeSpecifierNonArray::parse("dmat4x4"),
-        Ok(ast::TypeSpecifierNonArray::DMat4)
+        Ok(ast::TypeSpecifierNonArray::DMat44)
     );
     assert_ceq!(
         ast::TypeSpecifierNonArray::parse("sampler1D"),

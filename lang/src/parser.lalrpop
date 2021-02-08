@@ -361,17 +361,22 @@ pub ExprStatement: ast::ExprStatement = {
     <e:Expr?> ";" => ast::ExprStatement(e),
 };
 
-selection_rest_statement: ast::SelectionRestStatement = {
-    <s:Statement> "else" <r:Statement> => ast::SelectionRestStatement::Else(Box::new(s), Box::new(r)),
-    <s:Statement> => ast::SelectionRestStatement::Statement(Box::new(s))
-};
-
-pub SelectionStatement: ast::SelectionStatement = {
-    "if" "(" <e:Expr> ")" <r:selection_rest_statement> => ast::SelectionStatement {
+selection_statement_else<S>: ast::SelectionStatement = {
+    "if" "(" <e:Expr> ")" <r:StatementNoShortIf> "else" <s:S> => ast::SelectionStatement {
         cond: Box::new(e),
-        rest: r,
+        rest: ast::SelectionRestStatement::Else(Box::new(r), Box::new(s)),
     }
 };
+
+selection_statement<S>: ast::SelectionStatement = {
+    "if" "(" <e:Expr> ")" <r:Statement> => ast::SelectionStatement {
+        cond: Box::new(e),
+        rest: ast::SelectionRestStatement::Statement(Box::new(r)),
+    },
+    selection_statement_else<S>,
+};
+
+pub SelectionStatement = { selection_statement<Statement> };
 
 pub SwitchStatement: ast::SwitchStatement = {
     "switch" "(" <e:Expr> ")" "{" <s:Statement*> "}" => ast::SwitchStatement {
@@ -409,11 +414,15 @@ for_rest_statement: ast::ForRestStatement = {
     <c:condition?> ";" <e:Expr?> => ast::ForRestStatement { condition: c, post_expr: e.map(Box::new) },
 };
 
-pub IterationStatement: ast::IterationStatement = {
-    "while" "(" <c:condition> ")" <s:Statement> => ast::IterationStatement::While(c, Box::new(s)),
+iteration_statement<S>: ast::IterationStatement = {
+    "while" "(" <c:condition> ")" <s:S> => ast::IterationStatement::While(c, Box::new(s)),
     "do" <s:Statement> "while" "(" <c:Expr> ")" ";" => ast::IterationStatement::DoWhile(Box::new(s), Box::new(c)),
-    "for" "(" <init:for_init_statement> <rest:for_rest_statement> ")" <s:Statement> =>
+    "for" "(" <init:for_init_statement> <rest:for_rest_statement> ")" <s:S> =>
         ast::IterationStatement::For(init, rest, Box::new(s)),
+};
+
+pub IterationStatement = {
+    iteration_statement<Statement>
 };
 
 pub JumpStatement: ast::JumpStatement = {
@@ -423,14 +432,14 @@ pub JumpStatement: ast::JumpStatement = {
     "return" <e:Expr?> ";" => ast::JumpStatement::Return(e.map(Box::new)),
 };
 
-simple_statement: ast::Statement = {
-    <l:@L> <s:JumpStatement>        <r:@R> => ast::StatementData::Jump(s).spanned(l, r),
-    <l:@L> <s:IterationStatement>   <r:@R> => ast::StatementData::Iteration(s).spanned(l, r),
-    <l:@L> <s:CaseLabel>            <r:@R> => ast::StatementData::CaseLabel(s).spanned(l, r),
-    <l:@L> <s:SwitchStatement>      <r:@R> => ast::StatementData::Switch(s).spanned(l, r),
-    <l:@L> <s:SelectionStatement>   <r:@R> => ast::StatementData::Selection(s).spanned(l, r),
-    <l:@L> <s:Declaration>          <r:@R> => ast::StatementData::Declaration(s).spanned(l, r),
-    <l:@L> <s:ExprStatement>        <r:@R> => ast::StatementData::Expression(s).spanned(l, r),
+simple_statement<S, I>: ast::Statement = {
+    <l:@L> <s:JumpStatement>          <r:@R> => ast::StatementData::Jump(s).spanned(l, r),
+    <l:@L> <s:iteration_statement<S>> <r:@R> => ast::StatementData::Iteration(s).spanned(l, r),
+    <l:@L> <s:CaseLabel>              <r:@R> => ast::StatementData::CaseLabel(s).spanned(l, r),
+    <l:@L> <s:SwitchStatement>        <r:@R> => ast::StatementData::Switch(s).spanned(l, r),
+    <l:@L> <s:I>                      <r:@R> => ast::StatementData::Selection(s).spanned(l, r),
+    <l:@L> <s:Declaration>            <r:@R> => ast::StatementData::Declaration(s).spanned(l, r),
+    <l:@L> <s:ExprStatement>          <r:@R> => ast::StatementData::Expression(s).spanned(l, r),
 };
 
 pub CompoundStatement: ast::CompoundStatement = {
@@ -439,7 +448,12 @@ pub CompoundStatement: ast::CompoundStatement = {
 
 pub Statement: ast::Statement = {
     CompoundStatement => <>.map_spanned(ast::StatementData::Compound),
-    simple_statement,
+    simple_statement<Statement, selection_statement<Statement>>,
+};
+
+StatementNoShortIf: ast::Statement = {
+    CompoundStatement => <>.map_spanned(ast::StatementData::Compound),
+    simple_statement<StatementNoShortIf, selection_statement_else<StatementNoShortIf>>,
 };
 
 pub InterpolationQualifier: ast::InterpolationQualifier = {

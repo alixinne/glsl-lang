@@ -2582,3 +2582,40 @@ fn parse_arrayed_identifier() {
 fn parse_dos_crlf() {
     assert!(ast::TranslationUnit::parse("#version 460 core\r\nvoid main(){}\r\n").is_ok());
 }
+
+#[test]
+fn parse_dangling_else() {
+    // Checks that the else is attached to the closest if statement, following disambiguation rules
+    // for C compilers.
+    //
+    // See https://www.cs.cornell.edu/andru/javaspec/19.doc.html for how the grammar was modeled for
+    // a LALR parser.
+
+    assert_ceq!(
+        ast::Statement::parse("if (ca) if (cb) ab(); else c();"),
+        Ok(ast::StatementData::Selection(ast::SelectionStatement {
+            cond: Box::new(ast::Expr::variable("ca")),
+            rest: ast::SelectionRestStatement::Statement(Box::new(
+                ast::StatementData::Selection(ast::SelectionStatement {
+                    cond: Box::new(ast::Expr::variable("cb")),
+                    rest: ast::SelectionRestStatement::Else(
+                        Box::new(
+                            ast::StatementData::Expression(ast::ExprStatement(Some(
+                                ast::Expr::FunCall(ast::FunIdentifier::ident("ab"), vec![])
+                            )))
+                            .into()
+                        ),
+                        Box::new(
+                            ast::StatementData::Expression(ast::ExprStatement(Some(
+                                ast::Expr::FunCall(ast::FunIdentifier::ident("c"), vec![])
+                            )))
+                            .into()
+                        ),
+                    ),
+                })
+                .into()
+            ))
+        })
+        .into())
+    );
+}

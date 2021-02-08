@@ -478,6 +478,12 @@ pub enum Expr {
     Comma(Box<Expr>, Box<Expr>),
 }
 
+impl Expr {
+    pub fn variable(name: impl Into<IdentifierData>) -> Self {
+        Self::Variable(IdentifierData::from(name.into()).into())
+    }
+}
+
 /// All unary operators that exist in GLSL.
 #[derive(Clone, Debug, PartialEq, NodeContents)]
 pub enum UnaryOp {

@@ -13,32 +13,34 @@
 //! For instance, we can imagine visiting an AST to count how many variables are declared:
 //!
 //! ```
-//! use glsl_lang::ast::{CompoundStatement, Expr, SingleDeclaration, Statement, TypeSpecifierNonArray};
+//! use glsl_lang::ast::{CompoundStatement, CompoundStatementData, Expr, SingleDeclaration, StatementData, TypeSpecifierNonArray};
 //! use glsl_lang::visitor::{Host, Visit, Visitor};
 //! use std::iter::FromIterator;
 //!
-//! let decl0 = Statement::declare_var(
+//! let decl0 = StatementData::declare_var(
 //!   TypeSpecifierNonArray::Float,
 //!   "x",
 //!   None,
 //!   Some(Expr::from(3.14).into())
 //! );
 //!
-//! let decl1 = Statement::declare_var(
+//! let decl1 = StatementData::declare_var(
 //!   TypeSpecifierNonArray::Int,
 //!   "y",
 //!   None,
 //!   None
 //! );
 //!
-//! let decl2 = Statement::declare_var(
+//! let decl2 = StatementData::declare_var(
 //!   TypeSpecifierNonArray::Vec4,
 //!   "z",
 //!   None,
 //!   None
 //! );
 //!
-//! let compound = CompoundStatement::from_iter(vec![decl0, decl1, decl2]);
+//! let compound: CompoundStatement = CompoundStatementData::from_iter(
+//!   vec![decl0.into(), decl1.into(), decl2.into()]
+//! ).into();
 //!
 //! // our visitor that will count the number of variables it saw
 //! struct Counter {

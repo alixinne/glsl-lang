@@ -78,12 +78,19 @@ pub ArraySpecifier: ast::ArraySpecifier = {
     }
 };
 
-// TODO
 pub StructFieldSpecifier: ast::StructFieldSpecifier = {
+    <q:TypeQualifier?> <s:TypeSpecifier> <f:comma<ArrayedIdentifier>> ";" => ast::StructFieldSpecifier {
+        qualifier: q,
+        ty: s,
+        identifiers: f,
+    }
 };
 
-// TODO
 pub StructSpecifier: ast::StructSpecifier = {
+    "struct" <i:identifier?> "{" <s:StructFieldSpecifier*> "}" => ast::StructSpecifier {
+        name: i.map(|(ident, names)| names.add_type_name(ident)),
+        fields: s,
+    },
 };
 
 type_specifier_non_struct: ast::TypeSpecifierNonArray = {
@@ -807,6 +814,7 @@ extern {
         "break" => Token::Break,
         "discard" => Token::Discard,
         "return" => Token::Return,
+        "struct" => Token::Struct,
     }
 }
 

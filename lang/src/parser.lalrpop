@@ -25,8 +25,12 @@ comma_trailing<T>: Vec<T> = {
     }
 };
 
-pub Identifier: (ast::Identifier, TypeNames) = {
-    <l:@L> <i:identifier> <r:@R> => (ast::IdentifierData::from(i.as_str()).spanned(l, r), i.type_names()),
+identifier: (ast::Identifier, TypeNames) = {
+    <l:@L> <i:ident> <r:@R> => (ast::IdentifierData::from(i.as_str()).spanned(l, r), i.type_names()),
+};
+
+pub Identifier: ast::Identifier = {
+    identifier => <>.0
 };
 
 pub TypeName: ast::TypeName = {
@@ -34,7 +38,7 @@ pub TypeName: ast::TypeName = {
 };
 
 primary_expression: ast::Expr = {
-    Identifier => ast::Expr::Variable(<>.0),
+    Identifier => ast::Expr::Variable(<>),
     double_constant => ast::Expr::DoubleConst(<>.into()),
     float_constant => ast::Expr::FloatConst(<>.into()),
     uint_constant => ast::Expr::UIntConst(<>.into()),
@@ -47,7 +51,7 @@ postfix_expression: ast::Expr = {
     primary_expression,
     <l:postfix_expression> "[" <a:Expr> "]" => ast::Expr::Bracket(Box::new(l), Box::new(a)),
     function_call,
-    <l:postfix_expression> "." <r:Identifier> => ast::Expr::Dot(Box::new(l), r.0),
+    <l:postfix_expression> "." <r:Identifier> => ast::Expr::Dot(Box::new(l), r),
     <postfix_expression> "++" => ast::Expr::PostInc(Box::new(<>)),
     <postfix_expression> "--" => ast::Expr::PostDec(Box::new(<>)),
 };
@@ -251,7 +255,7 @@ pub UnaryOp: ast::UnaryOp = {
 };
 
 pub ArrayedIdentifier: ast::ArrayedIdentifier = {
-    <i:Identifier> <a:ArraySpecifier?> => ast::ArrayedIdentifier { ident: i.0, array_spec: a },
+    <i:Identifier> <a:ArraySpecifier?> => ast::ArrayedIdentifier { ident: i, array_spec: a },
 };
 
 multiplicative_expression: ast::Expr = {
@@ -408,7 +412,7 @@ initializer: ast::Initializer = {
 
 condition: ast::Condition = {
     <Expr> => ast::Condition::Expr(Box::new(<>)),
-    <t:FullySpecifiedType> <i:Identifier> "=" <e:initializer> => ast::Condition::Assignment(t, i.0, e),
+    <t:FullySpecifiedType> <i:Identifier> "=" <e:initializer> => ast::Condition::Assignment(t, i, e),
 }
 
 for_init_statement: ast::ForInitStatement = {
@@ -495,8 +499,8 @@ pub StorageQualifier: ast::StorageQualifier = {
 
 layout_qualifier_spec: ast::LayoutQualifierSpec = {
     "shared" => ast::LayoutQualifierSpec::Shared,
-    <i:Identifier> "=" <c:conditional_expression> => ast::LayoutQualifierSpec::Identifier(i.0, Some(Box::new(c))),
-    <Identifier> => ast::LayoutQualifierSpec::Identifier(<>.0, None),
+    <i:Identifier> "=" <c:conditional_expression> => ast::LayoutQualifierSpec::Identifier(i, Some(Box::new(c))),
+    <Identifier> => ast::LayoutQualifierSpec::Identifier(<>, None),
 };
 
 pub LayoutQualifier: ast::LayoutQualifier = {
@@ -525,7 +529,7 @@ function_prototype: ast::FunctionPrototype = {
     <l:@L> <rt:FullySpecifiedType> <n:Identifier> "(" <p:comma<function_parameter_declaration>> ")" <r:@R> =>
         ast::FunctionPrototypeData {
             ty: rt,
-            name: n.0,
+            name: n,
             parameters: p,
         }.spanned(l, r)
 };
@@ -592,7 +596,7 @@ extern {
     type Error = LexicalError;
 
     enum Token<'i> {
-        identifier => Token::Identifier((_, _)),
+        ident => Token::Identifier((_, _)),
         type_name => Token::TypeName(_),
         int_constant => Token::IntConstant(_),
         uint_constant => Token::UIntConstant(_),

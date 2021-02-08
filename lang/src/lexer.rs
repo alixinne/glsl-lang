@@ -6,7 +6,7 @@ use std::str::FromStr;
 use logos::Logos;
 use thiserror::Error;
 
-use crate::parse::ParseOptions;
+use crate::{ast, parse::ParseOptions};
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct TypeNames {
@@ -18,28 +18,31 @@ impl TypeNames {
         Self::default()
     }
 
+    pub fn clone_inner(&self) -> Self {
+        Self { names: Rc::new(RefCell::new(self.names.borrow().clone())) }
+    }
+
     pub fn is_type_name(&self, name: &str) -> bool {
         self.names.borrow().contains(name)
     }
 
-    pub fn add_type_name(&self, name: String) {
-        self.names.borrow_mut().insert(name);
+    pub fn add_type_name(&self, name: ast::Identifier) -> ast::TypeName {
+        let name_string = name.0.to_string();
+        self.names.borrow_mut().insert(name_string);
+        name.map(|id| ast::TypeNameData::from(id))
     }
 }
 
-pub struct LexerContext {
-    source_id: usize,
-    opts: ParseOptions,
-}
+pub type LexerContext = ParseOptions;
 
 pub struct Lexer<'i> {
     inner: logos::Lexer<'i, Token<'i>>,
 }
 
 impl<'i> Lexer<'i> {
-    pub fn new(input: &'i str, source_id: usize, opts: ParseOptions) -> Self {
+    pub fn new(input: &'i str, opts: ParseOptions) -> Self {
         Self {
-            inner: Token::lexer_with_extras(input, LexerContext { source_id, opts }),
+            inner: Token::lexer_with_extras(input, opts),
         }
     }
 }
@@ -52,7 +55,7 @@ impl<'i> Iterator for Lexer<'i> {
         let span = self.inner.span();
         let source_id = self.inner.extras.source_id;
 
-        let mut token = if self.inner.extras.opts.target_vulkan {
+        let mut token = if self.inner.extras.target_vulkan {
             // Targetting Vulkan, nothing to change
             ((source_id, span.start), token, (source_id, span.end))
         } else {
@@ -73,7 +76,7 @@ impl<'i> Iterator for Lexer<'i> {
                     | SubpassInput | ISubpassInput | USubpassInput | SubpassInputMS
                     | ISubpassInputMS | USubpassInputMS => Identifier((
                         self.inner.slice(),
-                        self.inner.extras.opts.type_names.clone(),
+                        self.inner.extras.type_names.clone(),
                     )),
                     other => other,
                 },
@@ -95,7 +98,7 @@ impl<'i> Iterator for Lexer<'i> {
 fn parse_ident<'i>(
     lex: &mut logos::Lexer<'i, Token<'i>>,
 ) -> Result<(&'i str, TypeNames), LexicalError> {
-    Ok((lex.slice(), lex.extras.opts.type_names.clone()))
+    Ok((lex.slice(), lex.extras.type_names.clone()))
 }
 
 fn parse_int<'i>(lex: &mut logos::Lexer<'i, Token<'i>>, radix: u32) -> Result<i32, LexicalError> {
@@ -745,7 +748,6 @@ mod tests {
     fn check_ident(input: &str) {
         let mut lexer = Lexer::new(
             input,
-            0,
             ParseOptions {
                 target_vulkan: false,
                 ..Default::default()
@@ -756,7 +758,7 @@ mod tests {
             lexer.next().map(|(_, n, _)| n),
             Some(Token::Identifier((
                 input,
-                lexer.inner.extras.opts.type_names
+                lexer.inner.extras.type_names
             )))
         );
     }
@@ -764,7 +766,6 @@ mod tests {
     fn check(input: &str, token: Token) {
         let mut lexer = Lexer::new(
             input,
-            0,
             ParseOptions {
                 target_vulkan: false,
                 ..Default::default()
@@ -776,7 +777,6 @@ mod tests {
     fn check_vulkan(input: &str, token: Token) {
         let mut lexer = Lexer::new(
             input,
-            0,
             ParseOptions {
                 target_vulkan: true,
                 ..Default::default()

@@ -371,12 +371,13 @@ fn parse_struct_field_specifier_type_name() {
         identifiers: vec!["x".into()],
     };
 
+    let opts = get_s0238_3_opts();
     assert_ceq!(
-        ast::StructFieldSpecifier::parse("S0238_3 x;"),
+        ast::StructFieldSpecifier::parse_with_options("S0238_3 x;", &opts).map(|(p, _)| p),
         Ok(expected.clone())
     );
     assert_ceq!(
-        ast::StructFieldSpecifier::parse("S0238_3     x ;"),
+        ast::StructFieldSpecifier::parse_with_options("S0238_3     x ;", &opts).map(|(p, _)| p),
         Ok(expected.clone())
     );
 }
@@ -427,6 +428,13 @@ fn parse_struct_specifier_one_field() {
     );
 }
 
+fn get_s0238_3_opts() -> ParseOptions {
+    let opts = ParseOptions::default();
+    opts.type_names
+        .add_type_name(ast::IdentifierData::from("S0238_3").into());
+    opts
+}
+
 #[test]
 fn parse_struct_specifier_multi_fields() {
     let a = ast::StructFieldSpecifier {
@@ -474,21 +482,28 @@ fn parse_struct_specifier_multi_fields() {
         fields: vec![a, b, c, d, e],
     };
 
+    let opts = get_s0238_3_opts();
     assert_ceq!(
-    ast::StructSpecifier::parse(
-      "struct _TestStruct_934i { vec4 foo; float bar; uint zoo; bvec3 foo_BAR_zoo3497_34; S0238_3 x; }"
-    ),
-    Ok(expected.clone())
-  );
+      ast::StructSpecifier::parse_with_options(
+        "struct _TestStruct_934i { vec4 foo; float bar; uint zoo; bvec3 foo_BAR_zoo3497_34; S0238_3 x; }",
+        &opts,
+      ).map(|(p, _)| p),
+      Ok(expected.clone()),
+    );
     assert_ceq!(
-    ast::StructSpecifier::parse(
-      "struct _TestStruct_934i{vec4 foo;float bar;uint zoo;bvec3 foo_BAR_zoo3497_34;S0238_3 x;}"
-
-    )
-    ,
-    Ok(expected.clone())
-  );
-    assert_ceq!(ast::StructSpecifier::parse("struct _TestStruct_934i\n   {  vec4\nfoo ;   \n\t float\n\t\t  bar  ;   \nuint   zoo;    \n bvec3   foo_BAR_zoo3497_34\n\n\t\n\t\n  ; S0238_3 x;}"), Ok(expected));
+      ast::StructSpecifier::parse_with_options(
+        "struct _TestStruct_934i{vec4 foo;float bar;uint zoo;bvec3 foo_BAR_zoo3497_34;S0238_3 x;}",
+        &opts,
+      ).map(|(p, _)| p),
+      Ok(expected.clone()),
+    );
+    assert_ceq!(
+      ast::StructSpecifier::parse_with_options(
+        "struct _TestStruct_934i\n   {  vec4\nfoo ;   \n\t float\n\t\t  bar  ;   \nuint   zoo;    \n bvec3   foo_BAR_zoo3497_34\n\n\t\n\t\n  ; S0238_3 x;}",
+        &opts,
+      ).map(|(p, _)| p),
+      Ok(expected),
+    );
 }
 
 #[test]
@@ -967,9 +982,10 @@ fn parse_type_specifier_non_array() {
     );
 
     let opts = ParseOptions::default();
-    opts.type_names.add_type_name("ReturnType".to_owned());
+    opts.type_names
+        .add_type_name(ast::IdentifierData::from("ReturnType").into());
     assert_ceq!(
-        ast::TypeSpecifierNonArray::parse_with_options("ReturnType", 0, &opts),
+        ast::TypeSpecifierNonArray::parse_with_options("ReturnType", &opts).map(|(p, _)| p),
         Ok(ast::TypeSpecifierNonArray::TypeName(ast::TypeName::from(
             "ReturnType"
         )))

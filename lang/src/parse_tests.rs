@@ -2238,23 +2238,6 @@ fn parse_layout_buffer_block_0() {
     assert_ceq!(ast::TranslationUnit::parse(src), Ok(expected));
 }
 
-/*
-#[test]
-fn parse_pp_version_profile() {
-    assert_ceq!(
-        ast::PreprocessorVersionProfile::parse("core"),
-        Ok(ast::PreprocessorVersionProfile::Core)
-    );
-    assert_ceq!(
-        ast::PreprocessorVersionProfile::parse("compatibility"),
-        Ok(ast::PreprocessorVersionProfile::Compatibility)
-    );
-    assert_ceq!(
-        ast::PreprocessorVersionProfile::parse("es"),
-        Ok(ast::PreprocessorVersionProfile::ES)
-    );
-}
-
 #[test]
 fn parse_pp_version() {
     assert_ceq!(
@@ -2300,13 +2283,13 @@ fn parse_pp_version_newline() {
 #[test]
 fn parse_pp_define() {
     let expect = |v: &str| {
-        Ok((
+        Ok(
             ast::PreprocessorData::Define(ast::PreprocessorDefine::ObjectLike {
                 ident: "test".into(),
                 value: v.to_owned(),
             })
             .into(),
-        ))
+        )
     };
 
     assert_ceq!(ast::Preprocessor::parse("#define test 1.0"), expect("1.0"));
@@ -2392,9 +2375,9 @@ fn parse_pp_else() {
 }
 
 #[test]
-fn parse_pp_elseif() {
+fn parse_pp_elif() {
     assert_ceq!(
-        ast::Preprocessor::parse("#   elseif \\\n42\n"),
+        ast::Preprocessor::parse("#   elif \\\n42\n"),
         Ok(ast::PreprocessorData::ElseIf(ast::PreprocessorElseIf {
             condition: "42".to_owned()
         })
@@ -2517,40 +2500,6 @@ fn parse_pp_undef() {
 }
 
 #[test]
-fn parse_pp_extension_name() {
-    assert_ceq!(
-        ast::PreprocessorExtensionName::parse("all"),
-        Ok(ast::PreprocessorExtensionName::All)
-    );
-    assert_ceq!(
-        ast::PreprocessorExtensionName::parse("GL_foobar_extension "),
-        Ok(ast::PreprocessorExtensionName::Specific(
-            "GL_foobar_extension".to_owned()
-        ))
-    );
-}
-
-#[test]
-fn parse_pp_extension_behavior() {
-    assert_ceq!(
-        ast::PreprocessorExtensionBehavior::parse("require"),
-        Ok(ast::PreprocessorExtensionBehavior::Require)
-    );
-    assert_ceq!(
-        ast::PreprocessorExtensionBehavior::parse("enable"),
-        Ok(ast::PreprocessorExtensionBehavior::Enable)
-    );
-    assert_ceq!(
-        ast::PreprocessorExtensionBehavior::parse("warn"),
-        Ok(ast::PreprocessorExtensionBehavior::Warn)
-    );
-    assert_ceq!(
-        ast::PreprocessorExtensionBehavior::parse("disable"),
-        Ok(ast::PreprocessorExtensionBehavior::Disable)
-    );
-}
-
-#[test]
 fn parse_pp_extension() {
     assert_ceq!(
         ast::Preprocessor::parse("#extension all: require\n"),
@@ -2562,13 +2511,23 @@ fn parse_pp_extension() {
             .into()
         )
     );
+
+    assert_ceq!(
+        ast::Preprocessor::parse("#extension GL_foobar: warn\n"),
+        Ok(
+            ast::PreprocessorData::Extension(ast::PreprocessorExtension {
+                name: ast::PreprocessorExtensionName::Specific("GL_foobar".to_owned()),
+                behavior: Some(ast::PreprocessorExtensionBehavior::Warn)
+            })
+            .into()
+        )
+    );
 }
 
 #[test]
 fn parse_dos_crlf() {
     assert!(ast::TranslationUnit::parse("#version 460 core\r\nvoid main(){}\r\n").is_ok());
 }
-*/
 
 #[test]
 fn parse_dot_field_expr_array() {

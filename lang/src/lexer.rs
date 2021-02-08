@@ -37,15 +37,148 @@ impl TypeNames {
 
 pub type LexerContext = ParseOptions;
 
+enum LexerStage<'i> {
+    Source(logos::Lexer<'i, Token<'i>>),
+    Preprocessor(
+        logos::Lexer<'i, PreprocessorToken<'i>>,
+        Token<'i>,
+        bool,
+        bool,
+    ),
+}
+
 pub struct Lexer<'i> {
-    inner: logos::Lexer<'i, Token<'i>>,
+    inner: LexerStage<'i>,
+    last_token: Option<Token<'i>>,
 }
 
 impl<'i> Lexer<'i> {
     pub fn new(input: &'i str, opts: ParseOptions) -> Self {
         Self {
-            inner: Token::lexer_with_extras(input, opts),
+            inner: LexerStage::Source(Token::lexer_with_extras(input, opts)),
+            last_token: None,
         }
+    }
+
+    fn consume(src: &mut logos::Lexer<'i, Token<'i>>) -> Option<<Self as Iterator>::Item> {
+        let token = src.next()?;
+        let span = src.span();
+        let source_id = src.extras.source_id;
+
+        Some(((source_id, span.start), token, (source_id, span.end)))
+    }
+
+    fn consume_pp(
+        pp: &mut logos::Lexer<'i, PreprocessorToken<'i>>,
+    ) -> Option<((usize, usize), PreprocessorToken<'i>, (usize, usize))> {
+        let token = pp.next()?;
+        let span = pp.span();
+        let source_id = pp.extras.source_id;
+
+        Some(((source_id, span.start), token, (source_id, span.end)))
+    }
+
+    fn consume_pp_rest(
+        pp: &mut logos::Lexer<'i, PreprocessorToken<'i>>,
+    ) -> Option<((usize, usize), PreprocessorToken<'i>, (usize, usize))> {
+        let mut ch1;
+        let mut ch2 = None;
+        let mut ch3 = None;
+
+        // First, consume whitespace
+        let mut whitespace_chars = 0;
+        for b in pp.remainder().bytes() {
+            ch1 = ch2;
+            ch2 = ch3;
+            ch3 = Some(b);
+
+            if ch3 == Some(b'\t') || ch3 == Some(b' ') {
+                // Regular whitespace
+                whitespace_chars += 1;
+            } else if ch3 == Some(b'\\') {
+                // Could be a line continuation, wait
+            } else if ch3 == Some(b'\r') && ch2 == Some(b'\\') {
+                // ditto
+            } else if ch3 == Some(b'\n') && ch2 == Some(b'\\') {
+                // Unix line continuation
+                whitespace_chars += 2;
+            } else if ch3 == Some(b'\n') && ch2 == Some(b'\r') && ch1 == Some(b'\\') {
+                // Windows line continuation
+                whitespace_chars += 3;
+            } else {
+                // Not whitespace
+                break;
+            }
+        }
+
+        pp.bump(whitespace_chars);
+
+        // Then consume the rest of the "line"
+        let mut ch1;
+        let mut ch2 = None;
+        let mut ch3 = None;
+
+        // TODO: Do not allocate if it's not needed
+        let mut res = Vec::new();
+
+        let start = pp.span().end;
+
+        let mut consumed_chars = 0;
+        for b in pp.remainder().bytes() {
+            ch1 = ch2;
+            ch2 = ch3;
+            ch3 = Some(b);
+
+            if ch3 == Some(b'\\') {
+                // Could be a line continuation, wait
+            } else if ch3 == Some(b'\r') && ch2 == Some(b'\\') {
+                // ditto
+            } else if ch3 == Some(b'\n') && ch2 == Some(b'\\') {
+                // Unix line continuation
+                consumed_chars += 2;
+            } else if ch3 == Some(b'\n') && ch2 == Some(b'\r') && ch1 == Some(b'\\') {
+                // Windows line continuation
+                consumed_chars += 3;
+            } else if ch3 == Some(b'\r') {
+                // Possible Windows line ending
+            } else if ch3 == Some(b'\n') && ch2 == Some(b'\r') {
+                // Windows line ending
+                break;
+            } else if ch3 == Some(b'\n') {
+                // Unix line ending
+                break;
+            } else if ch1 == Some(b'\\') {
+                // Not a Windows line continuation
+                consumed_chars += 3;
+                res.push(ch1.unwrap());
+                res.push(ch2.unwrap());
+                res.push(ch3.unwrap());
+            } else if ch2 == Some(b'\\') {
+                // Not a Unix line continuation
+                consumed_chars += 2;
+                res.push(ch2.unwrap());
+                res.push(ch3.unwrap());
+            } else if ch2 == Some(b'\r') {
+                // Unterminated Windows line ending
+                consumed_chars += 2;
+                res.push(b'\r');
+                res.push(ch3.unwrap());
+            } else {
+                consumed_chars += 1;
+                res.push(ch3.unwrap());
+            }
+        }
+
+        pp.bump(consumed_chars);
+
+        let source_id = pp.extras.source_id;
+        Some((
+            (source_id, start),
+            PreprocessorToken::Rest(std::borrow::Cow::Owned(
+                String::from_utf8(res).expect("invalid utf-8"),
+            )),
+            (source_id, start + consumed_chars),
+        ))
     }
 }
 
@@ -53,51 +186,190 @@ impl<'i> Iterator for Lexer<'i> {
     type Item = ((usize, usize), Token<'i>, (usize, usize));
 
     fn next(&mut self) -> Option<Self::Item> {
-        let token = self.inner.next()?;
-        let span = self.inner.span();
-        let source_id = self.inner.extras.source_id;
+        let result = match &mut self.inner {
+            LexerStage::Source(src) => {
+                let token = src.next()?;
+                let span = src.span();
+                let source_id = src.extras.source_id;
 
-        let mut token = if self.inner.extras.target_vulkan {
-            // Targetting Vulkan, nothing to change
-            ((source_id, span.start), token, (source_id, span.end))
-        } else {
-            use Token::*;
+                let mut token = if src.extras.target_vulkan {
+                    // Targetting Vulkan, nothing to change
+                    ((source_id, span.start), token, (source_id, span.end))
+                } else {
+                    use Token::*;
 
-            // Replace Vulkan keywords with identifiers
-            (
-                (source_id, span.start),
-                match token {
-                    Texture1D | Texture1DArray | ITexture1D | ITexture1DArray | UTexture1D
-                    | UTexture1DArray | Texture2D | Texture2DArray | ITexture2D
-                    | ITexture2DArray | UTexture2D | UTexture2DArray | Texture2DRect
-                    | ITexture2DRect | UTexture2DRect | Texture2DMS | ITexture2DMS
-                    | UTexture2DMS | Texture2DMSArray | ITexture2DMSArray | UTexture2DMSArray
-                    | Texture3D | ITexture3D | UTexture3D | TextureCube | ITextureCube
-                    | UTextureCube | TextureCubeArray | ITextureCubeArray | UTextureCubeArray
-                    | TextureBuffer | ITextureBuffer | UTextureBuffer | Sampler | SamplerShadow
-                    | SubpassInput | ISubpassInput | USubpassInput | SubpassInputMS
-                    | ISubpassInputMS | USubpassInputMS => {
-                        Identifier((self.inner.slice(), self.inner.extras.type_names.clone()))
+                    // Replace Vulkan keywords with identifiers
+                    (
+                        (source_id, span.start),
+                        match token {
+                            Texture1D | Texture1DArray | ITexture1D | ITexture1DArray
+                            | UTexture1D | UTexture1DArray | Texture2D | Texture2DArray
+                            | ITexture2D | ITexture2DArray | UTexture2D | UTexture2DArray
+                            | Texture2DRect | ITexture2DRect | UTexture2DRect | Texture2DMS
+                            | ITexture2DMS | UTexture2DMS | Texture2DMSArray
+                            | ITexture2DMSArray | UTexture2DMSArray | Texture3D | ITexture3D
+                            | UTexture3D | TextureCube | ITextureCube | UTextureCube
+                            | TextureCubeArray | ITextureCubeArray | UTextureCubeArray
+                            | TextureBuffer | ITextureBuffer | UTextureBuffer | Sampler
+                            | SamplerShadow | SubpassInput | ISubpassInput | USubpassInput
+                            | SubpassInputMS | ISubpassInputMS | USubpassInputMS => {
+                                Identifier((src.slice(), src.extras.type_names.clone()))
+                            }
+                            other => other,
+                        },
+                        (source_id, span.end),
+                    )
+                };
+
+                // Transform the ident into a type name if needed
+                if let Token::Identifier((ident, ref tn)) = token.1 {
+                    if tn.is_type_name(ident) {
+                        token.1 = Token::TypeName(ident);
                     }
-                    other => other,
-                },
-                (source_id, span.end),
-            )
+                }
+
+                // Switch to preprocessor mode when encountering a preprocessor token
+                if token.1.is_pp() {
+                    let consumed_rest = if let Token::PpElse | Token::PpEndIf = token.1 {
+                        // These tokens have nothing to parse following them
+                        true
+                    } else {
+                        // Other tokens will be processed by the preprocessor lexer
+                        false
+                    };
+
+                    let new_lexer = src.clone().morph();
+                    self.inner =
+                        LexerStage::Preprocessor(new_lexer, token.1.clone(), false, consumed_rest);
+                }
+
+                Some(token)
+            }
+            LexerStage::Preprocessor(pp, ty, waiting_for_rparen, consumed_rest) => {
+                let read_token = if *consumed_rest {
+                    None
+                } else {
+                    match ty {
+                        Token::PpDefine => {
+                            Some(if let Some(Token::Identifier(_)) = &self.last_token {
+                                // The last token was an identifier
+
+                                // Is it (immediately) followed by a left paren?
+                                if pp.remainder().bytes().next() == Some(b'(')
+                                    || *waiting_for_rparen
+                                {
+                                    // We will now wait for a right parenthesis to close the identifier
+                                    // list
+                                    *waiting_for_rparen = true;
+
+                                    // Then, consume it regularly so the parser can detect the identifiers
+                                    Self::consume_pp(pp)
+                                } else {
+                                    // Otherwise, it's the define value, so consume the remainder, return
+                                    // it as PpRest and return back to regular parsing
+                                    *consumed_rest = true;
+                                    Self::consume_pp_rest(pp)
+                                }
+                            } else if let Some(Token::RightParen) = &self.last_token {
+                                // This is the closing parenthesis of a define
+                                *consumed_rest = true;
+                                Self::consume_pp_rest(pp)
+                            } else {
+                                // Other tokens (identifier, comma), just consume regularly
+                                Self::consume_pp(pp)
+                            })
+                        }
+                        Token::PpElif | Token::PpError | Token::PpIf | Token::PpPragma => {
+                            // Consume the rest of the line
+                            *consumed_rest = true;
+                            Some(Self::consume_pp_rest(pp))
+                        }
+                        Token::PpVersion => {
+                            Some(Self::consume_pp(pp).map(|(start, token, end)| {
+                                (
+                                    start,
+                                    if let PreprocessorToken::Identifier((name, tn)) = token {
+                                        if name == "core" {
+                                            PreprocessorToken::PpCore
+                                        } else if name == "compatibility" {
+                                            PreprocessorToken::PpCompatibility
+                                        } else if name == "es" {
+                                            PreprocessorToken::PpEs
+                                        } else {
+                                            PreprocessorToken::Identifier((name, tn))
+                                        }
+                                    } else {
+                                        token
+                                    },
+                                    end,
+                                )
+                            }))
+                        }
+                        Token::PpExtension => {
+                            Some(Self::consume_pp(pp).map(|(start, token, end)| {
+                                (
+                                    start,
+                                    if let PreprocessorToken::Identifier((name, tn)) = token {
+                                        if name == "require" {
+                                            PreprocessorToken::PpExtRequire
+                                        } else if name == "enable" {
+                                            PreprocessorToken::PpExtEnable
+                                        } else if name == "warn" {
+                                            PreprocessorToken::PpExtWarn
+                                        } else if name == "disable" {
+                                            PreprocessorToken::PpExtDisable
+                                        } else {
+                                            PreprocessorToken::Identifier((name, tn))
+                                        }
+                                    } else {
+                                        token
+                                    },
+                                    end,
+                                )
+                            }))
+                        }
+                        _ => None,
+                    }
+                };
+
+                // If no token was read (unexpected state), read a new one
+                let token = read_token.unwrap_or_else(|| Self::consume_pp(pp));
+                if let Some((_, PreprocessorToken::Newline, _)) = token {
+                    // Directive completed, process next token as regular source
+                    let mut new_lexer = pp.clone().morph();
+                    let result = Self::consume(&mut new_lexer);
+                    self.inner = LexerStage::Source(new_lexer);
+                    result
+                } else {
+                    // Map into Token
+                    token.map(|(s, t, e)| (s, t.into(), e))
+                }
+            }
         };
 
-        // Transform the ident into a type name if needed
-        if let Token::Identifier((ident, ref tn)) = token.1 {
-            if tn.is_type_name(ident) {
-                token.1 = Token::TypeName(ident);
-            }
-        }
-
-        Some(token)
+        self.last_token = result.as_ref().map(|s| s.1.clone());
+        result
     }
+}
+
+fn parse_pp_path<'i>(lex: &mut logos::Lexer<'i, PreprocessorToken<'i>>) -> &'i str {
+    &lex.slice()[1..lex.slice().len() - 1]
+}
+
+fn parse_pp_int<'i>(
+    lex: &mut logos::Lexer<'i, PreprocessorToken<'i>>,
+) -> Result<i32, LexicalError> {
+    Ok(i32::from_str(lex.slice())?)
 }
 
 fn parse_ident<'i>(
     lex: &mut logos::Lexer<'i, Token<'i>>,
+) -> Result<(&'i str, TypeNames), LexicalError> {
+    Ok((lex.slice(), lex.extras.type_names.clone()))
+}
+
+fn parse_pp_ident<'i>(
+    lex: &mut logos::Lexer<'i, PreprocessorToken<'i>>,
 ) -> Result<(&'i str, TypeNames), LexicalError> {
     Ok((lex.slice(), lex.extras.type_names.clone()))
 }
@@ -170,7 +442,81 @@ pub enum LexicalError {
     InvalidFloatLiteral(#[from] std::num::ParseFloatError),
 }
 
-// TODO: Support preprocessor directives
+#[derive(Debug, Clone, PartialEq, Logos)]
+#[logos(extras = LexerContext)]
+pub enum PreprocessorToken<'i> {
+    #[regex("[a-zA-Z_][a-zA-Z_0-9]*", parse_pp_ident)]
+    Identifier((&'i str, TypeNames)),
+
+    #[token("(")]
+    LeftParen,
+    #[token(")")]
+    RightParen,
+    #[token(",")]
+    Comma,
+    #[token(":")]
+    Colon,
+
+    Rest(std::borrow::Cow<'i, str>),
+
+    #[regex(r"[0-9]*", parse_pp_int)]
+    IntConstant(i32),
+
+    PpCore,
+    PpCompatibility,
+    PpEs,
+
+    PpExtRequire,
+    PpExtEnable,
+    PpExtWarn,
+    PpExtDisable,
+
+    #[regex("<[^>]*>", parse_pp_path)]
+    PathAbsolute(&'i str),
+    #[regex(r#""[^"]*""#, parse_pp_path)]
+    PathRelative(&'i str),
+
+    #[regex("([ \t]|\\\\\r?\n)+", logos::skip)]
+    Whitespace,
+    #[regex("//(.|\\\\\r?\n)*")]
+    SingleLineComment,
+    #[regex("/\\*([^*]|\\*[^/])+\\*/")]
+    MultiLineComment,
+
+    #[regex("\r?\n")]
+    Newline,
+
+    #[error]
+    Error,
+}
+
+impl<'i> From<PreprocessorToken<'i>> for Token<'i> {
+    fn from(pp: PreprocessorToken<'i>) -> Self {
+        match pp {
+            PreprocessorToken::Identifier(inner) => Self::Identifier(inner),
+            PreprocessorToken::Error => Self::Error,
+            PreprocessorToken::LeftParen => Self::LeftParen,
+            PreprocessorToken::RightParen => Self::RightParen,
+            PreprocessorToken::Comma => Self::Comma,
+            PreprocessorToken::Whitespace => Self::Whitespace,
+            PreprocessorToken::SingleLineComment => Self::SingleLineComment,
+            PreprocessorToken::MultiLineComment => Self::MultiLineComment,
+            PreprocessorToken::IntConstant(inner) => Self::IntConstant(inner),
+            PreprocessorToken::Newline => Self::Whitespace,
+            PreprocessorToken::Rest(rest) => Self::PpRest(rest),
+            PreprocessorToken::PpCore => Self::PpCore,
+            PreprocessorToken::PpCompatibility => Self::PpCompatibility,
+            PreprocessorToken::PpEs => Self::PpEs,
+            PreprocessorToken::PpExtRequire => Self::PpExtRequire,
+            PreprocessorToken::PpExtEnable => Self::PpExtEnable,
+            PreprocessorToken::PpExtWarn => Self::PpExtWarn,
+            PreprocessorToken::PpExtDisable => Self::PpExtDisable,
+            PreprocessorToken::Colon => Self::Colon,
+            PreprocessorToken::PathAbsolute(inner) => Self::PpPathAbsolute(inner),
+            PreprocessorToken::PathRelative(inner) => Self::PpPathRelative(inner),
+        }
+    }
+}
 
 #[derive(Debug, Clone, PartialEq, Logos)]
 #[logos(extras = LexerContext)]
@@ -693,24 +1039,89 @@ pub enum Token<'i> {
     #[token("precision")]
     Precision,
 
-    #[regex("[ \t\r\n]+", logos::skip)]
+    // TODO: Line continuation can happen inside tokens
+    #[regex("([ \t\r\n]|\\\\\r?\n)+", logos::skip)]
     Whitespace,
-    #[regex("\\\\\r?\n", logos::skip)]
-    LineContinuation,
-    #[regex("//.*")]
+    #[regex("//(.|\\\\\r?\n)*")]
     SingleLineComment,
     #[regex("/\\*([^*]|\\*[^/])+\\*/")]
     MultiLineComment,
+
+    // TODO: Line continuations in preprocessor pragmas?
+    #[regex("#([ \t]|\\\\\r?\n)*define")]
+    PpDefine,
+    #[regex("#([ \t]|\\\\\r?\n)*else")]
+    PpElse,
+    #[regex("#([ \t]|\\\\\r?\n)*elif")]
+    PpElif,
+    #[regex("#([ \t]|\\\\\r?\n)*endif")]
+    PpEndIf,
+    #[regex("#([ \t]|\\\\\r?\n)*error")]
+    PpError,
+    #[regex("#([ \t]|\\\\\r?\n)*if")]
+    PpIf,
+    #[regex("#([ \t]|\\\\\r?\n)*ifdef")]
+    PpIfDef,
+    #[regex("#([ \t]|\\\\\r?\n)*ifndef")]
+    PpIfNDef,
+    #[regex("#([ \t]|\\\\\r?\n)*include")]
+    PpInclude,
+    #[regex("#([ \t]|\\\\\r?\n)*line")]
+    PpLine,
+    #[regex("#([ \t]|\\\\\r?\n)*pragma")]
+    PpPragma,
+    #[regex("#([ \t]|\\\\\r?\n)*undef")]
+    PpUndef,
+    #[regex("#([ \t]|\\\\\r?\n)*version")]
+    PpVersion,
+    #[regex("#([ \t]|\\\\\r?\n)*extension")]
+    PpExtension,
+
+    PpRest(std::borrow::Cow<'i, str>),
+
+    PpCore,
+    PpCompatibility,
+    PpEs,
+
+    PpExtRequire,
+    PpExtEnable,
+    PpExtWarn,
+    PpExtDisable,
+
+    PpPathAbsolute(&'i str),
+    PpPathRelative(&'i str),
 
     #[error]
     Error,
 }
 
 impl<'i> Token<'i> {
+    pub fn is_pp(&self) -> bool {
+        match self {
+            Self::PpDefine => true,
+            Self::PpElse => true,
+            Self::PpElif => true,
+            Self::PpEndIf => true,
+            Self::PpError => true,
+            Self::PpIf => true,
+            Self::PpIfDef => true,
+            Self::PpIfNDef => true,
+            Self::PpInclude => true,
+            Self::PpLine => true,
+            Self::PpPragma => true,
+            Self::PpUndef => true,
+            Self::PpVersion => true,
+            Self::PpExtension => true,
+            _ => false,
+        }
+    }
+
     pub fn as_str(&self) -> &'i str {
         match self {
             Self::Identifier((s, _)) => s,
             Self::TypeName(s) => s,
+            Self::PpPathRelative(s) => s,
+            Self::PpPathAbsolute(s) => s,
             _ => panic!("cannot convert token {:?}, to str", self),
         }
     }
@@ -742,22 +1153,32 @@ impl_into!(f32 => FloatConstant);
 impl_into!(f64 => DoubleConstant);
 impl_into!(bool => BoolConstant);
 
+impl<'i> Into<String> for Token<'i> {
+    fn into(self) -> String {
+        match self {
+            Self::PpRest(s) => s.to_string(),
+            other => panic!("cannot convert {:?} into String", other),
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
 
     fn check_ident(input: &str) {
-        let mut lexer = Lexer::new(
-            input,
-            ParseOptions {
-                target_vulkan: false,
-                ..Default::default()
-            },
-        );
+        let opts = ParseOptions {
+            target_vulkan: false,
+            ..Default::default()
+        };
+
+        let type_names = opts.type_names.clone();
+
+        let mut lexer = Lexer::new(input, opts);
 
         assert_eq!(
             lexer.next().map(|(_, n, _)| n),
-            Some(Token::Identifier((input, lexer.inner.extras.type_names)))
+            Some(Token::Identifier((input, type_names)))
         );
     }
 

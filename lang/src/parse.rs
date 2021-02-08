@@ -77,6 +77,7 @@ impl_parse!(ast::IterationStatement => parser::IterationStatementParser);
 impl_parse!(ast::JumpStatement => parser::JumpStatementParser);
 impl_parse!(ast::LayoutQualifier => parser::LayoutQualifierParser);
 impl_parse!(ast::PrecisionQualifier => parser::PrecisionQualifierParser);
+impl_parse!(ast::Preprocessor => parser::PreprocessorParser);
 impl_parse!(ast::SelectionStatement => parser::SelectionStatementParser);
 impl_parse!(ast::Statement => parser::StatementParser);
 impl_parse!(ast::StorageQualifier => parser::StorageQualifierParser);

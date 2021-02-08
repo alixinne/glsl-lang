@@ -589,8 +589,116 @@ pub FunctionDefinition: ast::FunctionDefinition = {
     }.spanned(l, r)
 };
 
+pp_define_object_like: ast::PreprocessorDefine = {
+    <i:Identifier> <r:pp_rest> => ast::PreprocessorDefine::ObjectLike {
+        ident: i,
+        value: r.into(),
+    }
+}
+
+pp_define_function_like: ast::PreprocessorDefine = {
+    <i:Identifier> "(" <p:comma<Identifier>> ")" <r:pp_rest> => ast::PreprocessorDefine::FunctionLike {
+        ident: i,
+        args: p,
+        value: r.into(),
+    }
+}
+
+PreprocessorDefine: ast::PreprocessorDefine = {
+    pp_define_function_like,
+    pp_define_object_like,
+};
+
+PreprocessorElseIf: ast::PreprocessorElseIf = {
+    <pp_rest> => ast::PreprocessorElseIf { condition: <>.into() }
+};
+
+PreprocessorError: ast::PreprocessorError = {
+    <pp_rest> => ast::PreprocessorError { message: <>.into() }
+};
+
+PreprocessorIf: ast::PreprocessorIf = {
+    <pp_rest> => ast::PreprocessorIf { condition: <>.into() }
+};
+
+PreprocessorIfDef: ast::PreprocessorIfDef = {
+    <ident:Identifier> => ast::PreprocessorIfDef { ident }
+};
+
+PreprocessorIfNDef: ast::PreprocessorIfNDef = {
+    <ident:Identifier> => ast::PreprocessorIfNDef { ident }
+};
+
+PreprocessorInclude: ast::PreprocessorInclude = {
+    pp_path_relative => ast::PreprocessorInclude { path: ast::Path::Relative(<>.as_str().to_owned()) },
+    pp_path_absolute => ast::PreprocessorInclude { path: ast::Path::Absolute(<>.as_str().to_owned()) },
+};
+
+PreprocessorLine: ast::PreprocessorLine = {
+    <l:int_constant> <f:int_constant?> => ast::PreprocessorLine {
+        line: <Token as Into<i32>>::into(l) as u32,
+        source_string_number: f.map(|n| <Token as Into<i32>>::into(n) as u32),
+    }
+};
+
+PreprocessorPragma: ast::PreprocessorPragma = {
+    <pp_rest> => ast::PreprocessorPragma { command: <>.into() }
+};
+
+PreprocessorUndef: ast::PreprocessorUndef = {
+    <name:Identifier> => ast::PreprocessorUndef { name }
+};
+
+PreprocessorVersionProfile: ast::PreprocessorVersionProfile = {
+    "core" => ast::PreprocessorVersionProfile::Core,
+    "compatibility" => ast::PreprocessorVersionProfile::Compatibility,
+    "es" => ast::PreprocessorVersionProfile::ES,
+};
+
+PreprocessorVersion: ast::PreprocessorVersion = {
+    <v:int_constant> <p:PreprocessorVersionProfile?> => ast::PreprocessorVersion {
+        version: <Token as Into<i32>>::into(v) as u16,
+        profile: p,
+    }
+};
+
+PreprocessorExtensionBehavior: ast::PreprocessorExtensionBehavior = {
+    "require" => ast::PreprocessorExtensionBehavior::Require,
+    "enable" => ast::PreprocessorExtensionBehavior::Enable,
+    "warn" => ast::PreprocessorExtensionBehavior::Warn,
+    "disable" => ast::PreprocessorExtensionBehavior::Disable,
+};
+
+PreprocessorExtension: ast::PreprocessorExtension = {
+    <i:ident> <b:(":" <PreprocessorExtensionBehavior>)?> => ast::PreprocessorExtension {
+        name: if i.as_str() == "all" {
+            ast::PreprocessorExtensionName::All
+        } else {
+            ast::PreprocessorExtensionName::Specific(i.as_str().to_owned())
+        },
+        behavior: b,
+    }
+};
+
+pub Preprocessor: ast::Preprocessor = {
+    <l:@L> "#define"    <p:PreprocessorDefine>    <r:@R> => ast::PreprocessorData::Define(p).spanned(l, r),
+    <l:@L> "#else"                                <r:@R> => ast::PreprocessorData::Else.spanned(l, r),
+    <l:@L> "#elif"      <p:PreprocessorElseIf>    <r:@R> => ast::PreprocessorData::ElseIf(p).spanned(l, r),
+    <l:@L> "#endif"                               <r:@R> => ast::PreprocessorData::EndIf.spanned(l, r),
+    <l:@L> "#error"     <p:PreprocessorError>     <r:@R> => ast::PreprocessorData::Error(p).spanned(l, r),
+    <l:@L> "#if"        <p:PreprocessorIf>        <r:@R> => ast::PreprocessorData::If(p).spanned(l, r),
+    <l:@L> "#ifdef"     <p:PreprocessorIfDef>     <r:@R> => ast::PreprocessorData::IfDef(p).spanned(l, r),
+    <l:@L> "#ifndef"    <p:PreprocessorIfNDef>    <r:@R> => ast::PreprocessorData::IfNDef(p).spanned(l, r),
+    <l:@L> "#include"   <p:PreprocessorInclude>   <r:@R> => ast::PreprocessorData::Include(p).spanned(l, r),
+    <l:@L> "#line"      <p:PreprocessorLine>      <r:@R> => ast::PreprocessorData::Line(p).spanned(l, r),
+    <l:@L> "#pragma"    <p:PreprocessorPragma>    <r:@R> => ast::PreprocessorData::Pragma(p).spanned(l, r),
+    <l:@L> "#undef"     <p:PreprocessorUndef>     <r:@R> => ast::PreprocessorData::Undef(p).spanned(l, r),
+    <l:@L> "#version"   <p:PreprocessorVersion>   <r:@R> => ast::PreprocessorData::Version(p).spanned(l, r),
+    <l:@L> "#extension" <p:PreprocessorExtension> <r:@R> => ast::PreprocessorData::Extension(p).spanned(l, r),
+};
+
 pub ExternalDeclaration: ast::ExternalDeclaration = {
-    //<l:@L> <p:preprocessor> <r:@R> => ast::ExternalDeclarationData::Preprocessor(p).spanned(l, r),
+    <l:@L> <p:Preprocessor> <r:@R> => ast::ExternalDeclarationData::Preprocessor(p).spanned(l, r),
     <l:@L> <f:FunctionDefinition> <r:@R> => ast::ExternalDeclarationData::FunctionDefinition(f).spanned(l, r),
     <l:@L> <d:Declaration> <r:@R> => ast::ExternalDeclarationData::Declaration(d).spanned(l, r),
 };
@@ -821,6 +929,30 @@ extern {
         "discard" => Token::Discard,
         "return" => Token::Return,
         "struct" => Token::Struct,
+        "#define" => Token::PpDefine,
+        "#else" => Token::PpElse,
+        "#elif" => Token::PpElif,
+        "#endif" => Token::PpEndIf,
+        "#error" => Token::PpError,
+        "#if" => Token::PpIf,
+        "#ifdef" => Token::PpIfDef,
+        "#ifndef" => Token::PpIfNDef,
+        "#include" => Token::PpInclude,
+        "#line" => Token::PpLine,
+        "#pragma" => Token::PpPragma,
+        "#undef" => Token::PpUndef,
+        "#version" => Token::PpVersion,
+        "#extension" => Token::PpExtension,
+        pp_rest => Token::PpRest(_),
+        "core" => Token::PpCore,
+        "compatibility" => Token::PpCompatibility,
+        "es" => Token::PpEs,
+        "require" => Token::PpExtRequire,
+        "enable" => Token::PpExtEnable,
+        "warn" => Token::PpExtWarn,
+        "disable" => Token::PpExtDisable,
+        pp_path_absolute => Token::PpPathAbsolute(_),
+        pp_path_relative => Token::PpPathRelative(_),
     }
 }
 

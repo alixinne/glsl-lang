@@ -4,6 +4,17 @@ use crate::lexer::{Token, LexicalError, TypeNames};
 grammar<'i>(text: &'i str);
 
 comma<T>: Vec<T> = {
+    <e:T?> <v:("," <T>)*> => match e {
+        None => v,
+        Some(e) => {
+            let mut v = v;
+            v.insert(0, e);
+            v
+        }
+    }
+};
+
+comma_trailing<T>: Vec<T> = {
     <v:(<T> ",")*> <e:T?> => match e {
         None => v,
         Some(e) => {
@@ -390,14 +401,9 @@ pub CaseLabel: ast::CaseLabel = {
     "default" ":" => ast::CaseLabel::Def,
 };
 
-initializer_list: Vec<ast::Initializer> = {
-    comma<initializer>
-};
-
 initializer: ast::Initializer = {
     <assignment_expression> => ast::Initializer::Simple(Box::new(<>)),
-    // TODO: Trailing comma
-    "{" <initializer_list> "}" => ast::Initializer::List(<>),
+    "{" <comma_trailing<initializer>> "}" => ast::Initializer::List(<>),
 };
 
 condition: ast::Condition = {

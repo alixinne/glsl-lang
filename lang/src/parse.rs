@@ -1,7 +1,6 @@
-use crate::ast;
-use crate::lexer::Lexer;
-pub use crate::lexer::{LexicalError, Token, TypeNames};
-use crate::parser;
+use crate::{ast, lexer::Lexer, parser};
+
+pub use crate::lexer::{IdentifierContext, LexicalError, Token, TypeNames, TypeTablePolicy};
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ParseOptions {

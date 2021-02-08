@@ -1,11 +1,7 @@
-use std::cell::RefCell;
-use std::collections::HashSet;
-use std::rc::Rc;
-
 use logos::Logos;
 use thiserror::Error;
 
-use crate::{ast, parse::ParseOptions};
+use crate::parse::ParseOptions;
 
 mod parsers;
 use parsers::*;
@@ -16,35 +12,11 @@ pub use preprocessor_token::*;
 mod token;
 pub use token::*;
 
+mod type_names;
+pub use type_names::*;
+
 #[cfg(test)]
 mod tests;
-
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct TypeNames {
-    names: Rc<RefCell<HashSet<String>>>,
-}
-
-impl TypeNames {
-    pub fn new() -> Self {
-        Self::default()
-    }
-
-    pub fn clone_inner(&self) -> Self {
-        Self {
-            names: Rc::new(RefCell::new(self.names.borrow().clone())),
-        }
-    }
-
-    pub fn is_type_name(&self, name: &str) -> bool {
-        self.names.borrow().contains(name)
-    }
-
-    pub fn add_type_name(&self, name: ast::Identifier) -> ast::TypeName {
-        let name_string = name.0.to_string();
-        self.names.borrow_mut().insert(name_string);
-        name.map(|id| ast::TypeNameData::from(id))
-    }
-}
 
 pub type LexerContext = ParseOptions;
 

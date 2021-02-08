@@ -1,5 +1,5 @@
 use crate::ast::{self, NodeContents};
-use crate::lexer::{Token, LexicalError, TypeNames};
+use crate::lexer::{Token, LexicalError, TypeNames, IdentifierContext};
 
 grammar<'i>(text: &'i str);
 
@@ -533,10 +533,13 @@ function_parameter_declaration: ast::FunctionParameterDeclaration = {
 }
 
 function_prototype: ast::FunctionPrototype = {
-    <l:@L> <rt:FullySpecifiedType> <n:Identifier> "(" <p:comma<function_parameter_declaration>> ")" <r:@R> =>
+    <l:@L> <rt:FullySpecifiedType> <n:identifier> "(" <p:comma<function_parameter_declaration>> ")" <r:@R> =>
         ast::FunctionPrototypeData {
             ty: rt,
-            name: n,
+            name: {
+                n.1.new_identifier(&n.0, IdentifierContext::FunctionPrototype);
+                n.0
+            },
             parameters: p,
         }.spanned(l, r)
 };

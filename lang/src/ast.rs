@@ -366,7 +366,6 @@ pub enum DeclarationData {
     InitDeclaratorList(InitDeclaratorList),
     Precision(PrecisionQualifier, TypeSpecifier),
     Block(Block),
-    Global(TypeQualifier, Vec<Identifier>),
 }
 
 /// A general purpose block, containing fields and possibly a list of declared identifiers. Semantic

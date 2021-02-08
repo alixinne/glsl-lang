@@ -20,6 +20,7 @@
 
 use std::borrow::Cow;
 use std::fmt;
+use std::iter::FromIterator;
 
 use glsl_lang_impl::NodeContents;
 
@@ -345,6 +346,24 @@ pub struct FullySpecifiedType {
     pub ty: TypeSpecifier,
 }
 
+impl FullySpecifiedType {
+    pub fn new(ty: TypeSpecifierNonArray) -> Self {
+        Self {
+            qualifier: None,
+            ty: TypeSpecifier {
+                ty,
+                array_specifier: None,
+            },
+        }
+    }
+}
+
+impl From<TypeSpecifierNonArray> for FullySpecifiedType {
+    fn from(ty: TypeSpecifierNonArray) -> Self {
+        FullySpecifiedType::new(ty)
+    }
+}
+
 /// Dimensionality of an array.
 #[derive(Clone, Debug, PartialEq, NodeContents)]
 pub struct ArraySpecifier {
@@ -497,6 +516,36 @@ impl Expr {
     }
 }
 
+impl From<i32> for Expr {
+    fn from(x: i32) -> Expr {
+        Expr::IntConst(x)
+    }
+}
+
+impl From<u32> for Expr {
+    fn from(x: u32) -> Expr {
+        Expr::UIntConst(x)
+    }
+}
+
+impl From<bool> for Expr {
+    fn from(x: bool) -> Expr {
+        Expr::BoolConst(x)
+    }
+}
+
+impl From<f32> for Expr {
+    fn from(x: f32) -> Expr {
+        Expr::FloatConst(x)
+    }
+}
+
+impl From<f64> for Expr {
+    fn from(x: f64) -> Expr {
+        Expr::DoubleConst(x)
+    }
+}
+
 /// All unary operators that exist in GLSL.
 #[derive(Clone, Debug, PartialEq, NodeContents)]
 pub enum UnaryOp {
@@ -573,6 +622,17 @@ pub struct CompoundStatementData {
     pub statement_list: Vec<Statement>,
 }
 
+impl FromIterator<Statement> for CompoundStatementData {
+    fn from_iter<T>(iter: T) -> Self
+    where
+        T: IntoIterator<Item = Statement>,
+    {
+        Self {
+            statement_list: iter.into_iter().collect(),
+        }
+    }
+}
+
 /// Statement.
 #[derive(Clone, Debug, PartialEq, NodeContents)]
 pub enum StatementData {
@@ -584,6 +644,34 @@ pub enum StatementData {
     Iteration(IterationStatement),
     Jump(JumpStatement),
     Compound(CompoundStatement),
+}
+
+impl StatementData {
+    /// Declare a new variable.
+    ///
+    /// `ty` is the type of the variable, `name` the name of the binding to create,
+    /// `array_specifier` an optional argument to make your binding an array and
+    /// `initializer`
+    pub fn declare_var<T, N, A, I>(ty: T, name: N, array_specifier: A, initializer: I) -> Self
+    where
+        T: Into<FullySpecifiedType>,
+        N: Into<Identifier>,
+        A: Into<Option<ArraySpecifier>>,
+        I: Into<Option<Initializer>>,
+    {
+        Self::Declaration(
+            DeclarationData::InitDeclaratorList(InitDeclaratorList {
+                head: SingleDeclaration {
+                    ty: ty.into(),
+                    name: Some(name.into()),
+                    array_specifier: array_specifier.into(),
+                    initializer: initializer.into(),
+                },
+                tail: Vec::new(),
+            })
+            .into(),
+        )
+    }
 }
 
 /// Expression statement.

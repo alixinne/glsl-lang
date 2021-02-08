@@ -1026,16 +1026,21 @@ fn parse_fully_specified_type() {
     };
 
     assert_ceq!(
-        ast::FullySpecifiedType::parse("iimage2DMSArray;"),
+        ast::FullySpecifiedType::parse("iimage2DMSArray"),
         Ok(expected.clone())
     );
 }
 
 #[test]
 fn parse_fully_specified_type_with_qualifier() {
+    let opts = ParseOptions::new();
+    let tn = opts
+        .type_names
+        .add_type_name(ast::IdentifierData::from("S032_29k").into());
+
     let qual_spec = ast::TypeQualifierSpec::Storage(ast::StorageQualifier::Subroutine(vec![
-        "vec2".into(),
-        "S032_29k".into(),
+        ast::TypeSpecifierNonArray::Vec2.into(),
+        tn.into(),
     ]));
     let qual = ast::TypeQualifier {
         qualifiers: vec![qual_spec],
@@ -1050,18 +1055,28 @@ fn parse_fully_specified_type_with_qualifier() {
     };
 
     assert_ceq!(
-        ast::FullySpecifiedType::parse("subroutine (vec2, S032_29k) iimage2DMSArray;"),
-        Ok(expected.clone())
+        ast::FullySpecifiedType::parse_with_options(
+            "subroutine (vec2, S032_29k) iimage2DMSArray",
+            &opts,
+        )
+        .map(|(p, _)| p),
+        Ok(expected.clone()),
     );
     assert_ceq!(
-        ast::FullySpecifiedType::parse(
-            "subroutine (  vec2\t\n \t , \n S032_29k   )\n iimage2DMSArray ;"
-        ),
-        Ok(expected.clone())
+        ast::FullySpecifiedType::parse_with_options(
+            "subroutine (  vec2\t\n \t , \n S032_29k   )\n iimage2DMSArray ",
+            &opts,
+        )
+        .map(|(p, _)| p),
+        Ok(expected.clone()),
     );
     assert_ceq!(
-        ast::FullySpecifiedType::parse("subroutine(vec2,S032_29k)iimage2DMSArray;"),
-        Ok(expected)
+        ast::FullySpecifiedType::parse_with_options(
+            "subroutine(vec2,S032_29k)iimage2DMSArray",
+            &opts,
+        )
+        .map(|(p, _)| p),
+        Ok(expected),
     );
 }
 
@@ -1598,6 +1613,11 @@ fn parse_declaration_precision_high() {
 
 #[test]
 fn parse_declaration_uniform_block() {
+    let opts = ParseOptions::new();
+    let foo = opts
+        .type_names
+        .add_type_name(ast::IdentifierData::from("foo").into());
+
     let qual_spec = ast::TypeQualifierSpec::Storage(ast::StorageQualifier::Uniform);
     let qual = ast::TypeQualifier {
         qualifiers: vec![qual_spec],
@@ -1621,7 +1641,7 @@ fn parse_declaration_uniform_block() {
     let f2 = ast::StructFieldSpecifier {
         qualifier: None,
         ty: ast::TypeSpecifier {
-            ty: ast::TypeSpecifierNonArray::TypeName("foo".into()),
+            ty: foo.into(),
             array_specifier: None,
         },
         identifiers: vec!["c".into(), "d".into()],
@@ -1635,14 +1655,30 @@ fn parse_declaration_uniform_block() {
     .into();
 
     assert_ceq!(
-        ast::Declaration::parse("uniform UniformBlockTest { float a; vec3 b; foo c, d; };"),
-        Ok(expected.clone())
+        ast::Declaration::parse_with_options(
+            "uniform UniformBlockTest { float a; vec3 b; foo c, d; };",
+            &opts
+        )
+        .map(|(p, _)| p),
+        Ok(expected.clone()),
     );
-    assert_ceq!(ast::Declaration::parse("uniform   \nUniformBlockTest\n {\n \t float   a  \n; \nvec3 b\n; foo \nc\n, \nd\n;\n }\n\t\n\t\t \t;"), Ok(expected));
+
+    assert_ceq!(
+        ast::Declaration::parse_with_options(
+            "uniform   \nUniformBlockTest\n {\n \t float   a  \n; \nvec3 b\n; foo \nc\n, \nd\n;\n }\n\t\n\t\t \t;",
+            &opts,
+        ).map(|(p, _)| p),
+        Ok(expected)
+    );
 }
 
 #[test]
 fn parse_declaration_buffer_block() {
+    let opts = ParseOptions::new();
+    let foo = opts
+        .type_names
+        .add_type_name(ast::IdentifierData::from("foo").into());
+
     let qual_spec = ast::TypeQualifierSpec::Storage(ast::StorageQualifier::Buffer);
     let qual = ast::TypeQualifier {
         qualifiers: vec![qual_spec],
@@ -1671,7 +1707,7 @@ fn parse_declaration_buffer_block() {
     let f2 = ast::StructFieldSpecifier {
         qualifier: None,
         ty: ast::TypeSpecifier {
-            ty: ast::TypeSpecifierNonArray::TypeName("foo".into()),
+            ty: foo.into(),
             array_specifier: None,
         },
         identifiers: vec!["c".into(), "d".into()],
@@ -1685,10 +1721,21 @@ fn parse_declaration_buffer_block() {
     .into();
 
     assert_ceq!(
-        ast::Declaration::parse("buffer UniformBlockTest { float a; vec3 b[]; foo c, d; };"),
-        Ok(expected.clone())
+        ast::Declaration::parse_with_options(
+            "buffer UniformBlockTest { float a; vec3 b[]; foo c, d; };",
+            &opts,
+        )
+        .map(|(p, _)| p),
+        Ok(expected.clone()),
     );
-    assert_ceq!(ast::Declaration::parse("buffer   \nUniformBlockTest\n {\n \t float   a  \n; \nvec3 b   [   ]\n; foo \nc\n, \nd\n;\n }\n\t\n\t\t \t;"), Ok(expected));
+
+    assert_ceq!(
+        ast::Declaration::parse_with_options(
+            "buffer   \nUniformBlockTest\n {\n \t float   a  \n; \nvec3 b   [   ]\n; foo \nc\n, \nd\n;\n }\n\t\n\t\t \t;",
+            &opts,
+        ).map(|(p, _)| p),
+        Ok(expected),
+    );
 }
 
 #[test]
@@ -2126,7 +2173,7 @@ fn parse_buffer_block_0() {
                 fields: vec![ast::StructFieldSpecifier {
                     qualifier: None,
                     ty: ast::TypeSpecifier {
-                        ty: ast::TypeSpecifierNonArray::TypeName("char".into()),
+                        ty: ast::TypeSpecifierNonArray::Float,
                         array_specifier: None,
                     },
                     identifiers: vec![ast::ArrayedIdentifier::new(
@@ -2176,10 +2223,7 @@ fn parse_layout_buffer_block_0() {
                 name: "Foo".into(),
                 fields: vec![ast::StructFieldSpecifier {
                     qualifier: None,
-                    ty: ast::TypeSpecifier {
-                        ty: ast::TypeSpecifierNonArray::TypeName("char".into()),
-                        array_specifier: None,
-                    },
+                    ty: ast::TypeSpecifierNonArray::Float.into(),
                     identifiers: vec!["a".into()],
                 }],
                 identifier: Some("foo".into()),
@@ -2519,6 +2563,11 @@ fn parse_pp_extension() {
         )
     );
 }
+
+#[test]
+fn parse_dos_crlf() {
+    assert!(ast::TranslationUnit::parse("#version 460 core\r\nvoid main(){}\r\n").is_ok());
+}
 */
 
 #[test]
@@ -2592,11 +2641,6 @@ fn parse_arrayed_identifier() {
         ast::ArrayedIdentifier::parse("foo \t\n  [\n\t ]"),
         Ok(expected)
     );
-}
-
-#[test]
-fn parse_dos_crlf() {
-    assert!(ast::TranslationUnit::parse("#version 460 core\r\nvoid main(){}\r\n").is_ok());
 }
 
 #[test]

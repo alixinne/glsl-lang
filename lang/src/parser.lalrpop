@@ -501,7 +501,7 @@ pub StorageQualifier: ast::StorageQualifier = {
     "restrict" => ast::StorageQualifier::Restrict,
     "readonly" => ast::StorageQualifier::ReadOnly,
     "writeonly" => ast::StorageQualifier::WriteOnly,
-    "subroutine" <t:("(" <comma<TypeName>> ")")?> => ast::StorageQualifier::Subroutine(t.unwrap_or_else(|| vec![])),
+    "subroutine" <t:("(" <comma<TypeSpecifier>> ")")?> => ast::StorageQualifier::Subroutine(t.unwrap_or_else(|| vec![])),
 };
 
 layout_qualifier_spec: ast::LayoutQualifierSpec = {
@@ -570,10 +570,16 @@ init_declarator_list: ast::InitDeclaratorList = {
     }
 };
 
+block_declaration: ast::Block = {
+    <q:TypeQualifier> <n:Identifier> "{" <f:StructFieldSpecifier*> "}" <a:ArrayedIdentifier?> =>
+        ast::Block { qualifier: q, name: n, fields: f, identifier: a }
+};
+
 pub Declaration: ast::Declaration = {
     <l:@L> <p:function_prototype> ";" <r:@R> => ast::DeclarationData::FunctionPrototype(p).spanned(l, r),
     <l:@L> <i:init_declarator_list> ";" <r:@R> => ast::DeclarationData::InitDeclaratorList(i).spanned(l, r),
     <l:@L> <p:precision_declaration> ";" <r:@R> => p.spanned(l, r),
+    <l:@L> <b:block_declaration> ";" <r:@R> => ast::DeclarationData::Block(b).spanned(l, r),
 };
 
 pub FunctionDefinition: ast::FunctionDefinition = {

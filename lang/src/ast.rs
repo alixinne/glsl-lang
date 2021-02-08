@@ -203,6 +203,12 @@ pub enum TypeSpecifierNonArray {
     TypeName(TypeName),
 }
 
+impl From<TypeName> for TypeSpecifierNonArray {
+    fn from(tn: TypeName) -> Self {
+        Self::TypeName(tn)
+    }
+}
+
 /// Type specifier.
 #[derive(Clone, Debug, PartialEq, NodeContents)]
 pub struct TypeSpecifier {
@@ -210,10 +216,10 @@ pub struct TypeSpecifier {
     pub array_specifier: Option<ArraySpecifier>,
 }
 
-impl From<TypeSpecifierNonArray> for TypeSpecifier {
-    fn from(ty: TypeSpecifierNonArray) -> Self {
+impl<T: Into<TypeSpecifierNonArray>> From<T> for TypeSpecifier {
+    fn from(ty: T) -> Self {
         Self {
-            ty,
+            ty: ty.into(),
             array_specifier: None,
         }
     }
@@ -298,7 +304,9 @@ pub enum StorageQualifier {
     Restrict,
     ReadOnly,
     WriteOnly,
-    Subroutine(Vec<TypeName>),
+    // Note: the grammar says TYPE_NAME but type_specifier makes more sense given the definition of
+    // subroutine. The reference implementation is marked "to do".
+    Subroutine(Vec<TypeSpecifier>),
 }
 
 /// Layout qualifier.

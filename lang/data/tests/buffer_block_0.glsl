@@ -1,5 +1,5 @@
 buffer Foo {
-    char tiles[];
+    float tiles[];
 } main_tiles;
 
 void main() {

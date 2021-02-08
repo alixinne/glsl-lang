@@ -10,6 +10,12 @@ pub struct ParseOptions {
     pub type_names: TypeNames,
 }
 
+impl ParseOptions {
+    pub fn new() -> Self {
+        Self::default()
+    }
+}
+
 pub type ParseError<'i> = lalrpop_util::ParseError<(usize, usize), Token<'i>, LexicalError>;
 
 pub trait Parse: Sized {
@@ -44,7 +50,9 @@ macro_rules! impl_parse {
                 // Invoke the parser
                 let lexer = Lexer::new(source, cloned_opts);
                 let parser = <$p>::new();
-                parser.parse(source, lexer).map(|parsed| (parsed, cloned_type_names))
+                parser
+                    .parse(source, lexer)
+                    .map(|parsed| (parsed, cloned_type_names))
             }
         }
     };

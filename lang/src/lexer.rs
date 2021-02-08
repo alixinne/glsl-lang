@@ -19,7 +19,9 @@ impl TypeNames {
     }
 
     pub fn clone_inner(&self) -> Self {
-        Self { names: Rc::new(RefCell::new(self.names.borrow().clone())) }
+        Self {
+            names: Rc::new(RefCell::new(self.names.borrow().clone())),
+        }
     }
 
     pub fn is_type_name(&self, name: &str) -> bool {
@@ -74,10 +76,9 @@ impl<'i> Iterator for Lexer<'i> {
                     | UTextureCube | TextureCubeArray | ITextureCubeArray | UTextureCubeArray
                     | TextureBuffer | ITextureBuffer | UTextureBuffer | Sampler | SamplerShadow
                     | SubpassInput | ISubpassInput | USubpassInput | SubpassInputMS
-                    | ISubpassInputMS | USubpassInputMS => Identifier((
-                        self.inner.slice(),
-                        self.inner.extras.type_names.clone(),
-                    )),
+                    | ISubpassInputMS | USubpassInputMS => {
+                        Identifier((self.inner.slice(), self.inner.extras.type_names.clone()))
+                    }
                     other => other,
                 },
                 (source_id, span.end),
@@ -756,10 +757,7 @@ mod tests {
 
         assert_eq!(
             lexer.next().map(|(_, n, _)| n),
-            Some(Token::Identifier((
-                input,
-                lexer.inner.extras.type_names
-            )))
+            Some(Token::Identifier((input, lexer.inner.extras.type_names)))
         );
     }
 

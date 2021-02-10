@@ -8,6 +8,28 @@
 with partial support for preprocessor directives. Its AST and features are
 modeled after [Dimitri Sabadie's `glsl` crate](https://github.com/phaazon/glsl).
 
+## Table of contents
+
+<!-- vim-markdown-toc GFM -->
+
+* [Repository structure](#repository-structure)
+* [`glsl-lang` vs. `glsl` crates](#glsl-lang-vs-glsl-crates)
+  * [Why pick this crate?](#why-pick-this-crate)
+    * [It's fast](#its-fast)
+    * [Syntax nodes have location information](#syntax-nodes-have-location-information)
+    * [Re-written GLSL transpiler](#re-written-glsl-transpiler)
+  * [Why not pick this crate?](#why-not-pick-this-crate)
+    * [Stateful lexer](#stateful-lexer)
+    * [Parser generation and compile times](#parser-generation-and-compile-times)
+    * [`glsl-lang-quote` state](#glsl-lang-quote-state)
+    * [AST differences](#ast-differences)
+    * [Documentation](#documentation)
+    * [crates.io release](#cratesio-release)
+* [Limitations](#limitations)
+* [License](#license)
+
+<!-- vim-markdown-toc -->
+
 ## Repository structure
 
 * [`lang`](lang): AST, parser, visitor, transpiler for GLSL language

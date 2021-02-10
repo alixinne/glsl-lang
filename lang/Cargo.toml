@@ -10,9 +10,20 @@ logos = "0.12.0"
 thiserror = "1.0.23"
 lalrpop-util = "0.19.4"
 lazy_static = "1.4.0"
+strum = "0.20"
+strum_macros = "0.20"
 
 [build-dependencies]
 lalrpop = "0.19.4"
 
 [dev-dependencies]
 expect-test = "1.1.0"
+
+[features]
+# Default: only parse full translation units
+default = []
+
+# Additional sub-parsers. Increases compilation time.
+parser-expr = []
+parser-preprocessor = []
+parser-statement = []

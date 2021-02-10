@@ -1912,7 +1912,7 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::parse::Parse;
+    use crate::parse::Parsable;
     use expect_test::{expect, Expect};
 
     fn check_expr(src: &str, expected: Expect) {

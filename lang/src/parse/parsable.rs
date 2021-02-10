@@ -1,0 +1,938 @@
+use crate::{
+    ast,
+    parse::{self, ParseErrorStatic, ParseOptions},
+};
+
+/// A parsable is something we can parse either directly, or embedded in some other syntax
+/// structure.
+///
+/// This allows us to parse specific AST items even though we don't export a LALR parser for it.
+/// Due to the way it is currently implemented, we have to generate extra code around the input,
+/// thus, if you are matching on span positions, you will get a different result than if using the
+/// parser directly.
+pub trait Parsable: Sized {
+    fn parse(source: &str) -> Result<Self, ParseErrorStatic> {
+        <Self as Parsable>::parse_with_options(source, &Default::default())
+            .map(|(parsed, _names)| parsed)
+    }
+
+    fn parse_with_options(
+        source: &str,
+        opts: &ParseOptions,
+    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic>;
+}
+
+impl<T: parse::Parse> Parsable for T {
+    fn parse_with_options(
+        source: &str,
+        opts: &ParseOptions,
+    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+        <Self as parse::Parse>::parse_with_options(source, opts)
+            .map_err(|e| e.map_token(Into::into))
+    }
+}
+
+impl Parsable for ast::FunctionDefinition {
+    fn parse_with_options(
+        source: &str,
+        opts: &ParseOptions,
+    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+        match ast::TranslationUnit::parse_with_options(source, opts) {
+            Ok((ast::TranslationUnit(extdecls), tn)) => {
+                if let ast::Node {
+                    contents: ast::ExternalDeclarationData::FunctionDefinition(fndef),
+                    ..
+                } = extdecls.into_iter().next().unwrap()
+                {
+                    return Ok((fndef, tn));
+                }
+            }
+            Err(error) => {
+                return Err(error);
+            }
+        }
+
+        panic!("invalid parsable result");
+    }
+}
+
+impl Parsable for ast::UnaryOp {
+    fn parse_with_options(
+        source: &str,
+        opts: &ParseOptions,
+    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+        let src = format!("void main() {{ {}x; }}", source);
+        match ast::TranslationUnit::parse_with_options(&src, opts) {
+            Ok((ast::TranslationUnit(extdecls), tn)) => {
+                if let ast::Node {
+                    contents:
+                        ast::ExternalDeclarationData::FunctionDefinition(ast::Node {
+                            contents:
+                                ast::FunctionDefinitionData {
+                                    statement:
+                                        ast::Node {
+                                            contents:
+                                                ast::CompoundStatementData { statement_list, .. },
+                                            ..
+                                        },
+                                    ..
+                                },
+                            ..
+                        }),
+                    ..
+                } = extdecls.into_iter().next().unwrap()
+                {
+                    if let ast::StatementData::Expression(ast::ExprStatement(Some(
+                        ast::Expr::Unary(u, _),
+                    ))) = statement_list.into_iter().next().unwrap().into_inner()
+                    {
+                        return Ok((u, tn));
+                    }
+                }
+            }
+            Err(error) => {
+                return Err(error);
+            }
+        }
+
+        panic!("invalid parsable result");
+    }
+}
+
+impl Parsable for ast::AssignmentOp {
+    fn parse_with_options(
+        source: &str,
+        opts: &ParseOptions,
+    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+        let src = format!("void main() {{ x {} 2; }}", source);
+        match ast::TranslationUnit::parse_with_options(&src, opts) {
+            Ok((ast::TranslationUnit(extdecls), tn)) => {
+                if let ast::Node {
+                    contents:
+                        ast::ExternalDeclarationData::FunctionDefinition(ast::Node {
+                            contents:
+                                ast::FunctionDefinitionData {
+                                    statement:
+                                        ast::Node {
+                                            contents:
+                                                ast::CompoundStatementData { statement_list, .. },
+                                            ..
+                                        },
+                                    ..
+                                },
+                            ..
+                        }),
+                    ..
+                } = extdecls.into_iter().next().unwrap()
+                {
+                    if let ast::StatementData::Expression(ast::ExprStatement(Some(
+                        ast::Expr::Assignment(_, o, _),
+                    ))) = statement_list.into_iter().next().unwrap().into_inner()
+                    {
+                        return Ok((o, tn));
+                    }
+                }
+            }
+            Err(error) => {
+                return Err(error);
+            }
+        }
+
+        panic!("invalid parsable result");
+    }
+}
+
+macro_rules! impl_parsable_statement {
+    ($i:ident => $t:ty) => {
+        impl Parsable for $t {
+            fn parse_with_options(
+                source: &str,
+                opts: &ParseOptions,
+            ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+                let src = format!("void main() {{ {} }}", source);
+                match ast::TranslationUnit::parse_with_options(&src, opts) {
+                    Ok((ast::TranslationUnit(extdecls), tn)) => {
+                        if let ast::Node {
+                            contents:
+                                ast::ExternalDeclarationData::FunctionDefinition(ast::Node {
+                                    contents:
+                                        ast::FunctionDefinitionData {
+                                            statement:
+                                                ast::Node {
+                                                    contents:
+                                                        ast::CompoundStatementData {
+                                                            statement_list,
+                                                            ..
+                                                        },
+                                                    ..
+                                                },
+                                            ..
+                                        },
+                                    ..
+                                }),
+                            ..
+                        } = extdecls.into_iter().next().unwrap()
+                        {
+                            if let ast::StatementData::$i(expr) =
+                                statement_list.into_iter().next().unwrap().into_inner()
+                            {
+                                return Ok((expr, tn));
+                            }
+                        }
+                    }
+                    Err(error) => {
+                        return Err(error);
+                    }
+                }
+
+                panic!("invalid parsable result");
+            }
+        }
+    };
+}
+
+impl_parsable_statement!(Expression => ast::ExprStatement);
+impl_parsable_statement!(Selection => ast::SelectionStatement);
+impl_parsable_statement!(Switch => ast::SwitchStatement);
+impl_parsable_statement!(CaseLabel => ast::CaseLabel);
+impl_parsable_statement!(Iteration => ast::IterationStatement);
+impl_parsable_statement!(Jump => ast::JumpStatement);
+impl_parsable_statement!(Compound => ast::CompoundStatement);
+
+impl Parsable for ast::ArraySpecifierDimension {
+    fn parse_with_options(
+        source: &str,
+        opts: &ParseOptions,
+    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+        let src = format!("void main() {{ vec2{}(); }}", source);
+        match ast::TranslationUnit::parse_with_options(&src, opts) {
+            Ok((ast::TranslationUnit(extdecls), tn)) => {
+                if let ast::Node {
+                    contents:
+                        ast::ExternalDeclarationData::FunctionDefinition(ast::Node {
+                            contents:
+                                ast::FunctionDefinitionData {
+                                    statement:
+                                        ast::Node {
+                                            contents:
+                                                ast::CompoundStatementData { statement_list, .. },
+                                            ..
+                                        },
+                                    ..
+                                },
+                            ..
+                        }),
+                    ..
+                } = extdecls.into_iter().next().unwrap()
+                {
+                    if let ast::StatementData::Expression(ast::ExprStatement(Some(
+                        ast::Expr::FunCall(
+                            ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifier {
+                                array_specifier: Some(array),
+                                ..
+                            }),
+                            _,
+                        ),
+                    ))) = statement_list.into_iter().next().unwrap().into_inner()
+                    {
+                        return Ok((array.dimensions.into_iter().next().unwrap(), tn));
+                    }
+                }
+            }
+            Err(error) => {
+                return Err(error);
+            }
+        }
+
+        panic!("invalid parsable result");
+    }
+}
+
+impl Parsable for ast::ArraySpecifier {
+    fn parse_with_options(
+        source: &str,
+        opts: &ParseOptions,
+    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+        let src = format!("void main() {{ vec2{}(); }}", source);
+        match ast::TranslationUnit::parse_with_options(&src, opts) {
+            Ok((ast::TranslationUnit(extdecls), tn)) => {
+                if let ast::Node {
+                    contents:
+                        ast::ExternalDeclarationData::FunctionDefinition(ast::Node {
+                            contents:
+                                ast::FunctionDefinitionData {
+                                    statement:
+                                        ast::Node {
+                                            contents:
+                                                ast::CompoundStatementData { statement_list, .. },
+                                            ..
+                                        },
+                                    ..
+                                },
+                            ..
+                        }),
+                    ..
+                } = extdecls.into_iter().next().unwrap()
+                {
+                    if let ast::StatementData::Expression(ast::ExprStatement(Some(
+                        ast::Expr::FunCall(
+                            ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifier {
+                                array_specifier: Some(array),
+                                ..
+                            }),
+                            _,
+                        ),
+                    ))) = statement_list.into_iter().next().unwrap().into_inner()
+                    {
+                        return Ok((array, tn));
+                    }
+                }
+            }
+            Err(error) => {
+                return Err(error);
+            }
+        }
+
+        panic!("invalid parsable result");
+    }
+}
+
+impl Parsable for ast::FunIdentifier {
+    fn parse_with_options(
+        source: &str,
+        opts: &ParseOptions,
+    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+        let src = format!("void main() {{ {}(); }}", source);
+        match ast::TranslationUnit::parse_with_options(&src, opts) {
+            Ok((ast::TranslationUnit(extdecls), tn)) => {
+                if let ast::Node {
+                    contents:
+                        ast::ExternalDeclarationData::FunctionDefinition(ast::Node {
+                            contents:
+                                ast::FunctionDefinitionData {
+                                    statement:
+                                        ast::Node {
+                                            contents:
+                                                ast::CompoundStatementData { statement_list, .. },
+                                            ..
+                                        },
+                                    ..
+                                },
+                            ..
+                        }),
+                    ..
+                } = extdecls.into_iter().next().unwrap()
+                {
+                    if let ast::StatementData::Expression(ast::ExprStatement(Some(
+                        ast::Expr::FunCall(fi, _),
+                    ))) = statement_list.into_iter().next().unwrap().into_inner()
+                    {
+                        return Ok((fi, tn));
+                    }
+                }
+            }
+            Err(error) => {
+                return Err(error);
+            }
+        }
+
+        panic!("invalid parsable result");
+    }
+}
+
+impl Parsable for ast::InterpolationQualifier {
+    fn parse_with_options(
+        source: &str,
+        opts: &ParseOptions,
+    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+        let src = format!("{} float x;", source);
+        match ast::TranslationUnit::parse_with_options(&src, opts) {
+            Ok((ast::TranslationUnit(extdecls), tn)) => {
+                if let ast::Node {
+                    contents:
+                        ast::ExternalDeclarationData::Declaration(ast::Node {
+                            contents:
+                                ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
+                                    head:
+                                        ast::SingleDeclaration {
+                                            ty:
+                                                ast::FullySpecifiedType {
+                                                    qualifier:
+                                                        Some(ast::TypeQualifier { qualifiers }),
+                                                    ..
+                                                },
+                                            ..
+                                        },
+                                    ..
+                                }),
+                            ..
+                        }),
+                    ..
+                } = extdecls.into_iter().next().unwrap()
+                {
+                    if let ast::TypeQualifierSpec::Interpolation(interp) =
+                        qualifiers.into_iter().next().unwrap()
+                    {
+                        return Ok((interp, tn));
+                    }
+                }
+            }
+            Err(error) => {
+                return Err(error);
+            }
+        }
+
+        panic!("invalid parsable result");
+    }
+}
+
+impl Parsable for ast::ArrayedIdentifier {
+    fn parse_with_options(
+        source: &str,
+        opts: &ParseOptions,
+    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+        let src = format!("uniform Block {{ float x; }} {};", source);
+        match ast::TranslationUnit::parse_with_options(&src, opts) {
+            Ok((ast::TranslationUnit(extdecls), tn)) => {
+                if let ast::Node {
+                    contents:
+                        ast::ExternalDeclarationData::Declaration(ast::Node {
+                            contents:
+                                ast::DeclarationData::Block(ast::Block {
+                                    identifier: Some(a),
+                                    ..
+                                }),
+                            ..
+                        }),
+                    ..
+                } = extdecls.into_iter().next().unwrap()
+                {
+                    return Ok((a, tn));
+                }
+            }
+            Err(error) => {
+                return Err(error);
+            }
+        }
+
+        panic!("invalid parsable result");
+    }
+}
+
+impl Parsable for ast::PrecisionQualifier {
+    fn parse_with_options(
+        source: &str,
+        opts: &ParseOptions,
+    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+        let src = format!("{} float x;", source);
+        match ast::TranslationUnit::parse_with_options(&src, opts) {
+            Ok((ast::TranslationUnit(extdecls), tn)) => {
+                if let ast::Node {
+                    contents:
+                        ast::ExternalDeclarationData::Declaration(ast::Node {
+                            contents:
+                                ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
+                                    head:
+                                        ast::SingleDeclaration {
+                                            ty:
+                                                ast::FullySpecifiedType {
+                                                    qualifier:
+                                                        Some(ast::TypeQualifier { qualifiers }),
+                                                    ..
+                                                },
+                                            ..
+                                        },
+                                    ..
+                                }),
+                            ..
+                        }),
+                    ..
+                } = extdecls.into_iter().next().unwrap()
+                {
+                    if let ast::TypeQualifierSpec::Precision(q) =
+                        qualifiers.into_iter().next().unwrap()
+                    {
+                        return Ok((q, tn));
+                    }
+                }
+            }
+            Err(error) => {
+                return Err(error);
+            }
+        }
+
+        panic!("invalid parsable result");
+    }
+}
+
+impl Parsable for ast::StorageQualifier {
+    fn parse_with_options(
+        source: &str,
+        opts: &ParseOptions,
+    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+        let src = format!("{} float x;", source);
+        match ast::TranslationUnit::parse_with_options(&src, opts) {
+            Ok((ast::TranslationUnit(extdecls), tn)) => {
+                if let ast::Node {
+                    contents:
+                        ast::ExternalDeclarationData::Declaration(ast::Node {
+                            contents:
+                                ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
+                                    head:
+                                        ast::SingleDeclaration {
+                                            ty:
+                                                ast::FullySpecifiedType {
+                                                    qualifier:
+                                                        Some(ast::TypeQualifier { qualifiers }),
+                                                    ..
+                                                },
+                                            ..
+                                        },
+                                    ..
+                                }),
+                            ..
+                        }),
+                    ..
+                } = extdecls.into_iter().next().unwrap()
+                {
+                    if let ast::TypeQualifierSpec::Storage(q) =
+                        qualifiers.into_iter().next().unwrap()
+                    {
+                        return Ok((q, tn));
+                    }
+                }
+            }
+            Err(error) => {
+                return Err(error);
+            }
+        }
+
+        panic!("invalid parsable result");
+    }
+}
+
+impl Parsable for ast::LayoutQualifier {
+    fn parse_with_options(
+        source: &str,
+        opts: &ParseOptions,
+    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+        let src = format!("{} float x;", source);
+        match ast::TranslationUnit::parse_with_options(&src, opts) {
+            Ok((ast::TranslationUnit(extdecls), tn)) => {
+                if let ast::Node {
+                    contents:
+                        ast::ExternalDeclarationData::Declaration(ast::Node {
+                            contents:
+                                ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
+                                    head:
+                                        ast::SingleDeclaration {
+                                            ty:
+                                                ast::FullySpecifiedType {
+                                                    qualifier:
+                                                        Some(ast::TypeQualifier { qualifiers }),
+                                                    ..
+                                                },
+                                            ..
+                                        },
+                                    ..
+                                }),
+                            ..
+                        }),
+                    ..
+                } = extdecls.into_iter().next().unwrap()
+                {
+                    if let ast::TypeQualifierSpec::Layout(q) =
+                        qualifiers.into_iter().next().unwrap()
+                    {
+                        return Ok((q, tn));
+                    }
+                }
+            }
+            Err(error) => {
+                return Err(error);
+            }
+        }
+
+        panic!("invalid parsable result");
+    }
+}
+
+impl Parsable for ast::TypeQualifier {
+    fn parse_with_options(
+        source: &str,
+        opts: &ParseOptions,
+    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+        let src = format!("{} float x;", source);
+        match ast::TranslationUnit::parse_with_options(&src, opts) {
+            Ok((ast::TranslationUnit(extdecls), tn)) => {
+                if let ast::Node {
+                    contents:
+                        ast::ExternalDeclarationData::Declaration(ast::Node {
+                            contents:
+                                ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
+                                    head:
+                                        ast::SingleDeclaration {
+                                            ty:
+                                                ast::FullySpecifiedType {
+                                                    qualifier: Some(q), ..
+                                                },
+                                            ..
+                                        },
+                                    ..
+                                }),
+                            ..
+                        }),
+                    ..
+                } = extdecls.into_iter().next().unwrap()
+                {
+                    return Ok((q, tn));
+                }
+            }
+            Err(error) => {
+                return Err(error);
+            }
+        }
+
+        panic!("invalid parsable result");
+    }
+}
+
+impl Parsable for ast::TypeSpecifier {
+    fn parse_with_options(
+        source: &str,
+        opts: &ParseOptions,
+    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+        let src = format!("{} x;", source);
+        match ast::TranslationUnit::parse_with_options(&src, opts) {
+            Ok((ast::TranslationUnit(extdecls), tn)) => {
+                if let ast::Node {
+                    contents:
+                        ast::ExternalDeclarationData::Declaration(ast::Node {
+                            contents:
+                                ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
+                                    head:
+                                        ast::SingleDeclaration {
+                                            ty: ast::FullySpecifiedType { ty, .. },
+                                            ..
+                                        },
+                                    ..
+                                }),
+                            ..
+                        }),
+                    ..
+                } = extdecls.into_iter().next().unwrap()
+                {
+                    return Ok((ty, tn));
+                }
+            }
+            Err(error) => {
+                return Err(error);
+            }
+        }
+
+        panic!("invalid parsable result");
+    }
+}
+
+impl Parsable for ast::TypeSpecifierNonArray {
+    fn parse_with_options(
+        source: &str,
+        opts: &ParseOptions,
+    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+        let src = format!("{} x;", source);
+        match ast::TranslationUnit::parse_with_options(&src, opts) {
+            Ok((ast::TranslationUnit(extdecls), tn)) => {
+                if let ast::Node {
+                    contents:
+                        ast::ExternalDeclarationData::Declaration(ast::Node {
+                            contents:
+                                ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
+                                    head:
+                                        ast::SingleDeclaration {
+                                            ty:
+                                                ast::FullySpecifiedType {
+                                                    ty: ast::TypeSpecifier { ty, .. },
+                                                    ..
+                                                },
+                                            ..
+                                        },
+                                    ..
+                                }),
+                            ..
+                        }),
+                    ..
+                } = extdecls.into_iter().next().unwrap()
+                {
+                    return Ok((ty, tn));
+                }
+            }
+            Err(error) => {
+                return Err(error);
+            }
+        }
+
+        panic!("invalid parsable result");
+    }
+}
+
+impl Parsable for ast::FullySpecifiedType {
+    fn parse_with_options(
+        source: &str,
+        opts: &ParseOptions,
+    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+        let src = format!("{} x;", source);
+        match ast::TranslationUnit::parse_with_options(&src, opts) {
+            Ok((ast::TranslationUnit(extdecls), tn)) => {
+                if let ast::Node {
+                    contents:
+                        ast::ExternalDeclarationData::Declaration(ast::Node {
+                            contents:
+                                ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
+                                    head: ast::SingleDeclaration { ty, .. },
+                                    ..
+                                }),
+                            ..
+                        }),
+                    ..
+                } = extdecls.into_iter().next().unwrap()
+                {
+                    return Ok((ty, tn));
+                }
+            }
+            Err(error) => {
+                return Err(error);
+            }
+        }
+
+        panic!("invalid parsable result");
+    }
+}
+
+impl Parsable for ast::Declaration {
+    fn parse_with_options(
+        source: &str,
+        opts: &ParseOptions,
+    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+        let src = format!("{};", source);
+        match ast::TranslationUnit::parse_with_options(&src, opts) {
+            Ok((ast::TranslationUnit(extdecls), tn)) => {
+                if let ast::Node {
+                    contents: ast::ExternalDeclarationData::Declaration(decl),
+                    ..
+                } = extdecls.into_iter().next().unwrap()
+                {
+                    return Ok((decl, tn));
+                }
+            }
+            Err(error) => {
+                return Err(error);
+            }
+        }
+
+        panic!("invalid parsable result");
+    }
+}
+
+impl Parsable for ast::StructFieldSpecifier {
+    fn parse_with_options(
+        source: &str,
+        opts: &ParseOptions,
+    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+        let src = format!("struct A {{ {} }};", source);
+        match ast::TranslationUnit::parse_with_options(&src, opts) {
+            Ok((ast::TranslationUnit(extdecls), tn)) => {
+                if let ast::Node {
+                    contents:
+                        ast::ExternalDeclarationData::Declaration(ast::Node {
+                            contents:
+                                ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
+                                    head:
+                                        ast::SingleDeclaration {
+                                            ty:
+                                                ast::FullySpecifiedType {
+                                                    ty:
+                                                        ast::TypeSpecifier {
+                                                            ty:
+                                                                ast::TypeSpecifierNonArray::Struct(
+                                                                    ast::StructSpecifier {
+                                                                        fields,
+                                                                        ..
+                                                                    },
+                                                                ),
+                                                            ..
+                                                        },
+                                                    ..
+                                                },
+                                            ..
+                                        },
+                                    ..
+                                }),
+                            ..
+                        }),
+                    ..
+                } = extdecls.into_iter().next().unwrap()
+                {
+                    return Ok((fields.into_iter().next().unwrap(), tn));
+                }
+            }
+            Err(error) => {
+                return Err(error);
+            }
+        }
+
+        panic!("invalid parsable result");
+    }
+}
+
+impl Parsable for ast::StructSpecifier {
+    fn parse_with_options(
+        source: &str,
+        opts: &ParseOptions,
+    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+        let src = format!("{};", source);
+        match ast::TranslationUnit::parse_with_options(&src, opts) {
+            Ok((ast::TranslationUnit(extdecls), tn)) => {
+                if let ast::Node {
+                    contents:
+                        ast::ExternalDeclarationData::Declaration(ast::Node {
+                            contents:
+                                ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
+                                    head:
+                                        ast::SingleDeclaration {
+                                            ty:
+                                                ast::FullySpecifiedType {
+                                                    ty:
+                                                        ast::TypeSpecifier {
+                                                            ty:
+                                                                ast::TypeSpecifierNonArray::Struct(s),
+                                                            ..
+                                                        },
+                                                    ..
+                                                },
+                                            ..
+                                        },
+                                    ..
+                                }),
+                            ..
+                        }),
+                    ..
+                } = extdecls.into_iter().next().unwrap()
+                {
+                    return Ok((s, tn));
+                }
+            }
+            Err(error) => {
+                return Err(error);
+            }
+        }
+
+        panic!("invalid parsable result");
+    }
+}
+
+#[cfg(not(feature = "parser-expr"))]
+impl Parsable for ast::Expr {
+    fn parse_with_options(
+        source: &str,
+        opts: &ParseOptions,
+    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+        let src = format!("void main() {{ {}; }}", source);
+        match ast::TranslationUnit::parse_with_options(&src, opts) {
+            Ok((ast::TranslationUnit(extdecls), tn)) => {
+                if let ast::Node {
+                    contents:
+                        ast::ExternalDeclarationData::FunctionDefinition(ast::Node {
+                            contents:
+                                ast::FunctionDefinitionData {
+                                    statement:
+                                        ast::Node {
+                                            contents:
+                                                ast::CompoundStatementData { statement_list, .. },
+                                            ..
+                                        },
+                                    ..
+                                },
+                            ..
+                        }),
+                    ..
+                } = extdecls.into_iter().next().unwrap()
+                {
+                    if let ast::StatementData::Expression(ast::ExprStatement(Some(expr))) =
+                        statement_list.into_iter().next().unwrap().into_inner()
+                    {
+                        return Ok((expr, tn));
+                    }
+                }
+            }
+            Err(error) => {
+                return Err(error);
+            }
+        }
+
+        panic!("invalid parsable result");
+    }
+}
+
+#[cfg(not(feature = "parser-preprocessor"))]
+impl Parsable for ast::Preprocessor {
+    fn parse_with_options(
+        source: &str,
+        opts: &ParseOptions,
+    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+        match ast::TranslationUnit::parse_with_options(source, opts) {
+            Ok((ast::TranslationUnit(extdecls), tn)) => {
+                if let ast::Node {
+                    contents: ast::ExternalDeclarationData::Preprocessor(pp),
+                    ..
+                } = extdecls.into_iter().next().unwrap()
+                {
+                    return Ok((pp, tn));
+                }
+            }
+            Err(error) => {
+                return Err(error);
+            }
+        }
+
+        panic!("invalid parsable result");
+    }
+}
+
+#[cfg(not(feature = "parser-statement"))]
+impl Parsable for ast::Statement {
+    fn parse_with_options(
+        source: &str,
+        opts: &ParseOptions,
+    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+        let src = format!("void main() {{ {} }}", source);
+        match ast::TranslationUnit::parse_with_options(&src, opts) {
+            Ok((ast::TranslationUnit(extdecls), tn)) => {
+                if let ast::Node {
+                    contents:
+                        ast::ExternalDeclarationData::FunctionDefinition(ast::Node {
+                            contents:
+                                ast::FunctionDefinitionData {
+                                    statement:
+                                        ast::Node {
+                                            contents:
+                                                ast::CompoundStatementData { statement_list, .. },
+                                            ..
+                                        },
+                                    ..
+                                },
+                            ..
+                        }),
+                    ..
+                } = extdecls.into_iter().next().unwrap()
+                {
+                    return Ok((statement_list.into_iter().next().unwrap(), tn));
+                }
+            }
+            Err(error) => {
+                return Err(error);
+            }
+        }
+
+        panic!("invalid parsable result");
+    }
+}

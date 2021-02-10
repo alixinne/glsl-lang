@@ -29,16 +29,13 @@ pub fn glsl(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     glsl_internal::<ast::TranslationUnit>(input)
 }
 
+#[cfg(feature = "quote-statement")]
 #[proc_macro]
 pub fn glsl_statement(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     glsl_internal::<ast::Statement>(input)
 }
 
-#[proc_macro]
-pub fn glsl_statements(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
-    glsl_internal::<ast::CompoundStatement>(input)
-}
-
+#[cfg(feature = "quote-expr")]
 #[proc_macro]
 pub fn glsl_expr(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     glsl_internal::<ast::Expr>(input)

@@ -1,9 +1,11 @@
 use logos::Logos;
+use strum_macros::{EnumDiscriminants, IntoStaticStr};
 
 use super::{parse_f32, parse_f64, parse_ident, parse_int, parse_uint, LexerContext, TypeNames};
 
-#[derive(Debug, Clone, PartialEq, Logos)]
+#[derive(Debug, Clone, PartialEq, Logos, EnumDiscriminants)]
 #[logos(extras = LexerContext)]
+#[strum_discriminants(name(TokenKind), derive(IntoStaticStr))]
 pub enum Token<'i> {
     #[token("const")]
     Const,

@@ -11,3 +11,12 @@ proc-macro = true
 glsl-lang = "0.1"
 proc-macro2 = "1"
 quote = "1"
+
+[features]
+# Default: only translation units can be quoted
+default = []
+
+# Additional sub-quotes. Increases compilation time.
+quote-expr = ["glsl-lang/parser-expr"]
+quote-preprocessor = ["glsl-lang/parser-preprocessor"]
+quote-statement = ["glsl-lang/parser-statement"]

@@ -4,7 +4,7 @@ use std::rc::Rc;
 
 use crate::ast;
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum IdentifierContext {
     FunctionPrototype,
 }

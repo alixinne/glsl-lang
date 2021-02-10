@@ -46,14 +46,6 @@ impl<'i> Lexer<'i> {
         }
     }
 
-    fn consume(src: &mut logos::Lexer<'i, Token<'i>>) -> Option<<Self as Iterator>::Item> {
-        let token = src.next()?;
-        let span = src.span();
-        let source_id = src.extras.source_id;
-
-        Some(((source_id, span.start), token, (source_id, span.end)))
-    }
-
     fn consume_pp(
         pp: &mut logos::Lexer<'i, PreprocessorToken<'i>>,
     ) -> Option<((usize, usize), PreprocessorToken<'i>, (usize, usize))> {
@@ -321,11 +313,9 @@ impl<'i> Iterator for Lexer<'i> {
                 // If no token was read (unexpected state), read a new one
                 let token = read_token.unwrap_or_else(|| Self::consume_pp(pp));
                 if let Some((_, PreprocessorToken::Newline, _)) = token {
-                    // Directive completed, process next token as regular source
-                    let mut new_lexer = pp.clone().morph();
-                    let result = Self::consume(&mut new_lexer);
-                    self.inner = LexerStage::Source(new_lexer);
-                    result
+                    // Directive completed, process next token as regular source by recursing into next
+                    self.inner = LexerStage::Source(pp.clone().morph());
+                    return self.next();
                 } else {
                     // Map into Token
                     token.map(|(s, t, e)| (s, t.into(), e))

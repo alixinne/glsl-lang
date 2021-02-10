@@ -2295,6 +2295,25 @@ fn parse_pp_define() {
             .into()
         )
     );
+
+    let a = ast::PreprocessorData::Define(ast::PreprocessorDefine::ObjectLike {
+        ident: "M_PI".into(),
+        value: "3.14".to_owned(),
+    })
+    .into();
+    let b = ast::PreprocessorData::Define(ast::PreprocessorDefine::ObjectLike {
+        ident: "M_2PI".into(),
+        value: "(2. * M_PI)".to_owned(),
+    })
+    .into();
+
+    assert_ceq!(
+        ast::TranslationUnit::parse("#define M_PI 3.14\n#define M_2PI (2. * M_PI)\n"),
+        Ok(ast::TranslationUnit(vec![
+            ast::ExternalDeclarationData::Preprocessor(a).into(),
+            ast::ExternalDeclarationData::Preprocessor(b).into()
+        ]))
+    );
 }
 
 #[test]

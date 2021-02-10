@@ -114,6 +114,7 @@ would require some changes to your code:
   constructor, and array specifiers are only allowed in this position.
 * Support for the `attribute` and `varying` qualifiers was removed
 * The `NonEmpty` wrapper was removed
+* `Declaration::Global` was removed since it's parsed as an `InitDeclaratorList`
 
 #### Documentation
 

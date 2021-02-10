@@ -1088,7 +1088,7 @@ fn tokenize_statement(sst: &ast::Statement) -> TokenStream {
 
 fn tokenize_expr_statement(est: &ast::ExprStatement) -> TokenStream {
     let e = est.0.as_ref().map(|e| tokenize_expr(&e)).quote();
-    quote! {#e}
+    quote! { glsl_lang::ast::ExprStatement(#e) }
 }
 
 fn tokenize_selection_statement(sst: &ast::SelectionStatement) -> TokenStream {

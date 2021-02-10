@@ -23,7 +23,13 @@ impl ParseOptions {
 pub type ParseError<'i> = lalrpop_util::ParseError<(usize, usize), Token<'i>, LexicalError>;
 pub type ParseErrorStatic = lalrpop_util::ParseError<(usize, usize), TokenKind, LexicalError>;
 
+pub trait LangParser: Sized {
+    fn new() -> Self;
+}
+
 pub trait Parse: Sized {
+    type Parser: LangParser;
+
     fn parse(source: &str) -> Result<Self, ParseError> {
         <Self as Parse>::parse_with_options(source, &Default::default())
             .map(|(parsed, _names)| parsed)
@@ -33,14 +39,37 @@ pub trait Parse: Sized {
         source: &'i str,
         opts: &ParseOptions,
     ) -> Result<(Self, TypeNames), ParseError<'i>>;
+
+    fn parse_with_parser<'i>(
+        source: &'i str,
+        opts: &ParseOptions,
+        parser: &Self::Parser,
+    ) -> Result<(Self, TypeNames), ParseError<'i>>;
 }
 
 macro_rules! impl_parse {
     ($t:ty => $p:ty) => {
+        impl LangParser for $p {
+            fn new() -> Self {
+                <$p>::new()
+            }
+        }
+
         impl Parse for $t {
+            type Parser = $p;
+
             fn parse_with_options<'i>(
                 source: &'i str,
                 opts: &ParseOptions,
+            ) -> Result<(Self, TypeNames), ParseError<'i>> {
+                let parser = <$p>::new();
+                Self::parse_with_parser(source, opts, &parser)
+            }
+
+            fn parse_with_parser<'i>(
+                source: &'i str,
+                opts: &ParseOptions,
+                parser: &$p,
             ) -> Result<(Self, TypeNames), ParseError<'i>> {
                 // Clone the input structure
                 let cloned_opts = opts.clone();
@@ -54,7 +83,6 @@ macro_rules! impl_parse {
 
                 // Invoke the parser
                 let lexer = Lexer::new(source, cloned_opts);
-                let parser = <$p>::new();
                 parser
                     .parse(source, lexer)
                     .map(|parsed| (parsed, cloned_type_names))

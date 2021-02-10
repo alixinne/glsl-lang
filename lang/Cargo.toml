@@ -17,7 +17,13 @@ strum_macros = "0.20"
 lalrpop = "0.19.4"
 
 [dev-dependencies]
+criterion = "0.3"
 expect-test = "1.1.0"
+glsl = "6"
+
+[[bench]]
+name = "glsl"
+harness = false
 
 [features]
 # Default: only parse full translation units

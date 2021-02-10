@@ -14,9 +14,12 @@ quote = "1"
 
 [features]
 # Default: only translation units can be quoted
-default = []
+default = ["quote-parsable"]
 
 # Additional sub-quotes. Increases compilation time.
 quote-expr = ["glsl-lang/parser-expr"]
 quote-preprocessor = ["glsl-lang/parser-preprocessor"]
 quote-statement = ["glsl-lang/parser-statement"]
+
+# Allow parsing quoted expressions with parseable
+quote-parsable = []

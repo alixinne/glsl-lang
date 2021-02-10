@@ -1,4 +1,4 @@
-use glsl_lang::{ast, parse::Parse};
+use glsl_lang::{ast, parse::Parsable};
 use proc_macro2::TokenStream;
 
 use crate::tokenize::Tokenize;
@@ -8,10 +8,10 @@ mod tokenize;
 
 fn glsl_internal<F>(input: proc_macro::TokenStream) -> proc_macro::TokenStream
 where
-    F: Parse + Tokenize + std::fmt::Debug,
+    F: Parsable + Tokenize + std::fmt::Debug,
 {
     let s = format!("{}", &input);
-    let parsed: Result<F, _> = Parse::parse(&s);
+    let parsed: Result<F, _> = Parsable::parse(&s);
 
     if let Ok(tu) = parsed {
         // create the stream and return it
@@ -29,13 +29,13 @@ pub fn glsl(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     glsl_internal::<ast::TranslationUnit>(input)
 }
 
-#[cfg(feature = "quote-statement")]
+#[cfg(any(feature = "quote-statement", feature = "quote-parsable"))]
 #[proc_macro]
 pub fn glsl_statement(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     glsl_internal::<ast::Statement>(input)
 }
 
-#[cfg(feature = "quote-expr")]
+#[cfg(any(feature = "quote-expr", feature = "quote-parsable"))]
 #[proc_macro]
 pub fn glsl_expr(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     glsl_internal::<ast::Expr>(input)

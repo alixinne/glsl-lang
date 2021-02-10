@@ -91,6 +91,7 @@ would require some changes to your code:
   this reflects the fact that a type specifier as a function identifier is a
   constructor, and array specifiers are only allowed in this position.
 * Support for the `attribute` and `varying` qualifiers was removed
+* The `NonEmpty` wrapper was removed
 
 #### Documentation
 

@@ -408,6 +408,26 @@ impl FunIdentifier {
     pub fn ident(i: impl Into<Identifier>) -> Self {
         Self::Expr(Box::new(Expr::Variable(i.into())))
     }
+
+    pub fn as_ident(&self) -> Option<&Identifier> {
+        match self {
+            Self::Expr(expr) => match &**expr {
+                Expr::Variable(ident) => Some(ident),
+                _ => None,
+            },
+            _ => None,
+        }
+    }
+
+    pub fn as_ident_mut(&mut self) -> Option<&mut Identifier> {
+        match self {
+            Self::Expr(expr) => match &mut **expr {
+                Expr::Variable(ident) => Some(ident),
+                _ => None,
+            },
+            _ => None,
+        }
+    }
 }
 
 /// Function prototype.

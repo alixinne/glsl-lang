@@ -50,6 +50,10 @@ impl IdentifierData {
             None
         }
     }
+
+    pub fn as_str(&self) -> &str {
+        self.0.as_str()
+    }
 }
 
 impl From<&str> for IdentifierData {
@@ -67,6 +71,12 @@ impl fmt::Display for IdentifierData {
 /// Any type name.
 #[derive(Clone, Debug, PartialEq, NodeContents)]
 pub struct TypeNameData(pub String);
+
+impl TypeNameData {
+    pub fn as_str(&self) -> &str {
+        self.0.as_str()
+    }
+}
 
 impl From<IdentifierData> for TypeNameData {
     fn from(ident: IdentifierData) -> Self {

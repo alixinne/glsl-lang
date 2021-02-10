@@ -334,4 +334,6 @@ pub enum LexicalError {
     InvalidIntLiteral(#[from] std::num::ParseIntError),
     #[error("invalid float literal: {0}")]
     InvalidFloatLiteral(#[from] std::num::ParseFloatError),
+    #[error("encountered forbidden #(ident) quote syntax")]
+    ForbiddenRsQuote,
 }

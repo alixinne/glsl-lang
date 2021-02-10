@@ -1,4 +1,7 @@
-use glsl_lang::{ast, parse::Parsable};
+use glsl_lang::{
+    ast,
+    parse::{Parsable, ParseOptions},
+};
 use proc_macro2::TokenStream;
 
 use crate::tokenize::Tokenize;
@@ -11,9 +14,13 @@ where
     F: Parsable + Tokenize + std::fmt::Debug,
 {
     let s = format!("{}", &input);
-    let parsed: Result<F, _> = Parsable::parse(&s);
+    let opts = ParseOptions {
+        allow_rs_ident: true,
+        ..Default::default()
+    };
+    let parsed: Result<(F, _), _> = Parsable::parse_with_options(&s, &opts);
 
-    if let Ok(tu) = parsed {
+    if let Ok((tu, _)) = parsed {
         // create the stream and return it
         let mut stream = TokenStream::new();
         tu.tokenize(&mut stream);

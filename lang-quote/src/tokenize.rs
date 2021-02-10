@@ -2,7 +2,7 @@
 
 use glsl_lang::ast;
 use proc_macro2::TokenStream;
-use quote::{quote, ToTokens};
+use quote::{format_ident, quote, ToTokens};
 use std::iter::once;
 
 use crate::quoted::Quoted;
@@ -127,9 +127,16 @@ fn tokenize_path(p: &ast::Path) -> TokenStream {
 }
 
 fn tokenize_identifier(i: &ast::Identifier) -> TokenStream {
-    let t = i.0.to_owned().quote();
-    let span = tokenize_span(&i.span);
-    quote! { glsl_lang::ast::Identifier::new(glsl_lang::ast::IdentifierData(#t), #span) }
+    if let Some(rs_ident) = i.as_rs_ident() {
+        // Rust identifier
+        let ident = format_ident!("{}", rs_ident);
+        quote! { #ident }
+    } else {
+        // Regular identifier
+        let t = i.0.to_owned().quote();
+        let span = tokenize_span(&i.span);
+        quote! { glsl_lang::ast::Identifier::new(glsl_lang::ast::IdentifierData(#t), #span) }
+    }
 }
 
 fn tokenize_type_name(tn: &ast::TypeName) -> TokenStream {
@@ -693,42 +700,15 @@ fn tokenize_interpolation_qualifier(i: &ast::InterpolationQualifier) -> TokenStr
 }
 
 fn tokenize_expr(expr: &ast::Expr) -> TokenStream {
+    if let Some(rs_ident) = expr.as_rs_ident() {
+        let ident = format_ident!("{}", rs_ident);
+        return quote! { #ident };
+    }
+
     match *expr {
         ast::Expr::Variable(ref i) => {
-            if i.0.starts_with("___") {
-                let name = &i.0[3..i.0.len()];
-                if name.starts_with("C") {
-                    let s = proc_macro2::Ident::new(
-                        &name[1..name.len()],
-                        proc_macro2::Span::call_site(),
-                    );
-                    quote! { glsl_lang::ast::Expr::Variable(#s.clone()) }
-                } else {
-                    let s = proc_macro2::Ident::new(name, proc_macro2::Span::call_site());
-                    quote! { glsl_lang::ast::Expr::Variable(#s) }
-                }
-            } else if i.0.starts_with("__") {
-                let name = &i.0[2..i.0.len()];
-                if name.starts_with("C") {
-                    let s = proc_macro2::Ident::new(
-                        &name[1..name.len()],
-                        proc_macro2::Span::call_site(),
-                    );
-                    quote! { #s.clone() }
-                } else if name.starts_with("P") {
-                    let s = proc_macro2::Ident::new(
-                        &name[1..name.len()],
-                        proc_macro2::Span::call_site(),
-                    );
-                    quote! { glsl_lang::ast::Expr::parse(#s)? }
-                } else {
-                    let s = proc_macro2::Ident::new(name, proc_macro2::Span::call_site());
-                    quote! { #s }
-                }
-            } else {
-                let i = tokenize_identifier(i);
-                quote! { glsl_lang::ast::Expr::Variable(#i) }
-            }
+            let i = tokenize_identifier(i);
+            quote! { glsl_lang::ast::Expr::Variable(#i) }
         }
 
         ast::Expr::IntConst(ref x) => quote! { glsl_lang::ast::Expr::IntConst(#x) },
@@ -857,6 +837,11 @@ fn tokenize_assignment_op(op: &ast::AssignmentOp) -> TokenStream {
 }
 
 fn tokenize_function_identifier(i: &ast::FunIdentifier) -> TokenStream {
+    if let Some(rs_ident) = i.as_rs_ident() {
+        let ident = format_ident!("{}", rs_ident);
+        return quote! { #ident };
+    }
+
     match *i {
         ast::FunIdentifier::TypeSpecifier(ref n) => {
             let n = tokenize_type_specifier(n);

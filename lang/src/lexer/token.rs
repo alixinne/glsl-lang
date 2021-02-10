@@ -2,7 +2,8 @@ use logos::Logos;
 use strum_macros::{EnumDiscriminants, IntoStaticStr};
 
 use super::{
-    parse_cmt, parse_f32, parse_f64, parse_ident, parse_int, parse_uint, LexerContext, TypeNames,
+    parse_cmt, parse_f32, parse_f64, parse_ident, parse_int, parse_rs_ident, parse_uint,
+    LexerContext, TypeNames,
 };
 
 #[derive(Debug, Clone, PartialEq, Logos, EnumDiscriminants)]
@@ -399,6 +400,7 @@ pub enum Token<'i> {
     #[token("subroutine")]
     Subroutine,
     #[regex("[a-zA-Z_][a-zA-Z_0-9]*", parse_ident)]
+    #[regex("#\\s*\\(\\s*[a-zA-Z_][a-zA-Z_0-9]*\\s*\\)", parse_rs_ident)]
     Identifier((&'i str, TypeNames)),
     TypeName(&'i str), // Cast from Identifier depending on known type names
     #[regex(

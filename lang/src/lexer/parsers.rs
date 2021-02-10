@@ -90,6 +90,16 @@ pub fn parse_ident<'i>(
     Ok((lex.slice(), lex.extras.type_names.clone()))
 }
 
+pub fn parse_rs_ident<'i>(
+    lex: &mut logos::Lexer<'i, Token<'i>>,
+) -> Result<(&'i str, TypeNames), LexicalError> {
+    if lex.extras.allow_rs_ident {
+        Ok((lex.slice(), lex.extras.type_names.clone()))
+    } else {
+        Err(LexicalError::ForbiddenRsQuote)
+    }
+}
+
 fn parse_cmt_int(
     extras: &super::LexerContext,
     slice: &str,

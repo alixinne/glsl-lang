@@ -1,6 +1,8 @@
 #[macro_use]
 extern crate glsl_lang_quote;
 
+use glsl_lang::ast;
+
 #[test]
 fn void_main_empty() {
     let _ = glsl! {void main() {}};
@@ -73,4 +75,21 @@ fn dot_expr() {
         //float z = .3;
       }
     };
+}
+
+#[test]
+fn quote_ident() {
+    let ident: ast::Identifier = ast::IdentifierData("main".to_owned()).into();
+
+    let tu = glsl! {
+        void #(ident)() {
+        }
+    };
+
+    match &*(tu.0)[0] {
+        ast::ExternalDeclarationData::FunctionDefinition(fndef) => {
+            assert_eq!(fndef.prototype.name.0, "main");
+        }
+        _ => assert!(false),
+    }
 }

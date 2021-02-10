@@ -12,6 +12,7 @@ pub use parsable::Parsable;
 pub struct ParseOptions {
     pub target_vulkan: bool,
     pub source_id: usize,
+    pub allow_rs_ident: bool,
     pub type_names: TypeNames,
     pub comments: Option<Comments>,
 }

@@ -39,6 +39,19 @@ pub enum Path {
 #[derive(Clone, Debug, PartialEq, NodeContents)]
 pub struct IdentifierData(pub String);
 
+impl IdentifierData {
+    pub fn as_rs_ident(&self) -> Option<&str> {
+        if self.0.starts_with("#") & self.0.ends_with(")") {
+            // Remove #\s* and )
+            let s = (&self.0[1..self.0.len() - 1]).trim();
+            // Remove ( and whitespace
+            Some(s[1..].trim())
+        } else {
+            None
+        }
+    }
+}
+
 impl From<&str> for IdentifierData {
     fn from(ident: &str) -> Self {
         Self(ident.to_owned())
@@ -427,6 +440,14 @@ impl FunIdentifier {
             _ => None,
         }
     }
+
+    pub fn as_rs_ident(&self) -> Option<&str> {
+        if let Some(ident) = self.as_ident() {
+            ident.as_rs_ident()
+        } else {
+            None
+        }
+    }
 }
 
 /// Function prototype.
@@ -532,6 +553,13 @@ pub enum Expr {
 impl Expr {
     pub fn variable(name: impl Into<IdentifierData>) -> Self {
         Self::Variable(IdentifierData::from(name.into()).into())
+    }
+
+    pub fn as_rs_ident(&self) -> Option<&str> {
+        match self {
+            Self::Variable(ident) => ident.as_rs_ident(),
+            _ => None,
+        }
     }
 }
 

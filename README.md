@@ -18,6 +18,7 @@ modeled after [Dimitri Sabadie's `glsl` crate](https://github.com/phaazon/glsl).
     * [It's fast](#its-fast)
     * [Syntax nodes have location information](#syntax-nodes-have-location-information)
     * [Re-written GLSL transpiler](#re-written-glsl-transpiler)
+    * [`glsl-lang-quote` quoting support](#glsl-lang-quote-quoting-support)
   * [Why not pick this crate?](#why-not-pick-this-crate)
     * [Stateful lexer](#stateful-lexer)
     * [Parser generation and compile times](#parser-generation-and-compile-times)
@@ -64,6 +65,17 @@ Most nodes in the AST are wrapped in a special `Node` type, which holds:
 The GLSL transpiler has been partially rewritten to generate indented code.
 It's still a work-in-progress but generates (mostly) readable code.
 
+#### `glsl-lang-quote` quoting support
+
+`glsl-lang-quote` is the `glsl-lang` version of `glsl-quasiquote`. It parses
+GLSL at compile-time to generate an AST. However, you can also insert parts
+of runtime-generated AST using a quoting syntax. Currently, the following
+insertion locations for the `#(ident)` syntax are supported:
+
+* Identifier
+* Expression
+* Function name
+
 ### Why not pick this crate?
 
 #### Stateful lexer
@@ -97,11 +109,7 @@ testing though.
 
 #### `glsl-lang-quote` state
 
-`glsl-lang-quote` is the `glsl-lang` version of `glsl-quasiquote`. It's
-currently in a PoC state, and although most of it is working it hasn't been
-tested well and some features are missing.
-
-For example, parsing preprocessor directives is not supported.
+Parsing preprocessor directives is currently not supported.
 
 #### AST differences
 

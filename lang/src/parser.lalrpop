@@ -523,16 +523,16 @@ function_parameter_declaration: ast::FunctionParameterDeclaration = {
         ast::FunctionParameterDeclarationData::Named(q, d).spanned(l, r),
 }
 
-function_prototype: ast::FunctionPrototype = {
+function_prototype: (ast::FunctionPrototype, TypeNames) = {
     <l:@L> <rt:fully_specified_type> <n:identifier> "(" <p:comma<function_parameter_declaration>> ")" <r:@R> =>
-        ast::FunctionPrototypeData {
-            ty: rt,
-            name: {
-                n.1.new_identifier(&n.0, IdentifierContext::FunctionPrototype);
-                n.0
-            },
-            parameters: p,
-        }.spanned(l, r)
+        (
+            ast::FunctionPrototypeData {
+                ty: rt,
+                name: n.0,
+                parameters: p,
+            }.spanned(l, r),
+            n.1,
+        )
 };
 
 single_declaration: ast::SingleDeclaration = {
@@ -570,7 +570,10 @@ block_declaration: ast::Block = {
 };
 
 declaration: ast::Declaration = {
-    <l:@L> <p:function_prototype> ";"    <r:@R> => ast::DeclarationData::FunctionPrototype(p).spanned(l, r),
+    <l:@L> <p:function_prototype> ";"    <r:@R> => {
+        p.1.new_identifier(&p.0.name, IdentifierContext::FunctionPrototype);
+        ast::DeclarationData::FunctionPrototype(p.0).spanned(l, r)
+    },
     <l:@L> <i:init_declarator_list> ";"  <r:@R> => ast::DeclarationData::InitDeclaratorList(i).spanned(l, r),
     <l:@L> <p:precision_declaration> ";" <r:@R> => p.spanned(l, r),
     <l:@L> <b:block_declaration> ";"     <r:@R> => ast::DeclarationData::Block(b).spanned(l, r),
@@ -578,7 +581,7 @@ declaration: ast::Declaration = {
 
 function_definition: ast::FunctionDefinition = {
     <l:@L> <p:function_prototype> <s:compound_statement> <r:@R> => ast::FunctionDefinitionData {
-        prototype: p,
+        prototype: p.0,
         statement: s,
     }.spanned(l, r)
 };

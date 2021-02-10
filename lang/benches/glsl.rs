@@ -38,7 +38,11 @@ criterion_group!(glsl, parse_expr);
 
 pub fn parse_tu(c: &mut Criterion) {
     let input = "void main() { ((((((((1.0f)))))))); }";
-    parse_impl::<glsl_lang::ast::TranslationUnit, glsl::syntax::TranslationUnit>(c, input, "TranslationUnit")
+    parse_impl::<glsl_lang::ast::TranslationUnit, glsl::syntax::TranslationUnit>(
+        c,
+        input,
+        "TranslationUnit",
+    )
 }
 
 criterion_group!(glsl, parse_tu);

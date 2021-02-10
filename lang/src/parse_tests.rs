@@ -3,71 +3,40 @@ use crate::{
     parse::{Parsable, ParseOptions},
 };
 
-/*
 #[test]
-fn parse_uniline_comment() {
-    use std::borrow::Cow;
-
-    let mut data = ParseContextData::with_comments();
-    let mut context = ParseContext::new(&mut data);
+fn parse_comments() {
+    let opts = ParseOptions::with_comments();
 
     assert_ceq!(
-        context.parse("// lol", comment),
-        Ok(ast::Comment::Single(Cow::Borrowed(" lol"))),
+        ast::TranslationUnit::parse_with_options("// lol", &opts).map(|(_, opts)| opts
+            .comments
+            .unwrap()
+            .into_inner()
+            .unwrap()
+            .into_iter()
+            .next()
+            .unwrap()
+            .1
+            .contents),
+        Ok(ast::CommentData::Single(" lol".to_owned())),
     );
-    let cmt = data.comments().unwrap();
-    assert_ceq!(cmt.len(), 1);
-    let first_cmt = cmt.iter().next().unwrap();
-    assert_ceq!(first_cmt.1.text(), " lol");
-    let span = first_cmt.0;
-    assert_ceq!(span.offset, 0);
-    assert_ceq!(span.length, 6);
 
-    let mut data = ParseContextData::with_comments();
-    let mut context = ParseContext::new(&mut data);
     assert_ceq!(
-        context.parse("// lol\nfoo", comment),
-        Ok(("foo", ast::Comment::Single(Cow::Borrowed(" lol")))),
+        ast::TranslationUnit::parse_with_options("/* Something */\nvoid main() {}", &opts).map(
+            |(_, opts)| opts
+                .comments
+                .unwrap()
+                .into_inner()
+                .unwrap()
+                .into_iter()
+                .next()
+                .unwrap()
+                .1
+                .contents
+        ),
+        Ok(ast::CommentData::Multi(" Something ".to_owned())),
     );
-    let cmt = data.comments().unwrap();
-    assert_ceq!(cmt.len(), 1);
-    let first_cmt = cmt.iter().next().unwrap();
-    assert_ceq!(first_cmt.1.text(), " lol");
-
-    let mut data = ParseContextData::with_comments();
-    let mut context = ParseContext::new(&mut data);
-    assert_ceq!(
-        context.parse("// lol\\\nfoo", comment),
-        Ok(ast::Comment::Single(Cow::Borrowed(" lol\\\nfoo"))),
-    );
-    let cmt = data.comments().unwrap();
-    assert_ceq!(cmt.len(), 1);
-    let first_cmt = cmt.iter().next().unwrap();
-    assert_ceq!(first_cmt.1.text(), " lol\\\nfoo");
-
-    let mut data = ParseContextData::with_comments();
-    let mut context = ParseContext::new(&mut data);
-    assert_ceq!(
-        context.parse("// lol   \\\n   foo\n", comment),
-        Ok((
-            "",
-            ast::Comment::Single(Cow::Borrowed(" lol   \\\n   foo")),
-        )),
-    );
-    let cmt = data.comments().unwrap();
-    assert_ceq!(cmt.len(), 1);
-    let first_cmt = cmt.iter().next().unwrap();
-    assert_ceq!(first_cmt.1.text(), " lol   \\\n   foo");
 }
-
-#[test]
-fn parse_multiline_comment() {
-    assert_ceq!(
-        comment("/* lol\nfoo\n*/bar"),
-        Ok(("bar", ast::Comment::Multi(Cow::Borrowed(" lol\nfoo\n"))))
-    )
-}
-*/
 
 #[test]
 fn parse_unary_op() {

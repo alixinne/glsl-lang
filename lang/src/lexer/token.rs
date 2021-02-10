@@ -1,7 +1,9 @@
 use logos::Logos;
 use strum_macros::{EnumDiscriminants, IntoStaticStr};
 
-use super::{parse_f32, parse_f64, parse_ident, parse_int, parse_uint, LexerContext, TypeNames};
+use super::{
+    parse_cmt, parse_f32, parse_f64, parse_ident, parse_int, parse_uint, LexerContext, TypeNames,
+};
 
 #[derive(Debug, Clone, PartialEq, Logos, EnumDiscriminants)]
 #[logos(extras = LexerContext)]
@@ -528,9 +530,9 @@ pub enum Token<'i> {
     // TODO: Line continuation can happen inside tokens
     #[regex("([ \t\r\n]|\\\\\r?\n)+", logos::skip)]
     Whitespace,
-    #[regex("//(.|\\\\\r?\n)*")]
+    #[regex("//(.|\\\\\r?\n)*", |lex| { parse_cmt(lex, true); logos::Skip })]
     SingleLineComment,
-    #[regex("/\\*([^*]|\\*[^/])+\\*/")]
+    #[regex("/\\*([^*]|\\*[^/])+\\*/", |lex| { parse_cmt(lex, false); logos::Skip })]
     MultiLineComment,
 
     // TODO: Line continuations in preprocessor pragmas?

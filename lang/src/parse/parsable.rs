@@ -19,14 +19,14 @@ pub trait Parsable: Sized {
     fn parse_with_options(
         source: &str,
         opts: &ParseOptions,
-    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic>;
+    ) -> Result<(Self, ParseOptions), ParseErrorStatic>;
 }
 
 impl<T: parse::Parse> Parsable for T {
     fn parse_with_options(
         source: &str,
         opts: &ParseOptions,
-    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+    ) -> Result<(Self, ParseOptions), ParseErrorStatic> {
         <Self as parse::Parse>::parse_with_options(source, opts)
             .map_err(|e| e.map_token(Into::into))
     }
@@ -36,15 +36,15 @@ impl Parsable for ast::FunctionDefinition {
     fn parse_with_options(
         source: &str,
         opts: &ParseOptions,
-    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+    ) -> Result<(Self, ParseOptions), ParseErrorStatic> {
         match ast::TranslationUnit::parse_with_options(source, opts) {
-            Ok((ast::TranslationUnit(extdecls), tn)) => {
+            Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
                     contents: ast::ExternalDeclarationData::FunctionDefinition(fndef),
                     ..
                 } = extdecls.into_iter().next().unwrap()
                 {
-                    return Ok((fndef, tn));
+                    return Ok((fndef, oo));
                 }
             }
             Err(error) => {
@@ -60,10 +60,10 @@ impl Parsable for ast::UnaryOp {
     fn parse_with_options(
         source: &str,
         opts: &ParseOptions,
-    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+    ) -> Result<(Self, ParseOptions), ParseErrorStatic> {
         let src = format!("void main() {{ {}x; }}", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
-            Ok((ast::TranslationUnit(extdecls), tn)) => {
+            Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
                     contents:
                         ast::ExternalDeclarationData::FunctionDefinition(ast::Node {
@@ -86,7 +86,7 @@ impl Parsable for ast::UnaryOp {
                         ast::Expr::Unary(u, _),
                     ))) = statement_list.into_iter().next().unwrap().into_inner()
                     {
-                        return Ok((u, tn));
+                        return Ok((u, oo));
                     }
                 }
             }
@@ -103,10 +103,10 @@ impl Parsable for ast::AssignmentOp {
     fn parse_with_options(
         source: &str,
         opts: &ParseOptions,
-    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+    ) -> Result<(Self, ParseOptions), ParseErrorStatic> {
         let src = format!("void main() {{ x {} 2; }}", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
-            Ok((ast::TranslationUnit(extdecls), tn)) => {
+            Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
                     contents:
                         ast::ExternalDeclarationData::FunctionDefinition(ast::Node {
@@ -129,7 +129,7 @@ impl Parsable for ast::AssignmentOp {
                         ast::Expr::Assignment(_, o, _),
                     ))) = statement_list.into_iter().next().unwrap().into_inner()
                     {
-                        return Ok((o, tn));
+                        return Ok((o, oo));
                     }
                 }
             }
@@ -148,10 +148,10 @@ macro_rules! impl_parsable_statement {
             fn parse_with_options(
                 source: &str,
                 opts: &ParseOptions,
-            ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+            ) -> Result<(Self, ParseOptions), ParseErrorStatic> {
                 let src = format!("void main() {{ {} }}", source);
                 match ast::TranslationUnit::parse_with_options(&src, opts) {
-                    Ok((ast::TranslationUnit(extdecls), tn)) => {
+                    Ok((ast::TranslationUnit(extdecls), oo)) => {
                         if let ast::Node {
                             contents:
                                 ast::ExternalDeclarationData::FunctionDefinition(ast::Node {
@@ -176,7 +176,7 @@ macro_rules! impl_parsable_statement {
                             if let ast::StatementData::$i(expr) =
                                 statement_list.into_iter().next().unwrap().into_inner()
                             {
-                                return Ok((expr, tn));
+                                return Ok((expr, oo));
                             }
                         }
                     }
@@ -203,10 +203,10 @@ impl Parsable for ast::ArraySpecifierDimension {
     fn parse_with_options(
         source: &str,
         opts: &ParseOptions,
-    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+    ) -> Result<(Self, ParseOptions), ParseErrorStatic> {
         let src = format!("void main() {{ vec2{}(); }}", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
-            Ok((ast::TranslationUnit(extdecls), tn)) => {
+            Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
                     contents:
                         ast::ExternalDeclarationData::FunctionDefinition(ast::Node {
@@ -235,7 +235,7 @@ impl Parsable for ast::ArraySpecifierDimension {
                         ),
                     ))) = statement_list.into_iter().next().unwrap().into_inner()
                     {
-                        return Ok((array.dimensions.into_iter().next().unwrap(), tn));
+                        return Ok((array.dimensions.into_iter().next().unwrap(), oo));
                     }
                 }
             }
@@ -252,10 +252,10 @@ impl Parsable for ast::ArraySpecifier {
     fn parse_with_options(
         source: &str,
         opts: &ParseOptions,
-    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+    ) -> Result<(Self, ParseOptions), ParseErrorStatic> {
         let src = format!("void main() {{ vec2{}(); }}", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
-            Ok((ast::TranslationUnit(extdecls), tn)) => {
+            Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
                     contents:
                         ast::ExternalDeclarationData::FunctionDefinition(ast::Node {
@@ -284,7 +284,7 @@ impl Parsable for ast::ArraySpecifier {
                         ),
                     ))) = statement_list.into_iter().next().unwrap().into_inner()
                     {
-                        return Ok((array, tn));
+                        return Ok((array, oo));
                     }
                 }
             }
@@ -301,10 +301,10 @@ impl Parsable for ast::FunIdentifier {
     fn parse_with_options(
         source: &str,
         opts: &ParseOptions,
-    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+    ) -> Result<(Self, ParseOptions), ParseErrorStatic> {
         let src = format!("void main() {{ {}(); }}", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
-            Ok((ast::TranslationUnit(extdecls), tn)) => {
+            Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
                     contents:
                         ast::ExternalDeclarationData::FunctionDefinition(ast::Node {
@@ -327,7 +327,7 @@ impl Parsable for ast::FunIdentifier {
                         ast::Expr::FunCall(fi, _),
                     ))) = statement_list.into_iter().next().unwrap().into_inner()
                     {
-                        return Ok((fi, tn));
+                        return Ok((fi, oo));
                     }
                 }
             }
@@ -344,10 +344,10 @@ impl Parsable for ast::InterpolationQualifier {
     fn parse_with_options(
         source: &str,
         opts: &ParseOptions,
-    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+    ) -> Result<(Self, ParseOptions), ParseErrorStatic> {
         let src = format!("{} float x;", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
-            Ok((ast::TranslationUnit(extdecls), tn)) => {
+            Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
                     contents:
                         ast::ExternalDeclarationData::Declaration(ast::Node {
@@ -373,7 +373,7 @@ impl Parsable for ast::InterpolationQualifier {
                     if let ast::TypeQualifierSpec::Interpolation(interp) =
                         qualifiers.into_iter().next().unwrap()
                     {
-                        return Ok((interp, tn));
+                        return Ok((interp, oo));
                     }
                 }
             }
@@ -390,10 +390,10 @@ impl Parsable for ast::ArrayedIdentifier {
     fn parse_with_options(
         source: &str,
         opts: &ParseOptions,
-    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+    ) -> Result<(Self, ParseOptions), ParseErrorStatic> {
         let src = format!("uniform Block {{ float x; }} {};", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
-            Ok((ast::TranslationUnit(extdecls), tn)) => {
+            Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
                     contents:
                         ast::ExternalDeclarationData::Declaration(ast::Node {
@@ -407,7 +407,7 @@ impl Parsable for ast::ArrayedIdentifier {
                     ..
                 } = extdecls.into_iter().next().unwrap()
                 {
-                    return Ok((a, tn));
+                    return Ok((a, oo));
                 }
             }
             Err(error) => {
@@ -423,10 +423,10 @@ impl Parsable for ast::PrecisionQualifier {
     fn parse_with_options(
         source: &str,
         opts: &ParseOptions,
-    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+    ) -> Result<(Self, ParseOptions), ParseErrorStatic> {
         let src = format!("{} float x;", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
-            Ok((ast::TranslationUnit(extdecls), tn)) => {
+            Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
                     contents:
                         ast::ExternalDeclarationData::Declaration(ast::Node {
@@ -452,7 +452,7 @@ impl Parsable for ast::PrecisionQualifier {
                     if let ast::TypeQualifierSpec::Precision(q) =
                         qualifiers.into_iter().next().unwrap()
                     {
-                        return Ok((q, tn));
+                        return Ok((q, oo));
                     }
                 }
             }
@@ -469,10 +469,10 @@ impl Parsable for ast::StorageQualifier {
     fn parse_with_options(
         source: &str,
         opts: &ParseOptions,
-    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+    ) -> Result<(Self, ParseOptions), ParseErrorStatic> {
         let src = format!("{} float x;", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
-            Ok((ast::TranslationUnit(extdecls), tn)) => {
+            Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
                     contents:
                         ast::ExternalDeclarationData::Declaration(ast::Node {
@@ -498,7 +498,7 @@ impl Parsable for ast::StorageQualifier {
                     if let ast::TypeQualifierSpec::Storage(q) =
                         qualifiers.into_iter().next().unwrap()
                     {
-                        return Ok((q, tn));
+                        return Ok((q, oo));
                     }
                 }
             }
@@ -515,10 +515,10 @@ impl Parsable for ast::LayoutQualifier {
     fn parse_with_options(
         source: &str,
         opts: &ParseOptions,
-    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+    ) -> Result<(Self, ParseOptions), ParseErrorStatic> {
         let src = format!("{} float x;", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
-            Ok((ast::TranslationUnit(extdecls), tn)) => {
+            Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
                     contents:
                         ast::ExternalDeclarationData::Declaration(ast::Node {
@@ -544,7 +544,7 @@ impl Parsable for ast::LayoutQualifier {
                     if let ast::TypeQualifierSpec::Layout(q) =
                         qualifiers.into_iter().next().unwrap()
                     {
-                        return Ok((q, tn));
+                        return Ok((q, oo));
                     }
                 }
             }
@@ -561,10 +561,10 @@ impl Parsable for ast::TypeQualifier {
     fn parse_with_options(
         source: &str,
         opts: &ParseOptions,
-    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+    ) -> Result<(Self, ParseOptions), ParseErrorStatic> {
         let src = format!("{} float x;", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
-            Ok((ast::TranslationUnit(extdecls), tn)) => {
+            Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
                     contents:
                         ast::ExternalDeclarationData::Declaration(ast::Node {
@@ -585,7 +585,7 @@ impl Parsable for ast::TypeQualifier {
                     ..
                 } = extdecls.into_iter().next().unwrap()
                 {
-                    return Ok((q, tn));
+                    return Ok((q, oo));
                 }
             }
             Err(error) => {
@@ -601,10 +601,10 @@ impl Parsable for ast::TypeSpecifier {
     fn parse_with_options(
         source: &str,
         opts: &ParseOptions,
-    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+    ) -> Result<(Self, ParseOptions), ParseErrorStatic> {
         let src = format!("{} x;", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
-            Ok((ast::TranslationUnit(extdecls), tn)) => {
+            Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
                     contents:
                         ast::ExternalDeclarationData::Declaration(ast::Node {
@@ -622,7 +622,7 @@ impl Parsable for ast::TypeSpecifier {
                     ..
                 } = extdecls.into_iter().next().unwrap()
                 {
-                    return Ok((ty, tn));
+                    return Ok((ty, oo));
                 }
             }
             Err(error) => {
@@ -638,10 +638,10 @@ impl Parsable for ast::TypeSpecifierNonArray {
     fn parse_with_options(
         source: &str,
         opts: &ParseOptions,
-    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+    ) -> Result<(Self, ParseOptions), ParseErrorStatic> {
         let src = format!("{} x;", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
-            Ok((ast::TranslationUnit(extdecls), tn)) => {
+            Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
                     contents:
                         ast::ExternalDeclarationData::Declaration(ast::Node {
@@ -663,7 +663,7 @@ impl Parsable for ast::TypeSpecifierNonArray {
                     ..
                 } = extdecls.into_iter().next().unwrap()
                 {
-                    return Ok((ty, tn));
+                    return Ok((ty, oo));
                 }
             }
             Err(error) => {
@@ -679,10 +679,10 @@ impl Parsable for ast::FullySpecifiedType {
     fn parse_with_options(
         source: &str,
         opts: &ParseOptions,
-    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+    ) -> Result<(Self, ParseOptions), ParseErrorStatic> {
         let src = format!("{} x;", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
-            Ok((ast::TranslationUnit(extdecls), tn)) => {
+            Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
                     contents:
                         ast::ExternalDeclarationData::Declaration(ast::Node {
@@ -696,7 +696,7 @@ impl Parsable for ast::FullySpecifiedType {
                     ..
                 } = extdecls.into_iter().next().unwrap()
                 {
-                    return Ok((ty, tn));
+                    return Ok((ty, oo));
                 }
             }
             Err(error) => {
@@ -712,16 +712,16 @@ impl Parsable for ast::Declaration {
     fn parse_with_options(
         source: &str,
         opts: &ParseOptions,
-    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+    ) -> Result<(Self, ParseOptions), ParseErrorStatic> {
         let src = format!("{};", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
-            Ok((ast::TranslationUnit(extdecls), tn)) => {
+            Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
                     contents: ast::ExternalDeclarationData::Declaration(decl),
                     ..
                 } = extdecls.into_iter().next().unwrap()
                 {
-                    return Ok((decl, tn));
+                    return Ok((decl, oo));
                 }
             }
             Err(error) => {
@@ -737,10 +737,10 @@ impl Parsable for ast::StructFieldSpecifier {
     fn parse_with_options(
         source: &str,
         opts: &ParseOptions,
-    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+    ) -> Result<(Self, ParseOptions), ParseErrorStatic> {
         let src = format!("struct A {{ {} }};", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
-            Ok((ast::TranslationUnit(extdecls), tn)) => {
+            Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
                     contents:
                         ast::ExternalDeclarationData::Declaration(ast::Node {
@@ -772,7 +772,7 @@ impl Parsable for ast::StructFieldSpecifier {
                     ..
                 } = extdecls.into_iter().next().unwrap()
                 {
-                    return Ok((fields.into_iter().next().unwrap(), tn));
+                    return Ok((fields.into_iter().next().unwrap(), oo));
                 }
             }
             Err(error) => {
@@ -788,10 +788,10 @@ impl Parsable for ast::StructSpecifier {
     fn parse_with_options(
         source: &str,
         opts: &ParseOptions,
-    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+    ) -> Result<(Self, ParseOptions), ParseErrorStatic> {
         let src = format!("{};", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
-            Ok((ast::TranslationUnit(extdecls), tn)) => {
+            Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
                     contents:
                         ast::ExternalDeclarationData::Declaration(ast::Node {
@@ -818,7 +818,7 @@ impl Parsable for ast::StructSpecifier {
                     ..
                 } = extdecls.into_iter().next().unwrap()
                 {
-                    return Ok((s, tn));
+                    return Ok((s, oo));
                 }
             }
             Err(error) => {
@@ -835,10 +835,10 @@ impl Parsable for ast::Expr {
     fn parse_with_options(
         source: &str,
         opts: &ParseOptions,
-    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+    ) -> Result<(Self, ParseOptions), ParseErrorStatic> {
         let src = format!("void main() {{ {}; }}", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
-            Ok((ast::TranslationUnit(extdecls), tn)) => {
+            Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
                     contents:
                         ast::ExternalDeclarationData::FunctionDefinition(ast::Node {
@@ -860,7 +860,7 @@ impl Parsable for ast::Expr {
                     if let ast::StatementData::Expression(ast::ExprStatement(Some(expr))) =
                         statement_list.into_iter().next().unwrap().into_inner()
                     {
-                        return Ok((expr, tn));
+                        return Ok((expr, oo));
                     }
                 }
             }
@@ -878,15 +878,15 @@ impl Parsable for ast::Preprocessor {
     fn parse_with_options(
         source: &str,
         opts: &ParseOptions,
-    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+    ) -> Result<(Self, ParseOptions), ParseErrorStatic> {
         match ast::TranslationUnit::parse_with_options(source, opts) {
-            Ok((ast::TranslationUnit(extdecls), tn)) => {
+            Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
                     contents: ast::ExternalDeclarationData::Preprocessor(pp),
                     ..
                 } = extdecls.into_iter().next().unwrap()
                 {
-                    return Ok((pp, tn));
+                    return Ok((pp, oo));
                 }
             }
             Err(error) => {
@@ -903,10 +903,10 @@ impl Parsable for ast::Statement {
     fn parse_with_options(
         source: &str,
         opts: &ParseOptions,
-    ) -> Result<(Self, parse::TypeNames), ParseErrorStatic> {
+    ) -> Result<(Self, ParseOptions), ParseErrorStatic> {
         let src = format!("void main() {{ {} }}", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
-            Ok((ast::TranslationUnit(extdecls), tn)) => {
+            Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
                     contents:
                         ast::ExternalDeclarationData::FunctionDefinition(ast::Node {
@@ -925,7 +925,7 @@ impl Parsable for ast::Statement {
                     ..
                 } = extdecls.into_iter().next().unwrap()
                 {
-                    return Ok((statement_list.into_iter().next().unwrap(), tn));
+                    return Ok((statement_list.into_iter().next().unwrap(), oo));
                 }
             }
             Err(error) => {

@@ -89,3 +89,33 @@ pub fn parse_ident<'i>(
 ) -> Result<(&'i str, TypeNames), LexicalError> {
     Ok((lex.slice(), lex.extras.type_names.clone()))
 }
+
+fn parse_cmt_int(
+    extras: &super::LexerContext,
+    slice: &str,
+    span: std::ops::Range<usize>,
+    is_single: bool,
+) {
+    use crate::ast::NodeContents;
+
+    if let Some(cmt) = extras.comments.as_ref() {
+        let source_id = extras.source_id;
+
+        let comment = if is_single {
+            crate::ast::CommentData::Single(slice[2..].to_owned())
+        } else {
+            crate::ast::CommentData::Multi(slice[2..slice.len() - 2].to_owned())
+        }
+        .spanned((source_id, span.start), (source_id, span.end));
+
+        cmt.add_comment(comment);
+    }
+}
+
+pub fn parse_cmt<'i>(lex: &mut logos::Lexer<'i, Token<'i>>, is_single: bool) {
+    parse_cmt_int(&lex.extras, lex.slice(), lex.span(), is_single)
+}
+
+pub fn parse_pp_cmt<'i>(lex: &mut logos::Lexer<'i, PreprocessorToken<'i>>, is_single: bool) {
+    parse_cmt_int(&lex.extras, lex.slice(), lex.span(), is_single)
+}

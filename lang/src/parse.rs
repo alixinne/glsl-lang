@@ -1,7 +1,8 @@
 use crate::{ast, lexer::Lexer, parser};
 
 pub use crate::lexer::{
-    IdentifierContext, LexicalError, Token, TokenKind, TypeNames, TypeTablePolicy,
+    CommentList, Comments, IdentifierContext, LexicalError, Token, TokenKind, TypeNames,
+    TypeTablePolicy,
 };
 
 mod parsable;
@@ -12,11 +13,19 @@ pub struct ParseOptions {
     pub target_vulkan: bool,
     pub source_id: usize,
     pub type_names: TypeNames,
+    pub comments: Option<Comments>,
 }
 
 impl ParseOptions {
     pub fn new() -> Self {
         Self::default()
+    }
+
+    pub fn with_comments() -> Self {
+        Self {
+            comments: Some(Comments::default()),
+            ..Default::default()
+        }
     }
 }
 
@@ -38,13 +47,13 @@ pub trait Parse: Sized {
     fn parse_with_options<'i>(
         source: &'i str,
         opts: &ParseOptions,
-    ) -> Result<(Self, TypeNames), ParseError<'i>>;
+    ) -> Result<(Self, ParseOptions), ParseError<'i>>;
 
     fn parse_with_parser<'i>(
         source: &'i str,
         opts: &ParseOptions,
         parser: &Self::Parser,
-    ) -> Result<(Self, TypeNames), ParseError<'i>>;
+    ) -> Result<(Self, ParseOptions), ParseError<'i>>;
 }
 
 macro_rules! impl_parse {
@@ -61,7 +70,7 @@ macro_rules! impl_parse {
             fn parse_with_options<'i>(
                 source: &'i str,
                 opts: &ParseOptions,
-            ) -> Result<(Self, TypeNames), ParseError<'i>> {
+            ) -> Result<(Self, ParseOptions), ParseError<'i>> {
                 let parser = <$p>::new();
                 Self::parse_with_parser(source, opts, &parser)
             }
@@ -70,22 +79,22 @@ macro_rules! impl_parse {
                 source: &'i str,
                 opts: &ParseOptions,
                 parser: &$p,
-            ) -> Result<(Self, TypeNames), ParseError<'i>> {
+            ) -> Result<(Self, ParseOptions), ParseError<'i>> {
                 // Clone the input structure
                 let cloned_opts = opts.clone();
 
                 // Clone the type names
-                let cloned_type_names = cloned_opts.type_names.clone_inner();
                 let cloned_opts = ParseOptions {
-                    type_names: cloned_type_names.clone(),
+                    type_names: cloned_opts.type_names.clone_inner(),
+                    comments: cloned_opts.comments.map(|c| c.clone_inner()),
                     ..cloned_opts
                 };
 
                 // Invoke the parser
-                let lexer = Lexer::new(source, cloned_opts);
+                let lexer = Lexer::new(source, cloned_opts.clone());
                 parser
                     .parse(source, lexer)
-                    .map(|parsed| (parsed, cloned_type_names))
+                    .map(|parsed| (parsed, cloned_opts))
             }
         }
     };

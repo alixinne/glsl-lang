@@ -18,7 +18,6 @@
 //! [`Expr`]: crate::syntax::Expr
 //! [`FunctionDefinition`]: crate::syntax::FunctionDefinition
 
-use std::borrow::Cow;
 use std::fmt;
 use std::iter::FromIterator;
 
@@ -902,16 +901,16 @@ pub enum PreprocessorExtensionBehavior {
     Disable,
 }
 
-/// A borrowed comment
+/// A comment
 #[derive(Debug, Clone, PartialEq, NodeContents)]
-pub enum Comment<'s> {
+pub enum CommentData {
     /// Single-line comment
-    Single(Cow<'s, str>),
+    Single(String),
     /// Multi-line comment
-    Multi(Cow<'s, str>),
+    Multi(String),
 }
 
-impl Comment<'_> {
+impl CommentData {
     pub fn text(&self) -> &str {
         match self {
             Self::Single(s) => s,
@@ -919,10 +918,11 @@ impl Comment<'_> {
         }
     }
 
-    pub fn to_owned(&self) -> Comment<'static> {
-        match self {
-            Self::Single(s) => Comment::Single(Cow::Owned(s.clone().into_owned())),
-            Self::Multi(s) => Comment::Multi(Cow::Owned(s.clone().into_owned())),
-        }
+    pub fn is_single(&self) -> bool {
+        matches!(self, Self::Multi(_))
+    }
+
+    pub fn is_multi(&self) -> bool {
+        matches!(self, Self::Multi(_))
     }
 }

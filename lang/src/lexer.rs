@@ -3,6 +3,9 @@ use thiserror::Error;
 
 use crate::parse::ParseOptions;
 
+mod comments;
+pub use comments::*;
+
 mod parsers;
 use parsers::*;
 

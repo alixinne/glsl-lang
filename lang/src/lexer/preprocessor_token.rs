@@ -1,7 +1,9 @@
 use logos::Logos;
 use strum_macros::{EnumDiscriminants, IntoStaticStr};
 
-use super::{parse_pp_ident, parse_pp_int, parse_pp_path, LexerContext, Token, TypeNames};
+use super::{
+    parse_pp_cmt, parse_pp_ident, parse_pp_int, parse_pp_path, LexerContext, Token, TypeNames,
+};
 
 #[derive(Debug, Clone, PartialEq, Logos, EnumDiscriminants)]
 #[logos(extras = LexerContext)]
@@ -40,9 +42,9 @@ pub enum PreprocessorToken<'i> {
 
     #[regex("([ \t]|\\\\\r?\n)+", logos::skip)]
     Whitespace,
-    #[regex("//(.|\\\\\r?\n)*")]
+    #[regex("//(.|\\\\\r?\n)*", |lex| { parse_pp_cmt(lex, true); logos::Skip })]
     SingleLineComment,
-    #[regex("/\\*([^*]|\\*[^/])+\\*/")]
+    #[regex("/\\*([^*]|\\*[^/])+\\*/", |lex| { parse_pp_cmt(lex, false); logos::Skip })]
     MultiLineComment,
 
     #[regex("\r?\n")]

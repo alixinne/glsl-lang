@@ -133,7 +133,7 @@ Aside from the limitations mentioned in the paragraph above:
 * As for the `glsl` crate, preprocessor parsing is mostly handled at the syntax
   level, so GLSL sources which are syntactically invalid without actual
   preprocessing will fail to parse.
-* Currently, no semantic analysis, no trivia (comments) extraction
+* Currently, no semantic analysis
 
 ## License
 

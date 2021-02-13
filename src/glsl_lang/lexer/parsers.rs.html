@@ -138,7 +138,7 @@
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">str</span>::<span class="ident">FromStr</span>;
 
-<span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">LexerPosition</span>, <span class="ident">LexicalError</span>, <span class="ident">PreprocessorToken</span>, <span class="ident">Token</span>, <span class="ident">TypeNames</span>};
+<span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">LexerContext</span>, <span class="ident">LexerPosition</span>, <span class="ident">LexicalError</span>, <span class="ident">PreprocessorToken</span>, <span class="ident">Token</span>};
 
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse_int</span><span class="op">&lt;</span><span class="lifetime">&#39;i</span><span class="op">&gt;</span>(
     <span class="ident">lex</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">logos</span>::<span class="ident">Lexer</span><span class="op">&lt;</span><span class="lifetime">&#39;i</span>, <span class="ident">Token</span><span class="op">&lt;</span><span class="lifetime">&#39;i</span><span class="op">&gt;</span><span class="op">&gt;</span>,
@@ -218,21 +218,21 @@
 
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse_pp_ident</span><span class="op">&lt;</span><span class="lifetime">&#39;i</span><span class="op">&gt;</span>(
     <span class="ident">lex</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">logos</span>::<span class="ident">Lexer</span><span class="op">&lt;</span><span class="lifetime">&#39;i</span>, <span class="ident">PreprocessorToken</span><span class="op">&lt;</span><span class="lifetime">&#39;i</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;i</span> <span class="ident">str</span>, <span class="ident">TypeNames</span>), <span class="ident">LexicalError</span><span class="op">&gt;</span> {
-    <span class="prelude-val">Ok</span>((<span class="ident">lex</span>.<span class="ident">slice</span>(), <span class="ident">lex</span>.<span class="ident">extras</span>.<span class="ident">type_names</span>.<span class="ident">clone</span>()))
+) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;i</span> <span class="ident">str</span>, <span class="ident">LexerContext</span>), <span class="ident">LexicalError</span><span class="op">&gt;</span> {
+    <span class="prelude-val">Ok</span>((<span class="ident">lex</span>.<span class="ident">slice</span>(), <span class="ident">lex</span>.<span class="ident">extras</span>.<span class="ident">clone</span>()))
 }
 
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse_ident</span><span class="op">&lt;</span><span class="lifetime">&#39;i</span><span class="op">&gt;</span>(
     <span class="ident">lex</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">logos</span>::<span class="ident">Lexer</span><span class="op">&lt;</span><span class="lifetime">&#39;i</span>, <span class="ident">Token</span><span class="op">&lt;</span><span class="lifetime">&#39;i</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;i</span> <span class="ident">str</span>, <span class="ident">TypeNames</span>), <span class="ident">LexicalError</span><span class="op">&gt;</span> {
-    <span class="prelude-val">Ok</span>((<span class="ident">lex</span>.<span class="ident">slice</span>(), <span class="ident">lex</span>.<span class="ident">extras</span>.<span class="ident">type_names</span>.<span class="ident">clone</span>()))
+) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;i</span> <span class="ident">str</span>, <span class="ident">LexerContext</span>), <span class="ident">LexicalError</span><span class="op">&gt;</span> {
+    <span class="prelude-val">Ok</span>((<span class="ident">lex</span>.<span class="ident">slice</span>(), <span class="ident">lex</span>.<span class="ident">extras</span>.<span class="ident">clone</span>()))
 }
 
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse_rs_ident</span><span class="op">&lt;</span><span class="lifetime">&#39;i</span><span class="op">&gt;</span>(
     <span class="ident">lex</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">logos</span>::<span class="ident">Lexer</span><span class="op">&lt;</span><span class="lifetime">&#39;i</span>, <span class="ident">Token</span><span class="op">&lt;</span><span class="lifetime">&#39;i</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;i</span> <span class="ident">str</span>, <span class="ident">TypeNames</span>), <span class="ident">LexicalError</span><span class="op">&gt;</span> {
-    <span class="kw">if</span> <span class="ident">lex</span>.<span class="ident">extras</span>.<span class="ident">allow_rs_ident</span> {
-        <span class="prelude-val">Ok</span>((<span class="ident">lex</span>.<span class="ident">slice</span>(), <span class="ident">lex</span>.<span class="ident">extras</span>.<span class="ident">type_names</span>.<span class="ident">clone</span>()))
+) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;i</span> <span class="ident">str</span>, <span class="ident">LexerContext</span>), <span class="ident">LexicalError</span><span class="op">&gt;</span> {
+    <span class="kw">if</span> <span class="ident">lex</span>.<span class="ident">extras</span>.<span class="ident">opts</span>.<span class="ident">allow_rs_ident</span> {
+        <span class="prelude-val">Ok</span>((<span class="ident">lex</span>.<span class="ident">slice</span>(), <span class="ident">lex</span>.<span class="ident">extras</span>.<span class="ident">clone</span>()))
     } <span class="kw">else</span> {
         <span class="prelude-val">Err</span>(<span class="ident">LexicalError</span>::<span class="ident">ForbiddenRsQuote</span>)
     }
@@ -246,8 +246,8 @@
 ) {
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ast</span>::<span class="ident">NodeContent</span>;
 
-    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">cmt</span>) <span class="op">=</span> <span class="ident">extras</span>.<span class="ident">comments</span>.<span class="ident">as_ref</span>() {
-        <span class="kw">let</span> <span class="ident">source_id</span> <span class="op">=</span> <span class="ident">extras</span>.<span class="ident">source_id</span>;
+    <span class="kw">if</span> <span class="ident">extras</span>.<span class="ident">has_comments</span>() {
+        <span class="kw">let</span> <span class="ident">source_id</span> <span class="op">=</span> <span class="ident">extras</span>.<span class="ident">opts</span>.<span class="ident">source_id</span>;
 
         <span class="kw">let</span> <span class="ident">comment</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">is_single</span> {
             <span class="kw">crate</span>::<span class="ident">ast</span>::<span class="ident">CommentData</span>::<span class="ident">Single</span>(<span class="ident">slice</span>[<span class="number">2</span>..].<span class="ident">to_owned</span>())
@@ -259,7 +259,7 @@
             <span class="ident">LexerPosition</span>::<span class="ident">new</span>(<span class="ident">source_id</span>, <span class="ident">span</span>.<span class="ident">end</span>),
         );
 
-        <span class="ident">cmt</span>.<span class="ident">add_comment</span>(<span class="ident">comment</span>);
+        <span class="ident">extras</span>.<span class="ident">add_comment</span>(<span class="ident">comment</span>);
     }
 }
 

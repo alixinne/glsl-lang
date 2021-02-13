@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["LexerStage",""],["LexicalError",""]],"mod":[["comments",""],["parsers",""],["preprocessor_token",""],["token",""],["type_names",""]],"struct":[["Lexer",""],["LexerPosition",""]],"type":[["LexerContext",""]]});
+initSidebarItems({"enum":[["LexerStage",""],["LexicalError",""]],"mod":[["parsers",""],["preprocessor_token",""],["token",""]],"struct":[["Lexer",""],["LexerPosition",""]],"type":[["LexerContext",""]]});

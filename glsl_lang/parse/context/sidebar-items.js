@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["IdentifierContext",""]],"struct":[["GlslTypeTablePolicy",""],["ParseContext",""],["ParseContextData",""],["ParseOptions",""]],"trait":[["TypeTablePolicy",""]],"type":[["CommentList",""]]});

@@ -2015,11 +2015,11 @@ return u;
 
     #[test]
     fn roundtrip_glsl_complex_expr() {
-        use crate::assert_ceq;
+        use lang_util::{assert_ceq, node::NodeContent};
 
         let zero = ast::Expr::DoubleConst(0.);
-        let ray = ast::Expr::Variable("ray".into());
-        let raydir = ast::Expr::Dot(Box::new(ray), "dir".into());
+        let ray = ast::Expr::Variable("ray".into_node());
+        let raydir = ast::Expr::Dot(Box::new(ray), "dir".into_node());
         let vec4 = ast::Expr::FunCall(
             ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifierNonArray::Vec4.into()),
             vec![raydir, zero],
@@ -2027,7 +2027,7 @@ return u;
         let view = ast::Expr::variable("view");
         let iview = ast::Expr::FunCall(ast::FunIdentifier::ident("inverse"), vec![view]);
         let mul = ast::Expr::Binary(ast::BinaryOp::Mult, Box::new(iview), Box::new(vec4));
-        let xyz = ast::Expr::Dot(Box::new(mul), "xyz".into());
+        let xyz = ast::Expr::Dot(Box::new(mul), "xyz".into_node());
         let input = ast::Expr::FunCall(ast::FunIdentifier::ident("normalize"), vec![xyz]);
 
         let mut output = String::new();

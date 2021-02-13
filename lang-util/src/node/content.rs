@@ -1,63 +1,16 @@
 use std::fmt;
 
-use crate::parse::LexerPosition;
-
-/// Span information for a node, constructed from a nom_locate::LocatedSpan
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub struct NodeSpan {
-    /// The index of this span into the list of parsed units. This is used to
-    /// identify which source string this span refers to when combining multiple ASTs
-    pub source_id: usize,
-
-    /// Start of the node in the input slice
-    pub start: usize,
-
-    /// End of the node in the input slice
-    pub end: usize,
-}
-
-impl NodeSpan {
-    /// Return a 0-length span located at the start of the given source
-    ///
-    /// This may be used in span range queries.
-    pub fn new_start(source_id: usize) -> Self {
-        Self {
-            source_id,
-            start: 0,
-            end: 0,
-        }
-    }
-
-    /// Return a 0-length span located at the end of the given source (as indicated by the offset)
-    ///
-    /// This may be used in span range queries.
-    pub fn new_end(source_id: usize, length: usize) -> Self {
-        Self {
-            source_id,
-            start: length,
-            end: length,
-        }
-    }
-
-    /// Return a 0-length span located at the end point of this span.
-    ///
-    /// This may be used in span range queries. Note that the line and column information will not be
-    /// accurate.
-    pub fn to_end_location(&self) -> Self {
-        Self {
-            source_id: self.source_id,
-            start: self.end,
-            end: self.end,
-        }
-    }
-
-    /// Return the length of this span
-    pub fn length(&self) -> usize {
-        self.end - self.start
-    }
-}
+use crate::position::{LexerPosition, NodeSpan};
 
 pub trait NodeContent: fmt::Debug + Clone + PartialEq + Sized {
+    /// Convert the contents into a node
+    fn into_node<T>(self) -> Node<T>
+    where
+        T: From<Self> + NodeContent,
+    {
+        Node::new(self.into(), None)
+    }
+
     /// Add span information to a syntax node
     fn spanned(self, start: LexerPosition, end: LexerPosition) -> Node<Self> {
         assert_eq!(start.source_id, end.source_id);
@@ -133,6 +86,14 @@ impl<T: NodeContent + fmt::Display> fmt::Display for Node<T> {
         <T as fmt::Display>::fmt(&self.content, f)
     }
 }
+
+impl<T: NodeContent> From<T> for Node<T> {
+    fn from(inner: T) -> Self {
+        Node::new(inner, None)
+    }
+}
+
+impl NodeContent for &'static str {}
 
 /// Trait for comparing the content of syntax nodes
 pub trait NodeContentEq {
@@ -226,7 +187,7 @@ macro_rules! assert_ceq {
     ($left:expr, $right:expr) => ({
         match (&$left, &$right) {
             (left_val, right_val) => {
-                if !$crate::ast::NodeContentEq::content_eq(left_val, right_val) {
+                if !::lang_util::node::NodeContentEq::content_eq(left_val, right_val) {
                     // The reborrows below are intentional. Without them, the stack slot for the
                     // borrow is initialized even before the values are compared, leading to a
                     // noticeable slow down.
@@ -243,7 +204,7 @@ macro_rules! assert_ceq {
     ($left:expr, $right:expr, $($arg:tt)+) => ({
         match (&($left), &($right)) {
             (left_val, right_val) => {
-                if !$crate::ast::NodeContentEq::content_eq(left_val, right_val) {
+                if !::lang_util::node::NodeContentEq::content_eq(left_val, right_val) {
                     // The reborrows below are intentional. Without them, the stack slot for the
                     // borrow is initialized even before the values are compared, leading to a
                     // noticeable slow down.

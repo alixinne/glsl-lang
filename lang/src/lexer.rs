@@ -1,5 +1,4 @@
 use logos::Logos;
-use parse_display::Display;
 use thiserror::Error;
 
 use crate::parse::ParseOptions;
@@ -22,18 +21,7 @@ pub use type_names::*;
 #[cfg(test)]
 mod tests;
 
-#[derive(Default, Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Display)]
-#[display("{source_id}:{offset}")]
-pub struct LexerPosition {
-    pub source_id: usize,
-    pub offset: usize,
-}
-
-impl LexerPosition {
-    pub fn new(source_id: usize, offset: usize) -> Self {
-        Self { source_id, offset }
-    }
-}
+pub use lang_util::position::LexerPosition;
 
 pub type LexerContext = ParseOptions;
 

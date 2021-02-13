@@ -18,7 +18,7 @@ struct NodeDisplay {
 }
 
 #[derive(FromDeriveInput)]
-#[darling(attributes(glsl_lang), forward_attrs(allow, doc, cfg))]
+#[darling(attributes(lang_util), forward_attrs(allow, doc, cfg))]
 struct NodeContentOpts {
     ident: syn::Ident,
     generics: syn::Generics,
@@ -26,7 +26,7 @@ struct NodeContentOpts {
     display: NodeDisplay,
 }
 
-#[proc_macro_derive(NodeContent, attributes(glsl_lang))]
+#[proc_macro_derive(NodeContent, attributes(lang_util))]
 pub fn node_content(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     // Parse the input tokens into a syntax tree
     let input = parse_macro_input!(input as DeriveInput);
@@ -51,9 +51,9 @@ pub fn node_content(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     // Build the output, possibly using quasi-quotation
     let mut expanded = quote! {
       #[automatically_derived]
-      impl NodeContent for #struct_name {}
+      impl ::lang_util::node::NodeContent for #struct_name {}
       #[automatically_derived]
-      impl NodeContentEq for #struct_name {
+      impl ::lang_util::node::NodeContentEq for #struct_name {
         fn content_eq(&self, other: &Self) -> bool {
           #content_eq_body
         }
@@ -76,15 +76,7 @@ pub fn node_content(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
         };
 
         let quoted = quote! {
-          pub type #type_name = Node<#struct_name>;
-
-          #[automatically_derived]
-          impl<U> From<U> for #type_name
-            where U: Into<#base_ident> {
-              fn from(u: U) -> Self {
-                Node::new(u.into(), None)
-              }
-          }
+          pub type #type_name = ::lang_util::node::Node<#struct_name>;
         };
 
         expanded.extend(quoted);

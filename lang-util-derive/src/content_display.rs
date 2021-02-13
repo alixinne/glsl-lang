@@ -21,7 +21,7 @@ struct DisplayVariantOpts {
 }
 
 #[derive(FromField)]
-#[darling(attributes(glsl_lang), forward_attrs(allow, doc, cfg))]
+#[darling(attributes(lang_util), forward_attrs(allow, doc, cfg))]
 struct NodeDisplayField {
     ident: Option<syn::Ident>,
     #[darling(default)]
@@ -29,7 +29,7 @@ struct NodeDisplayField {
 }
 
 #[derive(FromVariant)]
-#[darling(attributes(glsl_lang), forward_attrs(allow, doc, cfg))]
+#[darling(attributes(lang_util), forward_attrs(allow, doc, cfg))]
 struct NodeDisplayVariant {
     ident: syn::Ident,
     fields: darling::ast::Fields<NodeDisplayField>,
@@ -173,7 +173,7 @@ pub(crate) fn node_content_display(
                             let quoted = quote_spanned! {
                                 variant.span() =>
                                     Self::#name => {
-                                        write!(f, "{}", display::NodeDisplayWrapper::new(#vs, level))?;
+                                        write!(f, "{}", ::lang_util::node::NodeDisplayWrapper::new(#vs, level))?;
                                     }
                             };
 
@@ -251,16 +251,16 @@ pub(crate) fn node_content_display(
 
     quote! {
         #[automatically_derived]
-        impl NodeContentDisplay for #struct_name {
+        impl ::lang_util::node::NodeContentDisplay for #struct_name {
             fn name() -> Option<&'static str> {
                Some(#node_name)
             }
 
-            fn display_extra(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+            fn display_extra(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
                 #display_extra_impl
             }
 
-            fn display_children(&self, level: usize, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+            fn display_children(&self, level: usize, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
                 #display_children_impl
             }
         }

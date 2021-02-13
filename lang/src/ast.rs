@@ -21,13 +21,11 @@
 use std::fmt;
 use std::iter::FromIterator;
 
-use glsl_lang_impl::NodeContent;
-
-mod node;
-pub use node::*;
-
-mod display;
-pub use display::*;
+pub use lang_util::{
+    node::{Node, NodeDisplay},
+    position::NodeSpan,
+    NodeContent,
+};
 
 /// A path literal.
 #[derive(Clone, Debug, PartialEq, NodeContent)]
@@ -40,8 +38,8 @@ pub enum Path {
 
 /// A generic identifier.
 #[derive(Clone, Debug, PartialEq, NodeContent)]
-#[glsl_lang(display(leaf))]
-pub struct IdentifierData(#[glsl_lang(display(extra))] pub String);
+#[lang_util(display(leaf))]
+pub struct IdentifierData(#[lang_util(display(extra))] pub String);
 
 impl IdentifierData {
     pub fn as_rs_ident(&self) -> Option<&str> {
@@ -74,7 +72,7 @@ impl fmt::Display for IdentifierData {
 
 /// Any type name.
 #[derive(Clone, Debug, PartialEq, NodeContent)]
-#[glsl_lang(display(leaf))]
+#[lang_util(display(leaf))]
 pub struct TypeNameData(pub String);
 
 impl TypeNameData {
@@ -95,7 +93,7 @@ impl From<&str> for TypeNameData {
     }
 }
 
-impl fmt::Display for TypeName {
+impl fmt::Display for TypeNameData {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
         self.0.fmt(f)
     }
@@ -105,248 +103,248 @@ impl fmt::Display for TypeName {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 pub enum TypeSpecifierNonArray {
     // transparent types
-    #[glsl_lang(display(extra = "void"))]
+    #[lang_util(display(extra = "void"))]
     Void,
-    #[glsl_lang(display(extra = "bool"))]
+    #[lang_util(display(extra = "bool"))]
     Bool,
-    #[glsl_lang(display(extra = "int"))]
+    #[lang_util(display(extra = "int"))]
     Int,
-    #[glsl_lang(display(extra = "uint"))]
+    #[lang_util(display(extra = "uint"))]
     UInt,
-    #[glsl_lang(display(extra = "float"))]
+    #[lang_util(display(extra = "float"))]
     Float,
-    #[glsl_lang(display(extra = "double"))]
+    #[lang_util(display(extra = "double"))]
     Double,
-    #[glsl_lang(display(extra = "vec2"))]
+    #[lang_util(display(extra = "vec2"))]
     Vec2,
-    #[glsl_lang(display(extra = "vec3"))]
+    #[lang_util(display(extra = "vec3"))]
     Vec3,
-    #[glsl_lang(display(extra = "vec4"))]
+    #[lang_util(display(extra = "vec4"))]
     Vec4,
-    #[glsl_lang(display(extra = "dvec2"))]
+    #[lang_util(display(extra = "dvec2"))]
     DVec2,
-    #[glsl_lang(display(extra = "dvec3"))]
+    #[lang_util(display(extra = "dvec3"))]
     DVec3,
-    #[glsl_lang(display(extra = "dvec4"))]
+    #[lang_util(display(extra = "dvec4"))]
     DVec4,
-    #[glsl_lang(display(extra = "bvec2"))]
+    #[lang_util(display(extra = "bvec2"))]
     BVec2,
-    #[glsl_lang(display(extra = "bvec3"))]
+    #[lang_util(display(extra = "bvec3"))]
     BVec3,
-    #[glsl_lang(display(extra = "bvec4"))]
+    #[lang_util(display(extra = "bvec4"))]
     BVec4,
-    #[glsl_lang(display(extra = "ivec2"))]
+    #[lang_util(display(extra = "ivec2"))]
     IVec2,
-    #[glsl_lang(display(extra = "ivec3"))]
+    #[lang_util(display(extra = "ivec3"))]
     IVec3,
-    #[glsl_lang(display(extra = "ivec4"))]
+    #[lang_util(display(extra = "ivec4"))]
     IVec4,
-    #[glsl_lang(display(extra = "uvec2"))]
+    #[lang_util(display(extra = "uvec2"))]
     UVec2,
-    #[glsl_lang(display(extra = "uvec3"))]
+    #[lang_util(display(extra = "uvec3"))]
     UVec3,
-    #[glsl_lang(display(extra = "uvec4"))]
+    #[lang_util(display(extra = "uvec4"))]
     UVec4,
-    #[glsl_lang(display(extra = "mat2"))]
+    #[lang_util(display(extra = "mat2"))]
     Mat2,
-    #[glsl_lang(display(extra = "mat3"))]
+    #[lang_util(display(extra = "mat3"))]
     Mat3,
-    #[glsl_lang(display(extra = "mat4"))]
+    #[lang_util(display(extra = "mat4"))]
     Mat4,
-    #[glsl_lang(display(extra = "mat2x2"))]
+    #[lang_util(display(extra = "mat2x2"))]
     Mat22,
-    #[glsl_lang(display(extra = "mat2x3"))]
+    #[lang_util(display(extra = "mat2x3"))]
     Mat23,
-    #[glsl_lang(display(extra = "mat2x4"))]
+    #[lang_util(display(extra = "mat2x4"))]
     Mat24,
-    #[glsl_lang(display(extra = "mat3x2"))]
+    #[lang_util(display(extra = "mat3x2"))]
     Mat32,
-    #[glsl_lang(display(extra = "mat3x3"))]
+    #[lang_util(display(extra = "mat3x3"))]
     Mat33,
-    #[glsl_lang(display(extra = "mat3x4"))]
+    #[lang_util(display(extra = "mat3x4"))]
     Mat34,
-    #[glsl_lang(display(extra = "mat4x2"))]
+    #[lang_util(display(extra = "mat4x2"))]
     Mat42,
-    #[glsl_lang(display(extra = "mat4x3"))]
+    #[lang_util(display(extra = "mat4x3"))]
     Mat43,
-    #[glsl_lang(display(extra = "mat4x4"))]
+    #[lang_util(display(extra = "mat4x4"))]
     Mat44,
-    #[glsl_lang(display(extra = "dmat2"))]
+    #[lang_util(display(extra = "dmat2"))]
     DMat2,
-    #[glsl_lang(display(extra = "dmat3"))]
+    #[lang_util(display(extra = "dmat3"))]
     DMat3,
-    #[glsl_lang(display(extra = "dmat4"))]
+    #[lang_util(display(extra = "dmat4"))]
     DMat4,
-    #[glsl_lang(display(extra = "dmat2x2"))]
+    #[lang_util(display(extra = "dmat2x2"))]
     DMat22,
-    #[glsl_lang(display(extra = "dmat2x3"))]
+    #[lang_util(display(extra = "dmat2x3"))]
     DMat23,
-    #[glsl_lang(display(extra = "dmat2x4"))]
+    #[lang_util(display(extra = "dmat2x4"))]
     DMat24,
-    #[glsl_lang(display(extra = "dmat3x2"))]
+    #[lang_util(display(extra = "dmat3x2"))]
     DMat32,
-    #[glsl_lang(display(extra = "dmat3x3"))]
+    #[lang_util(display(extra = "dmat3x3"))]
     DMat33,
-    #[glsl_lang(display(extra = "dmat3x4"))]
+    #[lang_util(display(extra = "dmat3x4"))]
     DMat34,
-    #[glsl_lang(display(extra = "dmat4x2"))]
+    #[lang_util(display(extra = "dmat4x2"))]
     DMat42,
-    #[glsl_lang(display(extra = "dmat4x3"))]
+    #[lang_util(display(extra = "dmat4x3"))]
     DMat43,
-    #[glsl_lang(display(extra = "dmat4x4"))]
+    #[lang_util(display(extra = "dmat4x4"))]
     DMat44,
     // floating point opaque types
-    #[glsl_lang(display(extra = "sampler1D"))]
+    #[lang_util(display(extra = "sampler1D"))]
     Sampler1D,
-    #[glsl_lang(display(extra = "image1D"))]
+    #[lang_util(display(extra = "image1D"))]
     Image1D,
-    #[glsl_lang(display(extra = "sampler2D"))]
+    #[lang_util(display(extra = "sampler2D"))]
     Sampler2D,
-    #[glsl_lang(display(extra = "image2D"))]
+    #[lang_util(display(extra = "image2D"))]
     Image2D,
-    #[glsl_lang(display(extra = "sampler3D"))]
+    #[lang_util(display(extra = "sampler3D"))]
     Sampler3D,
-    #[glsl_lang(display(extra = "image3D"))]
+    #[lang_util(display(extra = "image3D"))]
     Image3D,
-    #[glsl_lang(display(extra = "samplerCube"))]
+    #[lang_util(display(extra = "samplerCube"))]
     SamplerCube,
-    #[glsl_lang(display(extra = "imageCube"))]
+    #[lang_util(display(extra = "imageCube"))]
     ImageCube,
-    #[glsl_lang(display(extra = "sampler2DRect"))]
+    #[lang_util(display(extra = "sampler2DRect"))]
     Sampler2DRect,
-    #[glsl_lang(display(extra = "image2DRect"))]
+    #[lang_util(display(extra = "image2DRect"))]
     Image2DRect,
-    #[glsl_lang(display(extra = "sampler1DArray"))]
+    #[lang_util(display(extra = "sampler1DArray"))]
     Sampler1DArray,
-    #[glsl_lang(display(extra = "image1DArray"))]
+    #[lang_util(display(extra = "image1DArray"))]
     Image1DArray,
-    #[glsl_lang(display(extra = "sampler2DArray"))]
+    #[lang_util(display(extra = "sampler2DArray"))]
     Sampler2DArray,
-    #[glsl_lang(display(extra = "image2DArray"))]
+    #[lang_util(display(extra = "image2DArray"))]
     Image2DArray,
-    #[glsl_lang(display(extra = "samplerBuffer"))]
+    #[lang_util(display(extra = "samplerBuffer"))]
     SamplerBuffer,
-    #[glsl_lang(display(extra = "imageBuffer"))]
+    #[lang_util(display(extra = "imageBuffer"))]
     ImageBuffer,
-    #[glsl_lang(display(extra = "sampler2DMS"))]
+    #[lang_util(display(extra = "sampler2DMS"))]
     Sampler2DMS,
-    #[glsl_lang(display(extra = "image2DMS"))]
+    #[lang_util(display(extra = "image2DMS"))]
     Image2DMS,
-    #[glsl_lang(display(extra = "sampler2DMSArray"))]
+    #[lang_util(display(extra = "sampler2DMSArray"))]
     Sampler2DMSArray,
-    #[glsl_lang(display(extra = "image2DMSArray"))]
+    #[lang_util(display(extra = "image2DMSArray"))]
     Image2DMSArray,
-    #[glsl_lang(display(extra = "samplerCubeArray"))]
+    #[lang_util(display(extra = "samplerCubeArray"))]
     SamplerCubeArray,
-    #[glsl_lang(display(extra = "imageCubeArray"))]
+    #[lang_util(display(extra = "imageCubeArray"))]
     ImageCubeArray,
-    #[glsl_lang(display(extra = "sampler1DShadow"))]
+    #[lang_util(display(extra = "sampler1DShadow"))]
     Sampler1DShadow,
-    #[glsl_lang(display(extra = "sampler2DShadow"))]
+    #[lang_util(display(extra = "sampler2DShadow"))]
     Sampler2DShadow,
-    #[glsl_lang(display(extra = "sampler2DRectShadow"))]
+    #[lang_util(display(extra = "sampler2DRectShadow"))]
     Sampler2DRectShadow,
-    #[glsl_lang(display(extra = "sampler1DArrayShadow"))]
+    #[lang_util(display(extra = "sampler1DArrayShadow"))]
     Sampler1DArrayShadow,
-    #[glsl_lang(display(extra = "sampler2DArrayShadow"))]
+    #[lang_util(display(extra = "sampler2DArrayShadow"))]
     Sampler2DArrayShadow,
-    #[glsl_lang(display(extra = "samplerCubeShadow"))]
+    #[lang_util(display(extra = "samplerCubeShadow"))]
     SamplerCubeShadow,
-    #[glsl_lang(display(extra = "samplerCubeArrayShadow"))]
+    #[lang_util(display(extra = "samplerCubeArrayShadow"))]
     SamplerCubeArrayShadow,
     // signed integer opaque types
-    #[glsl_lang(display(extra = "isampler1D"))]
+    #[lang_util(display(extra = "isampler1D"))]
     ISampler1D,
-    #[glsl_lang(display(extra = "iimage1D"))]
+    #[lang_util(display(extra = "iimage1D"))]
     IImage1D,
-    #[glsl_lang(display(extra = "isampler2D"))]
+    #[lang_util(display(extra = "isampler2D"))]
     ISampler2D,
-    #[glsl_lang(display(extra = "iimage2D"))]
+    #[lang_util(display(extra = "iimage2D"))]
     IImage2D,
-    #[glsl_lang(display(extra = "isampler3D"))]
+    #[lang_util(display(extra = "isampler3D"))]
     ISampler3D,
-    #[glsl_lang(display(extra = "iimage3D"))]
+    #[lang_util(display(extra = "iimage3D"))]
     IImage3D,
-    #[glsl_lang(display(extra = "isamplerCube"))]
+    #[lang_util(display(extra = "isamplerCube"))]
     ISamplerCube,
-    #[glsl_lang(display(extra = "iimageCube"))]
+    #[lang_util(display(extra = "iimageCube"))]
     IImageCube,
-    #[glsl_lang(display(extra = "isampler2DRect"))]
+    #[lang_util(display(extra = "isampler2DRect"))]
     ISampler2DRect,
-    #[glsl_lang(display(extra = "iimage2DRect"))]
+    #[lang_util(display(extra = "iimage2DRect"))]
     IImage2DRect,
-    #[glsl_lang(display(extra = "isampler1DArray"))]
+    #[lang_util(display(extra = "isampler1DArray"))]
     ISampler1DArray,
-    #[glsl_lang(display(extra = "iimage1DArray"))]
+    #[lang_util(display(extra = "iimage1DArray"))]
     IImage1DArray,
-    #[glsl_lang(display(extra = "isampler2DArray"))]
+    #[lang_util(display(extra = "isampler2DArray"))]
     ISampler2DArray,
-    #[glsl_lang(display(extra = "iimage2DArray"))]
+    #[lang_util(display(extra = "iimage2DArray"))]
     IImage2DArray,
-    #[glsl_lang(display(extra = "isamplerBuffer"))]
+    #[lang_util(display(extra = "isamplerBuffer"))]
     ISamplerBuffer,
-    #[glsl_lang(display(extra = "iimageBuffer"))]
+    #[lang_util(display(extra = "iimageBuffer"))]
     IImageBuffer,
-    #[glsl_lang(display(extra = "isampler2DMS"))]
+    #[lang_util(display(extra = "isampler2DMS"))]
     ISampler2DMS,
-    #[glsl_lang(display(extra = "iimage2DMS"))]
+    #[lang_util(display(extra = "iimage2DMS"))]
     IImage2DMS,
-    #[glsl_lang(display(extra = "isampler2DMSArray"))]
+    #[lang_util(display(extra = "isampler2DMSArray"))]
     ISampler2DMSArray,
-    #[glsl_lang(display(extra = "iimage2DMSArray"))]
+    #[lang_util(display(extra = "iimage2DMSArray"))]
     IImage2DMSArray,
-    #[glsl_lang(display(extra = "isamplerCubeArray"))]
+    #[lang_util(display(extra = "isamplerCubeArray"))]
     ISamplerCubeArray,
-    #[glsl_lang(display(extra = "iimageCubeArray"))]
+    #[lang_util(display(extra = "iimageCubeArray"))]
     IImageCubeArray,
     // unsigned integer opaque types
-    #[glsl_lang(display(extra = "atomic_uint"))]
+    #[lang_util(display(extra = "atomic_uint"))]
     AtomicUInt,
-    #[glsl_lang(display(extra = "usampler1D"))]
+    #[lang_util(display(extra = "usampler1D"))]
     USampler1D,
-    #[glsl_lang(display(extra = "uimage1D"))]
+    #[lang_util(display(extra = "uimage1D"))]
     UImage1D,
-    #[glsl_lang(display(extra = "usampler2D"))]
+    #[lang_util(display(extra = "usampler2D"))]
     USampler2D,
-    #[glsl_lang(display(extra = "uimage2D"))]
+    #[lang_util(display(extra = "uimage2D"))]
     UImage2D,
-    #[glsl_lang(display(extra = "usampler3D"))]
+    #[lang_util(display(extra = "usampler3D"))]
     USampler3D,
-    #[glsl_lang(display(extra = "uimage3D"))]
+    #[lang_util(display(extra = "uimage3D"))]
     UImage3D,
-    #[glsl_lang(display(extra = "usamplerCube"))]
+    #[lang_util(display(extra = "usamplerCube"))]
     USamplerCube,
-    #[glsl_lang(display(extra = "uimageCube"))]
+    #[lang_util(display(extra = "uimageCube"))]
     UImageCube,
-    #[glsl_lang(display(extra = "usampler2DRect"))]
+    #[lang_util(display(extra = "usampler2DRect"))]
     USampler2DRect,
-    #[glsl_lang(display(extra = "uimage2DRect"))]
+    #[lang_util(display(extra = "uimage2DRect"))]
     UImage2DRect,
-    #[glsl_lang(display(extra = "usampler1DArray"))]
+    #[lang_util(display(extra = "usampler1DArray"))]
     USampler1DArray,
-    #[glsl_lang(display(extra = "uimage1DArray"))]
+    #[lang_util(display(extra = "uimage1DArray"))]
     UImage1DArray,
-    #[glsl_lang(display(extra = "usampler2DArray"))]
+    #[lang_util(display(extra = "usampler2DArray"))]
     USampler2DArray,
-    #[glsl_lang(display(extra = "uimage2DArray"))]
+    #[lang_util(display(extra = "uimage2DArray"))]
     UImage2DArray,
-    #[glsl_lang(display(extra = "usamplerBuffer"))]
+    #[lang_util(display(extra = "usamplerBuffer"))]
     USamplerBuffer,
-    #[glsl_lang(display(extra = "uimageBuffer"))]
+    #[lang_util(display(extra = "uimageBuffer"))]
     UImageBuffer,
-    #[glsl_lang(display(extra = "usampler2DMS"))]
+    #[lang_util(display(extra = "usampler2DMS"))]
     USampler2DMS,
-    #[glsl_lang(display(extra = "uimage2DMS"))]
+    #[lang_util(display(extra = "uimage2DMS"))]
     UImage2DMS,
-    #[glsl_lang(display(extra = "usampler2DMSArray"))]
+    #[lang_util(display(extra = "usampler2DMSArray"))]
     USampler2DMSArray,
-    #[glsl_lang(display(extra = "uimage2DMSArray"))]
+    #[lang_util(display(extra = "uimage2DMSArray"))]
     UImage2DMSArray,
-    #[glsl_lang(display(extra = "usamplerCubeArray"))]
+    #[lang_util(display(extra = "usamplerCubeArray"))]
     USamplerCubeArray,
-    #[glsl_lang(display(extra = "uimageCubeArray"))]
+    #[lang_util(display(extra = "uimageCubeArray"))]
     UImageCubeArray,
-    #[glsl_lang(display(extra = "struct"))]
+    #[lang_util(display(extra = "struct"))]
     Struct(StructSpecifier),
     TypeName(TypeName),
 }
@@ -411,7 +409,7 @@ impl ArrayedIdentifier {
 impl From<&str> for ArrayedIdentifier {
     fn from(ident: &str) -> Self {
         ArrayedIdentifier {
-            ident: ident.into(),
+            ident: IdentifierData::from(ident).into(),
             array_spec: None,
         }
     }
@@ -437,39 +435,39 @@ pub enum TypeQualifierSpec {
 /// Storage qualifier.
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 pub enum StorageQualifier {
-    #[glsl_lang(display(extra = "const"))]
+    #[lang_util(display(extra = "const"))]
     Const,
-    #[glsl_lang(display(extra = "inout"))]
+    #[lang_util(display(extra = "inout"))]
     InOut,
-    #[glsl_lang(display(extra = "in"))]
+    #[lang_util(display(extra = "in"))]
     In,
-    #[glsl_lang(display(extra = "out"))]
+    #[lang_util(display(extra = "out"))]
     Out,
-    #[glsl_lang(display(extra = "centroid"))]
+    #[lang_util(display(extra = "centroid"))]
     Centroid,
-    #[glsl_lang(display(extra = "patch"))]
+    #[lang_util(display(extra = "patch"))]
     Patch,
-    #[glsl_lang(display(extra = "sample"))]
+    #[lang_util(display(extra = "sample"))]
     Sample,
-    #[glsl_lang(display(extra = "uniform"))]
+    #[lang_util(display(extra = "uniform"))]
     Uniform,
-    #[glsl_lang(display(extra = "buffer"))]
+    #[lang_util(display(extra = "buffer"))]
     Buffer,
-    #[glsl_lang(display(extra = "shared"))]
+    #[lang_util(display(extra = "shared"))]
     Shared,
-    #[glsl_lang(display(extra = "coherent"))]
+    #[lang_util(display(extra = "coherent"))]
     Coherent,
-    #[glsl_lang(display(extra = "volatile"))]
+    #[lang_util(display(extra = "volatile"))]
     Volatile,
-    #[glsl_lang(display(extra = "restrict"))]
+    #[lang_util(display(extra = "restrict"))]
     Restrict,
-    #[glsl_lang(display(extra = "readonly"))]
+    #[lang_util(display(extra = "readonly"))]
     ReadOnly,
-    #[glsl_lang(display(extra = "writeonly"))]
+    #[lang_util(display(extra = "writeonly"))]
     WriteOnly,
     // Note: the grammar says TYPE_NAME but type_specifier makes more sense given the definition of
     // subroutine. The reference implementation is marked "to do".
-    #[glsl_lang(display(extra = "subroutine"))]
+    #[lang_util(display(extra = "subroutine"))]
     Subroutine(Vec<TypeSpecifier>),
 }
 
@@ -483,29 +481,29 @@ pub struct LayoutQualifier {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 pub enum LayoutQualifierSpec {
     Identifier(Identifier, Option<Box<Expr>>),
-    #[glsl_lang(display(extra = "shared"))]
+    #[lang_util(display(extra = "shared"))]
     Shared,
 }
 
 /// Precision qualifier.
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 pub enum PrecisionQualifier {
-    #[glsl_lang(display(extra = "high"))]
+    #[lang_util(display(extra = "high"))]
     High,
-    #[glsl_lang(display(extra = "medium"))]
+    #[lang_util(display(extra = "medium"))]
     Medium,
-    #[glsl_lang(display(extra = "low"))]
+    #[lang_util(display(extra = "low"))]
     Low,
 }
 
 /// Interpolation qualifier.
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 pub enum InterpolationQualifier {
-    #[glsl_lang(display(extra = "smooth"))]
+    #[lang_util(display(extra = "smooth"))]
     Smooth,
-    #[glsl_lang(display(extra = "flat"))]
+    #[lang_util(display(extra = "flat"))]
     Flat,
-    #[glsl_lang(display(extra = "noperspective"))]
+    #[lang_util(display(extra = "noperspective"))]
     NoPerspective,
 }
 
@@ -575,8 +573,8 @@ pub enum FunIdentifier {
 }
 
 impl FunIdentifier {
-    pub fn ident(i: impl Into<Identifier>) -> Self {
-        Self::Expr(Box::new(Expr::Variable(i.into())))
+    pub fn ident(i: impl Into<IdentifierData>) -> Self {
+        Self::Expr(Box::new(Expr::Variable(i.into().into())))
     }
 
     pub fn as_ident(&self) -> Option<&Identifier> {
@@ -754,87 +752,87 @@ impl From<f64> for Expr {
 /// All unary operators that exist in GLSL.
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 pub enum UnaryOp {
-    #[glsl_lang(display(extra = "++"))]
+    #[lang_util(display(extra = "++"))]
     Inc,
-    #[glsl_lang(display(extra = "--"))]
+    #[lang_util(display(extra = "--"))]
     Dec,
-    #[glsl_lang(display(extra = "+"))]
+    #[lang_util(display(extra = "+"))]
     Add,
-    #[glsl_lang(display(extra = "-"))]
+    #[lang_util(display(extra = "-"))]
     Minus,
-    #[glsl_lang(display(extra = "!"))]
+    #[lang_util(display(extra = "!"))]
     Not,
-    #[glsl_lang(display(extra = "~"))]
+    #[lang_util(display(extra = "~"))]
     Complement,
 }
 
 /// All binary operators that exist in GLSL.
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 pub enum BinaryOp {
-    #[glsl_lang(display(extra = "||"))]
+    #[lang_util(display(extra = "||"))]
     Or,
-    #[glsl_lang(display(extra = "^^"))]
+    #[lang_util(display(extra = "^^"))]
     Xor,
-    #[glsl_lang(display(extra = "&&"))]
+    #[lang_util(display(extra = "&&"))]
     And,
-    #[glsl_lang(display(extra = "|"))]
+    #[lang_util(display(extra = "|"))]
     BitOr,
-    #[glsl_lang(display(extra = "^"))]
+    #[lang_util(display(extra = "^"))]
     BitXor,
-    #[glsl_lang(display(extra = "&"))]
+    #[lang_util(display(extra = "&"))]
     BitAnd,
-    #[glsl_lang(display(extra = "=="))]
+    #[lang_util(display(extra = "=="))]
     Equal,
-    #[glsl_lang(display(extra = "!="))]
+    #[lang_util(display(extra = "!="))]
     NonEqual,
-    #[glsl_lang(display(extra = "<"))]
+    #[lang_util(display(extra = "<"))]
     LT,
-    #[glsl_lang(display(extra = ">"))]
+    #[lang_util(display(extra = ">"))]
     GT,
-    #[glsl_lang(display(extra = "<="))]
+    #[lang_util(display(extra = "<="))]
     LTE,
-    #[glsl_lang(display(extra = ">="))]
+    #[lang_util(display(extra = ">="))]
     GTE,
-    #[glsl_lang(display(extra = "<<"))]
+    #[lang_util(display(extra = "<<"))]
     LShift,
-    #[glsl_lang(display(extra = ">>"))]
+    #[lang_util(display(extra = ">>"))]
     RShift,
-    #[glsl_lang(display(extra = "+"))]
+    #[lang_util(display(extra = "+"))]
     Add,
-    #[glsl_lang(display(extra = "-"))]
+    #[lang_util(display(extra = "-"))]
     Sub,
-    #[glsl_lang(display(extra = "*"))]
+    #[lang_util(display(extra = "*"))]
     Mult,
-    #[glsl_lang(display(extra = "/"))]
+    #[lang_util(display(extra = "/"))]
     Div,
-    #[glsl_lang(display(extra = "%"))]
+    #[lang_util(display(extra = "%"))]
     Mod,
 }
 
 /// All possible operators for assigning expressions.
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 pub enum AssignmentOp {
-    #[glsl_lang(display(extra = "="))]
+    #[lang_util(display(extra = "="))]
     Equal,
-    #[glsl_lang(display(extra = "*"))]
+    #[lang_util(display(extra = "*"))]
     Mult,
-    #[glsl_lang(display(extra = "/="))]
+    #[lang_util(display(extra = "/="))]
     Div,
-    #[glsl_lang(display(extra = "%="))]
+    #[lang_util(display(extra = "%="))]
     Mod,
-    #[glsl_lang(display(extra = "+="))]
+    #[lang_util(display(extra = "+="))]
     Add,
-    #[glsl_lang(display(extra = "-="))]
+    #[lang_util(display(extra = "-="))]
     Sub,
-    #[glsl_lang(display(extra = "<<="))]
+    #[lang_util(display(extra = "<<="))]
     LShift,
-    #[glsl_lang(display(extra = ">>="))]
+    #[lang_util(display(extra = ">>="))]
     RShift,
-    #[glsl_lang(display(extra = "&="))]
+    #[lang_util(display(extra = "&="))]
     And,
-    #[glsl_lang(display(extra = "^="))]
+    #[lang_util(display(extra = "^="))]
     Xor,
-    #[glsl_lang(display(extra = "|="))]
+    #[lang_util(display(extra = "|="))]
     Or,
 }
 
@@ -896,7 +894,7 @@ impl StatementData {
     pub fn declare_var<T, N, A, I>(ty: T, name: N, array_specifier: A, initializer: I) -> Self
     where
         T: Into<FullySpecifiedType>,
-        N: Into<Identifier>,
+        N: Into<IdentifierData>,
         A: Into<Option<ArraySpecifier>>,
         I: Into<Option<Initializer>>,
     {
@@ -904,7 +902,7 @@ impl StatementData {
             DeclarationData::InitDeclaratorList(InitDeclaratorList {
                 head: SingleDeclaration {
                     ty: ty.into(),
-                    name: Some(name.into()),
+                    name: Some(name.into().into()),
                     array_specifier: array_specifier.into(),
                     initializer: initializer.into(),
                 },
@@ -959,11 +957,11 @@ pub enum CaseLabel {
 /// Iteration statement.
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 pub enum IterationStatement {
-    #[glsl_lang(display(extra = "while"))]
+    #[lang_util(display(extra = "while"))]
     While(Condition, Box<Statement>),
-    #[glsl_lang(display(extra = "do"))]
+    #[lang_util(display(extra = "do"))]
     DoWhile(Box<Statement>, Box<Expr>),
-    #[glsl_lang(display(extra = "for"))]
+    #[lang_util(display(extra = "for"))]
     For(ForInitStatement, ForRestStatement, Box<Statement>),
 }
 
@@ -984,13 +982,13 @@ pub struct ForRestStatement {
 /// Jump statement.
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 pub enum JumpStatement {
-    #[glsl_lang(display(extra = "continue"))]
+    #[lang_util(display(extra = "continue"))]
     Continue,
-    #[glsl_lang(display(extra = "break"))]
+    #[lang_util(display(extra = "break"))]
     Break,
-    #[glsl_lang(display(extra = "return"))]
+    #[lang_util(display(extra = "return"))]
     Return(Option<Box<Expr>>),
-    #[glsl_lang(display(extra = "discard"))]
+    #[lang_util(display(extra = "discard"))]
     Discard,
 }
 
@@ -1001,33 +999,33 @@ pub enum JumpStatement {
 /// inspection.
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 pub enum PreprocessorData {
-    #[glsl_lang(display(extra = "#define"))]
+    #[lang_util(display(extra = "#define"))]
     Define(PreprocessorDefine),
-    #[glsl_lang(display(extra = "#else"))]
+    #[lang_util(display(extra = "#else"))]
     Else,
-    #[glsl_lang(display(extra = "#elseif"))]
+    #[lang_util(display(extra = "#elseif"))]
     ElseIf(PreprocessorElseIf),
-    #[glsl_lang(display(extra = "#endif"))]
+    #[lang_util(display(extra = "#endif"))]
     EndIf,
-    #[glsl_lang(display(extra = "#error"))]
+    #[lang_util(display(extra = "#error"))]
     Error(PreprocessorError),
-    #[glsl_lang(display(extra = "#if"))]
+    #[lang_util(display(extra = "#if"))]
     If(PreprocessorIf),
-    #[glsl_lang(display(extra = "#ifdef"))]
+    #[lang_util(display(extra = "#ifdef"))]
     IfDef(PreprocessorIfDef),
-    #[glsl_lang(display(extra = "#ifndef"))]
+    #[lang_util(display(extra = "#ifndef"))]
     IfNDef(PreprocessorIfNDef),
-    #[glsl_lang(display(extra = "#include"))]
+    #[lang_util(display(extra = "#include"))]
     Include(PreprocessorInclude),
-    #[glsl_lang(display(extra = "#line"))]
+    #[lang_util(display(extra = "#line"))]
     Line(PreprocessorLine),
-    #[glsl_lang(display(extra = "#pragma"))]
+    #[lang_util(display(extra = "#pragma"))]
     Pragma(PreprocessorPragma),
-    #[glsl_lang(display(extra = "#undef"))]
+    #[lang_util(display(extra = "#undef"))]
     Undef(PreprocessorUndef),
-    #[glsl_lang(display(extra = "#version"))]
+    #[lang_util(display(extra = "#version"))]
     Version(PreprocessorVersion),
-    #[glsl_lang(display(extra = "#extension"))]
+    #[lang_util(display(extra = "#extension"))]
     Extension(PreprocessorExtension),
 }
 
@@ -1051,35 +1049,35 @@ pub enum PreprocessorDefine {
 /// An #else preprocessor directive.
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 pub struct PreprocessorElseIf {
-    #[glsl_lang(display(extra))]
+    #[lang_util(display(extra))]
     pub condition: String,
 }
 
 /// An #error preprocessor directive.
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 pub struct PreprocessorError {
-    #[glsl_lang(display(extra))]
+    #[lang_util(display(extra))]
     pub message: String,
 }
 
 /// An #if preprocessor directive.
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 pub struct PreprocessorIf {
-    #[glsl_lang(display(extra))]
+    #[lang_util(display(extra))]
     pub condition: String,
 }
 
 /// An #ifdef preprocessor directive.
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 pub struct PreprocessorIfDef {
-    #[glsl_lang(display(extra))]
+    #[lang_util(display(extra))]
     pub ident: Identifier,
 }
 
 /// A #ifndef preprocessor directive.
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 pub struct PreprocessorIfNDef {
-    #[glsl_lang(display(extra))]
+    #[lang_util(display(extra))]
     pub ident: Identifier,
 }
 
@@ -1092,7 +1090,7 @@ pub struct PreprocessorInclude {
 /// A #line preprocessor directive.
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 pub struct PreprocessorLine {
-    #[glsl_lang(display(extra))]
+    #[lang_util(display(extra))]
     pub line: u32,
     pub source_string_number: Option<u32>,
 }
@@ -1101,21 +1099,21 @@ pub struct PreprocessorLine {
 /// Holds compiler-specific command.
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 pub struct PreprocessorPragma {
-    #[glsl_lang(display(extra))]
+    #[lang_util(display(extra))]
     pub command: String,
 }
 
 /// A #undef preprocessor directive.
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 pub struct PreprocessorUndef {
-    #[glsl_lang(display(extra))]
+    #[lang_util(display(extra))]
     pub name: Identifier,
 }
 
 /// A #version preprocessor directive.
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 pub struct PreprocessorVersion {
-    #[glsl_lang(display(extra))]
+    #[lang_util(display(extra))]
     pub version: u16,
     pub profile: Option<PreprocessorVersionProfile>,
 }
@@ -1123,11 +1121,11 @@ pub struct PreprocessorVersion {
 /// A #version profile annotation.
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 pub enum PreprocessorVersionProfile {
-    #[glsl_lang(display(extra = "core"))]
+    #[lang_util(display(extra = "core"))]
     Core,
-    #[glsl_lang(display(extra = "compatibility"))]
+    #[lang_util(display(extra = "compatibility"))]
     Compatibility,
-    #[glsl_lang(display(extra = "es"))]
+    #[lang_util(display(extra = "es"))]
     ES,
 }
 
@@ -1142,7 +1140,7 @@ pub struct PreprocessorExtension {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 pub enum PreprocessorExtensionName {
     /// All extensions you could ever imagine in your whole lifetime (how crazy is that!).
-    #[glsl_lang(display(extra = "all"))]
+    #[lang_util(display(extra = "all"))]
     All,
     /// A specific extension.
     Specific(String),
@@ -1151,13 +1149,13 @@ pub enum PreprocessorExtensionName {
 /// An #extension behavior annotation.
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 pub enum PreprocessorExtensionBehavior {
-    #[glsl_lang(display(extra = "require"))]
+    #[lang_util(display(extra = "require"))]
     Require,
-    #[glsl_lang(display(extra = "enable"))]
+    #[lang_util(display(extra = "enable"))]
     Enable,
-    #[glsl_lang(display(extra = "warn"))]
+    #[lang_util(display(extra = "warn"))]
     Warn,
-    #[glsl_lang(display(extra = "disable"))]
+    #[lang_util(display(extra = "disable"))]
     Disable,
 }
 

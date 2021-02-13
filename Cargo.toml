@@ -1,16 +1,19 @@
 [workspace]
 members = [
 	"lang",
-	"lang-impl",
+	"lang-util",
+	"lang-util-derive",
 	"lang-quote",
 	"lang-cli",
 ]
 
 [patch.crates-io]
-glsl-lang = { path = "lang" }
-glsl-lang-impl = { path = "lang-impl" }
+glsl-lang       = { path = "lang" }
 glsl-lang-quote = { path = "lang-quote" }
-glsl-lang-cli = { path = "lang-cli" }
+glsl-lang-cli   = { path = "lang-cli" }
+
+lang-util        = { path = "lang-util" }
+lang-util-derive = { path = "lang-util-derive" }
 
 [profile.dev.build-override]
 opt-level = 2

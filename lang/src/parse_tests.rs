@@ -1,5 +1,7 @@
+use lang_util::{assert_ceq, node::NodeContent};
+
 use crate::{
-    assert_ceq, ast,
+    ast,
     parse::{Parsable, ParseOptions},
 };
 
@@ -224,7 +226,10 @@ fn parse_storage_qualifier() {
 #[test]
 fn parse_layout_qualifier_std430() {
     let expected = ast::LayoutQualifier {
-        ids: vec![ast::LayoutQualifierSpec::Identifier("std430".into(), None)],
+        ids: vec![ast::LayoutQualifierSpec::Identifier(
+            "std430".into_node(),
+            None,
+        )],
     };
 
     assert_ceq!(
@@ -262,9 +267,9 @@ fn parse_layout_qualifier_shared() {
 #[test]
 fn parse_layout_qualifier_list() {
     let id_0 = ast::LayoutQualifierSpec::Shared;
-    let id_1 = ast::LayoutQualifierSpec::Identifier("std140".into(), None);
+    let id_1 = ast::LayoutQualifierSpec::Identifier("std140".into_node(), None);
     let id_2 = ast::LayoutQualifierSpec::Identifier(
-        "max_vertices".into(),
+        "max_vertices".into_node(),
         Some(Box::new(ast::Expr::IntConst(3))),
     );
     let expected = ast::LayoutQualifier {
@@ -289,9 +294,9 @@ fn parse_layout_qualifier_list() {
 fn parse_type_qualifier() {
     let storage_qual = ast::TypeQualifierSpec::Storage(ast::StorageQualifier::Const);
     let id_0 = ast::LayoutQualifierSpec::Shared;
-    let id_1 = ast::LayoutQualifierSpec::Identifier("std140".into(), None);
+    let id_1 = ast::LayoutQualifierSpec::Identifier("std140".into_node(), None);
     let id_2 = ast::LayoutQualifierSpec::Identifier(
-        "max_vertices".into(),
+        "max_vertices".into_node(),
         Some(Box::new(ast::Expr::IntConst(3))),
     );
     let layout_qual = ast::TypeQualifierSpec::Layout(ast::LayoutQualifier {
@@ -337,7 +342,7 @@ fn parse_struct_field_specifier_type_name() {
     let expected = ast::StructFieldSpecifier {
         qualifier: None,
         ty: ast::TypeSpecifier {
-            ty: ast::TypeSpecifierNonArray::TypeName("S0238_3".into()),
+            ty: ast::TypeSpecifierNonArray::TypeName("S0238_3".into_node()),
             array_specifier: None,
         },
         identifiers: vec!["x".into()],
@@ -386,7 +391,7 @@ fn parse_struct_specifier_one_field() {
         identifiers: vec!["foo".into()],
     };
     let expected = ast::StructSpecifier {
-        name: Some("TestStruct".into()),
+        name: Some("TestStruct".into_node()),
         fields: vec![field],
     };
 
@@ -444,13 +449,13 @@ fn parse_struct_specifier_multi_fields() {
     let s = ast::StructFieldSpecifier {
         qualifier: None,
         ty: ast::TypeSpecifier {
-            ty: ast::TypeSpecifierNonArray::TypeName("S0238_3".into()),
+            ty: ast::TypeSpecifierNonArray::TypeName("S0238_3".into_node()),
             array_specifier: None,
         },
         identifiers: vec!["x".into()],
     };
     let expected = ast::StructSpecifier {
-        name: Some("_TestStruct_934i".into()),
+        name: Some("_TestStruct_934i".into_node()),
         fields: vec![foo_field, bar, zoo, foobar, s],
     };
 
@@ -958,9 +963,9 @@ fn parse_type_specifier_non_array() {
         .add_type_name(ast::IdentifierData::from("ReturnType").into());
     assert_ceq!(
         ast::TypeSpecifierNonArray::parse_with_options("ReturnType", &opts).map(|(p, _)| p),
-        Ok(ast::TypeSpecifierNonArray::TypeName(ast::TypeName::from(
-            "ReturnType"
-        )))
+        Ok(ast::TypeSpecifierNonArray::TypeName(
+            ast::TypeNameData::from("ReturnType").into()
+        ))
     );
 }
 
@@ -1131,7 +1136,7 @@ fn parse_postfix_function_call_multi_arg() {
     let args = vec![
         ast::Expr::IntConst(0),
         ast::Expr::BoolConst(false),
-        ast::Expr::Variable("bar".into()),
+        ast::Expr::Variable("bar".into_node()),
     ];
     let expected = ast::Expr::FunCall(fun, args);
 
@@ -1144,7 +1149,7 @@ fn parse_postfix_function_call_multi_arg() {
 
 #[test]
 fn parse_postfix_expr_bracket() {
-    let id = ast::Expr::Variable("foo".into());
+    let id = ast::Expr::Variable("foo".into_node());
     let expected = ast::Expr::Bracket(Box::new(id), Box::new(ast::Expr::IntConst(7354)));
 
     assert_ceq!(ast::Expr::parse("foo[7354]"), Ok(expected.clone()));
@@ -1153,8 +1158,8 @@ fn parse_postfix_expr_bracket() {
 
 #[test]
 fn parse_postfix_expr_dot() {
-    let foo_var = Box::new(ast::Expr::Variable("foo".into()));
-    let expected = ast::Expr::Dot(foo_var, "bar".into());
+    let foo_var = Box::new(ast::Expr::Variable("foo".into_node()));
+    let expected = ast::Expr::Dot(foo_var, "bar".into_node());
 
     assert_ceq!(ast::Expr::parse("foo.bar"), Ok(expected.clone()));
     assert_ceq!(ast::Expr::parse("(foo).bar"), Ok(expected));
@@ -1162,10 +1167,10 @@ fn parse_postfix_expr_dot() {
 
 #[test]
 fn parse_postfix_expr_dot_several() {
-    let foo_var = Box::new(ast::Expr::Variable("foo".into()));
+    let foo_var = Box::new(ast::Expr::Variable("foo".into_node()));
     let expected = ast::Expr::Dot(
-        Box::new(ast::Expr::Dot(foo_var, "bar".into())),
-        "zoo".into(),
+        Box::new(ast::Expr::Dot(foo_var, "bar".into_node())),
+        "zoo".into_node(),
     );
 
     assert_ceq!(ast::Expr::parse("foo.bar.zoo"), Ok(expected.clone()));
@@ -1175,7 +1180,7 @@ fn parse_postfix_expr_dot_several() {
 
 #[test]
 fn parse_postfix_postinc() {
-    let foo_var = ast::Expr::Variable("foo".into());
+    let foo_var = ast::Expr::Variable("foo".into_node());
     let expected = ast::Expr::PostInc(Box::new(foo_var));
 
     assert_ceq!(ast::Expr::parse("foo++"), Ok(expected));
@@ -1183,7 +1188,7 @@ fn parse_postfix_postinc() {
 
 #[test]
 fn parse_postfix_postdec() {
-    let foo_var = ast::Expr::Variable("foo".into());
+    let foo_var = ast::Expr::Variable("foo".into_node());
     let expected = ast::Expr::PostDec(Box::new(foo_var));
 
     assert_ceq!(ast::Expr::parse("foo--"), Ok(expected));
@@ -1191,7 +1196,7 @@ fn parse_postfix_postdec() {
 
 #[test]
 fn parse_unary_add() {
-    let foo_var = ast::Expr::Variable("foo".into());
+    let foo_var = ast::Expr::Variable("foo".into_node());
     let expected = ast::Expr::Unary(ast::UnaryOp::Add, Box::new(foo_var));
 
     assert_ceq!(ast::Expr::parse("+foo"), Ok(expected));
@@ -1199,7 +1204,7 @@ fn parse_unary_add() {
 
 #[test]
 fn parse_unary_minus() {
-    let foo_var = ast::Expr::Variable("foo".into());
+    let foo_var = ast::Expr::Variable("foo".into_node());
     let expected = ast::Expr::Unary(ast::UnaryOp::Minus, Box::new(foo_var));
 
     assert_ceq!(ast::Expr::parse("-foo"), Ok(expected));
@@ -1207,7 +1212,7 @@ fn parse_unary_minus() {
 
 #[test]
 fn parse_unary_not() {
-    let foo_var = ast::Expr::Variable("foo".into());
+    let foo_var = ast::Expr::Variable("foo".into_node());
     let expected = ast::Expr::Unary(ast::UnaryOp::Not, Box::new(foo_var));
 
     assert_ceq!(ast::Expr::parse("!foo"), Ok(expected));
@@ -1215,7 +1220,7 @@ fn parse_unary_not() {
 
 #[test]
 fn parse_unary_complement() {
-    let foo_var = ast::Expr::Variable("foo".into());
+    let foo_var = ast::Expr::Variable("foo".into_node());
     let expected = ast::Expr::Unary(ast::UnaryOp::Complement, Box::new(foo_var));
 
     assert_ceq!(ast::Expr::parse("~foo"), Ok(expected));
@@ -1223,7 +1228,7 @@ fn parse_unary_complement() {
 
 #[test]
 fn parse_unary_inc() {
-    let foo_var = ast::Expr::Variable("foo".into());
+    let foo_var = ast::Expr::Variable("foo".into_node());
     let expected = ast::Expr::Unary(ast::UnaryOp::Inc, Box::new(foo_var));
 
     assert_ceq!(ast::Expr::parse("++foo"), Ok(expected));
@@ -1231,7 +1236,7 @@ fn parse_unary_inc() {
 
 #[test]
 fn parse_unary_dec() {
-    let foo_var = ast::Expr::Variable("foo".into());
+    let foo_var = ast::Expr::Variable("foo".into_node());
     let expected = ast::Expr::Unary(ast::UnaryOp::Dec, Box::new(foo_var));
 
     assert_ceq!(ast::Expr::parse("--foo"), Ok(expected));
@@ -1315,16 +1320,16 @@ fn parse_expr_add_sub_mult_div() {
 fn parse_complex_expr() {
     let input = "normalize((inverse(view) * vec4(ray.dir, 0.)).xyz)";
     let zero = ast::Expr::FloatConst(0.);
-    let ray = ast::Expr::Variable("ray".into());
-    let raydir = ast::Expr::Dot(Box::new(ray), "dir".into());
+    let ray = ast::Expr::Variable("ray".into_node());
+    let raydir = ast::Expr::Dot(Box::new(ray), "dir".into_node());
     let vec4 = ast::Expr::FunCall(
         ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifierNonArray::Vec4.into()),
         vec![raydir, zero],
     );
-    let view = ast::Expr::Variable("view".into());
+    let view = ast::Expr::Variable("view".into_node());
     let iview = ast::Expr::FunCall(ast::FunIdentifier::ident("inverse"), vec![view]);
     let mul = ast::Expr::Binary(ast::BinaryOp::Mult, Box::new(iview), Box::new(vec4));
-    let xyz = ast::Expr::Dot(Box::new(mul), "xyz".into());
+    let xyz = ast::Expr::Dot(Box::new(mul), "xyz".into_node());
     let normalize = ast::Expr::FunCall(ast::FunIdentifier::ident("normalize"), vec![xyz]);
     let expected = normalize;
 
@@ -1398,7 +1403,7 @@ fn parse_assignment_op() {
 #[test]
 fn parse_expr_statement() {
     let expected = ast::ExprStatement(Some(ast::Expr::Assignment(
-        Box::new(ast::Expr::Variable("foo".into())),
+        Box::new(ast::Expr::Variable("foo".into_node())),
         ast::AssignmentOp::Equal,
         Box::new(ast::Expr::FloatConst(314.)),
     )));
@@ -1447,7 +1452,7 @@ fn parse_declaration_function_prototype() {
     );
     let fp = ast::FunctionPrototypeData {
         ty: rt,
-        name: "foo".into(),
+        name: "foo".into_node(),
         parameters: vec![arg0.into(), arg1.into()],
     };
     let expected: ast::Declaration = ast::DeclarationData::FunctionPrototype(fp.into()).into();
@@ -1477,7 +1482,7 @@ fn parse_declaration_init_declarator_list_single() {
     };
     let sd = ast::SingleDeclaration {
         ty,
-        name: Some("foo".into()),
+        name: Some("foo".into_node()),
         array_specifier: None,
         initializer: Some(ast::Initializer::Simple(Box::new(ast::Expr::IntConst(34)))),
     };
@@ -1509,7 +1514,7 @@ fn parse_declaration_init_declarator_list_complex() {
     };
     let sd = ast::SingleDeclaration {
         ty,
-        name: Some("foo".into()),
+        name: Some("foo".into_node()),
         array_specifier: None,
         initializer: Some(ast::Initializer::Simple(Box::new(ast::Expr::IntConst(34)))),
     };
@@ -1620,7 +1625,7 @@ fn parse_declaration_uniform_block() {
     };
     let expected: ast::Declaration = ast::DeclarationData::Block(ast::Block {
         qualifier: qual,
-        name: "UniformBlockTest".into(),
+        name: "UniformBlockTest".into_node(),
         fields: vec![f0, f1, f2],
         identifier: None,
     })
@@ -1670,7 +1675,7 @@ fn parse_declaration_buffer_block() {
             array_specifier: None,
         },
         identifiers: vec![ast::ArrayedIdentifier::new(
-            "b",
+            "b".into_node(),
             Some(ast::ArraySpecifier {
                 dimensions: vec![ast::ArraySpecifierDimension::Unsized],
             }),
@@ -1686,7 +1691,7 @@ fn parse_declaration_buffer_block() {
     };
     let expected: ast::Declaration = ast::DeclarationData::Block(ast::Block {
         qualifier: qual,
-        name: "UniformBlockTest".into(),
+        name: "UniformBlockTest".into_node(),
         fields: vec![f0, f1, f2],
         identifier: None,
     })
@@ -1714,7 +1719,7 @@ fn parse_declaration_buffer_block() {
 fn parse_selection_statement_if() {
     let cond = ast::Expr::Binary(
         ast::BinaryOp::LT,
-        Box::new(ast::Expr::Variable("foo".into())),
+        Box::new(ast::Expr::Variable("foo".into_node())),
         Box::new(ast::Expr::IntConst(10)),
     );
     let ret = Box::new(ast::Expr::BoolConst(false));
@@ -1745,7 +1750,7 @@ fn parse_selection_statement_if() {
 fn parse_selection_statement_if_else() {
     let cond = ast::Expr::Binary(
         ast::BinaryOp::LT,
-        Box::new(ast::Expr::Variable("foo".into())),
+        Box::new(ast::Expr::Variable("foo".into_node())),
         Box::new(ast::Expr::IntConst(10)),
     );
     let if_ret = Box::new(ast::Expr::FloatConst(0.));
@@ -1756,7 +1761,7 @@ fn parse_selection_statement_if_else() {
         }
         .into(),
     );
-    let else_ret = Box::new(ast::Expr::Variable("foo".into()));
+    let else_ret = Box::new(ast::Expr::Variable("foo".into_node()));
     let else_st = ast::StatementData::Jump(ast::JumpStatement::Return(Some(else_ret)));
     let else_body = ast::StatementData::Compound(
         ast::CompoundStatementData {
@@ -1785,7 +1790,7 @@ fn parse_selection_statement_if_else() {
 
 #[test]
 fn parse_switch_statement_empty() {
-    let head = Box::new(ast::Expr::Variable("foo".into()));
+    let head = Box::new(ast::Expr::Variable("foo".into_node()));
     let expected = ast::SwitchStatement {
         head,
         body: Vec::new(),
@@ -1807,7 +1812,7 @@ fn parse_switch_statement_empty() {
 
 #[test]
 fn parse_switch_statement_cases() {
-    let head = Box::new(ast::Expr::Variable("foo".into()));
+    let head = Box::new(ast::Expr::Variable("foo".into_node()));
     let case0 =
         ast::StatementData::CaseLabel(ast::CaseLabel::Case(Box::new(ast::Expr::IntConst(0))));
     let case1 =
@@ -1847,8 +1852,8 @@ fn parse_case_label() {
 fn parse_iteration_statement_while_empty() {
     let cond = ast::Condition::Expr(ast::Expr::Binary(
         ast::BinaryOp::GTE,
-        Box::new(ast::Expr::Variable("a".into())),
-        Box::new(ast::Expr::Variable("b".into())),
+        Box::new(ast::Expr::Variable("a".into_node())),
+        Box::new(ast::Expr::Variable("b".into_node())),
     ));
     let st = ast::StatementData::Compound(
         ast::CompoundStatementData {
@@ -1882,8 +1887,8 @@ fn parse_iteration_statement_do_while_empty() {
     );
     let cond = Box::new(ast::Expr::Binary(
         ast::BinaryOp::GTE,
-        Box::new(ast::Expr::Variable("a".into())),
-        Box::new(ast::Expr::Variable("b".into())),
+        Box::new(ast::Expr::Variable("a".into_node())),
+        Box::new(ast::Expr::Variable("b".into_node())),
     ));
     let expected = ast::IterationStatement::DoWhile(Box::new(st.into()), cond);
 
@@ -1913,7 +1918,7 @@ fn parse_iteration_statement_for_empty() {
                         array_specifier: None,
                     },
                 },
-                name: Some("i".into()),
+                name: Some("i".into_node()),
                 array_specifier: None,
                 initializer: Some(ast::Initializer::Simple(Box::new(ast::Expr::FloatConst(
                     0.,
@@ -1926,12 +1931,12 @@ fn parse_iteration_statement_for_empty() {
     let rest = ast::ForRestStatement {
         condition: Some(ast::Condition::Expr(ast::Expr::Binary(
             ast::BinaryOp::LTE,
-            Box::new(ast::Expr::Variable("i".into())),
+            Box::new(ast::Expr::Variable("i".into_node())),
             Box::new(ast::Expr::FloatConst(10.)),
         ))),
         post_expr: Some(Box::new(ast::Expr::Unary(
             ast::UnaryOp::Inc,
-            Box::new(ast::Expr::Variable("i".into())),
+            Box::new(ast::Expr::Variable("i".into_node())),
         ))),
     };
     let st = ast::StatementData::Compound(
@@ -2038,7 +2043,7 @@ fn parse_compound_statement() {
                         array_specifier: None,
                     },
                 },
-                name: Some("x".into()),
+                name: Some("x".into_node()),
                 array_specifier: None,
                 initializer: None,
             },
@@ -2075,12 +2080,12 @@ fn parse_function_definition() {
     };
     let fp = ast::FunctionPrototypeData {
         ty: rt,
-        name: "foo".into(),
+        name: "foo".into_node(),
         parameters: Vec::new(),
     }
     .into();
     let st0 = ast::StatementData::Jump(ast::JumpStatement::Return(Some(Box::new(
-        ast::Expr::Variable("bar".into()),
+        ast::Expr::Variable("bar".into_node()),
     ))));
     let expected: ast::FunctionDefinition = ast::FunctionDefinitionData {
         prototype: fp,
@@ -2118,7 +2123,7 @@ fn parse_buffer_block_0() {
                         array_specifier: None,
                     },
                 },
-                name: "main".into(),
+                name: "main".into_node(),
                 parameters: Vec::new(),
             }
             .into(),
@@ -2137,7 +2142,7 @@ fn parse_buffer_block_0() {
                     ast::StorageQualifier::Buffer,
                 )],
             },
-            name: "Foo".into(),
+            name: "Foo".into_node(),
             fields: vec![ast::StructFieldSpecifier {
                 qualifier: None,
                 ty: ast::TypeSpecifier {
@@ -2145,7 +2150,7 @@ fn parse_buffer_block_0() {
                     array_specifier: None,
                 },
                 identifiers: vec![ast::ArrayedIdentifier::new(
-                    "tiles",
+                    "tiles".into_node(),
                     Some(ast::ArraySpecifier {
                         dimensions: vec![ast::ArraySpecifierDimension::Unsized],
                     }),
@@ -2167,11 +2172,11 @@ fn parse_layout_buffer_block_0() {
     let layout = ast::LayoutQualifier {
         ids: vec![
             ast::LayoutQualifierSpec::Identifier(
-                "set".into(),
+                "set".into_node(),
                 Some(Box::new(ast::Expr::IntConst(0))),
             ),
             ast::LayoutQualifierSpec::Identifier(
-                "binding".into(),
+                "binding".into_node(),
                 Some(Box::new(ast::Expr::IntConst(0))),
             ),
         ],
@@ -2185,7 +2190,7 @@ fn parse_layout_buffer_block_0() {
     let block = ast::ExternalDeclarationData::Declaration(
         ast::DeclarationData::Block(ast::Block {
             qualifier: type_qual,
-            name: "Foo".into(),
+            name: "Foo".into_node(),
             fields: vec![ast::StructFieldSpecifier {
                 qualifier: None,
                 ty: ast::TypeSpecifierNonArray::Float.into(),
@@ -2248,7 +2253,7 @@ fn parse_pp_define() {
     let expect = |v: &str| {
         Ok(
             ast::PreprocessorData::Define(ast::PreprocessorDefine::ObjectLike {
-                ident: "test".into(),
+                ident: "test".into_node(),
                 value: v.to_owned(),
             })
             .into(),
@@ -2269,7 +2274,7 @@ fn parse_pp_define() {
         ast::Preprocessor::parse("#define test123 .0f\n"),
         Ok(
             ast::PreprocessorData::Define(ast::PreprocessorDefine::ObjectLike {
-                ident: "test123".into(),
+                ident: "test123".into_node(),
                 value: ".0f".to_owned()
             })
             .into()
@@ -2280,7 +2285,7 @@ fn parse_pp_define() {
         ast::Preprocessor::parse("#define test 1\n"),
         Ok(
             ast::PreprocessorData::Define(ast::PreprocessorDefine::ObjectLike {
-                ident: "test".into(),
+                ident: "test".into_node(),
                 value: "1".to_owned()
             })
             .into()
@@ -2288,12 +2293,12 @@ fn parse_pp_define() {
     );
 
     let a = ast::PreprocessorData::Define(ast::PreprocessorDefine::ObjectLike {
-        ident: "M_PI".into(),
+        ident: "M_PI".into_node(),
         value: "3.14".to_owned(),
     })
     .into();
     let b = ast::PreprocessorData::Define(ast::PreprocessorDefine::ObjectLike {
-        ident: "M_2PI".into(),
+        ident: "M_2PI".into_node(),
         value: "(2. * M_PI)".to_owned(),
     })
     .into();
@@ -2311,7 +2316,7 @@ fn parse_pp_define() {
 fn parse_pp_define_with_args() {
     let expected: ast::Preprocessor =
         ast::PreprocessorData::Define(ast::PreprocessorDefine::FunctionLike {
-            ident: "add".into(),
+            ident: "add".into_node(),
             args: vec![
                 ast::IdentifierData::from("x").into(),
                 ast::IdentifierData::from("y").into(),
@@ -2340,7 +2345,7 @@ fn parse_pp_define_multiline() {
         ),
         Ok(
             ast::PreprocessorData::Define(ast::PreprocessorDefine::ObjectLike {
-                ident: "foo".into(),
+                ident: "foo".into_node(),
                 value: "32".to_owned(),
             })
             .into()
@@ -2516,10 +2521,10 @@ fn parse_dot_field_expr_array() {
     let src = "a[0].xyz";
     let expected = ast::Expr::Dot(
         Box::new(ast::Expr::Bracket(
-            Box::new(ast::Expr::Variable("a".into())),
+            Box::new(ast::Expr::Variable("a".into_node())),
             Box::new(ast::Expr::IntConst(0)),
         )),
-        "xyz".into(),
+        "xyz".into_node(),
     );
 
     assert_ceq!(ast::Expr::parse(src), Ok(expected));
@@ -2532,17 +2537,17 @@ fn parse_dot_field_expr_statement() {
     let args = vec![
         ast::Expr::FunCall(
             ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifierNonArray::Vec3.into()),
-            vec![ast::Expr::Variable("border_width".into())],
+            vec![ast::Expr::Variable("border_width".into_node())],
         ),
         ast::Expr::FunCall(
             ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifierNonArray::Vec3.into()),
             vec![ast::Expr::FloatConst(0.)],
         ),
-        ast::Expr::Variable("v_barycenter".into()),
+        ast::Expr::Variable("v_barycenter".into_node()),
     ];
     let ini = ast::Initializer::Simple(Box::new(ast::Expr::Dot(
         Box::new(ast::Expr::FunCall(fun, args)),
-        "zyx".into(),
+        "zyx".into_node(),
     )));
     let sd = ast::SingleDeclaration {
         ty: ast::FullySpecifiedType {
@@ -2552,7 +2557,7 @@ fn parse_dot_field_expr_statement() {
                 array_specifier: None,
             },
         },
-        name: Some("v".into()),
+        name: Some("v".into_node()),
         array_specifier: None,
         initializer: Some(ini),
     };
@@ -2571,7 +2576,7 @@ fn parse_dot_field_expr_statement() {
 #[test]
 fn parse_arrayed_identifier() {
     let expected = ast::ArrayedIdentifier::new(
-        "foo",
+        "foo".into_node(),
         ast::ArraySpecifier {
             dimensions: vec![ast::ArraySpecifierDimension::Unsized],
         },

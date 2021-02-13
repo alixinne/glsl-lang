@@ -5,14 +5,14 @@ authors = ["Vincent Tavernier <vince.tavernier@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-glsl-lang-impl = "0.1"
-logos = "0.12"
-thiserror = "1.0"
 lalrpop-util = "0.19"
 lazy_static = "1.4"
+logos = "0.12"
 strum = "0.20"
 strum_macros = "0.20"
-parse-display = "0.4"
+thiserror = "1.0"
+
+lang-util = "0.1"
 
 [build-dependencies]
 lalrpop = "0.19"

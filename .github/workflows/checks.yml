@@ -15,6 +15,15 @@ jobs:
           override: true
           target: ${{ matrix.target }}
           components: rustfmt, clippy
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cargo/bin/cargo-readme
+      - name: Install cargo-readme
+        run: |
+          cargo-readme -V || (
+            cargo install --force cargo-readme && cargo-readme -V
+          )
       - name: Check READMEs
         run: ./ci/readme.sh -c
       - name: Check formatting

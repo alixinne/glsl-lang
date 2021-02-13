@@ -17,6 +17,7 @@ jobs:
           components: rustfmt, clippy
       - uses: actions/cache@v2
         with:
+          key: ${{ runner.os }}
           path: |
             ~/.cargo/bin/cargo-readme
       - name: Install cargo-readme

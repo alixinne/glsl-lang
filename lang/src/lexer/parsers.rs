@@ -1,6 +1,6 @@
 use std::str::FromStr;
 
-use super::{LexerPosition, LexicalError, PreprocessorToken, Token, TypeNames};
+use super::{LexerContext, LexerPosition, LexicalError, PreprocessorToken, Token};
 
 pub fn parse_int<'i>(
     lex: &mut logos::Lexer<'i, Token<'i>>,
@@ -80,21 +80,21 @@ pub fn parse_pp_path<'i>(lex: &mut logos::Lexer<'i, PreprocessorToken<'i>>) -> &
 
 pub fn parse_pp_ident<'i>(
     lex: &mut logos::Lexer<'i, PreprocessorToken<'i>>,
-) -> Result<(&'i str, TypeNames), LexicalError> {
-    Ok((lex.slice(), lex.extras.type_names.clone()))
+) -> Result<(&'i str, LexerContext), LexicalError> {
+    Ok((lex.slice(), lex.extras.clone()))
 }
 
 pub fn parse_ident<'i>(
     lex: &mut logos::Lexer<'i, Token<'i>>,
-) -> Result<(&'i str, TypeNames), LexicalError> {
-    Ok((lex.slice(), lex.extras.type_names.clone()))
+) -> Result<(&'i str, LexerContext), LexicalError> {
+    Ok((lex.slice(), lex.extras.clone()))
 }
 
 pub fn parse_rs_ident<'i>(
     lex: &mut logos::Lexer<'i, Token<'i>>,
-) -> Result<(&'i str, TypeNames), LexicalError> {
-    if lex.extras.allow_rs_ident {
-        Ok((lex.slice(), lex.extras.type_names.clone()))
+) -> Result<(&'i str, LexerContext), LexicalError> {
+    if lex.extras.opts.allow_rs_ident {
+        Ok((lex.slice(), lex.extras.clone()))
     } else {
         Err(LexicalError::ForbiddenRsQuote)
     }
@@ -108,8 +108,8 @@ fn parse_cmt_int(
 ) {
     use crate::ast::NodeContent;
 
-    if let Some(cmt) = extras.comments.as_ref() {
-        let source_id = extras.source_id;
+    if extras.has_comments() {
+        let source_id = extras.opts.source_id;
 
         let comment = if is_single {
             crate::ast::CommentData::Single(slice[2..].to_owned())
@@ -121,7 +121,7 @@ fn parse_cmt_int(
             LexerPosition::new(source_id, span.end),
         );
 
-        cmt.add_comment(comment);
+        extras.add_comment(comment);
     }
 }
 

@@ -2,18 +2,18 @@ use lang_util::{assert_ceq, node::NodeContent};
 
 use crate::{
     ast,
-    parse::{Parsable, ParseOptions},
+    parse::{Parsable, ParseContext, ParseOptions},
 };
 
 #[test]
 fn parse_comments() {
-    let opts = ParseOptions::with_comments();
+    let opts = ParseOptions::new().with_comments();
 
     assert_ceq!(
         ast::TranslationUnit::parse_with_options("// lol", &opts).map(|(_, opts)| opts
-            .comments
+            .into_data()
             .unwrap()
-            .into_inner()
+            .comments
             .unwrap()
             .into_iter()
             .next()
@@ -26,9 +26,9 @@ fn parse_comments() {
     assert_ceq!(
         ast::TranslationUnit::parse_with_options("/* Something */\nvoid main() {}", &opts).map(
             |(_, opts)| opts
-                .comments
+                .into_data()
                 .unwrap()
-                .into_inner()
+                .comments
                 .unwrap()
                 .into_iter()
                 .next()
@@ -405,10 +405,9 @@ fn parse_struct_specifier_one_field() {
     );
 }
 
-fn get_s0238_3_opts() -> ParseOptions {
-    let opts = ParseOptions::default();
-    opts.type_names
-        .add_type_name(ast::IdentifierData::from("S0238_3").into());
+fn get_s0238_3_opts() -> ParseContext {
+    let opts = ParseOptions::default().build();
+    opts.add_type_name(ast::IdentifierData::from("S0238_3").into());
     opts
 }
 
@@ -958,9 +957,8 @@ fn parse_type_specifier_non_array() {
         Ok(ast::TypeSpecifierNonArray::UImageCubeArray)
     );
 
-    let opts = ParseOptions::default();
-    opts.type_names
-        .add_type_name(ast::IdentifierData::from("ReturnType").into());
+    let opts = ParseOptions::default().build();
+    opts.add_type_name(ast::IdentifierData::from("ReturnType").into());
     assert_ceq!(
         ast::TypeSpecifierNonArray::parse_with_options("ReturnType", &opts).map(|(p, _)| p),
         Ok(ast::TypeSpecifierNonArray::TypeName(
@@ -1010,10 +1008,8 @@ fn parse_fully_specified_type() {
 
 #[test]
 fn parse_fully_specified_type_with_qualifier() {
-    let opts = ParseOptions::new();
-    let tn = opts
-        .type_names
-        .add_type_name(ast::IdentifierData::from("S032_29k").into());
+    let opts = ParseOptions::new().build();
+    let tn = opts.add_type_name(ast::IdentifierData::from("S032_29k").into());
 
     let qual_spec = ast::TypeQualifierSpec::Storage(ast::StorageQualifier::Subroutine(vec![
         ast::TypeSpecifierNonArray::Vec2.into(),
@@ -1590,10 +1586,8 @@ fn parse_declaration_precision_high() {
 
 #[test]
 fn parse_declaration_uniform_block() {
-    let opts = ParseOptions::new();
-    let foo_var = opts
-        .type_names
-        .add_type_name(ast::IdentifierData::from("foo").into());
+    let opts = ParseOptions::new().build();
+    let foo_var = opts.add_type_name(ast::IdentifierData::from("foo").into());
 
     let qual_spec = ast::TypeQualifierSpec::Storage(ast::StorageQualifier::Uniform);
     let qual = ast::TypeQualifier {
@@ -1651,10 +1645,8 @@ fn parse_declaration_uniform_block() {
 
 #[test]
 fn parse_declaration_buffer_block() {
-    let opts = ParseOptions::new();
-    let foo_var = opts
-        .type_names
-        .add_type_name(ast::IdentifierData::from("foo").into());
+    let opts = ParseOptions::new().build();
+    let foo_var = opts.add_type_name(ast::IdentifierData::from("foo").into());
 
     let qual_spec = ast::TypeQualifierSpec::Storage(ast::StorageQualifier::Buffer);
     let qual = ast::TypeQualifier {

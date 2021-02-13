@@ -22,7 +22,7 @@ use std::fmt;
 use std::iter::FromIterator;
 
 pub use lang_util::{
-    node::{Node, NodeDisplay},
+    node::{Node, NodeContentEq, NodeDisplay},
     position::NodeSpan,
     NodeContent,
 };

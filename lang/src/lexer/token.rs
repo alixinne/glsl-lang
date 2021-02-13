@@ -3,7 +3,7 @@ use strum_macros::{EnumDiscriminants, IntoStaticStr};
 
 use super::{
     parse_cmt, parse_f32, parse_f64, parse_ident, parse_int, parse_rs_ident, parse_uint,
-    LexerContext, TypeNames,
+    LexerContext,
 };
 
 #[derive(Debug, Clone, PartialEq, Logos, EnumDiscriminants)]
@@ -401,7 +401,7 @@ pub enum Token<'i> {
     Subroutine,
     #[regex("[a-zA-Z_][a-zA-Z_0-9]*", parse_ident)]
     #[regex("#\\s*\\(\\s*[a-zA-Z_][a-zA-Z_0-9]*\\s*\\)", parse_rs_ident)]
-    Identifier((&'i str, TypeNames)),
+    Identifier((&'i str, LexerContext)),
     TypeName(&'i str), // Cast from Identifier depending on known type names
     #[regex(
         r"([0-9]+\.[0-9]+|[0-9]+\.|\.[0-9]+)([eE][+-]?[0-9]+)?(f|F)?",
@@ -616,9 +616,9 @@ impl<'i> Token<'i> {
         }
     }
 
-    pub fn type_names(&self) -> TypeNames {
+    pub fn context(&self) -> LexerContext {
         match self {
-            Self::Identifier((_, n)) => n.clone(),
+            Self::Identifier((_, c)) => c.clone(),
             _ => panic!("cannot get type_names for token {:?}", self),
         }
     }

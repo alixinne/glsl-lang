@@ -17,7 +17,8 @@ where
     let opts = ParseOptions {
         allow_rs_ident: true,
         ..Default::default()
-    };
+    }
+    .build();
     let parsed: Result<(F, _), _> = Parsable::parse_with_options(&s, &opts);
 
     if let Ok((tu, _)) = parsed {

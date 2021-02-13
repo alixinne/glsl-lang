@@ -1,18 +1,19 @@
 use super::*;
 
+use crate::parse::ParseOptions;
+
 fn check_ident(input: &str) {
-    let opts = ParseOptions {
+    let context: LexerContext = ParseOptions {
         target_vulkan: false,
         ..Default::default()
-    };
+    }
+    .into();
 
-    let type_names = opts.type_names.clone();
-
-    let mut lexer = Lexer::new(input, opts);
+    let mut lexer = Lexer::new(input, context.clone());
 
     assert_eq!(
         lexer.next().map(|(_, n, _)| n),
-        Some(Token::Identifier((input, type_names)))
+        Some(Token::Identifier((input, context)))
     );
 }
 
@@ -22,7 +23,8 @@ fn check(input: &str, token: Token) {
         ParseOptions {
             target_vulkan: false,
             ..Default::default()
-        },
+        }
+        .into(),
     );
     assert_eq!(lexer.next().map(|(_, n, _)| n), Some(token));
 }
@@ -33,7 +35,8 @@ fn check_vulkan(input: &str, token: Token) {
         ParseOptions {
             target_vulkan: true,
             ..Default::default()
-        },
+        }
+        .into(),
     );
     assert_eq!(lexer.next().map(|(_, n, _)| n), Some(token));
 }

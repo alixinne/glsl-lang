@@ -1,5 +1,8 @@
-use crate::ast::{self, NodeContent};
-use crate::lexer::{ IdentifierContext, LexerPosition, LexicalError, Token, TypeNames };
+use crate::{
+    ast::{self, NodeContent},
+    lexer::{LexerContext, LexerPosition, LexicalError, Token},
+    parse::IdentifierContext,
+};
 
 grammar<'i>(text: &'i str);
 
@@ -25,8 +28,8 @@ comma_trailing<T>: Vec<T> = {
     }
 };
 
-identifier: (ast::Identifier, TypeNames) = {
-    <l:@L> <i:ident> <r:@R> => (ast::IdentifierData::from(i.as_str()).spanned(l, r), i.type_names()),
+identifier: (ast::Identifier, LexerContext) = {
+    <l:@L> <i:ident> <r:@R> => (ast::IdentifierData::from(i.as_str()).spanned(l, r), i.context()),
 };
 
 type_name: ast::TypeName = {
@@ -523,7 +526,7 @@ function_parameter_declaration: ast::FunctionParameterDeclaration = {
         ast::FunctionParameterDeclarationData::Named(q, d).spanned(l, r),
 }
 
-function_prototype: (ast::FunctionPrototype, TypeNames) = {
+function_prototype: (ast::FunctionPrototype, LexerContext) = {
     <l:@L> <rt:fully_specified_type> <n:identifier> "(" <p:comma<function_parameter_declaration>> ")" <r:@R> =>
         (
             ast::FunctionPrototypeData {

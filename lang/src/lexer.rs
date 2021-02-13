@@ -1,11 +1,6 @@
 use logos::Logos;
 use thiserror::Error;
 
-use crate::parse::ParseOptions;
-
-mod comments;
-pub use comments::*;
-
 mod parsers;
 use parsers::*;
 
@@ -15,15 +10,12 @@ pub use preprocessor_token::*;
 mod token;
 pub use token::*;
 
-mod type_names;
-pub use type_names::*;
-
 #[cfg(test)]
 mod tests;
 
 pub use lang_util::position::LexerPosition;
 
-pub type LexerContext = ParseOptions;
+pub type LexerContext = crate::parse::ParseContext;
 
 enum LexerStage<'i> {
     Source(logos::Lexer<'i, Token<'i>>),
@@ -41,9 +33,9 @@ pub struct Lexer<'i> {
 }
 
 impl<'i> Lexer<'i> {
-    pub fn new(input: &'i str, opts: ParseOptions) -> Self {
+    pub fn new(input: &'i str, context: LexerContext) -> Self {
         Self {
-            inner: LexerStage::Source(Token::lexer_with_extras(input, opts)),
+            inner: LexerStage::Source(Token::lexer_with_extras(input, context)),
             last_token: None,
         }
     }
@@ -53,7 +45,7 @@ impl<'i> Lexer<'i> {
     ) -> Option<(LexerPosition, PreprocessorToken<'i>, LexerPosition)> {
         let token = pp.next()?;
         let span = pp.span();
-        let source_id = pp.extras.source_id;
+        let source_id = pp.extras.opts.source_id;
 
         Some((
             LexerPosition::new(source_id, span.end),
@@ -148,7 +140,7 @@ impl<'i> Lexer<'i> {
 
         pp.bump(consumed_chars);
 
-        let source_id = pp.extras.source_id;
+        let source_id = pp.extras.opts.source_id;
         Some((
             LexerPosition::new(source_id, start),
             PreprocessorToken::Rest(std::borrow::Cow::Owned(
@@ -167,9 +159,9 @@ impl<'i> Iterator for Lexer<'i> {
             LexerStage::Source(src) => {
                 let token = src.next()?;
                 let span = src.span();
-                let source_id = src.extras.source_id;
+                let source_id = src.extras.opts.source_id;
 
-                let mut token = if src.extras.target_vulkan {
+                let mut token = if src.extras.opts.target_vulkan {
                     // Targetting Vulkan, nothing to change
                     (
                         LexerPosition::new(source_id, span.start),
@@ -194,7 +186,7 @@ impl<'i> Iterator for Lexer<'i> {
                             | TextureBuffer | ITextureBuffer | UTextureBuffer | Sampler
                             | SamplerShadow | SubpassInput | ISubpassInput | USubpassInput
                             | SubpassInputMS | ISubpassInputMS | USubpassInputMS => {
-                                Identifier((src.slice(), src.extras.type_names.clone()))
+                                Identifier((src.slice(), src.extras.clone()))
                             }
                             other => other,
                         },
@@ -203,8 +195,8 @@ impl<'i> Iterator for Lexer<'i> {
                 };
 
                 // Transform the ident into a type name if needed
-                if let Token::Identifier((ident, ref tn)) = token.1 {
-                    if tn.is_type_name(ident) {
+                if let Token::Identifier((ident, ref ctx)) = token.1 {
+                    if ctx.is_type_name(ident) {
                         token.1 = Token::TypeName(ident);
                     }
                 }

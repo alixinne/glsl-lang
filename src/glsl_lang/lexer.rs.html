@@ -389,7 +389,7 @@
 
     <span class="kw">fn</span> <span class="ident">consume_pp_rest</span>(
         <span class="ident">pp</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">logos</span>::<span class="ident">Lexer</span><span class="op">&lt;</span><span class="lifetime">&#39;i</span>, <span class="ident">PreprocessorToken</span><span class="op">&lt;</span><span class="lifetime">&#39;i</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="ident">LexerPosition</span>, <span class="ident">PreprocessorToken</span><span class="op">&lt;</span><span class="lifetime">&#39;i</span><span class="op">&gt;</span>, <span class="ident">LexerPosition</span>)<span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> (<span class="ident">LexerPosition</span>, <span class="ident">PreprocessorToken</span><span class="op">&lt;</span><span class="lifetime">&#39;i</span><span class="op">&gt;</span>, <span class="ident">LexerPosition</span>) {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ch1</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ch2</span> <span class="op">=</span> <span class="prelude-val">None</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ch3</span> <span class="op">=</span> <span class="prelude-val">None</span>;
@@ -474,13 +474,13 @@
         <span class="ident">pp</span>.<span class="ident">bump</span>(<span class="ident">consumed_chars</span>);
 
         <span class="kw">let</span> <span class="ident">source_id</span> <span class="op">=</span> <span class="ident">pp</span>.<span class="ident">extras</span>.<span class="ident">opts</span>.<span class="ident">source_id</span>;
-        <span class="prelude-val">Some</span>((
+        (
             <span class="ident">LexerPosition</span>::<span class="ident">new</span>(<span class="ident">source_id</span>, <span class="ident">start</span>),
             <span class="ident">PreprocessorToken</span>::<span class="ident">Rest</span>(<span class="ident">std</span>::<span class="ident">borrow</span>::<span class="ident">Cow</span>::<span class="ident">Owned</span>(
                 <span class="ident">String</span>::<span class="ident">from_utf8</span>(<span class="ident">res</span>).<span class="ident">expect</span>(<span class="string">&quot;invalid utf-8&quot;</span>),
             )),
             <span class="ident">LexerPosition</span>::<span class="ident">new</span>(<span class="ident">source_id</span>, <span class="ident">start</span> <span class="op">+</span> <span class="ident">consumed_chars</span>),
-        ))
+        )
     }
 }
 
@@ -569,12 +569,12 @@
                                     <span class="comment">// Otherwise, it&#39;s the define value, so consume the remainder, return</span>
                                     <span class="comment">// it as PpRest and return back to regular parsing</span>
                                     <span class="kw-2">*</span><span class="ident">consumed_rest</span> <span class="op">=</span> <span class="bool-val">true</span>;
-                                    <span class="self">Self</span>::<span class="ident">consume_pp_rest</span>(<span class="ident">pp</span>)
+                                    <span class="prelude-val">Some</span>(<span class="self">Self</span>::<span class="ident">consume_pp_rest</span>(<span class="ident">pp</span>))
                                 }
                             } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">Token</span>::<span class="ident">RightParen</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">last_token</span> {
                                 <span class="comment">// This is the closing parenthesis of a define</span>
                                 <span class="kw-2">*</span><span class="ident">consumed_rest</span> <span class="op">=</span> <span class="bool-val">true</span>;
-                                <span class="self">Self</span>::<span class="ident">consume_pp_rest</span>(<span class="ident">pp</span>)
+                                <span class="prelude-val">Some</span>(<span class="self">Self</span>::<span class="ident">consume_pp_rest</span>(<span class="ident">pp</span>))
                             } <span class="kw">else</span> {
                                 <span class="comment">// Other tokens (identifier, comma), just consume regularly</span>
                                 <span class="self">Self</span>::<span class="ident">consume_pp</span>(<span class="ident">pp</span>)
@@ -583,7 +583,7 @@
                         <span class="ident">Token</span>::<span class="ident">PpElif</span> <span class="op">|</span> <span class="ident">Token</span>::<span class="ident">PpError</span> <span class="op">|</span> <span class="ident">Token</span>::<span class="ident">PpIf</span> <span class="op">|</span> <span class="ident">Token</span>::<span class="ident">PpPragma</span> <span class="op">=</span><span class="op">&gt;</span> {
                             <span class="comment">// Consume the rest of the line</span>
                             <span class="kw-2">*</span><span class="ident">consumed_rest</span> <span class="op">=</span> <span class="bool-val">true</span>;
-                            <span class="prelude-val">Some</span>(<span class="self">Self</span>::<span class="ident">consume_pp_rest</span>(<span class="ident">pp</span>))
+                            <span class="prelude-val">Some</span>(<span class="prelude-val">Some</span>(<span class="self">Self</span>::<span class="ident">consume_pp_rest</span>(<span class="ident">pp</span>)))
                         }
                         <span class="ident">Token</span>::<span class="ident">PpVersion</span> <span class="op">=</span><span class="op">&gt;</span> {
                             <span class="prelude-val">Some</span>(<span class="self">Self</span>::<span class="ident">consume_pp</span>(<span class="ident">pp</span>).<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">start</span>, <span class="ident">token</span>, <span class="ident">end</span>)<span class="op">|</span> {

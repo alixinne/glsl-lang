@@ -53,7 +53,7 @@ impl TypeNames {
     pub fn add_type_name(&self, name: ast::Identifier) -> ast::TypeName {
         let name_string = name.0.to_string();
         self.names.borrow_mut().insert(name_string);
-        name.map(|id| ast::TypeNameData::from(id))
+        name.map(ast::TypeNameData::from)
     }
 
     pub fn new_identifier(&self, name: &ast::Identifier, ctx: IdentifierContext) {

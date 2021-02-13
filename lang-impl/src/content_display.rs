@@ -249,7 +249,7 @@ pub(crate) fn node_content_display(
         ts
     };
 
-    let quoted = quote! {
+    quote! {
         #[automatically_derived]
         impl NodeContentDisplay for #struct_name {
             fn name() -> Option<&'static str> {
@@ -264,7 +264,5 @@ pub(crate) fn node_content_display(
                 #display_children_impl
             }
         }
-    };
-
-    TokenStream::from(quoted)
+    }
 }

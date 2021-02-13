@@ -12,6 +12,7 @@ lalrpop-util = "0.19"
 lazy_static = "1.4"
 strum = "0.20"
 strum_macros = "0.20"
+parse-display = "0.4"
 
 [build-dependencies]
 lalrpop = "0.19"

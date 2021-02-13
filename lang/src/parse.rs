@@ -1,8 +1,8 @@
 use crate::{ast, lexer::Lexer, parser};
 
 pub use crate::lexer::{
-    CommentList, Comments, IdentifierContext, LexicalError, Token, TokenKind, TypeNames,
-    TypeTablePolicy,
+    CommentList, Comments, IdentifierContext, LexerPosition, LexicalError, Token, TokenKind,
+    TypeNames, TypeTablePolicy,
 };
 
 mod parsable;
@@ -30,8 +30,8 @@ impl ParseOptions {
     }
 }
 
-pub type ParseError<'i> = lalrpop_util::ParseError<(usize, usize), Token<'i>, LexicalError>;
-pub type ParseErrorStatic = lalrpop_util::ParseError<(usize, usize), TokenKind, LexicalError>;
+pub type ParseError<'i> = lalrpop_util::ParseError<LexerPosition, Token<'i>, LexicalError>;
+pub type ParseErrorStatic = lalrpop_util::ParseError<LexerPosition, TokenKind, LexicalError>;
 
 pub trait LangParser: Sized {
     fn new() -> Self;

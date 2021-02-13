@@ -3,7 +3,7 @@ use quote::{format_ident, quote, quote_spanned};
 use syn::{spanned::Spanned, Data, DeriveInput};
 
 pub(crate) fn node_content_eq(input: &DeriveInput) -> TokenStream {
-    let quoted = match &input.data {
+    match &input.data {
         Data::Struct(ds) => {
             let mut current_expr = None;
 
@@ -110,7 +110,5 @@ pub(crate) fn node_content_eq(input: &DeriveInput) -> TokenStream {
         _ => quote_spanned! {
             input.span() => compile_error!("unsupported type for NodeContent derive");
         },
-    };
-
-    TokenStream::from(quoted)
+    }
 }

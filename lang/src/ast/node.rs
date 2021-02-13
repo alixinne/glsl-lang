@@ -1,7 +1,9 @@
 use std::fmt;
 
+use crate::parse::LexerPosition;
+
 /// Span information for a node, constructed from a nom_locate::LocatedSpan
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Ord, Hash)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct NodeSpan {
     /// The index of this span into the list of parsed units. This is used to
     /// identify which source string this span refers to when combining multiple ASTs
@@ -55,27 +57,17 @@ impl NodeSpan {
     }
 }
 
-impl std::cmp::PartialOrd for NodeSpan {
-    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        Some(self.source_id.cmp(&other.source_id).then_with(|| {
-            self.start
-                .cmp(&other.start)
-                .then_with(|| other.length().cmp(&self.length()))
-        }))
-    }
-}
-
 pub trait NodeContent: fmt::Debug + Clone + PartialEq + Sized {
     /// Add span information to a syntax node
-    fn spanned(self, start: (usize, usize), end: (usize, usize)) -> Node<Self> {
-        assert_eq!(start.0, end.0);
+    fn spanned(self, start: LexerPosition, end: LexerPosition) -> Node<Self> {
+        assert_eq!(start.source_id, end.source_id);
 
         Node {
             content: self,
             span: Some(NodeSpan {
-                source_id: start.0,
-                start: start.1,
-                end: end.1,
+                source_id: start.source_id,
+                start: start.offset,
+                end: end.offset,
             }),
         }
     }

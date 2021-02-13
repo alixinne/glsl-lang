@@ -92,14 +92,14 @@ pub enum Whitespace {
 }
 
 impl Whitespace {
-    pub fn write<F>(&self, f: &mut F, s: &mut FormattingState) -> std::fmt::Result
+    pub fn write<F>(&self, f: &mut F, state: &mut FormattingState) -> std::fmt::Result
     where
         F: Write,
     {
         match self {
             Self::None => Ok(()),
             Self::Space => f.write_char(' '),
-            Self::Newline => s.new_line(true),
+            Self::Newline => state.new_line(true),
         }
     }
 }
@@ -410,7 +410,7 @@ where
 pub fn show_type_specifier_non_array<F>(
     f: &mut F,
     t: &ast::TypeSpecifierNonArray,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
@@ -535,23 +535,23 @@ where
         ast::TypeSpecifierNonArray::UImage2DMSArray => f.write_str("uimage2DMSArray"),
         ast::TypeSpecifierNonArray::USamplerCubeArray => f.write_str("usamplerCubeArray"),
         ast::TypeSpecifierNonArray::UImageCubeArray => f.write_str("uimageCubeArray"),
-        ast::TypeSpecifierNonArray::Struct(ref st) => show_struct_non_declaration(f, st, s),
-        ast::TypeSpecifierNonArray::TypeName(ref tn) => show_type_name(f, tn, s),
+        ast::TypeSpecifierNonArray::Struct(ref st) => show_struct_non_declaration(f, st, state),
+        ast::TypeSpecifierNonArray::TypeName(ref tn) => show_type_name(f, tn, state),
     }
 }
 
 pub fn show_type_specifier<F>(
     f: &mut F,
     t: &ast::TypeSpecifier,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
 {
-    show_type_specifier_non_array(f, &t.ty, s)?;
+    show_type_specifier_non_array(f, &t.ty, state)?;
 
     if let Some(ref arr_spec) = t.array_specifier {
-        show_array_spec(f, arr_spec, s)?;
+        show_array_spec(f, arr_spec, state)?;
     }
 
     Ok(())
@@ -560,23 +560,23 @@ where
 pub fn show_fully_specified_type<F>(
     f: &mut F,
     t: &ast::FullySpecifiedType,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
 {
     if let Some(ref qual) = t.qualifier {
-        show_type_qualifier(f, &qual, s)?;
+        show_type_qualifier(f, &qual, state)?;
         f.write_str(" ")?;
     }
 
-    show_type_specifier(f, &t.ty, s)
+    show_type_specifier(f, &t.ty, state)
 }
 
 pub fn show_struct_non_declaration<F>(
     f: &mut F,
     st: &ast::StructSpecifier,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
@@ -587,15 +587,15 @@ where
         write!(f, "{} ", name)?;
     }
 
-    s.enter_block(f)?;
+    state.enter_block(f)?;
 
     for field in &st.fields {
-        s.flush_line(f)?;
-        show_struct_field(f, field, s)?;
-        s.write_struct_field_separator(f)?;
+        state.flush_line(f)?;
+        show_struct_field(f, field, state)?;
+        state.write_struct_field_separator(f)?;
     }
 
-    s.exit_block(f)?;
+    state.exit_block(f)?;
 
     Ok(())
 }
@@ -603,41 +603,41 @@ where
 pub fn show_struct<F>(
     f: &mut F,
     st: &ast::StructSpecifier,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
 {
-    show_struct_non_declaration(f, st, s)?;
-    s.write_struct_declaration_terminator(f)
+    show_struct_non_declaration(f, st, state)?;
+    state.write_struct_declaration_terminator(f)
 }
 
 pub fn show_struct_field<F>(
     f: &mut F,
     field: &ast::StructFieldSpecifier,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
 {
     if let Some(ref qual) = field.qualifier {
-        show_type_qualifier(f, &qual, s)?;
+        show_type_qualifier(f, &qual, state)?;
         f.write_str(" ")?;
     }
 
-    show_type_specifier(f, &field.ty, s)?;
+    show_type_specifier(f, &field.ty, state)?;
     f.write_str(" ")?;
 
     // there’s at least one identifier
     let mut identifiers = field.identifiers.iter();
     let identifier = identifiers.next().unwrap();
 
-    show_arrayed_identifier(f, identifier, s)?;
+    show_arrayed_identifier(f, identifier, state)?;
 
     // write the rest of the identifiers
     for identifier in identifiers {
         f.write_str(", ")?;
-        show_arrayed_identifier(f, identifier, s)?;
+        show_arrayed_identifier(f, identifier, state)?;
     }
 
     Ok(())
@@ -646,7 +646,7 @@ where
 pub fn show_array_spec<F>(
     f: &mut F,
     a: &ast::ArraySpecifier,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
@@ -656,7 +656,7 @@ where
             ast::ArraySpecifierDimension::Unsized => f.write_str("[]")?,
             ast::ArraySpecifierDimension::ExplicitlySized(ref e) => {
                 f.write_str("[")?;
-                show_expr(f, &e, s)?;
+                show_expr(f, &e, state)?;
                 f.write_str("]")?
             }
         }
@@ -668,7 +668,7 @@ where
 pub fn show_arrayed_identifier<F>(
     f: &mut F,
     a: &ast::ArrayedIdentifier,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
@@ -676,7 +676,7 @@ where
     write!(f, "{}", a.ident)?;
 
     if let Some(ref arr_spec) = a.array_spec {
-        show_array_spec(f, arr_spec, s)?;
+        show_array_spec(f, arr_spec, state)?;
     }
 
     Ok(())
@@ -685,7 +685,7 @@ where
 pub fn show_type_qualifier<F>(
     f: &mut F,
     q: &ast::TypeQualifier,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
@@ -693,11 +693,11 @@ where
     let mut qualifiers = q.qualifiers.iter();
     let first = qualifiers.next().unwrap();
 
-    show_type_qualifier_spec(f, first, s)?;
+    show_type_qualifier_spec(f, first, state)?;
 
     for qual_spec in qualifiers {
         f.write_str(" ")?;
-        show_type_qualifier_spec(f, qual_spec, s)?;
+        show_type_qualifier_spec(f, qual_spec, state)?;
     }
 
     Ok(())
@@ -706,16 +706,16 @@ where
 pub fn show_type_qualifier_spec<F>(
     f: &mut F,
     q: &ast::TypeQualifierSpec,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
 {
     match *q {
-        ast::TypeQualifierSpec::Storage(ref st) => show_storage_qualifier(f, &st, s),
-        ast::TypeQualifierSpec::Layout(ref l) => show_layout_qualifier(f, &l, s),
-        ast::TypeQualifierSpec::Precision(ref p) => show_precision_qualifier(f, &p, s),
-        ast::TypeQualifierSpec::Interpolation(ref i) => show_interpolation_qualifier(f, &i, s),
+        ast::TypeQualifierSpec::Storage(ref st) => show_storage_qualifier(f, &st, state),
+        ast::TypeQualifierSpec::Layout(ref l) => show_layout_qualifier(f, &l, state),
+        ast::TypeQualifierSpec::Precision(ref p) => show_precision_qualifier(f, &p, state),
+        ast::TypeQualifierSpec::Interpolation(ref i) => show_interpolation_qualifier(f, &i, state),
         ast::TypeQualifierSpec::Invariant => f.write_str("invariant"),
         ast::TypeQualifierSpec::Precise => f.write_str("precise"),
     }
@@ -724,7 +724,7 @@ where
 pub fn show_storage_qualifier<F>(
     f: &mut F,
     q: &ast::StorageQualifier,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
@@ -745,14 +745,14 @@ where
         ast::StorageQualifier::Restrict => f.write_str("restrict"),
         ast::StorageQualifier::ReadOnly => f.write_str("readonly"),
         ast::StorageQualifier::WriteOnly => f.write_str("writeonly"),
-        ast::StorageQualifier::Subroutine(ref n) => show_subroutine(f, &n, s),
+        ast::StorageQualifier::Subroutine(ref n) => show_subroutine(f, &n, state),
     }
 }
 
 pub fn show_subroutine<F>(
     f: &mut F,
-    types: &Vec<ast::TypeSpecifier>,
-    s: &mut FormattingState<'_>,
+    types: &[ast::TypeSpecifier],
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
@@ -765,11 +765,11 @@ where
         let mut types_iter = types.iter();
         let first = types_iter.next().unwrap();
 
-        show_type_specifier(f, first, s)?;
+        show_type_specifier(f, first, state)?;
 
         for type_name in types_iter {
             f.write_str(", ")?;
-            show_type_specifier(f, type_name, s)?;
+            show_type_specifier(f, type_name, state)?;
         }
 
         f.write_str(")")?;
@@ -781,7 +781,7 @@ where
 pub fn show_layout_qualifier<F>(
     f: &mut F,
     l: &ast::LayoutQualifier,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
@@ -790,11 +790,11 @@ where
     let first = qualifiers.next().unwrap();
 
     f.write_str("layout (")?;
-    show_layout_qualifier_spec(f, first, s)?;
+    show_layout_qualifier_spec(f, first, state)?;
 
     for qual_spec in qualifiers {
         f.write_str(", ")?;
-        show_layout_qualifier_spec(f, qual_spec, s)?;
+        show_layout_qualifier_spec(f, qual_spec, state)?;
     }
 
     f.write_str(")")
@@ -803,7 +803,7 @@ where
 pub fn show_layout_qualifier_spec<F>(
     f: &mut F,
     l: &ast::LayoutQualifierSpec,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
@@ -811,9 +811,9 @@ where
     match *l {
         ast::LayoutQualifierSpec::Identifier(ref i, Some(ref e)) => {
             write!(f, "{} = ", i)?;
-            show_expr(f, &e, s)
+            show_expr(f, &e, state)
         }
-        ast::LayoutQualifierSpec::Identifier(ref i, None) => show_identifier(f, &i, s),
+        ast::LayoutQualifierSpec::Identifier(ref i, None) => show_identifier(f, &i, state),
         ast::LayoutQualifierSpec::Shared => f.write_str("shared"),
     }
 }
@@ -870,56 +870,60 @@ where
     }
 }
 
-pub fn show_expr<F>(f: &mut F, expr: &ast::Expr, s: &mut FormattingState<'_>) -> std::fmt::Result
+pub fn show_expr<F>(
+    f: &mut F,
+    expr: &ast::Expr,
+    state: &mut FormattingState<'_>,
+) -> std::fmt::Result
 where
     F: Write,
 {
     match *expr {
-        ast::Expr::Variable(ref i) => show_identifier(f, &i, s),
+        ast::Expr::Variable(ref i) => show_identifier(f, &i, state),
         ast::Expr::IntConst(ref x) => write!(f, "{}", x),
         ast::Expr::UIntConst(ref x) => write!(f, "{}u", x),
         ast::Expr::BoolConst(ref x) => write!(f, "{}", x),
-        ast::Expr::FloatConst(ref x) => show_float(f, *x, s),
-        ast::Expr::DoubleConst(ref x) => show_double(f, *x, s),
+        ast::Expr::FloatConst(ref x) => show_float(f, *x, state),
+        ast::Expr::DoubleConst(ref x) => show_double(f, *x, state),
         ast::Expr::Unary(ref op, ref e) => {
             // Note: all unary ops are right-to-left associative
-            show_unary_op(f, &op, s)?;
+            show_unary_op(f, &op, state)?;
 
             if e.precedence() > op.precedence() {
                 f.write_str("(")?;
-                show_expr(f, &e, s)?;
+                show_expr(f, &e, state)?;
                 f.write_str(")")
             } else if let ast::Expr::Unary(eop, _) = &**e {
                 // Prevent double-unary plus/minus turning into inc/dec
                 if eop == op && (*eop == ast::UnaryOp::Add || *eop == ast::UnaryOp::Minus) {
                     f.write_str("(")?;
-                    show_expr(f, &e, s)?;
+                    show_expr(f, &e, state)?;
                     f.write_str(")")
                 } else {
-                    show_expr(f, &e, s)
+                    show_expr(f, &e, state)
                 }
             } else {
-                show_expr(f, &e, s)
+                show_expr(f, &e, state)
             }
         }
         ast::Expr::Binary(ref op, ref l, ref r) => {
             // Note: all binary ops are left-to-right associative (<= for left part)
 
             if l.precedence() <= op.precedence() {
-                show_expr(f, &l, s)?;
+                show_expr(f, &l, state)?;
             } else {
                 f.write_str("(")?;
-                show_expr(f, &l, s)?;
+                show_expr(f, &l, state)?;
                 f.write_str(")")?;
             }
 
-            show_binary_op(f, &op, s)?;
+            show_binary_op(f, &op, state)?;
 
             if r.precedence() < op.precedence() {
-                show_expr(f, &r, s)
+                show_expr(f, &r, state)
             } else {
                 f.write_str("(")?;
-                show_expr(f, &r, s)?;
+                show_expr(f, &r, state)?;
                 f.write_str(")")
             }
         }
@@ -927,20 +931,20 @@ where
             // Note: ternary is right-to-left associative (<= for right part)
 
             if c.precedence() < expr.precedence() {
-                show_expr(f, &c, s)?;
+                show_expr(f, &c, state)?;
             } else {
                 f.write_str("(")?;
-                show_expr(f, &c, s)?;
+                show_expr(f, &c, state)?;
                 f.write_str(")")?;
             }
             f.write_str(" ? ")?;
-            show_expr(f, &st, s)?;
+            show_expr(f, &st, state)?;
             f.write_str(" : ")?;
             if e.precedence() <= expr.precedence() {
-                show_expr(f, &e, s)
+                show_expr(f, &e, state)
             } else {
                 f.write_str("(")?;
-                show_expr(f, &e, s)?;
+                show_expr(f, &e, state)?;
                 f.write_str(")")
             }
         }
@@ -948,20 +952,20 @@ where
             // Note: all assignment ops are right-to-left associative
 
             if v.precedence() < op.precedence() {
-                show_expr(f, &v, s)?;
+                show_expr(f, &v, state)?;
             } else {
                 f.write_str("(")?;
-                show_expr(f, &v, s)?;
+                show_expr(f, &v, state)?;
                 f.write_str(")")?;
             }
 
-            show_assignment_op(f, &op, s)?;
+            show_assignment_op(f, &op, state)?;
 
             if e.precedence() <= op.precedence() {
-                show_expr(f, &e, s)
+                show_expr(f, &e, state)
             } else {
                 f.write_str("(")?;
-                show_expr(f, &e, s)?;
+                show_expr(f, &e, state)?;
                 f.write_str(")")
             }
         }
@@ -969,27 +973,27 @@ where
             // Note: bracket is left-to-right associative
 
             if e.precedence() <= expr.precedence() {
-                show_expr(f, &e, s)?;
+                show_expr(f, &e, state)?;
             } else {
                 f.write_str("(")?;
-                show_expr(f, &e, s)?;
+                show_expr(f, &e, state)?;
                 f.write_str(")")?;
             }
 
-            show_expr(f, &a, s)
+            show_expr(f, &a, state)
         }
         ast::Expr::FunCall(ref fun, ref args) => {
-            show_function_identifier(f, &fun, s)?;
+            show_function_identifier(f, &fun, state)?;
             f.write_str("(")?;
 
             if !args.is_empty() {
                 let mut args_iter = args.iter();
                 let first = args_iter.next().unwrap();
-                show_expr(f, first, s)?;
+                show_expr(f, first, state)?;
 
                 for e in args_iter {
                     f.write_str(", ")?;
-                    show_expr(f, e, s)?;
+                    show_expr(f, e, state)?;
                 }
             }
 
@@ -999,23 +1003,23 @@ where
             // Note: dot is left-to-right associative
 
             if e.precedence() <= expr.precedence() {
-                show_expr(f, &e, s)?;
+                show_expr(f, &e, state)?;
             } else {
                 f.write_str("(")?;
-                show_expr(f, &e, s)?;
+                show_expr(f, &e, state)?;
                 f.write_str(")")?;
             }
             f.write_str(".")?;
-            show_identifier(f, &i, s)
+            show_identifier(f, &i, state)
         }
         ast::Expr::PostInc(ref e) => {
             // Note: post-increment is right-to-left associative
 
             if e.precedence() < expr.precedence() {
-                show_expr(f, &e, s)?;
+                show_expr(f, &e, state)?;
             } else {
                 f.write_str("(")?;
-                show_expr(f, &e, s)?;
+                show_expr(f, &e, state)?;
                 f.write_str(")")?;
             }
 
@@ -1025,10 +1029,10 @@ where
             // Note: post-decrement is right-to-left associative
 
             if e.precedence() < expr.precedence() {
-                show_expr(f, &e, s)?;
+                show_expr(f, &e, state)?;
             } else {
                 f.write_str("(")?;
-                show_expr(f, &e, s)?;
+                show_expr(f, &e, state)?;
                 f.write_str(")")?;
             }
 
@@ -1038,20 +1042,20 @@ where
             // Note: comma is left-to-right associative
 
             if a.precedence() <= expr.precedence() {
-                show_expr(f, &a, s)?;
+                show_expr(f, &a, state)?;
             } else {
                 f.write_str("(")?;
-                show_expr(f, &a, s)?;
+                show_expr(f, &a, state)?;
                 f.write_str(")")?;
             }
 
             f.write_str(", ")?;
 
             if b.precedence() < expr.precedence() {
-                show_expr(f, &b, s)
+                show_expr(f, &b, state)
             } else {
                 f.write_str("(")?;
-                show_expr(f, &b, s)?;
+                show_expr(f, &b, state)?;
                 f.write_str(")")
             }
         }
@@ -1089,96 +1093,96 @@ where
 pub fn show_binary_op<F>(
     f: &mut F,
     op: &ast::BinaryOp,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
 {
     match *op {
-        ast::BinaryOp::Or => s.write_binary_op(f, "||"),
-        ast::BinaryOp::Xor => s.write_binary_op(f, "^^"),
-        ast::BinaryOp::And => s.write_binary_op(f, "&&"),
-        ast::BinaryOp::BitOr => s.write_binary_op(f, "|"),
-        ast::BinaryOp::BitXor => s.write_binary_op(f, "^"),
-        ast::BinaryOp::BitAnd => s.write_binary_op(f, "&"),
-        ast::BinaryOp::Equal => s.write_binary_op(f, "=="),
-        ast::BinaryOp::NonEqual => s.write_binary_op(f, "!="),
-        ast::BinaryOp::LT => s.write_binary_op(f, "<"),
-        ast::BinaryOp::GT => s.write_binary_op(f, ">"),
-        ast::BinaryOp::LTE => s.write_binary_op(f, "<="),
-        ast::BinaryOp::GTE => s.write_binary_op(f, ">="),
-        ast::BinaryOp::LShift => s.write_binary_op(f, "<<"),
-        ast::BinaryOp::RShift => s.write_binary_op(f, ">>"),
-        ast::BinaryOp::Add => s.write_binary_op(f, "+"),
-        ast::BinaryOp::Sub => s.write_binary_op(f, "-"),
-        ast::BinaryOp::Mult => s.write_binary_op(f, "*"),
-        ast::BinaryOp::Div => s.write_binary_op(f, "/"),
-        ast::BinaryOp::Mod => s.write_binary_op(f, "%"),
+        ast::BinaryOp::Or => state.write_binary_op(f, "||"),
+        ast::BinaryOp::Xor => state.write_binary_op(f, "^^"),
+        ast::BinaryOp::And => state.write_binary_op(f, "&&"),
+        ast::BinaryOp::BitOr => state.write_binary_op(f, "|"),
+        ast::BinaryOp::BitXor => state.write_binary_op(f, "^"),
+        ast::BinaryOp::BitAnd => state.write_binary_op(f, "&"),
+        ast::BinaryOp::Equal => state.write_binary_op(f, "=="),
+        ast::BinaryOp::NonEqual => state.write_binary_op(f, "!="),
+        ast::BinaryOp::LT => state.write_binary_op(f, "<"),
+        ast::BinaryOp::GT => state.write_binary_op(f, ">"),
+        ast::BinaryOp::LTE => state.write_binary_op(f, "<="),
+        ast::BinaryOp::GTE => state.write_binary_op(f, ">="),
+        ast::BinaryOp::LShift => state.write_binary_op(f, "<<"),
+        ast::BinaryOp::RShift => state.write_binary_op(f, ">>"),
+        ast::BinaryOp::Add => state.write_binary_op(f, "+"),
+        ast::BinaryOp::Sub => state.write_binary_op(f, "-"),
+        ast::BinaryOp::Mult => state.write_binary_op(f, "*"),
+        ast::BinaryOp::Div => state.write_binary_op(f, "/"),
+        ast::BinaryOp::Mod => state.write_binary_op(f, "%"),
     }
 }
 
 pub fn show_assignment_op<F>(
     f: &mut F,
     op: &ast::AssignmentOp,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
 {
     match *op {
-        ast::AssignmentOp::Equal => s.write_binary_op(f, "="),
-        ast::AssignmentOp::Mult => s.write_binary_op(f, "*="),
-        ast::AssignmentOp::Div => s.write_binary_op(f, "/="),
-        ast::AssignmentOp::Mod => s.write_binary_op(f, "%="),
-        ast::AssignmentOp::Add => s.write_binary_op(f, "+="),
-        ast::AssignmentOp::Sub => s.write_binary_op(f, "-="),
-        ast::AssignmentOp::LShift => s.write_binary_op(f, "<<="),
-        ast::AssignmentOp::RShift => s.write_binary_op(f, ">>="),
-        ast::AssignmentOp::And => s.write_binary_op(f, "&="),
-        ast::AssignmentOp::Xor => s.write_binary_op(f, "^="),
-        ast::AssignmentOp::Or => s.write_binary_op(f, "|="),
+        ast::AssignmentOp::Equal => state.write_binary_op(f, "="),
+        ast::AssignmentOp::Mult => state.write_binary_op(f, "*="),
+        ast::AssignmentOp::Div => state.write_binary_op(f, "/="),
+        ast::AssignmentOp::Mod => state.write_binary_op(f, "%="),
+        ast::AssignmentOp::Add => state.write_binary_op(f, "+="),
+        ast::AssignmentOp::Sub => state.write_binary_op(f, "-="),
+        ast::AssignmentOp::LShift => state.write_binary_op(f, "<<="),
+        ast::AssignmentOp::RShift => state.write_binary_op(f, ">>="),
+        ast::AssignmentOp::And => state.write_binary_op(f, "&="),
+        ast::AssignmentOp::Xor => state.write_binary_op(f, "^="),
+        ast::AssignmentOp::Or => state.write_binary_op(f, "|="),
     }
 }
 
 pub fn show_function_identifier<F>(
     f: &mut F,
     i: &ast::FunIdentifier,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
 {
     match *i {
-        ast::FunIdentifier::TypeSpecifier(ref n) => show_type_specifier(f, &n, s),
-        ast::FunIdentifier::Expr(ref e) => show_expr(f, &*e, s),
+        ast::FunIdentifier::TypeSpecifier(ref n) => show_type_specifier(f, &n, state),
+        ast::FunIdentifier::Expr(ref e) => show_expr(f, &*e, state),
     }
 }
 
 pub fn show_declaration<F>(
     f: &mut F,
     d: &ast::Declaration,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
 {
     match **d {
         ast::DeclarationData::FunctionPrototype(ref proto) => {
-            show_function_prototype(f, &proto, s)?;
-            s.write_declaration_terminator(f)
+            show_function_prototype(f, &proto, state)?;
+            state.write_declaration_terminator(f)
         }
         ast::DeclarationData::InitDeclaratorList(ref list) => {
-            show_init_declarator_list(f, &list, s)?;
-            s.write_declaration_terminator(f)
+            show_init_declarator_list(f, &list, state)?;
+            state.write_declaration_terminator(f)
         }
         ast::DeclarationData::Precision(ref qual, ref ty) => {
-            show_precision_qualifier(f, &qual, s)?;
-            show_type_specifier(f, &ty, s)?;
-            s.write_declaration_terminator(f)
+            show_precision_qualifier(f, &qual, state)?;
+            show_type_specifier(f, &ty, state)?;
+            state.write_declaration_terminator(f)
         }
         ast::DeclarationData::Block(ref block) => {
-            show_block(f, &block, s)?;
-            s.write_declaration_terminator(f)
+            show_block(f, &block, state)?;
+            state.write_declaration_terminator(f)
         }
     }
 }
@@ -1186,25 +1190,25 @@ where
 pub fn show_function_prototype<F>(
     f: &mut F,
     fp: &ast::FunctionPrototype,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
 {
-    show_fully_specified_type(f, &fp.ty, s)?;
+    show_fully_specified_type(f, &fp.ty, state)?;
     f.write_str(" ")?;
-    show_identifier(f, &fp.name, s)?;
+    show_identifier(f, &fp.name, state)?;
 
     f.write_str("(")?;
 
     if !fp.parameters.is_empty() {
         let mut iter = fp.parameters.iter();
         let first = iter.next().unwrap();
-        show_function_parameter_declaration(f, first, s)?;
+        show_function_parameter_declaration(f, first, state)?;
 
         for param in iter {
             f.write_str(", ")?;
-            show_function_parameter_declaration(f, param, s)?;
+            show_function_parameter_declaration(f, param, state)?;
         }
     }
 
@@ -1213,7 +1217,7 @@ where
 pub fn show_function_parameter_declaration<F>(
     f: &mut F,
     p: &ast::FunctionParameterDeclaration,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
@@ -1221,19 +1225,19 @@ where
     match **p {
         ast::FunctionParameterDeclarationData::Named(ref qual, ref fpd) => {
             if let Some(ref q) = *qual {
-                show_type_qualifier(f, q, s)?;
+                show_type_qualifier(f, q, state)?;
                 f.write_str(" ")?;
             }
 
-            show_function_parameter_declarator(f, fpd, s)
+            show_function_parameter_declarator(f, fpd, state)
         }
         ast::FunctionParameterDeclarationData::Unnamed(ref qual, ref ty) => {
             if let Some(ref q) = *qual {
-                show_type_qualifier(f, q, s)?;
+                show_type_qualifier(f, q, state)?;
                 f.write_str(" ")?;
             }
 
-            show_type_specifier(f, ty, s)
+            show_type_specifier(f, ty, state)
         }
     }
 }
@@ -1241,29 +1245,29 @@ where
 pub fn show_function_parameter_declarator<F>(
     f: &mut F,
     p: &ast::FunctionParameterDeclarator,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
 {
-    show_type_specifier(f, &p.ty, s)?;
+    show_type_specifier(f, &p.ty, state)?;
     f.write_str(" ")?;
-    show_arrayed_identifier(f, &p.ident, s)
+    show_arrayed_identifier(f, &p.ident, state)
 }
 
 pub fn show_init_declarator_list<F>(
     f: &mut F,
     i: &ast::InitDeclaratorList,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
 {
-    show_single_declaration(f, &i.head, s)?;
+    show_single_declaration(f, &i.head, state)?;
 
     for decl in &i.tail {
         f.write_str(", ")?;
-        show_single_declaration_no_type(f, decl, s)?;
+        show_single_declaration_no_type(f, decl, state)?;
     }
 
     Ok(())
@@ -1272,25 +1276,25 @@ where
 pub fn show_single_declaration<F>(
     f: &mut F,
     d: &ast::SingleDeclaration,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
 {
-    show_fully_specified_type(f, &d.ty, s)?;
+    show_fully_specified_type(f, &d.ty, state)?;
 
     if let Some(ref name) = d.name {
         f.write_str(" ")?;
-        show_identifier(f, name, s)?;
+        show_identifier(f, name, state)?;
     }
 
     if let Some(ref arr_spec) = d.array_specifier {
-        show_array_spec(f, arr_spec, s)?;
+        show_array_spec(f, arr_spec, state)?;
     }
 
     if let Some(ref initializer) = d.initializer {
         f.write_str(" = ")?;
-        show_initializer(f, initializer, s)?;
+        show_initializer(f, initializer, state)?;
     }
 
     Ok(())
@@ -1299,16 +1303,16 @@ where
 pub fn show_single_declaration_no_type<F>(
     f: &mut F,
     d: &ast::SingleDeclarationNoType,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
 {
-    show_arrayed_identifier(f, &d.ident, s)?;
+    show_arrayed_identifier(f, &d.ident, state)?;
 
     if let Some(ref initializer) = d.initializer {
         f.write_str(" = ")?;
-        show_initializer(f, initializer, s)?;
+        show_initializer(f, initializer, state)?;
     }
 
     Ok(())
@@ -1317,23 +1321,23 @@ where
 pub fn show_initializer<F>(
     f: &mut F,
     i: &ast::Initializer,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
 {
     match *i {
-        ast::Initializer::Simple(ref e) => show_expr(f, e, s),
+        ast::Initializer::Simple(ref e) => show_expr(f, e, state),
         ast::Initializer::List(ref list) => {
             let mut iter = list.iter();
             let first = iter.next().unwrap();
 
             f.write_str("{ ")?;
-            show_initializer(f, first, s)?;
+            show_initializer(f, first, state)?;
 
             for ini in iter {
                 f.write_str(", ")?;
-                show_initializer(f, ini, s)?;
+                show_initializer(f, ini, state)?;
             }
 
             f.write_str(" }")
@@ -1341,23 +1345,23 @@ where
     }
 }
 
-pub fn show_block<F>(f: &mut F, b: &ast::Block, s: &mut FormattingState<'_>) -> std::fmt::Result
+pub fn show_block<F>(f: &mut F, b: &ast::Block, state: &mut FormattingState<'_>) -> std::fmt::Result
 where
     F: Write,
 {
-    show_type_qualifier(f, &b.qualifier, s)?;
+    show_type_qualifier(f, &b.qualifier, state)?;
     f.write_str(" ")?;
-    show_identifier(f, &b.name, s)?;
-    s.enter_block(f)?;
+    show_identifier(f, &b.name, state)?;
+    state.enter_block(f)?;
 
     for field in &b.fields {
-        show_struct_field(f, field, s)?;
-        f.write_str("\n")?;
+        show_struct_field(f, field, state)?;
+        writeln!(f)?;
     }
-    s.exit_block(f)?;
+    state.exit_block(f)?;
 
     if let Some(ref ident) = b.identifier {
-        show_arrayed_identifier(f, ident, s)?;
+        show_arrayed_identifier(f, ident, state)?;
     }
 
     Ok(())
@@ -1366,33 +1370,33 @@ where
 pub fn show_function_definition<F>(
     f: &mut F,
     fd: &ast::FunctionDefinition,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
 {
-    show_function_prototype(f, &fd.prototype, s)?;
+    show_function_prototype(f, &fd.prototype, state)?;
     f.write_str(" ")?;
-    show_compound_statement(f, &fd.statement, s)?;
-    s.flush_line(f)?;
-    s.write_function_definition_terminator(f)
+    show_compound_statement(f, &fd.statement, state)?;
+    state.flush_line(f)?;
+    state.write_function_definition_terminator(f)
 }
 
 pub fn show_compound_statement<F>(
     f: &mut F,
     cst: &ast::CompoundStatement,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
 {
-    s.enter_block(f)?;
+    state.enter_block(f)?;
 
     for st in &cst.statement_list {
-        show_statement(f, st, s)?;
+        show_statement(f, st, state)?;
     }
 
-    s.exit_block(f)?;
+    state.exit_block(f)?;
 
     Ok(())
 }
@@ -1400,71 +1404,71 @@ where
 pub fn show_statement<F>(
     f: &mut F,
     st: &ast::Statement,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
 {
-    s.flush_line(f)?;
+    state.flush_line(f)?;
 
     match **st {
-        ast::StatementData::Declaration(ref d) => show_declaration(f, d, s),
-        ast::StatementData::Expression(ref e) => show_expression_statement(f, e, s),
-        ast::StatementData::Selection(ref st) => show_selection_statement(f, st, s),
-        ast::StatementData::Switch(ref st) => show_switch_statement(f, st, s),
-        ast::StatementData::CaseLabel(ref cl) => show_case_label(f, cl, s),
-        ast::StatementData::Iteration(ref i) => show_iteration_statement(f, i, s),
-        ast::StatementData::Jump(ref j) => show_jump_statement(f, j, s),
-        ast::StatementData::Compound(ref c) => show_compound_statement(f, c, s),
+        ast::StatementData::Declaration(ref d) => show_declaration(f, d, state),
+        ast::StatementData::Expression(ref e) => show_expression_statement(f, e, state),
+        ast::StatementData::Selection(ref st) => show_selection_statement(f, st, state),
+        ast::StatementData::Switch(ref st) => show_switch_statement(f, st, state),
+        ast::StatementData::CaseLabel(ref cl) => show_case_label(f, cl, state),
+        ast::StatementData::Iteration(ref i) => show_iteration_statement(f, i, state),
+        ast::StatementData::Jump(ref j) => show_jump_statement(f, j, state),
+        ast::StatementData::Compound(ref c) => show_compound_statement(f, c, state),
     }
 }
 
 pub fn show_expression_statement<F>(
     f: &mut F,
     est: &ast::ExprStatement,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
 {
     if let Some(ref e) = est.0 {
-        show_expr(f, e, s)?;
+        show_expr(f, e, state)?;
     }
 
-    s.write_statement_terminator(f)
+    state.write_statement_terminator(f)
 }
 
 pub fn show_selection_statement<F>(
     f: &mut F,
     sst: &ast::SelectionStatement,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
 {
     f.write_str("if (")?;
-    show_expr(f, &sst.cond, s)?;
+    show_expr(f, &sst.cond, state)?;
     f.write_str(") ")?;
-    show_selection_rest_statement(f, &sst.rest, s)
+    show_selection_rest_statement(f, &sst.rest, state)
 }
 
 pub fn show_selection_rest_statement<F>(
     f: &mut F,
     sst: &ast::SelectionRestStatement,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
 {
     match *sst {
-        ast::SelectionRestStatement::Statement(ref if_st) => show_statement(f, if_st, s),
+        ast::SelectionRestStatement::Statement(ref if_st) => show_statement(f, if_st, state),
         ast::SelectionRestStatement::Else(ref if_st, ref else_st) => {
-            show_statement(f, if_st, s)?;
+            show_statement(f, if_st, state)?;
             f.write_str(" else ")?;
             // TODO: This should be configurable instead of relying on show_statement's calling
             // flush_line
-            s.consume_newline();
-            show_statement(f, else_st, s)
+            state.consume_newline();
+            show_statement(f, else_st, state)
         }
     }
 }
@@ -1472,17 +1476,17 @@ where
 pub fn show_switch_statement<F>(
     f: &mut F,
     sst: &ast::SwitchStatement,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
 {
     f.write_str("switch (")?;
-    show_expr(f, &sst.head, s)?;
+    show_expr(f, &sst.head, state)?;
     f.write_str(") {\n")?;
 
     for st in &sst.body {
-        show_statement(f, st, s)?;
+        show_statement(f, st, state)?;
     }
 
     f.write_str("}\n")
@@ -1491,7 +1495,7 @@ where
 pub fn show_case_label<F>(
     f: &mut F,
     cl: &ast::CaseLabel,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
@@ -1499,7 +1503,7 @@ where
     match *cl {
         ast::CaseLabel::Case(ref e) => {
             f.write_str("case ")?;
-            show_expr(f, e, s)?;
+            show_expr(f, e, state)?;
             f.write_str(":\n")
         }
         ast::CaseLabel::Def => f.write_str("default:\n"),
@@ -1509,7 +1513,7 @@ where
 pub fn show_iteration_statement<F>(
     f: &mut F,
     ist: &ast::IterationStatement,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
@@ -1517,25 +1521,25 @@ where
     match *ist {
         ast::IterationStatement::While(ref cond, ref body) => {
             f.write_str("while (")?;
-            show_condition(f, cond, s)?;
+            show_condition(f, cond, state)?;
             f.write_str(") ")?;
-            show_statement(f, body, s)
+            show_statement(f, body, state)
         }
         ast::IterationStatement::DoWhile(ref body, ref cond) => {
             f.write_str("do ")?;
-            show_statement(f, body, s)?;
+            show_statement(f, body, state)?;
             f.write_str(" while (")?;
-            show_expr(f, cond, s)?;
+            show_expr(f, cond, state)?;
             f.write_str(")")?;
-            s.write_statement_terminator(f)
+            state.write_statement_terminator(f)
         }
         ast::IterationStatement::For(ref init, ref rest, ref body) => {
             f.write_str("for (")?;
-            show_for_init_statement(f, init, s)?;
-            s.flush_space(f)?;
-            show_for_rest_statement(f, rest, s)?;
+            show_for_init_statement(f, init, state)?;
+            state.flush_space(f)?;
+            show_for_rest_statement(f, rest, state)?;
             f.write_str(") ")?;
-            show_statement(f, body, s)
+            show_statement(f, body, state)
         }
     }
 }
@@ -1543,19 +1547,19 @@ where
 pub fn show_condition<F>(
     f: &mut F,
     c: &ast::Condition,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
 {
     match *c {
-        ast::Condition::Expr(ref e) => show_expr(f, e, s),
+        ast::Condition::Expr(ref e) => show_expr(f, e, state),
         ast::Condition::Assignment(ref ty, ref name, ref initializer) => {
-            show_fully_specified_type(f, ty, s)?;
+            show_fully_specified_type(f, ty, state)?;
             f.write_str(" ")?;
-            show_identifier(f, name, s)?;
+            show_identifier(f, name, state)?;
             f.write_str(" = ")?;
-            show_initializer(f, initializer, s)
+            show_initializer(f, initializer, state)
         }
     }
 }
@@ -1563,7 +1567,7 @@ where
 pub fn show_for_init_statement<F>(
     f: &mut F,
     i: &ast::ForInitStatement,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
@@ -1571,31 +1575,31 @@ where
     match *i {
         ast::ForInitStatement::Expression(ref expr) => {
             if let Some(ref e) = *expr {
-                show_expr(f, e, s)?;
+                show_expr(f, e, state)?;
             }
 
             Ok(())
         }
-        ast::ForInitStatement::Declaration(ref d) => show_declaration(f, d, s),
+        ast::ForInitStatement::Declaration(ref d) => show_declaration(f, d, state),
     }
 }
 
 pub fn show_for_rest_statement<F>(
     f: &mut F,
     r: &ast::ForRestStatement,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
 {
     if let Some(ref cond) = r.condition {
-        show_condition(f, cond, s)?;
+        show_condition(f, cond, state)?;
     }
 
     f.write_str("; ")?;
 
     if let Some(ref e) = r.post_expr {
-        show_expr(f, e, s)?;
+        show_expr(f, e, state)?;
     }
 
     Ok(())
@@ -1604,7 +1608,7 @@ where
 pub fn show_jump_statement<F>(
     f: &mut F,
     j: &ast::JumpStatement,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
@@ -1616,37 +1620,37 @@ where
         ast::JumpStatement::Return(ref e) => {
             f.write_str("return ")?;
             if let Some(e) = e {
-                show_expr(f, e, s)?;
+                show_expr(f, e, state)?;
             }
         }
     }
 
-    s.write_statement_terminator(f)
+    state.write_statement_terminator(f)
 }
 
 pub fn show_preprocessor<F>(
     f: &mut F,
     pp: &ast::Preprocessor,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
 {
     match **pp {
-        ast::PreprocessorData::Define(ref pd) => show_preprocessor_define(f, pd, s),
-        ast::PreprocessorData::Else => show_preprocessor_else(f, s),
-        ast::PreprocessorData::ElseIf(ref pei) => show_preprocessor_elseif(f, pei, s),
-        ast::PreprocessorData::EndIf => show_preprocessor_endif(f, s),
-        ast::PreprocessorData::Error(ref pe) => show_preprocessor_error(f, pe, s),
-        ast::PreprocessorData::If(ref pi) => show_preprocessor_if(f, pi, s),
-        ast::PreprocessorData::IfDef(ref pid) => show_preprocessor_ifdef(f, pid, s),
-        ast::PreprocessorData::IfNDef(ref pind) => show_preprocessor_ifndef(f, pind, s),
-        ast::PreprocessorData::Include(ref pi) => show_preprocessor_include(f, pi, s),
-        ast::PreprocessorData::Line(ref pl) => show_preprocessor_line(f, pl, s),
-        ast::PreprocessorData::Pragma(ref pp) => show_preprocessor_pragma(f, pp, s),
-        ast::PreprocessorData::Undef(ref pu) => show_preprocessor_undef(f, pu, s),
-        ast::PreprocessorData::Version(ref pv) => show_preprocessor_version(f, pv, s),
-        ast::PreprocessorData::Extension(ref pe) => show_preprocessor_extension(f, pe, s),
+        ast::PreprocessorData::Define(ref pd) => show_preprocessor_define(f, pd, state),
+        ast::PreprocessorData::Else => show_preprocessor_else(f, state),
+        ast::PreprocessorData::ElseIf(ref pei) => show_preprocessor_elseif(f, pei, state),
+        ast::PreprocessorData::EndIf => show_preprocessor_endif(f, state),
+        ast::PreprocessorData::Error(ref pe) => show_preprocessor_error(f, pe, state),
+        ast::PreprocessorData::If(ref pi) => show_preprocessor_if(f, pi, state),
+        ast::PreprocessorData::IfDef(ref pid) => show_preprocessor_ifdef(f, pid, state),
+        ast::PreprocessorData::IfNDef(ref pind) => show_preprocessor_ifndef(f, pind, state),
+        ast::PreprocessorData::Include(ref pi) => show_preprocessor_include(f, pi, state),
+        ast::PreprocessorData::Line(ref pl) => show_preprocessor_line(f, pl, state),
+        ast::PreprocessorData::Pragma(ref pp) => show_preprocessor_pragma(f, pp, state),
+        ast::PreprocessorData::Undef(ref pu) => show_preprocessor_undef(f, pu, state),
+        ast::PreprocessorData::Version(ref pv) => show_preprocessor_version(f, pv, state),
+        ast::PreprocessorData::Extension(ref pe) => show_preprocessor_extension(f, pe, state),
     }
 }
 
@@ -1662,7 +1666,7 @@ where
         ast::PreprocessorDefine::ObjectLike {
             ref ident,
             ref value,
-        } => write!(f, "#define {} {}\n", ident, value),
+        } => writeln!(f, "#define {} {}", ident, value),
 
         ast::PreprocessorDefine::FunctionLike {
             ref ident,
@@ -1679,7 +1683,7 @@ where
                 }
             }
 
-            write!(f, ") {}\n", value)
+            writeln!(f, ") {}", value)
         }
     }
 }
@@ -1699,7 +1703,7 @@ pub fn show_preprocessor_elseif<F>(
 where
     F: Write,
 {
-    write!(f, "#elseif {}\n", pei.condition)
+    writeln!(f, "#elseif {}", pei.condition)
 }
 
 pub fn show_preprocessor_error<F>(
@@ -1728,46 +1732,46 @@ pub fn show_preprocessor_if<F>(
 where
     F: Write,
 {
-    write!(f, "#if {}\n", pi.condition)
+    write!(f, "#if {}", pi.condition)
 }
 
 pub fn show_preprocessor_ifdef<F>(
     f: &mut F,
     pid: &ast::PreprocessorIfDef,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
 {
     f.write_str("#ifdef ")?;
-    show_identifier(f, &pid.ident, s)?;
-    f.write_str("\n")
+    show_identifier(f, &pid.ident, state)?;
+    writeln!(f)
 }
 
 pub fn show_preprocessor_ifndef<F>(
     f: &mut F,
     pind: &ast::PreprocessorIfNDef,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
 {
     f.write_str("#ifndef ")?;
-    show_identifier(f, &pind.ident, s)?;
-    f.write_str("\n")
+    show_identifier(f, &pind.ident, state)?;
+    writeln!(f)
 }
 
 pub fn show_preprocessor_include<F>(
     f: &mut F,
     pi: &ast::PreprocessorInclude,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
 {
     f.write_str("#include ")?;
-    show_path(f, &pi.path, s)?;
-    f.write_str("\n")
+    show_path(f, &pi.path, state)?;
+    writeln!(f)
 }
 
 pub fn show_preprocessor_line<F>(
@@ -1782,7 +1786,7 @@ where
     if let Some(source_string_number) = pl.source_string_number {
         write!(f, " {}", source_string_number)?;
     }
-    f.write_str("\n")
+    writeln!(f)
 }
 
 pub fn show_preprocessor_pragma<F>(
@@ -1799,14 +1803,14 @@ where
 pub fn show_preprocessor_undef<F>(
     f: &mut F,
     pud: &ast::PreprocessorUndef,
-    s: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
 {
     f.write_str("#undef ")?;
-    show_identifier(f, &pud.name, s)?;
-    f.write_str("\n")
+    show_identifier(f, &pud.name, state)?;
+    writeln!(f)
 }
 
 pub fn show_preprocessor_version<F>(
@@ -1833,7 +1837,7 @@ where
         }
     }
 
-    f.write_str("\n")
+    writeln!(f)
 }
 
 pub fn show_preprocessor_extension<F>(
@@ -1872,38 +1876,38 @@ where
         }
     }
 
-    f.write_str("\n")
+    writeln!(f)
 }
 
 pub fn show_external_declaration<F>(
     f: &mut F,
     ed: &ast::ExternalDeclaration,
-    mut s: &mut FormattingState<'_>,
+    mut state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
 {
-    s.flush_line(f)?;
+    state.flush_line(f)?;
 
     match **ed {
-        ast::ExternalDeclarationData::Preprocessor(ref pp) => show_preprocessor(f, pp, &mut s),
+        ast::ExternalDeclarationData::Preprocessor(ref pp) => show_preprocessor(f, pp, &mut state),
         ast::ExternalDeclarationData::FunctionDefinition(ref fd) => {
-            show_function_definition(f, fd, &mut s)
+            show_function_definition(f, fd, &mut state)
         }
-        ast::ExternalDeclarationData::Declaration(ref d) => show_declaration(f, d, &mut s),
+        ast::ExternalDeclarationData::Declaration(ref d) => show_declaration(f, d, &mut state),
     }
 }
 
 pub fn show_translation_unit<F>(
     f: &mut F,
     tu: &ast::TranslationUnit,
-    mut s: FormattingState<'_>,
+    mut state: FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
 {
     for ed in &tu.0 {
-        show_external_declaration(f, ed, &mut s)?;
+        show_external_declaration(f, ed, &mut state)?;
     }
 
     Ok(())
@@ -1922,9 +1926,9 @@ mod tests {
     }
 
     fn to_string(e: &ast::Expr) -> String {
-        let mut s = String::new();
-        show_expr(&mut s, e, &mut FormattingState::default()).unwrap();
-        s
+        let mut state = String::new();
+        show_expr(&mut state, e, &mut FormattingState::default()).unwrap();
+        state
     }
 
     #[test]
@@ -1977,7 +1981,7 @@ mod tests {
 
     #[test]
     fn test_parentheses() {
-        const SRC: &'static str = r#"vec2 main() {
+        const SRC: &str = r#"vec2 main() {
 float n = 0.;
 float p = 0.;
 float u = vec2(0., 0.);

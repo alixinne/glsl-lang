@@ -1,5 +1,5 @@
 use crate::ast::{self, NodeContent};
-use crate::lexer::{Token, LexicalError, TypeNames, IdentifierContext};
+use crate::lexer::{ IdentifierContext, LexerPosition, LexicalError, Token, TypeNames };
 
 grammar<'i>(text: &'i str);
 
@@ -412,7 +412,7 @@ initializer: ast::Initializer = {
 };
 
 condition: ast::Condition = {
-    <expr> => ast::Condition::Expr(Box::new(<>)),
+    <expr> => ast::Condition::Expr(<>),
     <t:fully_specified_type> <i:identifier> "=" <e:initializer> => ast::Condition::Assignment(t, i.0, e),
 }
 
@@ -714,7 +714,7 @@ pub Statement       = { statement };
 pub TranslationUnit = { translation_unit };
 
 extern {
-    type Location = (usize, usize);
+    type Location = LexerPosition;
     type Error = LexicalError;
 
     enum Token<'i> {

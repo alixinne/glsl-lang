@@ -45,7 +45,7 @@ pub struct IdentifierData(#[glsl_lang(display(extra))] pub String);
 
 impl IdentifierData {
     pub fn as_rs_ident(&self) -> Option<&str> {
-        if self.0.starts_with("#") & self.0.ends_with(")") {
+        if self.0.starts_with('#') & self.0.ends_with(')') {
             // Remove #\s* and )
             let s = (&self.0[1..self.0.len() - 1]).trim();
             // Remove ( and whitespace
@@ -710,7 +710,7 @@ pub enum Expr {
 
 impl Expr {
     pub fn variable(name: impl Into<IdentifierData>) -> Self {
-        Self::Variable(IdentifierData::from(name.into()).into())
+        Self::Variable(name.into().into())
     }
 
     pub fn as_rs_ident(&self) -> Option<&str> {
@@ -929,7 +929,7 @@ pub struct SelectionStatement {
 /// Condition.
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 pub enum Condition {
-    Expr(Box<Expr>),
+    Expr(Expr),
     Assignment(FullySpecifiedType, Identifier, Initializer),
 }
 

@@ -1,4 +1,5 @@
 use logos::Logos;
+use parse_display::Display;
 use thiserror::Error;
 
 use crate::parse::ParseOptions;
@@ -20,6 +21,19 @@ pub use type_names::*;
 
 #[cfg(test)]
 mod tests;
+
+#[derive(Default, Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Display)]
+#[display("{source_id}:{offset}")]
+pub struct LexerPosition {
+    pub source_id: usize,
+    pub offset: usize,
+}
+
+impl LexerPosition {
+    pub fn new(source_id: usize, offset: usize) -> Self {
+        Self { source_id, offset }
+    }
+}
 
 pub type LexerContext = ParseOptions;
 
@@ -48,17 +62,21 @@ impl<'i> Lexer<'i> {
 
     fn consume_pp(
         pp: &mut logos::Lexer<'i, PreprocessorToken<'i>>,
-    ) -> Option<((usize, usize), PreprocessorToken<'i>, (usize, usize))> {
+    ) -> Option<(LexerPosition, PreprocessorToken<'i>, LexerPosition)> {
         let token = pp.next()?;
         let span = pp.span();
         let source_id = pp.extras.source_id;
 
-        Some(((source_id, span.start), token, (source_id, span.end)))
+        Some((
+            LexerPosition::new(source_id, span.end),
+            token,
+            LexerPosition::new(source_id, span.end),
+        ))
     }
 
     fn consume_pp_rest(
         pp: &mut logos::Lexer<'i, PreprocessorToken<'i>>,
-    ) -> Option<((usize, usize), PreprocessorToken<'i>, (usize, usize))> {
+    ) -> Option<(LexerPosition, PreprocessorToken<'i>, LexerPosition)> {
         let mut ch1;
         let mut ch2 = None;
         let mut ch3 = None;
@@ -73,10 +91,8 @@ impl<'i> Lexer<'i> {
             if ch3 == Some(b'\t') || ch3 == Some(b' ') {
                 // Regular whitespace
                 whitespace_chars += 1;
-            } else if ch3 == Some(b'\\') {
+            } else if ch3 == Some(b'\\') || ch3 == Some(b'\r') && ch2 == Some(b'\\') {
                 // Could be a line continuation, wait
-            } else if ch3 == Some(b'\r') && ch2 == Some(b'\\') {
-                // ditto
             } else if ch3 == Some(b'\n') && ch2 == Some(b'\\') {
                 // Unix line continuation
                 whitespace_chars += 2;
@@ -107,10 +123,8 @@ impl<'i> Lexer<'i> {
             ch2 = ch3;
             ch3 = Some(b);
 
-            if ch3 == Some(b'\\') {
+            if ch3 == Some(b'\\') || ch3 == Some(b'\r') && ch2 == Some(b'\\') {
                 // Could be a line continuation, wait
-            } else if ch3 == Some(b'\r') && ch2 == Some(b'\\') {
-                // ditto
             } else if ch3 == Some(b'\n') && ch2 == Some(b'\\') {
                 // Unix line continuation
                 consumed_chars += 2;
@@ -119,11 +133,8 @@ impl<'i> Lexer<'i> {
                 consumed_chars += 3;
             } else if ch3 == Some(b'\r') {
                 // Possible Windows line ending
-            } else if ch3 == Some(b'\n') && ch2 == Some(b'\r') {
-                // Windows line ending
-                break;
             } else if ch3 == Some(b'\n') {
-                // Unix line ending
+                // Windows/Linux line ending
                 break;
             } else if ch1 == Some(b'\\') {
                 // Not a Windows line continuation
@@ -151,17 +162,17 @@ impl<'i> Lexer<'i> {
 
         let source_id = pp.extras.source_id;
         Some((
-            (source_id, start),
+            LexerPosition::new(source_id, start),
             PreprocessorToken::Rest(std::borrow::Cow::Owned(
                 String::from_utf8(res).expect("invalid utf-8"),
             )),
-            (source_id, start + consumed_chars),
+            LexerPosition::new(source_id, start + consumed_chars),
         ))
     }
 }
 
 impl<'i> Iterator for Lexer<'i> {
-    type Item = ((usize, usize), Token<'i>, (usize, usize));
+    type Item = (LexerPosition, Token<'i>, LexerPosition);
 
     fn next(&mut self) -> Option<Self::Item> {
         let result = match &mut self.inner {
@@ -172,13 +183,17 @@ impl<'i> Iterator for Lexer<'i> {
 
                 let mut token = if src.extras.target_vulkan {
                     // Targetting Vulkan, nothing to change
-                    ((source_id, span.start), token, (source_id, span.end))
+                    (
+                        LexerPosition::new(source_id, span.start),
+                        token,
+                        LexerPosition::new(source_id, span.end),
+                    )
                 } else {
                     use Token::*;
 
                     // Replace Vulkan keywords with identifiers
                     (
-                        (source_id, span.start),
+                        LexerPosition::new(source_id, span.start),
                         match token {
                             Texture1D | Texture1DArray | ITexture1D | ITexture1DArray
                             | UTexture1D | UTexture1DArray | Texture2D | Texture2DArray
@@ -195,7 +210,7 @@ impl<'i> Iterator for Lexer<'i> {
                             }
                             other => other,
                         },
-                        (source_id, span.end),
+                        LexerPosition::new(source_id, span.end),
                     )
                 };
 
@@ -208,13 +223,8 @@ impl<'i> Iterator for Lexer<'i> {
 
                 // Switch to preprocessor mode when encountering a preprocessor token
                 if token.1.is_pp() {
-                    let consumed_rest = if let Token::PpElse | Token::PpEndIf = token.1 {
-                        // These tokens have nothing to parse following them
-                        true
-                    } else {
-                        // Other tokens will be processed by the preprocessor lexer
-                        false
-                    };
+                    // #else and #endif have nothing to parse following them
+                    let consumed_rest = matches!(token.1, Token::PpElse | Token::PpEndIf);
 
                     let new_lexer = src.clone().morph();
                     self.inner =

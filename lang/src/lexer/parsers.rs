@@ -1,13 +1,13 @@
 use std::str::FromStr;
 
-use super::{LexicalError, PreprocessorToken, Token, TypeNames};
+use super::{LexerPosition, LexicalError, PreprocessorToken, Token, TypeNames};
 
 pub fn parse_int<'i>(
     lex: &mut logos::Lexer<'i, Token<'i>>,
     radix: u32,
 ) -> Result<i32, LexicalError> {
     let mut slice = lex.slice();
-    let fb = slice.bytes().nth(0);
+    let fb = slice.bytes().next();
     let sgn = if fb == Some(b'-') {
         slice = &slice[1..];
         0xFFFFFFFFu32
@@ -32,7 +32,7 @@ pub fn parse_uint<'i>(
     radix: u32,
 ) -> Result<u32, LexicalError> {
     let mut slice = lex.slice();
-    let fb = slice.bytes().nth(0);
+    let fb = slice.bytes().next();
     let sgn = if fb == Some(b'-') {
         slice = &slice[1..];
         0xFFFFFFFFu32
@@ -116,7 +116,10 @@ fn parse_cmt_int(
         } else {
             crate::ast::CommentData::Multi(slice[2..slice.len() - 2].to_owned())
         }
-        .spanned((source_id, span.start), (source_id, span.end));
+        .spanned(
+            LexerPosition::new(source_id, span.start),
+            LexerPosition::new(source_id, span.end),
+        );
 
         cmt.add_comment(comment);
     }

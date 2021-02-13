@@ -90,6 +90,6 @@ fn quote_ident() {
         ast::ExternalDeclarationData::FunctionDefinition(fndef) => {
             assert_eq!(fndef.prototype.name.0, "main");
         }
-        _ => assert!(false),
+        _ => panic!("unexpected syntax node"),
     }
 }

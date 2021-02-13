@@ -1413,6 +1413,7 @@ mod tests {
     use super::*;
 
     #[test]
+    #[allow(clippy::approx_constant)]
     fn count_variables() {
         let decl0 = ast::StatementData::declare_var(
             ast::TypeSpecifierNonArray::Float,

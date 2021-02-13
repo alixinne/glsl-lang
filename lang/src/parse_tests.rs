@@ -281,7 +281,7 @@ fn parse_layout_qualifier_list() {
     );
     assert_ceq!(
         ast::LayoutQualifier::parse("layout\n\n\t (    shared , std140, max_vertices= 3)"),
-        Ok(expected.clone())
+        Ok(expected)
     );
 }
 
@@ -328,7 +328,7 @@ fn parse_struct_field_specifier() {
     );
     assert_ceq!(
         ast::StructFieldSpecifier::parse("vec4     foo ;"),
-        Ok(expected.clone())
+        Ok(expected)
     );
 }
 
@@ -350,7 +350,7 @@ fn parse_struct_field_specifier_type_name() {
     );
     assert_ceq!(
         ast::StructFieldSpecifier::parse_with_options("S0238_3     x ;", &opts).map(|(p, _)| p),
-        Ok(expected.clone())
+        Ok(expected)
     );
 }
 
@@ -371,7 +371,7 @@ fn parse_struct_field_specifier_several() {
     );
     assert_ceq!(
         ast::StructFieldSpecifier::parse("vec4     foo , bar  , zoo ;"),
-        Ok(expected.clone())
+        Ok(expected)
     );
 }
 
@@ -409,7 +409,7 @@ fn get_s0238_3_opts() -> ParseOptions {
 
 #[test]
 fn parse_struct_specifier_multi_fields() {
-    let a = ast::StructFieldSpecifier {
+    let foo_field = ast::StructFieldSpecifier {
         qualifier: None,
         ty: ast::TypeSpecifier {
             ty: ast::TypeSpecifierNonArray::Vec4,
@@ -417,7 +417,7 @@ fn parse_struct_specifier_multi_fields() {
         },
         identifiers: vec!["foo".into()],
     };
-    let b = ast::StructFieldSpecifier {
+    let bar = ast::StructFieldSpecifier {
         qualifier: None,
         ty: ast::TypeSpecifier {
             ty: ast::TypeSpecifierNonArray::Float,
@@ -425,7 +425,7 @@ fn parse_struct_specifier_multi_fields() {
         },
         identifiers: vec!["bar".into()],
     };
-    let c = ast::StructFieldSpecifier {
+    let zoo = ast::StructFieldSpecifier {
         qualifier: None,
         ty: ast::TypeSpecifier {
             ty: ast::TypeSpecifierNonArray::UInt,
@@ -433,7 +433,7 @@ fn parse_struct_specifier_multi_fields() {
         },
         identifiers: vec!["zoo".into()],
     };
-    let d = ast::StructFieldSpecifier {
+    let foobar = ast::StructFieldSpecifier {
         qualifier: None,
         ty: ast::TypeSpecifier {
             ty: ast::TypeSpecifierNonArray::BVec3,
@@ -441,7 +441,7 @@ fn parse_struct_specifier_multi_fields() {
         },
         identifiers: vec!["foo_BAR_zoo3497_34".into()],
     };
-    let e = ast::StructFieldSpecifier {
+    let s = ast::StructFieldSpecifier {
         qualifier: None,
         ty: ast::TypeSpecifier {
             ty: ast::TypeSpecifierNonArray::TypeName("S0238_3".into()),
@@ -451,7 +451,7 @@ fn parse_struct_specifier_multi_fields() {
     };
     let expected = ast::StructSpecifier {
         name: Some("_TestStruct_934i".into()),
-        fields: vec![a, b, c, d, e],
+        fields: vec![foo_field, bar, zoo, foobar, s],
     };
 
     let opts = get_s0238_3_opts();
@@ -999,7 +999,7 @@ fn parse_fully_specified_type() {
 
     assert_ceq!(
         ast::FullySpecifiedType::parse("iimage2DMSArray"),
-        Ok(expected.clone())
+        Ok(expected)
     );
 }
 
@@ -1153,8 +1153,8 @@ fn parse_postfix_expr_bracket() {
 
 #[test]
 fn parse_postfix_expr_dot() {
-    let foo = Box::new(ast::Expr::Variable("foo".into()));
-    let expected = ast::Expr::Dot(foo, "bar".into());
+    let foo_var = Box::new(ast::Expr::Variable("foo".into()));
+    let expected = ast::Expr::Dot(foo_var, "bar".into());
 
     assert_ceq!(ast::Expr::parse("foo.bar"), Ok(expected.clone()));
     assert_ceq!(ast::Expr::parse("(foo).bar"), Ok(expected));
@@ -1162,8 +1162,11 @@ fn parse_postfix_expr_dot() {
 
 #[test]
 fn parse_postfix_expr_dot_several() {
-    let foo = Box::new(ast::Expr::Variable("foo".into()));
-    let expected = ast::Expr::Dot(Box::new(ast::Expr::Dot(foo, "bar".into())), "zoo".into());
+    let foo_var = Box::new(ast::Expr::Variable("foo".into()));
+    let expected = ast::Expr::Dot(
+        Box::new(ast::Expr::Dot(foo_var, "bar".into())),
+        "zoo".into(),
+    );
 
     assert_ceq!(ast::Expr::parse("foo.bar.zoo"), Ok(expected.clone()));
     assert_ceq!(ast::Expr::parse("(foo).bar.zoo"), Ok(expected.clone()));
@@ -1172,66 +1175,66 @@ fn parse_postfix_expr_dot_several() {
 
 #[test]
 fn parse_postfix_postinc() {
-    let foo = ast::Expr::Variable("foo".into());
-    let expected = ast::Expr::PostInc(Box::new(foo));
+    let foo_var = ast::Expr::Variable("foo".into());
+    let expected = ast::Expr::PostInc(Box::new(foo_var));
 
-    assert_ceq!(ast::Expr::parse("foo++"), Ok(expected.clone()));
+    assert_ceq!(ast::Expr::parse("foo++"), Ok(expected));
 }
 
 #[test]
 fn parse_postfix_postdec() {
-    let foo = ast::Expr::Variable("foo".into());
-    let expected = ast::Expr::PostDec(Box::new(foo));
+    let foo_var = ast::Expr::Variable("foo".into());
+    let expected = ast::Expr::PostDec(Box::new(foo_var));
 
-    assert_ceq!(ast::Expr::parse("foo--"), Ok(expected.clone()));
+    assert_ceq!(ast::Expr::parse("foo--"), Ok(expected));
 }
 
 #[test]
 fn parse_unary_add() {
-    let foo = ast::Expr::Variable("foo".into());
-    let expected = ast::Expr::Unary(ast::UnaryOp::Add, Box::new(foo));
+    let foo_var = ast::Expr::Variable("foo".into());
+    let expected = ast::Expr::Unary(ast::UnaryOp::Add, Box::new(foo_var));
 
-    assert_ceq!(ast::Expr::parse("+foo"), Ok(expected.clone()));
+    assert_ceq!(ast::Expr::parse("+foo"), Ok(expected));
 }
 
 #[test]
 fn parse_unary_minus() {
-    let foo = ast::Expr::Variable("foo".into());
-    let expected = ast::Expr::Unary(ast::UnaryOp::Minus, Box::new(foo));
+    let foo_var = ast::Expr::Variable("foo".into());
+    let expected = ast::Expr::Unary(ast::UnaryOp::Minus, Box::new(foo_var));
 
-    assert_ceq!(ast::Expr::parse("-foo"), Ok(expected.clone()));
+    assert_ceq!(ast::Expr::parse("-foo"), Ok(expected));
 }
 
 #[test]
 fn parse_unary_not() {
-    let foo = ast::Expr::Variable("foo".into());
-    let expected = ast::Expr::Unary(ast::UnaryOp::Not, Box::new(foo));
+    let foo_var = ast::Expr::Variable("foo".into());
+    let expected = ast::Expr::Unary(ast::UnaryOp::Not, Box::new(foo_var));
 
     assert_ceq!(ast::Expr::parse("!foo"), Ok(expected));
 }
 
 #[test]
 fn parse_unary_complement() {
-    let foo = ast::Expr::Variable("foo".into());
-    let expected = ast::Expr::Unary(ast::UnaryOp::Complement, Box::new(foo));
+    let foo_var = ast::Expr::Variable("foo".into());
+    let expected = ast::Expr::Unary(ast::UnaryOp::Complement, Box::new(foo_var));
 
-    assert_ceq!(ast::Expr::parse("~foo"), Ok(expected.clone()));
+    assert_ceq!(ast::Expr::parse("~foo"), Ok(expected));
 }
 
 #[test]
 fn parse_unary_inc() {
-    let foo = ast::Expr::Variable("foo".into());
-    let expected = ast::Expr::Unary(ast::UnaryOp::Inc, Box::new(foo));
+    let foo_var = ast::Expr::Variable("foo".into());
+    let expected = ast::Expr::Unary(ast::UnaryOp::Inc, Box::new(foo_var));
 
-    assert_ceq!(ast::Expr::parse("++foo"), Ok(expected.clone()));
+    assert_ceq!(ast::Expr::parse("++foo"), Ok(expected));
 }
 
 #[test]
 fn parse_unary_dec() {
-    let foo = ast::Expr::Variable("foo".into());
-    let expected = ast::Expr::Unary(ast::UnaryOp::Dec, Box::new(foo));
+    let foo_var = ast::Expr::Variable("foo".into());
+    let expected = ast::Expr::Unary(ast::UnaryOp::Dec, Box::new(foo_var));
 
-    assert_ceq!(ast::Expr::parse("--foo"), Ok(expected.clone()));
+    assert_ceq!(ast::Expr::parse("--foo"), Ok(expected));
 }
 
 #[test]
@@ -1305,10 +1308,7 @@ fn parse_expr_add_sub_mult_div() {
         )),
     );
 
-    assert_ceq!(
-        ast::Expr::parse("1 * (2 + 3) + 4 / (5 + 6)"),
-        Ok(expected.clone())
-    );
+    assert_ceq!(ast::Expr::parse("1 * (2 + 3) + 4 / (5 + 6)"), Ok(expected));
 }
 
 #[test]
@@ -1586,7 +1586,7 @@ fn parse_declaration_precision_high() {
 #[test]
 fn parse_declaration_uniform_block() {
     let opts = ParseOptions::new();
-    let foo = opts
+    let foo_var = opts
         .type_names
         .add_type_name(ast::IdentifierData::from("foo").into());
 
@@ -1613,7 +1613,7 @@ fn parse_declaration_uniform_block() {
     let f2 = ast::StructFieldSpecifier {
         qualifier: None,
         ty: ast::TypeSpecifier {
-            ty: foo.into(),
+            ty: foo_var.into(),
             array_specifier: None,
         },
         identifiers: vec!["c".into(), "d".into()],
@@ -1647,7 +1647,7 @@ fn parse_declaration_uniform_block() {
 #[test]
 fn parse_declaration_buffer_block() {
     let opts = ParseOptions::new();
-    let foo = opts
+    let foo_var = opts
         .type_names
         .add_type_name(ast::IdentifierData::from("foo").into());
 
@@ -1679,7 +1679,7 @@ fn parse_declaration_buffer_block() {
     let f2 = ast::StructFieldSpecifier {
         qualifier: None,
         ty: ast::TypeSpecifier {
-            ty: foo.into(),
+            ty: foo_var.into(),
             array_specifier: None,
         },
         identifiers: vec!["c".into(), "d".into()],
@@ -1822,7 +1822,7 @@ fn parse_switch_statement_cases() {
 
     assert_ceq!(
         ast::SwitchStatement::parse("switch (foo) { case 0: case 1: return 12u; }"),
-        Ok(expected.clone())
+        Ok(expected)
     );
 }
 
@@ -1845,11 +1845,11 @@ fn parse_case_label() {
 
 #[test]
 fn parse_iteration_statement_while_empty() {
-    let cond = ast::Condition::Expr(Box::new(ast::Expr::Binary(
+    let cond = ast::Condition::Expr(ast::Expr::Binary(
         ast::BinaryOp::GTE,
         Box::new(ast::Expr::Variable("a".into())),
         Box::new(ast::Expr::Variable("b".into())),
-    )));
+    ));
     let st = ast::StatementData::Compound(
         ast::CompoundStatementData {
             statement_list: Vec::new(),
@@ -1924,11 +1924,11 @@ fn parse_iteration_statement_for_empty() {
         .into(),
     ));
     let rest = ast::ForRestStatement {
-        condition: Some(ast::Condition::Expr(Box::new(ast::Expr::Binary(
+        condition: Some(ast::Condition::Expr(ast::Expr::Binary(
             ast::BinaryOp::LTE,
             Box::new(ast::Expr::Variable("i".into())),
             Box::new(ast::Expr::FloatConst(10.)),
-        )))),
+        ))),
         post_expr: Some(Box::new(ast::Expr::Unary(
             ast::UnaryOp::Inc,
             Box::new(ast::Expr::Variable("i".into())),

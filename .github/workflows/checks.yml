@@ -1,0 +1,25 @@
+name: checks
+
+on: push
+
+jobs:
+  test:
+    name: Test crate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+          target: ${{ matrix.target }}
+          components: rustfmt, clippy
+      - name: Check READMEs
+        run: ./ci/readme.sh -c
+      - name: Check formatting
+        run: cargo fmt -- --check
+      - name: Check clippy lints
+        run: cargo clippy -- -D warnings
+
+# vim: ft=yaml:ts=2:sw=2:et

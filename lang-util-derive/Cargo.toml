@@ -5,6 +5,7 @@ authors = ["Vincent Tavernier <vince.tavernier@gmail.com>"]
 edition = "2018"
 
 [lib]
+path = "src/lib.rs"
 proc-macro = true
 
 [dependencies]

@@ -25,6 +25,7 @@ jobs:
           toolchain: stable
           override: true
           target: ${{ matrix.target }}
-      - run: cargo test
+      - name: Run tests
+        run: cargo test
 
 # vim: ft=yaml:ts=2:sw=2:et

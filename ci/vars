@@ -1,0 +1,3 @@
+GLSL_DIRS=(lang lang-util lang-util-derive lang-quote lang-cli)
+
+# vim: ft=sh

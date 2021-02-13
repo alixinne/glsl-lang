@@ -8,7 +8,7 @@ edition = "2018"
 proc-macro = true
 
 [dependencies]
-glsl-lang = "0.1"
+glsl-lang = "=0.1.0"
 proc-macro2 = "1"
 quote = "1"
 

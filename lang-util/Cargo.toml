@@ -5,5 +5,5 @@ authors = ["Vincent Tavernier <vince.tavernier@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-lang-util-derive = "0.1"
+lang-util-derive = "=0.1.0"
 parse-display = "0.4"

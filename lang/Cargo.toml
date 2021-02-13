@@ -20,6 +20,7 @@ lalrpop = "0.19"
 [dev-dependencies]
 criterion = "0.3"
 expect-test = "1.1"
+funty = "=1.1.0" # see https://github.com/bitvecto-rs/bitvec/issues/105
 glsl = "6"
 
 [[bench]]

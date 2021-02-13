@@ -587,23 +587,23 @@ pub enum Token<'i> {
 
 impl<'i> Token<'i> {
     pub fn is_pp(&self) -> bool {
-        match self {
-            Self::PpDefine => true,
-            Self::PpElse => true,
-            Self::PpElif => true,
-            Self::PpEndIf => true,
-            Self::PpError => true,
-            Self::PpIf => true,
-            Self::PpIfDef => true,
-            Self::PpIfNDef => true,
-            Self::PpInclude => true,
-            Self::PpLine => true,
-            Self::PpPragma => true,
-            Self::PpUndef => true,
-            Self::PpVersion => true,
-            Self::PpExtension => true,
-            _ => false,
-        }
+        matches!(
+            self,
+            Self::PpDefine
+                | Self::PpElse
+                | Self::PpElif
+                | Self::PpEndIf
+                | Self::PpError
+                | Self::PpIf
+                | Self::PpIfDef
+                | Self::PpIfNDef
+                | Self::PpInclude
+                | Self::PpLine
+                | Self::PpPragma
+                | Self::PpUndef
+                | Self::PpVersion
+                | Self::PpExtension
+        )
     }
 
     pub fn as_str(&self) -> &'i str {

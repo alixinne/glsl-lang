@@ -11,7 +11,7 @@ where
         use glsl_lang::parse::LangParser;
 
         let parser = L::Parser::new();
-        let opts = glsl_lang::parse::ParseOptions::new();
+        let opts = glsl_lang::parse::ParseOptions::new().build();
 
         b.iter(|| {
             L::parse_with_parser(input, &opts, &parser).ok();

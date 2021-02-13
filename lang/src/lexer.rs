@@ -56,7 +56,7 @@ impl<'i> Lexer<'i> {
 
     fn consume_pp_rest(
         pp: &mut logos::Lexer<'i, PreprocessorToken<'i>>,
-    ) -> Option<(LexerPosition, PreprocessorToken<'i>, LexerPosition)> {
+    ) -> (LexerPosition, PreprocessorToken<'i>, LexerPosition) {
         let mut ch1;
         let mut ch2 = None;
         let mut ch3 = None;
@@ -141,13 +141,13 @@ impl<'i> Lexer<'i> {
         pp.bump(consumed_chars);
 
         let source_id = pp.extras.opts.source_id;
-        Some((
+        (
             LexerPosition::new(source_id, start),
             PreprocessorToken::Rest(std::borrow::Cow::Owned(
                 String::from_utf8(res).expect("invalid utf-8"),
             )),
             LexerPosition::new(source_id, start + consumed_chars),
-        ))
+        )
     }
 }
 
@@ -236,12 +236,12 @@ impl<'i> Iterator for Lexer<'i> {
                                     // Otherwise, it's the define value, so consume the remainder, return
                                     // it as PpRest and return back to regular parsing
                                     *consumed_rest = true;
-                                    Self::consume_pp_rest(pp)
+                                    Some(Self::consume_pp_rest(pp))
                                 }
                             } else if let Some(Token::RightParen) = &self.last_token {
                                 // This is the closing parenthesis of a define
                                 *consumed_rest = true;
-                                Self::consume_pp_rest(pp)
+                                Some(Self::consume_pp_rest(pp))
                             } else {
                                 // Other tokens (identifier, comma), just consume regularly
                                 Self::consume_pp(pp)
@@ -250,7 +250,7 @@ impl<'i> Iterator for Lexer<'i> {
                         Token::PpElif | Token::PpError | Token::PpIf | Token::PpPragma => {
                             // Consume the rest of the line
                             *consumed_rest = true;
-                            Some(Self::consume_pp_rest(pp))
+                            Some(Some(Self::consume_pp_rest(pp)))
                         }
                         Token::PpVersion => {
                             Some(Self::consume_pp(pp).map(|(start, token, end)| {

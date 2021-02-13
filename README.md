@@ -34,8 +34,10 @@ modeled after [Dimitri Sabadie's `glsl` crate](https://github.com/phaazon/glsl).
 ## Repository structure
 
 * [`lang`](lang): AST, parser, visitor, transpiler for GLSL language
-* [`lang-impl`](lang-impl): proc-macro crate to implement a syntax tree with span information
+* [`lang-util`](lang-util): utilities for implementing syntax trees
+* [`lang-util-derive`](lang-util-derive): proc-macro crate to implement a syntax tree with span information
 * [`lang-quote`](lang-quote): proc-macro crate to parse GLSL at compile-time
+* [`lang-cli`](lang-cli): simple CLI tool to show GLSL syntax trees
 
 ## `glsl-lang` vs. `glsl` crates
 

@@ -40,7 +40,7 @@ impl Parsable for ast::FunctionDefinition {
         match ast::TranslationUnit::parse_with_options(source, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
-                    contents: ast::ExternalDeclarationData::FunctionDefinition(fndef),
+                    content: ast::ExternalDeclarationData::FunctionDefinition(fndef),
                     ..
                 } = extdecls.into_iter().next().unwrap()
                 {
@@ -65,13 +65,13 @@ impl Parsable for ast::UnaryOp {
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
-                    contents:
+                    content:
                         ast::ExternalDeclarationData::FunctionDefinition(ast::Node {
-                            contents:
+                            content:
                                 ast::FunctionDefinitionData {
                                     statement:
                                         ast::Node {
-                                            contents:
+                                            content:
                                                 ast::CompoundStatementData { statement_list, .. },
                                             ..
                                         },
@@ -108,13 +108,13 @@ impl Parsable for ast::AssignmentOp {
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
-                    contents:
+                    content:
                         ast::ExternalDeclarationData::FunctionDefinition(ast::Node {
-                            contents:
+                            content:
                                 ast::FunctionDefinitionData {
                                     statement:
                                         ast::Node {
-                                            contents:
+                                            content:
                                                 ast::CompoundStatementData { statement_list, .. },
                                             ..
                                         },
@@ -153,13 +153,13 @@ macro_rules! impl_parsable_statement {
                 match ast::TranslationUnit::parse_with_options(&src, opts) {
                     Ok((ast::TranslationUnit(extdecls), oo)) => {
                         if let ast::Node {
-                            contents:
+                            content:
                                 ast::ExternalDeclarationData::FunctionDefinition(ast::Node {
-                                    contents:
+                                    content:
                                         ast::FunctionDefinitionData {
                                             statement:
                                                 ast::Node {
-                                                    contents:
+                                                    content:
                                                         ast::CompoundStatementData {
                                                             statement_list,
                                                             ..
@@ -208,13 +208,13 @@ impl Parsable for ast::ArraySpecifierDimension {
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
-                    contents:
+                    content:
                         ast::ExternalDeclarationData::FunctionDefinition(ast::Node {
-                            contents:
+                            content:
                                 ast::FunctionDefinitionData {
                                     statement:
                                         ast::Node {
-                                            contents:
+                                            content:
                                                 ast::CompoundStatementData { statement_list, .. },
                                             ..
                                         },
@@ -257,13 +257,13 @@ impl Parsable for ast::ArraySpecifier {
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
-                    contents:
+                    content:
                         ast::ExternalDeclarationData::FunctionDefinition(ast::Node {
-                            contents:
+                            content:
                                 ast::FunctionDefinitionData {
                                     statement:
                                         ast::Node {
-                                            contents:
+                                            content:
                                                 ast::CompoundStatementData { statement_list, .. },
                                             ..
                                         },
@@ -306,13 +306,13 @@ impl Parsable for ast::FunIdentifier {
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
-                    contents:
+                    content:
                         ast::ExternalDeclarationData::FunctionDefinition(ast::Node {
-                            contents:
+                            content:
                                 ast::FunctionDefinitionData {
                                     statement:
                                         ast::Node {
-                                            contents:
+                                            content:
                                                 ast::CompoundStatementData { statement_list, .. },
                                             ..
                                         },
@@ -349,9 +349,9 @@ impl Parsable for ast::InterpolationQualifier {
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
-                    contents:
+                    content:
                         ast::ExternalDeclarationData::Declaration(ast::Node {
-                            contents:
+                            content:
                                 ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
                                     head:
                                         ast::SingleDeclaration {
@@ -395,9 +395,9 @@ impl Parsable for ast::ArrayedIdentifier {
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
-                    contents:
+                    content:
                         ast::ExternalDeclarationData::Declaration(ast::Node {
-                            contents:
+                            content:
                                 ast::DeclarationData::Block(ast::Block {
                                     identifier: Some(a),
                                     ..
@@ -428,9 +428,9 @@ impl Parsable for ast::PrecisionQualifier {
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
-                    contents:
+                    content:
                         ast::ExternalDeclarationData::Declaration(ast::Node {
-                            contents:
+                            content:
                                 ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
                                     head:
                                         ast::SingleDeclaration {
@@ -474,9 +474,9 @@ impl Parsable for ast::StorageQualifier {
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
-                    contents:
+                    content:
                         ast::ExternalDeclarationData::Declaration(ast::Node {
-                            contents:
+                            content:
                                 ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
                                     head:
                                         ast::SingleDeclaration {
@@ -520,9 +520,9 @@ impl Parsable for ast::LayoutQualifier {
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
-                    contents:
+                    content:
                         ast::ExternalDeclarationData::Declaration(ast::Node {
-                            contents:
+                            content:
                                 ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
                                     head:
                                         ast::SingleDeclaration {
@@ -566,9 +566,9 @@ impl Parsable for ast::TypeQualifier {
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
-                    contents:
+                    content:
                         ast::ExternalDeclarationData::Declaration(ast::Node {
-                            contents:
+                            content:
                                 ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
                                     head:
                                         ast::SingleDeclaration {
@@ -606,9 +606,9 @@ impl Parsable for ast::TypeSpecifier {
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
-                    contents:
+                    content:
                         ast::ExternalDeclarationData::Declaration(ast::Node {
-                            contents:
+                            content:
                                 ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
                                     head:
                                         ast::SingleDeclaration {
@@ -643,9 +643,9 @@ impl Parsable for ast::TypeSpecifierNonArray {
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
-                    contents:
+                    content:
                         ast::ExternalDeclarationData::Declaration(ast::Node {
-                            contents:
+                            content:
                                 ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
                                     head:
                                         ast::SingleDeclaration {
@@ -684,9 +684,9 @@ impl Parsable for ast::FullySpecifiedType {
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
-                    contents:
+                    content:
                         ast::ExternalDeclarationData::Declaration(ast::Node {
-                            contents:
+                            content:
                                 ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
                                     head: ast::SingleDeclaration { ty, .. },
                                     ..
@@ -717,7 +717,7 @@ impl Parsable for ast::Declaration {
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
-                    contents: ast::ExternalDeclarationData::Declaration(decl),
+                    content: ast::ExternalDeclarationData::Declaration(decl),
                     ..
                 } = extdecls.into_iter().next().unwrap()
                 {
@@ -742,9 +742,9 @@ impl Parsable for ast::StructFieldSpecifier {
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
-                    contents:
+                    content:
                         ast::ExternalDeclarationData::Declaration(ast::Node {
-                            contents:
+                            content:
                                 ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
                                     head:
                                         ast::SingleDeclaration {
@@ -793,9 +793,9 @@ impl Parsable for ast::StructSpecifier {
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
-                    contents:
+                    content:
                         ast::ExternalDeclarationData::Declaration(ast::Node {
-                            contents:
+                            content:
                                 ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
                                     head:
                                         ast::SingleDeclaration {
@@ -840,13 +840,13 @@ impl Parsable for ast::Expr {
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
-                    contents:
+                    content:
                         ast::ExternalDeclarationData::FunctionDefinition(ast::Node {
-                            contents:
+                            content:
                                 ast::FunctionDefinitionData {
                                     statement:
                                         ast::Node {
-                                            contents:
+                                            content:
                                                 ast::CompoundStatementData { statement_list, .. },
                                             ..
                                         },
@@ -882,7 +882,7 @@ impl Parsable for ast::Preprocessor {
         match ast::TranslationUnit::parse_with_options(source, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
-                    contents: ast::ExternalDeclarationData::Preprocessor(pp),
+                    content: ast::ExternalDeclarationData::Preprocessor(pp),
                     ..
                 } = extdecls.into_iter().next().unwrap()
                 {
@@ -908,13 +908,13 @@ impl Parsable for ast::Statement {
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
-                    contents:
+                    content:
                         ast::ExternalDeclarationData::FunctionDefinition(ast::Node {
-                            contents:
+                            content:
                                 ast::FunctionDefinitionData {
                                     statement:
                                         ast::Node {
-                                            contents:
+                                            content:
                                                 ast::CompoundStatementData { statement_list, .. },
                                             ..
                                         },

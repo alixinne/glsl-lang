@@ -1521,7 +1521,7 @@ fn tokenize_span(s: &Option<ast::NodeSpan>) -> TokenStream {
 }
 
 fn tokenize_external_declaration(ed: &ast::ExternalDeclaration) -> TokenStream {
-    let contents = match ed.contents {
+    let contents = match **ed {
         ast::ExternalDeclarationData::Preprocessor(ref pp) => {
             let pp = tokenize_preprocessor(pp);
             quote! { glsl_lang::ast::ExternalDeclarationData::Preprocessor(#pp) }

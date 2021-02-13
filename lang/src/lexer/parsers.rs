@@ -106,7 +106,7 @@ fn parse_cmt_int(
     span: std::ops::Range<usize>,
     is_single: bool,
 ) {
-    use crate::ast::NodeContents;
+    use crate::ast::NodeContent;
 
     if let Some(cmt) = extras.comments.as_ref() {
         let source_id = extras.source_id;

@@ -17,7 +17,7 @@ fn parse_comments() {
             .next()
             .unwrap()
             .1
-            .contents),
+            .content),
         Ok(ast::CommentData::Single(" lol".to_owned())),
     );
 
@@ -32,7 +32,7 @@ fn parse_comments() {
                 .next()
                 .unwrap()
                 .1
-                .contents
+                .content
         ),
         Ok(ast::CommentData::Multi(" Something ".to_owned())),
     );
@@ -2108,61 +2108,55 @@ fn parse_function_definition() {
 #[test]
 fn parse_buffer_block_0() {
     let src = include_str!("../data/tests/buffer_block_0.glsl");
-    let main_fn = ast::Node {
-        contents: ast::ExternalDeclarationData::FunctionDefinition(
-            ast::FunctionDefinitionData {
-                prototype: ast::FunctionPrototypeData {
-                    ty: ast::FullySpecifiedType {
-                        qualifier: None,
-                        ty: ast::TypeSpecifier {
-                            ty: ast::TypeSpecifierNonArray::Void,
-                            array_specifier: None,
-                        },
-                    },
-                    name: "main".into(),
-                    parameters: Vec::new(),
-                }
-                .into(),
-                statement: ast::CompoundStatementData {
-                    statement_list: Vec::new(),
-                }
-                .into(),
-            }
-            .into(),
-        ),
-        span: None,
-    };
-
-    let buffer_block = ast::Node {
-        contents: ast::ExternalDeclarationData::Declaration(
-            ast::DeclarationData::Block(ast::Block {
-                qualifier: ast::TypeQualifier {
-                    qualifiers: vec![ast::TypeQualifierSpec::Storage(
-                        ast::StorageQualifier::Buffer,
-                    )],
-                },
-                name: "Foo".into(),
-                fields: vec![ast::StructFieldSpecifier {
+    let main_fn = ast::ExternalDeclarationData::FunctionDefinition(
+        ast::FunctionDefinitionData {
+            prototype: ast::FunctionPrototypeData {
+                ty: ast::FullySpecifiedType {
                     qualifier: None,
                     ty: ast::TypeSpecifier {
-                        ty: ast::TypeSpecifierNonArray::Float,
+                        ty: ast::TypeSpecifierNonArray::Void,
                         array_specifier: None,
                     },
-                    identifiers: vec![ast::ArrayedIdentifier::new(
-                        "tiles",
-                        Some(ast::ArraySpecifier {
-                            dimensions: vec![ast::ArraySpecifierDimension::Unsized],
-                        }),
-                    )],
-                }],
-                identifier: Some("main_tiles".into()),
-            })
+                },
+                name: "main".into(),
+                parameters: Vec::new(),
+            }
             .into(),
-        ),
-        span: None,
-    };
+            statement: ast::CompoundStatementData {
+                statement_list: Vec::new(),
+            }
+            .into(),
+        }
+        .into(),
+    );
 
-    let expected = ast::TranslationUnit(vec![buffer_block, main_fn]);
+    let buffer_block = ast::ExternalDeclarationData::Declaration(
+        ast::DeclarationData::Block(ast::Block {
+            qualifier: ast::TypeQualifier {
+                qualifiers: vec![ast::TypeQualifierSpec::Storage(
+                    ast::StorageQualifier::Buffer,
+                )],
+            },
+            name: "Foo".into(),
+            fields: vec![ast::StructFieldSpecifier {
+                qualifier: None,
+                ty: ast::TypeSpecifier {
+                    ty: ast::TypeSpecifierNonArray::Float,
+                    array_specifier: None,
+                },
+                identifiers: vec![ast::ArrayedIdentifier::new(
+                    "tiles",
+                    Some(ast::ArraySpecifier {
+                        dimensions: vec![ast::ArraySpecifierDimension::Unsized],
+                    }),
+                )],
+            }],
+            identifier: Some("main_tiles".into()),
+        })
+        .into(),
+    );
+
+    let expected = ast::TranslationUnit(vec![buffer_block.into(), main_fn.into()]);
 
     assert_ceq!(ast::TranslationUnit::parse(src), Ok(expected));
 }
@@ -2188,24 +2182,21 @@ fn parse_layout_buffer_block_0() {
             ast::TypeQualifierSpec::Storage(ast::StorageQualifier::Buffer),
         ],
     };
-    let block = ast::Node {
-        contents: ast::ExternalDeclarationData::Declaration(
-            ast::DeclarationData::Block(ast::Block {
-                qualifier: type_qual,
-                name: "Foo".into(),
-                fields: vec![ast::StructFieldSpecifier {
-                    qualifier: None,
-                    ty: ast::TypeSpecifierNonArray::Float.into(),
-                    identifiers: vec!["a".into()],
-                }],
-                identifier: Some("foo".into()),
-            })
-            .into(),
-        ),
-        span: None,
-    };
+    let block = ast::ExternalDeclarationData::Declaration(
+        ast::DeclarationData::Block(ast::Block {
+            qualifier: type_qual,
+            name: "Foo".into(),
+            fields: vec![ast::StructFieldSpecifier {
+                qualifier: None,
+                ty: ast::TypeSpecifierNonArray::Float.into(),
+                identifiers: vec!["a".into()],
+            }],
+            identifier: Some("foo".into()),
+        })
+        .into(),
+    );
 
-    let expected = ast::TranslationUnit(vec![block]);
+    let expected = ast::TranslationUnit(vec![block.into()]);
 
     assert_ceq!(ast::TranslationUnit::parse(src), Ok(expected));
 }

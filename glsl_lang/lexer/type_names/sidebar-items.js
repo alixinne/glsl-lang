@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["IdentifierContext",""]],"struct":[["GlslTypeTablePolicy",""],["TypeNames",""]],"trait":[["TypeTablePolicy",""]]});

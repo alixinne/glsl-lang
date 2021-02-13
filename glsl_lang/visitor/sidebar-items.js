@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Visit","Visit strategy after having visited an AST node."]],"trait":[["Host","Part of the AST that can be visited."],["HostMut","Part of the AST that can be visited."],["Visitor","Visitor object, visiting AST nodes."],["VisitorMut","Visitor object, visiting AST nodes."]]});

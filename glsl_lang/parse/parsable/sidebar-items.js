@@ -1,0 +1,1 @@
+initSidebarItems({"trait":[["Parsable","A parsable is something we can parse either directly, or embedded in some other syntax structure."]]});

@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["glsl_internal",""]],"macro":[["glsl",""],["glsl_expr",""],["glsl_statement",""]],"mod":[["quoted","A set of small traits that enable tokenizing some common types that get tokenizing erased normally, such as `Option<T>` as `Some(_)` or `None`, `Box<T>` as `Box::new(_)`, etc."],["tokenize","The [`Tokenize`] trait, turning glsl into [`TokenStream`]s."]]});

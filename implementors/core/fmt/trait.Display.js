@@ -1,0 +1,4 @@
+(function() {var implementors = {};
+implementors["glsl_lang"] = [{"text":"impl Display for IdentifierData","synthetic":false,"types":[]},{"text":"impl Display for TypeNameData","synthetic":false,"types":[]},{"text":"impl Display for LexicalError","synthetic":false,"types":[]}];
+implementors["lang_util"] = [{"text":"impl Display for LexerPosition","synthetic":false,"types":[]},{"text":"impl&lt;T:&nbsp;NodeContent + Display&gt; Display for Node&lt;T&gt;","synthetic":false,"types":[]},{"text":"impl Display for NodeDisplayWrapper&lt;'static, str&gt;","synthetic":false,"types":[]},{"text":"impl&lt;T:&nbsp;NodeDisplay&gt; Display for NodeDisplayWrapper&lt;'_, T&gt;","synthetic":false,"types":[]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

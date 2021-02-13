@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["glsl_lang"] = [{"text":"impl&lt;'i&gt; Into&lt;i32&gt; for Token&lt;'i&gt;","synthetic":false,"types":[]},{"text":"impl&lt;'i&gt; Into&lt;u32&gt; for Token&lt;'i&gt;","synthetic":false,"types":[]},{"text":"impl&lt;'i&gt; Into&lt;f32&gt; for Token&lt;'i&gt;","synthetic":false,"types":[]},{"text":"impl&lt;'i&gt; Into&lt;f64&gt; for Token&lt;'i&gt;","synthetic":false,"types":[]},{"text":"impl&lt;'i&gt; Into&lt;bool&gt; for Token&lt;'i&gt;","synthetic":false,"types":[]},{"text":"impl&lt;'i&gt; Into&lt;String&gt; for Token&lt;'i&gt;","synthetic":false,"types":[]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

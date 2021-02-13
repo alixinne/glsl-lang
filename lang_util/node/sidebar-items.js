@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["content",""],["display",""]],"struct":[["Node","A syntax node with span information"],["NodeDisplayWrapper",""]],"trait":[["NodeContent",""],["NodeContentDisplay",""],["NodeContentEq","Trait for comparing the content of syntax nodes"],["NodeDisplay",""]]});

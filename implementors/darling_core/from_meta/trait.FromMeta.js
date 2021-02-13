@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["lang_util_derive"] = [{"text":"impl FromMeta for DisplayFieldOpts","synthetic":false,"types":[]},{"text":"impl FromMeta for DisplayVariantOpts","synthetic":false,"types":[]},{"text":"impl FromMeta for NodeDisplay","synthetic":false,"types":[]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

@@ -1187,6 +1187,8 @@
 <span id="1184">1184</span>
 <span id="1185">1185</span>
 <span id="1186">1186</span>
+<span id="1187">1187</span>
+<span id="1188">1188</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! GLSL abstract syntax tree and grammar.</span>
 <span class="doccomment">//!</span>
@@ -1217,6 +1219,8 @@
     <span class="ident">NodeContent</span>,
 };
 
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">smol_str</span>::<span class="ident">SmolStr</span>;
+
 <span class="doccomment">/// A path literal.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Path</span> {
@@ -1229,7 +1233,7 @@
 <span class="doccomment">/// A generic identifier.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span>(<span class="ident">leaf</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">IdentifierData</span>(<span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span>(<span class="ident">extra</span>))]</span> <span class="kw">pub</span> <span class="ident">String</span>);
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">IdentifierData</span>(<span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span>(<span class="ident">extra</span>))]</span> <span class="kw">pub</span> <span class="ident">SmolStr</span>);
 
 <span class="kw">impl</span> <span class="ident">IdentifierData</span> {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_rs_ident</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> {
@@ -1250,7 +1254,7 @@
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">IdentifierData</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">ident</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span>(<span class="ident">ident</span>.<span class="ident">to_owned</span>())
+        <span class="self">Self</span>(<span class="ident">ident</span>.<span class="ident">into</span>())
     }
 }
 
@@ -1263,7 +1267,7 @@
 <span class="doccomment">/// Any type name.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span>(<span class="ident">leaf</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">TypeNameData</span>(<span class="kw">pub</span> <span class="ident">String</span>);
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">TypeNameData</span>(<span class="kw">pub</span> <span class="ident">SmolStr</span>);
 
 <span class="kw">impl</span> <span class="ident">TypeNameData</span> {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_str</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
@@ -1279,7 +1283,7 @@
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">TypeNameData</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">ident</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span>(<span class="ident">ident</span>.<span class="ident">to_owned</span>())
+        <span class="self">Self</span>(<span class="ident">ident</span>.<span class="ident">into</span>())
     }
 }
 
@@ -2333,7 +2337,7 @@
     <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span>(<span class="ident">extra</span> <span class="op">=</span> <span class="string">&quot;all&quot;</span>))]</span>
     <span class="ident">All</span>,
     <span class="doccomment">/// A specific extension.</span>
-    <span class="ident">Specific</span>(<span class="ident">String</span>),
+    <span class="ident">Specific</span>(<span class="ident">SmolStr</span>),
 }
 
 <span class="doccomment">/// An #extension behavior annotation.</span>

@@ -1549,6 +1549,7 @@
 <span id="1546">1546</span>
 <span id="1547">1547</span>
 <span id="1548">1548</span>
+<span id="1549">1549</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! The [`Tokenize`] trait, turning [glsl](https://crates.io/crates/glsl) into [`TokenStream`]s.</span>
 
@@ -3034,7 +3035,8 @@
             <span class="macro">quote</span><span class="macro">!</span> { <span class="ident">glsl_lang</span>::<span class="ident">ast</span>::<span class="ident">PreprocessorExtensionName</span>::<span class="ident">All</span> }
         }
         <span class="ident">ast</span>::<span class="ident">PreprocessorExtensionName</span>::<span class="ident">Specific</span>(<span class="kw-2">ref</span> <span class="ident">n</span>) <span class="op">=</span><span class="op">&gt;</span> {
-            <span class="macro">quote</span><span class="macro">!</span> { <span class="ident">glsl_lang</span>::<span class="ident">ast</span>::<span class="ident">PreprocessorExtensionName</span>::<span class="ident">Specific</span>(#<span class="ident">n</span>.<span class="ident">to_owned</span>()) }
+            <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="ident">n</span>.<span class="ident">quote</span>();
+            <span class="macro">quote</span><span class="macro">!</span> { <span class="ident">glsl_lang</span>::<span class="ident">ast</span>::<span class="ident">PreprocessorExtensionName</span>::<span class="ident">Specific</span>(#<span class="ident">n</span>) }
         }
     }
 }

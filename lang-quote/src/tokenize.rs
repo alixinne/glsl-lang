@@ -1482,7 +1482,8 @@ fn tokenize_preprocessor_extension_name(name: &ast::PreprocessorExtensionName) -
             quote! { glsl_lang::ast::PreprocessorExtensionName::All }
         }
         ast::PreprocessorExtensionName::Specific(ref n) => {
-            quote! { glsl_lang::ast::PreprocessorExtensionName::Specific(#n.to_owned()) }
+            let n = n.quote();
+            quote! { glsl_lang::ast::PreprocessorExtensionName::Specific(#n) }
         }
     }
 }

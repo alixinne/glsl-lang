@@ -27,6 +27,8 @@ pub use lang_util::{
     NodeContent,
 };
 
+pub use smol_str::SmolStr;
+
 /// A path literal.
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 pub enum Path {
@@ -39,7 +41,7 @@ pub enum Path {
 /// A generic identifier.
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[lang_util(display(leaf))]
-pub struct IdentifierData(#[lang_util(display(extra))] pub String);
+pub struct IdentifierData(#[lang_util(display(extra))] pub SmolStr);
 
 impl IdentifierData {
     pub fn as_rs_ident(&self) -> Option<&str> {
@@ -60,7 +62,7 @@ impl IdentifierData {
 
 impl From<&str> for IdentifierData {
     fn from(ident: &str) -> Self {
-        Self(ident.to_owned())
+        Self(ident.into())
     }
 }
 
@@ -73,7 +75,7 @@ impl fmt::Display for IdentifierData {
 /// Any type name.
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[lang_util(display(leaf))]
-pub struct TypeNameData(pub String);
+pub struct TypeNameData(pub SmolStr);
 
 impl TypeNameData {
     pub fn as_str(&self) -> &str {
@@ -89,7 +91,7 @@ impl From<IdentifierData> for TypeNameData {
 
 impl From<&str> for TypeNameData {
     fn from(ident: &str) -> Self {
-        Self(ident.to_owned())
+        Self(ident.into())
     }
 }
 
@@ -1143,7 +1145,7 @@ pub enum PreprocessorExtensionName {
     #[lang_util(display(extra = "all"))]
     All,
     /// A specific extension.
-    Specific(String),
+    Specific(SmolStr),
 }
 
 /// An #extension behavior annotation.

@@ -71,7 +71,7 @@ pub trait NodeContentDisplay {
 }
 
 macro_rules! forward_display {
-    ($i:ident => $e:expr) => {
+    ($i:ty => $e:expr) => {
         impl NodeContentDisplay for $i {
             fn name() -> Option<&'static str> {
                 Some($e)
@@ -88,6 +88,7 @@ macro_rules! forward_display {
     }
 }
 
+forward_display!(smol_str::SmolStr => "String");
 forward_display!(String => "String");
 forward_display!(f32 => "FloatConst");
 forward_display!(f64 => "DoubleConst");

@@ -674,7 +674,7 @@ preprocessor_extension: ast::PreprocessorExtension = {
         name: if i.as_str() == "all" {
             ast::PreprocessorExtensionName::All
         } else {
-            ast::PreprocessorExtensionName::Specific(i.as_str().to_owned())
+            ast::PreprocessorExtensionName::Specific(i.as_str().into())
         },
         behavior: b,
     }

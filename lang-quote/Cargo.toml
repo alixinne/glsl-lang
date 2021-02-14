@@ -12,6 +12,7 @@ path = "src/lib.rs"
 glsl-lang = "=0.1.0"
 proc-macro2 = "1"
 quote = "1"
+smol_str = "0.1"
 
 [features]
 # Default: only translation units can be quoted

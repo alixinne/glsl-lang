@@ -179,6 +179,7 @@ impl_node_content_eq!(f64);
 impl_node_content_eq!(usize);
 impl_node_content_eq!(&str);
 impl_node_content_eq!(String);
+impl_node_content_eq!(smol_str::SmolStr);
 impl_node_content_eq!(std::borrow::Cow<'_, str>);
 
 #[macro_export]

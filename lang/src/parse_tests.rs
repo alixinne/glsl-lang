@@ -2399,7 +2399,7 @@ fn parse_pp_ifdef() {
     assert_ceq!(
         ast::Preprocessor::parse("#ifdef       FOO\n"),
         Ok(ast::PreprocessorData::IfDef(ast::PreprocessorIfDef {
-            ident: ast::IdentifierData("FOO".to_owned()).into()
+            ident: ast::IdentifierData("FOO".into()).into()
         })
         .into())
     );
@@ -2410,7 +2410,7 @@ fn parse_pp_ifndef() {
     assert_ceq!(
         ast::Preprocessor::parse("#\\\nifndef \\\n   FOO\n"),
         Ok(ast::PreprocessorData::IfNDef(ast::PreprocessorIfNDef {
-            ident: ast::IdentifierData("FOO".to_owned()).into()
+            ident: ast::IdentifierData("FOO".into()).into()
         })
         .into())
     );
@@ -2472,7 +2472,7 @@ fn parse_pp_undef() {
     assert_ceq!(
         ast::Preprocessor::parse("# undef \\\n FOO"),
         Ok(ast::PreprocessorData::Undef(ast::PreprocessorUndef {
-            name: ast::IdentifierData("FOO".to_owned()).into()
+            name: ast::IdentifierData("FOO".into()).into()
         })
         .into())
     );
@@ -2495,7 +2495,7 @@ fn parse_pp_extension() {
         ast::Preprocessor::parse("#extension GL_foobar: warn\n"),
         Ok(
             ast::PreprocessorData::Extension(ast::PreprocessorExtension {
-                name: ast::PreprocessorExtensionName::Specific("GL_foobar".to_owned()),
+                name: ast::PreprocessorExtensionName::Specific("GL_foobar".into()),
                 behavior: Some(ast::PreprocessorExtensionBehavior::Warn)
             })
             .into()

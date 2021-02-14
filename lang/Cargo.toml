@@ -12,6 +12,7 @@ parse-display = { version = "0.4", default-features = false, features = ["std"] 
 thiserror = "1.0"
 
 lang-util = "=0.1.0"
+smol_str = "0.1"
 
 [build-dependencies]
 lalrpop = "0.19"

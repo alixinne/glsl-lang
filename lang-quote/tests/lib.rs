@@ -79,7 +79,7 @@ fn dot_expr() {
 
 #[test]
 fn quote_ident() {
-    let ident: ast::Identifier = ast::IdentifierData("main".to_owned()).into();
+    let ident: ast::Identifier = ast::IdentifierData("main".into()).into();
 
     let tu = glsl! {
         void #(ident)() {

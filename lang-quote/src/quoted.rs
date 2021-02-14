@@ -15,6 +15,13 @@ impl Quoted for String {
     }
 }
 
+impl Quoted for smol_str::SmolStr {
+    fn quote(&self) -> TokenStream {
+        let s = self.as_str();
+        quote! { #s.into() }
+    }
+}
+
 impl<T> Quoted for Option<T>
 where
     T: ToTokens,

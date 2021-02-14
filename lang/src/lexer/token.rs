@@ -1,14 +1,12 @@
 use logos::Logos;
-use strum_macros::{EnumDiscriminants, IntoStaticStr};
 
 use super::{
     parse_cmt, parse_f32, parse_f64, parse_ident, parse_int, parse_rs_ident, parse_uint,
     LexerContext,
 };
 
-#[derive(Debug, Clone, PartialEq, Logos, EnumDiscriminants)]
+#[derive(Debug, Clone, PartialEq, Logos, lang_util::Token, parse_display::Display)]
 #[logos(extras = LexerContext)]
-#[strum_discriminants(name(TokenKind), derive(IntoStaticStr))]
 pub enum Token<'i> {
     #[token("const")]
     Const,
@@ -401,30 +399,37 @@ pub enum Token<'i> {
     Subroutine,
     #[regex("[a-zA-Z_][a-zA-Z_0-9]*", parse_ident)]
     #[regex("#\\s*\\(\\s*[a-zA-Z_][a-zA-Z_0-9]*\\s*\\)", parse_rs_ident)]
+    #[display("{0.0}")]
     Identifier((&'i str, LexerContext)),
+    #[display("{0}")]
     TypeName(&'i str), // Cast from Identifier depending on known type names
     #[regex(
         r"([0-9]+\.[0-9]+|[0-9]+\.|\.[0-9]+)([eE][+-]?[0-9]+)?(f|F)?",
         parse_f32
     )]
     #[regex(r"[0-9]+[eE][+-]?[0-9]+(f|F)?", parse_f32)]
+    #[display("{0}")]
     FloatConstant(f32),
     #[regex(r"0[0-7]*", |lex| parse_int(lex, 8))]
     #[regex(r"[1-9][0-9]*", |lex| parse_int(lex, 10))]
     #[regex(r"0[xX][0-9A-Fa-f]+", |lex| parse_int(lex, 16))]
+    #[display("{0}")]
     IntConstant(i32),
     #[regex(r"0[0-7]*[uU]", |lex| parse_uint(lex, 8))]
     #[regex(r"[1-9][0-9]*[uU]", |lex| parse_uint(lex, 10))]
     #[regex(r"0[xX][0-9A-Fa-f]+[uU]", |lex| parse_uint(lex, 16))]
+    #[display("{0}")]
     UIntConstant(u32),
     #[token("true", |_| true)]
     #[token("false", |_| false)]
+    #[display("{0}")]
     BoolConstant(bool),
     #[regex(
         r"([0-9]+\.[0-9]+|[0-9]+\.|\.[0-9]+)([eE][+-]?[0-9]+)?(lf|LF)",
         parse_f64
     )]
     #[regex(r"[0-9]+[eE][+-]?[0-9]+(lf|LF)", parse_f64)]
+    #[display("{0}")]
     DoubleConstant(f64),
     #[token("<<")]
     LeftOp,
@@ -567,18 +572,29 @@ pub enum Token<'i> {
     #[regex("#([ \t]|\\\\\r?\n)*extension")]
     PpExtension,
 
+    #[display("<preprocessor string>")]
     PpRest(std::borrow::Cow<'i, str>),
 
+    #[display("core")]
     PpCore,
+    #[display("compatibility")]
     PpCompatibility,
+    #[display("es")]
     PpEs,
 
+    #[display("require")]
     PpExtRequire,
+    #[display("enable")]
     PpExtEnable,
+    #[display("warn")]
     PpExtWarn,
+    #[display("disable")]
     PpExtDisable,
 
+    // TODO: Why does this break without the spaces?
+    #[display("< {0} >")]
     PpPathAbsolute(&'i str),
+    #[display("\"{0}\"")]
     PpPathRelative(&'i str),
 
     #[error]

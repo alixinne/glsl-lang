@@ -1,6 +1,6 @@
 use crate::{
     ast,
-    parse::{self, ParseContext, ParseErrorStatic},
+    parse::{self, ParseContext, ParseError},
 };
 
 /// A parsable is something we can parse either directly, or embedded in some other syntax
@@ -11,7 +11,7 @@ use crate::{
 /// thus, if you are matching on span positions, you will get a different result than if using the
 /// parser directly.
 pub trait Parsable: Sized {
-    fn parse(source: &str) -> Result<Self, ParseErrorStatic> {
+    fn parse(source: &str) -> Result<Self, ParseError> {
         <Self as Parsable>::parse_with_options(source, &Default::default())
             .map(|(parsed, _names)| parsed)
     }
@@ -19,16 +19,15 @@ pub trait Parsable: Sized {
     fn parse_with_options(
         source: &str,
         opts: &ParseContext,
-    ) -> Result<(Self, ParseContext), ParseErrorStatic>;
+    ) -> Result<(Self, ParseContext), ParseError>;
 }
 
 impl<T: parse::Parse> Parsable for T {
     fn parse_with_options(
         source: &str,
         opts: &ParseContext,
-    ) -> Result<(Self, ParseContext), ParseErrorStatic> {
+    ) -> Result<(Self, ParseContext), ParseError> {
         <Self as parse::Parse>::parse_with_options(source, opts)
-            .map_err(|e| e.map_token(Into::into))
     }
 }
 
@@ -36,7 +35,7 @@ impl Parsable for ast::FunctionDefinition {
     fn parse_with_options(
         source: &str,
         opts: &ParseContext,
-    ) -> Result<(Self, ParseContext), ParseErrorStatic> {
+    ) -> Result<(Self, ParseContext), ParseError> {
         match ast::TranslationUnit::parse_with_options(source, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
@@ -60,7 +59,7 @@ impl Parsable for ast::UnaryOp {
     fn parse_with_options(
         source: &str,
         opts: &ParseContext,
-    ) -> Result<(Self, ParseContext), ParseErrorStatic> {
+    ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("void main() {{ {}x; }}", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
@@ -103,7 +102,7 @@ impl Parsable for ast::AssignmentOp {
     fn parse_with_options(
         source: &str,
         opts: &ParseContext,
-    ) -> Result<(Self, ParseContext), ParseErrorStatic> {
+    ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("void main() {{ x {} 2; }}", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
@@ -148,7 +147,7 @@ macro_rules! impl_parsable_statement {
             fn parse_with_options(
                 source: &str,
                 opts: &ParseContext,
-            ) -> Result<(Self, ParseContext), ParseErrorStatic> {
+            ) -> Result<(Self, ParseContext), ParseError> {
                 let src = format!("void main() {{ {} }}", source);
                 match ast::TranslationUnit::parse_with_options(&src, opts) {
                     Ok((ast::TranslationUnit(extdecls), oo)) => {
@@ -203,7 +202,7 @@ impl Parsable for ast::ArraySpecifierDimension {
     fn parse_with_options(
         source: &str,
         opts: &ParseContext,
-    ) -> Result<(Self, ParseContext), ParseErrorStatic> {
+    ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("void main() {{ vec2{}(); }}", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
@@ -252,7 +251,7 @@ impl Parsable for ast::ArraySpecifier {
     fn parse_with_options(
         source: &str,
         opts: &ParseContext,
-    ) -> Result<(Self, ParseContext), ParseErrorStatic> {
+    ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("void main() {{ vec2{}(); }}", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
@@ -301,7 +300,7 @@ impl Parsable for ast::FunIdentifier {
     fn parse_with_options(
         source: &str,
         opts: &ParseContext,
-    ) -> Result<(Self, ParseContext), ParseErrorStatic> {
+    ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("void main() {{ {}(); }}", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
@@ -344,7 +343,7 @@ impl Parsable for ast::InterpolationQualifier {
     fn parse_with_options(
         source: &str,
         opts: &ParseContext,
-    ) -> Result<(Self, ParseContext), ParseErrorStatic> {
+    ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("{} float x;", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
@@ -390,7 +389,7 @@ impl Parsable for ast::ArrayedIdentifier {
     fn parse_with_options(
         source: &str,
         opts: &ParseContext,
-    ) -> Result<(Self, ParseContext), ParseErrorStatic> {
+    ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("uniform Block {{ float x; }} {};", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
@@ -423,7 +422,7 @@ impl Parsable for ast::PrecisionQualifier {
     fn parse_with_options(
         source: &str,
         opts: &ParseContext,
-    ) -> Result<(Self, ParseContext), ParseErrorStatic> {
+    ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("{} float x;", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
@@ -469,7 +468,7 @@ impl Parsable for ast::StorageQualifier {
     fn parse_with_options(
         source: &str,
         opts: &ParseContext,
-    ) -> Result<(Self, ParseContext), ParseErrorStatic> {
+    ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("{} float x;", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
@@ -515,7 +514,7 @@ impl Parsable for ast::LayoutQualifier {
     fn parse_with_options(
         source: &str,
         opts: &ParseContext,
-    ) -> Result<(Self, ParseContext), ParseErrorStatic> {
+    ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("{} float x;", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
@@ -561,7 +560,7 @@ impl Parsable for ast::TypeQualifier {
     fn parse_with_options(
         source: &str,
         opts: &ParseContext,
-    ) -> Result<(Self, ParseContext), ParseErrorStatic> {
+    ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("{} float x;", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
@@ -601,7 +600,7 @@ impl Parsable for ast::TypeSpecifier {
     fn parse_with_options(
         source: &str,
         opts: &ParseContext,
-    ) -> Result<(Self, ParseContext), ParseErrorStatic> {
+    ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("{} x;", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
@@ -638,7 +637,7 @@ impl Parsable for ast::TypeSpecifierNonArray {
     fn parse_with_options(
         source: &str,
         opts: &ParseContext,
-    ) -> Result<(Self, ParseContext), ParseErrorStatic> {
+    ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("{} x;", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
@@ -679,7 +678,7 @@ impl Parsable for ast::FullySpecifiedType {
     fn parse_with_options(
         source: &str,
         opts: &ParseContext,
-    ) -> Result<(Self, ParseContext), ParseErrorStatic> {
+    ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("{} x;", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
@@ -712,7 +711,7 @@ impl Parsable for ast::Declaration {
     fn parse_with_options(
         source: &str,
         opts: &ParseContext,
-    ) -> Result<(Self, ParseContext), ParseErrorStatic> {
+    ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("{};", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
@@ -737,7 +736,7 @@ impl Parsable for ast::StructFieldSpecifier {
     fn parse_with_options(
         source: &str,
         opts: &ParseContext,
-    ) -> Result<(Self, ParseContext), ParseErrorStatic> {
+    ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("struct A {{ {} }};", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
@@ -788,7 +787,7 @@ impl Parsable for ast::StructSpecifier {
     fn parse_with_options(
         source: &str,
         opts: &ParseContext,
-    ) -> Result<(Self, ParseContext), ParseErrorStatic> {
+    ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("{};", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
@@ -835,7 +834,7 @@ impl Parsable for ast::Expr {
     fn parse_with_options(
         source: &str,
         opts: &ParseContext,
-    ) -> Result<(Self, ParseContext), ParseErrorStatic> {
+    ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("void main() {{ {}; }}", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
@@ -878,7 +877,7 @@ impl Parsable for ast::Preprocessor {
     fn parse_with_options(
         source: &str,
         opts: &ParseContext,
-    ) -> Result<(Self, ParseContext), ParseErrorStatic> {
+    ) -> Result<(Self, ParseContext), ParseError> {
         match ast::TranslationUnit::parse_with_options(source, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {
                 if let ast::Node {
@@ -903,7 +902,7 @@ impl Parsable for ast::Statement {
     fn parse_with_options(
         source: &str,
         opts: &ParseContext,
-    ) -> Result<(Self, ParseContext), ParseErrorStatic> {
+    ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("void main() {{ {} }}", source);
         match ast::TranslationUnit::parse_with_options(&src, opts) {
             Ok((ast::TranslationUnit(extdecls), oo)) => {

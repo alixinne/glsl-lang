@@ -1,6 +1,6 @@
 use crate::{ast, lexer::Lexer, parser};
 
-pub use crate::lexer::{LexerPosition, LexicalError, Token, TokenKind};
+pub use crate::lexer::{LexerPosition, LexicalError, Token};
 
 mod parsable;
 pub use parsable::Parsable;
@@ -8,8 +8,7 @@ pub use parsable::Parsable;
 mod context;
 pub use context::*;
 
-pub type ParseError<'i> = lalrpop_util::ParseError<LexerPosition, Token<'i>, LexicalError>;
-pub type ParseErrorStatic = lalrpop_util::ParseError<LexerPosition, TokenKind, LexicalError>;
+pub type ParseError = lang_util::error::ParseError<LexicalError>;
 
 pub trait LangParser: Sized {
     fn new() -> Self;
@@ -23,16 +22,16 @@ pub trait Parse: Sized {
             .map(|(parsed, _names)| parsed)
     }
 
-    fn parse_with_options<'i>(
-        source: &'i str,
+    fn parse_with_options(
+        source: &str,
         opts: &ParseContext,
-    ) -> Result<(Self, ParseContext), ParseError<'i>>;
+    ) -> Result<(Self, ParseContext), ParseError>;
 
     fn parse_with_parser<'i>(
         source: &'i str,
         opts: &ParseContext,
         parser: &Self::Parser,
-    ) -> Result<(Self, ParseContext), ParseError<'i>>;
+    ) -> Result<(Self, ParseContext), ParseError>;
 }
 
 macro_rules! impl_parse {
@@ -49,7 +48,7 @@ macro_rules! impl_parse {
             fn parse_with_options<'i>(
                 source: &'i str,
                 opts: &ParseContext,
-            ) -> Result<(Self, ParseContext), ParseError<'i>> {
+            ) -> Result<(Self, ParseContext), ParseError> {
                 let parser = <$p>::new();
                 Self::parse_with_parser(source, opts, &parser)
             }
@@ -58,7 +57,7 @@ macro_rules! impl_parse {
                 source: &'i str,
                 opts: &ParseContext,
                 parser: &$p,
-            ) -> Result<(Self, ParseContext), ParseError<'i>> {
+            ) -> Result<(Self, ParseContext), ParseError> {
                 // Clone the input structure
                 let cloned_opts = opts.clone_inner();
 
@@ -67,6 +66,7 @@ macro_rules! impl_parse {
                 parser
                     .parse(source, lexer)
                     .map(|parsed| (parsed, cloned_opts))
+                    .map_err(|err| ParseError::new(err, source))
             }
         }
     };

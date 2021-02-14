@@ -5,5 +5,7 @@ authors = ["Vincent Tavernier <vince.tavernier@gmail.com>"]
 edition = "2018"
 
 [dependencies]
+lalrpop-util = { version = "0.19", default-features = false }
 lang-util-derive = "=0.1.0"
+line-span = "0.1"
 parse-display = { version = "0.4", default-features = false, features = ["std"] }

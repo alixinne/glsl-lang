@@ -8,8 +8,7 @@ edition = "2018"
 lalrpop-util = { version = "0.19", default-features = false, features = ["std"] }
 lazy_static = "1.4"
 logos = "0.12"
-strum = "0.20"
-strum_macros = "0.20"
+parse-display = { version = "0.4", default-features = false, features = ["std"] }
 thiserror = "1.0"
 
 lang-util = "=0.1.0"

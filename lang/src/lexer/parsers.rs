@@ -18,13 +18,19 @@ pub fn parse_int<'i>(
         1u32
     };
 
-    Ok(sgn.wrapping_mul(u32::from_str_radix(
-        &slice[match radix {
-            16 => 2,
-            _ => 0,
-        }..],
-        radix,
-    )?) as i32)
+    Ok(sgn.wrapping_mul(
+        u32::from_str_radix(
+            &slice[match radix {
+                16 => 2,
+                _ => 0,
+            }..],
+            radix,
+        )
+        .map_err(|source| LexicalError::InvalidIntLiteral {
+            location: LexerPosition::new(lex.extras.opts.source_id, lex.span().start),
+            source,
+        })?,
+    ) as i32)
 }
 
 pub fn parse_uint<'i>(
@@ -43,20 +49,31 @@ pub fn parse_uint<'i>(
         1u32
     };
 
-    Ok(sgn.wrapping_mul(u32::from_str_radix(
-        &slice[match radix {
-            16 => 2,
-            _ => 0,
-        }..slice.len() - 1],
-        radix,
-    )?))
+    Ok(sgn.wrapping_mul(
+        u32::from_str_radix(
+            &slice[match radix {
+                16 => 2,
+                _ => 0,
+            }..slice.len() - 1],
+            radix,
+        )
+        .map_err(|source| LexicalError::InvalidIntLiteral {
+            location: LexerPosition::new(lex.extras.opts.source_id, lex.span().start),
+            source,
+        })?,
+    ))
 }
 
 pub fn parse_f32<'i>(lex: &mut logos::Lexer<'i, Token<'i>>) -> Result<f32, LexicalError> {
     let s = lex.slice();
-    Ok(f32::from_str(
-        s.strip_suffix(|c| c == 'f' || c == 'F').unwrap_or(s),
-    )?)
+    Ok(
+        f32::from_str(s.strip_suffix(|c| c == 'f' || c == 'F').unwrap_or(s)).map_err(|source| {
+            LexicalError::InvalidFloatLiteral {
+                location: LexerPosition::new(lex.extras.opts.source_id, lex.span().start),
+                source,
+            }
+        })?,
+    )
 }
 
 pub fn parse_f64<'i>(lex: &mut logos::Lexer<'i, Token<'i>>) -> Result<f64, LexicalError> {
@@ -65,13 +82,22 @@ pub fn parse_f64<'i>(lex: &mut logos::Lexer<'i, Token<'i>>) -> Result<f64, Lexic
         s.strip_suffix(|c| c == 'f' || c == 'F')
             .and_then(|s| s.strip_suffix(|c| c == 'l' || c == 'L'))
             .unwrap_or(s),
-    )?)
+    )
+    .map_err(|source| LexicalError::InvalidFloatLiteral {
+        location: LexerPosition::new(lex.extras.opts.source_id, lex.span().start),
+        source,
+    })?)
 }
 
 pub fn parse_pp_int<'i>(
     lex: &mut logos::Lexer<'i, PreprocessorToken<'i>>,
 ) -> Result<i32, LexicalError> {
-    Ok(i32::from_str(lex.slice())?)
+    Ok(
+        i32::from_str(lex.slice()).map_err(|source| LexicalError::InvalidIntLiteral {
+            location: LexerPosition::new(lex.extras.opts.source_id, lex.span().start),
+            source,
+        })?,
+    )
 }
 
 pub fn parse_pp_path<'i>(lex: &mut logos::Lexer<'i, PreprocessorToken<'i>>) -> &'i str {
@@ -96,7 +122,9 @@ pub fn parse_rs_ident<'i>(
     if lex.extras.opts.allow_rs_ident {
         Ok((lex.slice(), lex.extras.clone()))
     } else {
-        Err(LexicalError::ForbiddenRsQuote)
+        Err(LexicalError::ForbiddenRsQuote {
+            location: LexerPosition::new(lex.extras.opts.source_id, lex.span().start),
+        })
     }
 }
 

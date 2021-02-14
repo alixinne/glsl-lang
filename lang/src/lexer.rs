@@ -320,10 +320,26 @@ impl<'i> Iterator for Lexer<'i> {
 
 #[derive(Debug, PartialEq, Error)]
 pub enum LexicalError {
-    #[error("invalid int literal: {0}")]
-    InvalidIntLiteral(#[from] std::num::ParseIntError),
-    #[error("invalid float literal: {0}")]
-    InvalidFloatLiteral(#[from] std::num::ParseFloatError),
+    #[error("invalid int literal: {source}")]
+    InvalidIntLiteral {
+        source: std::num::ParseIntError,
+        location: LexerPosition,
+    },
+    #[error("invalid float literal: {source}")]
+    InvalidFloatLiteral {
+        source: std::num::ParseFloatError,
+        location: LexerPosition,
+    },
     #[error("encountered forbidden #(ident) quote syntax")]
-    ForbiddenRsQuote,
+    ForbiddenRsQuote { location: LexerPosition },
+}
+
+impl lang_util::error::LexicalError for LexicalError {
+    fn location(&self) -> LexerPosition {
+        match self {
+            LexicalError::InvalidIntLiteral { location, .. } => *location,
+            LexicalError::InvalidFloatLiteral { location, .. } => *location,
+            LexicalError::ForbiddenRsQuote { location } => *location,
+        }
+    }
 }

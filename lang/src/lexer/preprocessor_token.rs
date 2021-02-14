@@ -1,11 +1,9 @@
 use logos::Logos;
-use strum_macros::{EnumDiscriminants, IntoStaticStr};
 
 use super::{parse_pp_cmt, parse_pp_ident, parse_pp_int, parse_pp_path, LexerContext, Token};
 
-#[derive(Debug, Clone, PartialEq, Logos, EnumDiscriminants)]
+#[derive(Debug, Clone, PartialEq, Logos)]
 #[logos(extras = LexerContext)]
-#[strum_discriminants(name(PreprocessorTokenKind), derive(IntoStaticStr))]
 pub enum PreprocessorToken<'i> {
     #[regex("[a-zA-Z_][a-zA-Z_0-9]*", parse_pp_ident)]
     Identifier((&'i str, LexerContext)),

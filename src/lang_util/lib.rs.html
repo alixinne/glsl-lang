@@ -7,12 +7,18 @@
 <span id="4">4</span>
 <span id="5">5</span>
 <span id="6">6</span>
+<span id="7">7</span>
+<span id="8">8</span>
+<span id="9">9</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">lang_util_derive</span>::<span class="ident">NodeContent</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">lang_util_derive</span>::{<span class="ident">NodeContent</span>, <span class="ident">Token</span>};
 
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">position</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">error</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">error</span>::<span class="ident">Token</span>;
 
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">node</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">node</span>::<span class="ident">NodeContent</span>;
+
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">position</span>;
 </pre></div>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "lang_util";</script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>

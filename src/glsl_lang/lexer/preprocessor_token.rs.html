@@ -80,17 +80,13 @@
 <span id="77">77</span>
 <span id="78">78</span>
 <span id="79">79</span>
-<span id="80">80</span>
-<span id="81">81</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">logos</span>::<span class="ident">Logos</span>;
-<span class="kw">use</span> <span class="ident">strum_macros</span>::{<span class="ident">EnumDiscriminants</span>, <span class="ident">IntoStaticStr</span>};
 
 <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">parse_pp_cmt</span>, <span class="ident">parse_pp_ident</span>, <span class="ident">parse_pp_int</span>, <span class="ident">parse_pp_path</span>, <span class="ident">LexerContext</span>, <span class="ident">Token</span>};
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Logos</span>, <span class="ident">EnumDiscriminants</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Logos</span>)]</span>
 <span class="attribute">#[<span class="ident">logos</span>(<span class="ident">extras</span> <span class="op">=</span> <span class="ident">LexerContext</span>)]</span>
-<span class="attribute">#[<span class="ident">strum_discriminants</span>(<span class="ident">name</span>(<span class="ident">PreprocessorTokenKind</span>), <span class="ident">derive</span>(<span class="ident">IntoStaticStr</span>))]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">PreprocessorToken</span><span class="op">&lt;</span><span class="lifetime">&#39;i</span><span class="op">&gt;</span> {
     <span class="attribute">#[<span class="ident">regex</span>(<span class="string">&quot;[a-zA-Z_][a-zA-Z_0-9]*&quot;</span>, <span class="ident">parse_pp_ident</span>)]</span>
     <span class="ident">Identifier</span>((<span class="kw-2">&amp;</span><span class="lifetime">&#39;i</span> <span class="ident">str</span>, <span class="ident">LexerContext</span>)),

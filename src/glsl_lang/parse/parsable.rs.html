@@ -938,11 +938,10 @@
 <span id="935">935</span>
 <span id="936">936</span>
 <span id="937">937</span>
-<span id="938">938</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">ast</span>,
-    <span class="ident">parse</span>::{<span class="self">self</span>, <span class="ident">ParseContext</span>, <span class="ident">ParseErrorStatic</span>},
+    <span class="ident">parse</span>::{<span class="self">self</span>, <span class="ident">ParseContext</span>, <span class="ident">ParseError</span>},
 };
 
 <span class="doccomment">/// A parsable is something we can parse either directly, or embedded in some other syntax</span>
@@ -953,7 +952,7 @@
 <span class="doccomment">/// thus, if you are matching on span positions, you will get a different result than if using the</span>
 <span class="doccomment">/// parser directly.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Parsable</span>: <span class="ident">Sized</span> {
-    <span class="kw">fn</span> <span class="ident">parse</span>(<span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">ParseErrorStatic</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">parse</span>(<span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">ParseError</span><span class="op">&gt;</span> {
         <span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">Parsable</span><span class="op">&gt;</span>::<span class="ident">parse_with_options</span>(<span class="ident">source</span>, <span class="kw-2">&amp;</span><span class="ident">Default</span>::<span class="ident">default</span>())
             .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">parsed</span>, <span class="ident">_names</span>)<span class="op">|</span> <span class="ident">parsed</span>)
     }
@@ -961,16 +960,15 @@
     <span class="kw">fn</span> <span class="ident">parse_with_options</span>(
         <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">opts</span>: <span class="kw-2">&amp;</span><span class="ident">ParseContext</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseErrorStatic</span><span class="op">&gt;</span>;
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseError</span><span class="op">&gt;</span>;
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">parse</span>::<span class="ident">Parse</span><span class="op">&gt;</span> <span class="ident">Parsable</span> <span class="kw">for</span> <span class="ident">T</span> {
     <span class="kw">fn</span> <span class="ident">parse_with_options</span>(
         <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">opts</span>: <span class="kw-2">&amp;</span><span class="ident">ParseContext</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseErrorStatic</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseError</span><span class="op">&gt;</span> {
         <span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">parse</span>::<span class="ident">Parse</span><span class="op">&gt;</span>::<span class="ident">parse_with_options</span>(<span class="ident">source</span>, <span class="ident">opts</span>)
-            .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">e</span>.<span class="ident">map_token</span>(<span class="ident">Into</span>::<span class="ident">into</span>))
     }
 }
 
@@ -978,7 +976,7 @@
     <span class="kw">fn</span> <span class="ident">parse_with_options</span>(
         <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">opts</span>: <span class="kw-2">&amp;</span><span class="ident">ParseContext</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseErrorStatic</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseError</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="ident">ast</span>::<span class="ident">TranslationUnit</span>::<span class="ident">parse_with_options</span>(<span class="ident">source</span>, <span class="ident">opts</span>) {
             <span class="prelude-val">Ok</span>((<span class="ident">ast</span>::<span class="ident">TranslationUnit</span>(<span class="ident">extdecls</span>), <span class="ident">oo</span>)) <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">if</span> <span class="kw">let</span> <span class="ident">ast</span>::<span class="ident">Node</span> {
@@ -1002,7 +1000,7 @@
     <span class="kw">fn</span> <span class="ident">parse_with_options</span>(
         <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">opts</span>: <span class="kw-2">&amp;</span><span class="ident">ParseContext</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseErrorStatic</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">src</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;void main() {{ {}x; }}&quot;</span>, <span class="ident">source</span>);
         <span class="kw">match</span> <span class="ident">ast</span>::<span class="ident">TranslationUnit</span>::<span class="ident">parse_with_options</span>(<span class="kw-2">&amp;</span><span class="ident">src</span>, <span class="ident">opts</span>) {
             <span class="prelude-val">Ok</span>((<span class="ident">ast</span>::<span class="ident">TranslationUnit</span>(<span class="ident">extdecls</span>), <span class="ident">oo</span>)) <span class="op">=</span><span class="op">&gt;</span> {
@@ -1045,7 +1043,7 @@
     <span class="kw">fn</span> <span class="ident">parse_with_options</span>(
         <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">opts</span>: <span class="kw-2">&amp;</span><span class="ident">ParseContext</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseErrorStatic</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">src</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;void main() {{ x {} 2; }}&quot;</span>, <span class="ident">source</span>);
         <span class="kw">match</span> <span class="ident">ast</span>::<span class="ident">TranslationUnit</span>::<span class="ident">parse_with_options</span>(<span class="kw-2">&amp;</span><span class="ident">src</span>, <span class="ident">opts</span>) {
             <span class="prelude-val">Ok</span>((<span class="ident">ast</span>::<span class="ident">TranslationUnit</span>(<span class="ident">extdecls</span>), <span class="ident">oo</span>)) <span class="op">=</span><span class="op">&gt;</span> {
@@ -1090,7 +1088,7 @@
             <span class="kw">fn</span> <span class="ident">parse_with_options</span>(
                 <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
                 <span class="ident">opts</span>: <span class="kw-2">&amp;</span><span class="ident">ParseContext</span>,
-            ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseErrorStatic</span><span class="op">&gt;</span> {
+            ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseError</span><span class="op">&gt;</span> {
                 <span class="kw">let</span> <span class="ident">src</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;void main() {{ {} }}&quot;</span>, <span class="ident">source</span>);
                 <span class="kw">match</span> <span class="ident">ast</span>::<span class="ident">TranslationUnit</span>::<span class="ident">parse_with_options</span>(<span class="kw-2">&amp;</span><span class="ident">src</span>, <span class="ident">opts</span>) {
                     <span class="prelude-val">Ok</span>((<span class="ident">ast</span>::<span class="ident">TranslationUnit</span>(<span class="ident">extdecls</span>), <span class="ident">oo</span>)) <span class="op">=</span><span class="op">&gt;</span> {
@@ -1145,7 +1143,7 @@
     <span class="kw">fn</span> <span class="ident">parse_with_options</span>(
         <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">opts</span>: <span class="kw-2">&amp;</span><span class="ident">ParseContext</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseErrorStatic</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">src</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;void main() {{ vec2{}(); }}&quot;</span>, <span class="ident">source</span>);
         <span class="kw">match</span> <span class="ident">ast</span>::<span class="ident">TranslationUnit</span>::<span class="ident">parse_with_options</span>(<span class="kw-2">&amp;</span><span class="ident">src</span>, <span class="ident">opts</span>) {
             <span class="prelude-val">Ok</span>((<span class="ident">ast</span>::<span class="ident">TranslationUnit</span>(<span class="ident">extdecls</span>), <span class="ident">oo</span>)) <span class="op">=</span><span class="op">&gt;</span> {
@@ -1194,7 +1192,7 @@
     <span class="kw">fn</span> <span class="ident">parse_with_options</span>(
         <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">opts</span>: <span class="kw-2">&amp;</span><span class="ident">ParseContext</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseErrorStatic</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">src</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;void main() {{ vec2{}(); }}&quot;</span>, <span class="ident">source</span>);
         <span class="kw">match</span> <span class="ident">ast</span>::<span class="ident">TranslationUnit</span>::<span class="ident">parse_with_options</span>(<span class="kw-2">&amp;</span><span class="ident">src</span>, <span class="ident">opts</span>) {
             <span class="prelude-val">Ok</span>((<span class="ident">ast</span>::<span class="ident">TranslationUnit</span>(<span class="ident">extdecls</span>), <span class="ident">oo</span>)) <span class="op">=</span><span class="op">&gt;</span> {
@@ -1243,7 +1241,7 @@
     <span class="kw">fn</span> <span class="ident">parse_with_options</span>(
         <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">opts</span>: <span class="kw-2">&amp;</span><span class="ident">ParseContext</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseErrorStatic</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">src</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;void main() {{ {}(); }}&quot;</span>, <span class="ident">source</span>);
         <span class="kw">match</span> <span class="ident">ast</span>::<span class="ident">TranslationUnit</span>::<span class="ident">parse_with_options</span>(<span class="kw-2">&amp;</span><span class="ident">src</span>, <span class="ident">opts</span>) {
             <span class="prelude-val">Ok</span>((<span class="ident">ast</span>::<span class="ident">TranslationUnit</span>(<span class="ident">extdecls</span>), <span class="ident">oo</span>)) <span class="op">=</span><span class="op">&gt;</span> {
@@ -1286,7 +1284,7 @@
     <span class="kw">fn</span> <span class="ident">parse_with_options</span>(
         <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">opts</span>: <span class="kw-2">&amp;</span><span class="ident">ParseContext</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseErrorStatic</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">src</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{} float x;&quot;</span>, <span class="ident">source</span>);
         <span class="kw">match</span> <span class="ident">ast</span>::<span class="ident">TranslationUnit</span>::<span class="ident">parse_with_options</span>(<span class="kw-2">&amp;</span><span class="ident">src</span>, <span class="ident">opts</span>) {
             <span class="prelude-val">Ok</span>((<span class="ident">ast</span>::<span class="ident">TranslationUnit</span>(<span class="ident">extdecls</span>), <span class="ident">oo</span>)) <span class="op">=</span><span class="op">&gt;</span> {
@@ -1332,7 +1330,7 @@
     <span class="kw">fn</span> <span class="ident">parse_with_options</span>(
         <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">opts</span>: <span class="kw-2">&amp;</span><span class="ident">ParseContext</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseErrorStatic</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">src</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;uniform Block {{ float x; }} {};&quot;</span>, <span class="ident">source</span>);
         <span class="kw">match</span> <span class="ident">ast</span>::<span class="ident">TranslationUnit</span>::<span class="ident">parse_with_options</span>(<span class="kw-2">&amp;</span><span class="ident">src</span>, <span class="ident">opts</span>) {
             <span class="prelude-val">Ok</span>((<span class="ident">ast</span>::<span class="ident">TranslationUnit</span>(<span class="ident">extdecls</span>), <span class="ident">oo</span>)) <span class="op">=</span><span class="op">&gt;</span> {
@@ -1365,7 +1363,7 @@
     <span class="kw">fn</span> <span class="ident">parse_with_options</span>(
         <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">opts</span>: <span class="kw-2">&amp;</span><span class="ident">ParseContext</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseErrorStatic</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">src</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{} float x;&quot;</span>, <span class="ident">source</span>);
         <span class="kw">match</span> <span class="ident">ast</span>::<span class="ident">TranslationUnit</span>::<span class="ident">parse_with_options</span>(<span class="kw-2">&amp;</span><span class="ident">src</span>, <span class="ident">opts</span>) {
             <span class="prelude-val">Ok</span>((<span class="ident">ast</span>::<span class="ident">TranslationUnit</span>(<span class="ident">extdecls</span>), <span class="ident">oo</span>)) <span class="op">=</span><span class="op">&gt;</span> {
@@ -1411,7 +1409,7 @@
     <span class="kw">fn</span> <span class="ident">parse_with_options</span>(
         <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">opts</span>: <span class="kw-2">&amp;</span><span class="ident">ParseContext</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseErrorStatic</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">src</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{} float x;&quot;</span>, <span class="ident">source</span>);
         <span class="kw">match</span> <span class="ident">ast</span>::<span class="ident">TranslationUnit</span>::<span class="ident">parse_with_options</span>(<span class="kw-2">&amp;</span><span class="ident">src</span>, <span class="ident">opts</span>) {
             <span class="prelude-val">Ok</span>((<span class="ident">ast</span>::<span class="ident">TranslationUnit</span>(<span class="ident">extdecls</span>), <span class="ident">oo</span>)) <span class="op">=</span><span class="op">&gt;</span> {
@@ -1457,7 +1455,7 @@
     <span class="kw">fn</span> <span class="ident">parse_with_options</span>(
         <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">opts</span>: <span class="kw-2">&amp;</span><span class="ident">ParseContext</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseErrorStatic</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">src</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{} float x;&quot;</span>, <span class="ident">source</span>);
         <span class="kw">match</span> <span class="ident">ast</span>::<span class="ident">TranslationUnit</span>::<span class="ident">parse_with_options</span>(<span class="kw-2">&amp;</span><span class="ident">src</span>, <span class="ident">opts</span>) {
             <span class="prelude-val">Ok</span>((<span class="ident">ast</span>::<span class="ident">TranslationUnit</span>(<span class="ident">extdecls</span>), <span class="ident">oo</span>)) <span class="op">=</span><span class="op">&gt;</span> {
@@ -1503,7 +1501,7 @@
     <span class="kw">fn</span> <span class="ident">parse_with_options</span>(
         <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">opts</span>: <span class="kw-2">&amp;</span><span class="ident">ParseContext</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseErrorStatic</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">src</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{} float x;&quot;</span>, <span class="ident">source</span>);
         <span class="kw">match</span> <span class="ident">ast</span>::<span class="ident">TranslationUnit</span>::<span class="ident">parse_with_options</span>(<span class="kw-2">&amp;</span><span class="ident">src</span>, <span class="ident">opts</span>) {
             <span class="prelude-val">Ok</span>((<span class="ident">ast</span>::<span class="ident">TranslationUnit</span>(<span class="ident">extdecls</span>), <span class="ident">oo</span>)) <span class="op">=</span><span class="op">&gt;</span> {
@@ -1543,7 +1541,7 @@
     <span class="kw">fn</span> <span class="ident">parse_with_options</span>(
         <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">opts</span>: <span class="kw-2">&amp;</span><span class="ident">ParseContext</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseErrorStatic</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">src</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{} x;&quot;</span>, <span class="ident">source</span>);
         <span class="kw">match</span> <span class="ident">ast</span>::<span class="ident">TranslationUnit</span>::<span class="ident">parse_with_options</span>(<span class="kw-2">&amp;</span><span class="ident">src</span>, <span class="ident">opts</span>) {
             <span class="prelude-val">Ok</span>((<span class="ident">ast</span>::<span class="ident">TranslationUnit</span>(<span class="ident">extdecls</span>), <span class="ident">oo</span>)) <span class="op">=</span><span class="op">&gt;</span> {
@@ -1580,7 +1578,7 @@
     <span class="kw">fn</span> <span class="ident">parse_with_options</span>(
         <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">opts</span>: <span class="kw-2">&amp;</span><span class="ident">ParseContext</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseErrorStatic</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">src</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{} x;&quot;</span>, <span class="ident">source</span>);
         <span class="kw">match</span> <span class="ident">ast</span>::<span class="ident">TranslationUnit</span>::<span class="ident">parse_with_options</span>(<span class="kw-2">&amp;</span><span class="ident">src</span>, <span class="ident">opts</span>) {
             <span class="prelude-val">Ok</span>((<span class="ident">ast</span>::<span class="ident">TranslationUnit</span>(<span class="ident">extdecls</span>), <span class="ident">oo</span>)) <span class="op">=</span><span class="op">&gt;</span> {
@@ -1621,7 +1619,7 @@
     <span class="kw">fn</span> <span class="ident">parse_with_options</span>(
         <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">opts</span>: <span class="kw-2">&amp;</span><span class="ident">ParseContext</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseErrorStatic</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">src</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{} x;&quot;</span>, <span class="ident">source</span>);
         <span class="kw">match</span> <span class="ident">ast</span>::<span class="ident">TranslationUnit</span>::<span class="ident">parse_with_options</span>(<span class="kw-2">&amp;</span><span class="ident">src</span>, <span class="ident">opts</span>) {
             <span class="prelude-val">Ok</span>((<span class="ident">ast</span>::<span class="ident">TranslationUnit</span>(<span class="ident">extdecls</span>), <span class="ident">oo</span>)) <span class="op">=</span><span class="op">&gt;</span> {
@@ -1654,7 +1652,7 @@
     <span class="kw">fn</span> <span class="ident">parse_with_options</span>(
         <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">opts</span>: <span class="kw-2">&amp;</span><span class="ident">ParseContext</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseErrorStatic</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">src</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{};&quot;</span>, <span class="ident">source</span>);
         <span class="kw">match</span> <span class="ident">ast</span>::<span class="ident">TranslationUnit</span>::<span class="ident">parse_with_options</span>(<span class="kw-2">&amp;</span><span class="ident">src</span>, <span class="ident">opts</span>) {
             <span class="prelude-val">Ok</span>((<span class="ident">ast</span>::<span class="ident">TranslationUnit</span>(<span class="ident">extdecls</span>), <span class="ident">oo</span>)) <span class="op">=</span><span class="op">&gt;</span> {
@@ -1679,7 +1677,7 @@
     <span class="kw">fn</span> <span class="ident">parse_with_options</span>(
         <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">opts</span>: <span class="kw-2">&amp;</span><span class="ident">ParseContext</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseErrorStatic</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">src</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;struct A {{ {} }};&quot;</span>, <span class="ident">source</span>);
         <span class="kw">match</span> <span class="ident">ast</span>::<span class="ident">TranslationUnit</span>::<span class="ident">parse_with_options</span>(<span class="kw-2">&amp;</span><span class="ident">src</span>, <span class="ident">opts</span>) {
             <span class="prelude-val">Ok</span>((<span class="ident">ast</span>::<span class="ident">TranslationUnit</span>(<span class="ident">extdecls</span>), <span class="ident">oo</span>)) <span class="op">=</span><span class="op">&gt;</span> {
@@ -1730,7 +1728,7 @@
     <span class="kw">fn</span> <span class="ident">parse_with_options</span>(
         <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">opts</span>: <span class="kw-2">&amp;</span><span class="ident">ParseContext</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseErrorStatic</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">src</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{};&quot;</span>, <span class="ident">source</span>);
         <span class="kw">match</span> <span class="ident">ast</span>::<span class="ident">TranslationUnit</span>::<span class="ident">parse_with_options</span>(<span class="kw-2">&amp;</span><span class="ident">src</span>, <span class="ident">opts</span>) {
             <span class="prelude-val">Ok</span>((<span class="ident">ast</span>::<span class="ident">TranslationUnit</span>(<span class="ident">extdecls</span>), <span class="ident">oo</span>)) <span class="op">=</span><span class="op">&gt;</span> {
@@ -1777,7 +1775,7 @@
     <span class="kw">fn</span> <span class="ident">parse_with_options</span>(
         <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">opts</span>: <span class="kw-2">&amp;</span><span class="ident">ParseContext</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseErrorStatic</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">src</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;void main() {{ {}; }}&quot;</span>, <span class="ident">source</span>);
         <span class="kw">match</span> <span class="ident">ast</span>::<span class="ident">TranslationUnit</span>::<span class="ident">parse_with_options</span>(<span class="kw-2">&amp;</span><span class="ident">src</span>, <span class="ident">opts</span>) {
             <span class="prelude-val">Ok</span>((<span class="ident">ast</span>::<span class="ident">TranslationUnit</span>(<span class="ident">extdecls</span>), <span class="ident">oo</span>)) <span class="op">=</span><span class="op">&gt;</span> {
@@ -1820,7 +1818,7 @@
     <span class="kw">fn</span> <span class="ident">parse_with_options</span>(
         <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">opts</span>: <span class="kw-2">&amp;</span><span class="ident">ParseContext</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseErrorStatic</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseError</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="ident">ast</span>::<span class="ident">TranslationUnit</span>::<span class="ident">parse_with_options</span>(<span class="ident">source</span>, <span class="ident">opts</span>) {
             <span class="prelude-val">Ok</span>((<span class="ident">ast</span>::<span class="ident">TranslationUnit</span>(<span class="ident">extdecls</span>), <span class="ident">oo</span>)) <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">if</span> <span class="kw">let</span> <span class="ident">ast</span>::<span class="ident">Node</span> {
@@ -1845,7 +1843,7 @@
     <span class="kw">fn</span> <span class="ident">parse_with_options</span>(
         <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">opts</span>: <span class="kw-2">&amp;</span><span class="ident">ParseContext</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseErrorStatic</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="self">Self</span>, <span class="ident">ParseContext</span>), <span class="ident">ParseError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">src</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;void main() {{ {} }}&quot;</span>, <span class="ident">source</span>);
         <span class="kw">match</span> <span class="ident">ast</span>::<span class="ident">TranslationUnit</span>::<span class="ident">parse_with_options</span>(<span class="kw-2">&amp;</span><span class="ident">src</span>, <span class="ident">opts</span>) {
             <span class="prelude-val">Ok</span>((<span class="ident">ast</span>::<span class="ident">TranslationUnit</span>(<span class="ident">extdecls</span>), <span class="ident">oo</span>)) <span class="op">=</span><span class="op">&gt;</span> {

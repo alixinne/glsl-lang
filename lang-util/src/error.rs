@@ -17,13 +17,15 @@ pub struct ResolvedPosition {
 }
 
 impl ResolvedPosition {
-    pub fn new(raw: LexerPosition, input: &str) -> Option<ResolvedPosition> {
-        if raw.offset >= input.len() {
-            return None;
-        }
+    pub fn new(raw: LexerPosition, input: &str) -> ResolvedPosition {
+        let offset = if raw.offset >= input.len() {
+            input.len().max(1) - 1
+        } else {
+            raw.offset
+        };
 
         // Find line start offset
-        let line_start = line_span::find_line_start(input, raw.offset);
+        let line_start = line_span::find_line_start(input, offset);
 
         // Count newlines
         let line_index = input
@@ -33,13 +35,13 @@ impl ResolvedPosition {
             .count();
 
         // Find column
-        let pos_index = raw.offset - line_start;
+        let pos_index = offset - line_start;
 
-        Some(Self {
+        Self {
             raw,
             line_index,
             pos_index,
-        })
+        }
     }
 
     pub fn source_id(&self) -> usize {
@@ -86,8 +88,7 @@ impl<E: LexicalError> ParseError<E> {
                 lalrpop_util::ParseError::User { error } => error.location(),
             },
             input,
-        )
-        .expect("invalid location");
+        );
 
         // Map the error kind
         let kind = match error {
@@ -169,7 +170,7 @@ Hello,
 World"#;
 
         let pos = LexerPosition::new(0, s.find('r').unwrap());
-        let resolved = ResolvedPosition::new(pos, s).unwrap();
+        let resolved = ResolvedPosition::new(pos, s);
 
         assert_eq!(resolved.line(), 2);
         assert_eq!(resolved.col(), 2);
@@ -183,7 +184,7 @@ Hello,
 World"#;
 
         let pos = LexerPosition::new(0, s.find('d').unwrap());
-        let resolved = ResolvedPosition::new(pos, s).unwrap();
+        let resolved = ResolvedPosition::new(pos, s);
 
         assert_eq!(resolved.line(), 2);
         assert_eq!(resolved.col(), 4);
@@ -192,6 +193,6 @@ World"#;
     #[test]
     fn resolved_position_out_of_bounds() {
         let pos = LexerPosition::new(0, 1);
-        assert_eq!(None, ResolvedPosition::new(pos, ""));
+        assert_eq!(ResolvedPosition::new(pos, "").line(), 0);
     }
 }

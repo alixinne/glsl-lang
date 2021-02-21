@@ -1352,12 +1352,16 @@ where
     show_type_qualifier(f, &b.qualifier, state)?;
     f.write_str(" ")?;
     show_identifier(f, &b.name, state)?;
+    f.write_str(" ")?;
+
     state.enter_block(f)?;
 
     for field in &b.fields {
+        state.flush_line(f)?;
         show_struct_field(f, field, state)?;
-        writeln!(f)?;
+        state.write_struct_field_separator(f)?;
     }
+
     state.exit_block(f)?;
 
     if let Some(ref ident) = b.identifier {
@@ -2035,5 +2039,25 @@ return u;
 
         let back = ast::Expr::parse(&output).unwrap();
         assert_ceq!(back, input, "intermediate source '{}'", output);
+    }
+
+    #[test]
+    fn block_decl_formatting() {
+        let src = r#"uniform Global { float param; };"#;
+
+        let mut s = String::new();
+        show_external_declaration(
+            &mut s,
+            &ast::TranslationUnit::parse(src).unwrap().0[0],
+            &mut FormattingState::default(),
+        )
+        .unwrap();
+
+        let expected = expect![[r#"
+            uniform Global {
+                float param;
+            };"#]];
+
+        expected.assert_eq(&s);
     }
 }

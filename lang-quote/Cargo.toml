@@ -3,13 +3,21 @@ name = "glsl-lang-quote"
 version = "0.1.0"
 authors = ["Vincent Tavernier <vince.tavernier@gmail.com>"]
 edition = "2018"
+license = "BSD-3-Clause"
+description = "Quoting proc-macro for glsl-lang"
+homepage = "https://github.com/vtavernier/glsl-lang"
+documentation = "https://docs.rs/glsl-lang-quote/"
+repository = "https://github.com/vtavernier/glsl-lang"
+readme = "README.md"
+keywords = ["glsl", "language", "parser", "ast", "macro"]
+categories = ["parser-implementation", "rendering"]
 
 [lib]
 proc-macro = true
 path = "src/lib.rs"
 
 [dependencies]
-glsl-lang = "=0.1.0"
+glsl-lang = "0.1.0"
 proc-macro2 = "1"
 quote = "1"
 smol_str = "0.1"

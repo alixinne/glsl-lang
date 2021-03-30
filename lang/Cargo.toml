@@ -3,6 +3,14 @@ name = "glsl-lang"
 version = "0.1.0"
 authors = ["Vincent Tavernier <vince.tavernier@gmail.com>"]
 edition = "2018"
+license = "BSD-3-Clause"
+description = "GLSL 4.6 language LALR parser and AST"
+homepage = "https://github.com/vtavernier/glsl-lang"
+documentation = "https://docs.rs/glsl-lang/"
+repository = "https://github.com/vtavernier/glsl-lang"
+readme = "README.md"
+keywords = ["glsl", "language", "parser", "ast"]
+categories = ["parser-implementations", "rendering"]
 
 [dependencies]
 lalrpop-util = { version = "0.19", default-features = false, features = ["std"] }
@@ -11,7 +19,7 @@ logos = "0.12"
 parse-display = { version = "0.4", default-features = false, features = ["std"] }
 thiserror = "1.0"
 
-lang-util = "=0.1.0"
+lang-util = "0.1.0"
 smol_str = "0.1"
 
 [build-dependencies]

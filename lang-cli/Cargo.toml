@@ -3,7 +3,15 @@ name = "glsl-lang-cli"
 version = "0.1.0"
 authors = ["Vincent Tavernier <vince.tavernier@gmail.com>"]
 edition = "2018"
+license = "BSD-3-Clause"
+description = "CLI for the glsl-lang crate"
+homepage = "https://github.com/vtavernier/glsl-lang"
+documentation = "https://docs.rs/glsl-lang-cli/"
+repository = "https://github.com/vtavernier/glsl-lang"
+readme = "README.md"
+keywords = ["glsl", "language", "parser", "ast", "cli"]
+categories = ["command-line-interface", "parser-implementations", "rendering"]
 
 [dependencies]
-glsl-lang = "=0.1.0"
+glsl-lang = "0.1.0"
 anyhow = "1.0"

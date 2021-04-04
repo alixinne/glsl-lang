@@ -379,7 +379,7 @@
         <span class="kw">let</span> <span class="ident">kind</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">error</span> {
             <span class="ident">lalrpop_util</span>::<span class="ident">ParseError</span>::<span class="ident">InvalidToken</span> { .. } <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ParseErrorKind</span>::<span class="ident">InvalidToken</span>,
             <span class="ident">lalrpop_util</span>::<span class="ident">ParseError</span>::<span class="ident">UnrecognizedEOF</span> { <span class="ident">expected</span>, .. } <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="ident">ParseErrorKind</span>::<span class="ident">UnrecognizedEOF</span> { <span class="ident">expected</span> }
+                <span class="ident">ParseErrorKind</span>::<span class="ident">UnrecognizedEof</span> { <span class="ident">expected</span> }
             }
             <span class="ident">lalrpop_util</span>::<span class="ident">ParseError</span>::<span class="ident">UnrecognizedToken</span> { <span class="ident">token</span>, <span class="ident">expected</span> } <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="ident">ParseErrorKind</span>::<span class="ident">UnrecognizedToken</span> {
@@ -412,7 +412,7 @@
     <span class="doccomment">/// An invalid token was encountered during lexical analysis</span>
     <span class="ident">InvalidToken</span>,
     <span class="doccomment">/// Unexpected end of file</span>
-    <span class="ident">UnrecognizedEOF</span> {
+    <span class="ident">UnrecognizedEof</span> {
         <span class="doccomment">/// List of expected token names</span>
         <span class="ident">expected</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
     },
@@ -439,7 +439,7 @@
     <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="kw">match</span> <span class="self">self</span> {
             <span class="ident">ParseErrorKind</span>::<span class="ident">InvalidToken</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;invalid token&quot;</span>),
-            <span class="ident">ParseErrorKind</span>::<span class="ident">UnrecognizedEOF</span> { <span class="ident">expected</span> } <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">ParseErrorKind</span>::<span class="ident">UnrecognizedEof</span> { <span class="ident">expected</span> } <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;unexpected end of input, expected any of {:?}&quot;</span>, <span class="ident">expected</span>)
             }
             <span class="ident">ParseErrorKind</span>::<span class="ident">UnrecognizedToken</span> { <span class="ident">token</span>, <span class="ident">expected</span> } <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write</span><span class="macro">!</span>(

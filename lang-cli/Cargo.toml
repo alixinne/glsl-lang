@@ -1,6 +1,6 @@
 [package]
 name = "glsl-lang-cli"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Vincent Tavernier <vince.tavernier@gmail.com>"]
 edition = "2018"
 license = "BSD-3-Clause"
@@ -13,5 +13,5 @@ keywords = ["glsl", "language", "parser", "ast", "cli"]
 categories = ["command-line-interface", "parser-implementations", "rendering"]
 
 [dependencies]
-glsl-lang = "0.1.0"
+glsl-lang = "0.1.1"
 anyhow = "1.0"

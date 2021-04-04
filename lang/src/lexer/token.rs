@@ -178,17 +178,17 @@ pub enum Token<'i> {
     #[token("usampler2DRect")]
     USampler2DRect,
     #[token("sampler2DMS")]
-    Sampler2DMS,
+    Sampler2DMs,
     #[token("isampler2DMS")]
-    ISampler2DMS,
+    ISampler2DMs,
     #[token("usampler2DMS")]
-    USampler2DMS,
+    USampler2DMs,
     #[token("sampler2DMSArray")]
-    Sampler2DMSArray,
+    Sampler2DMsArray,
     #[token("isampler2DMSArray")]
-    ISampler2DMSArray,
+    ISampler2DMsArray,
     #[token("usampler2DMSArray")]
-    USampler2DMSArray,
+    USampler2DMsArray,
     #[token("sampler3D")]
     Sampler3D,
     #[token("isampler3D")]
@@ -248,17 +248,17 @@ pub enum Token<'i> {
     #[token("uimage2DRect")]
     UImage2DRect,
     #[token("image2DMS")]
-    Image2DMS,
+    Image2DMs,
     #[token("iimage2DMS")]
-    IImage2DMS,
+    IImage2DMs,
     #[token("uimage2DMS")]
-    UImage2DMS,
+    UImage2DMs,
     #[token("image2DMSArray")]
-    Image2DMSArray,
+    Image2DMsArray,
     #[token("iimage2DMSArray")]
-    IImage2DMSArray,
+    IImage2DMsArray,
     #[token("uimage2DMSArray")]
-    UImage2DMSArray,
+    UImage2DMsArray,
     #[token("image3D")]
     Image3D,
     #[token("iimage3D")]
@@ -316,17 +316,17 @@ pub enum Token<'i> {
     #[token("utexture2DRect")]
     UTexture2DRect,
     #[token("texture2DMS")]
-    Texture2DMS,
+    Texture2DMs,
     #[token("itexture2DMS")]
-    ITexture2DMS,
+    ITexture2DMs,
     #[token("utexture2DMS")]
-    UTexture2DMS,
+    UTexture2DMs,
     #[token("texture2DMSArray")]
-    Texture2DMSArray,
+    Texture2DMsArray,
     #[token("itexture2DMSArray")]
-    ITexture2DMSArray,
+    ITexture2DMsArray,
     #[token("utexture2DMSArray")]
-    UTexture2DMSArray,
+    UTexture2DMsArray,
     #[token("texture3D")]
     Texture3D,
     #[token("itexture3D")]
@@ -362,11 +362,11 @@ pub enum Token<'i> {
     #[token("usubpassInput")]
     USubpassInput,
     #[token("subpassInputMS")]
-    SubpassInputMS,
+    SubpassInputMs,
     #[token("isubpassInputMS")]
-    ISubpassInputMS,
+    ISubpassInputMs,
     #[token("usubpassInputMS")]
-    USubpassInputMS,
+    USubpassInputMs,
     // End Vulkan-target keywords
     #[token("struct")]
     Struct,
@@ -644,12 +644,12 @@ impl<'i> Token<'i> {
     }
 }
 
-macro_rules! impl_into {
+macro_rules! impl_from {
     ($t:ty => $i:ident) => {
-        impl<'i> Into<$t> for Token<'i> {
-            fn into(self) -> $t {
-                match self {
-                    Self::$i(i) => i,
+        impl<'i> From<Token<'i>> for $t {
+            fn from(value: Token<'i>) -> Self {
+                match value {
+                    Token::$i(i) => i,
                     other => panic!(concat!("cannot convert {:?} into ", stringify!($i)), other),
                 }
             }
@@ -657,16 +657,16 @@ macro_rules! impl_into {
     };
 }
 
-impl_into!(i32 => IntConstant);
-impl_into!(u32 => UIntConstant);
-impl_into!(f32 => FloatConstant);
-impl_into!(f64 => DoubleConstant);
-impl_into!(bool => BoolConstant);
+impl_from!(i32 => IntConstant);
+impl_from!(u32 => UIntConstant);
+impl_from!(f32 => FloatConstant);
+impl_from!(f64 => DoubleConstant);
+impl_from!(bool => BoolConstant);
 
-impl<'i> Into<String> for Token<'i> {
-    fn into(self) -> String {
-        match self {
-            Self::PpRest(s) => s.to_string(),
+impl<'i> From<Token<'i>> for String {
+    fn from(value: Token<'i>) -> Self {
+        match value {
+            Token::PpRest(s) => s.to_string(),
             other => panic!("cannot convert {:?} into String", other),
         }
     }

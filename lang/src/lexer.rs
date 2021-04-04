@@ -178,14 +178,14 @@ impl<'i> Iterator for Lexer<'i> {
                             Texture1D | Texture1DArray | ITexture1D | ITexture1DArray
                             | UTexture1D | UTexture1DArray | Texture2D | Texture2DArray
                             | ITexture2D | ITexture2DArray | UTexture2D | UTexture2DArray
-                            | Texture2DRect | ITexture2DRect | UTexture2DRect | Texture2DMS
-                            | ITexture2DMS | UTexture2DMS | Texture2DMSArray
-                            | ITexture2DMSArray | UTexture2DMSArray | Texture3D | ITexture3D
+                            | Texture2DRect | ITexture2DRect | UTexture2DRect | Texture2DMs
+                            | ITexture2DMs | UTexture2DMs | Texture2DMsArray
+                            | ITexture2DMsArray | UTexture2DMsArray | Texture3D | ITexture3D
                             | UTexture3D | TextureCube | ITextureCube | UTextureCube
                             | TextureCubeArray | ITextureCubeArray | UTextureCubeArray
                             | TextureBuffer | ITextureBuffer | UTextureBuffer | Sampler
                             | SamplerShadow | SubpassInput | ISubpassInput | USubpassInput
-                            | SubpassInputMS | ISubpassInputMS | USubpassInputMS => {
+                            | SubpassInputMs | ISubpassInputMs | USubpassInputMs => {
                                 Identifier((src.slice(), src.extras.clone()))
                             }
                             other => other,

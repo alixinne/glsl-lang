@@ -463,32 +463,32 @@ fn lex_usampler_2d_rect() {
 
 #[test]
 fn lex_sampler_2dms() {
-    check("sampler2DMS", Token::Sampler2DMS);
+    check("sampler2DMS", Token::Sampler2DMs);
 }
 
 #[test]
 fn lex_isampler_2dms() {
-    check("isampler2DMS", Token::ISampler2DMS);
+    check("isampler2DMS", Token::ISampler2DMs);
 }
 
 #[test]
 fn lex_usampler_2dms() {
-    check("usampler2DMS", Token::USampler2DMS);
+    check("usampler2DMS", Token::USampler2DMs);
 }
 
 #[test]
 fn lex_sampler_2dms_array() {
-    check("sampler2DMSArray", Token::Sampler2DMSArray);
+    check("sampler2DMSArray", Token::Sampler2DMsArray);
 }
 
 #[test]
 fn lex_isampler_2dms_array() {
-    check("isampler2DMSArray", Token::ISampler2DMSArray);
+    check("isampler2DMSArray", Token::ISampler2DMsArray);
 }
 
 #[test]
 fn lex_usampler_2dms_array() {
-    check("usampler2DMSArray", Token::USampler2DMSArray);
+    check("usampler2DMSArray", Token::USampler2DMsArray);
 }
 
 #[test]
@@ -638,32 +638,32 @@ fn lex_uimage_2d_rect() {
 
 #[test]
 fn lex_image_2dms() {
-    check("image2DMS", Token::Image2DMS);
+    check("image2DMS", Token::Image2DMs);
 }
 
 #[test]
 fn lex_iimage_2dms() {
-    check("iimage2DMS", Token::IImage2DMS);
+    check("iimage2DMS", Token::IImage2DMs);
 }
 
 #[test]
 fn lex_uimage_2dms() {
-    check("uimage2DMS", Token::UImage2DMS);
+    check("uimage2DMS", Token::UImage2DMs);
 }
 
 #[test]
 fn lex_image_2dms_array() {
-    check("image2DMSArray", Token::Image2DMSArray);
+    check("image2DMSArray", Token::Image2DMsArray);
 }
 
 #[test]
 fn lex_iimage_2dms_array() {
-    check("iimage2DMSArray", Token::IImage2DMSArray);
+    check("iimage2DMSArray", Token::IImage2DMsArray);
 }
 
 #[test]
 fn lex_uimage_2dms_array() {
-    check("uimage2DMSArray", Token::UImage2DMSArray);
+    check("uimage2DMSArray", Token::UImage2DMsArray);
 }
 
 #[test]
@@ -819,37 +819,37 @@ fn lex_utexture_2d_rect() {
 
 #[test]
 fn lex_texture_2dms() {
-    check_vulkan("texture2DMS", Token::Texture2DMS);
+    check_vulkan("texture2DMS", Token::Texture2DMs);
     check_ident("texture2DMS");
 }
 
 #[test]
 fn lex_itexture_2dms() {
-    check_vulkan("itexture2DMS", Token::ITexture2DMS);
+    check_vulkan("itexture2DMS", Token::ITexture2DMs);
     check_ident("itexture2DMS");
 }
 
 #[test]
 fn lex_utexture_2dms() {
-    check_vulkan("utexture2DMS", Token::UTexture2DMS);
+    check_vulkan("utexture2DMS", Token::UTexture2DMs);
     check_ident("utexture2DMS");
 }
 
 #[test]
 fn lex_texture_2dms_array() {
-    check_vulkan("texture2DMSArray", Token::Texture2DMSArray);
+    check_vulkan("texture2DMSArray", Token::Texture2DMsArray);
     check_ident("texture2DMSArray");
 }
 
 #[test]
 fn lex_itexture_2dms_array() {
-    check_vulkan("itexture2DMSArray", Token::ITexture2DMSArray);
+    check_vulkan("itexture2DMSArray", Token::ITexture2DMsArray);
     check_ident("itexture2DMSArray");
 }
 
 #[test]
 fn lex_utexture_2dms_array() {
-    check_vulkan("utexture2DMSArray", Token::UTexture2DMSArray);
+    check_vulkan("utexture2DMSArray", Token::UTexture2DMsArray);
     check_ident("utexture2DMSArray");
 }
 
@@ -957,19 +957,19 @@ fn lex_usubpass_input() {
 
 #[test]
 fn lex_subpass_input_ms() {
-    check_vulkan("subpassInputMS", Token::SubpassInputMS);
+    check_vulkan("subpassInputMS", Token::SubpassInputMs);
     check_ident("subpassInputMS");
 }
 
 #[test]
 fn lex_isubpass_input_ms() {
-    check_vulkan("isubpassInputMS", Token::ISubpassInputMS);
+    check_vulkan("isubpassInputMS", Token::ISubpassInputMs);
     check_ident("isubpassInputMS");
 }
 
 #[test]
 fn lex_usubpass_input_ms() {
-    check_vulkan("usubpassInputMS", Token::USubpassInputMS);
+    check_vulkan("usubpassInputMS", Token::USubpassInputMs);
     check_ident("usubpassInputMS");
 }
 // End Vulkan-target keywords

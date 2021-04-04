@@ -298,16 +298,16 @@ pub enum TypeSpecifierNonArray {
     ImageBuffer,
     /// `sampler2DMS` type specifier
     #[lang_util(display(extra = "sampler2DMS"))]
-    Sampler2DMS,
+    Sampler2DMs,
     /// `image2DMS` type specifier
     #[lang_util(display(extra = "image2DMS"))]
-    Image2DMS,
+    Image2DMs,
     /// `sampler2DMSArray` type specifier
     #[lang_util(display(extra = "sampler2DMSArray"))]
-    Sampler2DMSArray,
+    Sampler2DMsArray,
     /// `image2DMSArray` type specifier
     #[lang_util(display(extra = "image2DMSArray"))]
-    Image2DMSArray,
+    Image2DMsArray,
     /// `samplerCubeArray` type specifier
     #[lang_util(display(extra = "samplerCubeArray"))]
     SamplerCubeArray,
@@ -386,16 +386,16 @@ pub enum TypeSpecifierNonArray {
     IImageBuffer,
     /// `isampler2DMS` type specifier
     #[lang_util(display(extra = "isampler2DMS"))]
-    ISampler2DMS,
+    ISampler2DMs,
     /// `iimage2DMS` type specifier
     #[lang_util(display(extra = "iimage2DMS"))]
-    IImage2DMS,
+    IImage2DMs,
     /// `isampler2DMSArray` type specifier
     #[lang_util(display(extra = "isampler2DMSArray"))]
-    ISampler2DMSArray,
+    ISampler2DMsArray,
     /// `iimage2DMSArray` type specifier
     #[lang_util(display(extra = "iimage2DMSArray"))]
-    IImage2DMSArray,
+    IImage2DMsArray,
     /// `isamplerCubeArray` type specifier
     #[lang_util(display(extra = "isamplerCubeArray"))]
     ISamplerCubeArray,
@@ -456,16 +456,16 @@ pub enum TypeSpecifierNonArray {
     UImageBuffer,
     /// `usampler2DMS` type specifier
     #[lang_util(display(extra = "usampler2DMS"))]
-    USampler2DMS,
+    USampler2DMs,
     /// `uimage2DMS` type specifier
     #[lang_util(display(extra = "uimage2DMS"))]
-    UImage2DMS,
+    UImage2DMs,
     /// `usampler2DMSArray` type specifier
     #[lang_util(display(extra = "usampler2DMSArray"))]
-    USampler2DMSArray,
+    USampler2DMsArray,
     /// `uimage2DMSArray` type specifier
     #[lang_util(display(extra = "uimage2DMSArray"))]
-    UImage2DMSArray,
+    UImage2DMsArray,
     /// `usamplerCubeArray` type specifier
     #[lang_util(display(extra = "usamplerCubeArray"))]
     USamplerCubeArray,
@@ -1012,16 +1012,16 @@ pub enum BinaryOp {
     NonEqual,
     /// `<` binary operator
     #[lang_util(display(extra = "<"))]
-    LT,
+    Lt,
     /// `>` binary operator
     #[lang_util(display(extra = ">"))]
-    GT,
+    Gt,
     /// `<=` binary operator
     #[lang_util(display(extra = "<="))]
-    LTE,
+    Lte,
     /// `>=` binary operator
     #[lang_util(display(extra = ">="))]
-    GTE,
+    Gte,
     /// `<<` binary operator
     #[lang_util(display(extra = "<<"))]
     LShift,
@@ -1442,7 +1442,7 @@ pub enum PreprocessorVersionProfile {
     Compatibility,
     /// `es` version profile
     #[lang_util(display(extra = "es"))]
-    ES,
+    Es,
 }
 
 /// An #extension preprocessor directive.

@@ -310,17 +310,17 @@ fn tokenize_type_specifier_non_array(t: &ast::TypeSpecifierNonArray) -> TokenStr
         ast::TypeSpecifierNonArray::ImageBuffer => {
             quote! { glsl_lang::ast::TypeSpecifierNonArray::ImageBuffer }
         }
-        ast::TypeSpecifierNonArray::Sampler2DMS => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Sampler2DMS }
+        ast::TypeSpecifierNonArray::Sampler2DMs => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArray::Sampler2DMs }
         }
-        ast::TypeSpecifierNonArray::Image2DMS => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Image2DMS }
+        ast::TypeSpecifierNonArray::Image2DMs => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArray::Image2DMs }
         }
-        ast::TypeSpecifierNonArray::Sampler2DMSArray => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Sampler2DMSArray }
+        ast::TypeSpecifierNonArray::Sampler2DMsArray => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArray::Sampler2DMsArray }
         }
-        ast::TypeSpecifierNonArray::Image2DMSArray => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Image2DMSArray }
+        ast::TypeSpecifierNonArray::Image2DMsArray => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArray::Image2DMsArray }
         }
         ast::TypeSpecifierNonArray::SamplerCubeArray => {
             quote! { glsl_lang::ast::TypeSpecifierNonArray::SamplerCubeArray }
@@ -397,17 +397,17 @@ fn tokenize_type_specifier_non_array(t: &ast::TypeSpecifierNonArray) -> TokenStr
         ast::TypeSpecifierNonArray::IImageBuffer => {
             quote! { glsl_lang::ast::TypeSpecifierNonArray::IImageBuffer }
         }
-        ast::TypeSpecifierNonArray::ISampler2DMS => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::ISampler2DMS }
+        ast::TypeSpecifierNonArray::ISampler2DMs => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArray::ISampler2DMs }
         }
-        ast::TypeSpecifierNonArray::IImage2DMS => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::IImage2DMS }
+        ast::TypeSpecifierNonArray::IImage2DMs => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArray::IImage2DMs }
         }
-        ast::TypeSpecifierNonArray::ISampler2DMSArray => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::ISampler2DMSArray }
+        ast::TypeSpecifierNonArray::ISampler2DMsArray => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArray::ISampler2DMsArray }
         }
-        ast::TypeSpecifierNonArray::IImage2DMSArray => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::IImage2DMSArray }
+        ast::TypeSpecifierNonArray::IImage2DMsArray => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArray::IImage2DMsArray }
         }
         ast::TypeSpecifierNonArray::ISamplerCubeArray => {
             quote! { glsl_lang::ast::TypeSpecifierNonArray::ISamplerCubeArray }
@@ -466,17 +466,17 @@ fn tokenize_type_specifier_non_array(t: &ast::TypeSpecifierNonArray) -> TokenStr
         ast::TypeSpecifierNonArray::UImageBuffer => {
             quote! { glsl_lang::ast::TypeSpecifierNonArray::UImageBuffer }
         }
-        ast::TypeSpecifierNonArray::USampler2DMS => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::USampler2DMS }
+        ast::TypeSpecifierNonArray::USampler2DMs => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArray::USampler2DMs }
         }
-        ast::TypeSpecifierNonArray::UImage2DMS => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::UImage2DMS }
+        ast::TypeSpecifierNonArray::UImage2DMs => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArray::UImage2DMs }
         }
-        ast::TypeSpecifierNonArray::USampler2DMSArray => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::USampler2DMSArray }
+        ast::TypeSpecifierNonArray::USampler2DMsArray => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArray::USampler2DMsArray }
         }
-        ast::TypeSpecifierNonArray::UImage2DMSArray => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::UImage2DMSArray }
+        ast::TypeSpecifierNonArray::UImage2DMsArray => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArray::UImage2DMsArray }
         }
         ast::TypeSpecifierNonArray::USamplerCubeArray => {
             quote! { glsl_lang::ast::TypeSpecifierNonArray::USamplerCubeArray }
@@ -806,10 +806,10 @@ fn tokenize_binary_op(op: &ast::BinaryOp) -> TokenStream {
         ast::BinaryOp::BitAnd => quote! { glsl_lang::ast::BinaryOp::BitAnd },
         ast::BinaryOp::Equal => quote! { glsl_lang::ast::BinaryOp::Equal },
         ast::BinaryOp::NonEqual => quote! { glsl_lang::ast::BinaryOp::NonEqual },
-        ast::BinaryOp::LT => quote! { glsl_lang::ast::BinaryOp::LT },
-        ast::BinaryOp::GT => quote! { glsl_lang::ast::BinaryOp::GT },
-        ast::BinaryOp::LTE => quote! { glsl_lang::ast::BinaryOp::LTE },
-        ast::BinaryOp::GTE => quote! { glsl_lang::ast::BinaryOp::GTE },
+        ast::BinaryOp::Lt => quote! { glsl_lang::ast::BinaryOp::Lt },
+        ast::BinaryOp::Gt => quote! { glsl_lang::ast::BinaryOp::Gt },
+        ast::BinaryOp::Lte => quote! { glsl_lang::ast::BinaryOp::Lte },
+        ast::BinaryOp::Gte => quote! { glsl_lang::ast::BinaryOp::Gte },
         ast::BinaryOp::LShift => quote! { glsl_lang::ast::BinaryOp::LShift },
         ast::BinaryOp::RShift => quote! { glsl_lang::ast::BinaryOp::RShift },
         ast::BinaryOp::Add => quote! { glsl_lang::ast::BinaryOp::Add },
@@ -1454,8 +1454,8 @@ fn tokenize_preprocessor_version_profile(profile: &ast::PreprocessorVersionProfi
         ast::PreprocessorVersionProfile::Compatibility => {
             quote! { glsl_lang::ast::PreprocessorVersionProfile::Compatibility }
         }
-        ast::PreprocessorVersionProfile::ES => {
-            quote! { glsl_lang::ast::PreprocessorVersionProfile::ES }
+        ast::PreprocessorVersionProfile::Es => {
+            quote! { glsl_lang::ast::PreprocessorVersionProfile::Es }
         }
     }
 }

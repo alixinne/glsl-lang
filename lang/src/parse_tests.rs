@@ -726,19 +726,19 @@ fn parse_type_specifier_non_array() {
     );
     assert_ceq!(
         ast::TypeSpecifierNonArray::parse("sampler2DMS"),
-        Ok(ast::TypeSpecifierNonArray::Sampler2DMS)
+        Ok(ast::TypeSpecifierNonArray::Sampler2DMs)
     );
     assert_ceq!(
         ast::TypeSpecifierNonArray::parse("image2DMS"),
-        Ok(ast::TypeSpecifierNonArray::Image2DMS)
+        Ok(ast::TypeSpecifierNonArray::Image2DMs)
     );
     assert_ceq!(
         ast::TypeSpecifierNonArray::parse("sampler2DMSArray"),
-        Ok(ast::TypeSpecifierNonArray::Sampler2DMSArray)
+        Ok(ast::TypeSpecifierNonArray::Sampler2DMsArray)
     );
     assert_ceq!(
         ast::TypeSpecifierNonArray::parse("image2DMSArray"),
-        Ok(ast::TypeSpecifierNonArray::Image2DMSArray)
+        Ok(ast::TypeSpecifierNonArray::Image2DMsArray)
     );
     assert_ceq!(
         ast::TypeSpecifierNonArray::parse("samplerCubeArray"),
@@ -842,19 +842,19 @@ fn parse_type_specifier_non_array() {
     );
     assert_ceq!(
         ast::TypeSpecifierNonArray::parse("isampler2DMS"),
-        Ok(ast::TypeSpecifierNonArray::ISampler2DMS)
+        Ok(ast::TypeSpecifierNonArray::ISampler2DMs)
     );
     assert_ceq!(
         ast::TypeSpecifierNonArray::parse("iimage2DMS"),
-        Ok(ast::TypeSpecifierNonArray::IImage2DMS)
+        Ok(ast::TypeSpecifierNonArray::IImage2DMs)
     );
     assert_ceq!(
         ast::TypeSpecifierNonArray::parse("isampler2DMSArray"),
-        Ok(ast::TypeSpecifierNonArray::ISampler2DMSArray)
+        Ok(ast::TypeSpecifierNonArray::ISampler2DMsArray)
     );
     assert_ceq!(
         ast::TypeSpecifierNonArray::parse("iimage2DMSArray"),
-        Ok(ast::TypeSpecifierNonArray::IImage2DMSArray)
+        Ok(ast::TypeSpecifierNonArray::IImage2DMsArray)
     );
     assert_ceq!(
         ast::TypeSpecifierNonArray::parse("isamplerCubeArray"),
@@ -934,19 +934,19 @@ fn parse_type_specifier_non_array() {
     );
     assert_ceq!(
         ast::TypeSpecifierNonArray::parse("usampler2DMS"),
-        Ok(ast::TypeSpecifierNonArray::USampler2DMS)
+        Ok(ast::TypeSpecifierNonArray::USampler2DMs)
     );
     assert_ceq!(
         ast::TypeSpecifierNonArray::parse("uimage2DMS"),
-        Ok(ast::TypeSpecifierNonArray::UImage2DMS)
+        Ok(ast::TypeSpecifierNonArray::UImage2DMs)
     );
     assert_ceq!(
         ast::TypeSpecifierNonArray::parse("usampler2DMSArray"),
-        Ok(ast::TypeSpecifierNonArray::USampler2DMSArray)
+        Ok(ast::TypeSpecifierNonArray::USampler2DMsArray)
     );
     assert_ceq!(
         ast::TypeSpecifierNonArray::parse("uimage2DMSArray"),
-        Ok(ast::TypeSpecifierNonArray::UImage2DMSArray)
+        Ok(ast::TypeSpecifierNonArray::UImage2DMsArray)
     );
     assert_ceq!(
         ast::TypeSpecifierNonArray::parse("usamplerCubeArray"),
@@ -979,7 +979,7 @@ fn parse_type_specifier() {
     assert_ceq!(
         ast::TypeSpecifier::parse("iimage2DMSArray[35]"),
         Ok(ast::TypeSpecifier {
-            ty: ast::TypeSpecifierNonArray::IImage2DMSArray,
+            ty: ast::TypeSpecifierNonArray::IImage2DMsArray,
             array_specifier: Some(ast::ArraySpecifier {
                 dimensions: vec![ast::ArraySpecifierDimension::ExplicitlySized(Box::new(
                     ast::Expr::IntConst(35)
@@ -992,7 +992,7 @@ fn parse_type_specifier() {
 #[test]
 fn parse_fully_specified_type() {
     let ty = ast::TypeSpecifier {
-        ty: ast::TypeSpecifierNonArray::IImage2DMSArray,
+        ty: ast::TypeSpecifierNonArray::IImage2DMsArray,
         array_specifier: None,
     };
     let expected = ast::FullySpecifiedType {
@@ -1019,7 +1019,7 @@ fn parse_fully_specified_type_with_qualifier() {
         qualifiers: vec![qual_spec],
     };
     let ty = ast::TypeSpecifier {
-        ty: ast::TypeSpecifierNonArray::IImage2DMSArray,
+        ty: ast::TypeSpecifierNonArray::IImage2DMsArray,
         array_specifier: None,
     };
     let expected = ast::FullySpecifiedType {
@@ -1710,7 +1710,7 @@ fn parse_declaration_buffer_block() {
 #[test]
 fn parse_selection_statement_if() {
     let cond = ast::Expr::Binary(
-        ast::BinaryOp::LT,
+        ast::BinaryOp::Lt,
         Box::new(ast::Expr::Variable("foo".into_node())),
         Box::new(ast::Expr::IntConst(10)),
     );
@@ -1741,7 +1741,7 @@ fn parse_selection_statement_if() {
 #[test]
 fn parse_selection_statement_if_else() {
     let cond = ast::Expr::Binary(
-        ast::BinaryOp::LT,
+        ast::BinaryOp::Lt,
         Box::new(ast::Expr::Variable("foo".into_node())),
         Box::new(ast::Expr::IntConst(10)),
     );
@@ -1843,7 +1843,7 @@ fn parse_case_label() {
 #[test]
 fn parse_iteration_statement_while_empty() {
     let cond = ast::Condition::Expr(ast::Expr::Binary(
-        ast::BinaryOp::GTE,
+        ast::BinaryOp::Gte,
         Box::new(ast::Expr::Variable("a".into_node())),
         Box::new(ast::Expr::Variable("b".into_node())),
     ));
@@ -1878,7 +1878,7 @@ fn parse_iteration_statement_do_while_empty() {
         .into(),
     );
     let cond = Box::new(ast::Expr::Binary(
-        ast::BinaryOp::GTE,
+        ast::BinaryOp::Gte,
         Box::new(ast::Expr::Variable("a".into_node())),
         Box::new(ast::Expr::Variable("b".into_node())),
     ));
@@ -1922,7 +1922,7 @@ fn parse_iteration_statement_for_empty() {
     ));
     let rest = ast::ForRestStatement {
         condition: Some(ast::Condition::Expr(ast::Expr::Binary(
-            ast::BinaryOp::LTE,
+            ast::BinaryOp::Lte,
             Box::new(ast::Expr::Variable("i".into_node())),
             Box::new(ast::Expr::FloatConst(10.)),
         ))),

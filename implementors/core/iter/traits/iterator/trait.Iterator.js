@@ -1,3 +1,3 @@
 (function() {var implementors = {};
-implementors["glsl_lang"] = [{"text":"impl&lt;'i&gt; Iterator for Lexer&lt;'i&gt;","synthetic":false,"types":[]}];
+implementors["glsl_lang"] = [{"text":"impl&lt;'i&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/iter/traits/iterator/trait.Iterator.html\" title=\"trait core::iter::traits::iterator::Iterator\">Iterator</a> for <a class=\"struct\" href=\"glsl_lang/lexer/struct.Lexer.html\" title=\"struct glsl_lang::lexer::Lexer\">Lexer</a>&lt;'i&gt;","synthetic":false,"types":["glsl_lang::lexer::Lexer"]}];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

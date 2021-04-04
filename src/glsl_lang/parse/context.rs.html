@@ -221,6 +221,57 @@
 <span id="218">218</span>
 <span id="219">219</span>
 <span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
+<span id="234">234</span>
+<span id="235">235</span>
+<span id="236">236</span>
+<span id="237">237</span>
+<span id="238">238</span>
+<span id="239">239</span>
+<span id="240">240</span>
+<span id="241">241</span>
+<span id="242">242</span>
+<span id="243">243</span>
+<span id="244">244</span>
+<span id="245">245</span>
+<span id="246">246</span>
+<span id="247">247</span>
+<span id="248">248</span>
+<span id="249">249</span>
+<span id="250">250</span>
+<span id="251">251</span>
+<span id="252">252</span>
+<span id="253">253</span>
+<span id="254">254</span>
+<span id="255">255</span>
+<span id="256">256</span>
+<span id="257">257</span>
+<span id="258">258</span>
+<span id="259">259</span>
+<span id="260">260</span>
+<span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">cell</span>::<span class="ident">RefCell</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::{<span class="ident">BTreeMap</span>, <span class="ident">HashSet</span>};
@@ -228,18 +279,24 @@
 
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ast</span>;
 
+<span class="doccomment">/// Parsing options</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ParseOptions</span> {
+    <span class="doccomment">/// `true` if the GLSL target should be Vulkan instead of OpenGL</span>
     <span class="kw">pub</span> <span class="ident">target_vulkan</span>: <span class="ident">bool</span>,
+    <span class="doccomment">/// Unique source identifier for token positions</span>
     <span class="kw">pub</span> <span class="ident">source_id</span>: <span class="ident">usize</span>,
+    <span class="doccomment">/// Allow Rust quoting identifiers (`#(ident)`) in the source</span>
     <span class="kw">pub</span> <span class="ident">allow_rs_ident</span>: <span class="ident">bool</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">ParseOptions</span> {
+    <span class="doccomment">/// Create new parsing options using default values</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span>::<span class="ident">default</span>()
     }
 
+    <span class="doccomment">/// Create a new parsing context from this options object</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">build</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ParseContext</span> {
         <span class="ident">ParseContext</span> {
             <span class="ident">opts</span>: <span class="self">self</span>,
@@ -247,6 +304,7 @@
         }
     }
 
+    <span class="doccomment">/// Create a new parsing context from this options object, with comment parsing enabled</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_comments</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ParseContext</span> {
         <span class="ident">ParseContext</span> {
             <span class="ident">opts</span>: <span class="self">self</span>,
@@ -254,6 +312,7 @@
         }
     }
 
+    <span class="doccomment">/// Create a new parsing context from this options object, with a custom type table policy</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_policy</span>(<span class="self">self</span>, <span class="ident">policy</span>: <span class="kw">impl</span> <span class="ident">TypeTablePolicy</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ParseContext</span> {
         <span class="ident">ParseContext</span> {
             <span class="ident">opts</span>: <span class="self">self</span>,
@@ -261,6 +320,8 @@
         }
     }
 
+    <span class="doccomment">/// Create a new parsing context from this options object, with a custom type table policy and</span>
+    <span class="doccomment">/// comment parsing enabled</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_comments_and_policy</span>(<span class="self">self</span>, <span class="ident">policy</span>: <span class="kw">impl</span> <span class="ident">TypeTablePolicy</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ParseContext</span> {
         <span class="ident">ParseContext</span> {
             <span class="ident">opts</span>: <span class="self">self</span>,
@@ -270,6 +331,7 @@
         }
     }
 
+    <span class="doccomment">/// Create a new parsing context from this options object and pre-existing context data</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_context</span>(<span class="self">self</span>, <span class="ident">context</span>: <span class="ident">ParseContextData</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ParseContext</span> {
         <span class="ident">ParseContext</span> {
             <span class="ident">opts</span>: <span class="self">self</span>,
@@ -278,13 +340,17 @@
     }
 }
 
+<span class="doccomment">/// Parsing context</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ParseContext</span> {
+    <span class="doccomment">/// Parsing options</span>
     <span class="kw">pub</span> <span class="ident">opts</span>: <span class="ident">ParseOptions</span>,
+    <span class="doccomment">/// Parsing data</span>
     <span class="kw">pub</span> <span class="ident">data</span>: <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">RefCell</span><span class="op">&lt;</span><span class="ident">ParseContextData</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">ParseContext</span> {
+    <span class="doccomment">/// Clone the parsing data and return the cloned context</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">clone_inner</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">opts</span>: <span class="self">self</span>.<span class="ident">opts</span>,
@@ -292,14 +358,18 @@
         }
     }
 
+    <span class="doccomment">/// Consume this [ParseContext] and return its data. Will fail if there are multiple references</span>
+    <span class="doccomment">/// to this context&#39;s data.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_data</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ParseContextData</span><span class="op">&gt;</span> {
         <span class="ident">Rc</span>::<span class="ident">try_unwrap</span>(<span class="self">self</span>.<span class="ident">data</span>).<span class="ident">ok</span>().<span class="ident">map</span>(<span class="ident">RefCell</span>::<span class="ident">into_inner</span>)
     }
 
+    <span class="doccomment">/// Obtain a reference to the context&#39;s data</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">data</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">cell</span>::<span class="ident">Ref</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">ParseContextData</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">borrow</span>()
     }
 
+    <span class="doccomment">/// Obtain an exclusive reference to the context&#39;s data</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">data_mut</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">cell</span>::<span class="ident">RefMut</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">ParseContextData</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">borrow_mut</span>()
     }
@@ -314,19 +384,28 @@
     }
 }
 
+<span class="doccomment">/// Parsing context data</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ParseContextData</span> {
+    <span class="doccomment">/// List of known type names</span>
     <span class="kw">pub</span> <span class="ident">names</span>: <span class="ident">HashSet</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// List of parsed comments (or `None` to disable comment parsing)</span>
     <span class="kw">pub</span> <span class="ident">comments</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CommentList</span><span class="op">&gt;</span>,
 
     <span class="ident">policy</span>: <span class="ident">Rc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">TypeTablePolicy</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">ParseContextData</span> {
+    <span class="doccomment">/// Create a new [ParseContextData] object</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span>::<span class="ident">default</span>()
     }
 
+    <span class="doccomment">/// Create a new [ParseContextData] object with the given type table policy</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Parameters</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// * `policy`: policy object managing the type table</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_policy</span>(<span class="ident">policy</span>: <span class="kw">impl</span> <span class="ident">TypeTablePolicy</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">policy</span>: <span class="ident">Rc</span>::<span class="ident">new</span>(<span class="ident">policy</span>),
@@ -334,6 +413,7 @@
         }
     }
 
+    <span class="doccomment">/// Create a new [ParseContextData] object with comments parsing enabled</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_comments</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">comments</span>: <span class="prelude-val">Some</span>(<span class="ident">Default</span>::<span class="ident">default</span>()),
@@ -341,6 +421,12 @@
         }
     }
 
+    <span class="doccomment">/// Create a new [ParseContextData] object with comments parsing enabled and the given type</span>
+    <span class="doccomment">/// table policy</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Parameters</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// * `policy`: policy object managing the type table</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_comments_and_policy</span>(<span class="ident">policy</span>: <span class="kw">impl</span> <span class="ident">TypeTablePolicy</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">comments</span>: <span class="prelude-val">Some</span>(<span class="ident">Default</span>::<span class="ident">default</span>()),
@@ -368,15 +454,21 @@
 
 <span class="comment">// Begin type name stuff</span>
 
+<span class="doccomment">/// Context in which an identifier is seen for the first time</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">IdentifierContext</span> {
+    <span class="doccomment">/// The identifier is a function declaration name</span>
     <span class="ident">FunctionPrototype</span>,
 }
 
+<span class="doccomment">/// A policy to dictate which identifiers should be seen as type names or not</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">TypeTablePolicy</span>: <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Debug</span> {
+    <span class="doccomment">/// Return `true` if the given identifier (in its context) should now be considered a type name</span>
+    <span class="doccomment">/// or not.</span>
     <span class="kw">fn</span> <span class="ident">promote_to_type_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">Identifier</span>, <span class="ident">ctx</span>: <span class="ident">IdentifierContext</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span>;
 }
 
+<span class="doccomment">/// Default GLSL type table policy: only struct declarations create new type names</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">GlslTypeTablePolicy</span>;
 
@@ -387,30 +479,36 @@
 }
 
 <span class="kw">impl</span> <span class="ident">ParseContext</span> {
+    <span class="doccomment">/// Return `true` if the given name is a type name</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_type_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">borrow</span>().<span class="ident">is_type_name</span>(<span class="ident">name</span>)
     }
 
+    <span class="doccomment">/// Register `name` as a new type name</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_type_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="ident">ast</span>::<span class="ident">Identifier</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ast</span>::<span class="ident">TypeName</span> {
         <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">borrow_mut</span>().<span class="ident">add_type_name</span>(<span class="ident">name</span>)
     }
 
+    <span class="doccomment">/// Update the context data with a new identifier in a given context</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_identifier</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">Identifier</span>, <span class="ident">ctx</span>: <span class="ident">IdentifierContext</span>) {
         <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">borrow_mut</span>().<span class="ident">new_identifier</span>(<span class="ident">name</span>, <span class="ident">ctx</span>)
     }
 }
 
 <span class="kw">impl</span> <span class="ident">ParseContextData</span> {
+    <span class="doccomment">/// Return `true` if the given name is a type name</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_type_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">names</span>.<span class="ident">contains</span>(<span class="ident">name</span>)
     }
 
+    <span class="doccomment">/// Register `name` as a new type name</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_type_name</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">name</span>: <span class="ident">ast</span>::<span class="ident">Identifier</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ast</span>::<span class="ident">TypeName</span> {
         <span class="kw">let</span> <span class="ident">name_string</span> <span class="op">=</span> <span class="ident">name</span>.<span class="number">0</span>.<span class="ident">to_string</span>();
         <span class="self">self</span>.<span class="ident">names</span>.<span class="ident">insert</span>(<span class="ident">name_string</span>);
         <span class="ident">name</span>.<span class="ident">map</span>(<span class="ident">ast</span>::<span class="ident">TypeNameData</span>::<span class="ident">from</span>)
     }
 
+    <span class="doccomment">/// Update the context data with a new identifier in a given context</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_identifier</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">Identifier</span>, <span class="ident">ctx</span>: <span class="ident">IdentifierContext</span>) {
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">policy</span>.<span class="ident">promote_to_type_name</span>(<span class="ident">name</span>, <span class="ident">ctx</span>) {
             <span class="self">self</span>.<span class="ident">add_type_name</span>(<span class="ident">name</span>.<span class="ident">clone</span>());
@@ -422,19 +520,23 @@
 
 <span class="comment">// Begin comment stuff</span>
 
+<span class="doccomment">/// A list of comments indexed by their position</span>
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">CommentList</span> <span class="op">=</span> <span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">ast</span>::<span class="ident">NodeSpan</span>, <span class="ident">ast</span>::<span class="ident">Comment</span><span class="op">&gt;</span>;
 
 <span class="kw">impl</span> <span class="ident">ParseContext</span> {
+    <span class="doccomment">/// Return `true` if this parsing context supports comments</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">has_comments</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">borrow</span>().<span class="ident">comments</span>.<span class="ident">is_some</span>()
     }
 
+    <span class="doccomment">/// Add a new comment to the parsed comments list</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_comment</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">comment</span>: <span class="ident">ast</span>::<span class="ident">Comment</span>) {
         <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">borrow_mut</span>().<span class="ident">add_comment</span>(<span class="ident">comment</span>)
     }
 }
 
 <span class="kw">impl</span> <span class="ident">ParseContextData</span> {
+    <span class="doccomment">/// Add a new comment to the parsed comments list</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_comment</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">comment</span>: <span class="ident">ast</span>::<span class="ident">Comment</span>) {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">comments</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">comments</span>.<span class="ident">as_mut</span>() {
             <span class="kw">let</span> <span class="ident">span</span> <span class="op">=</span> <span class="ident">comment</span>.<span class="ident">span</span>;
@@ -443,4 +545,5 @@
     }
 }
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "glsl_lang";</script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="glsl_lang"></div>
+    <script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>

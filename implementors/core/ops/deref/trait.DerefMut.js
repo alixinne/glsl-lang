@@ -1,3 +1,3 @@
 (function() {var implementors = {};
-implementors["lang_util"] = [{"text":"impl&lt;T:&nbsp;NodeContent&gt; DerefMut for Node&lt;T&gt;","synthetic":false,"types":[]}];
+implementors["lang_util"] = [{"text":"impl&lt;T:&nbsp;<a class=\"trait\" href=\"lang_util/node/content/trait.NodeContent.html\" title=\"trait lang_util::node::content::NodeContent\">NodeContent</a>&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/ops/deref/trait.DerefMut.html\" title=\"trait core::ops::deref::DerefMut\">DerefMut</a> for <a class=\"struct\" href=\"lang_util/node/content/struct.Node.html\" title=\"struct lang_util::node::content::Node\">Node</a>&lt;T&gt;","synthetic":false,"types":["lang_util::node::content::Node"]}];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

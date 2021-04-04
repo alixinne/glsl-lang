@@ -1,3 +1,3 @@
 (function() {var implementors = {};
-implementors["glsl_lang"] = [{"text":"impl&lt;'i&gt; ParserDefinition for __StateMachine&lt;'i&gt;","synthetic":false,"types":[]}];
+implementors["glsl_lang"] = [{"text":"impl&lt;'i&gt; ParserDefinition for <a class=\"struct\" href=\"glsl_lang/parser/__parse__TranslationUnit/struct.__StateMachine.html\" title=\"struct glsl_lang::parser::__parse__TranslationUnit::__StateMachine\">__StateMachine</a>&lt;'i&gt;","synthetic":false,"types":["glsl_lang::parser::__parse__TranslationUnit::__StateMachine"]}];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

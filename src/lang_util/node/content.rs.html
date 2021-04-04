@@ -221,11 +221,28 @@
 <span id="218">218</span>
 <span id="219">219</span>
 <span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
+<span id="234">234</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fmt</span>;
 
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">position</span>::{<span class="ident">LexerPosition</span>, <span class="ident">NodeSpan</span>};
 
+<span class="doccomment">/// Trait for AST node contents.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// All nodes which will be stored in a [Node] need to implement this.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">NodeContent</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">PartialEq</span> <span class="op">+</span> <span class="ident">Sized</span> {
     <span class="doccomment">/// Convert the contents into a node</span>
     <span class="kw">fn</span> <span class="ident">into_node</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Node</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
@@ -253,7 +270,9 @@
 <span class="doccomment">/// A syntax node with span information</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Node</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">NodeContent</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// Contents of this syntax node</span>
     <span class="kw">pub</span> <span class="ident">content</span>: <span class="ident">T</span>,
+    <span class="doccomment">/// Span in the input this node was parsed from</span>
     <span class="kw">pub</span> <span class="ident">span</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">NodeSpan</span><span class="op">&gt;</span>,
 }
 
@@ -321,6 +340,15 @@
 
 <span class="doccomment">/// Trait for comparing the content of syntax nodes</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">NodeContentEq</span> {
+    <span class="doccomment">/// Compares this node&#39;s contents with the other&#39;s</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Parameters</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// * `other`: other node to compare the contents from</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Returns</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// `true` if both node&#39;s contents are equal, regardless of their span information.</span>
     <span class="kw">fn</span> <span class="ident">content_eq</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="self">Self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span>;
 }
 
@@ -443,4 +471,5 @@
     });
 }
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "lang_util";</script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="lang_util"></div>
+    <script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>

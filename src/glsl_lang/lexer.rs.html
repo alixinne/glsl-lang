@@ -346,6 +346,17 @@
 <span id="343">343</span>
 <span id="344">344</span>
 <span id="345">345</span>
+<span id="346">346</span>
+<span id="347">347</span>
+<span id="348">348</span>
+<span id="349">349</span>
+<span id="350">350</span>
+<span id="351">351</span>
+<span id="352">352</span>
+<span id="353">353</span>
+<span id="354">354</span>
+<span id="355">355</span>
+<span id="356">356</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">logos</span>::<span class="ident">Logos</span>;
 <span class="kw">use</span> <span class="ident">thiserror</span>::<span class="ident">Error</span>;
@@ -667,20 +678,31 @@
     }
 }
 
+<span class="doccomment">/// Lexical analysis error</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Error</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">LexicalError</span> {
+    <span class="doccomment">/// Invalid int literal</span>
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;invalid int literal: {source}&quot;</span>)]</span>
     <span class="ident">InvalidIntLiteral</span> {
+        <span class="doccomment">/// Source error</span>
         <span class="ident">source</span>: <span class="ident">std</span>::<span class="ident">num</span>::<span class="ident">ParseIntError</span>,
+        <span class="doccomment">/// Location for the error</span>
         <span class="ident">location</span>: <span class="ident">LexerPosition</span>,
     },
+    <span class="doccomment">/// Invalid float literal</span>
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;invalid float literal: {source}&quot;</span>)]</span>
     <span class="ident">InvalidFloatLiteral</span> {
+        <span class="doccomment">/// Source error</span>
         <span class="ident">source</span>: <span class="ident">std</span>::<span class="ident">num</span>::<span class="ident">ParseFloatError</span>,
+        <span class="doccomment">/// Location for the error</span>
         <span class="ident">location</span>: <span class="ident">LexerPosition</span>,
     },
+    <span class="doccomment">/// Unexpected Rust identifier</span>
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;encountered forbidden #(ident) quote syntax&quot;</span>)]</span>
-    <span class="ident">ForbiddenRsQuote</span> { <span class="ident">location</span>: <span class="ident">LexerPosition</span> },
+    <span class="ident">ForbiddenRsQuote</span> {
+        <span class="doccomment">/// Location for the error</span>
+        <span class="ident">location</span>: <span class="ident">LexerPosition</span>,
+    },
 }
 
 <span class="kw">impl</span> <span class="ident">lang_util</span>::<span class="ident">error</span>::<span class="ident">LexicalError</span> <span class="kw">for</span> <span class="ident">LexicalError</span> {
@@ -693,4 +715,5 @@
     }
 }
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "glsl_lang";</script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="glsl_lang"></div>
+    <script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>

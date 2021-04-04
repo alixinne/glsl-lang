@@ -2064,6 +2064,91 @@
 <span id="2061">2061</span>
 <span id="2062">2062</span>
 <span id="2063">2063</span>
+<span id="2064">2064</span>
+<span id="2065">2065</span>
+<span id="2066">2066</span>
+<span id="2067">2067</span>
+<span id="2068">2068</span>
+<span id="2069">2069</span>
+<span id="2070">2070</span>
+<span id="2071">2071</span>
+<span id="2072">2072</span>
+<span id="2073">2073</span>
+<span id="2074">2074</span>
+<span id="2075">2075</span>
+<span id="2076">2076</span>
+<span id="2077">2077</span>
+<span id="2078">2078</span>
+<span id="2079">2079</span>
+<span id="2080">2080</span>
+<span id="2081">2081</span>
+<span id="2082">2082</span>
+<span id="2083">2083</span>
+<span id="2084">2084</span>
+<span id="2085">2085</span>
+<span id="2086">2086</span>
+<span id="2087">2087</span>
+<span id="2088">2088</span>
+<span id="2089">2089</span>
+<span id="2090">2090</span>
+<span id="2091">2091</span>
+<span id="2092">2092</span>
+<span id="2093">2093</span>
+<span id="2094">2094</span>
+<span id="2095">2095</span>
+<span id="2096">2096</span>
+<span id="2097">2097</span>
+<span id="2098">2098</span>
+<span id="2099">2099</span>
+<span id="2100">2100</span>
+<span id="2101">2101</span>
+<span id="2102">2102</span>
+<span id="2103">2103</span>
+<span id="2104">2104</span>
+<span id="2105">2105</span>
+<span id="2106">2106</span>
+<span id="2107">2107</span>
+<span id="2108">2108</span>
+<span id="2109">2109</span>
+<span id="2110">2110</span>
+<span id="2111">2111</span>
+<span id="2112">2112</span>
+<span id="2113">2113</span>
+<span id="2114">2114</span>
+<span id="2115">2115</span>
+<span id="2116">2116</span>
+<span id="2117">2117</span>
+<span id="2118">2118</span>
+<span id="2119">2119</span>
+<span id="2120">2120</span>
+<span id="2121">2121</span>
+<span id="2122">2122</span>
+<span id="2123">2123</span>
+<span id="2124">2124</span>
+<span id="2125">2125</span>
+<span id="2126">2126</span>
+<span id="2127">2127</span>
+<span id="2128">2128</span>
+<span id="2129">2129</span>
+<span id="2130">2130</span>
+<span id="2131">2131</span>
+<span id="2132">2132</span>
+<span id="2133">2133</span>
+<span id="2134">2134</span>
+<span id="2135">2135</span>
+<span id="2136">2136</span>
+<span id="2137">2137</span>
+<span id="2138">2138</span>
+<span id="2139">2139</span>
+<span id="2140">2140</span>
+<span id="2141">2141</span>
+<span id="2142">2142</span>
+<span id="2143">2143</span>
+<span id="2144">2144</span>
+<span id="2145">2145</span>
+<span id="2146">2146</span>
+<span id="2147">2147</span>
+<span id="2148">2148</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! A GLSL450/GLSL460 transpiler that takes a syntax tree and writes it as a plain raw GLSL</span>
 <span class="doccomment">//! [`String`].</span>
@@ -2123,6 +2208,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">IndentStyle</span> {
+    <span class="doccomment">/// Write the current indenting level and style to the output</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">write</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>, <span class="ident">levels</span>: <span class="ident">u32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="prelude-ty">Result</span>
     <span class="kw">where</span>
         <span class="ident">F</span>: <span class="ident">Write</span>,
@@ -2151,14 +2237,19 @@
     }
 }
 
+<span class="doccomment">/// Formatter whitespace</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Whitespace</span> {
+    <span class="doccomment">/// No whitespace</span>
     <span class="prelude-val">None</span>,
+    <span class="doccomment">/// A space</span>
     <span class="ident">Space</span>,
+    <span class="doccomment">/// A newline</span>
     <span class="ident">Newline</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">Whitespace</span> {
+    <span class="doccomment">/// Write this whitespace to the output</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">write</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>, <span class="ident">state</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">FormattingState</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="prelude-ty">Result</span>
     <span class="kw">where</span>
         <span class="ident">F</span>: <span class="ident">Write</span>,
@@ -2216,6 +2307,7 @@
 <span class="doccomment">/// Formatting state of the GLSL transpiler</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">FormattingState</span><span class="op">&lt;</span><span class="lifetime">&#39;s</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// Formatting settings</span>
     <span class="kw">pub</span> <span class="ident">settings</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;s</span> <span class="ident">FormattingSettings</span>,
     <span class="ident">indentation_level</span>: <span class="ident">u32</span>,
     <span class="ident">new_line_pending</span>: <span class="ident">bool</span>,
@@ -2237,6 +2329,7 @@
         <span class="self">self</span>.<span class="ident">write_indent</span>(<span class="ident">f</span>)
     }
 
+    <span class="doccomment">/// Append a pending new line to the output</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_line</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">required</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="kw">if</span> <span class="ident">required</span> {
             <span class="self">self</span>.<span class="ident">new_line_pending</span> <span class="op">=</span> <span class="bool-val">true</span>;
@@ -2245,10 +2338,12 @@
         <span class="prelude-val">Ok</span>(())
     }
 
+    <span class="doccomment">/// Consume the pending newlines</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">consume_newline</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
         <span class="self">self</span>.<span class="ident">new_line_pending</span> <span class="op">=</span> <span class="bool-val">false</span>;
     }
 
+    <span class="doccomment">/// Flush pending newlines to the output, if any</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">flush_line</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="prelude-ty">Result</span>
     <span class="kw">where</span>
         <span class="ident">F</span>: <span class="ident">Write</span>,
@@ -2261,6 +2356,7 @@
         <span class="prelude-val">Ok</span>(())
     }
 
+    <span class="doccomment">/// Flush pending newlines as spaces to the output, if any</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">flush_space</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="prelude-ty">Result</span>
     <span class="kw">where</span>
         <span class="ident">F</span>: <span class="ident">Write</span>,
@@ -2273,6 +2369,7 @@
         <span class="prelude-val">Ok</span>(())
     }
 
+    <span class="doccomment">/// Enter a new block, and update the indentation level</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">enter_block</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="prelude-ty">Result</span>
     <span class="kw">where</span>
         <span class="ident">F</span>: <span class="ident">Write</span>,
@@ -2287,6 +2384,7 @@
         <span class="prelude-val">Ok</span>(())
     }
 
+    <span class="doccomment">/// Exit the current block, and update the indentation level</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">exit_block</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="prelude-ty">Result</span>
     <span class="kw">where</span>
         <span class="ident">F</span>: <span class="ident">Write</span>,
@@ -2309,6 +2407,7 @@
         <span class="prelude-val">Ok</span>(())
     }
 
+    <span class="doccomment">/// Write a struct field separator</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">write_struct_field_separator</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="prelude-ty">Result</span>
     <span class="kw">where</span>
         <span class="ident">F</span>: <span class="ident">Write</span>,
@@ -2317,6 +2416,7 @@
         <span class="self">self</span>.<span class="ident">settings</span>.<span class="ident">struct_field_separator</span>.<span class="ident">write</span>(<span class="ident">f</span>, <span class="self">self</span>)
     }
 
+    <span class="doccomment">/// Write a struct declaration terminator</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">write_struct_declaration_terminator</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="prelude-ty">Result</span>
     <span class="kw">where</span>
         <span class="ident">F</span>: <span class="ident">Write</span>,
@@ -2325,6 +2425,7 @@
         <span class="self">self</span>.<span class="ident">settings</span>.<span class="ident">struct_declaration_terminator</span>.<span class="ident">write</span>(<span class="ident">f</span>, <span class="self">self</span>)
     }
 
+    <span class="doccomment">/// Write a declaration terminator</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">write_declaration_terminator</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="prelude-ty">Result</span>
     <span class="kw">where</span>
         <span class="ident">F</span>: <span class="ident">Write</span>,
@@ -2333,6 +2434,7 @@
         <span class="self">self</span>.<span class="ident">settings</span>.<span class="ident">declaration_terminator</span>.<span class="ident">write</span>(<span class="ident">f</span>, <span class="self">self</span>)
     }
 
+    <span class="doccomment">/// Write a binary operator</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">write_binary_op</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>, <span class="ident">op</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="prelude-ty">Result</span>
     <span class="kw">where</span>
         <span class="ident">F</span>: <span class="ident">Write</span>,
@@ -2350,6 +2452,7 @@
         <span class="prelude-val">Ok</span>(())
     }
 
+    <span class="doccomment">/// Write a statement terminator</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">write_statement_terminator</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="prelude-ty">Result</span>
     <span class="kw">where</span>
         <span class="ident">F</span>: <span class="ident">Write</span>,
@@ -2358,6 +2461,7 @@
         <span class="self">self</span>.<span class="ident">settings</span>.<span class="ident">statement_terminator</span>.<span class="ident">write</span>(<span class="ident">f</span>, <span class="self">self</span>)
     }
 
+    <span class="doccomment">/// Write a function definition terminator</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">write_function_definition_terminator</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="prelude-ty">Result</span>
     <span class="kw">where</span>
         <span class="ident">F</span>: <span class="ident">Write</span>,
@@ -2392,8 +2496,9 @@
 
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ast</span>;
 
-<span class="comment">// Precedence information for transpiling parentheses properly</span>
+<span class="doccomment">/// Precedence information for transpiling parentheses properly</span>
 <span class="kw">trait</span> <span class="ident">HasPrecedence</span> {
+    <span class="doccomment">/// Return the precedence level of the expression</span>
     <span class="kw">fn</span> <span class="ident">precedence</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u32</span>;
 }
 
@@ -2452,6 +2557,7 @@
     }
 }
 
+<span class="doccomment">/// Transpile an identifier to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_identifier</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">i</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">Identifier</span>,
@@ -2463,6 +2569,7 @@
     <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="kw-2">&amp;</span><span class="ident">i</span>.<span class="number">0</span>)
 }
 
+<span class="doccomment">/// Transpile a type_name to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_type_name</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">t</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">TypeName</span>,
@@ -2474,6 +2581,7 @@
     <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="kw-2">&amp;</span><span class="ident">t</span>.<span class="number">0</span>)
 }
 
+<span class="doccomment">/// Transpile a type_specifier_non_array to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_type_specifier_non_array</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">t</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">TypeSpecifierNonArray</span>,
@@ -2607,6 +2715,7 @@
     }
 }
 
+<span class="doccomment">/// Transpile a type_specifier to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_type_specifier</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">t</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">TypeSpecifier</span>,
@@ -2624,6 +2733,7 @@
     <span class="prelude-val">Ok</span>(())
 }
 
+<span class="doccomment">/// Transpile a fully_specified_type to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_fully_specified_type</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">t</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">FullySpecifiedType</span>,
@@ -2640,6 +2750,7 @@
     <span class="ident">show_type_specifier</span>(<span class="ident">f</span>, <span class="kw-2">&amp;</span><span class="ident">t</span>.<span class="ident">ty</span>, <span class="ident">state</span>)
 }
 
+<span class="doccomment">/// Transpile a struct_non_declaration to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_struct_non_declaration</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">st</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">StructSpecifier</span>,
@@ -2667,6 +2778,7 @@
     <span class="prelude-val">Ok</span>(())
 }
 
+<span class="doccomment">/// Transpile a struct to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_struct</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">st</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">StructSpecifier</span>,
@@ -2679,6 +2791,7 @@
     <span class="ident">state</span>.<span class="ident">write_struct_declaration_terminator</span>(<span class="ident">f</span>)
 }
 
+<span class="doccomment">/// Transpile a struct_field to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_struct_field</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">field</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">StructFieldSpecifier</span>,
@@ -2710,6 +2823,7 @@
     <span class="prelude-val">Ok</span>(())
 }
 
+<span class="doccomment">/// Transpile an array_spec to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_array_spec</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">a</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">ArraySpecifier</span>,
@@ -2732,6 +2846,7 @@
     <span class="prelude-val">Ok</span>(())
 }
 
+<span class="doccomment">/// Transpile an arrayed_identifier to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_arrayed_identifier</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">a</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">ArrayedIdentifier</span>,
@@ -2749,6 +2864,7 @@
     <span class="prelude-val">Ok</span>(())
 }
 
+<span class="doccomment">/// Transpile a type_qualifier to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_type_qualifier</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">q</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">TypeQualifier</span>,
@@ -2770,6 +2886,7 @@
     <span class="prelude-val">Ok</span>(())
 }
 
+<span class="doccomment">/// Transpile a type_qualifier_spec to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_type_qualifier_spec</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">q</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">TypeQualifierSpec</span>,
@@ -2788,6 +2905,7 @@
     }
 }
 
+<span class="doccomment">/// Transpile a storage_qualifier to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_storage_qualifier</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">q</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">StorageQualifier</span>,
@@ -2816,6 +2934,7 @@
     }
 }
 
+<span class="doccomment">/// Transpile a subroutine to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_subroutine</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">types</span>: <span class="kw-2">&amp;</span>[<span class="ident">ast</span>::<span class="ident">TypeSpecifier</span>],
@@ -2845,6 +2964,7 @@
     <span class="prelude-val">Ok</span>(())
 }
 
+<span class="doccomment">/// Transpile a layout_qualifier to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_layout_qualifier</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">l</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">LayoutQualifier</span>,
@@ -2867,6 +2987,7 @@
     <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;)&quot;</span>)
 }
 
+<span class="doccomment">/// Transpile a layout_qualifier_spec to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_layout_qualifier_spec</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">l</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">LayoutQualifierSpec</span>,
@@ -2885,6 +3006,7 @@
     }
 }
 
+<span class="doccomment">/// Transpile a precision_qualifier to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_precision_qualifier</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">PrecisionQualifier</span>,
@@ -2900,6 +3022,7 @@
     }
 }
 
+<span class="doccomment">/// Transpile an interpolation_qualifier to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_interpolation_qualifier</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">i</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">InterpolationQualifier</span>,
@@ -2915,6 +3038,7 @@
     }
 }
 
+<span class="doccomment">/// Transpile a float&lt;F&gt;(f: &amp;mut F, x: f32, _: &amp;mut FormattingState to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_float</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>, <span class="ident">x</span>: <span class="ident">f32</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">FormattingState</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="prelude-ty">Result</span>
 <span class="kw">where</span>
     <span class="ident">F</span>: <span class="ident">Write</span>,
@@ -2926,6 +3050,7 @@
     }
 }
 
+<span class="doccomment">/// Transpile a double&lt;F&gt;(f: &amp;mut F, x: f64, _: &amp;mut FormattingState to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_double</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>, <span class="ident">x</span>: <span class="ident">f64</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">FormattingState</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="prelude-ty">Result</span>
 <span class="kw">where</span>
     <span class="ident">F</span>: <span class="ident">Write</span>,
@@ -2937,6 +3062,7 @@
     }
 }
 
+<span class="doccomment">/// Transpile an expr to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_expr</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">expr</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">Expr</span>,
@@ -3129,6 +3255,7 @@
     }
 }
 
+<span class="doccomment">/// Transpile a path&lt;F&gt;(f: &amp;mut F, path: &amp;ast::Path, _: &amp;mut FormattingState to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_path</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>, <span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">Path</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">FormattingState</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="prelude-ty">Result</span>
 <span class="kw">where</span>
     <span class="ident">F</span>: <span class="ident">Write</span>,
@@ -3139,6 +3266,7 @@
     }
 }
 
+<span class="doccomment">/// Transpile an unary_op to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_unary_op</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">op</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">UnaryOp</span>,
@@ -3157,6 +3285,7 @@
     }
 }
 
+<span class="doccomment">/// Transpile a binary_op to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_binary_op</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">op</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">BinaryOp</span>,
@@ -3188,6 +3317,7 @@
     }
 }
 
+<span class="doccomment">/// Transpile an assignment_op to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_assignment_op</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">op</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">AssignmentOp</span>,
@@ -3211,6 +3341,7 @@
     }
 }
 
+<span class="doccomment">/// Transpile a function_identifier to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_function_identifier</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">i</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">FunIdentifier</span>,
@@ -3225,6 +3356,7 @@
     }
 }
 
+<span class="doccomment">/// Transpile a declaration to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_declaration</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">d</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">Declaration</span>,
@@ -3254,6 +3386,7 @@
     }
 }
 
+<span class="doccomment">/// Transpile a function_prototype to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_function_prototype</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">fp</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">FunctionPrototype</span>,
@@ -3281,6 +3414,7 @@
 
     <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;)&quot;</span>)
 }
+<span class="doccomment">/// Transpile a function_parameter_declaration to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_function_parameter_declaration</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">FunctionParameterDeclaration</span>,
@@ -3309,6 +3443,7 @@
     }
 }
 
+<span class="doccomment">/// Transpile a function_parameter_declarator to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_function_parameter_declarator</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">FunctionParameterDeclarator</span>,
@@ -3322,6 +3457,7 @@
     <span class="ident">show_arrayed_identifier</span>(<span class="ident">f</span>, <span class="kw-2">&amp;</span><span class="ident">p</span>.<span class="ident">ident</span>, <span class="ident">state</span>)
 }
 
+<span class="doccomment">/// Transpile an init_declarator_list to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_init_declarator_list</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">i</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">InitDeclaratorList</span>,
@@ -3340,6 +3476,7 @@
     <span class="prelude-val">Ok</span>(())
 }
 
+<span class="doccomment">/// Transpile a single_declaration to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_single_declaration</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">d</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">SingleDeclaration</span>,
@@ -3367,6 +3504,7 @@
     <span class="prelude-val">Ok</span>(())
 }
 
+<span class="doccomment">/// Transpile a single_declaration_no_type to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_single_declaration_no_type</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">d</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">SingleDeclarationNoType</span>,
@@ -3385,6 +3523,7 @@
     <span class="prelude-val">Ok</span>(())
 }
 
+<span class="doccomment">/// Transpile an initializer to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_initializer</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">i</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">Initializer</span>,
@@ -3412,6 +3551,7 @@
     }
 }
 
+<span class="doccomment">/// Transpile a block&lt;F&gt;(f: &amp;mut F, b: &amp;ast::Block, state: &amp;mut FormattingState to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_block</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>, <span class="ident">b</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">Block</span>, <span class="ident">state</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">FormattingState</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="prelude-ty">Result</span>
 <span class="kw">where</span>
     <span class="ident">F</span>: <span class="ident">Write</span>,
@@ -3438,6 +3578,7 @@
     <span class="prelude-val">Ok</span>(())
 }
 
+<span class="doccomment">/// Transpile a function_definition to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_function_definition</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">fd</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">FunctionDefinition</span>,
@@ -3453,6 +3594,7 @@
     <span class="ident">state</span>.<span class="ident">write_function_definition_terminator</span>(<span class="ident">f</span>)
 }
 
+<span class="doccomment">/// Transpile a compound_statement to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_compound_statement</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">cst</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">CompoundStatement</span>,
@@ -3472,6 +3614,7 @@
     <span class="prelude-val">Ok</span>(())
 }
 
+<span class="doccomment">/// Transpile a statement to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_statement</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">st</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">Statement</span>,
@@ -3494,6 +3637,7 @@
     }
 }
 
+<span class="doccomment">/// Transpile an expression_statement to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_expression_statement</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">est</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">ExprStatement</span>,
@@ -3509,6 +3653,7 @@
     <span class="ident">state</span>.<span class="ident">write_statement_terminator</span>(<span class="ident">f</span>)
 }
 
+<span class="doccomment">/// Transpile a selection_statement to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_selection_statement</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">sst</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">SelectionStatement</span>,
@@ -3523,6 +3668,7 @@
     <span class="ident">show_selection_rest_statement</span>(<span class="ident">f</span>, <span class="kw-2">&amp;</span><span class="ident">sst</span>.<span class="ident">rest</span>, <span class="ident">state</span>)
 }
 
+<span class="doccomment">/// Transpile a selection_rest_statement to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_selection_rest_statement</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">sst</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">SelectionRestStatement</span>,
@@ -3544,6 +3690,7 @@
     }
 }
 
+<span class="doccomment">/// Transpile a switch_statement to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_switch_statement</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">sst</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">SwitchStatement</span>,
@@ -3563,6 +3710,7 @@
     <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;}\n&quot;</span>)
 }
 
+<span class="doccomment">/// Transpile a case_label to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_case_label</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">cl</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">CaseLabel</span>,
@@ -3581,6 +3729,7 @@
     }
 }
 
+<span class="doccomment">/// Transpile an iteration_statement to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_iteration_statement</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">ist</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">IterationStatement</span>,
@@ -3615,6 +3764,7 @@
     }
 }
 
+<span class="doccomment">/// Transpile a condition to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_condition</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">c</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">Condition</span>,
@@ -3635,6 +3785,7 @@
     }
 }
 
+<span class="doccomment">/// Transpile a for_init_statement to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_for_init_statement</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">i</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">ForInitStatement</span>,
@@ -3655,6 +3806,7 @@
     }
 }
 
+<span class="doccomment">/// Transpile a for_rest_statement to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_for_rest_statement</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">r</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">ForRestStatement</span>,
@@ -3676,6 +3828,7 @@
     <span class="prelude-val">Ok</span>(())
 }
 
+<span class="doccomment">/// Transpile a jump_statement to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_jump_statement</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">j</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">JumpStatement</span>,
@@ -3699,6 +3852,7 @@
     <span class="ident">state</span>.<span class="ident">write_statement_terminator</span>(<span class="ident">f</span>)
 }
 
+<span class="doccomment">/// Transpile a preprocessor to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_preprocessor</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">pp</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">Preprocessor</span>,
@@ -3725,6 +3879,7 @@
     }
 }
 
+<span class="doccomment">/// Transpile a preprocessor_define to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_preprocessor_define</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">pd</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">PreprocessorDefine</span>,
@@ -3759,6 +3914,7 @@
     }
 }
 
+<span class="doccomment">/// Transpile a preprocessor_else&lt;F&gt;(f: &amp;mut F, _: &amp;mut FormattingState to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_preprocessor_else</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">FormattingState</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="prelude-ty">Result</span>
 <span class="kw">where</span>
     <span class="ident">F</span>: <span class="ident">Write</span>,
@@ -3766,6 +3922,7 @@
     <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;#else\n&quot;</span>)
 }
 
+<span class="doccomment">/// Transpile a preprocessor_elseif to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_preprocessor_elseif</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">pei</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">PreprocessorElseIf</span>,
@@ -3777,6 +3934,7 @@
     <span class="macro">writeln</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;#elseif {}&quot;</span>, <span class="ident">pei</span>.<span class="ident">condition</span>)
 }
 
+<span class="doccomment">/// Transpile a preprocessor_error to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_preprocessor_error</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">pe</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">PreprocessorError</span>,
@@ -3788,6 +3946,7 @@
     <span class="macro">writeln</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;#error {}&quot;</span>, <span class="ident">pe</span>.<span class="ident">message</span>)
 }
 
+<span class="doccomment">/// Transpile a preprocessor_endif&lt;F&gt;(f: &amp;mut F, _: &amp;mut FormattingState to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_preprocessor_endif</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">FormattingState</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="prelude-ty">Result</span>
 <span class="kw">where</span>
     <span class="ident">F</span>: <span class="ident">Write</span>,
@@ -3795,6 +3954,7 @@
     <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;#endif\n&quot;</span>)
 }
 
+<span class="doccomment">/// Transpile a preprocessor_if to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_preprocessor_if</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">pi</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">PreprocessorIf</span>,
@@ -3806,6 +3966,7 @@
     <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;#if {}&quot;</span>, <span class="ident">pi</span>.<span class="ident">condition</span>)
 }
 
+<span class="doccomment">/// Transpile a preprocessor_ifdef to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_preprocessor_ifdef</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">pid</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">PreprocessorIfDef</span>,
@@ -3819,6 +3980,7 @@
     <span class="macro">writeln</span><span class="macro">!</span>(<span class="ident">f</span>)
 }
 
+<span class="doccomment">/// Transpile a preprocessor_ifndef to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_preprocessor_ifndef</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">pind</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">PreprocessorIfNDef</span>,
@@ -3832,6 +3994,7 @@
     <span class="macro">writeln</span><span class="macro">!</span>(<span class="ident">f</span>)
 }
 
+<span class="doccomment">/// Transpile a preprocessor_include to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_preprocessor_include</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">pi</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">PreprocessorInclude</span>,
@@ -3845,6 +4008,7 @@
     <span class="macro">writeln</span><span class="macro">!</span>(<span class="ident">f</span>)
 }
 
+<span class="doccomment">/// Transpile a preprocessor_line to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_preprocessor_line</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">pl</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">PreprocessorLine</span>,
@@ -3860,6 +4024,7 @@
     <span class="macro">writeln</span><span class="macro">!</span>(<span class="ident">f</span>)
 }
 
+<span class="doccomment">/// Transpile a preprocessor_pragma to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_preprocessor_pragma</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">pp</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">PreprocessorPragma</span>,
@@ -3871,6 +4036,7 @@
     <span class="macro">writeln</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;#pragma {}&quot;</span>, <span class="ident">pp</span>.<span class="ident">command</span>)
 }
 
+<span class="doccomment">/// Transpile a preprocessor_undef to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_preprocessor_undef</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">pud</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">PreprocessorUndef</span>,
@@ -3884,6 +4050,7 @@
     <span class="macro">writeln</span><span class="macro">!</span>(<span class="ident">f</span>)
 }
 
+<span class="doccomment">/// Transpile a preprocessor_version to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_preprocessor_version</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">pv</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">PreprocessorVersion</span>,
@@ -3911,6 +4078,7 @@
     <span class="macro">writeln</span><span class="macro">!</span>(<span class="ident">f</span>)
 }
 
+<span class="doccomment">/// Transpile a preprocessor_extension to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_preprocessor_extension</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">pe</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">PreprocessorExtension</span>,
@@ -3950,6 +4118,7 @@
     <span class="macro">writeln</span><span class="macro">!</span>(<span class="ident">f</span>)
 }
 
+<span class="doccomment">/// Transpile an external_declaration to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_external_declaration</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">ed</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">ExternalDeclaration</span>,
@@ -3969,6 +4138,7 @@
     }
 }
 
+<span class="doccomment">/// Transpile a translation_unit to GLSL</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">show_translation_unit</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
     <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">F</span>,
     <span class="ident">tu</span>: <span class="kw-2">&amp;</span><span class="ident">ast</span>::<span class="ident">TranslationUnit</span>,
@@ -4129,4 +4299,5 @@ return u;
     }
 }
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "glsl_lang";</script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="glsl_lang"></div>
+    <script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>

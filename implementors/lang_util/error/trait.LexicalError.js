@@ -1,3 +1,3 @@
 (function() {var implementors = {};
-implementors["glsl_lang"] = [{"text":"impl LexicalError for LexicalError","synthetic":false,"types":[]}];
+implementors["glsl_lang"] = [{"text":"impl <a class=\"trait\" href=\"lang_util/error/trait.LexicalError.html\" title=\"trait lang_util::error::LexicalError\">LexicalError</a> for <a class=\"enum\" href=\"glsl_lang/lexer/enum.LexicalError.html\" title=\"enum glsl_lang::lexer::LexicalError\">LexicalError</a>","synthetic":false,"types":["glsl_lang::lexer::LexicalError"]}];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

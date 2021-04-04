@@ -1,3 +1,3 @@
 (function() {var implementors = {};
-implementors["lang_util_derive"] = [{"text":"impl FromField for NodeDisplayField","synthetic":false,"types":[]}];
+implementors["lang_util_derive"] = [{"text":"impl FromField for <a class=\"struct\" href=\"lang_util_derive/content_display/struct.NodeDisplayField.html\" title=\"struct lang_util_derive::content_display::NodeDisplayField\">NodeDisplayField</a>","synthetic":false,"types":["lang_util_derive::content_display::NodeDisplayField"]}];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

@@ -1,4 +1,4 @@
 (function() {var implementors = {};
-implementors["glsl_lang"] = [{"text":"impl Error for LexicalError","synthetic":false,"types":[]}];
-implementors["lang_util"] = [{"text":"impl&lt;E:&nbsp;LexicalError&gt; Error for ParseError&lt;E&gt;","synthetic":false,"types":[]}];
+implementors["glsl_lang"] = [{"text":"impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/std/error/trait.Error.html\" title=\"trait std::error::Error\">Error</a> for <a class=\"enum\" href=\"glsl_lang/lexer/enum.LexicalError.html\" title=\"enum glsl_lang::lexer::LexicalError\">LexicalError</a>","synthetic":false,"types":["glsl_lang::lexer::LexicalError"]}];
+implementors["lang_util"] = [{"text":"impl&lt;E:&nbsp;<a class=\"trait\" href=\"lang_util/error/trait.LexicalError.html\" title=\"trait lang_util::error::LexicalError\">LexicalError</a>&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/std/error/trait.Error.html\" title=\"trait std::error::Error\">Error</a> for <a class=\"struct\" href=\"lang_util/error/struct.ParseError.html\" title=\"struct lang_util::error::ParseError\">ParseError</a>&lt;E&gt;","synthetic":false,"types":["lang_util::error::ParseError"]}];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

@@ -1,3 +1,3 @@
 (function() {var implementors = {};
-implementors["lang_util_derive"] = [{"text":"impl FromDeriveInput for NodeContentOpts","synthetic":false,"types":[]}];
+implementors["lang_util_derive"] = [{"text":"impl FromDeriveInput for <a class=\"struct\" href=\"lang_util_derive/struct.NodeContentOpts.html\" title=\"struct lang_util_derive::NodeContentOpts\">NodeContentOpts</a>","synthetic":false,"types":["lang_util_derive::NodeContentOpts"]}];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

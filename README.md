@@ -33,17 +33,13 @@ modeled after [Dimitri Sabadie's `glsl` crate](https://github.com/phaazon/glsl).
 
 ## Repository structure
 
-* [![Crates.io](https://img.shields.io/crates/v/glsl-lang)](https://crates.io/crates/glsl-lang) [`lang`](lang):
-  AST, parser, visitor, transpiler for GLSL language
-* [![Crates.io](https://img.shields.io/crates/v/glsl-lang-quote)](https://crates.io/crates/glsl-lang-quote) [`lang-quote`](lang-quote):
-  proc-macro crate to parse GLSL at compile-time
-* [![Crates.io](https://img.shields.io/crates/v/glsl-lang-cli)](https://crates.io/crates/glsl-lang-cli) [`lang-cli`](lang-cli):
-  simple CLI tool to show GLSL syntax trees
-
-* [![Crates.io](https://img.shields.io/crates/v/lang-util)](https://crates.io/crates/lang-util) [`lang-util`](lang-util):
-  utilities for implementing syntax trees
-* [![Crates.io](https://img.shields.io/crates/v/lang-util-derive)](https://crates.io/crates/lang-util-derive) [`lang-util-derive`](lang-util-derive):
-  proc-macro crate to implement a syntax tree with span information
+| crates.io                                                                                                   | Path                                   | Description                                                       |
+| ---                                                                                                         | ---                                    | ---                                                               |
+| [![Crates.io](https://img.shields.io/crates/v/glsl-lang)](https://crates.io/crates/glsl-lang)               | [`lang`](lang)                         | AST, parser, visitor, transpiler for GLSL language                |
+| [![Crates.io](https://img.shields.io/crates/v/glsl-lang-quote)](https://crates.io/crates/glsl-lang-quote)   | [`lang-quote`](lang-quote)             | proc-macro crate to parse GLSL at compile-time                    |
+| [![Crates.io](https://img.shields.io/crates/v/glsl-lang-cli)](https://crates.io/crates/glsl-lang-cli)       | [`lang-cli`](lang-cli)                 | simple CLI tool to show GLSL syntax trees                         |
+| [![Crates.io](https://img.shields.io/crates/v/lang-util)](https://crates.io/crates/lang-util)               | [`lang-util`](lang-util)               | utilities for implementing syntax trees                           |
+| [![Crates.io](https://img.shields.io/crates/v/lang-util-derive)](https://crates.io/crates/lang-util-derive) | [`lang-util-derive`](lang-util-derive) | proc-macro crate to implement a syntax tree with span information |
 
 ## `glsl-lang` vs. `glsl` crates
 

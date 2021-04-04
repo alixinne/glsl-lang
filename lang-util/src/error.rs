@@ -130,7 +130,7 @@ impl<E: LexicalError> ParseError<E> {
         let kind = match error {
             lalrpop_util::ParseError::InvalidToken { .. } => ParseErrorKind::InvalidToken,
             lalrpop_util::ParseError::UnrecognizedEOF { expected, .. } => {
-                ParseErrorKind::UnrecognizedEOF { expected }
+                ParseErrorKind::UnrecognizedEof { expected }
             }
             lalrpop_util::ParseError::UnrecognizedToken { token, expected } => {
                 ParseErrorKind::UnrecognizedToken {
@@ -163,7 +163,7 @@ pub enum ParseErrorKind<E: LexicalError> {
     /// An invalid token was encountered during lexical analysis
     InvalidToken,
     /// Unexpected end of file
-    UnrecognizedEOF {
+    UnrecognizedEof {
         /// List of expected token names
         expected: Vec<String>,
     },
@@ -190,7 +190,7 @@ impl<E: LexicalError> fmt::Display for ParseErrorKind<E> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             ParseErrorKind::InvalidToken => write!(f, "invalid token"),
-            ParseErrorKind::UnrecognizedEOF { expected } => {
+            ParseErrorKind::UnrecognizedEof { expected } => {
                 write!(f, "unexpected end of input, expected any of {:?}", expected)
             }
             ParseErrorKind::UnrecognizedToken { token, expected } => write!(

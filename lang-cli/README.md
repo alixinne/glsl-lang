@@ -1,6 +1,6 @@
 # glsl-lang-cli
 
-
+`glsl-lang` debugging CLI. Prints GLSL ASTs to the standard output.
 
 ## Author
 

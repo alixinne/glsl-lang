@@ -1,14 +1,25 @@
+//! Error type definitions
+
 use std::error::Error;
 use std::fmt;
 
 use crate::position::LexerPosition;
 
+/// Trait to implement for a token to be used with `lang_util`'s infrastructure
 pub trait Token: fmt::Display {}
 
+/// An error produced by lexical analysis
 pub trait LexicalError: Error {
+    /// Return the location at which this error occurred
+    ///
+    /// # Returns
+    ///
+    /// [LexerPosition] structure that indicates at which offset in the input the error occurred.
     fn location(&self) -> LexerPosition;
 }
 
+/// A position in the input stream that has been resolved into the more user-friendly line and
+/// column indices
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct ResolvedPosition {
     raw: LexerPosition,
@@ -17,6 +28,18 @@ pub struct ResolvedPosition {
 }
 
 impl ResolvedPosition {
+    /// Create a new resolved position
+    ///
+    /// If the offset doesn't correspond to the input string, the results are undefined.
+    ///
+    /// # Parameters
+    ///
+    /// * `raw`: raw byte offset into the input
+    /// * `input`: input string the offset is to be taken into
+    ///
+    /// # Returns
+    ///
+    /// The resolved position.
     pub fn new(raw: LexerPosition, input: &str) -> ResolvedPosition {
         let offset = if raw.offset >= input.len() {
             input.len().max(1) - 1
@@ -44,18 +67,22 @@ impl ResolvedPosition {
         }
     }
 
+    /// Source string id for this position
     pub fn source_id(&self) -> usize {
         self.raw.source_id
     }
 
+    /// Raw byte offset into the source string
     pub fn offset(&self) -> usize {
         self.raw.offset
     }
 
+    /// Line index (0 based)
     pub fn line(&self) -> usize {
         self.line_index
     }
 
+    /// Column index (0 based)
     pub fn col(&self) -> usize {
         self.pos_index
     }
@@ -67,13 +94,22 @@ impl fmt::Display for ResolvedPosition {
     }
 }
 
+/// A parsing error wrapped from lalrpop_util's error type
 #[derive(Debug, PartialEq)]
 pub struct ParseError<E: LexicalError> {
+    /// Position in the input stream at which the error occurred
     pub position: ResolvedPosition,
+    /// Type of the error
     pub kind: ParseErrorKind<E>,
 }
 
 impl<E: LexicalError> ParseError<E> {
+    /// Create a new [ParseError]
+    ///
+    /// # Parameters
+    ///
+    /// * `error`: lalrpop_util parsing error
+    /// * `input`: input string in which the error occurred
     pub fn new<T: Token>(
         error: lalrpop_util::ParseError<LexerPosition, T, E>,
         input: &str,
@@ -121,20 +157,31 @@ impl<E: LexicalError> fmt::Display for ParseError<E> {
 impl<E: LexicalError> Error for ParseError<E> {}
 
 // We represent tokens as formatted string since we only want to display them
+/// Parsing error kind
 #[derive(Debug, Clone, PartialEq)]
 pub enum ParseErrorKind<E: LexicalError> {
+    /// An invalid token was encountered during lexical analysis
     InvalidToken,
+    /// Unexpected end of file
     UnrecognizedEOF {
+        /// List of expected token names
         expected: Vec<String>,
     },
+    /// Unexpected token
     UnrecognizedToken {
+        /// The unexpected token
         token: String,
+        /// List of expected token names
         expected: Vec<String>,
     },
+    /// Extra token after input
     ExtraToken {
+        /// The extra token
         token: String,
     },
+    /// Lexical analysis error
     LexicalError {
+        /// Lexical error
         error: E,
     },
 }

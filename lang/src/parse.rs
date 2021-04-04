@@ -1,3 +1,5 @@
+//! Parsing utilities and entry points
+
 use crate::{ast, lexer::Lexer, parser};
 
 pub use crate::lexer::{LexerPosition, LexicalError, Token};
@@ -8,25 +10,33 @@ pub use parsable::Parsable;
 mod context;
 pub use context::*;
 
+/// GLSL parsing error
 pub type ParseError = lang_util::error::ParseError<LexicalError>;
 
+/// GLSL language parser
 pub trait LangParser: Sized {
+    /// Instantiate the parser
     fn new() -> Self;
 }
 
+/// GLSL language parsing capability
 pub trait Parse: Sized {
+    /// Type of the parser to create
     type Parser: LangParser;
 
+    /// Parse the input source
     fn parse(source: &str) -> Result<Self, ParseError> {
         <Self as Parse>::parse_with_options(source, &Default::default())
             .map(|(parsed, _names)| parsed)
     }
 
+    /// Parse the input source with the given options
     fn parse_with_options(
         source: &str,
         opts: &ParseContext,
     ) -> Result<(Self, ParseContext), ParseError>;
 
+    /// Parse the input source with the given options and already instantiated parser
     fn parse_with_parser<'i>(
         source: &'i str,
         opts: &ParseContext,

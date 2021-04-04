@@ -1,3 +1,7 @@
+//! `glsl-lang-quote` offers proc-macros to quote GLSL syntax in Rust.
+
+#![deny(missing_docs)]
+
 use glsl_lang::{
     ast,
     parse::{Parsable, ParseOptions},
@@ -32,17 +36,20 @@ where
     }
 }
 
+/// Parse a translation unit at compile time
 #[proc_macro]
 pub fn glsl(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     glsl_internal::<ast::TranslationUnit>(input)
 }
 
+/// Parse a statement at compile time
 #[cfg(any(feature = "quote-statement", feature = "quote-parsable"))]
 #[proc_macro]
 pub fn glsl_statement(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     glsl_internal::<ast::Statement>(input)
 }
 
+/// Parse an expression at compile time
 #[cfg(any(feature = "quote-expr", feature = "quote-parsable"))]
 #[proc_macro]
 pub fn glsl_expr(input: proc_macro::TokenStream) -> proc_macro::TokenStream {

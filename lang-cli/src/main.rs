@@ -1,3 +1,7 @@
+//! `glsl-lang` debugging CLI. Prints GLSL ASTs to the standard output.
+
+#![deny(missing_docs)]
+
 use std::io::prelude::*;
 
 use glsl_lang::ast::NodeDisplay;

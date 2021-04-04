@@ -1,3 +1,7 @@
+//! GLSL 4.60 language parser and AST.
+
+#![deny(missing_docs)]
+
 use lalrpop_util::lalrpop_mod;
 
 pub mod ast;

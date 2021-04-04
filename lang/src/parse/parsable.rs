@@ -11,11 +11,13 @@ use crate::{
 /// thus, if you are matching on span positions, you will get a different result than if using the
 /// parser directly.
 pub trait Parsable: Sized {
+    /// Parse the input source
     fn parse(source: &str) -> Result<Self, ParseError> {
         <Self as Parsable>::parse_with_options(source, &Default::default())
             .map(|(parsed, _names)| parsed)
     }
 
+    /// Parse the input source with the given options
     fn parse_with_options(
         source: &str,
         opts: &ParseContext,

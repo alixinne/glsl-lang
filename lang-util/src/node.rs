@@ -1,3 +1,5 @@
+//! AST type definitions
+
 mod content;
 mod display;
 

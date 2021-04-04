@@ -7,6 +7,7 @@ use super::{
 
 #[derive(Debug, Clone, PartialEq, Logos, lang_util::Token, parse_display::Display)]
 #[logos(extras = LexerContext)]
+#[allow(missing_docs)]
 pub enum Token<'i> {
     #[token("const")]
     Const,
@@ -602,6 +603,7 @@ pub enum Token<'i> {
 }
 
 impl<'i> Token<'i> {
+    /// Return `true` if this token is a preprocessor token
     pub fn is_pp(&self) -> bool {
         matches!(
             self,
@@ -622,6 +624,7 @@ impl<'i> Token<'i> {
         )
     }
 
+    /// Return this token's inner text as a string slice
     pub fn as_str(&self) -> &'i str {
         match self {
             Self::Identifier((s, _)) => s,
@@ -632,6 +635,7 @@ impl<'i> Token<'i> {
         }
     }
 
+    /// Return this token's lexer context
     pub fn context(&self) -> LexerContext {
         match self {
             Self::Identifier((_, c)) => c.clone(),

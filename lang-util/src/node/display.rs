@@ -1,11 +1,19 @@
 use std::fmt;
 
+/// A wrapper for a syntax node to be displayed
+#[derive(Clone, Copy)]
 pub struct NodeDisplayWrapper<'a, T: ?Sized> {
     node: &'a T,
     current_level: usize,
 }
 
 impl NodeDisplayWrapper<'static, str> {
+    /// Create a new [NodeDisplayWrapper]
+    ///
+    /// # Parameters
+    ///
+    /// * `name`: name of the node being displayed
+    /// * `level`: current indentation level
     pub fn new(name: &'static str, level: usize) -> Self {
         Self {
             node: name,
@@ -27,6 +35,15 @@ impl fmt::Display for NodeDisplayWrapper<'static, str> {
 }
 
 impl<'a, T> NodeDisplayWrapper<'a, T> {
+    /// Set the level of this display wrapper
+    ///
+    /// # Parameters
+    ///
+    /// * `level`: new indentation level
+    ///
+    /// # Returns
+    ///
+    /// New display wrapper with the updated level.
     pub fn set_level(self, level: usize) -> Self {
         Self {
             node: self.node,
@@ -64,9 +81,29 @@ impl<T: NodeDisplay> fmt::Display for NodeDisplayWrapper<'_, T> {
     }
 }
 
+/// Trait for displaying an AST node's content
 pub trait NodeContentDisplay {
+    /// Name of the node
+    ///
+    /// # Returns
+    ///
+    /// `None` if this node is just a transparent wrapper (and should not be displayed), otherwise
+    /// the name of the node type.
     fn name() -> Option<&'static str>;
+
+    /// Display extra information for the node
+    ///
+    /// # Parameters
+    ///
+    /// * `f`: formatter to output to
     fn display_extra(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result;
+
+    /// Display the node's children
+    ///
+    /// # Parameters
+    ///
+    /// * `level`: current indentation level
+    /// * `f`: formatter to output to
     fn display_children(&self, level: usize, f: &mut fmt::Formatter<'_>) -> fmt::Result;
 }
 
@@ -97,15 +134,34 @@ forward_display!(u16 => "ShortConst");
 forward_display!(u32 => "UIntConst");
 forward_display!(bool => "BoolConst");
 
+/// Trait for displaying a syntax node
 pub trait NodeDisplay: Sized {
+    /// Name of the syntax node's type
     fn name() -> Option<&'static str>;
 
+    /// Starting position of the node
     fn start(&self) -> Option<usize>;
+    /// Ending position of the node
     fn end(&self) -> Option<usize>;
+    /// Source id of the node
     fn source_id(&self) -> Option<usize>;
 
+    /// Obtain a display wrapper for the current node
     fn display(&self) -> NodeDisplayWrapper<Self>;
+
+    /// Display extra information for the node
+    ///
+    /// # Parameters
+    ///
+    /// * `f`: formatter to output to
     fn display_extra(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result;
+
+    /// Display the node's children
+    ///
+    /// # Parameters
+    ///
+    /// * `level`: current indentation level
+    /// * `f`: formatter to output to
     fn display_children(&self, level: usize, f: &mut fmt::Formatter<'_>) -> fmt::Result;
 }
 

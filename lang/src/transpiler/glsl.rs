@@ -56,6 +56,7 @@ pub enum IndentStyle {
 }
 
 impl IndentStyle {
+    /// Write the current indenting level and style to the output
     pub fn write<F>(&self, f: &mut F, levels: u32) -> std::fmt::Result
     where
         F: Write,
@@ -84,14 +85,19 @@ impl Default for IndentStyle {
     }
 }
 
+/// Formatter whitespace
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum Whitespace {
+    /// No whitespace
     None,
+    /// A space
     Space,
+    /// A newline
     Newline,
 }
 
 impl Whitespace {
+    /// Write this whitespace to the output
     pub fn write<F>(&self, f: &mut F, state: &mut FormattingState) -> std::fmt::Result
     where
         F: Write,
@@ -149,6 +155,7 @@ impl Default for FormattingSettings {
 /// Formatting state of the GLSL transpiler
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct FormattingState<'s> {
+    /// Formatting settings
     pub settings: &'s FormattingSettings,
     indentation_level: u32,
     new_line_pending: bool,
@@ -170,6 +177,7 @@ impl<'s> FormattingState<'s> {
         self.write_indent(f)
     }
 
+    /// Append a pending new line to the output
     pub fn new_line(&mut self, required: bool) -> std::fmt::Result {
         if required {
             self.new_line_pending = true;
@@ -178,10 +186,12 @@ impl<'s> FormattingState<'s> {
         Ok(())
     }
 
+    /// Consume the pending newlines
     pub fn consume_newline(&mut self) {
         self.new_line_pending = false;
     }
 
+    /// Flush pending newlines to the output, if any
     pub fn flush_line<F>(&mut self, f: &mut F) -> std::fmt::Result
     where
         F: Write,
@@ -194,6 +204,7 @@ impl<'s> FormattingState<'s> {
         Ok(())
     }
 
+    /// Flush pending newlines as spaces to the output, if any
     pub fn flush_space<F>(&mut self, f: &mut F) -> std::fmt::Result
     where
         F: Write,
@@ -206,6 +217,7 @@ impl<'s> FormattingState<'s> {
         Ok(())
     }
 
+    /// Enter a new block, and update the indentation level
     pub fn enter_block<F>(&mut self, f: &mut F) -> std::fmt::Result
     where
         F: Write,
@@ -220,6 +232,7 @@ impl<'s> FormattingState<'s> {
         Ok(())
     }
 
+    /// Exit the current block, and update the indentation level
     pub fn exit_block<F>(&mut self, f: &mut F) -> std::fmt::Result
     where
         F: Write,
@@ -242,6 +255,7 @@ impl<'s> FormattingState<'s> {
         Ok(())
     }
 
+    /// Write a struct field separator
     pub fn write_struct_field_separator<F>(&mut self, f: &mut F) -> std::fmt::Result
     where
         F: Write,
@@ -250,6 +264,7 @@ impl<'s> FormattingState<'s> {
         self.settings.struct_field_separator.write(f, self)
     }
 
+    /// Write a struct declaration terminator
     pub fn write_struct_declaration_terminator<F>(&mut self, f: &mut F) -> std::fmt::Result
     where
         F: Write,
@@ -258,6 +273,7 @@ impl<'s> FormattingState<'s> {
         self.settings.struct_declaration_terminator.write(f, self)
     }
 
+    /// Write a declaration terminator
     pub fn write_declaration_terminator<F>(&mut self, f: &mut F) -> std::fmt::Result
     where
         F: Write,
@@ -266,6 +282,7 @@ impl<'s> FormattingState<'s> {
         self.settings.declaration_terminator.write(f, self)
     }
 
+    /// Write a binary operator
     pub fn write_binary_op<F>(&self, f: &mut F, op: &str) -> std::fmt::Result
     where
         F: Write,
@@ -283,6 +300,7 @@ impl<'s> FormattingState<'s> {
         Ok(())
     }
 
+    /// Write a statement terminator
     pub fn write_statement_terminator<F>(&mut self, f: &mut F) -> std::fmt::Result
     where
         F: Write,
@@ -291,6 +309,7 @@ impl<'s> FormattingState<'s> {
         self.settings.statement_terminator.write(f, self)
     }
 
+    /// Write a function definition terminator
     pub fn write_function_definition_terminator<F>(&mut self, f: &mut F) -> std::fmt::Result
     where
         F: Write,
@@ -325,8 +344,9 @@ impl Default for FormattingState<'static> {
 
 use crate::ast;
 
-// Precedence information for transpiling parentheses properly
+/// Precedence information for transpiling parentheses properly
 trait HasPrecedence {
+    /// Return the precedence level of the expression
     fn precedence(&self) -> u32;
 }
 
@@ -385,6 +405,7 @@ impl HasPrecedence for ast::AssignmentOp {
     }
 }
 
+/// Transpile an identifier to GLSL
 pub fn show_identifier<F>(
     f: &mut F,
     i: &ast::Identifier,
@@ -396,6 +417,7 @@ where
     f.write_str(&i.0)
 }
 
+/// Transpile a type_name to GLSL
 pub fn show_type_name<F>(
     f: &mut F,
     t: &ast::TypeName,
@@ -407,6 +429,7 @@ where
     f.write_str(&t.0)
 }
 
+/// Transpile a type_specifier_non_array to GLSL
 pub fn show_type_specifier_non_array<F>(
     f: &mut F,
     t: &ast::TypeSpecifierNonArray,
@@ -540,6 +563,7 @@ where
     }
 }
 
+/// Transpile a type_specifier to GLSL
 pub fn show_type_specifier<F>(
     f: &mut F,
     t: &ast::TypeSpecifier,
@@ -557,6 +581,7 @@ where
     Ok(())
 }
 
+/// Transpile a fully_specified_type to GLSL
 pub fn show_fully_specified_type<F>(
     f: &mut F,
     t: &ast::FullySpecifiedType,
@@ -573,6 +598,7 @@ where
     show_type_specifier(f, &t.ty, state)
 }
 
+/// Transpile a struct_non_declaration to GLSL
 pub fn show_struct_non_declaration<F>(
     f: &mut F,
     st: &ast::StructSpecifier,
@@ -600,6 +626,7 @@ where
     Ok(())
 }
 
+/// Transpile a struct to GLSL
 pub fn show_struct<F>(
     f: &mut F,
     st: &ast::StructSpecifier,
@@ -612,6 +639,7 @@ where
     state.write_struct_declaration_terminator(f)
 }
 
+/// Transpile a struct_field to GLSL
 pub fn show_struct_field<F>(
     f: &mut F,
     field: &ast::StructFieldSpecifier,
@@ -643,6 +671,7 @@ where
     Ok(())
 }
 
+/// Transpile an array_spec to GLSL
 pub fn show_array_spec<F>(
     f: &mut F,
     a: &ast::ArraySpecifier,
@@ -665,6 +694,7 @@ where
     Ok(())
 }
 
+/// Transpile an arrayed_identifier to GLSL
 pub fn show_arrayed_identifier<F>(
     f: &mut F,
     a: &ast::ArrayedIdentifier,
@@ -682,6 +712,7 @@ where
     Ok(())
 }
 
+/// Transpile a type_qualifier to GLSL
 pub fn show_type_qualifier<F>(
     f: &mut F,
     q: &ast::TypeQualifier,
@@ -703,6 +734,7 @@ where
     Ok(())
 }
 
+/// Transpile a type_qualifier_spec to GLSL
 pub fn show_type_qualifier_spec<F>(
     f: &mut F,
     q: &ast::TypeQualifierSpec,
@@ -721,6 +753,7 @@ where
     }
 }
 
+/// Transpile a storage_qualifier to GLSL
 pub fn show_storage_qualifier<F>(
     f: &mut F,
     q: &ast::StorageQualifier,
@@ -749,6 +782,7 @@ where
     }
 }
 
+/// Transpile a subroutine to GLSL
 pub fn show_subroutine<F>(
     f: &mut F,
     types: &[ast::TypeSpecifier],
@@ -778,6 +812,7 @@ where
     Ok(())
 }
 
+/// Transpile a layout_qualifier to GLSL
 pub fn show_layout_qualifier<F>(
     f: &mut F,
     l: &ast::LayoutQualifier,
@@ -800,6 +835,7 @@ where
     f.write_str(")")
 }
 
+/// Transpile a layout_qualifier_spec to GLSL
 pub fn show_layout_qualifier_spec<F>(
     f: &mut F,
     l: &ast::LayoutQualifierSpec,
@@ -818,6 +854,7 @@ where
     }
 }
 
+/// Transpile a precision_qualifier to GLSL
 pub fn show_precision_qualifier<F>(
     f: &mut F,
     p: &ast::PrecisionQualifier,
@@ -833,6 +870,7 @@ where
     }
 }
 
+/// Transpile an interpolation_qualifier to GLSL
 pub fn show_interpolation_qualifier<F>(
     f: &mut F,
     i: &ast::InterpolationQualifier,
@@ -848,6 +886,7 @@ where
     }
 }
 
+/// Transpile a float<F>(f: &mut F, x: f32, _: &mut FormattingState to GLSL
 pub fn show_float<F>(f: &mut F, x: f32, _: &mut FormattingState<'_>) -> std::fmt::Result
 where
     F: Write,
@@ -859,6 +898,7 @@ where
     }
 }
 
+/// Transpile a double<F>(f: &mut F, x: f64, _: &mut FormattingState to GLSL
 pub fn show_double<F>(f: &mut F, x: f64, _: &mut FormattingState<'_>) -> std::fmt::Result
 where
     F: Write,
@@ -870,6 +910,7 @@ where
     }
 }
 
+/// Transpile an expr to GLSL
 pub fn show_expr<F>(
     f: &mut F,
     expr: &ast::Expr,
@@ -1062,6 +1103,7 @@ where
     }
 }
 
+/// Transpile a path<F>(f: &mut F, path: &ast::Path, _: &mut FormattingState to GLSL
 pub fn show_path<F>(f: &mut F, path: &ast::Path, _: &mut FormattingState<'_>) -> std::fmt::Result
 where
     F: Write,
@@ -1072,6 +1114,7 @@ where
     }
 }
 
+/// Transpile an unary_op to GLSL
 pub fn show_unary_op<F>(
     f: &mut F,
     op: &ast::UnaryOp,
@@ -1090,6 +1133,7 @@ where
     }
 }
 
+/// Transpile a binary_op to GLSL
 pub fn show_binary_op<F>(
     f: &mut F,
     op: &ast::BinaryOp,
@@ -1121,6 +1165,7 @@ where
     }
 }
 
+/// Transpile an assignment_op to GLSL
 pub fn show_assignment_op<F>(
     f: &mut F,
     op: &ast::AssignmentOp,
@@ -1144,6 +1189,7 @@ where
     }
 }
 
+/// Transpile a function_identifier to GLSL
 pub fn show_function_identifier<F>(
     f: &mut F,
     i: &ast::FunIdentifier,
@@ -1158,6 +1204,7 @@ where
     }
 }
 
+/// Transpile a declaration to GLSL
 pub fn show_declaration<F>(
     f: &mut F,
     d: &ast::Declaration,
@@ -1187,6 +1234,7 @@ where
     }
 }
 
+/// Transpile a function_prototype to GLSL
 pub fn show_function_prototype<F>(
     f: &mut F,
     fp: &ast::FunctionPrototype,
@@ -1214,6 +1262,7 @@ where
 
     f.write_str(")")
 }
+/// Transpile a function_parameter_declaration to GLSL
 pub fn show_function_parameter_declaration<F>(
     f: &mut F,
     p: &ast::FunctionParameterDeclaration,
@@ -1242,6 +1291,7 @@ where
     }
 }
 
+/// Transpile a function_parameter_declarator to GLSL
 pub fn show_function_parameter_declarator<F>(
     f: &mut F,
     p: &ast::FunctionParameterDeclarator,
@@ -1255,6 +1305,7 @@ where
     show_arrayed_identifier(f, &p.ident, state)
 }
 
+/// Transpile an init_declarator_list to GLSL
 pub fn show_init_declarator_list<F>(
     f: &mut F,
     i: &ast::InitDeclaratorList,
@@ -1273,6 +1324,7 @@ where
     Ok(())
 }
 
+/// Transpile a single_declaration to GLSL
 pub fn show_single_declaration<F>(
     f: &mut F,
     d: &ast::SingleDeclaration,
@@ -1300,6 +1352,7 @@ where
     Ok(())
 }
 
+/// Transpile a single_declaration_no_type to GLSL
 pub fn show_single_declaration_no_type<F>(
     f: &mut F,
     d: &ast::SingleDeclarationNoType,
@@ -1318,6 +1371,7 @@ where
     Ok(())
 }
 
+/// Transpile an initializer to GLSL
 pub fn show_initializer<F>(
     f: &mut F,
     i: &ast::Initializer,
@@ -1345,6 +1399,7 @@ where
     }
 }
 
+/// Transpile a block<F>(f: &mut F, b: &ast::Block, state: &mut FormattingState to GLSL
 pub fn show_block<F>(f: &mut F, b: &ast::Block, state: &mut FormattingState<'_>) -> std::fmt::Result
 where
     F: Write,
@@ -1371,6 +1426,7 @@ where
     Ok(())
 }
 
+/// Transpile a function_definition to GLSL
 pub fn show_function_definition<F>(
     f: &mut F,
     fd: &ast::FunctionDefinition,
@@ -1386,6 +1442,7 @@ where
     state.write_function_definition_terminator(f)
 }
 
+/// Transpile a compound_statement to GLSL
 pub fn show_compound_statement<F>(
     f: &mut F,
     cst: &ast::CompoundStatement,
@@ -1405,6 +1462,7 @@ where
     Ok(())
 }
 
+/// Transpile a statement to GLSL
 pub fn show_statement<F>(
     f: &mut F,
     st: &ast::Statement,
@@ -1427,6 +1485,7 @@ where
     }
 }
 
+/// Transpile an expression_statement to GLSL
 pub fn show_expression_statement<F>(
     f: &mut F,
     est: &ast::ExprStatement,
@@ -1442,6 +1501,7 @@ where
     state.write_statement_terminator(f)
 }
 
+/// Transpile a selection_statement to GLSL
 pub fn show_selection_statement<F>(
     f: &mut F,
     sst: &ast::SelectionStatement,
@@ -1456,6 +1516,7 @@ where
     show_selection_rest_statement(f, &sst.rest, state)
 }
 
+/// Transpile a selection_rest_statement to GLSL
 pub fn show_selection_rest_statement<F>(
     f: &mut F,
     sst: &ast::SelectionRestStatement,
@@ -1477,6 +1538,7 @@ where
     }
 }
 
+/// Transpile a switch_statement to GLSL
 pub fn show_switch_statement<F>(
     f: &mut F,
     sst: &ast::SwitchStatement,
@@ -1496,6 +1558,7 @@ where
     f.write_str("}\n")
 }
 
+/// Transpile a case_label to GLSL
 pub fn show_case_label<F>(
     f: &mut F,
     cl: &ast::CaseLabel,
@@ -1514,6 +1577,7 @@ where
     }
 }
 
+/// Transpile an iteration_statement to GLSL
 pub fn show_iteration_statement<F>(
     f: &mut F,
     ist: &ast::IterationStatement,
@@ -1548,6 +1612,7 @@ where
     }
 }
 
+/// Transpile a condition to GLSL
 pub fn show_condition<F>(
     f: &mut F,
     c: &ast::Condition,
@@ -1568,6 +1633,7 @@ where
     }
 }
 
+/// Transpile a for_init_statement to GLSL
 pub fn show_for_init_statement<F>(
     f: &mut F,
     i: &ast::ForInitStatement,
@@ -1588,6 +1654,7 @@ where
     }
 }
 
+/// Transpile a for_rest_statement to GLSL
 pub fn show_for_rest_statement<F>(
     f: &mut F,
     r: &ast::ForRestStatement,
@@ -1609,6 +1676,7 @@ where
     Ok(())
 }
 
+/// Transpile a jump_statement to GLSL
 pub fn show_jump_statement<F>(
     f: &mut F,
     j: &ast::JumpStatement,
@@ -1632,6 +1700,7 @@ where
     state.write_statement_terminator(f)
 }
 
+/// Transpile a preprocessor to GLSL
 pub fn show_preprocessor<F>(
     f: &mut F,
     pp: &ast::Preprocessor,
@@ -1658,6 +1727,7 @@ where
     }
 }
 
+/// Transpile a preprocessor_define to GLSL
 pub fn show_preprocessor_define<F>(
     f: &mut F,
     pd: &ast::PreprocessorDefine,
@@ -1692,6 +1762,7 @@ where
     }
 }
 
+/// Transpile a preprocessor_else<F>(f: &mut F, _: &mut FormattingState to GLSL
 pub fn show_preprocessor_else<F>(f: &mut F, _: &mut FormattingState<'_>) -> std::fmt::Result
 where
     F: Write,
@@ -1699,6 +1770,7 @@ where
     f.write_str("#else\n")
 }
 
+/// Transpile a preprocessor_elseif to GLSL
 pub fn show_preprocessor_elseif<F>(
     f: &mut F,
     pei: &ast::PreprocessorElseIf,
@@ -1710,6 +1782,7 @@ where
     writeln!(f, "#elseif {}", pei.condition)
 }
 
+/// Transpile a preprocessor_error to GLSL
 pub fn show_preprocessor_error<F>(
     f: &mut F,
     pe: &ast::PreprocessorError,
@@ -1721,6 +1794,7 @@ where
     writeln!(f, "#error {}", pe.message)
 }
 
+/// Transpile a preprocessor_endif<F>(f: &mut F, _: &mut FormattingState to GLSL
 pub fn show_preprocessor_endif<F>(f: &mut F, _: &mut FormattingState<'_>) -> std::fmt::Result
 where
     F: Write,
@@ -1728,6 +1802,7 @@ where
     f.write_str("#endif\n")
 }
 
+/// Transpile a preprocessor_if to GLSL
 pub fn show_preprocessor_if<F>(
     f: &mut F,
     pi: &ast::PreprocessorIf,
@@ -1739,6 +1814,7 @@ where
     write!(f, "#if {}", pi.condition)
 }
 
+/// Transpile a preprocessor_ifdef to GLSL
 pub fn show_preprocessor_ifdef<F>(
     f: &mut F,
     pid: &ast::PreprocessorIfDef,
@@ -1752,6 +1828,7 @@ where
     writeln!(f)
 }
 
+/// Transpile a preprocessor_ifndef to GLSL
 pub fn show_preprocessor_ifndef<F>(
     f: &mut F,
     pind: &ast::PreprocessorIfNDef,
@@ -1765,6 +1842,7 @@ where
     writeln!(f)
 }
 
+/// Transpile a preprocessor_include to GLSL
 pub fn show_preprocessor_include<F>(
     f: &mut F,
     pi: &ast::PreprocessorInclude,
@@ -1778,6 +1856,7 @@ where
     writeln!(f)
 }
 
+/// Transpile a preprocessor_line to GLSL
 pub fn show_preprocessor_line<F>(
     f: &mut F,
     pl: &ast::PreprocessorLine,
@@ -1793,6 +1872,7 @@ where
     writeln!(f)
 }
 
+/// Transpile a preprocessor_pragma to GLSL
 pub fn show_preprocessor_pragma<F>(
     f: &mut F,
     pp: &ast::PreprocessorPragma,
@@ -1804,6 +1884,7 @@ where
     writeln!(f, "#pragma {}", pp.command)
 }
 
+/// Transpile a preprocessor_undef to GLSL
 pub fn show_preprocessor_undef<F>(
     f: &mut F,
     pud: &ast::PreprocessorUndef,
@@ -1817,6 +1898,7 @@ where
     writeln!(f)
 }
 
+/// Transpile a preprocessor_version to GLSL
 pub fn show_preprocessor_version<F>(
     f: &mut F,
     pv: &ast::PreprocessorVersion,
@@ -1844,6 +1926,7 @@ where
     writeln!(f)
 }
 
+/// Transpile a preprocessor_extension to GLSL
 pub fn show_preprocessor_extension<F>(
     f: &mut F,
     pe: &ast::PreprocessorExtension,
@@ -1883,6 +1966,7 @@ where
     writeln!(f)
 }
 
+/// Transpile an external_declaration to GLSL
 pub fn show_external_declaration<F>(
     f: &mut F,
     ed: &ast::ExternalDeclaration,
@@ -1902,6 +1986,7 @@ where
     }
 }
 
+/// Transpile a translation_unit to GLSL
 pub fn show_translation_unit<F>(
     f: &mut F,
     tu: &ast::TranslationUnit,

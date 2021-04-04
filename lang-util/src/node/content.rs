@@ -2,6 +2,9 @@ use std::fmt;
 
 use crate::position::{LexerPosition, NodeSpan};
 
+/// Trait for AST node contents.
+///
+/// All nodes which will be stored in a [Node] need to implement this.
 pub trait NodeContent: fmt::Debug + Clone + PartialEq + Sized {
     /// Convert the contents into a node
     fn into_node<T>(self) -> Node<T>
@@ -29,7 +32,9 @@ pub trait NodeContent: fmt::Debug + Clone + PartialEq + Sized {
 /// A syntax node with span information
 #[derive(Debug, Clone, PartialEq)]
 pub struct Node<T: NodeContent> {
+    /// Contents of this syntax node
     pub content: T,
+    /// Span in the input this node was parsed from
     pub span: Option<NodeSpan>,
 }
 
@@ -97,6 +102,15 @@ impl NodeContent for &'static str {}
 
 /// Trait for comparing the content of syntax nodes
 pub trait NodeContentEq {
+    /// Compares this node's contents with the other's
+    ///
+    /// # Parameters
+    ///
+    /// * `other`: other node to compare the contents from
+    ///
+    /// # Returns
+    ///
+    /// `true` if both node's contents are equal, regardless of their span information.
     fn content_eq(&self, other: &Self) -> bool;
 }
 

@@ -318,20 +318,31 @@ impl<'i> Iterator for Lexer<'i> {
     }
 }
 
+/// Lexical analysis error
 #[derive(Debug, PartialEq, Error)]
 pub enum LexicalError {
+    /// Invalid int literal
     #[error("invalid int literal: {source}")]
     InvalidIntLiteral {
+        /// Source error
         source: std::num::ParseIntError,
+        /// Location for the error
         location: LexerPosition,
     },
+    /// Invalid float literal
     #[error("invalid float literal: {source}")]
     InvalidFloatLiteral {
+        /// Source error
         source: std::num::ParseFloatError,
+        /// Location for the error
         location: LexerPosition,
     },
+    /// Unexpected Rust identifier
     #[error("encountered forbidden #(ident) quote syntax")]
-    ForbiddenRsQuote { location: LexerPosition },
+    ForbiddenRsQuote {
+        /// Location for the error
+        location: LexerPosition,
+    },
 }
 
 impl lang_util::error::LexicalError for LexicalError {

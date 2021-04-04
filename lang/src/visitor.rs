@@ -90,6 +90,7 @@ macro_rules! make_visitor_trait {
     ///
     /// This trait exists in two flavors, depending on whether you want to mutate the AST or not: [`Visitor`] doesn’t
     /// allow for mutation while [`VisitorMut`] does.
+    #[allow(missing_docs)]
     pub trait $t {
       fn visit_translation_unit(&mut self, _: $($ref)* ast::TranslationUnit) -> Visit {
         Visit::Children

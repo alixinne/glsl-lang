@@ -10,7 +10,7 @@ documentation = "https://docs.rs/glsl-lang-quote/"
 repository = "https://github.com/vtavernier/glsl-lang"
 readme = "README.md"
 keywords = ["glsl", "language", "parser", "ast", "macro"]
-categories = ["parser-implementation", "rendering"]
+categories = ["parser-implementations", "rendering"]
 
 [lib]
 proc-macro = true

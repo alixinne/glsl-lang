@@ -20,15 +20,12 @@ if [ $CHECK_MODE -gt 0 ]; then
 	for D in "${GLSL_DIRS[@]}"; do
 		printf "% 20s " "$D" >&2
 
-		(
-			cd $D
-			if diff <(cargo readme -t ../README.tpl) README.md >/dev/null 2>&1; then
-				echo ok
-			else
-				echo not ok
-				EXIT_CODE=$((EXIT_CODE + 1))
-			fi
-		)
+		if (cd $D && diff <(cargo readme -t ../README.tpl) README.md >/dev/null 2>&1); then
+			echo ok
+		else
+			echo not ok
+			EXIT_CODE=$((EXIT_CODE + 1))
+		fi
 	done
 else
 	for D in "${GLSL_DIRS[@]}"; do

@@ -3,7 +3,20 @@
 [![Crates.io](https://img.shields.io/crates/v/glsl-lang-cli)](https://crates.io/crates/glsl-lang-cli)
 [![docs.rs](https://img.shields.io/docsrs/glsl-lang-cli)](https://docs.rs/glsl-lang-cli/)
 
-`glsl-lang` debugging CLI. Prints GLSL ASTs to the standard output.
+[`glsl-lang`](https://crates.io/crates/glsl-lang) debugging CLI.
+
+*This is only a prototype for debugging, more options will be added in later updates.*
+
+## Usage
+
+Print GLSL AST to the standard output:
+```bash
+$ cargo run < source.glsl
+TranslationUnit
+  ExternalDeclaration@0:0..45 `Declaration`
+    Declaration@0:0..45 `Block`
+      [...]
+```
 
 ## Author
 

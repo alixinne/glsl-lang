@@ -873,9 +873,11 @@ impl From<Expr> for Initializer {
     }
 }
 
-/// The most general form of an expression. As you can see if you read the variant list, in GLSL, an
-/// assignment is an expression. This is a bit silly but think of an assignment as a statement first
-/// then an expression which evaluates to what the statement “returns”.
+/// The most general form of an expression.
+///
+/// As you can see if you read the variant list, in GLSL, an assignment is an expression. This is a
+/// bit silly but think of an assignment as a statement first then an expression which evaluates to
+/// what the statement “returns”.
 ///
 /// An expression is either an assignment or a list (comma) of assignments.
 #[derive(Clone, Debug, PartialEq, NodeContent)]

@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["main",""]]});
+initSidebarItems({"fn":[["main","CLI entry point"]]});

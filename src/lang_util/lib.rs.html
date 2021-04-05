@@ -15,9 +15,21 @@
 <span id="12">12</span>
 <span id="13">13</span>
 <span id="14">14</span>
+<span id="15">15</span>
+<span id="16">16</span>
+<span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
+<span id="20">20</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! `lang-util` is a crate that implements utilities to parse and represent syntax trees using</span>
-<span class="doccomment">//! `lalrpop` and `logos`.</span>
+<span class="doccomment">//! [`lalrpop`](https://crates.io/crates/lalrpop) and [`logos`](https://crates.io/crates/logos).</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! This crate is tailored for use in the [`glsl-lang`](https://crates.io/crates/glsl-lang) crate,</span>
+<span class="doccomment">//! but you may use its utilities for implementing your own language parsers:</span>
+<span class="doccomment">//! - [error]: parsing error reporting module, with user-readable location information</span>
+<span class="doccomment">//! - [node]: AST node structure and display</span>
+<span class="doccomment">//! - [position]: utilities for working with positions in strings</span>
 
 <span class="attribute">#![<span class="ident">deny</span>(<span class="ident">missing_docs</span>)]</span>
 

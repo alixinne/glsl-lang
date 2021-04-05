@@ -1512,6 +1512,8 @@
 <span id="1509">1509</span>
 <span id="1510">1510</span>
 <span id="1511">1511</span>
+<span id="1512">1512</span>
+<span id="1513">1513</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! GLSL abstract syntax tree and grammar.</span>
 <span class="doccomment">//!</span>
@@ -2388,9 +2390,11 @@
     }
 }
 
-<span class="doccomment">/// The most general form of an expression. As you can see if you read the variant list, in GLSL, an</span>
-<span class="doccomment">/// assignment is an expression. This is a bit silly but think of an assignment as a statement first</span>
-<span class="doccomment">/// then an expression which evaluates to what the statement “returns”.</span>
+<span class="doccomment">/// The most general form of an expression.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// As you can see if you read the variant list, in GLSL, an assignment is an expression. This is a</span>
+<span class="doccomment">/// bit silly but think of an assignment as a statement first then an expression which evaluates to</span>
+<span class="doccomment">/// what the statement “returns”.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// An expression is either an assignment or a list (comma) of assignments.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>

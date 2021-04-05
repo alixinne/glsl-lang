@@ -1,7 +1,6 @@
 # glsl-lang-cli
 
 [![Crates.io](https://img.shields.io/crates/v/glsl-lang-cli)](https://crates.io/crates/glsl-lang-cli)
-[![docs.rs](https://img.shields.io/docsrs/glsl-lang-cli)](https://docs.rs/glsl-lang-cli/)
 
 [`glsl-lang`](https://crates.io/crates/glsl-lang) debugging CLI.
 

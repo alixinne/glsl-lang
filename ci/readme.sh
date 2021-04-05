@@ -14,13 +14,21 @@ while getopts ":c" opt; do
 	esac
 done
 
+make_readme () {
+	if [ -f 'README.tpl' ]; then
+		cargo readme -t README.tpl "$@"
+	else
+		cargo readme -t '../README.tpl' "$@"
+	fi
+}
+
 EXIT_CODE=0
 
 if [ $CHECK_MODE -gt 0 ]; then
 	for D in "${GLSL_DIRS[@]}"; do
 		printf "% 20s " "$D" >&2
 
-		if (cd $D && diff <(cargo readme -t ../README.tpl) README.md >/dev/null 2>&1); then
+		if (cd $D && diff <(make_readme) README.md >/dev/null 2>&1); then
 			echo ok
 		else
 			echo not ok
@@ -33,7 +41,7 @@ else
 
 		(
 			cd $D
-			cargo readme -t ../README.tpl -o README.md
+			make_readme -o README.md
 		)
 	done
 fi

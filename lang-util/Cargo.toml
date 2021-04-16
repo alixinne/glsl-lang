@@ -1,6 +1,6 @@
 [package]
 name = "lang-util"
-version = "0.1.2"
+version = "0.1.3"
 authors = ["Vincent Tavernier <vince.tavernier@gmail.com>"]
 edition = "2018"
 license = "BSD-3-Clause"
@@ -14,7 +14,7 @@ categories = ["parsing"]
 
 [dependencies]
 lalrpop-util = { version = "0.19", default-features = false }
-lang-util-derive = "0.1.2"
+lang-util-derive = "0.1.3"
 line-span = "0.1"
 parse-display = { version = "0.4", default-features = false, features = ["std"] }
 smol_str = "0.1"

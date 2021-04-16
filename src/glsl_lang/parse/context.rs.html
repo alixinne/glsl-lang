@@ -272,6 +272,18 @@
 <span id="269">269</span>
 <span id="270">270</span>
 <span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">cell</span>::<span class="ident">RefCell</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::{<span class="ident">BTreeMap</span>, <span class="ident">HashSet</span>};
@@ -372,6 +384,18 @@
     <span class="doccomment">/// Obtain an exclusive reference to the context&#39;s data</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">data_mut</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">cell</span>::<span class="ident">RefMut</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">ParseContextData</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">borrow_mut</span>()
+    }
+
+    <span class="doccomment">/// Create a new parse context cloning the given one&#39;s data, but applies the given policy</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_policy</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">policy</span>: <span class="kw">impl</span> <span class="ident">TypeTablePolicy</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ParseContext</span> {
+        <span class="self">Self</span> {
+            <span class="ident">opts</span>: <span class="self">self</span>.<span class="ident">opts</span>,
+            <span class="ident">data</span>: {
+                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">data</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">data</span>().<span class="ident">clone</span>();
+                <span class="ident">data</span>.<span class="ident">policy</span> <span class="op">=</span> <span class="ident">Rc</span>::<span class="ident">new</span>(<span class="ident">policy</span>);
+                <span class="ident">Rc</span>::<span class="ident">new</span>(<span class="ident">RefCell</span>::<span class="ident">new</span>(<span class="ident">data</span>))
+            },
+        }
     }
 }
 

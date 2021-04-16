@@ -98,6 +98,18 @@ impl ParseContext {
     pub fn data_mut(&self) -> std::cell::RefMut<'_, ParseContextData> {
         self.data.borrow_mut()
     }
+
+    /// Create a new parse context cloning the given one's data, but applies the given policy
+    pub fn with_policy(&self, policy: impl TypeTablePolicy + 'static) -> ParseContext {
+        Self {
+            opts: self.opts,
+            data: {
+                let mut data = self.data().clone();
+                data.policy = Rc::new(policy);
+                Rc::new(RefCell::new(data))
+            },
+        }
+    }
 }
 
 impl From<ParseOptions> for ParseContext {

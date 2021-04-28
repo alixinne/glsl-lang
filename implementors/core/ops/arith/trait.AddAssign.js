@@ -1,3 +1,0 @@
-(function() {var implementors = {};
-implementors["lang_util"] = [{"text":"impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/ops/arith/trait.AddAssign.html\" title=\"trait core::ops::arith::AddAssign\">AddAssign</a>&lt;<a class=\"struct\" href=\"lang_util/error/struct.ResolvedPosition.html\" title=\"struct lang_util::error::ResolvedPosition\">ResolvedPosition</a>&gt; for <a class=\"struct\" href=\"lang_util/error/struct.ResolvedPosition.html\" title=\"struct lang_util::error::ResolvedPosition\">ResolvedPosition</a>","synthetic":false,"types":["lang_util::error::ResolvedPosition"]}];
-if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

@@ -26,6 +26,8 @@ jobs:
           override: true
           target: ${{ matrix.target }}
       - name: Run tests
-        run: cargo test
+        run: |
+          cargo test
+          cargo test -p lang-util --lib --features serde
 
 # vim: ft=yaml:ts=2:sw=2:et

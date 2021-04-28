@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - `lang-util`: Add lang_util::error::ResolvedPosition::without_source_number
+- `lang-util`: Add support for serde serializing of node contents
 
 ## [0.1.3] - 2021-04-16
 ### Added

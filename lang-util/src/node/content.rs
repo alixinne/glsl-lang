@@ -172,6 +172,29 @@ impl<T: NodeContentEq> NodeContentEq for Box<T> {
     }
 }
 
+#[cfg(feature = "serde")]
+impl<T: NodeContent + serde::ser::Serialize> serde::ser::Serialize for Node<T> {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        self.content.serialize(serializer)
+    }
+}
+
+#[cfg(feature = "serde")]
+impl<'de, T: NodeContent + serde::de::Deserialize<'de>> serde::de::Deserialize<'de> for Node<T> {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(Self {
+            content: T::deserialize(deserializer)?,
+            span: None,
+        })
+    }
+}
+
 macro_rules! impl_node_content_eq {
     ($t:ty) => {
         impl NodeContentEq for $t {

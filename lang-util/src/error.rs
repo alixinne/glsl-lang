@@ -86,11 +86,35 @@ impl ResolvedPosition {
     pub fn col(&self) -> usize {
         self.pos_index
     }
+
+    /// Display the resolved position without source number
+    pub fn without_source_number(self) -> OptionalSourceNumber<Self> {
+        OptionalSourceNumber(self)
+    }
 }
 
 impl fmt::Display for ResolvedPosition {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}:{}:{}", self.source_id(), self.line() + 1, self.col())
+    }
+}
+
+/// Display wrapper for optional source numbers in resolved positions
+pub struct OptionalSourceNumber<T>(T);
+
+impl<T> fmt::Display for OptionalSourceNumber<T>
+where
+    ResolvedPosition: From<T>,
+    T: Copy,
+{
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let pos = ResolvedPosition::from(self.0);
+
+        if pos.source_id() == 0 {
+            write!(f, "{}:{}", pos.line() + 1, pos.col())
+        } else {
+            write!(f, "{}", pos)
+        }
     }
 }
 
@@ -146,6 +170,11 @@ impl<E: LexicalError> ParseError<E> {
 
         Self { position, kind }
     }
+
+    /// Display the resolved position without source number
+    pub fn without_source_number(&self) -> OptionalSourceNumber<&Self> {
+        OptionalSourceNumber(self)
+    }
 }
 
 impl<E: LexicalError> fmt::Display for ParseError<E> {
@@ -155,6 +184,12 @@ impl<E: LexicalError> fmt::Display for ParseError<E> {
 }
 
 impl<E: LexicalError> Error for ParseError<E> {}
+
+impl<'e, E: LexicalError> From<&'e ParseError<E>> for ResolvedPosition {
+    fn from(error: &'e ParseError<E>) -> Self {
+        error.position
+    }
+}
 
 // We represent tokens as formatted string since we only want to display them
 /// Parsing error kind

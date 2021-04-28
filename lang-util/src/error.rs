@@ -139,16 +139,7 @@ impl<E: LexicalError> ParseError<E> {
         input: &str,
     ) -> Self {
         // Resolve position into something that is user readable
-        let position = ResolvedPosition::new(
-            match &error {
-                lalrpop_util::ParseError::InvalidToken { location } => *location,
-                lalrpop_util::ParseError::UnrecognizedEOF { location, .. } => *location,
-                lalrpop_util::ParseError::UnrecognizedToken { token, .. } => token.0,
-                lalrpop_util::ParseError::ExtraToken { token } => token.0,
-                lalrpop_util::ParseError::User { error } => error.location(),
-            },
-            input,
-        );
+        let position = ResolvedPosition::from((&error, input));
 
         // Map the error kind
         let kind = match error {
@@ -174,6 +165,24 @@ impl<E: LexicalError> ParseError<E> {
     /// Display the resolved position without source number
     pub fn without_source_number(&self) -> OptionalSourceNumber<&Self> {
         OptionalSourceNumber(self)
+    }
+}
+
+impl<'s, T, E: LexicalError> From<(&'s lalrpop_util::ParseError<LexerPosition, T, E>, &'s str)>
+    for ResolvedPosition
+{
+    fn from((error, input): (&'s lalrpop_util::ParseError<LexerPosition, T, E>, &'s str)) -> Self {
+        // Resolve position into something that is user readable
+        Self::new(
+            match error {
+                lalrpop_util::ParseError::InvalidToken { location } => *location,
+                lalrpop_util::ParseError::UnrecognizedEOF { location, .. } => *location,
+                lalrpop_util::ParseError::UnrecognizedToken { token, .. } => token.0,
+                lalrpop_util::ParseError::ExtraToken { token } => token.0,
+                lalrpop_util::ParseError::User { error } => error.location(),
+            },
+            input,
+        )
     }
 }
 

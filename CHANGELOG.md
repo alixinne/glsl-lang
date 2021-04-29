@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 - NodeContentEq trait in lang-util
+- `lang-util`: dependency on parse-display
 
 ### Fixed
 - `#[derive(NodeContent)]` doesn't require importing NodeDisplay anymore

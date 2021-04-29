@@ -1,10 +1,9 @@
 //! Input position representation types
 
-use parse_display::Display;
+use std::fmt::Display;
 
 /// A position in the lexer's input
-#[derive(Default, Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Display)]
-#[display("{source_id}:{offset}")]
+#[derive(Default, Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct LexerPosition {
     /// Source id
     pub source_id: usize,
@@ -21,6 +20,12 @@ impl LexerPosition {
     /// * `offset`: raw byte offset in the input
     pub fn new(source_id: usize, offset: usize) -> Self {
         Self { source_id, offset }
+    }
+}
+
+impl Display for LexerPosition {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}:{}", self.source_id, self.offset)
     }
 }
 

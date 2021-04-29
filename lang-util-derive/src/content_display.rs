@@ -138,6 +138,7 @@ pub(crate) fn node_content_display(
         quote! { Ok(()) }
     } else {
         let mut ts = TokenStream::new();
+        ts.extend(quote! { use ::lang_util::node::NodeDisplay; });
 
         match &input.data {
             Data::Struct(st) => {

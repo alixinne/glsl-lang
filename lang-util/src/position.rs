@@ -29,7 +29,7 @@ impl Display for LexerPosition {
     }
 }
 
-/// Span information for a node, constructed from a nom_locate::LocatedSpan
+/// Span information for a node, constructed from a pair of LexerPositions
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct NodeSpan {
     /// The index of this span into the list of parsed units. This is used to
@@ -68,8 +68,7 @@ impl NodeSpan {
 
     /// Return a 0-length span located at the end point of this span.
     ///
-    /// This may be used in span range queries. Note that the line and column information will not be
-    /// accurate.
+    /// This may be used in span range queries.
     pub fn to_end_location(&self) -> Self {
         Self {
             source_id: self.source_id,

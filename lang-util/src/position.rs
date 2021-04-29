@@ -81,4 +81,14 @@ impl NodeSpan {
     pub fn length(&self) -> usize {
         self.end - self.start
     }
+
+    /// Return the start of this span as a LexerPosition
+    pub fn start(&self) -> LexerPosition {
+        LexerPosition::new(self.source_id, self.start)
+    }
+
+    /// Return the end of this span as a LexerPosition
+    pub fn end(&self) -> LexerPosition {
+        LexerPosition::new(self.source_id, self.end)
+    }
 }

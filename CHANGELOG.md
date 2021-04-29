@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `lang-util`: Implement AsRef for Node (contents)
 - `lang-util`: Implement PartialOrd/Ord for Node (contents)
 - `lang-util`: Implement Hash for Node (contents)
+- `glsl-lang`: Add `serde` feature for AST serialization
 
 ### Changed
 - PartialEq for Node now compares the contents of the node by default

@@ -22,6 +22,8 @@ thiserror = "1.0"
 lang-util = "0.2.0"
 smol_str = "0.1"
 
+rserde = { version = "1.0", optional = true, features = ["derive"], package = "serde" }
+
 [build-dependencies]
 lalrpop = "0.19"
 
@@ -42,3 +44,6 @@ default = []
 parser-expr = []
 parser-preprocessor = []
 parser-statement = []
+
+# AST Serialization
+serde = ["rserde", "lang-util/serde", "smol_str/serde"]

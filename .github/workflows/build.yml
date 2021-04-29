@@ -29,5 +29,6 @@ jobs:
         run: |
           cargo test
           cargo test -p lang-util --lib --features serde
+          cargo test -p glsl-lang --lib --features serde
 
 # vim: ft=yaml:ts=2:sw=2:et

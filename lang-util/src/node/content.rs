@@ -30,7 +30,7 @@ pub trait NodeContent: fmt::Debug + Clone + PartialEq + Sized {
 }
 
 /// A syntax node with span information
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone)]
 pub struct Node<T: NodeContent> {
     /// Contents of this syntax node
     pub content: T,
@@ -100,75 +100,35 @@ impl<T: NodeContent> From<T> for Node<T> {
 
 impl NodeContent for &'static str {}
 
-/// Trait for comparing the content of syntax nodes
-pub trait NodeContentEq {
-    /// Compares this node's contents with the other's
-    ///
-    /// # Parameters
-    ///
-    /// * `other`: other node to compare the contents from
-    ///
-    /// # Returns
-    ///
-    /// `true` if both node's contents are equal, regardless of their span information.
-    fn content_eq(&self, other: &Self) -> bool;
-}
-
-impl<T: NodeContent + NodeContentEq> NodeContentEq for Node<T> {
-    fn content_eq(&self, other: &Self) -> bool {
-        self.content.content_eq(&other.content)
+impl<U, T: NodeContent + AsRef<U>> AsRef<U> for Node<T> {
+    fn as_ref(&self) -> &U {
+        self.content.as_ref()
     }
 }
 
-impl<T: NodeContentEq, U: PartialEq> NodeContentEq for Result<T, U> {
-    fn content_eq(&self, other: &Self) -> bool {
-        match (self, other) {
-            (Ok(a), Ok(b)) => a.content_eq(b),
-            (Err(a), Err(b)) => a.eq(b),
-            _ => false,
-        }
+impl<T: NodeContent + PartialEq> PartialEq for Node<T> {
+    fn eq(&self, other: &Self) -> bool {
+        self.content.eq(&other.content)
     }
 }
 
-impl<T: NodeContentEq, U: PartialEq> NodeContentEq for Result<(&str, T), U> {
-    fn content_eq(&self, other: &Result<(&str, T), U>) -> bool {
-        match (self, other) {
-            (Ok((a1, a2)), Ok((b1, b2))) => a2.content_eq(b2) && a1 == b1,
-            (Err(a), Err(b)) => a.eq(b),
-            _ => false,
-        }
+impl<T: NodeContent + Eq> Eq for Node<T> {}
+
+impl<T: NodeContent + PartialOrd> PartialOrd for Node<T> {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        self.content.partial_cmp(&other.content)
     }
 }
 
-impl<T: NodeContentEq> NodeContentEq for Option<T> {
-    fn content_eq(&self, other: &Self) -> bool {
-        match (self, other) {
-            (Some(a), Some(b)) => a.content_eq(b),
-            (None, None) => true,
-            _ => false,
-        }
+impl<T: NodeContent + Ord> Ord for Node<T> {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        self.content.cmp(&other.content)
     }
 }
 
-impl<T: NodeContentEq> NodeContentEq for Vec<T> {
-    fn content_eq(&self, other: &Self) -> bool {
-        if self.len() != other.len() {
-            return false;
-        }
-
-        for (a, b) in self.iter().zip(other.iter()) {
-            if !a.content_eq(b) {
-                return false;
-            }
-        }
-
-        true
-    }
-}
-
-impl<T: NodeContentEq> NodeContentEq for Box<T> {
-    fn content_eq(&self, other: &Self) -> bool {
-        (**self).content_eq(&**other)
+impl<T: NodeContent + std::hash::Hash> std::hash::Hash for Node<T> {
+    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+        self.content.hash(state)
     }
 }
 
@@ -193,65 +153,4 @@ impl<'de, T: NodeContent + serde::de::Deserialize<'de>> serde::de::Deserialize<'
             span: None,
         })
     }
-}
-
-macro_rules! impl_node_content_eq {
-    ($t:ty) => {
-        impl NodeContentEq for $t {
-            fn content_eq(&self, other: &Self) -> bool {
-                *self == *other
-            }
-        }
-    };
-}
-
-impl_node_content_eq!(());
-impl_node_content_eq!(bool);
-impl_node_content_eq!(char);
-impl_node_content_eq!(u16);
-impl_node_content_eq!(i32);
-impl_node_content_eq!(u32);
-impl_node_content_eq!(f32);
-impl_node_content_eq!(f64);
-impl_node_content_eq!(usize);
-impl_node_content_eq!(&str);
-impl_node_content_eq!(String);
-impl_node_content_eq!(smol_str::SmolStr);
-impl_node_content_eq!(std::borrow::Cow<'_, str>);
-
-#[macro_export]
-/// Replacement for assert_eq but using [`NodeContentEq`] instead of [`PartialEq`]
-macro_rules! assert_ceq {
-    ($left:expr, $right:expr) => ({
-        match (&$left, &$right) {
-            (left_val, right_val) => {
-                if !::lang_util::node::NodeContentEq::content_eq(left_val, right_val) {
-                    // The reborrows below are intentional. Without them, the stack slot for the
-                    // borrow is initialized even before the values are compared, leading to a
-                    // noticeable slow down.
-                    panic!(r#"assertion failed: `left.content_eq(right)`
-  left: `{:?}`,
- right: `{:?}`"#, &*left_val, &*right_val)
-                }
-            }
-        }
-    });
-    ($left:expr, $right:expr,) => ({
-        assert_ceq!($left, $right)
-    });
-    ($left:expr, $right:expr, $($arg:tt)+) => ({
-        match (&($left), &($right)) {
-            (left_val, right_val) => {
-                if !::lang_util::node::NodeContentEq::content_eq(left_val, right_val) {
-                    // The reborrows below are intentional. Without them, the stack slot for the
-                    // borrow is initialized even before the values are compared, leading to a
-                    // noticeable slow down.
-                    panic!(r#"assertion failed: `left.content_eq(right)`
-  left: `{:?}`,
- right: `{:?}`: {}"#, &*left_val, &*right_val,
-                           format_args!($($arg)+))
-                }
-            }
-        }
-    });
 }

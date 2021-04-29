@@ -2104,7 +2104,7 @@ return u;
 
     #[test]
     fn roundtrip_glsl_complex_expr() {
-        use lang_util::{assert_ceq, node::NodeContent};
+        use lang_util::node::NodeContent;
 
         let zero = ast::Expr::DoubleConst(0.);
         let ray = ast::Expr::Variable("ray".into_node());
@@ -2123,7 +2123,7 @@ return u;
         show_expr(&mut output, &input, &mut FormattingState::default()).unwrap();
 
         let back = ast::Expr::parse(&output).unwrap();
-        assert_ceq!(back, input, "intermediate source '{}'", output);
+        assert_eq!(back, input, "intermediate source '{}'", output);
     }
 
     #[test]

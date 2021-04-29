@@ -12,9 +12,6 @@ use darling::FromDeriveInput;
 use quote::{format_ident, quote};
 use syn::{parse_macro_input, DeriveInput};
 
-mod content_eq;
-use content_eq::node_content_eq;
-
 mod content_display;
 use content_display::node_content_display;
 
@@ -72,9 +69,6 @@ pub fn node_content(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     // Add anonymous lifetimes as needed
     let lifetimes: Vec<_> = opts.generics.lifetimes().map(|_| quote! { '_ }).collect();
 
-    // Build the content_eq method
-    let content_eq_body = node_content_eq(&input);
-
     // Generate the name of the target for usage in impl targets
     let base_ident = &opts.ident;
     let struct_name = if lifetimes.is_empty() {
@@ -87,12 +81,6 @@ pub fn node_content(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     let mut expanded = quote! {
       #[automatically_derived]
       impl ::lang_util::node::NodeContent for #struct_name {}
-      #[automatically_derived]
-      impl ::lang_util::node::NodeContentEq for #struct_name {
-        fn content_eq(&self, other: &Self) -> bool {
-          #content_eq_body
-        }
-      }
     };
 
     // Is this a "Data" node?

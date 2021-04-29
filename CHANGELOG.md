@@ -8,6 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - `lang-util`: Add lang_util::error::ResolvedPosition::without_source_number
 - `lang-util`: Add support for serde serializing of node contents
+- `lang-util`: Implement AsRef for Node (contents)
+- `lang-util`: Implement PartialOrd/Ord for Node (contents)
+- `lang-util`: Implement Hash for Node (contents)
+
+### Changed
+- PartialEq for Node now compares the contents of the node by default
+
+### Removed
+- NodeContentEq trait in lang-util
 
 ## [0.1.3] - 2021-04-16
 ### Added

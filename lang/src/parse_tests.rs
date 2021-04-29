@@ -1,4 +1,4 @@
-use lang_util::{assert_ceq, node::NodeContent};
+use lang_util::node::NodeContent;
 
 use crate::{
     ast,
@@ -9,7 +9,7 @@ use crate::{
 fn parse_comments() {
     let opts = ParseOptions::new().with_comments();
 
-    assert_ceq!(
+    assert_eq!(
         ast::TranslationUnit::parse_with_options("// lol", &opts).map(|(_, opts)| opts
             .into_data()
             .unwrap()
@@ -23,7 +23,7 @@ fn parse_comments() {
         Ok(ast::CommentData::Single(" lol".to_owned())),
     );
 
-    assert_ceq!(
+    assert_eq!(
         ast::TranslationUnit::parse_with_options("/* Something */\nvoid main() {}", &opts).map(
             |(_, opts)| opts
                 .into_data()
@@ -42,25 +42,25 @@ fn parse_comments() {
 
 #[test]
 fn parse_unary_op() {
-    assert_ceq!(ast::UnaryOp::parse("+"), Ok(ast::UnaryOp::Add));
-    assert_ceq!(ast::UnaryOp::parse("-"), Ok(ast::UnaryOp::Minus));
-    assert_ceq!(ast::UnaryOp::parse("!"), Ok(ast::UnaryOp::Not));
-    assert_ceq!(ast::UnaryOp::parse("~"), Ok(ast::UnaryOp::Complement));
-    assert_ceq!(ast::UnaryOp::parse("++"), Ok(ast::UnaryOp::Inc));
-    assert_ceq!(ast::UnaryOp::parse("--"), Ok(ast::UnaryOp::Dec));
+    assert_eq!(ast::UnaryOp::parse("+"), Ok(ast::UnaryOp::Add));
+    assert_eq!(ast::UnaryOp::parse("-"), Ok(ast::UnaryOp::Minus));
+    assert_eq!(ast::UnaryOp::parse("!"), Ok(ast::UnaryOp::Not));
+    assert_eq!(ast::UnaryOp::parse("~"), Ok(ast::UnaryOp::Complement));
+    assert_eq!(ast::UnaryOp::parse("++"), Ok(ast::UnaryOp::Inc));
+    assert_eq!(ast::UnaryOp::parse("--"), Ok(ast::UnaryOp::Dec));
 }
 
 #[test]
 fn parse_array_specifier_dimension_unsized() {
-    assert_ceq!(
+    assert_eq!(
         ast::ArraySpecifierDimension::parse("[]"),
         Ok(ast::ArraySpecifierDimension::Unsized)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::ArraySpecifierDimension::parse("[ ]"),
         Ok(ast::ArraySpecifierDimension::Unsized)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::ArraySpecifierDimension::parse("[\n]"),
         Ok(ast::ArraySpecifierDimension::Unsized)
     );
@@ -70,13 +70,13 @@ fn parse_array_specifier_dimension_unsized() {
 fn parse_array_specifier_dimension_sized() {
     let ix = ast::Expr::IntConst(0);
 
-    assert_ceq!(
+    assert_eq!(
         ast::ArraySpecifierDimension::parse("[0]"),
         Ok(ast::ArraySpecifierDimension::ExplicitlySized(Box::new(
             ix.clone()
         )))
     );
-    assert_ceq!(
+    assert_eq!(
         ast::ArraySpecifierDimension::parse("[\n0   \t]"),
         Ok(ast::ArraySpecifierDimension::ExplicitlySized(Box::new(ix)))
     );
@@ -84,7 +84,7 @@ fn parse_array_specifier_dimension_sized() {
 
 #[test]
 fn parse_array_specifier_unsized() {
-    assert_ceq!(
+    assert_eq!(
         ast::ArraySpecifier::parse("[]"),
         Ok(ast::ArraySpecifier {
             dimensions: vec![ast::ArraySpecifierDimension::Unsized]
@@ -96,7 +96,7 @@ fn parse_array_specifier_unsized() {
 fn parse_array_specifier_sized() {
     let ix = ast::Expr::IntConst(123);
 
-    assert_ceq!(
+    assert_eq!(
         ast::ArraySpecifier::parse("[123]"),
         Ok(ast::ArraySpecifier {
             dimensions: vec![ast::ArraySpecifierDimension::ExplicitlySized(Box::new(ix))]
@@ -110,7 +110,7 @@ fn parse_array_specifier_sized_multiple() {
     let b = ast::Expr::IntConst(100);
     let d = ast::Expr::IntConst(5);
 
-    assert_ceq!(
+    assert_eq!(
         ast::ArraySpecifier::parse("[2][100][][5]"),
         Ok(ast::ArraySpecifier {
             dimensions: vec![
@@ -125,15 +125,15 @@ fn parse_array_specifier_sized_multiple() {
 
 #[test]
 fn parse_interpolation_qualifier() {
-    assert_ceq!(
+    assert_eq!(
         ast::InterpolationQualifier::parse("smooth"),
         Ok(ast::InterpolationQualifier::Smooth)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::InterpolationQualifier::parse("flat"),
         Ok(ast::InterpolationQualifier::Flat)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::InterpolationQualifier::parse("noperspective"),
         Ok(ast::InterpolationQualifier::NoPerspective)
     );
@@ -141,15 +141,15 @@ fn parse_interpolation_qualifier() {
 
 #[test]
 fn parse_precision_qualifier() {
-    assert_ceq!(
+    assert_eq!(
         ast::PrecisionQualifier::parse("highp"),
         Ok(ast::PrecisionQualifier::High)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::PrecisionQualifier::parse("mediump"),
         Ok(ast::PrecisionQualifier::Medium)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::PrecisionQualifier::parse("lowp"),
         Ok(ast::PrecisionQualifier::Low)
     );
@@ -157,67 +157,67 @@ fn parse_precision_qualifier() {
 
 #[test]
 fn parse_storage_qualifier() {
-    assert_ceq!(
+    assert_eq!(
         ast::StorageQualifier::parse("const"),
         Ok(ast::StorageQualifier::Const)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::StorageQualifier::parse("inout"),
         Ok(ast::StorageQualifier::InOut)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::StorageQualifier::parse("in"),
         Ok(ast::StorageQualifier::In)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::StorageQualifier::parse("out"),
         Ok(ast::StorageQualifier::Out)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::StorageQualifier::parse("centroid"),
         Ok(ast::StorageQualifier::Centroid)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::StorageQualifier::parse("patch"),
         Ok(ast::StorageQualifier::Patch)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::StorageQualifier::parse("sample"),
         Ok(ast::StorageQualifier::Sample)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::StorageQualifier::parse("uniform"),
         Ok(ast::StorageQualifier::Uniform)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::StorageQualifier::parse("buffer"),
         Ok(ast::StorageQualifier::Buffer)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::StorageQualifier::parse("shared"),
         Ok(ast::StorageQualifier::Shared)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::StorageQualifier::parse("coherent"),
         Ok(ast::StorageQualifier::Coherent)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::StorageQualifier::parse("volatile"),
         Ok(ast::StorageQualifier::Volatile)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::StorageQualifier::parse("restrict"),
         Ok(ast::StorageQualifier::Restrict)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::StorageQualifier::parse("readonly"),
         Ok(ast::StorageQualifier::ReadOnly)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::StorageQualifier::parse("writeonly"),
         Ok(ast::StorageQualifier::WriteOnly)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::StorageQualifier::parse("subroutine"),
         Ok(ast::StorageQualifier::Subroutine(vec![]))
     );
@@ -232,19 +232,19 @@ fn parse_layout_qualifier_std430() {
         )],
     };
 
-    assert_ceq!(
+    assert_eq!(
         ast::LayoutQualifier::parse("layout (std430)"),
         Ok(expected.clone())
     );
-    assert_ceq!(
+    assert_eq!(
         ast::LayoutQualifier::parse("layout  (std430   )"),
         Ok(expected.clone())
     );
-    assert_ceq!(
+    assert_eq!(
         ast::LayoutQualifier::parse("layout \n\t (  std430  )"),
         Ok(expected.clone())
     );
-    assert_ceq!(ast::LayoutQualifier::parse("layout(std430)"), Ok(expected));
+    assert_eq!(ast::LayoutQualifier::parse("layout(std430)"), Ok(expected));
 }
 
 #[test]
@@ -253,15 +253,15 @@ fn parse_layout_qualifier_shared() {
         ids: vec![ast::LayoutQualifierSpec::Shared],
     };
 
-    assert_ceq!(
+    assert_eq!(
         ast::LayoutQualifier::parse("layout (shared)"),
         Ok(expected.clone())
     );
-    assert_ceq!(
+    assert_eq!(
         ast::LayoutQualifier::parse("layout ( shared )"),
         Ok(expected.clone())
     );
-    assert_ceq!(ast::LayoutQualifier::parse("layout(shared)"), Ok(expected));
+    assert_eq!(ast::LayoutQualifier::parse("layout(shared)"), Ok(expected));
 }
 
 #[test]
@@ -276,15 +276,15 @@ fn parse_layout_qualifier_list() {
         ids: vec![id_0, id_1, id_2],
     };
 
-    assert_ceq!(
+    assert_eq!(
         ast::LayoutQualifier::parse("layout (shared, std140, max_vertices = 3)"),
         Ok(expected.clone())
     );
-    assert_ceq!(
+    assert_eq!(
         ast::LayoutQualifier::parse("layout(shared,std140,max_vertices=3)"),
         Ok(expected.clone())
     );
-    assert_ceq!(
+    assert_eq!(
         ast::LayoutQualifier::parse("layout\n\n\t (    shared , std140, max_vertices= 3)"),
         Ok(expected)
     );
@@ -306,11 +306,11 @@ fn parse_type_qualifier() {
         qualifiers: vec![storage_qual, layout_qual],
     };
 
-    assert_ceq!(
+    assert_eq!(
         ast::TypeQualifier::parse("const layout (shared, std140, max_vertices = 3)"),
         Ok(expected.clone())
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeQualifier::parse("const layout(shared,std140,max_vertices=3)"),
         Ok(expected)
     );
@@ -327,11 +327,11 @@ fn parse_struct_field_specifier() {
         identifiers: vec!["foo".into()],
     };
 
-    assert_ceq!(
+    assert_eq!(
         ast::StructFieldSpecifier::parse("vec4 foo;"),
         Ok(expected.clone())
     );
-    assert_ceq!(
+    assert_eq!(
         ast::StructFieldSpecifier::parse("vec4     foo ;"),
         Ok(expected)
     );
@@ -349,11 +349,11 @@ fn parse_struct_field_specifier_type_name() {
     };
 
     let opts = get_s0238_3_opts();
-    assert_ceq!(
+    assert_eq!(
         ast::StructFieldSpecifier::parse_with_options("S0238_3 x;", &opts).map(|(p, _)| p),
         Ok(expected.clone())
     );
-    assert_ceq!(
+    assert_eq!(
         ast::StructFieldSpecifier::parse_with_options("S0238_3     x ;", &opts).map(|(p, _)| p),
         Ok(expected)
     );
@@ -370,11 +370,11 @@ fn parse_struct_field_specifier_several() {
         identifiers: vec!["foo".into(), "bar".into(), "zoo".into()],
     };
 
-    assert_ceq!(
+    assert_eq!(
         ast::StructFieldSpecifier::parse("vec4 foo, bar, zoo;"),
         Ok(expected.clone())
     );
-    assert_ceq!(
+    assert_eq!(
         ast::StructFieldSpecifier::parse("vec4     foo , bar  , zoo ;"),
         Ok(expected)
     );
@@ -395,11 +395,11 @@ fn parse_struct_specifier_one_field() {
         fields: vec![field],
     };
 
-    assert_ceq!(
+    assert_eq!(
         ast::StructSpecifier::parse("struct TestStruct { vec4 foo; }"),
         Ok(expected.clone())
     );
-    assert_ceq!(
+    assert_eq!(
         ast::StructSpecifier::parse("struct      TestStruct \n \n\n {\n    vec4   foo  ;}"),
         Ok(expected)
     );
@@ -459,21 +459,21 @@ fn parse_struct_specifier_multi_fields() {
     };
 
     let opts = get_s0238_3_opts();
-    assert_ceq!(
+    assert_eq!(
       ast::StructSpecifier::parse_with_options(
         "struct _TestStruct_934i { vec4 foo; float bar; uint zoo; bvec3 foo_BAR_zoo3497_34; S0238_3 x; }",
         &opts,
       ).map(|(p, _)| p),
       Ok(expected.clone()),
     );
-    assert_ceq!(
+    assert_eq!(
       ast::StructSpecifier::parse_with_options(
         "struct _TestStruct_934i{vec4 foo;float bar;uint zoo;bvec3 foo_BAR_zoo3497_34;S0238_3 x;}",
         &opts,
       ).map(|(p, _)| p),
       Ok(expected.clone()),
     );
-    assert_ceq!(
+    assert_eq!(
       ast::StructSpecifier::parse_with_options(
         "struct _TestStruct_934i\n   {  vec4\nfoo ;   \n\t float\n\t\t  bar  ;   \nuint   zoo;    \n bvec3   foo_BAR_zoo3497_34\n\n\t\n\t\n  ; S0238_3 x;}",
         &opts,
@@ -484,482 +484,482 @@ fn parse_struct_specifier_multi_fields() {
 
 #[test]
 fn parse_type_specifier_non_array() {
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("bool"),
         Ok(ast::TypeSpecifierNonArray::Bool)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("int"),
         Ok(ast::TypeSpecifierNonArray::Int)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("uint"),
         Ok(ast::TypeSpecifierNonArray::UInt)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("float"),
         Ok(ast::TypeSpecifierNonArray::Float)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("double"),
         Ok(ast::TypeSpecifierNonArray::Double)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("vec2"),
         Ok(ast::TypeSpecifierNonArray::Vec2)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("vec3"),
         Ok(ast::TypeSpecifierNonArray::Vec3)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("vec4"),
         Ok(ast::TypeSpecifierNonArray::Vec4)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("dvec2"),
         Ok(ast::TypeSpecifierNonArray::DVec2)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("dvec3"),
         Ok(ast::TypeSpecifierNonArray::DVec3)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("dvec4"),
         Ok(ast::TypeSpecifierNonArray::DVec4)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("bvec2"),
         Ok(ast::TypeSpecifierNonArray::BVec2)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("bvec3"),
         Ok(ast::TypeSpecifierNonArray::BVec3)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("bvec4"),
         Ok(ast::TypeSpecifierNonArray::BVec4)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("ivec2"),
         Ok(ast::TypeSpecifierNonArray::IVec2)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("ivec3"),
         Ok(ast::TypeSpecifierNonArray::IVec3)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("ivec4"),
         Ok(ast::TypeSpecifierNonArray::IVec4)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("uvec2"),
         Ok(ast::TypeSpecifierNonArray::UVec2)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("uvec3"),
         Ok(ast::TypeSpecifierNonArray::UVec3)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("uvec4"),
         Ok(ast::TypeSpecifierNonArray::UVec4)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("mat2"),
         Ok(ast::TypeSpecifierNonArray::Mat2)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("mat3"),
         Ok(ast::TypeSpecifierNonArray::Mat3)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("mat4"),
         Ok(ast::TypeSpecifierNonArray::Mat4)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("mat2x2"),
         Ok(ast::TypeSpecifierNonArray::Mat22)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("mat2x3"),
         Ok(ast::TypeSpecifierNonArray::Mat23)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("mat2x4"),
         Ok(ast::TypeSpecifierNonArray::Mat24)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("mat3x2"),
         Ok(ast::TypeSpecifierNonArray::Mat32)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("mat3x3"),
         Ok(ast::TypeSpecifierNonArray::Mat33)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("mat3x4"),
         Ok(ast::TypeSpecifierNonArray::Mat34)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("mat4x2"),
         Ok(ast::TypeSpecifierNonArray::Mat42)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("mat4x3"),
         Ok(ast::TypeSpecifierNonArray::Mat43)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("mat4x4"),
         Ok(ast::TypeSpecifierNonArray::Mat44)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("dmat2"),
         Ok(ast::TypeSpecifierNonArray::DMat2)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("dmat3"),
         Ok(ast::TypeSpecifierNonArray::DMat3)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("dmat4"),
         Ok(ast::TypeSpecifierNonArray::DMat4)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("dmat2x2"),
         Ok(ast::TypeSpecifierNonArray::DMat22)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("dmat2x3"),
         Ok(ast::TypeSpecifierNonArray::DMat23)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("dmat2x4"),
         Ok(ast::TypeSpecifierNonArray::DMat24)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("dmat3x2"),
         Ok(ast::TypeSpecifierNonArray::DMat32)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("dmat3x3"),
         Ok(ast::TypeSpecifierNonArray::DMat33)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("dmat3x4"),
         Ok(ast::TypeSpecifierNonArray::DMat34)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("dmat4x2"),
         Ok(ast::TypeSpecifierNonArray::DMat42)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("dmat4x3"),
         Ok(ast::TypeSpecifierNonArray::DMat43)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("dmat4x4"),
         Ok(ast::TypeSpecifierNonArray::DMat44)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("sampler1D"),
         Ok(ast::TypeSpecifierNonArray::Sampler1D)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("image1D"),
         Ok(ast::TypeSpecifierNonArray::Image1D)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("sampler2D"),
         Ok(ast::TypeSpecifierNonArray::Sampler2D)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("image2D"),
         Ok(ast::TypeSpecifierNonArray::Image2D)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("sampler3D"),
         Ok(ast::TypeSpecifierNonArray::Sampler3D)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("image3D"),
         Ok(ast::TypeSpecifierNonArray::Image3D)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("samplerCube"),
         Ok(ast::TypeSpecifierNonArray::SamplerCube)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("imageCube"),
         Ok(ast::TypeSpecifierNonArray::ImageCube)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("sampler2DRect"),
         Ok(ast::TypeSpecifierNonArray::Sampler2DRect)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("image2DRect"),
         Ok(ast::TypeSpecifierNonArray::Image2DRect)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("sampler1DArray"),
         Ok(ast::TypeSpecifierNonArray::Sampler1DArray)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("image1DArray"),
         Ok(ast::TypeSpecifierNonArray::Image1DArray)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("sampler2DArray"),
         Ok(ast::TypeSpecifierNonArray::Sampler2DArray)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("image2DArray"),
         Ok(ast::TypeSpecifierNonArray::Image2DArray)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("samplerBuffer"),
         Ok(ast::TypeSpecifierNonArray::SamplerBuffer)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("imageBuffer"),
         Ok(ast::TypeSpecifierNonArray::ImageBuffer)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("sampler2DMS"),
         Ok(ast::TypeSpecifierNonArray::Sampler2DMs)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("image2DMS"),
         Ok(ast::TypeSpecifierNonArray::Image2DMs)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("sampler2DMSArray"),
         Ok(ast::TypeSpecifierNonArray::Sampler2DMsArray)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("image2DMSArray"),
         Ok(ast::TypeSpecifierNonArray::Image2DMsArray)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("samplerCubeArray"),
         Ok(ast::TypeSpecifierNonArray::SamplerCubeArray)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("imageCubeArray"),
         Ok(ast::TypeSpecifierNonArray::ImageCubeArray)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("sampler1DShadow"),
         Ok(ast::TypeSpecifierNonArray::Sampler1DShadow)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("sampler2DShadow"),
         Ok(ast::TypeSpecifierNonArray::Sampler2DShadow)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("sampler2DRectShadow"),
         Ok(ast::TypeSpecifierNonArray::Sampler2DRectShadow)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("sampler1DArrayShadow"),
         Ok(ast::TypeSpecifierNonArray::Sampler1DArrayShadow)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("sampler2DArrayShadow"),
         Ok(ast::TypeSpecifierNonArray::Sampler2DArrayShadow)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("samplerCubeShadow"),
         Ok(ast::TypeSpecifierNonArray::SamplerCubeShadow)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("samplerCubeArrayShadow"),
         Ok(ast::TypeSpecifierNonArray::SamplerCubeArrayShadow)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("isampler1D"),
         Ok(ast::TypeSpecifierNonArray::ISampler1D)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("iimage1D"),
         Ok(ast::TypeSpecifierNonArray::IImage1D)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("isampler2D"),
         Ok(ast::TypeSpecifierNonArray::ISampler2D)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("iimage2D"),
         Ok(ast::TypeSpecifierNonArray::IImage2D)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("isampler3D"),
         Ok(ast::TypeSpecifierNonArray::ISampler3D)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("iimage3D"),
         Ok(ast::TypeSpecifierNonArray::IImage3D)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("isamplerCube"),
         Ok(ast::TypeSpecifierNonArray::ISamplerCube)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("iimageCube"),
         Ok(ast::TypeSpecifierNonArray::IImageCube)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("isampler2DRect"),
         Ok(ast::TypeSpecifierNonArray::ISampler2DRect)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("iimage2DRect"),
         Ok(ast::TypeSpecifierNonArray::IImage2DRect)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("isampler1DArray"),
         Ok(ast::TypeSpecifierNonArray::ISampler1DArray)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("iimage1DArray"),
         Ok(ast::TypeSpecifierNonArray::IImage1DArray)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("isampler2DArray"),
         Ok(ast::TypeSpecifierNonArray::ISampler2DArray)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("iimage2DArray"),
         Ok(ast::TypeSpecifierNonArray::IImage2DArray)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("isamplerBuffer"),
         Ok(ast::TypeSpecifierNonArray::ISamplerBuffer)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("iimageBuffer"),
         Ok(ast::TypeSpecifierNonArray::IImageBuffer)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("isampler2DMS"),
         Ok(ast::TypeSpecifierNonArray::ISampler2DMs)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("iimage2DMS"),
         Ok(ast::TypeSpecifierNonArray::IImage2DMs)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("isampler2DMSArray"),
         Ok(ast::TypeSpecifierNonArray::ISampler2DMsArray)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("iimage2DMSArray"),
         Ok(ast::TypeSpecifierNonArray::IImage2DMsArray)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("isamplerCubeArray"),
         Ok(ast::TypeSpecifierNonArray::ISamplerCubeArray)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("iimageCubeArray"),
         Ok(ast::TypeSpecifierNonArray::IImageCubeArray)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("atomic_uint"),
         Ok(ast::TypeSpecifierNonArray::AtomicUInt)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("usampler1D"),
         Ok(ast::TypeSpecifierNonArray::USampler1D)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("uimage1D"),
         Ok(ast::TypeSpecifierNonArray::UImage1D)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("usampler2D"),
         Ok(ast::TypeSpecifierNonArray::USampler2D)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("uimage2D"),
         Ok(ast::TypeSpecifierNonArray::UImage2D)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("usampler3D"),
         Ok(ast::TypeSpecifierNonArray::USampler3D)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("uimage3D"),
         Ok(ast::TypeSpecifierNonArray::UImage3D)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("usamplerCube"),
         Ok(ast::TypeSpecifierNonArray::USamplerCube)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("uimageCube"),
         Ok(ast::TypeSpecifierNonArray::UImageCube)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("usampler2DRect"),
         Ok(ast::TypeSpecifierNonArray::USampler2DRect)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("uimage2DRect"),
         Ok(ast::TypeSpecifierNonArray::UImage2DRect)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("usampler1DArray"),
         Ok(ast::TypeSpecifierNonArray::USampler1DArray)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("uimage1DArray"),
         Ok(ast::TypeSpecifierNonArray::UImage1DArray)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("usampler2DArray"),
         Ok(ast::TypeSpecifierNonArray::USampler2DArray)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("uimage2DArray"),
         Ok(ast::TypeSpecifierNonArray::UImage2DArray)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("usamplerBuffer"),
         Ok(ast::TypeSpecifierNonArray::USamplerBuffer)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("uimageBuffer"),
         Ok(ast::TypeSpecifierNonArray::UImageBuffer)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("usampler2DMS"),
         Ok(ast::TypeSpecifierNonArray::USampler2DMs)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("uimage2DMS"),
         Ok(ast::TypeSpecifierNonArray::UImage2DMs)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("usampler2DMSArray"),
         Ok(ast::TypeSpecifierNonArray::USampler2DMsArray)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("uimage2DMSArray"),
         Ok(ast::TypeSpecifierNonArray::UImage2DMsArray)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("usamplerCubeArray"),
         Ok(ast::TypeSpecifierNonArray::USamplerCubeArray)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse("uimageCubeArray"),
         Ok(ast::TypeSpecifierNonArray::UImageCubeArray)
     );
 
     let opts = ParseOptions::default().build();
     opts.add_type_name(ast::IdentifierData::from("ReturnType").into());
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifierNonArray::parse_with_options("ReturnType", &opts).map(|(p, _)| p),
         Ok(ast::TypeSpecifierNonArray::TypeName(
             ast::TypeNameData::from("ReturnType").into()
@@ -969,14 +969,14 @@ fn parse_type_specifier_non_array() {
 
 #[test]
 fn parse_type_specifier() {
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifier::parse("uint"),
         Ok(ast::TypeSpecifier {
             ty: ast::TypeSpecifierNonArray::UInt,
             array_specifier: None
         })
     );
-    assert_ceq!(
+    assert_eq!(
         ast::TypeSpecifier::parse("iimage2DMSArray[35]"),
         Ok(ast::TypeSpecifier {
             ty: ast::TypeSpecifierNonArray::IImage2DMsArray,
@@ -1000,7 +1000,7 @@ fn parse_fully_specified_type() {
         ty,
     };
 
-    assert_ceq!(
+    assert_eq!(
         ast::FullySpecifiedType::parse("iimage2DMSArray"),
         Ok(expected)
     );
@@ -1027,7 +1027,7 @@ fn parse_fully_specified_type_with_qualifier() {
         ty,
     };
 
-    assert_ceq!(
+    assert_eq!(
         ast::FullySpecifiedType::parse_with_options(
             "subroutine (vec2, S032_29k) iimage2DMSArray",
             &opts,
@@ -1035,7 +1035,7 @@ fn parse_fully_specified_type_with_qualifier() {
         .map(|(p, _)| p),
         Ok(expected.clone()),
     );
-    assert_ceq!(
+    assert_eq!(
         ast::FullySpecifiedType::parse_with_options(
             "subroutine (  vec2\t\n \t , \n S032_29k   )\n iimage2DMSArray ",
             &opts,
@@ -1043,7 +1043,7 @@ fn parse_fully_specified_type_with_qualifier() {
         .map(|(p, _)| p),
         Ok(expected.clone()),
     );
-    assert_ceq!(
+    assert_eq!(
         ast::FullySpecifiedType::parse_with_options(
             "subroutine(vec2,S032_29k)iimage2DMSArray",
             &opts,
@@ -1055,41 +1055,41 @@ fn parse_fully_specified_type_with_qualifier() {
 
 #[test]
 fn parse_primary_expr_intconst() {
-    assert_ceq!(ast::Expr::parse("0 "), Ok(ast::Expr::IntConst(0)));
-    assert_ceq!(ast::Expr::parse("1 "), Ok(ast::Expr::IntConst(1)));
+    assert_eq!(ast::Expr::parse("0 "), Ok(ast::Expr::IntConst(0)));
+    assert_eq!(ast::Expr::parse("1 "), Ok(ast::Expr::IntConst(1)));
 }
 
 #[test]
 fn parse_primary_expr_uintconst() {
-    assert_ceq!(ast::Expr::parse("0u "), Ok(ast::Expr::UIntConst(0)));
-    assert_ceq!(ast::Expr::parse("1u "), Ok(ast::Expr::UIntConst(1)));
+    assert_eq!(ast::Expr::parse("0u "), Ok(ast::Expr::UIntConst(0)));
+    assert_eq!(ast::Expr::parse("1u "), Ok(ast::Expr::UIntConst(1)));
 }
 
 #[test]
 fn parse_primary_expr_floatconst() {
-    assert_ceq!(ast::Expr::parse("0.f "), Ok(ast::Expr::FloatConst(0.)));
-    assert_ceq!(ast::Expr::parse("1.f "), Ok(ast::Expr::FloatConst(1.)));
-    assert_ceq!(ast::Expr::parse("0.F "), Ok(ast::Expr::FloatConst(0.)));
-    assert_ceq!(ast::Expr::parse("1.F "), Ok(ast::Expr::FloatConst(1.)));
+    assert_eq!(ast::Expr::parse("0.f "), Ok(ast::Expr::FloatConst(0.)));
+    assert_eq!(ast::Expr::parse("1.f "), Ok(ast::Expr::FloatConst(1.)));
+    assert_eq!(ast::Expr::parse("0.F "), Ok(ast::Expr::FloatConst(0.)));
+    assert_eq!(ast::Expr::parse("1.F "), Ok(ast::Expr::FloatConst(1.)));
 }
 
 #[test]
 fn parse_primary_expr_doubleconst() {
-    assert_ceq!(ast::Expr::parse("0. "), Ok(ast::Expr::FloatConst(0.)));
-    assert_ceq!(ast::Expr::parse("1. "), Ok(ast::Expr::FloatConst(1.)));
-    assert_ceq!(ast::Expr::parse("0.lf "), Ok(ast::Expr::DoubleConst(0.)));
-    assert_ceq!(ast::Expr::parse("1.lf "), Ok(ast::Expr::DoubleConst(1.)));
-    assert_ceq!(ast::Expr::parse("0.LF "), Ok(ast::Expr::DoubleConst(0.)));
-    assert_ceq!(ast::Expr::parse("1.LF "), Ok(ast::Expr::DoubleConst(1.)));
+    assert_eq!(ast::Expr::parse("0. "), Ok(ast::Expr::FloatConst(0.)));
+    assert_eq!(ast::Expr::parse("1. "), Ok(ast::Expr::FloatConst(1.)));
+    assert_eq!(ast::Expr::parse("0.lf "), Ok(ast::Expr::DoubleConst(0.)));
+    assert_eq!(ast::Expr::parse("1.lf "), Ok(ast::Expr::DoubleConst(1.)));
+    assert_eq!(ast::Expr::parse("0.LF "), Ok(ast::Expr::DoubleConst(0.)));
+    assert_eq!(ast::Expr::parse("1.LF "), Ok(ast::Expr::DoubleConst(1.)));
 }
 
 #[test]
 fn parse_primary_expr_boolconst() {
-    assert_ceq!(
+    assert_eq!(
         ast::Expr::parse("false"),
         Ok(ast::Expr::BoolConst(false.to_owned()))
     );
-    assert_ceq!(
+    assert_eq!(
         ast::Expr::parse("true"),
         Ok(ast::Expr::BoolConst(true.to_owned()))
     );
@@ -1097,11 +1097,11 @@ fn parse_primary_expr_boolconst() {
 
 #[test]
 fn parse_primary_expr_parens() {
-    assert_ceq!(ast::Expr::parse("(0)"), Ok(ast::Expr::IntConst(0)));
-    assert_ceq!(ast::Expr::parse("(  0 )"), Ok(ast::Expr::IntConst(0)));
-    assert_ceq!(ast::Expr::parse("(  .0 )"), Ok(ast::Expr::FloatConst(0.)));
-    assert_ceq!(ast::Expr::parse("(  (.0) )"), Ok(ast::Expr::FloatConst(0.)));
-    assert_ceq!(ast::Expr::parse("(true) "), Ok(ast::Expr::BoolConst(true)));
+    assert_eq!(ast::Expr::parse("(0)"), Ok(ast::Expr::IntConst(0)));
+    assert_eq!(ast::Expr::parse("(  0 )"), Ok(ast::Expr::IntConst(0)));
+    assert_eq!(ast::Expr::parse("(  .0 )"), Ok(ast::Expr::FloatConst(0.)));
+    assert_eq!(ast::Expr::parse("(  (.0) )"), Ok(ast::Expr::FloatConst(0.)));
+    assert_eq!(ast::Expr::parse("(true) "), Ok(ast::Expr::BoolConst(true)));
 }
 
 #[test]
@@ -1110,9 +1110,9 @@ fn parse_postfix_function_call_no_args() {
     let args = Vec::new();
     let expected = ast::Expr::FunCall(fun, args);
 
-    assert_ceq!(ast::Expr::parse("vec3()"), Ok(expected.clone()));
-    assert_ceq!(ast::Expr::parse("vec3   (  ) "), Ok(expected.clone()));
-    assert_ceq!(ast::Expr::parse("vec3   (\nvoid\n) "), Ok(expected));
+    assert_eq!(ast::Expr::parse("vec3()"), Ok(expected.clone()));
+    assert_eq!(ast::Expr::parse("vec3   (  ) "), Ok(expected.clone()));
+    assert_eq!(ast::Expr::parse("vec3   (\nvoid\n) "), Ok(expected));
 }
 
 #[test]
@@ -1121,9 +1121,9 @@ fn parse_postfix_function_call_one_arg() {
     let args = vec![ast::Expr::IntConst(0)];
     let expected = ast::Expr::FunCall(fun, args);
 
-    assert_ceq!(ast::Expr::parse("foo(0)"), Ok(expected.clone()));
-    assert_ceq!(ast::Expr::parse("foo   ( 0 ) "), Ok(expected.clone()));
-    assert_ceq!(ast::Expr::parse("foo   (\n0\t\n) "), Ok(expected));
+    assert_eq!(ast::Expr::parse("foo(0)"), Ok(expected.clone()));
+    assert_eq!(ast::Expr::parse("foo   ( 0 ) "), Ok(expected.clone()));
+    assert_eq!(ast::Expr::parse("foo   (\n0\t\n) "), Ok(expected));
 }
 
 #[test]
@@ -1136,8 +1136,8 @@ fn parse_postfix_function_call_multi_arg() {
     ];
     let expected = ast::Expr::FunCall(fun, args);
 
-    assert_ceq!(ast::Expr::parse("foo(0, false, bar)"), Ok(expected.clone()));
-    assert_ceq!(
+    assert_eq!(ast::Expr::parse("foo(0, false, bar)"), Ok(expected.clone()));
+    assert_eq!(
         ast::Expr::parse("foo   ( 0\t, false    ,\t\tbar) "),
         Ok(expected)
     );
@@ -1148,8 +1148,8 @@ fn parse_postfix_expr_bracket() {
     let id = ast::Expr::Variable("foo".into_node());
     let expected = ast::Expr::Bracket(Box::new(id), Box::new(ast::Expr::IntConst(7354)));
 
-    assert_ceq!(ast::Expr::parse("foo[7354]"), Ok(expected.clone()));
-    assert_ceq!(ast::Expr::parse("foo[\n  7354    ]"), Ok(expected));
+    assert_eq!(ast::Expr::parse("foo[7354]"), Ok(expected.clone()));
+    assert_eq!(ast::Expr::parse("foo[\n  7354    ]"), Ok(expected));
 }
 
 #[test]
@@ -1157,8 +1157,8 @@ fn parse_postfix_expr_dot() {
     let foo_var = Box::new(ast::Expr::Variable("foo".into_node()));
     let expected = ast::Expr::Dot(foo_var, "bar".into_node());
 
-    assert_ceq!(ast::Expr::parse("foo.bar"), Ok(expected.clone()));
-    assert_ceq!(ast::Expr::parse("(foo).bar"), Ok(expected));
+    assert_eq!(ast::Expr::parse("foo.bar"), Ok(expected.clone()));
+    assert_eq!(ast::Expr::parse("(foo).bar"), Ok(expected));
 }
 
 #[test]
@@ -1169,9 +1169,9 @@ fn parse_postfix_expr_dot_several() {
         "zoo".into_node(),
     );
 
-    assert_ceq!(ast::Expr::parse("foo.bar.zoo"), Ok(expected.clone()));
-    assert_ceq!(ast::Expr::parse("(foo).bar.zoo"), Ok(expected.clone()));
-    assert_ceq!(ast::Expr::parse("(foo.bar).zoo"), Ok(expected));
+    assert_eq!(ast::Expr::parse("foo.bar.zoo"), Ok(expected.clone()));
+    assert_eq!(ast::Expr::parse("(foo).bar.zoo"), Ok(expected.clone()));
+    assert_eq!(ast::Expr::parse("(foo.bar).zoo"), Ok(expected));
 }
 
 #[test]
@@ -1179,7 +1179,7 @@ fn parse_postfix_postinc() {
     let foo_var = ast::Expr::Variable("foo".into_node());
     let expected = ast::Expr::PostInc(Box::new(foo_var));
 
-    assert_ceq!(ast::Expr::parse("foo++"), Ok(expected));
+    assert_eq!(ast::Expr::parse("foo++"), Ok(expected));
 }
 
 #[test]
@@ -1187,7 +1187,7 @@ fn parse_postfix_postdec() {
     let foo_var = ast::Expr::Variable("foo".into_node());
     let expected = ast::Expr::PostDec(Box::new(foo_var));
 
-    assert_ceq!(ast::Expr::parse("foo--"), Ok(expected));
+    assert_eq!(ast::Expr::parse("foo--"), Ok(expected));
 }
 
 #[test]
@@ -1195,7 +1195,7 @@ fn parse_unary_add() {
     let foo_var = ast::Expr::Variable("foo".into_node());
     let expected = ast::Expr::Unary(ast::UnaryOp::Add, Box::new(foo_var));
 
-    assert_ceq!(ast::Expr::parse("+foo"), Ok(expected));
+    assert_eq!(ast::Expr::parse("+foo"), Ok(expected));
 }
 
 #[test]
@@ -1203,7 +1203,7 @@ fn parse_unary_minus() {
     let foo_var = ast::Expr::Variable("foo".into_node());
     let expected = ast::Expr::Unary(ast::UnaryOp::Minus, Box::new(foo_var));
 
-    assert_ceq!(ast::Expr::parse("-foo"), Ok(expected));
+    assert_eq!(ast::Expr::parse("-foo"), Ok(expected));
 }
 
 #[test]
@@ -1211,7 +1211,7 @@ fn parse_unary_not() {
     let foo_var = ast::Expr::Variable("foo".into_node());
     let expected = ast::Expr::Unary(ast::UnaryOp::Not, Box::new(foo_var));
 
-    assert_ceq!(ast::Expr::parse("!foo"), Ok(expected));
+    assert_eq!(ast::Expr::parse("!foo"), Ok(expected));
 }
 
 #[test]
@@ -1219,7 +1219,7 @@ fn parse_unary_complement() {
     let foo_var = ast::Expr::Variable("foo".into_node());
     let expected = ast::Expr::Unary(ast::UnaryOp::Complement, Box::new(foo_var));
 
-    assert_ceq!(ast::Expr::parse("~foo"), Ok(expected));
+    assert_eq!(ast::Expr::parse("~foo"), Ok(expected));
 }
 
 #[test]
@@ -1227,7 +1227,7 @@ fn parse_unary_inc() {
     let foo_var = ast::Expr::Variable("foo".into_node());
     let expected = ast::Expr::Unary(ast::UnaryOp::Inc, Box::new(foo_var));
 
-    assert_ceq!(ast::Expr::parse("++foo"), Ok(expected));
+    assert_eq!(ast::Expr::parse("++foo"), Ok(expected));
 }
 
 #[test]
@@ -1235,14 +1235,14 @@ fn parse_unary_dec() {
     let foo_var = ast::Expr::Variable("foo".into_node());
     let expected = ast::Expr::Unary(ast::UnaryOp::Dec, Box::new(foo_var));
 
-    assert_ceq!(ast::Expr::parse("--foo"), Ok(expected));
+    assert_eq!(ast::Expr::parse("--foo"), Ok(expected));
 }
 
 #[test]
 fn parse_expr_float() {
-    assert_ceq!(ast::Expr::parse("314."), Ok(ast::Expr::FloatConst(314.)));
-    assert_ceq!(ast::Expr::parse("314.f"), Ok(ast::Expr::FloatConst(314.)));
-    assert_ceq!(ast::Expr::parse("314.LF"), Ok(ast::Expr::DoubleConst(314.)));
+    assert_eq!(ast::Expr::parse("314."), Ok(ast::Expr::FloatConst(314.)));
+    assert_eq!(ast::Expr::parse("314.f"), Ok(ast::Expr::FloatConst(314.)));
+    assert_eq!(ast::Expr::parse("314.LF"), Ok(ast::Expr::DoubleConst(314.)));
 }
 
 #[test]
@@ -1250,9 +1250,9 @@ fn parse_expr_add_2() {
     let one = Box::new(ast::Expr::IntConst(1));
     let expected = ast::Expr::Binary(ast::BinaryOp::Add, one.clone(), one);
 
-    assert_ceq!(ast::Expr::parse("1 + 1"), Ok(expected.clone()));
-    assert_ceq!(ast::Expr::parse("1+1"), Ok(expected.clone()));
-    assert_ceq!(ast::Expr::parse("(1 + 1)"), Ok(expected));
+    assert_eq!(ast::Expr::parse("1 + 1"), Ok(expected.clone()));
+    assert_eq!(ast::Expr::parse("1+1"), Ok(expected.clone()));
+    assert_eq!(ast::Expr::parse("(1 + 1)"), Ok(expected));
 }
 
 #[test]
@@ -1266,9 +1266,9 @@ fn parse_expr_add_3() {
         three,
     );
 
-    assert_ceq!(ast::Expr::parse("1u + 2u + 3u"), Ok(expected.clone()));
-    assert_ceq!(ast::Expr::parse("1u+2u+3u"), Ok(expected.clone()));
-    assert_ceq!(ast::Expr::parse("((1u + 2u) + 3u)"), Ok(expected));
+    assert_eq!(ast::Expr::parse("1u + 2u + 3u"), Ok(expected.clone()));
+    assert_eq!(ast::Expr::parse("1u+2u+3u"), Ok(expected.clone()));
+    assert_eq!(ast::Expr::parse("((1u + 2u) + 3u)"), Ok(expected));
 }
 
 #[test]
@@ -1282,9 +1282,9 @@ fn parse_expr_add_mult_3() {
         three,
     );
 
-    assert_ceq!(ast::Expr::parse("1u * 2u + 3u"), Ok(expected.clone()));
-    assert_ceq!(ast::Expr::parse("1u*2u+3u"), Ok(expected.clone()));
-    assert_ceq!(ast::Expr::parse("(1u * 2u) + 3u"), Ok(expected));
+    assert_eq!(ast::Expr::parse("1u * 2u + 3u"), Ok(expected.clone()));
+    assert_eq!(ast::Expr::parse("1u*2u+3u"), Ok(expected.clone()));
+    assert_eq!(ast::Expr::parse("(1u * 2u) + 3u"), Ok(expected));
 }
 
 #[test]
@@ -1309,7 +1309,7 @@ fn parse_expr_add_sub_mult_div() {
         )),
     );
 
-    assert_ceq!(ast::Expr::parse("1 * (2 + 3) + 4 / (5 + 6)"), Ok(expected));
+    assert_eq!(ast::Expr::parse("1 * (2 + 3) + 4 / (5 + 6)"), Ok(expected));
 }
 
 #[test]
@@ -1329,22 +1329,22 @@ fn parse_complex_expr() {
     let normalize = ast::Expr::FunCall(ast::FunIdentifier::ident("normalize"), vec![xyz]);
     let expected = normalize;
 
-    assert_ceq!(ast::Expr::parse(&input[..]), Ok(expected));
+    assert_eq!(ast::Expr::parse(&input[..]), Ok(expected));
 }
 
 #[test]
 fn parse_function_identifier_typename() {
     let expected = ast::FunIdentifier::ident("foo");
-    assert_ceq!(ast::FunIdentifier::parse("foo"), Ok(expected.clone()));
-    assert_ceq!(ast::FunIdentifier::parse("foo\n\t"), Ok(expected.clone()));
-    assert_ceq!(ast::FunIdentifier::parse("foo\n "), Ok(expected));
+    assert_eq!(ast::FunIdentifier::parse("foo"), Ok(expected.clone()));
+    assert_eq!(ast::FunIdentifier::parse("foo\n\t"), Ok(expected.clone()));
+    assert_eq!(ast::FunIdentifier::parse("foo\n "), Ok(expected));
 }
 
 #[test]
 fn parse_function_identifier_cast() {
     let expected = ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifierNonArray::Vec3.into());
-    assert_ceq!(ast::FunIdentifier::parse("vec3"), Ok(expected.clone()));
-    assert_ceq!(ast::FunIdentifier::parse("vec3\t\n\n \t"), Ok(expected));
+    assert_eq!(ast::FunIdentifier::parse("vec3"), Ok(expected.clone()));
+    assert_eq!(ast::FunIdentifier::parse("vec3\t\n\n \t"), Ok(expected));
 }
 
 #[test]
@@ -1356,8 +1356,8 @@ fn parse_function_identifier_cast_array_unsized() {
         }),
     });
 
-    assert_ceq!(ast::FunIdentifier::parse("vec3[]"), Ok(expected.clone()));
-    assert_ceq!(ast::FunIdentifier::parse("vec3  [\t\n]"), Ok(expected));
+    assert_eq!(ast::FunIdentifier::parse("vec3[]"), Ok(expected.clone()));
+    assert_eq!(ast::FunIdentifier::parse("vec3  [\t\n]"), Ok(expected));
 }
 
 #[test]
@@ -1371,29 +1371,29 @@ fn parse_function_identifier_cast_array_sized() {
         }),
     });
 
-    assert_ceq!(ast::FunIdentifier::parse("vec3[12]"), Ok(expected.clone()));
-    assert_ceq!(ast::FunIdentifier::parse("vec3  [\t 12\n]"), Ok(expected));
+    assert_eq!(ast::FunIdentifier::parse("vec3[12]"), Ok(expected.clone()));
+    assert_eq!(ast::FunIdentifier::parse("vec3  [\t 12\n]"), Ok(expected));
 }
 
 #[test]
 fn parse_assignment_op() {
-    assert_ceq!(ast::AssignmentOp::parse("="), Ok(ast::AssignmentOp::Equal));
-    assert_ceq!(ast::AssignmentOp::parse("*="), Ok(ast::AssignmentOp::Mult));
-    assert_ceq!(ast::AssignmentOp::parse("/="), Ok(ast::AssignmentOp::Div));
-    assert_ceq!(ast::AssignmentOp::parse("%="), Ok(ast::AssignmentOp::Mod));
-    assert_ceq!(ast::AssignmentOp::parse("+="), Ok(ast::AssignmentOp::Add));
-    assert_ceq!(ast::AssignmentOp::parse("-="), Ok(ast::AssignmentOp::Sub));
-    assert_ceq!(
+    assert_eq!(ast::AssignmentOp::parse("="), Ok(ast::AssignmentOp::Equal));
+    assert_eq!(ast::AssignmentOp::parse("*="), Ok(ast::AssignmentOp::Mult));
+    assert_eq!(ast::AssignmentOp::parse("/="), Ok(ast::AssignmentOp::Div));
+    assert_eq!(ast::AssignmentOp::parse("%="), Ok(ast::AssignmentOp::Mod));
+    assert_eq!(ast::AssignmentOp::parse("+="), Ok(ast::AssignmentOp::Add));
+    assert_eq!(ast::AssignmentOp::parse("-="), Ok(ast::AssignmentOp::Sub));
+    assert_eq!(
         ast::AssignmentOp::parse("<<="),
         Ok(ast::AssignmentOp::LShift)
     );
-    assert_ceq!(
+    assert_eq!(
         ast::AssignmentOp::parse(">>="),
         Ok(ast::AssignmentOp::RShift)
     );
-    assert_ceq!(ast::AssignmentOp::parse("&="), Ok(ast::AssignmentOp::And));
-    assert_ceq!(ast::AssignmentOp::parse("^="), Ok(ast::AssignmentOp::Xor));
-    assert_ceq!(ast::AssignmentOp::parse("|="), Ok(ast::AssignmentOp::Or));
+    assert_eq!(ast::AssignmentOp::parse("&="), Ok(ast::AssignmentOp::And));
+    assert_eq!(ast::AssignmentOp::parse("^="), Ok(ast::AssignmentOp::Xor));
+    assert_eq!(ast::AssignmentOp::parse("|="), Ok(ast::AssignmentOp::Or));
 }
 
 #[test]
@@ -1404,15 +1404,15 @@ fn parse_expr_statement() {
         Box::new(ast::Expr::FloatConst(314.)),
     )));
 
-    assert_ceq!(
+    assert_eq!(
         ast::ExprStatement::parse("foo = 314.f;"),
         Ok(expected.clone())
     );
-    assert_ceq!(
+    assert_eq!(
         ast::ExprStatement::parse("foo=314.f;"),
         Ok(expected.clone())
     );
-    assert_ceq!(
+    assert_eq!(
         ast::ExprStatement::parse("foo\n\t=  \n314.f;"),
         Ok(expected)
     );
@@ -1453,15 +1453,15 @@ fn parse_declaration_function_prototype() {
     };
     let expected: ast::Declaration = ast::DeclarationData::FunctionPrototype(fp.into()).into();
 
-    assert_ceq!(
+    assert_eq!(
         ast::Declaration::parse("vec3 foo(vec2, out float the_arg);"),
         Ok(expected.clone())
     );
-    assert_ceq!(
+    assert_eq!(
         ast::Declaration::parse("vec3 \nfoo ( vec2\n, out float \n\tthe_arg )\n;"),
         Ok(expected.clone())
     );
-    assert_ceq!(
+    assert_eq!(
         ast::Declaration::parse("vec3 foo(vec2,out float the_arg);"),
         Ok(expected)
     );
@@ -1488,12 +1488,12 @@ fn parse_declaration_init_declarator_list_single() {
     };
     let expected: ast::Declaration = ast::DeclarationData::InitDeclaratorList(idl).into();
 
-    assert_ceq!(
+    assert_eq!(
         ast::Declaration::parse("int foo = 34;"),
         Ok(expected.clone())
     );
-    assert_ceq!(ast::Declaration::parse("int foo=34;"), Ok(expected.clone()));
-    assert_ceq!(
+    assert_eq!(ast::Declaration::parse("int foo=34;"), Ok(expected.clone()));
+    assert_eq!(
         ast::Declaration::parse("int    \t  \nfoo =\t34  ;"),
         Ok(expected)
     );
@@ -1525,15 +1525,15 @@ fn parse_declaration_init_declarator_list_complex() {
         })
         .into();
 
-    assert_ceq!(
+    assert_eq!(
         ast::Declaration::parse("int foo = 34, bar = 12;"),
         Ok(expected.clone())
     );
-    assert_ceq!(
+    assert_eq!(
         ast::Declaration::parse("int foo=34,bar=12;"),
         Ok(expected.clone())
     );
-    assert_ceq!(
+    assert_eq!(
         ast::Declaration::parse("int    \t  \nfoo =\t34 \n,\tbar=      12\n ;"),
         Ok(expected)
     );
@@ -1548,7 +1548,7 @@ fn parse_declaration_precision_low() {
     };
     let expected: ast::Declaration = ast::DeclarationData::Precision(qual, ty).into();
 
-    assert_ceq!(
+    assert_eq!(
         ast::Declaration::parse("precision lowp float;"),
         Ok(expected)
     );
@@ -1563,7 +1563,7 @@ fn parse_declaration_precision_medium() {
     };
     let expected: ast::Declaration = ast::DeclarationData::Precision(qual, ty).into();
 
-    assert_ceq!(
+    assert_eq!(
         ast::Declaration::parse("precision mediump float;"),
         Ok(expected)
     );
@@ -1578,7 +1578,7 @@ fn parse_declaration_precision_high() {
     };
     let expected: ast::Declaration = ast::DeclarationData::Precision(qual, ty).into();
 
-    assert_ceq!(
+    assert_eq!(
         ast::Declaration::parse("precision highp float;"),
         Ok(expected)
     );
@@ -1625,7 +1625,7 @@ fn parse_declaration_uniform_block() {
     })
     .into();
 
-    assert_ceq!(
+    assert_eq!(
         ast::Declaration::parse_with_options(
             "uniform UniformBlockTest { float a; vec3 b; foo c, d; };",
             &opts
@@ -1634,7 +1634,7 @@ fn parse_declaration_uniform_block() {
         Ok(expected.clone()),
     );
 
-    assert_ceq!(
+    assert_eq!(
         ast::Declaration::parse_with_options(
             "uniform   \nUniformBlockTest\n {\n \t float   a  \n; \nvec3 b\n; foo \nc\n, \nd\n;\n }\n\t\n\t\t \t;",
             &opts,
@@ -1689,7 +1689,7 @@ fn parse_declaration_buffer_block() {
     })
     .into();
 
-    assert_ceq!(
+    assert_eq!(
         ast::Declaration::parse_with_options(
             "buffer UniformBlockTest { float a; vec3 b[]; foo c, d; };",
             &opts,
@@ -1698,7 +1698,7 @@ fn parse_declaration_buffer_block() {
         Ok(expected.clone()),
     );
 
-    assert_ceq!(
+    assert_eq!(
         ast::Declaration::parse_with_options(
             "buffer   \nUniformBlockTest\n {\n \t float   a  \n; \nvec3 b   [   ]\n; foo \nc\n, \nd\n;\n }\n\t\n\t\t \t;",
             &opts,
@@ -1728,11 +1728,11 @@ fn parse_selection_statement_if() {
         rest,
     };
 
-    assert_ceq!(
+    assert_eq!(
         ast::SelectionStatement::parse("if (foo < 10) { return false; }"),
         Ok(expected.clone())
     );
-    assert_ceq!(
+    assert_eq!(
         ast::SelectionStatement::parse("if \n(foo<10\n) \t{return false;}"),
         Ok(expected)
     );
@@ -1768,11 +1768,11 @@ fn parse_selection_statement_if_else() {
         rest,
     };
 
-    assert_ceq!(
+    assert_eq!(
         ast::SelectionStatement::parse("if (foo < 10) { return 0.f; } else { return foo; }"),
         Ok(expected.clone())
     );
-    assert_ceq!(
+    assert_eq!(
         ast::SelectionStatement::parse(
             "if \n(foo<10\n) \t{return 0.f\t;\n\n}\n else{\n\t return foo   ;}"
         ),
@@ -1788,15 +1788,15 @@ fn parse_switch_statement_empty() {
         body: Vec::new(),
     };
 
-    assert_ceq!(
+    assert_eq!(
         ast::SwitchStatement::parse("switch (foo) {}"),
         Ok(expected.clone())
     );
-    assert_ceq!(
+    assert_eq!(
         ast::SwitchStatement::parse("switch(foo){}"),
         Ok(expected.clone())
     );
-    assert_ceq!(
+    assert_eq!(
         ast::SwitchStatement::parse("switch\n\n (  foo  \t   \n) { \n\n   }"),
         Ok(expected)
     );
@@ -1817,7 +1817,7 @@ fn parse_switch_statement_cases() {
         body: vec![case0.into(), case1.into(), ret.into()],
     };
 
-    assert_ceq!(
+    assert_eq!(
         ast::SwitchStatement::parse("switch (foo) { case 0: case 1: return 12u; }"),
         Ok(expected)
     );
@@ -1825,8 +1825,8 @@ fn parse_switch_statement_cases() {
 
 #[test]
 fn parse_case_label_def() {
-    assert_ceq!(ast::CaseLabel::parse("default:"), Ok(ast::CaseLabel::Def));
-    assert_ceq!(
+    assert_eq!(ast::CaseLabel::parse("default:"), Ok(ast::CaseLabel::Def));
+    assert_eq!(
         ast::CaseLabel::parse("default   :"),
         Ok(ast::CaseLabel::Def)
     );
@@ -1836,8 +1836,8 @@ fn parse_case_label_def() {
 fn parse_case_label() {
     let expected = ast::CaseLabel::Case(Box::new(ast::Expr::IntConst(3)));
 
-    assert_ceq!(ast::CaseLabel::parse("case 3:"), Ok(expected.clone()));
-    assert_ceq!(ast::CaseLabel::parse("case\n\t 3   :"), Ok(expected));
+    assert_eq!(ast::CaseLabel::parse("case 3:"), Ok(expected.clone()));
+    assert_eq!(ast::CaseLabel::parse("case\n\t 3   :"), Ok(expected));
 }
 
 #[test]
@@ -1855,15 +1855,15 @@ fn parse_iteration_statement_while_empty() {
     );
     let expected = ast::IterationStatement::While(cond, Box::new(st.into()));
 
-    assert_ceq!(
+    assert_eq!(
         ast::IterationStatement::parse("while (a >= b) {}"),
         Ok(expected.clone())
     );
-    assert_ceq!(
+    assert_eq!(
         ast::IterationStatement::parse("while(a>=b){}"),
         Ok(expected.clone())
     );
-    assert_ceq!(
+    assert_eq!(
         ast::IterationStatement::parse("while (  a >=\n\tb  )\t  {   \n}"),
         Ok(expected)
     );
@@ -1884,15 +1884,15 @@ fn parse_iteration_statement_do_while_empty() {
     ));
     let expected = ast::IterationStatement::DoWhile(Box::new(st.into()), cond);
 
-    assert_ceq!(
+    assert_eq!(
         ast::IterationStatement::parse("do {} while (a >= b);"),
         Ok(expected.clone())
     );
-    assert_ceq!(
+    assert_eq!(
         ast::IterationStatement::parse("do{}while(a>=b);"),
         Ok(expected.clone())
     );
-    assert_ceq!(
+    assert_eq!(
         ast::IterationStatement::parse("do \n {\n} while (  a >=\n\tb  )\t  \n;"),
         Ok(expected)
     );
@@ -1939,15 +1939,15 @@ fn parse_iteration_statement_for_empty() {
     );
     let expected = ast::IterationStatement::For(init, rest, Box::new(st.into()));
 
-    assert_ceq!(
+    assert_eq!(
         ast::IterationStatement::parse("for (float i = 0.f; i <= 10.f; ++i) {}"),
         Ok(expected.clone())
     );
-    assert_ceq!(
+    assert_eq!(
         ast::IterationStatement::parse("for(float i=0.f;i<=10.f;++i){}"),
         Ok(expected.clone())
     );
-    assert_ceq!(
+    assert_eq!(
         ast::IterationStatement::parse(
             "for\n\t (  \t\n\nfloat \ni \t=\n0.f\n;\ni\t<=  10.f; \n++i\n)\n{\n}"
         ),
@@ -1957,7 +1957,7 @@ fn parse_iteration_statement_for_empty() {
 
 #[test]
 fn parse_jump_continue() {
-    assert_ceq!(
+    assert_eq!(
         ast::JumpStatement::parse("continue;"),
         Ok(ast::JumpStatement::Continue)
     );
@@ -1965,7 +1965,7 @@ fn parse_jump_continue() {
 
 #[test]
 fn parse_jump_break() {
-    assert_ceq!(
+    assert_eq!(
         ast::JumpStatement::parse("break;"),
         Ok(ast::JumpStatement::Break)
     );
@@ -1974,19 +1974,19 @@ fn parse_jump_break() {
 #[test]
 fn parse_jump_return() {
     let expected = ast::JumpStatement::Return(Some(Box::new(ast::Expr::IntConst(3))));
-    assert_ceq!(ast::JumpStatement::parse("return 3;"), Ok(expected));
+    assert_eq!(ast::JumpStatement::parse("return 3;"), Ok(expected));
 }
 
 #[test]
 fn parse_jump_empty_return() {
     let expected: ast::Statement =
         ast::StatementData::Jump(ast::JumpStatement::Return(None)).into();
-    assert_ceq!(ast::Statement::parse("return;"), Ok(expected));
+    assert_eq!(ast::Statement::parse("return;"), Ok(expected));
 }
 
 #[test]
 fn parse_jump_discard() {
-    assert_ceq!(
+    assert_eq!(
         ast::JumpStatement::parse("discard;"),
         Ok(ast::JumpStatement::Discard)
     );
@@ -1998,7 +1998,7 @@ fn parse_simple_statement_return() {
     let expected: ast::Statement =
         ast::StatementData::Jump(ast::JumpStatement::Return(Some(Box::new(e)))).into();
 
-    assert_ceq!(ast::Statement::parse("return false;"), Ok(expected));
+    assert_eq!(ast::Statement::parse("return false;"), Ok(expected));
 }
 
 #[test]
@@ -2008,7 +2008,7 @@ fn parse_compound_statement_empty() {
     }
     .into();
 
-    assert_ceq!(ast::CompoundStatement::parse("{}"), Ok(expected));
+    assert_eq!(ast::CompoundStatement::parse("{}"), Ok(expected));
 }
 
 #[test]
@@ -2051,11 +2051,11 @@ fn parse_compound_statement() {
     }
     .into();
 
-    assert_ceq!(
+    assert_eq!(
         ast::CompoundStatement::parse("{ if (true) {} isampler3D x; return 42 ; }"),
         Ok(expected.clone())
     );
-    assert_ceq!(
+    assert_eq!(
         ast::CompoundStatement::parse("{if(true){}isampler3D x;return 42;}"),
         Ok(expected)
     );
@@ -2088,15 +2088,15 @@ fn parse_function_definition() {
     }
     .into();
 
-    assert_ceq!(
+    assert_eq!(
         ast::FunctionDefinition::parse("iimage2DArray foo() { return bar; }"),
         Ok(expected.clone()),
     );
-    assert_ceq!(
+    assert_eq!(
         ast::FunctionDefinition::parse("iimage2DArray \tfoo\n()\n \n{\n return \nbar\n;}"),
         Ok(expected.clone())
     );
-    assert_ceq!(
+    assert_eq!(
         ast::FunctionDefinition::parse("iimage2DArray foo(){return bar;}"),
         Ok(expected)
     );
@@ -2155,7 +2155,7 @@ fn parse_buffer_block_0() {
 
     let expected = ast::TranslationUnit(vec![buffer_block.into(), main_fn.into()]);
 
-    assert_ceq!(ast::TranslationUnit::parse(src), Ok(expected));
+    assert_eq!(ast::TranslationUnit::parse(src), Ok(expected));
 }
 
 #[test]
@@ -2195,12 +2195,12 @@ fn parse_layout_buffer_block_0() {
 
     let expected = ast::TranslationUnit(vec![block.into()]);
 
-    assert_ceq!(ast::TranslationUnit::parse(src), Ok(expected));
+    assert_eq!(ast::TranslationUnit::parse(src), Ok(expected));
 }
 
 #[test]
 fn parse_pp_version() {
-    assert_ceq!(
+    assert_eq!(
         ast::Preprocessor::parse("#version 450\n"),
         Ok(ast::PreprocessorData::Version(ast::PreprocessorVersion {
             version: 450,
@@ -2209,7 +2209,7 @@ fn parse_pp_version() {
         .into())
     );
 
-    assert_ceq!(
+    assert_eq!(
         ast::Preprocessor::parse("#version 450 core\n"),
         Ok(ast::PreprocessorData::Version(ast::PreprocessorVersion {
             version: 450,
@@ -2221,7 +2221,7 @@ fn parse_pp_version() {
 
 #[test]
 fn parse_pp_version_newline() {
-    assert_ceq!(
+    assert_eq!(
         ast::Preprocessor::parse("#version 450\n"),
         Ok(ast::PreprocessorData::Version(ast::PreprocessorVersion {
             version: 450,
@@ -2230,7 +2230,7 @@ fn parse_pp_version_newline() {
         .into())
     );
 
-    assert_ceq!(
+    assert_eq!(
         ast::Preprocessor::parse("#version 450 core\n"),
         Ok(ast::PreprocessorData::Version(ast::PreprocessorVersion {
             version: 450,
@@ -2252,17 +2252,17 @@ fn parse_pp_define() {
         )
     };
 
-    assert_ceq!(ast::Preprocessor::parse("#define test 1.0"), expect("1.0"));
-    assert_ceq!(
+    assert_eq!(ast::Preprocessor::parse("#define test 1.0"), expect("1.0"));
+    assert_eq!(
         ast::Preprocessor::parse("#define test \\\n   1.0"),
         expect("1.0")
     );
-    assert_ceq!(
+    assert_eq!(
         ast::Preprocessor::parse("#define test 1.0\n"),
         expect("1.0")
     );
 
-    assert_ceq!(
+    assert_eq!(
         ast::Preprocessor::parse("#define test123 .0f\n"),
         Ok(
             ast::PreprocessorData::Define(ast::PreprocessorDefine::ObjectLike {
@@ -2273,7 +2273,7 @@ fn parse_pp_define() {
         )
     );
 
-    assert_ceq!(
+    assert_eq!(
         ast::Preprocessor::parse("#define test 1\n"),
         Ok(
             ast::PreprocessorData::Define(ast::PreprocessorDefine::ObjectLike {
@@ -2295,7 +2295,7 @@ fn parse_pp_define() {
     })
     .into();
 
-    assert_ceq!(
+    assert_eq!(
         ast::TranslationUnit::parse("#define M_PI 3.14\n#define M_2PI (2. * M_PI)\n"),
         Ok(ast::TranslationUnit(vec![
             ast::ExternalDeclarationData::Preprocessor(a).into(),
@@ -2317,12 +2317,12 @@ fn parse_pp_define_with_args() {
         })
         .into();
 
-    assert_ceq!(
+    assert_eq!(
         ast::Preprocessor::parse("#define \\\n add(x, y) \\\n (x + y)"),
         Ok(expected.clone())
     );
 
-    assert_ceq!(
+    assert_eq!(
         ast::Preprocessor::parse("#define \\\n add(  x, y  ) \\\n (x + y)"),
         Ok(expected)
     );
@@ -2330,7 +2330,7 @@ fn parse_pp_define_with_args() {
 
 #[test]
 fn parse_pp_define_multiline() {
-    assert_ceq!(
+    assert_eq!(
         ast::Preprocessor::parse(
             r#"#define foo \
        32"#
@@ -2347,7 +2347,7 @@ fn parse_pp_define_multiline() {
 
 #[test]
 fn parse_pp_else() {
-    assert_ceq!(
+    assert_eq!(
         ast::Preprocessor::parse("#    else\n"),
         Ok(ast::PreprocessorData::Else.into())
     );
@@ -2355,7 +2355,7 @@ fn parse_pp_else() {
 
 #[test]
 fn parse_pp_elif() {
-    assert_ceq!(
+    assert_eq!(
         ast::Preprocessor::parse("#   elif \\\n42\n"),
         Ok(ast::PreprocessorData::ElseIf(ast::PreprocessorElseIf {
             condition: "42".to_owned()
@@ -2366,7 +2366,7 @@ fn parse_pp_elif() {
 
 #[test]
 fn parse_pp_endif() {
-    assert_ceq!(
+    assert_eq!(
         ast::Preprocessor::parse("#\\\nendif"),
         Ok(ast::PreprocessorData::EndIf.into())
     );
@@ -2374,7 +2374,7 @@ fn parse_pp_endif() {
 
 #[test]
 fn parse_pp_error() {
-    assert_ceq!(
+    assert_eq!(
         ast::Preprocessor::parse("#error \\\n     some message"),
         Ok(ast::PreprocessorData::Error(ast::PreprocessorError {
             message: "some message".to_owned()
@@ -2385,7 +2385,7 @@ fn parse_pp_error() {
 
 #[test]
 fn parse_pp_if() {
-    assert_ceq!(
+    assert_eq!(
         ast::Preprocessor::parse("# \\\nif 42"),
         Ok(ast::PreprocessorData::If(ast::PreprocessorIf {
             condition: "42".to_owned()
@@ -2396,7 +2396,7 @@ fn parse_pp_if() {
 
 #[test]
 fn parse_pp_ifdef() {
-    assert_ceq!(
+    assert_eq!(
         ast::Preprocessor::parse("#ifdef       FOO\n"),
         Ok(ast::PreprocessorData::IfDef(ast::PreprocessorIfDef {
             ident: ast::IdentifierData("FOO".into()).into()
@@ -2407,7 +2407,7 @@ fn parse_pp_ifdef() {
 
 #[test]
 fn parse_pp_ifndef() {
-    assert_ceq!(
+    assert_eq!(
         ast::Preprocessor::parse("#\\\nifndef \\\n   FOO\n"),
         Ok(ast::PreprocessorData::IfNDef(ast::PreprocessorIfNDef {
             ident: ast::IdentifierData("FOO".into()).into()
@@ -2418,7 +2418,7 @@ fn parse_pp_ifndef() {
 
 #[test]
 fn parse_pp_include() {
-    assert_ceq!(
+    assert_eq!(
         ast::Preprocessor::parse("#include <filename>\n"),
         Ok(ast::PreprocessorData::Include(ast::PreprocessorInclude {
             path: ast::Path::Absolute("filename".to_owned())
@@ -2426,7 +2426,7 @@ fn parse_pp_include() {
         .into())
     );
 
-    assert_ceq!(
+    assert_eq!(
         ast::Preprocessor::parse("#include \\\n\"filename\"\n"),
         Ok(ast::PreprocessorData::Include(ast::PreprocessorInclude {
             path: ast::Path::Relative("filename".to_owned())
@@ -2437,7 +2437,7 @@ fn parse_pp_include() {
 
 #[test]
 fn parse_pp_line() {
-    assert_ceq!(
+    assert_eq!(
         ast::Preprocessor::parse("#   line \\\n2\n"),
         Ok(ast::PreprocessorData::Line(ast::PreprocessorLine {
             line: 2,
@@ -2446,7 +2446,7 @@ fn parse_pp_line() {
         .into())
     );
 
-    assert_ceq!(
+    assert_eq!(
         ast::Preprocessor::parse("#line 2 \\\n 4\n"),
         Ok(ast::PreprocessorData::Line(ast::PreprocessorLine {
             line: 2,
@@ -2458,7 +2458,7 @@ fn parse_pp_line() {
 
 #[test]
 fn parse_pp_pragma() {
-    assert_ceq!(
+    assert_eq!(
         ast::Preprocessor::parse("#\\\npragma  some   flag"),
         Ok(ast::PreprocessorData::Pragma(ast::PreprocessorPragma {
             command: "some   flag".to_owned()
@@ -2469,7 +2469,7 @@ fn parse_pp_pragma() {
 
 #[test]
 fn parse_pp_undef() {
-    assert_ceq!(
+    assert_eq!(
         ast::Preprocessor::parse("# undef \\\n FOO"),
         Ok(ast::PreprocessorData::Undef(ast::PreprocessorUndef {
             name: ast::IdentifierData("FOO".into()).into()
@@ -2480,7 +2480,7 @@ fn parse_pp_undef() {
 
 #[test]
 fn parse_pp_extension() {
-    assert_ceq!(
+    assert_eq!(
         ast::Preprocessor::parse("#extension all: require\n"),
         Ok(
             ast::PreprocessorData::Extension(ast::PreprocessorExtension {
@@ -2491,7 +2491,7 @@ fn parse_pp_extension() {
         )
     );
 
-    assert_ceq!(
+    assert_eq!(
         ast::Preprocessor::parse("#extension GL_foobar: warn\n"),
         Ok(
             ast::PreprocessorData::Extension(ast::PreprocessorExtension {
@@ -2519,7 +2519,7 @@ fn parse_dot_field_expr_array() {
         "xyz".into_node(),
     );
 
-    assert_ceq!(ast::Expr::parse(src), Ok(expected));
+    assert_eq!(ast::Expr::parse(src), Ok(expected));
 }
 
 #[test]
@@ -2562,7 +2562,7 @@ fn parse_dot_field_expr_statement() {
     )
     .into();
 
-    assert_ceq!(ast::Statement::parse(src), Ok(expected));
+    assert_eq!(ast::Statement::parse(src), Ok(expected));
 }
 
 #[test]
@@ -2574,8 +2574,8 @@ fn parse_arrayed_identifier() {
         },
     );
 
-    assert_ceq!(ast::ArrayedIdentifier::parse("foo[]"), Ok(expected.clone()));
-    assert_ceq!(
+    assert_eq!(ast::ArrayedIdentifier::parse("foo[]"), Ok(expected.clone()));
+    assert_eq!(
         ast::ArrayedIdentifier::parse("foo \t\n  [\n\t ]"),
         Ok(expected)
     );
@@ -2589,7 +2589,7 @@ fn parse_dangling_else() {
     // See https://www.cs.cornell.edu/andru/javaspec/19.doc.html for how the grammar was modeled for
     // a LALR parser.
 
-    assert_ceq!(
+    assert_eq!(
         ast::Statement::parse("if (ca) if (cb) ab(); else c();"),
         Ok(ast::StatementData::Selection(ast::SelectionStatement {
             cond: Box::new(ast::Expr::variable("ca")),

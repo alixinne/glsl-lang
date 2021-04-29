@@ -21,7 +21,7 @@ struct DisplayVariantOpts {
 }
 
 #[derive(FromField)]
-#[darling(attributes(lang_util), forward_attrs(allow, doc, cfg))]
+#[darling(attributes(lang_util))]
 struct NodeDisplayField {
     ident: Option<syn::Ident>,
     #[darling(default)]
@@ -29,7 +29,7 @@ struct NodeDisplayField {
 }
 
 #[derive(FromVariant)]
-#[darling(attributes(lang_util), forward_attrs(allow, doc, cfg))]
+#[darling(attributes(lang_util))]
 struct NodeDisplayVariant {
     ident: syn::Ident,
     fields: darling::ast::Fields<NodeDisplayField>,

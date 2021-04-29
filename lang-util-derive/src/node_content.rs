@@ -12,7 +12,7 @@ struct NodeDisplay {
 }
 
 #[derive(FromDeriveInput)]
-#[darling(attributes(lang_util), forward_attrs(allow, doc, cfg))]
+#[darling(attributes(lang_util))]
 pub(crate) struct NodeContentOpts {
     ident: syn::Ident,
     generics: syn::Generics,

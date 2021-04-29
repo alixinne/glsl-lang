@@ -164,11 +164,6 @@ impl<E: LexicalError> ParseError<E> {
 
         Self { position, kind }
     }
-
-    /// Display the resolved position without source number
-    pub fn without_source_number(&self) -> OptionalSourceNumber<&Self> {
-        OptionalSourceNumber(self)
-    }
 }
 
 impl<'s, T, E: LexicalError> From<(&'s lalrpop_util::ParseError<LexerPosition, T, E>, &'s str)>

@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `glsl-lang-cli`: Add GLSL output format
 - `glsl-lang`: Implement PartialOrd and Hash for Identifier and TypeName
 - `lang-util`: Add NodeSpan::start() and NodeSpan::end()
+- `lang-util`: Generate display impl for derive(Token)
 
 ### Changed
 - PartialEq for Node now compares the contents of the node by default
@@ -24,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - NodeContentEq trait in lang-util
 - `lang-util`: dependency on parse-display
+- `glsl-lang`: dependency on parse-display
 
 ### Fixed
 - `#[derive(NodeContent)]` doesn't require importing NodeDisplay anymore

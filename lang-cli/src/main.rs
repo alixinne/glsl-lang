@@ -33,6 +33,20 @@ fn output_json(output: &mut dyn std::io::Write, tu: TranslationUnit) -> anyhow::
     Ok(())
 }
 
+fn output_glsl(output: &mut dyn std::io::Write, tu: TranslationUnit) -> anyhow::Result<()> {
+    let mut s = String::new();
+
+    glsl_lang::transpiler::glsl::show_translation_unit(
+        &mut s,
+        &tu,
+        glsl_lang::transpiler::glsl::FormattingState::default(),
+    )?;
+
+    write!(output, "{}", s)?;
+
+    Ok(())
+}
+
 /// CLI entry point
 fn main() -> anyhow::Result<()> {
     let mut args = pico_args::Arguments::from_env();
@@ -46,6 +60,7 @@ fn main() -> anyhow::Result<()> {
         "text" => output_text,
         #[cfg(feature = "json")]
         "json" => output_json,
+        "glsl" => output_glsl,
         other => bail!("unknown output format: {}", other),
     };
 

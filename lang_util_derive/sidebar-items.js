@@ -1,1 +1,1 @@
-initSidebarItems({"derive":[["NodeContent","Mark a type as representing data in an AST node"],["Token","Derive `lang_util::error::Token` for an enum usable with Logos"]],"mod":[["content_display",""],["content_eq",""]],"struct":[["NodeContentOpts",""],["NodeDisplay",""]]});
+initSidebarItems({"derive":[["NodeContent","Mark a type as representing data in an AST node"],["Token","Derive `lang_util::error::Token` for an enum usable with Logos"]],"mod":[["node_content",""],["token",""]]});

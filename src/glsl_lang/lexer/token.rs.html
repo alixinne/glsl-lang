@@ -674,6 +674,23 @@
 <span id="671">671</span>
 <span id="672">672</span>
 <span id="673">673</span>
+<span id="674">674</span>
+<span id="675">675</span>
+<span id="676">676</span>
+<span id="677">677</span>
+<span id="678">678</span>
+<span id="679">679</span>
+<span id="680">680</span>
+<span id="681">681</span>
+<span id="682">682</span>
+<span id="683">683</span>
+<span id="684">684</span>
+<span id="685">685</span>
+<span id="686">686</span>
+<span id="687">687</span>
+<span id="688">688</span>
+<span id="689">689</span>
+<span id="690">690</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">logos</span>::<span class="ident">Logos</span>;
 
@@ -682,7 +699,7 @@
     <span class="ident">LexerContext</span>,
 };
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Logos</span>, <span class="ident">lang_util</span>::<span class="ident">Token</span>, <span class="ident">parse_display</span>::<span class="ident">Display</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Logos</span>, <span class="ident">lang_util</span>::<span class="ident">Token</span>)]</span>
 <span class="attribute">#[<span class="ident">logos</span>(<span class="ident">extras</span> <span class="op">=</span> <span class="ident">LexerContext</span>)]</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">missing_docs</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Token</span><span class="op">&lt;</span><span class="lifetime">&#39;i</span><span class="op">&gt;</span> {
@@ -1077,37 +1094,37 @@
     <span class="ident">Subroutine</span>,
     <span class="attribute">#[<span class="ident">regex</span>(<span class="string">&quot;[a-zA-Z_][a-zA-Z_0-9]*&quot;</span>, <span class="ident">parse_ident</span>)]</span>
     <span class="attribute">#[<span class="ident">regex</span>(<span class="string">&quot;#\\s*\\(\\s*[a-zA-Z_][a-zA-Z_0-9]*\\s*\\)&quot;</span>, <span class="ident">parse_rs_ident</span>)]</span>
-    <span class="attribute">#[<span class="ident">display</span>(<span class="string">&quot;{0.0}&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span>(<span class="string">&quot;{}&quot;</span>, <span class="string">&quot;_0.0&quot;</span>), <span class="kw">as</span> <span class="op">=</span> <span class="string">&quot;ident&quot;</span>)]</span>
     <span class="ident">Identifier</span>((<span class="kw-2">&amp;</span><span class="lifetime">&#39;i</span> <span class="ident">str</span>, <span class="ident">LexerContext</span>)),
-    <span class="attribute">#[<span class="ident">display</span>(<span class="string">&quot;{0}&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">lang_util</span>(<span class="kw">as</span> <span class="op">=</span> <span class="string">&quot;ty_name&quot;</span>)]</span>
     <span class="ident">TypeName</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;i</span> <span class="ident">str</span>), <span class="comment">// Cast from Identifier depending on known type names</span>
     <span class="attribute">#[<span class="ident">regex</span>(
         <span class="string">r&quot;([0-9]+\.[0-9]+|[0-9]+\.|\.[0-9]+)([eE][+-]?[0-9]+)?(f|F)?&quot;</span>,
         <span class="ident">parse_f32</span>
     )]</span>
     <span class="attribute">#[<span class="ident">regex</span>(<span class="string">r&quot;[0-9]+[eE][+-]?[0-9]+(f|F)?&quot;</span>, <span class="ident">parse_f32</span>)]</span>
-    <span class="attribute">#[<span class="ident">display</span>(<span class="string">&quot;{0}&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">lang_util</span>(<span class="kw">as</span> <span class="op">=</span> <span class="string">&quot;float_constant&quot;</span>)]</span>
     <span class="ident">FloatConstant</span>(<span class="ident">f32</span>),
     <span class="attribute">#[<span class="ident">regex</span>(<span class="string">r&quot;0[0-7]*&quot;</span>, <span class="op">|</span><span class="ident">lex</span><span class="op">|</span> <span class="ident">parse_int</span>(<span class="ident">lex</span>, <span class="number">8</span>))]</span>
     <span class="attribute">#[<span class="ident">regex</span>(<span class="string">r&quot;[1-9][0-9]*&quot;</span>, <span class="op">|</span><span class="ident">lex</span><span class="op">|</span> <span class="ident">parse_int</span>(<span class="ident">lex</span>, <span class="number">10</span>))]</span>
     <span class="attribute">#[<span class="ident">regex</span>(<span class="string">r&quot;0[xX][0-9A-Fa-f]+&quot;</span>, <span class="op">|</span><span class="ident">lex</span><span class="op">|</span> <span class="ident">parse_int</span>(<span class="ident">lex</span>, <span class="number">16</span>))]</span>
-    <span class="attribute">#[<span class="ident">display</span>(<span class="string">&quot;{0}&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">lang_util</span>(<span class="kw">as</span> <span class="op">=</span> <span class="string">&quot;int_constant&quot;</span>)]</span>
     <span class="ident">IntConstant</span>(<span class="ident">i32</span>),
     <span class="attribute">#[<span class="ident">regex</span>(<span class="string">r&quot;0[0-7]*[uU]&quot;</span>, <span class="op">|</span><span class="ident">lex</span><span class="op">|</span> <span class="ident">parse_uint</span>(<span class="ident">lex</span>, <span class="number">8</span>))]</span>
     <span class="attribute">#[<span class="ident">regex</span>(<span class="string">r&quot;[1-9][0-9]*[uU]&quot;</span>, <span class="op">|</span><span class="ident">lex</span><span class="op">|</span> <span class="ident">parse_uint</span>(<span class="ident">lex</span>, <span class="number">10</span>))]</span>
     <span class="attribute">#[<span class="ident">regex</span>(<span class="string">r&quot;0[xX][0-9A-Fa-f]+[uU]&quot;</span>, <span class="op">|</span><span class="ident">lex</span><span class="op">|</span> <span class="ident">parse_uint</span>(<span class="ident">lex</span>, <span class="number">16</span>))]</span>
-    <span class="attribute">#[<span class="ident">display</span>(<span class="string">&quot;{0}&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">lang_util</span>(<span class="kw">as</span> <span class="op">=</span> <span class="string">&quot;uint_constant&quot;</span>)]</span>
     <span class="ident">UIntConstant</span>(<span class="ident">u32</span>),
     <span class="attribute">#[<span class="ident">token</span>(<span class="string">&quot;true&quot;</span>, <span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="bool-val">true</span>)]</span>
     <span class="attribute">#[<span class="ident">token</span>(<span class="string">&quot;false&quot;</span>, <span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="bool-val">false</span>)]</span>
-    <span class="attribute">#[<span class="ident">display</span>(<span class="string">&quot;{0}&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">lang_util</span>(<span class="kw">as</span> <span class="op">=</span> <span class="string">&quot;bool_constant&quot;</span>)]</span>
     <span class="ident">BoolConstant</span>(<span class="ident">bool</span>),
     <span class="attribute">#[<span class="ident">regex</span>(
         <span class="string">r&quot;([0-9]+\.[0-9]+|[0-9]+\.|\.[0-9]+)([eE][+-]?[0-9]+)?(lf|LF)&quot;</span>,
         <span class="ident">parse_f64</span>
     )]</span>
     <span class="attribute">#[<span class="ident">regex</span>(<span class="string">r&quot;[0-9]+[eE][+-]?[0-9]+(lf|LF)&quot;</span>, <span class="ident">parse_f64</span>)]</span>
-    <span class="attribute">#[<span class="ident">display</span>(<span class="string">&quot;{0}&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">lang_util</span>(<span class="kw">as</span> <span class="op">=</span> <span class="string">&quot;double_constant&quot;</span>)]</span>
     <span class="ident">DoubleConstant</span>(<span class="ident">f64</span>),
     <span class="attribute">#[<span class="ident">token</span>(<span class="string">&quot;&lt;&lt;&quot;</span>)]</span>
     <span class="ident">LeftOp</span>,
@@ -1214,68 +1231,85 @@
 
     <span class="comment">// TODO: Line continuation can happen inside tokens</span>
     <span class="attribute">#[<span class="ident">regex</span>(<span class="string">&quot;([ \t\r\n]|\\\\\r?\n)+&quot;</span>, <span class="ident">logos</span>::<span class="ident">skip</span>)]</span>
+    <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;&lt;whitespace&gt;&quot;</span>, <span class="kw">as</span>(<span class="ident">display</span>))]</span>
     <span class="ident">Whitespace</span>,
     <span class="attribute">#[<span class="ident">regex</span>(<span class="string">&quot;//(.|\\\\\r?\n)*&quot;</span>, <span class="op">|</span><span class="ident">lex</span><span class="op">|</span> { <span class="ident">parse_cmt</span>(<span class="ident">lex</span>, <span class="bool-val">true</span>); <span class="ident">logos</span>::<span class="ident">Skip</span> })]</span>
+    <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;&lt;single line comment&gt;&quot;</span>, <span class="kw">as</span>(<span class="ident">display</span>))]</span>
     <span class="ident">SingleLineComment</span>,
     <span class="attribute">#[<span class="ident">regex</span>(<span class="string">&quot;/\\*([^*]|\\*[^/])+\\*/&quot;</span>, <span class="op">|</span><span class="ident">lex</span><span class="op">|</span> { <span class="ident">parse_cmt</span>(<span class="ident">lex</span>, <span class="bool-val">false</span>); <span class="ident">logos</span>::<span class="ident">Skip</span> })]</span>
+    <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;&lt;multi line comment&gt;&quot;</span>, <span class="kw">as</span>(<span class="ident">display</span>))]</span>
     <span class="ident">MultiLineComment</span>,
 
     <span class="comment">// TODO: Line continuations in preprocessor pragmas?</span>
     <span class="attribute">#[<span class="ident">regex</span>(<span class="string">&quot;#([ \t]|\\\\\r?\n)*define&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;#define&quot;</span>, <span class="kw">as</span>(<span class="ident">display</span>))]</span>
     <span class="ident">PpDefine</span>,
     <span class="attribute">#[<span class="ident">regex</span>(<span class="string">&quot;#([ \t]|\\\\\r?\n)*else&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;#else&quot;</span>, <span class="kw">as</span>(<span class="ident">display</span>))]</span>
     <span class="ident">PpElse</span>,
     <span class="attribute">#[<span class="ident">regex</span>(<span class="string">&quot;#([ \t]|\\\\\r?\n)*elif&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;#elif&quot;</span>, <span class="kw">as</span>(<span class="ident">display</span>))]</span>
     <span class="ident">PpElif</span>,
     <span class="attribute">#[<span class="ident">regex</span>(<span class="string">&quot;#([ \t]|\\\\\r?\n)*endif&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;#endif&quot;</span>, <span class="kw">as</span>(<span class="ident">display</span>))]</span>
     <span class="ident">PpEndIf</span>,
     <span class="attribute">#[<span class="ident">regex</span>(<span class="string">&quot;#([ \t]|\\\\\r?\n)*error&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;#error&quot;</span>, <span class="kw">as</span>(<span class="ident">display</span>))]</span>
     <span class="ident">PpError</span>,
     <span class="attribute">#[<span class="ident">regex</span>(<span class="string">&quot;#([ \t]|\\\\\r?\n)*if&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;#if&quot;</span>, <span class="kw">as</span>(<span class="ident">display</span>))]</span>
     <span class="ident">PpIf</span>,
     <span class="attribute">#[<span class="ident">regex</span>(<span class="string">&quot;#([ \t]|\\\\\r?\n)*ifdef&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;#ifdef&quot;</span>, <span class="kw">as</span>(<span class="ident">display</span>))]</span>
     <span class="ident">PpIfDef</span>,
     <span class="attribute">#[<span class="ident">regex</span>(<span class="string">&quot;#([ \t]|\\\\\r?\n)*ifndef&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;#ifndef&quot;</span>, <span class="kw">as</span>(<span class="ident">display</span>))]</span>
     <span class="ident">PpIfNDef</span>,
     <span class="attribute">#[<span class="ident">regex</span>(<span class="string">&quot;#([ \t]|\\\\\r?\n)*include&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;#include&quot;</span>, <span class="kw">as</span>(<span class="ident">display</span>))]</span>
     <span class="ident">PpInclude</span>,
     <span class="attribute">#[<span class="ident">regex</span>(<span class="string">&quot;#([ \t]|\\\\\r?\n)*line&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;#line&quot;</span>, <span class="kw">as</span>(<span class="ident">display</span>))]</span>
     <span class="ident">PpLine</span>,
     <span class="attribute">#[<span class="ident">regex</span>(<span class="string">&quot;#([ \t]|\\\\\r?\n)*pragma&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;#pragma&quot;</span>, <span class="kw">as</span>(<span class="ident">display</span>))]</span>
     <span class="ident">PpPragma</span>,
     <span class="attribute">#[<span class="ident">regex</span>(<span class="string">&quot;#([ \t]|\\\\\r?\n)*undef&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;#undef&quot;</span>, <span class="kw">as</span>(<span class="ident">display</span>))]</span>
     <span class="ident">PpUndef</span>,
     <span class="attribute">#[<span class="ident">regex</span>(<span class="string">&quot;#([ \t]|\\\\\r?\n)*version&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;#version&quot;</span>, <span class="kw">as</span>(<span class="ident">display</span>))]</span>
     <span class="ident">PpVersion</span>,
     <span class="attribute">#[<span class="ident">regex</span>(<span class="string">&quot;#([ \t]|\\\\\r?\n)*extension&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;#extension&quot;</span>, <span class="kw">as</span>(<span class="ident">display</span>))]</span>
     <span class="ident">PpExtension</span>,
 
-    <span class="attribute">#[<span class="ident">display</span>(<span class="string">&quot;&lt;preprocessor string&gt;&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;&lt;preprocessor string&gt;&quot;</span>, <span class="kw">as</span>(<span class="ident">display</span>))]</span>
     <span class="ident">PpRest</span>(<span class="ident">std</span>::<span class="ident">borrow</span>::<span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;i</span>, <span class="ident">str</span><span class="op">&gt;</span>),
 
-    <span class="attribute">#[<span class="ident">display</span>(<span class="string">&quot;core&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;core&quot;</span>, <span class="kw">as</span>(<span class="ident">display</span>))]</span>
     <span class="ident">PpCore</span>,
-    <span class="attribute">#[<span class="ident">display</span>(<span class="string">&quot;compatibility&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;compatibility&quot;</span>, <span class="kw">as</span>(<span class="ident">display</span>))]</span>
     <span class="ident">PpCompatibility</span>,
-    <span class="attribute">#[<span class="ident">display</span>(<span class="string">&quot;es&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;es&quot;</span>, <span class="kw">as</span>(<span class="ident">display</span>))]</span>
     <span class="ident">PpEs</span>,
 
-    <span class="attribute">#[<span class="ident">display</span>(<span class="string">&quot;require&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;require&quot;</span>, <span class="kw">as</span>(<span class="ident">display</span>))]</span>
     <span class="ident">PpExtRequire</span>,
-    <span class="attribute">#[<span class="ident">display</span>(<span class="string">&quot;enable&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;enable&quot;</span>, <span class="kw">as</span>(<span class="ident">display</span>))]</span>
     <span class="ident">PpExtEnable</span>,
-    <span class="attribute">#[<span class="ident">display</span>(<span class="string">&quot;warn&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;warn&quot;</span>, <span class="kw">as</span>(<span class="ident">display</span>))]</span>
     <span class="ident">PpExtWarn</span>,
-    <span class="attribute">#[<span class="ident">display</span>(<span class="string">&quot;disable&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;disable&quot;</span>, <span class="kw">as</span>(<span class="ident">display</span>))]</span>
     <span class="ident">PpExtDisable</span>,
 
-    <span class="comment">// TODO: Why does this break without the spaces?</span>
-    <span class="attribute">#[<span class="ident">display</span>(<span class="string">&quot;&lt; {0} &gt;&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;&lt;{}&gt;&quot;</span>, <span class="kw">as</span>(<span class="ident">display</span>))]</span>
     <span class="ident">PpPathAbsolute</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;i</span> <span class="ident">str</span>),
-    <span class="attribute">#[<span class="ident">display</span>(<span class="string">&quot;\&quot;{0}\&quot;&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;\&quot;{}\&quot;&quot;</span>, <span class="kw">as</span>(<span class="ident">display</span>))]</span>
     <span class="ident">PpPathRelative</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;i</span> <span class="ident">str</span>),
 
     <span class="attribute">#[<span class="ident">error</span>]</span>
+    <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;&lt;invalid token&gt;&quot;</span>, <span class="kw">as</span>(<span class="ident">display</span>))]</span>
     <span class="ident">Error</span>,
 }
 

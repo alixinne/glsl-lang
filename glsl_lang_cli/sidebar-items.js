@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["main","CLI entry point"]]});
+initSidebarItems({"fn":[["main","CLI entry point"],["output_glsl",""],["output_json",""],["output_text",""]]});

@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["LexerPosition","A position in the lexer's input"],["NodeSpan","Span information for a node, constructed from a nom_locate::LocatedSpan"]]});
+initSidebarItems({"struct":[["LexerPosition","A position in the lexer's input"],["NodeSpan","Span information for a node, constructed from a pair of LexerPositions"]]});

@@ -288,8 +288,6 @@
 <span id="285">285</span>
 <span id="286">286</span>
 <span id="287">287</span>
-<span id="288">288</span>
-<span id="289">289</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Error type definitions</span>
 
@@ -299,7 +297,10 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">position</span>::<span class="ident">LexerPosition</span>;
 
 <span class="doccomment">/// Trait to implement for a token to be used with `lang_util`&#39;s infrastructure</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Token</span>: <span class="ident">fmt</span>::<span class="ident">Display</span> {}
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Token</span>: <span class="ident">fmt</span>::<span class="ident">Display</span> {
+    <span class="doccomment">/// Return the name used by the lalrpop parser for this token</span>
+    <span class="kw">fn</span> <span class="ident">as_parser_token</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>;
+}
 
 <span class="doccomment">/// An error produced by lexical analysis</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">LexicalError</span>: <span class="ident">Error</span> {
@@ -453,11 +454,6 @@
         };
 
         <span class="self">Self</span> { <span class="ident">position</span>, <span class="ident">kind</span> }
-    }
-
-    <span class="doccomment">/// Display the resolved position without source number</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">without_source_number</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">OptionalSourceNumber</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="self">Self</span><span class="op">&gt;</span> {
-        <span class="ident">OptionalSourceNumber</span>(<span class="self">self</span>)
     }
 }
 

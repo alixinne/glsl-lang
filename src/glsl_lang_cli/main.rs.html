@@ -37,6 +37,58 @@
 <span id="34">34</span>
 <span id="35">35</span>
 <span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+<span id="70">70</span>
+<span id="71">71</span>
+<span id="72">72</span>
+<span id="73">73</span>
+<span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
+<span id="77">77</span>
+<span id="78">78</span>
+<span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
+<span id="84">84</span>
+<span id="85">85</span>
+<span id="86">86</span>
+<span id="87">87</span>
+<span id="88">88</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! [`glsl-lang`](https://crates.io/crates/glsl-lang) debugging CLI.</span>
 <span class="doccomment">//!</span>
@@ -57,21 +109,73 @@
 
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">prelude</span>::<span class="kw-2">*</span>;
 
-<span class="kw">use</span> <span class="ident">glsl_lang</span>::<span class="ident">ast</span>::<span class="ident">NodeDisplay</span>;
+<span class="kw">use</span> <span class="ident">anyhow</span>::<span class="ident">bail</span>;
+
+<span class="kw">use</span> <span class="ident">glsl_lang</span>::<span class="ident">ast</span>::{<span class="ident">NodeDisplay</span>, <span class="ident">TranslationUnit</span>};
 <span class="kw">use</span> <span class="ident">glsl_lang</span>::<span class="ident">parse</span>::<span class="ident">Parse</span>;
+
+<span class="kw">fn</span> <span class="ident">output_text</span>(<span class="ident">output</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">Write</span>, <span class="ident">tu</span>: <span class="ident">TranslationUnit</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="macro">writeln</span><span class="macro">!</span>(<span class="ident">output</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">tu</span>.<span class="ident">display</span>())<span class="question-mark">?</span>;
+    <span class="prelude-val">Ok</span>(())
+}
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;json&quot;</span>)]</span>
+<span class="kw">fn</span> <span class="ident">output_json</span>(<span class="ident">output</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">Write</span>, <span class="ident">tu</span>: <span class="ident">TranslationUnit</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="ident">serde_json</span>::<span class="ident">to_writer</span>(<span class="ident">output</span>, <span class="kw-2">&amp;</span><span class="ident">tu</span>)<span class="question-mark">?</span>;
+    <span class="prelude-val">Ok</span>(())
+}
+
+<span class="kw">fn</span> <span class="ident">output_glsl</span>(<span class="ident">output</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">Write</span>, <span class="ident">tu</span>: <span class="ident">TranslationUnit</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">String</span>::<span class="ident">new</span>();
+
+    <span class="ident">glsl_lang</span>::<span class="ident">transpiler</span>::<span class="ident">glsl</span>::<span class="ident">show_translation_unit</span>(
+        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">s</span>,
+        <span class="kw-2">&amp;</span><span class="ident">tu</span>,
+        <span class="ident">glsl_lang</span>::<span class="ident">transpiler</span>::<span class="ident">glsl</span>::<span class="ident">FormattingState</span>::<span class="ident">default</span>(),
+    )<span class="question-mark">?</span>;
+
+    <span class="macro">write</span><span class="macro">!</span>(<span class="ident">output</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">s</span>)<span class="question-mark">?</span>;
+
+    <span class="prelude-val">Ok</span>(())
+}
 
 <span class="doccomment">/// CLI entry point</span>
 <span class="kw">fn</span> <span class="ident">main</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">args</span> <span class="op">=</span> <span class="ident">pico_args</span>::<span class="ident">Arguments</span>::<span class="ident">from_env</span>();
+
+    <span class="comment">// Figure out output format</span>
+    <span class="kw">let</span> <span class="ident">output_fn</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">args</span>
+        .<span class="ident">opt_value_from_str</span>(<span class="string">&quot;--format&quot;</span>)<span class="question-mark">?</span>
+        .<span class="ident">unwrap_or</span>(<span class="string">&quot;text&quot;</span>.<span class="ident">to_owned</span>())
+        .<span class="ident">as_str</span>()
+    {
+        <span class="string">&quot;text&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">output_text</span>,
+        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;json&quot;</span>)]</span>
+        <span class="string">&quot;json&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">output_json</span>,
+        <span class="string">&quot;glsl&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">output_glsl</span>,
+        <span class="ident">other</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(<span class="string">&quot;unknown output format: {}&quot;</span>, <span class="ident">other</span>),
+    };
+
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">String</span>::<span class="ident">new</span>();
-    <span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">stdin</span>().<span class="ident">read_to_string</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">s</span>)<span class="question-mark">?</span>;
+
+    <span class="comment">// Read input from argument or stdin</span>
+    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">path</span>) <span class="op">=</span>
+        <span class="ident">args</span>.<span class="ident">opt_free_from_os_str</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span><span class="op">&gt;</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> <span class="prelude-val">Ok</span>(<span class="ident">std</span>::<span class="ident">path</span>::<span class="ident">PathBuf</span>::<span class="ident">from</span>(<span class="ident">s</span>)))<span class="question-mark">?</span>
+    {
+        <span class="ident">s</span> <span class="op">=</span> <span class="ident">std</span>::<span class="ident">fs</span>::<span class="ident">read_to_string</span>(<span class="ident">path</span>)<span class="question-mark">?</span>;
+    } <span class="kw">else</span> {
+        <span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">stdin</span>().<span class="ident">read_to_string</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">s</span>)<span class="question-mark">?</span>;
+    }
+
     <span class="kw">match</span> <span class="ident">glsl_lang</span>::<span class="ident">ast</span>::<span class="ident">TranslationUnit</span>::<span class="ident">parse</span>(<span class="ident">s</span>.<span class="ident">as_str</span>()) {
         <span class="prelude-val">Ok</span>(<span class="ident">tu</span>) <span class="op">=</span><span class="op">&gt;</span> {
-            <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">tu</span>.<span class="ident">display</span>());
+            <span class="ident">output_fn</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">stdout</span>(), <span class="ident">tu</span>)<span class="question-mark">?</span>;
         }
         <span class="prelude-val">Err</span>(<span class="ident">error</span>) <span class="op">=</span><span class="op">&gt;</span> {
-            <span class="macro">eprintln</span><span class="macro">!</span>(<span class="string">&quot;error: {:?}&quot;</span>, <span class="ident">error</span>);
+            <span class="macro">eprintln</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">error</span>);
         }
     }
+
     <span class="prelude-val">Ok</span>(())
 }
 </pre></div>

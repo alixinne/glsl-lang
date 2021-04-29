@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["AsParser",""],["AsParserError",""]],"fn":[["display_impl",""],["parse_as_parser",""],["parse_token_attr",""],["token",""],["token_impl",""]],"struct":[["Token",""],["TokenAttr",""],["TokenDisplay",""],["TokenOpts",""],["TokenVariant",""],["TokenVariantField",""]],"type":[["TokenAttrTy",""]]});

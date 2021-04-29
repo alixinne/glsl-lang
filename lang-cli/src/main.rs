@@ -80,7 +80,7 @@ fn main() -> anyhow::Result<()> {
             output_fn(&mut std::io::stdout(), tu)?;
         }
         Err(error) => {
-            eprintln!("error: {:?}", error);
+            eprintln!("{}", error);
         }
     }
 

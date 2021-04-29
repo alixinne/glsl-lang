@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `glsl-lang-cli`: Add JSON output format
 - `glsl-lang-cli`: Add input file argument
 - `glsl-lang-cli`: Add GLSL output format
+- `glsl-lang`: Implement PartialOrd and Hash for Identifier and TypeName
 
 ### Changed
 - PartialEq for Node now compares the contents of the node by default

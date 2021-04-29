@@ -44,7 +44,7 @@ pub enum Path {
 }
 
 /// A generic identifier.
-#[derive(Clone, Debug, PartialEq, NodeContent)]
+#[derive(Clone, Debug, PartialEq, PartialOrd, Hash, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
 #[lang_util(display(leaf))]
@@ -87,7 +87,7 @@ impl fmt::Display for IdentifierData {
 }
 
 /// Any type name.
-#[derive(Clone, Debug, PartialEq, NodeContent)]
+#[derive(Clone, Debug, PartialEq, PartialOrd, Hash, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
 #[lang_util(display(leaf))]

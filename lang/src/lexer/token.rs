@@ -400,31 +400,37 @@ pub enum Token<'i> {
     Subroutine,
     #[regex("[a-zA-Z_][a-zA-Z_0-9]*", parse_ident)]
     #[regex("#\\s*\\(\\s*[a-zA-Z_][a-zA-Z_0-9]*\\s*\\)", parse_rs_ident)]
-    #[lang_util(display("{}", "_0.0"))]
+    #[lang_util(display("{}", "_0.0"), as = "ident")]
     Identifier((&'i str, LexerContext)),
+    #[lang_util(as = "ty_name")]
     TypeName(&'i str), // Cast from Identifier depending on known type names
     #[regex(
         r"([0-9]+\.[0-9]+|[0-9]+\.|\.[0-9]+)([eE][+-]?[0-9]+)?(f|F)?",
         parse_f32
     )]
     #[regex(r"[0-9]+[eE][+-]?[0-9]+(f|F)?", parse_f32)]
+    #[lang_util(as = "float_constant")]
     FloatConstant(f32),
     #[regex(r"0[0-7]*", |lex| parse_int(lex, 8))]
     #[regex(r"[1-9][0-9]*", |lex| parse_int(lex, 10))]
     #[regex(r"0[xX][0-9A-Fa-f]+", |lex| parse_int(lex, 16))]
+    #[lang_util(as = "int_constant")]
     IntConstant(i32),
     #[regex(r"0[0-7]*[uU]", |lex| parse_uint(lex, 8))]
     #[regex(r"[1-9][0-9]*[uU]", |lex| parse_uint(lex, 10))]
     #[regex(r"0[xX][0-9A-Fa-f]+[uU]", |lex| parse_uint(lex, 16))]
+    #[lang_util(as = "uint_constant")]
     UIntConstant(u32),
     #[token("true", |_| true)]
     #[token("false", |_| false)]
+    #[lang_util(as = "bool_constant")]
     BoolConstant(bool),
     #[regex(
         r"([0-9]+\.[0-9]+|[0-9]+\.|\.[0-9]+)([eE][+-]?[0-9]+)?(lf|LF)",
         parse_f64
     )]
     #[regex(r"[0-9]+[eE][+-]?[0-9]+(lf|LF)", parse_f64)]
+    #[lang_util(as = "double_constant")]
     DoubleConstant(f64),
     #[token("<<")]
     LeftOp,
@@ -531,85 +537,85 @@ pub enum Token<'i> {
 
     // TODO: Line continuation can happen inside tokens
     #[regex("([ \t\r\n]|\\\\\r?\n)+", logos::skip)]
-    #[lang_util(display = "<whitespace>")]
+    #[lang_util(display = "<whitespace>", as(display))]
     Whitespace,
     #[regex("//(.|\\\\\r?\n)*", |lex| { parse_cmt(lex, true); logos::Skip })]
-    #[lang_util(display = "<single line comment>")]
+    #[lang_util(display = "<single line comment>", as(display))]
     SingleLineComment,
     #[regex("/\\*([^*]|\\*[^/])+\\*/", |lex| { parse_cmt(lex, false); logos::Skip })]
-    #[lang_util(display = "<multi line comment>")]
+    #[lang_util(display = "<multi line comment>", as(display))]
     MultiLineComment,
 
     // TODO: Line continuations in preprocessor pragmas?
     #[regex("#([ \t]|\\\\\r?\n)*define")]
-    #[lang_util(display = "#define")]
+    #[lang_util(display = "#define", as(display))]
     PpDefine,
     #[regex("#([ \t]|\\\\\r?\n)*else")]
-    #[lang_util(display = "#else")]
+    #[lang_util(display = "#else", as(display))]
     PpElse,
     #[regex("#([ \t]|\\\\\r?\n)*elif")]
-    #[lang_util(display = "#elif")]
+    #[lang_util(display = "#elif", as(display))]
     PpElif,
     #[regex("#([ \t]|\\\\\r?\n)*endif")]
-    #[lang_util(display = "#endif")]
+    #[lang_util(display = "#endif", as(display))]
     PpEndIf,
     #[regex("#([ \t]|\\\\\r?\n)*error")]
-    #[lang_util(display = "#error")]
+    #[lang_util(display = "#error", as(display))]
     PpError,
     #[regex("#([ \t]|\\\\\r?\n)*if")]
-    #[lang_util(display = "#if")]
+    #[lang_util(display = "#if", as(display))]
     PpIf,
     #[regex("#([ \t]|\\\\\r?\n)*ifdef")]
-    #[lang_util(display = "#ifdef")]
+    #[lang_util(display = "#ifdef", as(display))]
     PpIfDef,
     #[regex("#([ \t]|\\\\\r?\n)*ifndef")]
-    #[lang_util(display = "#ifndef")]
+    #[lang_util(display = "#ifndef", as(display))]
     PpIfNDef,
     #[regex("#([ \t]|\\\\\r?\n)*include")]
-    #[lang_util(display = "#include")]
+    #[lang_util(display = "#include", as(display))]
     PpInclude,
     #[regex("#([ \t]|\\\\\r?\n)*line")]
-    #[lang_util(display = "#line")]
+    #[lang_util(display = "#line", as(display))]
     PpLine,
     #[regex("#([ \t]|\\\\\r?\n)*pragma")]
-    #[lang_util(display = "#pragma")]
+    #[lang_util(display = "#pragma", as(display))]
     PpPragma,
     #[regex("#([ \t]|\\\\\r?\n)*undef")]
-    #[lang_util(display = "#undef")]
+    #[lang_util(display = "#undef", as(display))]
     PpUndef,
     #[regex("#([ \t]|\\\\\r?\n)*version")]
-    #[lang_util(display = "#version")]
+    #[lang_util(display = "#version", as(display))]
     PpVersion,
     #[regex("#([ \t]|\\\\\r?\n)*extension")]
-    #[lang_util(display = "#extension")]
+    #[lang_util(display = "#extension", as(display))]
     PpExtension,
 
-    #[lang_util(display = "<preprocessor string>")]
+    #[lang_util(display = "<preprocessor string>", as(display))]
     PpRest(std::borrow::Cow<'i, str>),
 
-    #[lang_util(display = "core")]
+    #[lang_util(display = "core", as(display))]
     PpCore,
-    #[lang_util(display = "compatibility")]
+    #[lang_util(display = "compatibility", as(display))]
     PpCompatibility,
-    #[lang_util(display = "es")]
+    #[lang_util(display = "es", as(display))]
     PpEs,
 
-    #[lang_util(display = "require")]
+    #[lang_util(display = "require", as(display))]
     PpExtRequire,
-    #[lang_util(display = "enable")]
+    #[lang_util(display = "enable", as(display))]
     PpExtEnable,
-    #[lang_util(display = "warn")]
+    #[lang_util(display = "warn", as(display))]
     PpExtWarn,
-    #[lang_util(display = "disable")]
+    #[lang_util(display = "disable", as(display))]
     PpExtDisable,
 
-    #[lang_util(display = "<{}>")]
+    #[lang_util(display = "<{}>", as(display))]
     PpPathAbsolute(&'i str),
-    #[lang_util(display = "\"{}\"")]
+    #[lang_util(display = "\"{}\"", as(display))]
     PpPathRelative(&'i str),
 
     #[error]
-    #[lang_util(display = "<invalid token>")]
+    #[lang_util(display = "<invalid token>", as(display))]
     Error,
 }
 

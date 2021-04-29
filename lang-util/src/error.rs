@@ -6,7 +6,10 @@ use std::fmt;
 use crate::position::LexerPosition;
 
 /// Trait to implement for a token to be used with `lang_util`'s infrastructure
-pub trait Token: fmt::Display {}
+pub trait Token: fmt::Display {
+    /// Return the name used by the lalrpop parser for this token
+    fn as_parser_token(&self) -> &'static str;
+}
 
 /// An error produced by lexical analysis
 pub trait LexicalError: Error {

@@ -50,7 +50,15 @@ fn main() -> anyhow::Result<()> {
     };
 
     let mut s = String::new();
-    std::io::stdin().read_to_string(&mut s)?;
+
+    // Read input from argument or stdin
+    if let Some(path) =
+        args.opt_free_from_os_str::<_, &'static str>(|s| Ok(std::path::PathBuf::from(s)))?
+    {
+        s = std::fs::read_to_string(path)?;
+    } else {
+        std::io::stdin().read_to_string(&mut s)?;
+    }
 
     match glsl_lang::ast::TranslationUnit::parse(s.as_str()) {
         Ok(tu) => {

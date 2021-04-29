@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `lang-util`: Implement Hash for Node (contents)
 - `glsl-lang`: Add `serde` feature for AST serialization
 - `glsl-lang-cli`: Add JSON output format
+- `glsl-lang-cli`: Add input file argument
 
 ### Changed
 - PartialEq for Node now compares the contents of the node by default

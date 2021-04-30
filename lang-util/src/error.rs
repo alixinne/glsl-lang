@@ -319,13 +319,11 @@ impl<E: LexicalError> fmt::Display for ParseErrorKind<E> {
             ParseErrorKind::UnrecognizedEof { expected } => {
                 write!(f, "unexpected end of input, expected any of {:?}", expected)
             }
-            ParseErrorKind::UnrecognizedToken { token, expected } => write!(
-                f,
-                "unexpected token `{}`, expected any of {:?}",
-                token, expected
-            ),
+            ParseErrorKind::UnrecognizedToken { token, expected } => {
+                write!(f, "unexpected {}, expected any of {:?}", token, expected)
+            }
             ParseErrorKind::ExtraToken { token } => {
-                write!(f, "extra token `{}` at end of input", token)
+                write!(f, "extra {} at end of input", token)
             }
             ParseErrorKind::LexicalError { error } => write!(f, "{}", error),
         }

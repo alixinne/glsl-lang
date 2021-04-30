@@ -201,6 +201,14 @@ impl<'s> Token<'s> {
         }
     }
 
+    fn get_prefixed_fmt(&self, base_fmt: &str) -> String {
+        if self.variant.kinds.is_empty() {
+            format!("`{}`", base_fmt)
+        } else {
+            format!("{} `{}`", self.variant.kinds.last().unwrap(), base_fmt)
+        }
+    }
+
     fn display_arm_body(&self, declared_fields: &[syn::Ident]) -> TokenStream {
         match self.variant.fields.style {
             darling::ast::Style::Tuple => {
@@ -248,6 +256,7 @@ impl<'s> Token<'s> {
                             .collect()
                     };
 
+                    let fmt = self.get_prefixed_fmt(fmt);
                     return quote_spanned! {
                         self.variant.ident.span() =>
                             write!(f, #fmt, #(#args),*)
@@ -256,9 +265,10 @@ impl<'s> Token<'s> {
                     // No display attribute, check if we can have a sensible default
                     if declared_fields.len() == 1 {
                         let v1 = &declared_fields[0];
+                        let fmt = self.get_prefixed_fmt("{}");
                         return quote_spanned! {
                             self.variant.ident.span() =>
-                                write!(f, "{}", #v1)
+                                write!(f, #fmt, #v1)
                         };
                     }
                 }
@@ -275,7 +285,8 @@ impl<'s> Token<'s> {
                     return match token {
                         Ok(value) => {
                             let value = &value.token;
-                            quote_spanned! { self.variant.ident.span() => write!(f, "{}", #value) }
+                            let fmt = self.get_prefixed_fmt("{}");
+                            quote_spanned! { self.variant.ident.span() => write!(f, #fmt, #value) }
                         }
                         Err(error) => {
                             let s = format!("invalid token attribute: {}", error);
@@ -287,7 +298,8 @@ impl<'s> Token<'s> {
                     };
                 } else if let Some(display) = &self.variant.display {
                     let value = &display.format;
-                    return quote_spanned! { self.variant.ident.span() => write!(f, "{}", #value) };
+                    let fmt = self.get_prefixed_fmt("{}");
+                    return quote_spanned! { self.variant.ident.span() => write!(f, #fmt, #value) };
                 }
             }
         }

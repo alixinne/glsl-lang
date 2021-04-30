@@ -1,5 +1,7 @@
 //! Error type definitions
 
+use std::cmp::Ordering;
+use std::collections::{HashMap, HashSet};
 use std::error::Error;
 use std::fmt;
 
@@ -228,16 +230,77 @@ impl<E: LexicalError> ParseError<E> {
         // Resolve position into something that is user readable
         let position = ResolvedPosition::from((&error, input));
 
+        // Simplification function
+        let simplify = || {
+            // Lookup structure for token names and kinds
+            let mut token_descriptors = HashMap::new();
+            let mut token_kinds: HashMap<&'static str, HashSet<&'static str>> = HashMap::new();
+            for descriptor in T::all_tokens() {
+                // Add the token descriptor
+                token_descriptors.insert(descriptor.parser_token, descriptor);
+
+                // Add the token descriptor to the various kinds
+                for kind in descriptor.kinds {
+                    if let Some(existing) = token_kinds.get_mut(kind) {
+                        existing.insert(descriptor.parser_token);
+                    } else {
+                        token_kinds
+                            .insert(kind, std::iter::once(descriptor.parser_token).collect());
+                    }
+                }
+            }
+
+            |expected: Vec<String>| -> Vec<String> {
+                let expected: HashSet<_> = expected.iter().map(String::as_str).collect();
+                let mut seen_tokens = HashSet::new();
+                let mut result = Vec::new();
+
+                for (kind, members) in token_kinds {
+                    if members.is_subset(&expected) {
+                        // Add all the tokens of this kind as seen
+                        seen_tokens.extend(members);
+                        // Add the kind of token to the expected list
+                        result.push(kind.to_owned());
+                    }
+                }
+
+                // Leftover tokens should still be expected
+                for leftover in expected.difference(&seen_tokens) {
+                    result.push(leftover.to_string());
+                }
+
+                // Sort the result for deterministic results
+                result.sort_unstable_by(|a, b| {
+                    // TODO: Standalone token kinds should be last
+                    let a_spaces = a.contains(' ');
+                    let b_spaces = b.contains(' ');
+                    if a_spaces && b_spaces {
+                        a.cmp(b)
+                    } else if a_spaces {
+                        Ordering::Less
+                    } else if b_spaces {
+                        Ordering::Greater
+                    } else {
+                        a.len().cmp(&b.len()).reverse().then_with(|| a.cmp(b))
+                    }
+                });
+
+                result
+            }
+        };
+
         // Map the error kind
         let kind = match error {
             lalrpop_util::ParseError::InvalidToken { .. } => ParseErrorKind::InvalidToken,
             lalrpop_util::ParseError::UnrecognizedEOF { expected, .. } => {
-                ParseErrorKind::UnrecognizedEof { expected }
+                ParseErrorKind::UnrecognizedEof {
+                    expected: simplify()(expected),
+                }
             }
             lalrpop_util::ParseError::UnrecognizedToken { token, expected } => {
                 ParseErrorKind::UnrecognizedToken {
                     token: token.1.description(),
-                    expected,
+                    expected: simplify()(expected),
                 }
             }
             lalrpop_util::ParseError::ExtraToken { token } => ParseErrorKind::ExtraToken {

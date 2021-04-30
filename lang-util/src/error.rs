@@ -375,15 +375,71 @@ pub enum ParseErrorKind<E: LexicalError> {
     },
 }
 
+struct ListDisplay<'s>(&'s [String]);
+struct KindDisplay<'s>(&'s str);
+
+impl<'s> fmt::Display for KindDisplay<'s> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        if self
+            .0
+            .chars()
+            .next()
+            .map(char::is_alphabetic)
+            .unwrap_or(false)
+        {
+            write!(f, "{}", self.0)
+        } else {
+            write!(f, "`{}`", self.0)
+        }
+    }
+}
+
+impl<'s> fmt::Display for ListDisplay<'s> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        if self.0.is_empty() {
+            write!(f, "nothing")
+        } else {
+            let first = self.0.first().unwrap();
+            match first.chars().next() {
+                Some('a') | Some('e') | Some('i') | Some('u') | Some('o') | Some('y') => {
+                    write!(f, "an ")?
+                }
+                _ => write!(f, "a ")?,
+            }
+
+            write!(f, "{}", KindDisplay(first))?;
+
+            for rest in self.0.iter().skip(1).take(self.0.len() - 2) {
+                write!(f, ", {}", KindDisplay(rest))?;
+            }
+
+            if self.0.len() > 1 {
+                write!(f, " or {}", KindDisplay(self.0.last().unwrap()))?;
+            }
+
+            Ok(())
+        }
+    }
+}
+
 impl<E: LexicalError> fmt::Display for ParseErrorKind<E> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             ParseErrorKind::InvalidToken => write!(f, "invalid token"),
             ParseErrorKind::UnrecognizedEof { expected } => {
-                write!(f, "unexpected end of input, expected any of {:?}", expected)
+                write!(
+                    f,
+                    "unexpected end of input, expected {}",
+                    ListDisplay(&expected)
+                )
             }
             ParseErrorKind::UnrecognizedToken { token, expected } => {
-                write!(f, "unexpected {}, expected any of {:?}", token, expected)
+                write!(
+                    f,
+                    "unexpected {}, expected {}",
+                    token,
+                    ListDisplay(&expected)
+                )
             }
             ParseErrorKind::ExtraToken { token } => {
                 write!(f, "extra {} at end of input", token)

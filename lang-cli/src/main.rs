@@ -54,7 +54,7 @@ fn main() -> anyhow::Result<()> {
     // Figure out output format
     let output_fn = match args
         .opt_value_from_str("--format")?
-        .unwrap_or("text".to_owned())
+        .unwrap_or_else(|| "text".to_owned())
         .as_str()
     {
         "text" => output_text,

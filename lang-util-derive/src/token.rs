@@ -292,7 +292,7 @@ fn parse_token_attr(attrs: &[syn::Attribute]) -> TokenAttrTy {
         Some((
             token
                 .parse_meta()
-                .map_err(|err| darling::Error::custom(err))
+                .map_err(darling::Error::custom)
                 .and_then(|meta| TokenAttr::from_meta(&meta)),
             token,
         ))

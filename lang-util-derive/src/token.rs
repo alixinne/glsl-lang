@@ -91,16 +91,19 @@ struct TokenVariant {
     display: Option<TokenDisplay>,
     #[darling(default, rename = "as")]
     as_parser: Option<AsParser>,
+    #[darling(multiple, rename = "kind")]
+    kinds: Vec<String>,
 }
 
 struct Token<'s> {
+    base_ident: &'s syn::Ident,
     variant: &'s TokenVariant,
     token: TokenAttrTy<'s>,
     as_parser: Result<String, AsParserError>,
 }
 
 impl<'s> Token<'s> {
-    fn as_parser_token_arm(&self, base_ident: &syn::Ident) -> TokenStream {
+    fn empty_variant_header(&self) -> TokenStream {
         let variant_name = &self.variant.ident;
         let variant_header = match &self.variant.fields.style {
             darling::ast::Style::Tuple => {
@@ -119,7 +122,26 @@ impl<'s> Token<'s> {
             darling::ast::Style::Unit => quote! { #variant_name },
         };
 
-        let body = match &self.as_parser {
+        let base_ident = self.base_ident;
+        quote_spanned! { self.variant.ident.span() => #base_ident :: #variant_header }
+    }
+
+    fn variant_name_arm(&self) -> TokenStream {
+        let variant_header = self.empty_variant_header();
+
+        let body = {
+            let value = &self.variant.ident.to_string();
+            quote_spanned! { self.variant.ident.span() => #value }
+        };
+
+        quote_spanned! {
+            self.variant.ident.span() =>
+                #variant_header => #body
+        }
+    }
+
+    fn parser_token_body(&self) -> TokenStream {
+        match &self.as_parser {
             Ok(value) => quote_spanned! { self.variant.ident.span() => #value },
             Err(error) => {
                 let error = error.to_string();
@@ -128,11 +150,54 @@ impl<'s> Token<'s> {
                         compile_error!(#error)
                 }
             }
-        };
+        }
+    }
+
+    fn parser_token_arm(&self) -> TokenStream {
+        let variant_header = self.empty_variant_header();
+        let body = self.parser_token_body();
 
         quote_spanned! {
             self.variant.ident.span() =>
-                #base_ident :: #variant_header => #body
+                #variant_header => #body
+        }
+    }
+
+    fn kinds_body(&self) -> TokenStream {
+        if self.variant.kinds.is_empty() {
+            if let Some((token, attr)) = &self.token {
+                match token {
+                    Ok(value) => {
+                        let value = &value.token;
+                        quote_spanned! { self.variant.ident.span() => &[#value] }
+                    }
+                    Err(error) => {
+                        let s = format!("invalid token attribute: {}", error);
+                        quote_spanned! {
+                            attr.path.span() =>
+                                compile_error!(#s)
+                        }
+                    }
+                }
+            } else {
+                quote_spanned! {
+                    self.variant.ident.span() =>
+                        compile_error!("cannot determine token kind for this token")
+                }
+            }
+        } else {
+            let value = &self.variant.kinds;
+            quote_spanned! { self.variant.ident.span() => &[#(#value),*] }
+        }
+    }
+
+    fn kinds_arm(&self) -> TokenStream {
+        let variant_header = self.empty_variant_header();
+        let body = self.kinds_body();
+
+        quote_spanned! {
+            self.variant.ident.span() =>
+                #variant_header => #body
         }
     }
 
@@ -233,7 +298,7 @@ impl<'s> Token<'s> {
         }
     }
 
-    fn display_arm(&self, base_ident: &syn::Ident) -> TokenStream {
+    fn display_arm(&self) -> TokenStream {
         // Create arm header
         let variant_name = &self.variant.ident;
         let (variant_header, declared_fields) = match &self.variant.fields.style {
@@ -272,9 +337,21 @@ impl<'s> Token<'s> {
         // Create arm body
         let body = self.display_arm_body(&declared_fields);
 
+        let base_ident = self.base_ident;
         quote_spanned! {
             self.variant.ident.span() =>
                 #base_ident :: #variant_header => { #body }
+        }
+    }
+
+    fn all_tokens_arm(&self) -> TokenStream {
+        let variant_name = self.variant.ident.to_string();
+        let parser_token = self.parser_token_body();
+        let kinds = self.kinds_body();
+
+        quote_spanned! {
+            self.variant.ident.span() =>
+                ::lang_util::error::TokenDescriptor::new(#variant_name, #parser_token, #kinds)
         }
     }
 }
@@ -349,12 +426,13 @@ fn parse_as_parser(variant: &TokenVariant, token: &TokenAttrTy) -> Result<String
     }
 }
 
-impl<'s> From<&'s TokenVariant> for Token<'s> {
-    fn from(variant: &'s TokenVariant) -> Self {
+impl<'s> From<(&'s syn::Ident, &'s TokenVariant)> for Token<'s> {
+    fn from((base_ident, variant): (&'s syn::Ident, &'s TokenVariant)) -> Self {
         let token = parse_token_attr(&variant.attrs);
         let as_parser = parse_as_parser(&variant, &token);
 
         Self {
+            base_ident,
             variant,
             token,
             as_parser,
@@ -375,7 +453,7 @@ fn display_impl(
     enum_name: &TokenStream,
     variants: &[Token],
 ) -> TokenStream {
-    let arms = variants.iter().map(|v| v.display_arm(base_ident));
+    let arms = variants.iter().map(Token::display_arm);
 
     quote_spanned! {
         base_ident.span() =>
@@ -390,15 +468,41 @@ fn display_impl(
 }
 
 fn token_impl(base_ident: &syn::Ident, enum_name: &TokenStream, variants: &[Token]) -> TokenStream {
-    let arms = variants.iter().map(|v| v.as_parser_token_arm(base_ident));
+    let variant_name_arms = variants.iter().map(Token::variant_name_arm);
+    let parser_token_arms = variants.iter().map(Token::parser_token_arm);
+    let kinds_arms = variants.iter().map(Token::kinds_arm);
+    let all_tokens_arms = variants.iter().map(Token::all_tokens_arm);
+
+    let id = format_ident!("__{}_TOKENS", base_ident.to_string().to_uppercase());
+    let cnt = variants.len();
 
     quote_spanned! {
         base_ident.span() =>
+            static #id: [::lang_util::error::TokenDescriptor; #cnt] = [
+                #(#all_tokens_arms),*
+            ];
+
             impl ::lang_util::error::Token for #enum_name {
-                fn as_parser_token(&self) -> &'static str {
+                fn variant_name(&self) -> &'static str {
                     match self {
-                        #(#arms),*
+                        #(#variant_name_arms),*
                     }
+                }
+
+                fn parser_token(&self) -> &'static str {
+                    match self {
+                        #(#parser_token_arms),*
+                    }
+                }
+
+                fn kinds(&self) -> &'static [&'static str] {
+                    match self {
+                        #(#kinds_arms),*
+                    }
+                }
+
+                fn all_tokens() -> &'static [::lang_util::error::TokenDescriptor] {
+                    &#id
                 }
             }
     }
@@ -412,6 +516,8 @@ pub(crate) fn token(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
         TokenOpts::from_derive_input(&input).expect("failed to parse options")
     };
 
+    let base_ident = &opts.ident;
+
     // Extract enum fields
     let fields = match &opts.data {
         darling::ast::Data::Enum(fields) => fields,
@@ -424,7 +530,10 @@ pub(crate) fn token(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     };
 
     // Create the Token structs
-    let fields: Vec<Token> = fields.iter().map(Into::into).collect();
+    let fields: Vec<Token> = fields
+        .iter()
+        .map(|variant| (base_ident, variant).into())
+        .collect();
 
     // All declarations
     let mut decls = Vec::new();
@@ -446,7 +555,6 @@ pub(crate) fn token(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     }
 
     // Compute enum name
-    let base_ident = &opts.ident;
     let enum_name = {
         // Add anonymous lifetimes as needed
         let lifetimes: Vec<_> = opts.generics.lifetimes().map(|_| quote! { '_ }).collect();

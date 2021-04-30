@@ -5,10 +5,94 @@ use std::fmt;
 
 use crate::position::LexerPosition;
 
+/// Information about a known token
+#[derive(Debug, Clone, PartialEq, PartialOrd, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize))]
+pub struct TokenDescriptor {
+    /// Variant name
+    pub variant_name: &'static str,
+
+    /// Parser token name
+    pub parser_token: &'static str,
+
+    /// List of kinds this token belongs to
+    pub kinds: &'static [&'static str],
+}
+
+impl TokenDescriptor {
+    /// Create a new token descriptor
+    pub const fn new(
+        variant_name: &'static str,
+        parser_token: &'static str,
+        kinds: &'static [&'static str],
+    ) -> Self {
+        Self {
+            variant_name,
+            parser_token,
+            kinds,
+        }
+    }
+}
+
+/// Information about a lexed token
+#[derive(Debug, Clone, PartialEq, PartialOrd, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize))]
+pub struct TokenDescription {
+    /// String representation of the lexed token
+    pub formatted: String,
+
+    /// Variant name
+    pub variant_name: &'static str,
+
+    /// Parser token name
+    pub parser_token: &'static str,
+
+    /// List of kinds this token belongs to
+    pub kinds: &'static [&'static str],
+}
+
+impl<'t, T: Token> From<&'t T> for TokenDescription {
+    fn from(token: &'t T) -> Self {
+        Self {
+            formatted: token.to_string(),
+            variant_name: token.variant_name(),
+            parser_token: token.parser_token(),
+            kinds: token.kinds(),
+        }
+    }
+}
+
+impl fmt::Display for TokenDescription {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.formatted)
+    }
+}
+
 /// Trait to implement for a token to be used with `lang_util`'s infrastructure
 pub trait Token: fmt::Display {
+    /// Return the variant name of the current token
+    fn variant_name(&self) -> &'static str;
+
     /// Return the name used by the lalrpop parser for this token
-    fn as_parser_token(&self) -> &'static str;
+    fn parser_token(&self) -> &'static str;
+
+    /// Return the token kinds this token belongs to
+    fn kinds(&self) -> &'static [&'static str];
+
+    /// Return the descriptions for all known tokens
+    fn all_tokens() -> &'static [TokenDescriptor];
+}
+
+/// Methods provided for all [Token] implementations
+pub trait TokenExt {
+    /// Return a descriptor for the current token
+    fn description(&self) -> TokenDescription;
+}
+
+impl<T: Token> TokenExt for T {
+    fn description(&self) -> TokenDescription {
+        TokenDescription::from(self)
+    }
 }
 
 /// An error produced by lexical analysis
@@ -152,12 +236,12 @@ impl<E: LexicalError> ParseError<E> {
             }
             lalrpop_util::ParseError::UnrecognizedToken { token, expected } => {
                 ParseErrorKind::UnrecognizedToken {
-                    token: token.1.to_string(),
+                    token: token.1.description(),
                     expected,
                 }
             }
             lalrpop_util::ParseError::ExtraToken { token } => ParseErrorKind::ExtraToken {
-                token: token.1.to_string(),
+                token: token.1.description(),
             },
             lalrpop_util::ParseError::User { error } => ParseErrorKind::LexicalError { error },
         };
@@ -212,14 +296,14 @@ pub enum ParseErrorKind<E: LexicalError> {
     /// Unexpected token
     UnrecognizedToken {
         /// The unexpected token
-        token: String,
+        token: TokenDescription,
         /// List of expected token names
         expected: Vec<String>,
     },
     /// Extra token after input
     ExtraToken {
         /// The extra token
-        token: String,
+        token: TokenDescription,
     },
     /// Lexical analysis error
     LexicalError {

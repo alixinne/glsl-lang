@@ -17,4 +17,4 @@ lalrpop-util = { version = "0.19", default-features = false }
 lang-util-derive = "0.2.0"
 line-span = "0.1"
 smol_str = "0.1"
-serde = { version = "1.0", optional = true }
+serde = { version = "1.0", optional = true, features = ["derive"] }

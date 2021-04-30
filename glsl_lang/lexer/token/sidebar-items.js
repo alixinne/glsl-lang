@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["Token",""]]});
+initSidebarItems({"enum":[["Token",""]],"static":[["__TOKEN_TOKENS",""]]});

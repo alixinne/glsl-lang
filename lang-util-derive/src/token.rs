@@ -372,22 +372,23 @@ type TokenAttrTy<'s> = Option<(darling::Result<TokenAttr>, &'s syn::Attribute)>;
 
 fn parse_token_attr(attrs: &[syn::Attribute]) -> TokenAttrTy {
     // Unit struct, is there a token impl?
-    if let Some(token) = attrs.iter().find(|attr| {
-        attr.path
-            .get_ident()
-            .map(|ident| ident == "token")
-            .unwrap_or(false)
-    }) {
-        Some((
-            token
-                .parse_meta()
-                .map_err(darling::Error::custom)
-                .and_then(|meta| TokenAttr::from_meta(&meta)),
-            token,
-        ))
-    } else {
-        None
-    }
+    attrs
+        .iter()
+        .find(|attr| {
+            attr.path
+                .get_ident()
+                .map(|ident| ident == "token")
+                .unwrap_or(false)
+        })
+        .map(|token| {
+            (
+                token
+                    .parse_meta()
+                    .map_err(darling::Error::custom)
+                    .and_then(|meta| TokenAttr::from_meta(&meta)),
+                token,
+            )
+        })
 }
 
 #[derive(Debug)]

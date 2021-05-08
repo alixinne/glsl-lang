@@ -250,23 +250,44 @@ impl<E: LexicalError> ParseError<E> {
                 }
             }
 
-            |expected: Vec<String>| -> Vec<String> {
+            move |expected: Vec<String>| -> Vec<String> {
                 let expected: HashSet<_> = expected.iter().map(String::as_str).collect();
                 let mut seen_tokens = HashSet::new();
                 let mut result = Vec::new();
 
-                for (kind, members) in token_kinds {
+                for (kind, members) in &token_kinds {
                     if members.is_subset(&expected) {
                         // Add all the tokens of this kind as seen
                         seen_tokens.extend(members);
                         // Add the kind of token to the expected list
-                        result.push(kind.to_owned());
+                        result.push(*kind);
                     }
                 }
 
+                // Some expected groups might be subsets of others, try to reduce this
+                let mut delete = HashSet::new();
+                for expected_set_name in &result {
+                    for other_set_name in &result {
+                        if expected_set_name != other_set_name
+                            && token_kinds
+                                .get(*expected_set_name)
+                                .unwrap()
+                                .is_subset(token_kinds.get(*other_set_name).unwrap())
+                        {
+                            delete.insert(expected_set_name);
+                        }
+                    }
+                }
+
+                // Remove extra subsets
+                let mut result: Vec<_> = result
+                    .iter()
+                    .filter(|item| !delete.contains(item))
+                    .collect();
+
                 // Leftover tokens should still be expected
                 for leftover in expected.difference(&seen_tokens) {
-                    result.push(leftover.to_string());
+                    result.push(leftover);
                 }
 
                 // Sort the result for deterministic results
@@ -285,7 +306,7 @@ impl<E: LexicalError> ParseError<E> {
                     }
                 });
 
-                result
+                result.into_iter().map(|it| (**it).to_string()).collect()
             }
         };
 

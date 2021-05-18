@@ -221,7 +221,8 @@ type_specifier_non_array: ast::TypeSpecifierNonArray = {
 };
 
 type_specifier: ast::TypeSpecifier = {
-    <t:type_specifier_non_array> <a:array_specifier?> => ast::TypeSpecifier { ty: t, array_specifier: a }
+    <l:@L> <t:type_specifier_non_array> <a:array_specifier?> <r:@R> =>
+        ast::TypeSpecifierData { ty: t, array_specifier: a }.spanned(l, r)
 };
 
 type_qualifier_spec: ast::TypeQualifierSpec = {

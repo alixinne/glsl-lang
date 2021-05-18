@@ -229,7 +229,11 @@ impl Parsable for ast::ArraySpecifierDimension {
                     if let ast::StatementData::Expression(ast::ExprStatement(Some(
                         ast::Expr::FunCall(
                             ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifier {
-                                array_specifier: Some(array),
+                                content:
+                                    ast::TypeSpecifierData {
+                                        array_specifier: Some(array),
+                                        ..
+                                    },
                                 ..
                             }),
                             _,
@@ -278,7 +282,11 @@ impl Parsable for ast::ArraySpecifier {
                     if let ast::StatementData::Expression(ast::ExprStatement(Some(
                         ast::Expr::FunCall(
                             ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifier {
-                                array_specifier: Some(array),
+                                content:
+                                    ast::TypeSpecifierData {
+                                        array_specifier: Some(array),
+                                        ..
+                                    },
                                 ..
                             }),
                             _,
@@ -652,7 +660,12 @@ impl Parsable for ast::TypeSpecifierNonArray {
                                         ast::SingleDeclaration {
                                             ty:
                                                 ast::FullySpecifiedType {
-                                                    ty: ast::TypeSpecifier { ty, .. },
+                                                    ty:
+                                                        ast::TypeSpecifier {
+                                                            content:
+                                                                ast::TypeSpecifierData { ty, .. },
+                                                            ..
+                                                        },
                                                     ..
                                                 },
                                             ..
@@ -753,17 +766,20 @@ impl Parsable for ast::StructFieldSpecifier {
                                                 ast::FullySpecifiedType {
                                                     ty:
                                                         ast::TypeSpecifier {
-                                                            ty:
-                                                                ast::TypeSpecifierNonArray {
-                                                                    content: ast::TypeSpecifierNonArrayData::Struct(
-                                                                         ast::StructSpecifier {
-                                                                             fields,
-                                                                             ..
-                                                                         },
-                                                                     ),
-                                                                     ..
-                                                                },
-                                                                ..
+                                                            content: ast::TypeSpecifierData {
+                                                                ty:
+                                                                    ast::TypeSpecifierNonArray {
+                                                                        content: ast::TypeSpecifierNonArrayData::Struct(
+                                                                             ast::StructSpecifier {
+                                                                                 fields,
+                                                                                 ..
+                                                                             },
+                                                                         ),
+                                                                         ..
+                                                                    },
+                                                                    ..
+                                                            },
+                                                            ..
                                                         },
                                                         ..
                                                 },
@@ -807,10 +823,13 @@ impl Parsable for ast::StructSpecifier {
                                                 ast::FullySpecifiedType {
                                                     ty:
                                                         ast::TypeSpecifier {
-                                                            ty:
-                                                                ast::TypeSpecifierNonArray {
-                                                                    content: ast::TypeSpecifierNonArrayData::Struct(s),
-                                                                    ..
+                                                            content: ast::TypeSpecifierData {
+                                                                ty:
+                                                                    ast::TypeSpecifierNonArray {
+                                                                        content: ast::TypeSpecifierNonArrayData::Struct(s),
+                                                                        ..
+                                                                    },
+                                                                ..
                                                                 },
                                                             ..
                                                         },

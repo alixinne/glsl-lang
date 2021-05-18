@@ -2112,7 +2112,9 @@ return u;
         let ray = ast::Expr::Variable("ray".into_node());
         let raydir = ast::Expr::Dot(Box::new(ray), "dir".into_node());
         let vec4 = ast::Expr::FunCall(
-            ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifierNonArrayData::Vec4.into()),
+            ast::FunIdentifier::TypeSpecifier(
+                ast::TypeSpecifierData::from(ast::TypeSpecifierNonArrayData::Vec4).into(),
+            ),
             vec![raydir, zero],
         );
         let view = ast::Expr::variable("view");

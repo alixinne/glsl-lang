@@ -500,14 +500,14 @@ impl From<TypeName> for TypeSpecifierNonArrayData {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub struct TypeSpecifier {
+pub struct TypeSpecifierData {
     /// Type name portion of the specifier
     pub ty: TypeSpecifierNonArray,
     /// Array part of the specifier
     pub array_specifier: Option<ArraySpecifier>,
 }
 
-impl From<TypeSpecifierNonArray> for TypeSpecifier {
+impl From<TypeSpecifierNonArray> for TypeSpecifierData {
     fn from(ty: TypeSpecifierNonArray) -> Self {
         Self {
             ty,
@@ -516,7 +516,7 @@ impl From<TypeSpecifierNonArray> for TypeSpecifier {
     }
 }
 
-impl From<TypeSpecifierNonArrayData> for TypeSpecifier {
+impl From<TypeSpecifierNonArrayData> for TypeSpecifierData {
     fn from(ty: TypeSpecifierNonArrayData) -> Self {
         Self {
             ty: ty.into_node(),
@@ -738,10 +738,11 @@ impl FullySpecifiedType {
     pub fn new(ty: TypeSpecifierNonArray) -> Self {
         Self {
             qualifier: None,
-            ty: TypeSpecifier {
+            ty: TypeSpecifierData {
                 ty,
                 array_specifier: None,
-            },
+            }
+            .into(),
         }
     }
 }

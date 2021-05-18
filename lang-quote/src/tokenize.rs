@@ -528,14 +528,21 @@ fn tokenize_type_specifier_non_array(t: &ast::TypeSpecifierNonArray) -> TokenStr
 }
 
 fn tokenize_type_specifier(t: &ast::TypeSpecifier) -> TokenStream {
-    let ty = tokenize_type_specifier_non_array(&t.ty);
-    let array_specifier = t.array_specifier.as_ref().map(tokenize_array_spec).quote();
+    let span = tokenize_span(&t.span);
+    let data = {
+        let ty = tokenize_type_specifier_non_array(&t.ty);
+        let array_specifier = t.array_specifier.as_ref().map(tokenize_array_spec).quote();
+
+        quote! {
+          glsl_lang::ast::TypeSpecifierData {
+            ty: #ty,
+            array_specifier: #array_specifier
+          }
+        }
+    };
 
     quote! {
-      glsl_lang::ast::TypeSpecifier {
-        ty: #ty,
-        array_specifier: #array_specifier
-      }
+        glsl_lang::ast::TypeSpecifier::new(#data, #span)
     }
 }
 

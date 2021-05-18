@@ -320,10 +320,11 @@ fn parse_type_qualifier() {
 fn parse_struct_field_specifier() {
     let expected = ast::StructFieldSpecifier {
         qualifier: None,
-        ty: ast::TypeSpecifier {
+        ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::Vec4.into(),
             array_specifier: None,
-        },
+        }
+        .into(),
         identifiers: vec!["foo".into()],
     };
 
@@ -341,10 +342,11 @@ fn parse_struct_field_specifier() {
 fn parse_struct_field_specifier_type_name() {
     let expected = ast::StructFieldSpecifier {
         qualifier: None,
-        ty: ast::TypeSpecifier {
+        ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::TypeName("S0238_3".into_node()).into(),
             array_specifier: None,
-        },
+        }
+        .into(),
         identifiers: vec!["x".into()],
     };
 
@@ -363,10 +365,11 @@ fn parse_struct_field_specifier_type_name() {
 fn parse_struct_field_specifier_several() {
     let expected = ast::StructFieldSpecifier {
         qualifier: None,
-        ty: ast::TypeSpecifier {
+        ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::Vec4.into(),
             array_specifier: None,
-        },
+        }
+        .into(),
         identifiers: vec!["foo".into(), "bar".into(), "zoo".into()],
     };
 
@@ -384,10 +387,11 @@ fn parse_struct_field_specifier_several() {
 fn parse_struct_specifier_one_field() {
     let field = ast::StructFieldSpecifier {
         qualifier: None,
-        ty: ast::TypeSpecifier {
+        ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::Vec4.into(),
             array_specifier: None,
-        },
+        }
+        .into(),
         identifiers: vec!["foo".into()],
     };
     let expected = ast::StructSpecifier {
@@ -415,42 +419,47 @@ fn get_s0238_3_opts() -> ParseContext {
 fn parse_struct_specifier_multi_fields() {
     let foo_field = ast::StructFieldSpecifier {
         qualifier: None,
-        ty: ast::TypeSpecifier {
+        ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::Vec4.into(),
             array_specifier: None,
-        },
+        }
+        .into(),
         identifiers: vec!["foo".into()],
     };
     let bar = ast::StructFieldSpecifier {
         qualifier: None,
-        ty: ast::TypeSpecifier {
+        ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::Float.into(),
             array_specifier: None,
-        },
+        }
+        .into(),
         identifiers: vec!["bar".into()],
     };
     let zoo = ast::StructFieldSpecifier {
         qualifier: None,
-        ty: ast::TypeSpecifier {
+        ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::UInt.into(),
             array_specifier: None,
-        },
+        }
+        .into(),
         identifiers: vec!["zoo".into()],
     };
     let foobar = ast::StructFieldSpecifier {
         qualifier: None,
-        ty: ast::TypeSpecifier {
+        ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::BVec3.into(),
             array_specifier: None,
-        },
+        }
+        .into(),
         identifiers: vec!["foo_BAR_zoo3497_34".into()],
     };
     let s = ast::StructFieldSpecifier {
         qualifier: None,
-        ty: ast::TypeSpecifier {
+        ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::TypeName("S0238_3".into_node()).into(),
             array_specifier: None,
-        },
+        }
+        .into(),
         identifiers: vec!["x".into()],
     };
     let expected = ast::StructSpecifier {
@@ -972,33 +981,35 @@ fn parse_type_specifier_non_array() {
 fn parse_type_specifier() {
     assert_eq!(
         ast::TypeSpecifier::parse("uint"),
-        Ok(ast::TypeSpecifier {
+        Ok(ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::UInt.into(),
             array_specifier: None
-        })
+        }
+        .into())
     );
     assert_eq!(
         ast::TypeSpecifier::parse("iimage2DMSArray[35]"),
-        Ok(ast::TypeSpecifier {
+        Ok(ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::IImage2DMsArray.into(),
             array_specifier: Some(ast::ArraySpecifier {
                 dimensions: vec![ast::ArraySpecifierDimension::ExplicitlySized(Box::new(
                     ast::Expr::IntConst(35)
                 ))]
             })
-        })
+        }
+        .into())
     );
 }
 
 #[test]
 fn parse_fully_specified_type() {
-    let ty = ast::TypeSpecifier {
+    let ty = ast::TypeSpecifierData {
         ty: ast::TypeSpecifierNonArrayData::IImage2DMsArray.into(),
         array_specifier: None,
     };
     let expected = ast::FullySpecifiedType {
         qualifier: None,
-        ty,
+        ty: ty.into(),
     };
 
     assert_eq!(
@@ -1013,19 +1024,19 @@ fn parse_fully_specified_type_with_qualifier() {
     let tn = opts.add_type_name(ast::IdentifierData::from("S032_29k").into());
 
     let qual_spec = ast::TypeQualifierSpec::Storage(ast::StorageQualifier::Subroutine(vec![
-        ast::TypeSpecifierNonArrayData::Vec2.into(),
-        ast::TypeSpecifierNonArrayData::from(tn).into(),
+        ast::TypeSpecifierData::from(ast::TypeSpecifierNonArrayData::Vec2).into(),
+        ast::TypeSpecifierData::from(ast::TypeSpecifierNonArrayData::from(tn)).into(),
     ]));
     let qual = ast::TypeQualifier {
         qualifiers: vec![qual_spec],
     };
-    let ty = ast::TypeSpecifier {
+    let ty = ast::TypeSpecifierData {
         ty: ast::TypeSpecifierNonArrayData::IImage2DMsArray.into(),
         array_specifier: None,
     };
     let expected = ast::FullySpecifiedType {
         qualifier: Some(qual),
-        ty,
+        ty: ty.into(),
     };
 
     assert_eq!(
@@ -1107,7 +1118,9 @@ fn parse_primary_expr_parens() {
 
 #[test]
 fn parse_postfix_function_call_no_args() {
-    let fun = ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifierNonArrayData::Vec3.into());
+    let fun = ast::FunIdentifier::TypeSpecifier(
+        ast::TypeSpecifierData::from(ast::TypeSpecifierNonArrayData::Vec3).into(),
+    );
     let args = Vec::new();
     let expected = ast::Expr::FunCall(fun, args);
 
@@ -1320,7 +1333,9 @@ fn parse_complex_expr() {
     let ray = ast::Expr::Variable("ray".into_node());
     let raydir = ast::Expr::Dot(Box::new(ray), "dir".into_node());
     let vec4 = ast::Expr::FunCall(
-        ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifierNonArrayData::Vec4.into()),
+        ast::FunIdentifier::TypeSpecifier(
+            ast::TypeSpecifierData::from(ast::TypeSpecifierNonArrayData::Vec4).into(),
+        ),
         vec![raydir, zero],
     );
     let view = ast::Expr::Variable("view".into_node());
@@ -1343,19 +1358,24 @@ fn parse_function_identifier_typename() {
 
 #[test]
 fn parse_function_identifier_cast() {
-    let expected = ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifierNonArrayData::Vec3.into());
+    let expected = ast::FunIdentifier::TypeSpecifier(
+        ast::TypeSpecifierData::from(ast::TypeSpecifierNonArrayData::Vec3).into(),
+    );
     assert_eq!(ast::FunIdentifier::parse("vec3"), Ok(expected.clone()));
     assert_eq!(ast::FunIdentifier::parse("vec3\t\n\n \t"), Ok(expected));
 }
 
 #[test]
 fn parse_function_identifier_cast_array_unsized() {
-    let expected = ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifier {
-        ty: ast::TypeSpecifierNonArrayData::Vec3.into(),
-        array_specifier: Some(ast::ArraySpecifier {
-            dimensions: vec![ast::ArraySpecifierDimension::Unsized],
-        }),
-    });
+    let expected = ast::FunIdentifier::TypeSpecifier(
+        ast::TypeSpecifierData {
+            ty: ast::TypeSpecifierNonArrayData::Vec3.into(),
+            array_specifier: Some(ast::ArraySpecifier {
+                dimensions: vec![ast::ArraySpecifierDimension::Unsized],
+            }),
+        }
+        .into(),
+    );
 
     assert_eq!(ast::FunIdentifier::parse("vec3[]"), Ok(expected.clone()));
     assert_eq!(ast::FunIdentifier::parse("vec3  [\t\n]"), Ok(expected));
@@ -1363,14 +1383,17 @@ fn parse_function_identifier_cast_array_unsized() {
 
 #[test]
 fn parse_function_identifier_cast_array_sized() {
-    let expected = ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifier {
-        ty: ast::TypeSpecifierNonArrayData::Vec3.into(),
-        array_specifier: Some(ast::ArraySpecifier {
-            dimensions: vec![ast::ArraySpecifierDimension::ExplicitlySized(Box::new(
-                ast::Expr::IntConst(12),
-            ))],
-        }),
-    });
+    let expected = ast::FunIdentifier::TypeSpecifier(
+        ast::TypeSpecifierData {
+            ty: ast::TypeSpecifierNonArrayData::Vec3.into(),
+            array_specifier: Some(ast::ArraySpecifier {
+                dimensions: vec![ast::ArraySpecifierDimension::ExplicitlySized(Box::new(
+                    ast::Expr::IntConst(12),
+                ))],
+            }),
+        }
+        .into(),
+    );
 
     assert_eq!(ast::FunIdentifier::parse("vec3[12]"), Ok(expected.clone()));
     assert_eq!(ast::FunIdentifier::parse("vec3  [\t 12\n]"), Ok(expected));
@@ -1423,16 +1446,17 @@ fn parse_expr_statement() {
 fn parse_declaration_function_prototype() {
     let rt = ast::FullySpecifiedType {
         qualifier: None,
-        ty: ast::TypeSpecifier {
+        ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::Vec3.into(),
             array_specifier: None,
-        },
+        }
+        .into(),
     };
-    let arg0_ty = ast::TypeSpecifier {
+    let arg0_ty = ast::TypeSpecifierData {
         ty: ast::TypeSpecifierNonArrayData::Vec2.into(),
         array_specifier: None,
     };
-    let arg0 = ast::FunctionParameterDeclarationData::Unnamed(None, arg0_ty);
+    let arg0 = ast::FunctionParameterDeclarationData::Unnamed(None, arg0_ty.into());
     let qual_spec = ast::TypeQualifierSpec::Storage(ast::StorageQualifier::Out);
     let qual = ast::TypeQualifier {
         qualifiers: vec![qual_spec],
@@ -1440,10 +1464,11 @@ fn parse_declaration_function_prototype() {
     let arg1 = ast::FunctionParameterDeclarationData::Named(
         Some(qual),
         ast::FunctionParameterDeclarator {
-            ty: ast::TypeSpecifier {
+            ty: ast::TypeSpecifierData {
                 ty: ast::TypeSpecifierNonArrayData::Float.into(),
                 array_specifier: None,
-            },
+            }
+            .into(),
             ident: "the_arg".into(),
         },
     );
@@ -1472,10 +1497,11 @@ fn parse_declaration_function_prototype() {
 fn parse_declaration_init_declarator_list_single() {
     let ty = ast::FullySpecifiedType {
         qualifier: None,
-        ty: ast::TypeSpecifier {
+        ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::Int.into(),
             array_specifier: None,
-        },
+        }
+        .into(),
     };
     let sd = ast::SingleDeclaration {
         ty,
@@ -1504,10 +1530,11 @@ fn parse_declaration_init_declarator_list_single() {
 fn parse_declaration_init_declarator_list_complex() {
     let ty = ast::FullySpecifiedType {
         qualifier: None,
-        ty: ast::TypeSpecifier {
+        ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::Int.into(),
             array_specifier: None,
-        },
+        }
+        .into(),
     };
     let sd = ast::SingleDeclaration {
         ty,
@@ -1543,11 +1570,11 @@ fn parse_declaration_init_declarator_list_complex() {
 #[test]
 fn parse_declaration_precision_low() {
     let qual = ast::PrecisionQualifier::Low;
-    let ty = ast::TypeSpecifier {
+    let ty = ast::TypeSpecifierData {
         ty: ast::TypeSpecifierNonArrayData::Float.into(),
         array_specifier: None,
     };
-    let expected: ast::Declaration = ast::DeclarationData::Precision(qual, ty).into();
+    let expected: ast::Declaration = ast::DeclarationData::Precision(qual, ty.into()).into();
 
     assert_eq!(
         ast::Declaration::parse("precision lowp float;"),
@@ -1558,11 +1585,11 @@ fn parse_declaration_precision_low() {
 #[test]
 fn parse_declaration_precision_medium() {
     let qual = ast::PrecisionQualifier::Medium;
-    let ty = ast::TypeSpecifier {
+    let ty = ast::TypeSpecifierData {
         ty: ast::TypeSpecifierNonArrayData::Float.into(),
         array_specifier: None,
     };
-    let expected: ast::Declaration = ast::DeclarationData::Precision(qual, ty).into();
+    let expected: ast::Declaration = ast::DeclarationData::Precision(qual, ty.into()).into();
 
     assert_eq!(
         ast::Declaration::parse("precision mediump float;"),
@@ -1573,11 +1600,11 @@ fn parse_declaration_precision_medium() {
 #[test]
 fn parse_declaration_precision_high() {
     let qual = ast::PrecisionQualifier::High;
-    let ty = ast::TypeSpecifier {
+    let ty = ast::TypeSpecifierData {
         ty: ast::TypeSpecifierNonArrayData::Float.into(),
         array_specifier: None,
     };
-    let expected: ast::Declaration = ast::DeclarationData::Precision(qual, ty).into();
+    let expected: ast::Declaration = ast::DeclarationData::Precision(qual, ty.into()).into();
 
     assert_eq!(
         ast::Declaration::parse("precision highp float;"),
@@ -1596,26 +1623,29 @@ fn parse_declaration_uniform_block() {
     };
     let f0 = ast::StructFieldSpecifier {
         qualifier: None,
-        ty: ast::TypeSpecifier {
+        ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::Float.into(),
             array_specifier: None,
-        },
+        }
+        .into(),
         identifiers: vec!["a".into()],
     };
     let f1 = ast::StructFieldSpecifier {
         qualifier: None,
-        ty: ast::TypeSpecifier {
+        ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::Vec3.into(),
             array_specifier: None,
-        },
+        }
+        .into(),
         identifiers: vec!["b".into()],
     };
     let f2 = ast::StructFieldSpecifier {
         qualifier: None,
-        ty: ast::TypeSpecifier {
+        ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::TypeName(foo_var).into(),
             array_specifier: None,
-        },
+        }
+        .into(),
         identifiers: vec!["c".into(), "d".into()],
     };
     let expected: ast::Declaration = ast::DeclarationData::Block(ast::Block {
@@ -1655,18 +1685,20 @@ fn parse_declaration_buffer_block() {
     };
     let f0 = ast::StructFieldSpecifier {
         qualifier: None,
-        ty: ast::TypeSpecifier {
+        ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::Float.into(),
             array_specifier: None,
-        },
+        }
+        .into(),
         identifiers: vec!["a".into()],
     };
     let f1 = ast::StructFieldSpecifier {
         qualifier: None,
-        ty: ast::TypeSpecifier {
+        ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::Vec3.into(),
             array_specifier: None,
-        },
+        }
+        .into(),
         identifiers: vec![ast::ArrayedIdentifier::new(
             "b".into_node(),
             Some(ast::ArraySpecifier {
@@ -1676,10 +1708,11 @@ fn parse_declaration_buffer_block() {
     };
     let f2 = ast::StructFieldSpecifier {
         qualifier: None,
-        ty: ast::TypeSpecifier {
+        ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::TypeName(foo_var).into(),
             array_specifier: None,
-        },
+        }
+        .into(),
         identifiers: vec!["c".into(), "d".into()],
     };
     let expected: ast::Declaration = ast::DeclarationData::Block(ast::Block {
@@ -1906,10 +1939,11 @@ fn parse_iteration_statement_for_empty() {
             head: ast::SingleDeclaration {
                 ty: ast::FullySpecifiedType {
                     qualifier: None,
-                    ty: ast::TypeSpecifier {
+                    ty: ast::TypeSpecifierData {
                         ty: ast::TypeSpecifierNonArrayData::Float.into(),
                         array_specifier: None,
-                    },
+                    }
+                    .into(),
                 },
                 name: Some("i".into_node()),
                 array_specifier: None,
@@ -2031,10 +2065,11 @@ fn parse_compound_statement() {
             head: ast::SingleDeclaration {
                 ty: ast::FullySpecifiedType {
                     qualifier: None,
-                    ty: ast::TypeSpecifier {
+                    ty: ast::TypeSpecifierData {
                         ty: ast::TypeSpecifierNonArrayData::ISampler3D.into(),
                         array_specifier: None,
-                    },
+                    }
+                    .into(),
                 },
                 name: Some("x".into_node()),
                 array_specifier: None,
@@ -2066,10 +2101,11 @@ fn parse_compound_statement() {
 fn parse_function_definition() {
     let rt = ast::FullySpecifiedType {
         qualifier: None,
-        ty: ast::TypeSpecifier {
+        ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::IImage2DArray.into(),
             array_specifier: None,
-        },
+        }
+        .into(),
     };
     let fp = ast::FunctionPrototypeData {
         ty: rt,
@@ -2111,10 +2147,11 @@ fn parse_buffer_block_0() {
             prototype: ast::FunctionPrototypeData {
                 ty: ast::FullySpecifiedType {
                     qualifier: None,
-                    ty: ast::TypeSpecifier {
+                    ty: ast::TypeSpecifierData {
                         ty: ast::TypeSpecifierNonArrayData::Void.into(),
                         array_specifier: None,
-                    },
+                    }
+                    .into(),
                 },
                 name: "main".into_node(),
                 parameters: Vec::new(),
@@ -2138,10 +2175,11 @@ fn parse_buffer_block_0() {
             name: "Foo".into_node(),
             fields: vec![ast::StructFieldSpecifier {
                 qualifier: None,
-                ty: ast::TypeSpecifier {
+                ty: ast::TypeSpecifierData {
                     ty: ast::TypeSpecifierNonArrayData::Float.into(),
                     array_specifier: None,
-                },
+                }
+                .into(),
                 identifiers: vec![ast::ArrayedIdentifier::new(
                     "tiles".into_node(),
                     Some(ast::ArraySpecifier {
@@ -2186,7 +2224,7 @@ fn parse_layout_buffer_block_0() {
             name: "Foo".into_node(),
             fields: vec![ast::StructFieldSpecifier {
                 qualifier: None,
-                ty: ast::TypeSpecifierNonArrayData::Float.into(),
+                ty: ast::TypeSpecifierData::from(ast::TypeSpecifierNonArrayData::Float).into(),
                 identifiers: vec!["a".into()],
             }],
             identifier: Some("foo".into()),
@@ -2529,11 +2567,15 @@ fn parse_dot_field_expr_statement() {
     let fun = ast::FunIdentifier::ident("smoothstep");
     let args = vec![
         ast::Expr::FunCall(
-            ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifierNonArrayData::Vec3.into()),
+            ast::FunIdentifier::TypeSpecifier(
+                ast::TypeSpecifierData::from(ast::TypeSpecifierNonArrayData::Vec3).into(),
+            ),
             vec![ast::Expr::Variable("border_width".into_node())],
         ),
         ast::Expr::FunCall(
-            ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifierNonArrayData::Vec3.into()),
+            ast::FunIdentifier::TypeSpecifier(
+                ast::TypeSpecifierData::from(ast::TypeSpecifierNonArrayData::Vec3).into(),
+            ),
             vec![ast::Expr::FloatConst(0.)],
         ),
         ast::Expr::Variable("v_barycenter".into_node()),
@@ -2545,10 +2587,11 @@ fn parse_dot_field_expr_statement() {
     let sd = ast::SingleDeclaration {
         ty: ast::FullySpecifiedType {
             qualifier: None,
-            ty: ast::TypeSpecifier {
+            ty: ast::TypeSpecifierData {
                 ty: ast::TypeSpecifierNonArrayData::Vec3.into(),
                 array_specifier: None,
-            },
+            }
+            .into(),
         },
         name: Some("v".into_node()),
         array_specifier: None,

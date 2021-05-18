@@ -78,11 +78,11 @@ array_specifier: ast::ArraySpecifier = {
 };
 
 struct_field_specifier: ast::StructFieldSpecifier = {
-    <q:type_qualifier?> <s:type_specifier> <f:comma<arrayed_identifier>> ";" => ast::StructFieldSpecifier {
+    <l:@L> <q:type_qualifier?> <s:type_specifier> <f:comma<arrayed_identifier>> ";" <r:@R> => ast::StructFieldSpecifierData {
         qualifier: q,
         ty: s,
         identifiers: f,
-    }
+    }.spanned(l, r)
 };
 
 struct_specifier: ast::StructSpecifier = {

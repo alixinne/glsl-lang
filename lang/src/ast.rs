@@ -540,7 +540,7 @@ pub struct StructSpecifierData {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub struct StructFieldSpecifier {
+pub struct StructFieldSpecifierData {
     /// Type qualifiers for the field
     pub qualifier: Option<TypeQualifier>,
     /// Type of the field

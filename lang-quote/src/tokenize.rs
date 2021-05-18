@@ -576,21 +576,26 @@ fn tokenize_struct_non_declaration(s: &ast::StructSpecifier) -> TokenStream {
 }
 
 fn tokenize_struct_field(field: &ast::StructFieldSpecifier) -> TokenStream {
-    let qual = field
-        .qualifier
-        .as_ref()
-        .map(tokenize_type_qualifier)
-        .quote();
-    let ty = tokenize_type_specifier(&field.ty);
-    let identifiers = field.identifiers.iter().map(tokenize_arrayed_identifier);
+    let span = tokenize_span(&field.span);
+    let field = {
+        let qual = field
+            .qualifier
+            .as_ref()
+            .map(tokenize_type_qualifier)
+            .quote();
+        let ty = tokenize_type_specifier(&field.ty);
+        let identifiers = field.identifiers.iter().map(tokenize_arrayed_identifier);
 
-    quote! {
-      glsl_lang::ast::StructFieldSpecifier {
-        qualifier: #qual,
-        ty: #ty,
-        identifiers: vec![#(#identifiers),*]
-      }
-    }
+        quote! {
+          glsl_lang::ast::StructFieldSpecifierData {
+            qualifier: #qual,
+            ty: #ty,
+            identifiers: vec![#(#identifiers),*]
+          }
+        }
+    };
+
+    quote! { glsl_lang::ast::StructFieldSpecifier::new(#field, #span) }
 }
 
 fn tokenize_array_spec(a: &ast::ArraySpecifier) -> TokenStream {

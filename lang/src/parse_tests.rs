@@ -318,7 +318,7 @@ fn parse_type_qualifier() {
 
 #[test]
 fn parse_struct_field_specifier() {
-    let expected = ast::StructFieldSpecifier {
+    let expected: ast::StructFieldSpecifier = ast::StructFieldSpecifierData {
         qualifier: None,
         ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::Vec4.into(),
@@ -326,7 +326,8 @@ fn parse_struct_field_specifier() {
         }
         .into(),
         identifiers: vec!["foo".into()],
-    };
+    }
+    .into();
 
     assert_eq!(
         ast::StructFieldSpecifier::parse("vec4 foo;"),
@@ -340,7 +341,7 @@ fn parse_struct_field_specifier() {
 
 #[test]
 fn parse_struct_field_specifier_type_name() {
-    let expected = ast::StructFieldSpecifier {
+    let expected: ast::StructFieldSpecifier = ast::StructFieldSpecifierData {
         qualifier: None,
         ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::TypeName("S0238_3".into_node()).into(),
@@ -348,7 +349,8 @@ fn parse_struct_field_specifier_type_name() {
         }
         .into(),
         identifiers: vec!["x".into()],
-    };
+    }
+    .into();
 
     let opts = get_s0238_3_opts();
     assert_eq!(
@@ -363,7 +365,7 @@ fn parse_struct_field_specifier_type_name() {
 
 #[test]
 fn parse_struct_field_specifier_several() {
-    let expected = ast::StructFieldSpecifier {
+    let expected: ast::StructFieldSpecifier = ast::StructFieldSpecifierData {
         qualifier: None,
         ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::Vec4.into(),
@@ -371,7 +373,8 @@ fn parse_struct_field_specifier_several() {
         }
         .into(),
         identifiers: vec!["foo".into(), "bar".into(), "zoo".into()],
-    };
+    }
+    .into();
 
     assert_eq!(
         ast::StructFieldSpecifier::parse("vec4 foo, bar, zoo;"),
@@ -385,7 +388,7 @@ fn parse_struct_field_specifier_several() {
 
 #[test]
 fn parse_struct_specifier_one_field() {
-    let field = ast::StructFieldSpecifier {
+    let field = ast::StructFieldSpecifierData {
         qualifier: None,
         ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::Vec4.into(),
@@ -396,7 +399,7 @@ fn parse_struct_specifier_one_field() {
     };
     let expected: ast::StructSpecifier = ast::StructSpecifierData {
         name: Some("TestStruct".into_node()),
-        fields: vec![field],
+        fields: vec![field.into()],
     }
     .into();
 
@@ -418,7 +421,7 @@ fn get_s0238_3_opts() -> ParseContext {
 
 #[test]
 fn parse_struct_specifier_multi_fields() {
-    let foo_field = ast::StructFieldSpecifier {
+    let foo_field = ast::StructFieldSpecifierData {
         qualifier: None,
         ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::Vec4.into(),
@@ -427,7 +430,7 @@ fn parse_struct_specifier_multi_fields() {
         .into(),
         identifiers: vec!["foo".into()],
     };
-    let bar = ast::StructFieldSpecifier {
+    let bar = ast::StructFieldSpecifierData {
         qualifier: None,
         ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::Float.into(),
@@ -436,7 +439,7 @@ fn parse_struct_specifier_multi_fields() {
         .into(),
         identifiers: vec!["bar".into()],
     };
-    let zoo = ast::StructFieldSpecifier {
+    let zoo = ast::StructFieldSpecifierData {
         qualifier: None,
         ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::UInt.into(),
@@ -445,7 +448,7 @@ fn parse_struct_specifier_multi_fields() {
         .into(),
         identifiers: vec!["zoo".into()],
     };
-    let foobar = ast::StructFieldSpecifier {
+    let foobar = ast::StructFieldSpecifierData {
         qualifier: None,
         ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::BVec3.into(),
@@ -454,7 +457,7 @@ fn parse_struct_specifier_multi_fields() {
         .into(),
         identifiers: vec!["foo_BAR_zoo3497_34".into()],
     };
-    let s = ast::StructFieldSpecifier {
+    let s = ast::StructFieldSpecifierData {
         qualifier: None,
         ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::TypeName("S0238_3".into_node()).into(),
@@ -465,7 +468,13 @@ fn parse_struct_specifier_multi_fields() {
     };
     let expected: ast::StructSpecifier = ast::StructSpecifierData {
         name: Some("_TestStruct_934i".into_node()),
-        fields: vec![foo_field, bar, zoo, foobar, s],
+        fields: vec![
+            foo_field.into(),
+            bar.into(),
+            zoo.into(),
+            foobar.into(),
+            s.into(),
+        ],
     }
     .into();
 
@@ -1623,7 +1632,7 @@ fn parse_declaration_uniform_block() {
     let qual = ast::TypeQualifier {
         qualifiers: vec![qual_spec],
     };
-    let f0 = ast::StructFieldSpecifier {
+    let f0 = ast::StructFieldSpecifierData {
         qualifier: None,
         ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::Float.into(),
@@ -1632,7 +1641,7 @@ fn parse_declaration_uniform_block() {
         .into(),
         identifiers: vec!["a".into()],
     };
-    let f1 = ast::StructFieldSpecifier {
+    let f1 = ast::StructFieldSpecifierData {
         qualifier: None,
         ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::Vec3.into(),
@@ -1641,7 +1650,7 @@ fn parse_declaration_uniform_block() {
         .into(),
         identifiers: vec!["b".into()],
     };
-    let f2 = ast::StructFieldSpecifier {
+    let f2 = ast::StructFieldSpecifierData {
         qualifier: None,
         ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::TypeName(foo_var).into(),
@@ -1653,7 +1662,7 @@ fn parse_declaration_uniform_block() {
     let expected: ast::Declaration = ast::DeclarationData::Block(ast::Block {
         qualifier: qual,
         name: "UniformBlockTest".into_node(),
-        fields: vec![f0, f1, f2],
+        fields: vec![f0.into(), f1.into(), f2.into()],
         identifier: None,
     })
     .into();
@@ -1685,7 +1694,7 @@ fn parse_declaration_buffer_block() {
     let qual = ast::TypeQualifier {
         qualifiers: vec![qual_spec],
     };
-    let f0 = ast::StructFieldSpecifier {
+    let f0 = ast::StructFieldSpecifierData {
         qualifier: None,
         ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::Float.into(),
@@ -1694,7 +1703,7 @@ fn parse_declaration_buffer_block() {
         .into(),
         identifiers: vec!["a".into()],
     };
-    let f1 = ast::StructFieldSpecifier {
+    let f1 = ast::StructFieldSpecifierData {
         qualifier: None,
         ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::Vec3.into(),
@@ -1708,7 +1717,7 @@ fn parse_declaration_buffer_block() {
             }),
         )],
     };
-    let f2 = ast::StructFieldSpecifier {
+    let f2 = ast::StructFieldSpecifierData {
         qualifier: None,
         ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::TypeName(foo_var).into(),
@@ -1720,7 +1729,7 @@ fn parse_declaration_buffer_block() {
     let expected: ast::Declaration = ast::DeclarationData::Block(ast::Block {
         qualifier: qual,
         name: "UniformBlockTest".into_node(),
-        fields: vec![f0, f1, f2],
+        fields: vec![f0.into(), f1.into(), f2.into()],
         identifier: None,
     })
     .into();
@@ -2175,7 +2184,7 @@ fn parse_buffer_block_0() {
                 )],
             },
             name: "Foo".into_node(),
-            fields: vec![ast::StructFieldSpecifier {
+            fields: vec![ast::StructFieldSpecifierData {
                 qualifier: None,
                 ty: ast::TypeSpecifierData {
                     ty: ast::TypeSpecifierNonArrayData::Float.into(),
@@ -2188,7 +2197,8 @@ fn parse_buffer_block_0() {
                         dimensions: vec![ast::ArraySpecifierDimension::Unsized],
                     }),
                 )],
-            }],
+            }
+            .into()],
             identifier: Some("main_tiles".into()),
         })
         .into(),
@@ -2224,11 +2234,12 @@ fn parse_layout_buffer_block_0() {
         ast::DeclarationData::Block(ast::Block {
             qualifier: type_qual,
             name: "Foo".into_node(),
-            fields: vec![ast::StructFieldSpecifier {
+            fields: vec![ast::StructFieldSpecifierData {
                 qualifier: None,
                 ty: ast::TypeSpecifierData::from(ast::TypeSpecifierNonArrayData::Float).into(),
                 identifiers: vec!["a".into()],
-            }],
+            }
+            .into()],
             identifier: Some("foo".into()),
         })
         .into(),

@@ -637,13 +637,18 @@ fn tokenize_arrayed_identifier(identifier: &ast::ArrayedIdentifier) -> TokenStre
 }
 
 fn tokenize_type_qualifier(q: &ast::TypeQualifier) -> TokenStream {
-    let quals = q.qualifiers.iter().map(tokenize_type_qualifier_spec);
+    let span = tokenize_span(&q.span);
+    let q = {
+        let quals = q.qualifiers.iter().map(tokenize_type_qualifier_spec);
 
-    quote! {
-      glsl_lang::ast::TypeQualifier {
-        qualifiers: vec![#(#quals),*]
-      }
-    }
+        quote! {
+          glsl_lang::ast::TypeQualifierData {
+            qualifiers: vec![#(#quals),*]
+          }
+        }
+    };
+
+    quote! { glsl_lang::ast::TypeQualifier::new(#q, #span) }
 }
 
 fn tokenize_type_qualifier_spec(q: &ast::TypeQualifierSpec) -> TokenStream {

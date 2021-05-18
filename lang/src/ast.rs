@@ -587,7 +587,7 @@ impl From<&str> for ArrayedIdentifierData {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub struct TypeQualifier {
+pub struct TypeQualifierData {
     /// List of type qualifiers
     pub qualifiers: Vec<TypeQualifierSpec>,
 }

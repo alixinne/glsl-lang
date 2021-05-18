@@ -93,3 +93,10 @@ fn quote_ident() {
         _ => panic!("unexpected syntax node"),
     }
 }
+
+#[test]
+fn type_qualifier() {
+    let _ = glsl! {
+        highp float x;
+    };
+}

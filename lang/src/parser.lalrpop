@@ -235,7 +235,7 @@ type_qualifier_spec: ast::TypeQualifierSpec = {
 };
 
 type_qualifier: ast::TypeQualifier = {
-    <type_qualifier_spec+> => ast::TypeQualifier { qualifiers: <> }
+    <l:@L> <t:type_qualifier_spec+> <r:@R> => ast::TypeQualifierData { qualifiers: t }.spanned(l, r)
 };
 
 fully_specified_type: ast::FullySpecifiedType = {

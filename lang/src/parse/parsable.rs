@@ -367,7 +367,11 @@ impl Parsable for ast::InterpolationQualifier {
                                             ty:
                                                 ast::FullySpecifiedType {
                                                     qualifier:
-                                                        Some(ast::TypeQualifier { qualifiers }),
+                                                        Some(ast::TypeQualifier {
+                                                            content:
+                                                                ast::TypeQualifierData { qualifiers },
+                                                            ..
+                                                        }),
                                                     ..
                                                 },
                                             ..
@@ -446,7 +450,11 @@ impl Parsable for ast::PrecisionQualifier {
                                             ty:
                                                 ast::FullySpecifiedType {
                                                     qualifier:
-                                                        Some(ast::TypeQualifier { qualifiers }),
+                                                        Some(ast::TypeQualifier {
+                                                            content:
+                                                                ast::TypeQualifierData { qualifiers },
+                                                            ..
+                                                        }),
                                                     ..
                                                 },
                                             ..
@@ -492,7 +500,11 @@ impl Parsable for ast::StorageQualifier {
                                             ty:
                                                 ast::FullySpecifiedType {
                                                     qualifier:
-                                                        Some(ast::TypeQualifier { qualifiers }),
+                                                        Some(ast::TypeQualifier {
+                                                            content:
+                                                                ast::TypeQualifierData { qualifiers },
+                                                            ..
+                                                        }),
                                                     ..
                                                 },
                                             ..
@@ -538,7 +550,11 @@ impl Parsable for ast::LayoutQualifier {
                                             ty:
                                                 ast::FullySpecifiedType {
                                                     qualifier:
-                                                        Some(ast::TypeQualifier { qualifiers }),
+                                                        Some(ast::TypeQualifier {
+                                                            content:
+                                                                ast::TypeQualifierData { qualifiers },
+                                                            ..
+                                                        }),
                                                     ..
                                                 },
                                             ..

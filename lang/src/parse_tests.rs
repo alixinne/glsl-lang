@@ -302,9 +302,10 @@ fn parse_type_qualifier() {
     let layout_qual = ast::TypeQualifierSpec::Layout(ast::LayoutQualifier {
         ids: vec![id_0, id_1, id_2],
     });
-    let expected = ast::TypeQualifier {
+    let expected: ast::TypeQualifier = ast::TypeQualifierData {
         qualifiers: vec![storage_qual, layout_qual],
-    };
+    }
+    .into();
 
     assert_eq!(
         ast::TypeQualifier::parse("const layout (shared, std140, max_vertices = 3)"),
@@ -1038,9 +1039,10 @@ fn parse_fully_specified_type_with_qualifier() {
         ast::TypeSpecifierData::from(ast::TypeSpecifierNonArrayData::Vec2).into(),
         ast::TypeSpecifierData::from(ast::TypeSpecifierNonArrayData::from(tn)).into(),
     ]));
-    let qual = ast::TypeQualifier {
+    let qual = ast::TypeQualifierData {
         qualifiers: vec![qual_spec],
-    };
+    }
+    .into();
     let ty = ast::TypeSpecifierData {
         ty: ast::TypeSpecifierNonArrayData::IImage2DMsArray.into(),
         array_specifier: None,
@@ -1469,9 +1471,10 @@ fn parse_declaration_function_prototype() {
     };
     let arg0 = ast::FunctionParameterDeclarationData::Unnamed(None, arg0_ty.into());
     let qual_spec = ast::TypeQualifierSpec::Storage(ast::StorageQualifier::Out);
-    let qual = ast::TypeQualifier {
+    let qual = ast::TypeQualifierData {
         qualifiers: vec![qual_spec],
-    };
+    }
+    .into();
     let arg1 = ast::FunctionParameterDeclarationData::Named(
         Some(qual),
         ast::FunctionParameterDeclarator {
@@ -1629,9 +1632,10 @@ fn parse_declaration_uniform_block() {
     let foo_var = opts.add_type_name(ast::IdentifierData::from("foo").into());
 
     let qual_spec = ast::TypeQualifierSpec::Storage(ast::StorageQualifier::Uniform);
-    let qual = ast::TypeQualifier {
+    let qual = ast::TypeQualifierData {
         qualifiers: vec![qual_spec],
-    };
+    }
+    .into();
     let f0 = ast::StructFieldSpecifierData {
         qualifier: None,
         ty: ast::TypeSpecifierData {
@@ -1691,9 +1695,10 @@ fn parse_declaration_buffer_block() {
     let foo_var = opts.add_type_name(ast::IdentifierData::from("foo").into());
 
     let qual_spec = ast::TypeQualifierSpec::Storage(ast::StorageQualifier::Buffer);
-    let qual = ast::TypeQualifier {
+    let qual = ast::TypeQualifierData {
         qualifiers: vec![qual_spec],
-    };
+    }
+    .into();
     let f0 = ast::StructFieldSpecifierData {
         qualifier: None,
         ty: ast::TypeSpecifierData {
@@ -2179,11 +2184,12 @@ fn parse_buffer_block_0() {
 
     let buffer_block = ast::ExternalDeclarationData::Declaration(
         ast::DeclarationData::Block(ast::Block {
-            qualifier: ast::TypeQualifier {
+            qualifier: ast::TypeQualifierData {
                 qualifiers: vec![ast::TypeQualifierSpec::Storage(
                     ast::StorageQualifier::Buffer,
                 )],
-            },
+            }
+            .into(),
             name: "Foo".into_node(),
             fields: vec![ast::StructFieldSpecifierData {
                 qualifier: None,
@@ -2226,12 +2232,13 @@ fn parse_layout_buffer_block_0() {
             ),
         ],
     };
-    let type_qual = ast::TypeQualifier {
+    let type_qual = ast::TypeQualifierData {
         qualifiers: vec![
             ast::TypeQualifierSpec::Layout(layout),
             ast::TypeQualifierSpec::Storage(ast::StorageQualifier::Buffer),
         ],
-    };
+    }
+    .into();
     let block = ast::ExternalDeclarationData::Declaration(
         ast::DeclarationData::Block(ast::Block {
             qualifier: type_qual,

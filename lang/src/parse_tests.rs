@@ -1329,7 +1329,7 @@ fn parse_complex_expr() {
     let normalize = ast::Expr::FunCall(ast::FunIdentifier::ident("normalize"), vec![xyz]);
     let expected = normalize;
 
-    assert_eq!(ast::Expr::parse(&input[..]), Ok(expected));
+    assert_eq!(ast::Expr::parse(&input), Ok(expected));
 }
 
 #[test]

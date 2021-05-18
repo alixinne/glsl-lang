@@ -559,15 +559,20 @@ fn tokenize_fully_specified_type(t: &ast::FullySpecifiedType) -> TokenStream {
 }
 
 fn tokenize_struct_non_declaration(s: &ast::StructSpecifier) -> TokenStream {
-    let name = s.name.as_ref().map(tokenize_type_name);
-    let fields = s.fields.iter().map(tokenize_struct_field);
+    let span = tokenize_span(&s.span);
+    let s = {
+        let name = s.name.as_ref().map(tokenize_type_name);
+        let fields = s.fields.iter().map(tokenize_struct_field);
 
-    quote! {
-      glsl_lang::ast::StructSpecifier {
-        name: Some(#name),
-        fields: vec![#(#fields),*]
-      }
-    }
+        quote! {
+          glsl_lang::ast::StructSpecifierData {
+            name: Some(#name),
+            fields: vec![#(#fields),*]
+          }
+        }
+    };
+
+    quote! { glsl_lang::ast::StructSpecifier::new(#s, #span) }
 }
 
 fn tokenize_struct_field(field: &ast::StructFieldSpecifier) -> TokenStream {

@@ -771,7 +771,10 @@ impl Parsable for ast::StructFieldSpecifier {
                                                                     ast::TypeSpecifierNonArray {
                                                                         content: ast::TypeSpecifierNonArrayData::Struct(
                                                                              ast::StructSpecifier {
-                                                                                 fields,
+                                                                                 content: ast::StructSpecifierData {
+                                                                                     fields,
+                                                                                     ..
+                                                                                 },
                                                                                  ..
                                                                              },
                                                                          ),

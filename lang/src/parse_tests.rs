@@ -394,10 +394,11 @@ fn parse_struct_specifier_one_field() {
         .into(),
         identifiers: vec!["foo".into()],
     };
-    let expected = ast::StructSpecifier {
+    let expected: ast::StructSpecifier = ast::StructSpecifierData {
         name: Some("TestStruct".into_node()),
         fields: vec![field],
-    };
+    }
+    .into();
 
     assert_eq!(
         ast::StructSpecifier::parse("struct TestStruct { vec4 foo; }"),
@@ -462,10 +463,11 @@ fn parse_struct_specifier_multi_fields() {
         .into(),
         identifiers: vec!["x".into()],
     };
-    let expected = ast::StructSpecifier {
+    let expected: ast::StructSpecifier = ast::StructSpecifierData {
         name: Some("_TestStruct_934i".into_node()),
         fields: vec![foo_field, bar, zoo, foobar, s],
-    };
+    }
+    .into();
 
     let opts = get_s0238_3_opts();
     assert_eq!(

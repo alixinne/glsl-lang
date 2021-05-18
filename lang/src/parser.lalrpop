@@ -86,10 +86,10 @@ struct_field_specifier: ast::StructFieldSpecifier = {
 };
 
 struct_specifier: ast::StructSpecifier = {
-    "struct" <i:identifier?> "{" <s:struct_field_specifier*> "}" => ast::StructSpecifier {
+    <l:@L> "struct" <i:identifier?> "{" <s:struct_field_specifier*> "}" <r:@R> => ast::StructSpecifierData {
         name: i.map(|(ident, names)| names.add_type_name(ident)),
         fields: s,
-    },
+    }.spanned(l, r),
 };
 
 type_specifier_non_struct: ast::TypeSpecifierNonArrayData = {

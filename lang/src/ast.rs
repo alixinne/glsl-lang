@@ -529,7 +529,7 @@ impl From<TypeSpecifierNonArrayData> for TypeSpecifierData {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub struct StructSpecifier {
+pub struct StructSpecifierData {
     /// Structure name
     pub name: Option<TypeName>,
     /// Field specifications

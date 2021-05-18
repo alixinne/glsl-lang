@@ -325,7 +325,7 @@ fn parse_struct_field_specifier() {
             array_specifier: None,
         }
         .into(),
-        identifiers: vec!["foo".into()],
+        identifiers: vec!["foo".into_node()],
     }
     .into();
 
@@ -348,7 +348,7 @@ fn parse_struct_field_specifier_type_name() {
             array_specifier: None,
         }
         .into(),
-        identifiers: vec!["x".into()],
+        identifiers: vec!["x".into_node()],
     }
     .into();
 
@@ -372,7 +372,7 @@ fn parse_struct_field_specifier_several() {
             array_specifier: None,
         }
         .into(),
-        identifiers: vec!["foo".into(), "bar".into(), "zoo".into()],
+        identifiers: vec!["foo".into_node(), "bar".into_node(), "zoo".into_node()],
     }
     .into();
 
@@ -395,7 +395,7 @@ fn parse_struct_specifier_one_field() {
             array_specifier: None,
         }
         .into(),
-        identifiers: vec!["foo".into()],
+        identifiers: vec!["foo".into_node()],
     };
     let expected: ast::StructSpecifier = ast::StructSpecifierData {
         name: Some("TestStruct".into_node()),
@@ -428,7 +428,7 @@ fn parse_struct_specifier_multi_fields() {
             array_specifier: None,
         }
         .into(),
-        identifiers: vec!["foo".into()],
+        identifiers: vec!["foo".into_node()],
     };
     let bar = ast::StructFieldSpecifierData {
         qualifier: None,
@@ -437,7 +437,7 @@ fn parse_struct_specifier_multi_fields() {
             array_specifier: None,
         }
         .into(),
-        identifiers: vec!["bar".into()],
+        identifiers: vec!["bar".into_node()],
     };
     let zoo = ast::StructFieldSpecifierData {
         qualifier: None,
@@ -446,7 +446,7 @@ fn parse_struct_specifier_multi_fields() {
             array_specifier: None,
         }
         .into(),
-        identifiers: vec!["zoo".into()],
+        identifiers: vec!["zoo".into_node()],
     };
     let foobar = ast::StructFieldSpecifierData {
         qualifier: None,
@@ -455,7 +455,7 @@ fn parse_struct_specifier_multi_fields() {
             array_specifier: None,
         }
         .into(),
-        identifiers: vec!["foo_BAR_zoo3497_34".into()],
+        identifiers: vec!["foo_BAR_zoo3497_34".into_node()],
     };
     let s = ast::StructFieldSpecifierData {
         qualifier: None,
@@ -464,7 +464,7 @@ fn parse_struct_specifier_multi_fields() {
             array_specifier: None,
         }
         .into(),
-        identifiers: vec!["x".into()],
+        identifiers: vec!["x".into_node()],
     };
     let expected: ast::StructSpecifier = ast::StructSpecifierData {
         name: Some("_TestStruct_934i".into_node()),
@@ -1480,7 +1480,7 @@ fn parse_declaration_function_prototype() {
                 array_specifier: None,
             }
             .into(),
-            ident: "the_arg".into(),
+            ident: "the_arg".into_node(),
         },
     );
     let fp = ast::FunctionPrototypeData {
@@ -1554,7 +1554,7 @@ fn parse_declaration_init_declarator_list_complex() {
         initializer: Some(ast::Initializer::Simple(Box::new(ast::Expr::IntConst(34)))),
     };
     let sdnt = ast::SingleDeclarationNoType {
-        ident: "bar".into(),
+        ident: "bar".into_node(),
         initializer: Some(ast::Initializer::Simple(Box::new(ast::Expr::IntConst(12)))),
     };
     let expected: ast::Declaration =
@@ -1639,7 +1639,7 @@ fn parse_declaration_uniform_block() {
             array_specifier: None,
         }
         .into(),
-        identifiers: vec!["a".into()],
+        identifiers: vec!["a".into_node()],
     };
     let f1 = ast::StructFieldSpecifierData {
         qualifier: None,
@@ -1648,7 +1648,7 @@ fn parse_declaration_uniform_block() {
             array_specifier: None,
         }
         .into(),
-        identifiers: vec!["b".into()],
+        identifiers: vec!["b".into_node()],
     };
     let f2 = ast::StructFieldSpecifierData {
         qualifier: None,
@@ -1657,7 +1657,7 @@ fn parse_declaration_uniform_block() {
             array_specifier: None,
         }
         .into(),
-        identifiers: vec!["c".into(), "d".into()],
+        identifiers: vec!["c".into_node(), "d".into_node()],
     };
     let expected: ast::Declaration = ast::DeclarationData::Block(ast::Block {
         qualifier: qual,
@@ -1701,7 +1701,7 @@ fn parse_declaration_buffer_block() {
             array_specifier: None,
         }
         .into(),
-        identifiers: vec!["a".into()],
+        identifiers: vec!["a".into_node()],
     };
     let f1 = ast::StructFieldSpecifierData {
         qualifier: None,
@@ -1710,12 +1710,13 @@ fn parse_declaration_buffer_block() {
             array_specifier: None,
         }
         .into(),
-        identifiers: vec![ast::ArrayedIdentifier::new(
+        identifiers: vec![ast::ArrayedIdentifierData::new(
             "b".into_node(),
             Some(ast::ArraySpecifier {
                 dimensions: vec![ast::ArraySpecifierDimension::Unsized],
             }),
-        )],
+        )
+        .into()],
     };
     let f2 = ast::StructFieldSpecifierData {
         qualifier: None,
@@ -1724,7 +1725,7 @@ fn parse_declaration_buffer_block() {
             array_specifier: None,
         }
         .into(),
-        identifiers: vec!["c".into(), "d".into()],
+        identifiers: vec!["c".into_node(), "d".into_node()],
     };
     let expected: ast::Declaration = ast::DeclarationData::Block(ast::Block {
         qualifier: qual,
@@ -2191,15 +2192,16 @@ fn parse_buffer_block_0() {
                     array_specifier: None,
                 }
                 .into(),
-                identifiers: vec![ast::ArrayedIdentifier::new(
+                identifiers: vec![ast::ArrayedIdentifierData::new(
                     "tiles".into_node(),
                     Some(ast::ArraySpecifier {
                         dimensions: vec![ast::ArraySpecifierDimension::Unsized],
                     }),
-                )],
+                )
+                .into()],
             }
             .into()],
-            identifier: Some("main_tiles".into()),
+            identifier: Some("main_tiles".into_node()),
         })
         .into(),
     );
@@ -2237,10 +2239,10 @@ fn parse_layout_buffer_block_0() {
             fields: vec![ast::StructFieldSpecifierData {
                 qualifier: None,
                 ty: ast::TypeSpecifierData::from(ast::TypeSpecifierNonArrayData::Float).into(),
-                identifiers: vec!["a".into()],
+                identifiers: vec!["a".into_node()],
             }
             .into()],
-            identifier: Some("foo".into()),
+            identifier: Some("foo".into_node()),
         })
         .into(),
     );
@@ -2624,12 +2626,13 @@ fn parse_dot_field_expr_statement() {
 
 #[test]
 fn parse_arrayed_identifier() {
-    let expected = ast::ArrayedIdentifier::new(
+    let expected: ast::ArrayedIdentifier = ast::ArrayedIdentifierData::new(
         "foo".into_node(),
         ast::ArraySpecifier {
             dimensions: vec![ast::ArraySpecifierDimension::Unsized],
         },
-    );
+    )
+    .into();
 
     assert_eq!(ast::ArrayedIdentifier::parse("foo[]"), Ok(expected.clone()));
     assert_eq!(

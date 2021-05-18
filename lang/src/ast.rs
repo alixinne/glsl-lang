@@ -553,30 +553,30 @@ pub struct StructFieldSpecifierData {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub struct ArrayedIdentifier {
+pub struct ArrayedIdentifierData {
     /// Raw identifier
     pub ident: Identifier,
     /// Attached array specification
     pub array_spec: Option<ArraySpecifier>,
 }
 
-impl ArrayedIdentifier {
+impl ArrayedIdentifierData {
     /// Create a new [ArrayedIdentifier] from a raw identifier and a specification
     pub fn new<I, AS>(ident: I, array_spec: AS) -> Self
     where
         I: Into<Identifier>,
         AS: Into<Option<ArraySpecifier>>,
     {
-        ArrayedIdentifier {
+        Self {
             ident: ident.into(),
             array_spec: array_spec.into(),
         }
     }
 }
 
-impl From<&str> for ArrayedIdentifier {
+impl From<&str> for ArrayedIdentifierData {
     fn from(ident: &str) -> Self {
-        ArrayedIdentifier {
+        Self {
             ident: IdentifierData::from(ident).into(),
             array_spec: None,
         }

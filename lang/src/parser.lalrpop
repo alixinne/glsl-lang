@@ -262,7 +262,8 @@ unary_op: ast::UnaryOp = {
 };
 
 arrayed_identifier: ast::ArrayedIdentifier = {
-    <i:identifier> <a:array_specifier?> => ast::ArrayedIdentifier { ident: i.0, array_spec: a },
+    <l:@L> <i:identifier> <a:array_specifier?> <r:@R> =>
+        ast::ArrayedIdentifierData { ident: i.0, array_spec: a }.spanned(l, r),
 };
 
 multiplicative_expression: ast::Expr = {
@@ -540,11 +541,14 @@ function_prototype: (ast::FunctionPrototype, LexerContext) = {
 };
 
 single_declaration: ast::SingleDeclaration = {
-    <t:fully_specified_type> <i:arrayed_identifier> <e:("=" <initializer>)?> => ast::SingleDeclaration {
-        ty: t,
-        name: Some(i.ident),
-        array_specifier: i.array_spec,
-        initializer: e,
+    <t:fully_specified_type> <i:arrayed_identifier> <e:("=" <initializer>)?> => {
+        let i = i.into_inner();
+        ast::SingleDeclaration {
+            ty: t,
+            name: Some(i.ident),
+            array_specifier: i.array_spec,
+            initializer: e,
+        }
     },
     <t:fully_specified_type> => ast::SingleDeclaration {
         ty: t,

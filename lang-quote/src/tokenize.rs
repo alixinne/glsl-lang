@@ -619,16 +619,21 @@ fn tokenize_array_spec_dim(a: &ast::ArraySpecifierDimension) -> TokenStream {
 }
 
 fn tokenize_arrayed_identifier(identifier: &ast::ArrayedIdentifier) -> TokenStream {
-    let ident = tokenize_identifier(&identifier.ident);
-    let array_spec = identifier
-        .array_spec
-        .as_ref()
-        .map(tokenize_array_spec)
-        .quote();
+    let span = tokenize_span(&identifier.span);
+    let identifier = {
+        let ident = tokenize_identifier(&identifier.ident);
+        let array_spec = identifier
+            .array_spec
+            .as_ref()
+            .map(tokenize_array_spec)
+            .quote();
 
-    quote! {
-      glsl_lang::ast::ArrayedIdentifier::new(#ident, #array_spec)
-    }
+        quote! {
+          glsl_lang::ast::ArrayedIdentifierData::new(#ident, #array_spec)
+        }
+    };
+
+    quote! { glsl_lang::ast::ArrayedIdentifier::new(#identifier, #span) }
 }
 
 fn tokenize_type_qualifier(q: &ast::TypeQualifier) -> TokenStream {

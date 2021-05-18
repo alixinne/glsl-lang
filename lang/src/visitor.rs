@@ -13,26 +13,26 @@
 //! For instance, we can imagine visiting an AST to count how many variables are declared:
 //!
 //! ```
-//! use glsl_lang::ast::{CompoundStatement, CompoundStatementData, Expr, SingleDeclaration, StatementData, TypeSpecifierNonArray};
+//! use glsl_lang::ast::{CompoundStatement, CompoundStatementData, Expr, SingleDeclaration, StatementData, TypeSpecifierNonArrayData};
 //! use glsl_lang::visitor::{Host, Visit, Visitor};
 //! use std::iter::FromIterator;
 //!
 //! let decl0 = StatementData::declare_var(
-//!   TypeSpecifierNonArray::Float,
+//!   TypeSpecifierNonArrayData::Float,
 //!   "x",
 //!   None,
 //!   Some(Expr::from(3.14).into())
 //! );
 //!
 //! let decl1 = StatementData::declare_var(
-//!   TypeSpecifierNonArray::Int,
+//!   TypeSpecifierNonArrayData::Int,
 //!   "y",
 //!   None,
 //!   None
 //! );
 //!
 //! let decl2 = StatementData::declare_var(
-//!   TypeSpecifierNonArray::Vec4,
+//!   TypeSpecifierNonArrayData::Vec4,
 //!   "z",
 //!   None,
 //!   None
@@ -846,9 +846,9 @@ macro_rules! make_host_trait {
         let visit = visitor.visit_type_specifier_non_array(self);
 
         if visit == Visit::Children {
-          match self {
-            ast::TypeSpecifierNonArray::Struct(ss) => ss.$mthd_name(visitor),
-            ast::TypeSpecifierNonArray::TypeName(tn) => tn.$mthd_name(visitor),
+          match $($ref)* **self {
+            ast::TypeSpecifierNonArrayData::Struct(ss) => ss.$mthd_name(visitor),
+            ast::TypeSpecifierNonArrayData::TypeName(tn) => tn.$mthd_name(visitor),
             _ => (),
           }
         }
@@ -1417,17 +1417,17 @@ mod tests {
     #[allow(clippy::approx_constant)]
     fn count_variables() {
         let decl0 = ast::StatementData::declare_var(
-            ast::TypeSpecifierNonArray::Float,
+            ast::TypeSpecifierNonArrayData::Float,
             "x",
             None,
             Some(ast::Expr::from(3.14).into()),
         );
 
         let decl1 =
-            ast::StatementData::declare_var(ast::TypeSpecifierNonArray::Int, "y", None, None);
+            ast::StatementData::declare_var(ast::TypeSpecifierNonArrayData::Int, "y", None, None);
 
         let decl2 =
-            ast::StatementData::declare_var(ast::TypeSpecifierNonArray::Vec4, "z", None, None);
+            ast::StatementData::declare_var(ast::TypeSpecifierNonArrayData::Vec4, "z", None, None);
 
         let compound: ast::CompoundStatement =
             ast::CompoundStatementData::from_iter(vec![decl0.into(), decl1.into(), decl2.into()])

@@ -754,15 +754,18 @@ impl Parsable for ast::StructFieldSpecifier {
                                                     ty:
                                                         ast::TypeSpecifier {
                                                             ty:
-                                                                ast::TypeSpecifierNonArray::Struct(
-                                                                    ast::StructSpecifier {
-                                                                        fields,
-                                                                        ..
-                                                                    },
-                                                                ),
-                                                            ..
+                                                                ast::TypeSpecifierNonArray {
+                                                                    content: ast::TypeSpecifierNonArrayData::Struct(
+                                                                         ast::StructSpecifier {
+                                                                             fields,
+                                                                             ..
+                                                                         },
+                                                                     ),
+                                                                     ..
+                                                                },
+                                                                ..
                                                         },
-                                                    ..
+                                                        ..
                                                 },
                                             ..
                                         },
@@ -805,7 +808,10 @@ impl Parsable for ast::StructSpecifier {
                                                     ty:
                                                         ast::TypeSpecifier {
                                                             ty:
-                                                                ast::TypeSpecifierNonArray::Struct(s),
+                                                                ast::TypeSpecifierNonArray {
+                                                                    content: ast::TypeSpecifierNonArrayData::Struct(s),
+                                                                    ..
+                                                                },
                                                             ..
                                                         },
                                                     ..

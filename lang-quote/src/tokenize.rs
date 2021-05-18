@@ -153,355 +153,378 @@ fn tokenize_type_name(tn: &ast::TypeName) -> TokenStream {
 }
 
 fn tokenize_type_specifier_non_array(t: &ast::TypeSpecifierNonArray) -> TokenStream {
-    match *t {
-        ast::TypeSpecifierNonArray::Void => quote! { glsl_lang::ast::TypeSpecifierNonArray::Void },
-        ast::TypeSpecifierNonArray::Bool => quote! { glsl_lang::ast::TypeSpecifierNonArray::Bool },
-        ast::TypeSpecifierNonArray::Int => quote! { glsl_lang::ast::TypeSpecifierNonArray::Int },
-        ast::TypeSpecifierNonArray::UInt => quote! { glsl_lang::ast::TypeSpecifierNonArray::UInt },
-        ast::TypeSpecifierNonArray::Float => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Float }
+    let span = tokenize_span(&t.span);
+    let t = match **t {
+        ast::TypeSpecifierNonArrayData::Void => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Void }
         }
-        ast::TypeSpecifierNonArray::Double => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Double }
+        ast::TypeSpecifierNonArrayData::Bool => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Bool }
         }
-        ast::TypeSpecifierNonArray::Vec2 => quote! { glsl_lang::ast::TypeSpecifierNonArray::Vec2 },
-        ast::TypeSpecifierNonArray::Vec3 => quote! { glsl_lang::ast::TypeSpecifierNonArray::Vec3 },
-        ast::TypeSpecifierNonArray::Vec4 => quote! { glsl_lang::ast::TypeSpecifierNonArray::Vec4 },
-        ast::TypeSpecifierNonArray::DVec2 => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::DVec2 }
+        ast::TypeSpecifierNonArrayData::Int => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Int }
         }
-        ast::TypeSpecifierNonArray::DVec3 => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::DVec3 }
+        ast::TypeSpecifierNonArrayData::UInt => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::UInt }
         }
-        ast::TypeSpecifierNonArray::DVec4 => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::DVec4 }
+        ast::TypeSpecifierNonArrayData::Float => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Float }
         }
-        ast::TypeSpecifierNonArray::BVec2 => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::BVec2 }
+        ast::TypeSpecifierNonArrayData::Double => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Double }
         }
-        ast::TypeSpecifierNonArray::BVec3 => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::BVec3 }
+        ast::TypeSpecifierNonArrayData::Vec2 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Vec2 }
         }
-        ast::TypeSpecifierNonArray::BVec4 => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::BVec4 }
+        ast::TypeSpecifierNonArrayData::Vec3 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Vec3 }
         }
-        ast::TypeSpecifierNonArray::IVec2 => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::IVec2 }
+        ast::TypeSpecifierNonArrayData::Vec4 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Vec4 }
         }
-        ast::TypeSpecifierNonArray::IVec3 => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::IVec3 }
+        ast::TypeSpecifierNonArrayData::DVec2 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::DVec2 }
         }
-        ast::TypeSpecifierNonArray::IVec4 => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::IVec4 }
+        ast::TypeSpecifierNonArrayData::DVec3 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::DVec3 }
         }
-        ast::TypeSpecifierNonArray::UVec2 => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::UVec2 }
+        ast::TypeSpecifierNonArrayData::DVec4 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::DVec4 }
         }
-        ast::TypeSpecifierNonArray::UVec3 => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::UVec3 }
+        ast::TypeSpecifierNonArrayData::BVec2 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::BVec2 }
         }
-        ast::TypeSpecifierNonArray::UVec4 => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::UVec4 }
+        ast::TypeSpecifierNonArrayData::BVec3 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::BVec3 }
         }
-        ast::TypeSpecifierNonArray::Mat2 => quote! { glsl_lang::ast::TypeSpecifierNonArray::Mat2 },
-        ast::TypeSpecifierNonArray::Mat3 => quote! { glsl_lang::ast::TypeSpecifierNonArray::Mat3 },
-        ast::TypeSpecifierNonArray::Mat4 => quote! { glsl_lang::ast::TypeSpecifierNonArray::Mat4 },
-        ast::TypeSpecifierNonArray::Mat22 => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Mat22 }
+        ast::TypeSpecifierNonArrayData::BVec4 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::BVec4 }
         }
-        ast::TypeSpecifierNonArray::Mat23 => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Mat23 }
+        ast::TypeSpecifierNonArrayData::IVec2 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::IVec2 }
         }
-        ast::TypeSpecifierNonArray::Mat24 => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Mat24 }
+        ast::TypeSpecifierNonArrayData::IVec3 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::IVec3 }
         }
-        ast::TypeSpecifierNonArray::Mat32 => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Mat32 }
+        ast::TypeSpecifierNonArrayData::IVec4 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::IVec4 }
         }
-        ast::TypeSpecifierNonArray::Mat33 => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Mat33 }
+        ast::TypeSpecifierNonArrayData::UVec2 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::UVec2 }
         }
-        ast::TypeSpecifierNonArray::Mat34 => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Mat34 }
+        ast::TypeSpecifierNonArrayData::UVec3 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::UVec3 }
         }
-        ast::TypeSpecifierNonArray::Mat42 => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Mat42 }
+        ast::TypeSpecifierNonArrayData::UVec4 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::UVec4 }
         }
-        ast::TypeSpecifierNonArray::Mat43 => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Mat43 }
+        ast::TypeSpecifierNonArrayData::Mat2 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Mat2 }
         }
-        ast::TypeSpecifierNonArray::Mat44 => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Mat44 }
+        ast::TypeSpecifierNonArrayData::Mat3 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Mat3 }
         }
-        ast::TypeSpecifierNonArray::DMat2 => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::DMat2 }
+        ast::TypeSpecifierNonArrayData::Mat4 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Mat4 }
         }
-        ast::TypeSpecifierNonArray::DMat3 => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::DMat3 }
+        ast::TypeSpecifierNonArrayData::Mat22 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Mat22 }
         }
-        ast::TypeSpecifierNonArray::DMat4 => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::DMat4 }
+        ast::TypeSpecifierNonArrayData::Mat23 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Mat23 }
         }
-        ast::TypeSpecifierNonArray::DMat22 => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::DMat22 }
+        ast::TypeSpecifierNonArrayData::Mat24 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Mat24 }
         }
-        ast::TypeSpecifierNonArray::DMat23 => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::DMat23 }
+        ast::TypeSpecifierNonArrayData::Mat32 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Mat32 }
         }
-        ast::TypeSpecifierNonArray::DMat24 => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::DMat24 }
+        ast::TypeSpecifierNonArrayData::Mat33 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Mat33 }
         }
-        ast::TypeSpecifierNonArray::DMat32 => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::DMat32 }
+        ast::TypeSpecifierNonArrayData::Mat34 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Mat34 }
         }
-        ast::TypeSpecifierNonArray::DMat33 => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::DMat33 }
+        ast::TypeSpecifierNonArrayData::Mat42 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Mat42 }
         }
-        ast::TypeSpecifierNonArray::DMat34 => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::DMat34 }
+        ast::TypeSpecifierNonArrayData::Mat43 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Mat43 }
         }
-        ast::TypeSpecifierNonArray::DMat42 => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::DMat42 }
+        ast::TypeSpecifierNonArrayData::Mat44 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Mat44 }
         }
-        ast::TypeSpecifierNonArray::DMat43 => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::DMat43 }
+        ast::TypeSpecifierNonArrayData::DMat2 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::DMat2 }
         }
-        ast::TypeSpecifierNonArray::DMat44 => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::DMat44 }
+        ast::TypeSpecifierNonArrayData::DMat3 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::DMat3 }
         }
-        ast::TypeSpecifierNonArray::Sampler1D => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Sampler1D }
+        ast::TypeSpecifierNonArrayData::DMat4 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::DMat4 }
         }
-        ast::TypeSpecifierNonArray::Image1D => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Image1D }
+        ast::TypeSpecifierNonArrayData::DMat22 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::DMat22 }
         }
-        ast::TypeSpecifierNonArray::Sampler2D => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Sampler2D }
+        ast::TypeSpecifierNonArrayData::DMat23 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::DMat23 }
         }
-        ast::TypeSpecifierNonArray::Image2D => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Image2D }
+        ast::TypeSpecifierNonArrayData::DMat24 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::DMat24 }
         }
-        ast::TypeSpecifierNonArray::Sampler3D => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Sampler3D }
+        ast::TypeSpecifierNonArrayData::DMat32 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::DMat32 }
         }
-        ast::TypeSpecifierNonArray::Image3D => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Image3D }
+        ast::TypeSpecifierNonArrayData::DMat33 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::DMat33 }
         }
-        ast::TypeSpecifierNonArray::SamplerCube => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::SamplerCube }
+        ast::TypeSpecifierNonArrayData::DMat34 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::DMat34 }
         }
-        ast::TypeSpecifierNonArray::ImageCube => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::ImageCube }
+        ast::TypeSpecifierNonArrayData::DMat42 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::DMat42 }
         }
-        ast::TypeSpecifierNonArray::Sampler2DRect => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Sampler2DRect }
+        ast::TypeSpecifierNonArrayData::DMat43 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::DMat43 }
         }
-        ast::TypeSpecifierNonArray::Image2DRect => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Image2DRect }
+        ast::TypeSpecifierNonArrayData::DMat44 => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::DMat44 }
         }
-        ast::TypeSpecifierNonArray::Sampler1DArray => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Sampler1DArray }
+        ast::TypeSpecifierNonArrayData::Sampler1D => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Sampler1D }
         }
-        ast::TypeSpecifierNonArray::Image1DArray => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Image1DArray }
+        ast::TypeSpecifierNonArrayData::Image1D => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Image1D }
         }
-        ast::TypeSpecifierNonArray::Sampler2DArray => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Sampler2DArray }
+        ast::TypeSpecifierNonArrayData::Sampler2D => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Sampler2D }
         }
-        ast::TypeSpecifierNonArray::Image2DArray => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Image2DArray }
+        ast::TypeSpecifierNonArrayData::Image2D => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Image2D }
         }
-        ast::TypeSpecifierNonArray::SamplerBuffer => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::SamplerBuffer }
+        ast::TypeSpecifierNonArrayData::Sampler3D => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Sampler3D }
         }
-        ast::TypeSpecifierNonArray::ImageBuffer => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::ImageBuffer }
+        ast::TypeSpecifierNonArrayData::Image3D => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Image3D }
         }
-        ast::TypeSpecifierNonArray::Sampler2DMs => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Sampler2DMs }
+        ast::TypeSpecifierNonArrayData::SamplerCube => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::SamplerCube }
         }
-        ast::TypeSpecifierNonArray::Image2DMs => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Image2DMs }
+        ast::TypeSpecifierNonArrayData::ImageCube => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::ImageCube }
         }
-        ast::TypeSpecifierNonArray::Sampler2DMsArray => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Sampler2DMsArray }
+        ast::TypeSpecifierNonArrayData::Sampler2DRect => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Sampler2DRect }
         }
-        ast::TypeSpecifierNonArray::Image2DMsArray => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Image2DMsArray }
+        ast::TypeSpecifierNonArrayData::Image2DRect => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Image2DRect }
         }
-        ast::TypeSpecifierNonArray::SamplerCubeArray => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::SamplerCubeArray }
+        ast::TypeSpecifierNonArrayData::Sampler1DArray => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Sampler1DArray }
         }
-        ast::TypeSpecifierNonArray::ImageCubeArray => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::ImageCubeArray }
+        ast::TypeSpecifierNonArrayData::Image1DArray => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Image1DArray }
         }
-        ast::TypeSpecifierNonArray::Sampler1DShadow => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Sampler1DShadow }
+        ast::TypeSpecifierNonArrayData::Sampler2DArray => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Sampler2DArray }
         }
-        ast::TypeSpecifierNonArray::Sampler2DShadow => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Sampler2DShadow }
+        ast::TypeSpecifierNonArrayData::Image2DArray => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Image2DArray }
         }
-        ast::TypeSpecifierNonArray::Sampler2DRectShadow => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Sampler2DRectShadow }
+        ast::TypeSpecifierNonArrayData::SamplerBuffer => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::SamplerBuffer }
         }
-        ast::TypeSpecifierNonArray::Sampler1DArrayShadow => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Sampler1DArrayShadow }
+        ast::TypeSpecifierNonArrayData::ImageBuffer => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::ImageBuffer }
         }
-        ast::TypeSpecifierNonArray::Sampler2DArrayShadow => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Sampler2DArrayShadow }
+        ast::TypeSpecifierNonArrayData::Sampler2DMs => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Sampler2DMs }
         }
-        ast::TypeSpecifierNonArray::SamplerCubeShadow => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::SamplerCubeShadow }
+        ast::TypeSpecifierNonArrayData::Image2DMs => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Image2DMs }
         }
-        ast::TypeSpecifierNonArray::SamplerCubeArrayShadow => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::SamplerCubeArrayShadow }
+        ast::TypeSpecifierNonArrayData::Sampler2DMsArray => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Sampler2DMsArray }
         }
-        ast::TypeSpecifierNonArray::ISampler1D => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::ISampler1D }
+        ast::TypeSpecifierNonArrayData::Image2DMsArray => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Image2DMsArray }
         }
-        ast::TypeSpecifierNonArray::IImage1D => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::IImage1D }
+        ast::TypeSpecifierNonArrayData::SamplerCubeArray => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::SamplerCubeArray }
         }
-        ast::TypeSpecifierNonArray::ISampler2D => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::ISampler2D }
+        ast::TypeSpecifierNonArrayData::ImageCubeArray => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::ImageCubeArray }
         }
-        ast::TypeSpecifierNonArray::IImage2D => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::IImage2D }
+        ast::TypeSpecifierNonArrayData::Sampler1DShadow => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Sampler1DShadow }
         }
-        ast::TypeSpecifierNonArray::ISampler3D => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::ISampler3D }
+        ast::TypeSpecifierNonArrayData::Sampler2DShadow => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Sampler2DShadow }
         }
-        ast::TypeSpecifierNonArray::IImage3D => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::IImage3D }
+        ast::TypeSpecifierNonArrayData::Sampler2DRectShadow => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Sampler2DRectShadow }
         }
-        ast::TypeSpecifierNonArray::ISamplerCube => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::ISamplerCube }
+        ast::TypeSpecifierNonArrayData::Sampler1DArrayShadow => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Sampler1DArrayShadow }
         }
-        ast::TypeSpecifierNonArray::IImageCube => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::IImageCube }
+        ast::TypeSpecifierNonArrayData::Sampler2DArrayShadow => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Sampler2DArrayShadow }
         }
-        ast::TypeSpecifierNonArray::ISampler2DRect => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::ISampler2DRect }
+        ast::TypeSpecifierNonArrayData::SamplerCubeShadow => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::SamplerCubeShadow }
         }
-        ast::TypeSpecifierNonArray::IImage2DRect => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::IImage2DRect }
+        ast::TypeSpecifierNonArrayData::SamplerCubeArrayShadow => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::SamplerCubeArrayShadow }
         }
-        ast::TypeSpecifierNonArray::ISampler1DArray => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::ISampler1DArray }
+        ast::TypeSpecifierNonArrayData::ISampler1D => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::ISampler1D }
         }
-        ast::TypeSpecifierNonArray::IImage1DArray => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::IImage1DArray }
+        ast::TypeSpecifierNonArrayData::IImage1D => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::IImage1D }
         }
-        ast::TypeSpecifierNonArray::ISampler2DArray => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::ISampler2DArray }
+        ast::TypeSpecifierNonArrayData::ISampler2D => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::ISampler2D }
         }
-        ast::TypeSpecifierNonArray::IImage2DArray => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::IImage2DArray }
+        ast::TypeSpecifierNonArrayData::IImage2D => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::IImage2D }
         }
-        ast::TypeSpecifierNonArray::ISamplerBuffer => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::ISamplerBuffer }
+        ast::TypeSpecifierNonArrayData::ISampler3D => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::ISampler3D }
         }
-        ast::TypeSpecifierNonArray::IImageBuffer => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::IImageBuffer }
+        ast::TypeSpecifierNonArrayData::IImage3D => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::IImage3D }
         }
-        ast::TypeSpecifierNonArray::ISampler2DMs => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::ISampler2DMs }
+        ast::TypeSpecifierNonArrayData::ISamplerCube => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::ISamplerCube }
         }
-        ast::TypeSpecifierNonArray::IImage2DMs => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::IImage2DMs }
+        ast::TypeSpecifierNonArrayData::IImageCube => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::IImageCube }
         }
-        ast::TypeSpecifierNonArray::ISampler2DMsArray => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::ISampler2DMsArray }
+        ast::TypeSpecifierNonArrayData::ISampler2DRect => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::ISampler2DRect }
         }
-        ast::TypeSpecifierNonArray::IImage2DMsArray => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::IImage2DMsArray }
+        ast::TypeSpecifierNonArrayData::IImage2DRect => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::IImage2DRect }
         }
-        ast::TypeSpecifierNonArray::ISamplerCubeArray => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::ISamplerCubeArray }
+        ast::TypeSpecifierNonArrayData::ISampler1DArray => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::ISampler1DArray }
         }
-        ast::TypeSpecifierNonArray::IImageCubeArray => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::IImageCubeArray }
+        ast::TypeSpecifierNonArrayData::IImage1DArray => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::IImage1DArray }
         }
-        ast::TypeSpecifierNonArray::AtomicUInt => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::AtomicUInt }
+        ast::TypeSpecifierNonArrayData::ISampler2DArray => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::ISampler2DArray }
         }
-        ast::TypeSpecifierNonArray::USampler1D => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::USampler1D }
+        ast::TypeSpecifierNonArrayData::IImage2DArray => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::IImage2DArray }
         }
-        ast::TypeSpecifierNonArray::UImage1D => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::UImage1D }
+        ast::TypeSpecifierNonArrayData::ISamplerBuffer => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::ISamplerBuffer }
         }
-        ast::TypeSpecifierNonArray::USampler2D => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::USampler2D }
+        ast::TypeSpecifierNonArrayData::IImageBuffer => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::IImageBuffer }
         }
-        ast::TypeSpecifierNonArray::UImage2D => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::UImage2D }
+        ast::TypeSpecifierNonArrayData::ISampler2DMs => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::ISampler2DMs }
         }
-        ast::TypeSpecifierNonArray::USampler3D => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::USampler3D }
+        ast::TypeSpecifierNonArrayData::IImage2DMs => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::IImage2DMs }
         }
-        ast::TypeSpecifierNonArray::UImage3D => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::UImage3D }
+        ast::TypeSpecifierNonArrayData::ISampler2DMsArray => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::ISampler2DMsArray }
         }
-        ast::TypeSpecifierNonArray::USamplerCube => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::USamplerCube }
+        ast::TypeSpecifierNonArrayData::IImage2DMsArray => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::IImage2DMsArray }
         }
-        ast::TypeSpecifierNonArray::UImageCube => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::UImageCube }
+        ast::TypeSpecifierNonArrayData::ISamplerCubeArray => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::ISamplerCubeArray }
         }
-        ast::TypeSpecifierNonArray::USampler2DRect => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::USampler2DRect }
+        ast::TypeSpecifierNonArrayData::IImageCubeArray => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::IImageCubeArray }
         }
-        ast::TypeSpecifierNonArray::UImage2DRect => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::UImage2DRect }
+        ast::TypeSpecifierNonArrayData::AtomicUInt => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::AtomicUInt }
         }
-        ast::TypeSpecifierNonArray::USampler1DArray => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::USampler1DArray }
+        ast::TypeSpecifierNonArrayData::USampler1D => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::USampler1D }
         }
-        ast::TypeSpecifierNonArray::UImage1DArray => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::UImage1DArray }
+        ast::TypeSpecifierNonArrayData::UImage1D => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::UImage1D }
         }
-        ast::TypeSpecifierNonArray::USampler2DArray => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::USampler2DArray }
+        ast::TypeSpecifierNonArrayData::USampler2D => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::USampler2D }
         }
-        ast::TypeSpecifierNonArray::UImage2DArray => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::UImage2DArray }
+        ast::TypeSpecifierNonArrayData::UImage2D => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::UImage2D }
         }
-        ast::TypeSpecifierNonArray::USamplerBuffer => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::USamplerBuffer }
+        ast::TypeSpecifierNonArrayData::USampler3D => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::USampler3D }
         }
-        ast::TypeSpecifierNonArray::UImageBuffer => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::UImageBuffer }
+        ast::TypeSpecifierNonArrayData::UImage3D => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::UImage3D }
         }
-        ast::TypeSpecifierNonArray::USampler2DMs => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::USampler2DMs }
+        ast::TypeSpecifierNonArrayData::USamplerCube => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::USamplerCube }
         }
-        ast::TypeSpecifierNonArray::UImage2DMs => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::UImage2DMs }
+        ast::TypeSpecifierNonArrayData::UImageCube => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::UImageCube }
         }
-        ast::TypeSpecifierNonArray::USampler2DMsArray => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::USampler2DMsArray }
+        ast::TypeSpecifierNonArrayData::USampler2DRect => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::USampler2DRect }
         }
-        ast::TypeSpecifierNonArray::UImage2DMsArray => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::UImage2DMsArray }
+        ast::TypeSpecifierNonArrayData::UImage2DRect => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::UImage2DRect }
         }
-        ast::TypeSpecifierNonArray::USamplerCubeArray => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::USamplerCubeArray }
+        ast::TypeSpecifierNonArrayData::USampler1DArray => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::USampler1DArray }
         }
-        ast::TypeSpecifierNonArray::UImageCubeArray => {
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::UImageCubeArray }
+        ast::TypeSpecifierNonArrayData::UImage1DArray => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::UImage1DArray }
+        }
+        ast::TypeSpecifierNonArrayData::USampler2DArray => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::USampler2DArray }
+        }
+        ast::TypeSpecifierNonArrayData::UImage2DArray => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::UImage2DArray }
+        }
+        ast::TypeSpecifierNonArrayData::USamplerBuffer => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::USamplerBuffer }
+        }
+        ast::TypeSpecifierNonArrayData::UImageBuffer => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::UImageBuffer }
+        }
+        ast::TypeSpecifierNonArrayData::USampler2DMs => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::USampler2DMs }
+        }
+        ast::TypeSpecifierNonArrayData::UImage2DMs => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::UImage2DMs }
+        }
+        ast::TypeSpecifierNonArrayData::USampler2DMsArray => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::USampler2DMsArray }
+        }
+        ast::TypeSpecifierNonArrayData::UImage2DMsArray => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::UImage2DMsArray }
+        }
+        ast::TypeSpecifierNonArrayData::USamplerCubeArray => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::USamplerCubeArray }
+        }
+        ast::TypeSpecifierNonArrayData::UImageCubeArray => {
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::UImageCubeArray }
         }
 
-        ast::TypeSpecifierNonArray::Struct(ref s) => {
+        ast::TypeSpecifierNonArrayData::Struct(ref s) => {
             let s = tokenize_struct_non_declaration(s);
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::Struct(#s) }
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Struct(#s) }
         }
 
-        ast::TypeSpecifierNonArray::TypeName(ref tn) => {
+        ast::TypeSpecifierNonArrayData::TypeName(ref tn) => {
             let tn = tokenize_type_name(tn);
-            quote! { glsl_lang::ast::TypeSpecifierNonArray::TypeName(#tn) }
+            quote! { glsl_lang::ast::TypeSpecifierNonArrayData::TypeName(#tn) }
         }
-    }
+    };
+
+    quote! { glsl_lang::ast::TypeSpecifierNonArray::new(#t, #span) }
 }
 
 fn tokenize_type_specifier(t: &ast::TypeSpecifier) -> TokenStream {

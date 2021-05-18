@@ -122,7 +122,7 @@ impl fmt::Display for TypeNameData {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub enum TypeSpecifierNonArray {
+pub enum TypeSpecifierNonArrayData {
     /// `void` type specifier
     #[lang_util(display(extra = "void"))]
     Void,
@@ -490,7 +490,7 @@ pub enum TypeSpecifierNonArray {
     TypeName(TypeName),
 }
 
-impl From<TypeName> for TypeSpecifierNonArray {
+impl From<TypeName> for TypeSpecifierNonArrayData {
     fn from(tn: TypeName) -> Self {
         Self::TypeName(tn)
     }
@@ -507,10 +507,19 @@ pub struct TypeSpecifier {
     pub array_specifier: Option<ArraySpecifier>,
 }
 
-impl<T: Into<TypeSpecifierNonArray>> From<T> for TypeSpecifier {
-    fn from(ty: T) -> Self {
+impl From<TypeSpecifierNonArray> for TypeSpecifier {
+    fn from(ty: TypeSpecifierNonArray) -> Self {
         Self {
-            ty: ty.into(),
+            ty,
+            array_specifier: None,
+        }
+    }
+}
+
+impl From<TypeSpecifierNonArrayData> for TypeSpecifier {
+    fn from(ty: TypeSpecifierNonArrayData) -> Self {
+        Self {
+            ty: ty.into_node(),
             array_specifier: None,
         }
     }
@@ -734,6 +743,12 @@ impl FullySpecifiedType {
                 array_specifier: None,
             },
         }
+    }
+}
+
+impl From<TypeSpecifierNonArrayData> for FullySpecifiedType {
+    fn from(ty: TypeSpecifierNonArrayData) -> Self {
+        FullySpecifiedType::new(ty.into_node())
     }
 }
 

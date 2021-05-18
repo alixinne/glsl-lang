@@ -321,7 +321,7 @@ fn parse_struct_field_specifier() {
     let expected = ast::StructFieldSpecifier {
         qualifier: None,
         ty: ast::TypeSpecifier {
-            ty: ast::TypeSpecifierNonArray::Vec4,
+            ty: ast::TypeSpecifierNonArrayData::Vec4.into(),
             array_specifier: None,
         },
         identifiers: vec!["foo".into()],
@@ -342,7 +342,7 @@ fn parse_struct_field_specifier_type_name() {
     let expected = ast::StructFieldSpecifier {
         qualifier: None,
         ty: ast::TypeSpecifier {
-            ty: ast::TypeSpecifierNonArray::TypeName("S0238_3".into_node()),
+            ty: ast::TypeSpecifierNonArrayData::TypeName("S0238_3".into_node()).into(),
             array_specifier: None,
         },
         identifiers: vec!["x".into()],
@@ -364,7 +364,7 @@ fn parse_struct_field_specifier_several() {
     let expected = ast::StructFieldSpecifier {
         qualifier: None,
         ty: ast::TypeSpecifier {
-            ty: ast::TypeSpecifierNonArray::Vec4,
+            ty: ast::TypeSpecifierNonArrayData::Vec4.into(),
             array_specifier: None,
         },
         identifiers: vec!["foo".into(), "bar".into(), "zoo".into()],
@@ -385,7 +385,7 @@ fn parse_struct_specifier_one_field() {
     let field = ast::StructFieldSpecifier {
         qualifier: None,
         ty: ast::TypeSpecifier {
-            ty: ast::TypeSpecifierNonArray::Vec4,
+            ty: ast::TypeSpecifierNonArrayData::Vec4.into(),
             array_specifier: None,
         },
         identifiers: vec!["foo".into()],
@@ -416,7 +416,7 @@ fn parse_struct_specifier_multi_fields() {
     let foo_field = ast::StructFieldSpecifier {
         qualifier: None,
         ty: ast::TypeSpecifier {
-            ty: ast::TypeSpecifierNonArray::Vec4,
+            ty: ast::TypeSpecifierNonArrayData::Vec4.into(),
             array_specifier: None,
         },
         identifiers: vec!["foo".into()],
@@ -424,7 +424,7 @@ fn parse_struct_specifier_multi_fields() {
     let bar = ast::StructFieldSpecifier {
         qualifier: None,
         ty: ast::TypeSpecifier {
-            ty: ast::TypeSpecifierNonArray::Float,
+            ty: ast::TypeSpecifierNonArrayData::Float.into(),
             array_specifier: None,
         },
         identifiers: vec!["bar".into()],
@@ -432,7 +432,7 @@ fn parse_struct_specifier_multi_fields() {
     let zoo = ast::StructFieldSpecifier {
         qualifier: None,
         ty: ast::TypeSpecifier {
-            ty: ast::TypeSpecifierNonArray::UInt,
+            ty: ast::TypeSpecifierNonArrayData::UInt.into(),
             array_specifier: None,
         },
         identifiers: vec!["zoo".into()],
@@ -440,7 +440,7 @@ fn parse_struct_specifier_multi_fields() {
     let foobar = ast::StructFieldSpecifier {
         qualifier: None,
         ty: ast::TypeSpecifier {
-            ty: ast::TypeSpecifierNonArray::BVec3,
+            ty: ast::TypeSpecifierNonArrayData::BVec3.into(),
             array_specifier: None,
         },
         identifiers: vec!["foo_BAR_zoo3497_34".into()],
@@ -448,7 +448,7 @@ fn parse_struct_specifier_multi_fields() {
     let s = ast::StructFieldSpecifier {
         qualifier: None,
         ty: ast::TypeSpecifier {
-            ty: ast::TypeSpecifierNonArray::TypeName("S0238_3".into_node()),
+            ty: ast::TypeSpecifierNonArrayData::TypeName("S0238_3".into_node()).into(),
             array_specifier: None,
         },
         identifiers: vec!["x".into()],
@@ -486,484 +486,485 @@ fn parse_struct_specifier_multi_fields() {
 fn parse_type_specifier_non_array() {
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("bool"),
-        Ok(ast::TypeSpecifierNonArray::Bool)
+        Ok(ast::TypeSpecifierNonArrayData::Bool.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("int"),
-        Ok(ast::TypeSpecifierNonArray::Int)
+        Ok(ast::TypeSpecifierNonArrayData::Int.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("uint"),
-        Ok(ast::TypeSpecifierNonArray::UInt)
+        Ok(ast::TypeSpecifierNonArrayData::UInt.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("float"),
-        Ok(ast::TypeSpecifierNonArray::Float)
+        Ok(ast::TypeSpecifierNonArrayData::Float.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("double"),
-        Ok(ast::TypeSpecifierNonArray::Double)
+        Ok(ast::TypeSpecifierNonArrayData::Double.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("vec2"),
-        Ok(ast::TypeSpecifierNonArray::Vec2)
+        Ok(ast::TypeSpecifierNonArrayData::Vec2.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("vec3"),
-        Ok(ast::TypeSpecifierNonArray::Vec3)
+        Ok(ast::TypeSpecifierNonArrayData::Vec3.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("vec4"),
-        Ok(ast::TypeSpecifierNonArray::Vec4)
+        Ok(ast::TypeSpecifierNonArrayData::Vec4.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("dvec2"),
-        Ok(ast::TypeSpecifierNonArray::DVec2)
+        Ok(ast::TypeSpecifierNonArrayData::DVec2.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("dvec3"),
-        Ok(ast::TypeSpecifierNonArray::DVec3)
+        Ok(ast::TypeSpecifierNonArrayData::DVec3.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("dvec4"),
-        Ok(ast::TypeSpecifierNonArray::DVec4)
+        Ok(ast::TypeSpecifierNonArrayData::DVec4.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("bvec2"),
-        Ok(ast::TypeSpecifierNonArray::BVec2)
+        Ok(ast::TypeSpecifierNonArrayData::BVec2.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("bvec3"),
-        Ok(ast::TypeSpecifierNonArray::BVec3)
+        Ok(ast::TypeSpecifierNonArrayData::BVec3.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("bvec4"),
-        Ok(ast::TypeSpecifierNonArray::BVec4)
+        Ok(ast::TypeSpecifierNonArrayData::BVec4.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("ivec2"),
-        Ok(ast::TypeSpecifierNonArray::IVec2)
+        Ok(ast::TypeSpecifierNonArrayData::IVec2.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("ivec3"),
-        Ok(ast::TypeSpecifierNonArray::IVec3)
+        Ok(ast::TypeSpecifierNonArrayData::IVec3.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("ivec4"),
-        Ok(ast::TypeSpecifierNonArray::IVec4)
+        Ok(ast::TypeSpecifierNonArrayData::IVec4.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("uvec2"),
-        Ok(ast::TypeSpecifierNonArray::UVec2)
+        Ok(ast::TypeSpecifierNonArrayData::UVec2.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("uvec3"),
-        Ok(ast::TypeSpecifierNonArray::UVec3)
+        Ok(ast::TypeSpecifierNonArrayData::UVec3.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("uvec4"),
-        Ok(ast::TypeSpecifierNonArray::UVec4)
+        Ok(ast::TypeSpecifierNonArrayData::UVec4.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("mat2"),
-        Ok(ast::TypeSpecifierNonArray::Mat2)
+        Ok(ast::TypeSpecifierNonArrayData::Mat2.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("mat3"),
-        Ok(ast::TypeSpecifierNonArray::Mat3)
+        Ok(ast::TypeSpecifierNonArrayData::Mat3.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("mat4"),
-        Ok(ast::TypeSpecifierNonArray::Mat4)
+        Ok(ast::TypeSpecifierNonArrayData::Mat4.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("mat2x2"),
-        Ok(ast::TypeSpecifierNonArray::Mat22)
+        Ok(ast::TypeSpecifierNonArrayData::Mat22.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("mat2x3"),
-        Ok(ast::TypeSpecifierNonArray::Mat23)
+        Ok(ast::TypeSpecifierNonArrayData::Mat23.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("mat2x4"),
-        Ok(ast::TypeSpecifierNonArray::Mat24)
+        Ok(ast::TypeSpecifierNonArrayData::Mat24.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("mat3x2"),
-        Ok(ast::TypeSpecifierNonArray::Mat32)
+        Ok(ast::TypeSpecifierNonArrayData::Mat32.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("mat3x3"),
-        Ok(ast::TypeSpecifierNonArray::Mat33)
+        Ok(ast::TypeSpecifierNonArrayData::Mat33.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("mat3x4"),
-        Ok(ast::TypeSpecifierNonArray::Mat34)
+        Ok(ast::TypeSpecifierNonArrayData::Mat34.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("mat4x2"),
-        Ok(ast::TypeSpecifierNonArray::Mat42)
+        Ok(ast::TypeSpecifierNonArrayData::Mat42.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("mat4x3"),
-        Ok(ast::TypeSpecifierNonArray::Mat43)
+        Ok(ast::TypeSpecifierNonArrayData::Mat43.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("mat4x4"),
-        Ok(ast::TypeSpecifierNonArray::Mat44)
+        Ok(ast::TypeSpecifierNonArrayData::Mat44.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("dmat2"),
-        Ok(ast::TypeSpecifierNonArray::DMat2)
+        Ok(ast::TypeSpecifierNonArrayData::DMat2.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("dmat3"),
-        Ok(ast::TypeSpecifierNonArray::DMat3)
+        Ok(ast::TypeSpecifierNonArrayData::DMat3.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("dmat4"),
-        Ok(ast::TypeSpecifierNonArray::DMat4)
+        Ok(ast::TypeSpecifierNonArrayData::DMat4.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("dmat2x2"),
-        Ok(ast::TypeSpecifierNonArray::DMat22)
+        Ok(ast::TypeSpecifierNonArrayData::DMat22.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("dmat2x3"),
-        Ok(ast::TypeSpecifierNonArray::DMat23)
+        Ok(ast::TypeSpecifierNonArrayData::DMat23.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("dmat2x4"),
-        Ok(ast::TypeSpecifierNonArray::DMat24)
+        Ok(ast::TypeSpecifierNonArrayData::DMat24.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("dmat3x2"),
-        Ok(ast::TypeSpecifierNonArray::DMat32)
+        Ok(ast::TypeSpecifierNonArrayData::DMat32.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("dmat3x3"),
-        Ok(ast::TypeSpecifierNonArray::DMat33)
+        Ok(ast::TypeSpecifierNonArrayData::DMat33.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("dmat3x4"),
-        Ok(ast::TypeSpecifierNonArray::DMat34)
+        Ok(ast::TypeSpecifierNonArrayData::DMat34.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("dmat4x2"),
-        Ok(ast::TypeSpecifierNonArray::DMat42)
+        Ok(ast::TypeSpecifierNonArrayData::DMat42.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("dmat4x3"),
-        Ok(ast::TypeSpecifierNonArray::DMat43)
+        Ok(ast::TypeSpecifierNonArrayData::DMat43.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("dmat4x4"),
-        Ok(ast::TypeSpecifierNonArray::DMat44)
+        Ok(ast::TypeSpecifierNonArrayData::DMat44.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("sampler1D"),
-        Ok(ast::TypeSpecifierNonArray::Sampler1D)
+        Ok(ast::TypeSpecifierNonArrayData::Sampler1D.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("image1D"),
-        Ok(ast::TypeSpecifierNonArray::Image1D)
+        Ok(ast::TypeSpecifierNonArrayData::Image1D.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("sampler2D"),
-        Ok(ast::TypeSpecifierNonArray::Sampler2D)
+        Ok(ast::TypeSpecifierNonArrayData::Sampler2D.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("image2D"),
-        Ok(ast::TypeSpecifierNonArray::Image2D)
+        Ok(ast::TypeSpecifierNonArrayData::Image2D.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("sampler3D"),
-        Ok(ast::TypeSpecifierNonArray::Sampler3D)
+        Ok(ast::TypeSpecifierNonArrayData::Sampler3D.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("image3D"),
-        Ok(ast::TypeSpecifierNonArray::Image3D)
+        Ok(ast::TypeSpecifierNonArrayData::Image3D.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("samplerCube"),
-        Ok(ast::TypeSpecifierNonArray::SamplerCube)
+        Ok(ast::TypeSpecifierNonArrayData::SamplerCube.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("imageCube"),
-        Ok(ast::TypeSpecifierNonArray::ImageCube)
+        Ok(ast::TypeSpecifierNonArrayData::ImageCube.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("sampler2DRect"),
-        Ok(ast::TypeSpecifierNonArray::Sampler2DRect)
+        Ok(ast::TypeSpecifierNonArrayData::Sampler2DRect.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("image2DRect"),
-        Ok(ast::TypeSpecifierNonArray::Image2DRect)
+        Ok(ast::TypeSpecifierNonArrayData::Image2DRect.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("sampler1DArray"),
-        Ok(ast::TypeSpecifierNonArray::Sampler1DArray)
+        Ok(ast::TypeSpecifierNonArrayData::Sampler1DArray.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("image1DArray"),
-        Ok(ast::TypeSpecifierNonArray::Image1DArray)
+        Ok(ast::TypeSpecifierNonArrayData::Image1DArray.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("sampler2DArray"),
-        Ok(ast::TypeSpecifierNonArray::Sampler2DArray)
+        Ok(ast::TypeSpecifierNonArrayData::Sampler2DArray.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("image2DArray"),
-        Ok(ast::TypeSpecifierNonArray::Image2DArray)
+        Ok(ast::TypeSpecifierNonArrayData::Image2DArray.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("samplerBuffer"),
-        Ok(ast::TypeSpecifierNonArray::SamplerBuffer)
+        Ok(ast::TypeSpecifierNonArrayData::SamplerBuffer.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("imageBuffer"),
-        Ok(ast::TypeSpecifierNonArray::ImageBuffer)
+        Ok(ast::TypeSpecifierNonArrayData::ImageBuffer.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("sampler2DMS"),
-        Ok(ast::TypeSpecifierNonArray::Sampler2DMs)
+        Ok(ast::TypeSpecifierNonArrayData::Sampler2DMs.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("image2DMS"),
-        Ok(ast::TypeSpecifierNonArray::Image2DMs)
+        Ok(ast::TypeSpecifierNonArrayData::Image2DMs.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("sampler2DMSArray"),
-        Ok(ast::TypeSpecifierNonArray::Sampler2DMsArray)
+        Ok(ast::TypeSpecifierNonArrayData::Sampler2DMsArray.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("image2DMSArray"),
-        Ok(ast::TypeSpecifierNonArray::Image2DMsArray)
+        Ok(ast::TypeSpecifierNonArrayData::Image2DMsArray.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("samplerCubeArray"),
-        Ok(ast::TypeSpecifierNonArray::SamplerCubeArray)
+        Ok(ast::TypeSpecifierNonArrayData::SamplerCubeArray.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("imageCubeArray"),
-        Ok(ast::TypeSpecifierNonArray::ImageCubeArray)
+        Ok(ast::TypeSpecifierNonArrayData::ImageCubeArray.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("sampler1DShadow"),
-        Ok(ast::TypeSpecifierNonArray::Sampler1DShadow)
+        Ok(ast::TypeSpecifierNonArrayData::Sampler1DShadow.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("sampler2DShadow"),
-        Ok(ast::TypeSpecifierNonArray::Sampler2DShadow)
+        Ok(ast::TypeSpecifierNonArrayData::Sampler2DShadow.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("sampler2DRectShadow"),
-        Ok(ast::TypeSpecifierNonArray::Sampler2DRectShadow)
+        Ok(ast::TypeSpecifierNonArrayData::Sampler2DRectShadow.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("sampler1DArrayShadow"),
-        Ok(ast::TypeSpecifierNonArray::Sampler1DArrayShadow)
+        Ok(ast::TypeSpecifierNonArrayData::Sampler1DArrayShadow.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("sampler2DArrayShadow"),
-        Ok(ast::TypeSpecifierNonArray::Sampler2DArrayShadow)
+        Ok(ast::TypeSpecifierNonArrayData::Sampler2DArrayShadow.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("samplerCubeShadow"),
-        Ok(ast::TypeSpecifierNonArray::SamplerCubeShadow)
+        Ok(ast::TypeSpecifierNonArrayData::SamplerCubeShadow.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("samplerCubeArrayShadow"),
-        Ok(ast::TypeSpecifierNonArray::SamplerCubeArrayShadow)
+        Ok(ast::TypeSpecifierNonArrayData::SamplerCubeArrayShadow.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("isampler1D"),
-        Ok(ast::TypeSpecifierNonArray::ISampler1D)
+        Ok(ast::TypeSpecifierNonArrayData::ISampler1D.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("iimage1D"),
-        Ok(ast::TypeSpecifierNonArray::IImage1D)
+        Ok(ast::TypeSpecifierNonArrayData::IImage1D.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("isampler2D"),
-        Ok(ast::TypeSpecifierNonArray::ISampler2D)
+        Ok(ast::TypeSpecifierNonArrayData::ISampler2D.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("iimage2D"),
-        Ok(ast::TypeSpecifierNonArray::IImage2D)
+        Ok(ast::TypeSpecifierNonArrayData::IImage2D.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("isampler3D"),
-        Ok(ast::TypeSpecifierNonArray::ISampler3D)
+        Ok(ast::TypeSpecifierNonArrayData::ISampler3D.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("iimage3D"),
-        Ok(ast::TypeSpecifierNonArray::IImage3D)
+        Ok(ast::TypeSpecifierNonArrayData::IImage3D.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("isamplerCube"),
-        Ok(ast::TypeSpecifierNonArray::ISamplerCube)
+        Ok(ast::TypeSpecifierNonArrayData::ISamplerCube.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("iimageCube"),
-        Ok(ast::TypeSpecifierNonArray::IImageCube)
+        Ok(ast::TypeSpecifierNonArrayData::IImageCube.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("isampler2DRect"),
-        Ok(ast::TypeSpecifierNonArray::ISampler2DRect)
+        Ok(ast::TypeSpecifierNonArrayData::ISampler2DRect.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("iimage2DRect"),
-        Ok(ast::TypeSpecifierNonArray::IImage2DRect)
+        Ok(ast::TypeSpecifierNonArrayData::IImage2DRect.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("isampler1DArray"),
-        Ok(ast::TypeSpecifierNonArray::ISampler1DArray)
+        Ok(ast::TypeSpecifierNonArrayData::ISampler1DArray.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("iimage1DArray"),
-        Ok(ast::TypeSpecifierNonArray::IImage1DArray)
+        Ok(ast::TypeSpecifierNonArrayData::IImage1DArray.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("isampler2DArray"),
-        Ok(ast::TypeSpecifierNonArray::ISampler2DArray)
+        Ok(ast::TypeSpecifierNonArrayData::ISampler2DArray.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("iimage2DArray"),
-        Ok(ast::TypeSpecifierNonArray::IImage2DArray)
+        Ok(ast::TypeSpecifierNonArrayData::IImage2DArray.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("isamplerBuffer"),
-        Ok(ast::TypeSpecifierNonArray::ISamplerBuffer)
+        Ok(ast::TypeSpecifierNonArrayData::ISamplerBuffer.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("iimageBuffer"),
-        Ok(ast::TypeSpecifierNonArray::IImageBuffer)
+        Ok(ast::TypeSpecifierNonArrayData::IImageBuffer.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("isampler2DMS"),
-        Ok(ast::TypeSpecifierNonArray::ISampler2DMs)
+        Ok(ast::TypeSpecifierNonArrayData::ISampler2DMs.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("iimage2DMS"),
-        Ok(ast::TypeSpecifierNonArray::IImage2DMs)
+        Ok(ast::TypeSpecifierNonArrayData::IImage2DMs.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("isampler2DMSArray"),
-        Ok(ast::TypeSpecifierNonArray::ISampler2DMsArray)
+        Ok(ast::TypeSpecifierNonArrayData::ISampler2DMsArray.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("iimage2DMSArray"),
-        Ok(ast::TypeSpecifierNonArray::IImage2DMsArray)
+        Ok(ast::TypeSpecifierNonArrayData::IImage2DMsArray.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("isamplerCubeArray"),
-        Ok(ast::TypeSpecifierNonArray::ISamplerCubeArray)
+        Ok(ast::TypeSpecifierNonArrayData::ISamplerCubeArray.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("iimageCubeArray"),
-        Ok(ast::TypeSpecifierNonArray::IImageCubeArray)
+        Ok(ast::TypeSpecifierNonArrayData::IImageCubeArray.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("atomic_uint"),
-        Ok(ast::TypeSpecifierNonArray::AtomicUInt)
+        Ok(ast::TypeSpecifierNonArrayData::AtomicUInt.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("usampler1D"),
-        Ok(ast::TypeSpecifierNonArray::USampler1D)
+        Ok(ast::TypeSpecifierNonArrayData::USampler1D.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("uimage1D"),
-        Ok(ast::TypeSpecifierNonArray::UImage1D)
+        Ok(ast::TypeSpecifierNonArrayData::UImage1D.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("usampler2D"),
-        Ok(ast::TypeSpecifierNonArray::USampler2D)
+        Ok(ast::TypeSpecifierNonArrayData::USampler2D.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("uimage2D"),
-        Ok(ast::TypeSpecifierNonArray::UImage2D)
+        Ok(ast::TypeSpecifierNonArrayData::UImage2D.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("usampler3D"),
-        Ok(ast::TypeSpecifierNonArray::USampler3D)
+        Ok(ast::TypeSpecifierNonArrayData::USampler3D.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("uimage3D"),
-        Ok(ast::TypeSpecifierNonArray::UImage3D)
+        Ok(ast::TypeSpecifierNonArrayData::UImage3D.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("usamplerCube"),
-        Ok(ast::TypeSpecifierNonArray::USamplerCube)
+        Ok(ast::TypeSpecifierNonArrayData::USamplerCube.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("uimageCube"),
-        Ok(ast::TypeSpecifierNonArray::UImageCube)
+        Ok(ast::TypeSpecifierNonArrayData::UImageCube.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("usampler2DRect"),
-        Ok(ast::TypeSpecifierNonArray::USampler2DRect)
+        Ok(ast::TypeSpecifierNonArrayData::USampler2DRect.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("uimage2DRect"),
-        Ok(ast::TypeSpecifierNonArray::UImage2DRect)
+        Ok(ast::TypeSpecifierNonArrayData::UImage2DRect.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("usampler1DArray"),
-        Ok(ast::TypeSpecifierNonArray::USampler1DArray)
+        Ok(ast::TypeSpecifierNonArrayData::USampler1DArray.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("uimage1DArray"),
-        Ok(ast::TypeSpecifierNonArray::UImage1DArray)
+        Ok(ast::TypeSpecifierNonArrayData::UImage1DArray.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("usampler2DArray"),
-        Ok(ast::TypeSpecifierNonArray::USampler2DArray)
+        Ok(ast::TypeSpecifierNonArrayData::USampler2DArray.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("uimage2DArray"),
-        Ok(ast::TypeSpecifierNonArray::UImage2DArray)
+        Ok(ast::TypeSpecifierNonArrayData::UImage2DArray.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("usamplerBuffer"),
-        Ok(ast::TypeSpecifierNonArray::USamplerBuffer)
+        Ok(ast::TypeSpecifierNonArrayData::USamplerBuffer.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("uimageBuffer"),
-        Ok(ast::TypeSpecifierNonArray::UImageBuffer)
+        Ok(ast::TypeSpecifierNonArrayData::UImageBuffer.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("usampler2DMS"),
-        Ok(ast::TypeSpecifierNonArray::USampler2DMs)
+        Ok(ast::TypeSpecifierNonArrayData::USampler2DMs.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("uimage2DMS"),
-        Ok(ast::TypeSpecifierNonArray::UImage2DMs)
+        Ok(ast::TypeSpecifierNonArrayData::UImage2DMs.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("usampler2DMSArray"),
-        Ok(ast::TypeSpecifierNonArray::USampler2DMsArray)
+        Ok(ast::TypeSpecifierNonArrayData::USampler2DMsArray.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("uimage2DMSArray"),
-        Ok(ast::TypeSpecifierNonArray::UImage2DMsArray)
+        Ok(ast::TypeSpecifierNonArrayData::UImage2DMsArray.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("usamplerCubeArray"),
-        Ok(ast::TypeSpecifierNonArray::USamplerCubeArray)
+        Ok(ast::TypeSpecifierNonArrayData::USamplerCubeArray.into())
     );
     assert_eq!(
         ast::TypeSpecifierNonArray::parse("uimageCubeArray"),
-        Ok(ast::TypeSpecifierNonArray::UImageCubeArray)
+        Ok(ast::TypeSpecifierNonArrayData::UImageCubeArray.into())
     );
 
     let opts = ParseOptions::default().build();
     opts.add_type_name(ast::IdentifierData::from("ReturnType").into());
     assert_eq!(
         ast::TypeSpecifierNonArray::parse_with_options("ReturnType", &opts).map(|(p, _)| p),
-        Ok(ast::TypeSpecifierNonArray::TypeName(
-            ast::TypeNameData::from("ReturnType").into()
-        ))
+        Ok(
+            ast::TypeSpecifierNonArrayData::TypeName(ast::TypeNameData::from("ReturnType").into())
+                .into()
+        )
     );
 }
 
@@ -972,14 +973,14 @@ fn parse_type_specifier() {
     assert_eq!(
         ast::TypeSpecifier::parse("uint"),
         Ok(ast::TypeSpecifier {
-            ty: ast::TypeSpecifierNonArray::UInt,
+            ty: ast::TypeSpecifierNonArrayData::UInt.into(),
             array_specifier: None
         })
     );
     assert_eq!(
         ast::TypeSpecifier::parse("iimage2DMSArray[35]"),
         Ok(ast::TypeSpecifier {
-            ty: ast::TypeSpecifierNonArray::IImage2DMsArray,
+            ty: ast::TypeSpecifierNonArrayData::IImage2DMsArray.into(),
             array_specifier: Some(ast::ArraySpecifier {
                 dimensions: vec![ast::ArraySpecifierDimension::ExplicitlySized(Box::new(
                     ast::Expr::IntConst(35)
@@ -992,7 +993,7 @@ fn parse_type_specifier() {
 #[test]
 fn parse_fully_specified_type() {
     let ty = ast::TypeSpecifier {
-        ty: ast::TypeSpecifierNonArray::IImage2DMsArray,
+        ty: ast::TypeSpecifierNonArrayData::IImage2DMsArray.into(),
         array_specifier: None,
     };
     let expected = ast::FullySpecifiedType {
@@ -1012,14 +1013,14 @@ fn parse_fully_specified_type_with_qualifier() {
     let tn = opts.add_type_name(ast::IdentifierData::from("S032_29k").into());
 
     let qual_spec = ast::TypeQualifierSpec::Storage(ast::StorageQualifier::Subroutine(vec![
-        ast::TypeSpecifierNonArray::Vec2.into(),
-        tn.into(),
+        ast::TypeSpecifierNonArrayData::Vec2.into(),
+        ast::TypeSpecifierNonArrayData::from(tn).into(),
     ]));
     let qual = ast::TypeQualifier {
         qualifiers: vec![qual_spec],
     };
     let ty = ast::TypeSpecifier {
-        ty: ast::TypeSpecifierNonArray::IImage2DMsArray,
+        ty: ast::TypeSpecifierNonArrayData::IImage2DMsArray.into(),
         array_specifier: None,
     };
     let expected = ast::FullySpecifiedType {
@@ -1106,7 +1107,7 @@ fn parse_primary_expr_parens() {
 
 #[test]
 fn parse_postfix_function_call_no_args() {
-    let fun = ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifierNonArray::Vec3.into());
+    let fun = ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifierNonArrayData::Vec3.into());
     let args = Vec::new();
     let expected = ast::Expr::FunCall(fun, args);
 
@@ -1319,7 +1320,7 @@ fn parse_complex_expr() {
     let ray = ast::Expr::Variable("ray".into_node());
     let raydir = ast::Expr::Dot(Box::new(ray), "dir".into_node());
     let vec4 = ast::Expr::FunCall(
-        ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifierNonArray::Vec4.into()),
+        ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifierNonArrayData::Vec4.into()),
         vec![raydir, zero],
     );
     let view = ast::Expr::Variable("view".into_node());
@@ -1342,7 +1343,7 @@ fn parse_function_identifier_typename() {
 
 #[test]
 fn parse_function_identifier_cast() {
-    let expected = ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifierNonArray::Vec3.into());
+    let expected = ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifierNonArrayData::Vec3.into());
     assert_eq!(ast::FunIdentifier::parse("vec3"), Ok(expected.clone()));
     assert_eq!(ast::FunIdentifier::parse("vec3\t\n\n \t"), Ok(expected));
 }
@@ -1350,7 +1351,7 @@ fn parse_function_identifier_cast() {
 #[test]
 fn parse_function_identifier_cast_array_unsized() {
     let expected = ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifier {
-        ty: ast::TypeSpecifierNonArray::Vec3,
+        ty: ast::TypeSpecifierNonArrayData::Vec3.into(),
         array_specifier: Some(ast::ArraySpecifier {
             dimensions: vec![ast::ArraySpecifierDimension::Unsized],
         }),
@@ -1363,7 +1364,7 @@ fn parse_function_identifier_cast_array_unsized() {
 #[test]
 fn parse_function_identifier_cast_array_sized() {
     let expected = ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifier {
-        ty: ast::TypeSpecifierNonArray::Vec3,
+        ty: ast::TypeSpecifierNonArrayData::Vec3.into(),
         array_specifier: Some(ast::ArraySpecifier {
             dimensions: vec![ast::ArraySpecifierDimension::ExplicitlySized(Box::new(
                 ast::Expr::IntConst(12),
@@ -1423,12 +1424,12 @@ fn parse_declaration_function_prototype() {
     let rt = ast::FullySpecifiedType {
         qualifier: None,
         ty: ast::TypeSpecifier {
-            ty: ast::TypeSpecifierNonArray::Vec3,
+            ty: ast::TypeSpecifierNonArrayData::Vec3.into(),
             array_specifier: None,
         },
     };
     let arg0_ty = ast::TypeSpecifier {
-        ty: ast::TypeSpecifierNonArray::Vec2,
+        ty: ast::TypeSpecifierNonArrayData::Vec2.into(),
         array_specifier: None,
     };
     let arg0 = ast::FunctionParameterDeclarationData::Unnamed(None, arg0_ty);
@@ -1440,7 +1441,7 @@ fn parse_declaration_function_prototype() {
         Some(qual),
         ast::FunctionParameterDeclarator {
             ty: ast::TypeSpecifier {
-                ty: ast::TypeSpecifierNonArray::Float,
+                ty: ast::TypeSpecifierNonArrayData::Float.into(),
                 array_specifier: None,
             },
             ident: "the_arg".into(),
@@ -1472,7 +1473,7 @@ fn parse_declaration_init_declarator_list_single() {
     let ty = ast::FullySpecifiedType {
         qualifier: None,
         ty: ast::TypeSpecifier {
-            ty: ast::TypeSpecifierNonArray::Int,
+            ty: ast::TypeSpecifierNonArrayData::Int.into(),
             array_specifier: None,
         },
     };
@@ -1504,7 +1505,7 @@ fn parse_declaration_init_declarator_list_complex() {
     let ty = ast::FullySpecifiedType {
         qualifier: None,
         ty: ast::TypeSpecifier {
-            ty: ast::TypeSpecifierNonArray::Int,
+            ty: ast::TypeSpecifierNonArrayData::Int.into(),
             array_specifier: None,
         },
     };
@@ -1543,7 +1544,7 @@ fn parse_declaration_init_declarator_list_complex() {
 fn parse_declaration_precision_low() {
     let qual = ast::PrecisionQualifier::Low;
     let ty = ast::TypeSpecifier {
-        ty: ast::TypeSpecifierNonArray::Float,
+        ty: ast::TypeSpecifierNonArrayData::Float.into(),
         array_specifier: None,
     };
     let expected: ast::Declaration = ast::DeclarationData::Precision(qual, ty).into();
@@ -1558,7 +1559,7 @@ fn parse_declaration_precision_low() {
 fn parse_declaration_precision_medium() {
     let qual = ast::PrecisionQualifier::Medium;
     let ty = ast::TypeSpecifier {
-        ty: ast::TypeSpecifierNonArray::Float,
+        ty: ast::TypeSpecifierNonArrayData::Float.into(),
         array_specifier: None,
     };
     let expected: ast::Declaration = ast::DeclarationData::Precision(qual, ty).into();
@@ -1573,7 +1574,7 @@ fn parse_declaration_precision_medium() {
 fn parse_declaration_precision_high() {
     let qual = ast::PrecisionQualifier::High;
     let ty = ast::TypeSpecifier {
-        ty: ast::TypeSpecifierNonArray::Float,
+        ty: ast::TypeSpecifierNonArrayData::Float.into(),
         array_specifier: None,
     };
     let expected: ast::Declaration = ast::DeclarationData::Precision(qual, ty).into();
@@ -1596,7 +1597,7 @@ fn parse_declaration_uniform_block() {
     let f0 = ast::StructFieldSpecifier {
         qualifier: None,
         ty: ast::TypeSpecifier {
-            ty: ast::TypeSpecifierNonArray::Float,
+            ty: ast::TypeSpecifierNonArrayData::Float.into(),
             array_specifier: None,
         },
         identifiers: vec!["a".into()],
@@ -1604,7 +1605,7 @@ fn parse_declaration_uniform_block() {
     let f1 = ast::StructFieldSpecifier {
         qualifier: None,
         ty: ast::TypeSpecifier {
-            ty: ast::TypeSpecifierNonArray::Vec3,
+            ty: ast::TypeSpecifierNonArrayData::Vec3.into(),
             array_specifier: None,
         },
         identifiers: vec!["b".into()],
@@ -1612,7 +1613,7 @@ fn parse_declaration_uniform_block() {
     let f2 = ast::StructFieldSpecifier {
         qualifier: None,
         ty: ast::TypeSpecifier {
-            ty: foo_var.into(),
+            ty: ast::TypeSpecifierNonArrayData::TypeName(foo_var).into(),
             array_specifier: None,
         },
         identifiers: vec!["c".into(), "d".into()],
@@ -1655,7 +1656,7 @@ fn parse_declaration_buffer_block() {
     let f0 = ast::StructFieldSpecifier {
         qualifier: None,
         ty: ast::TypeSpecifier {
-            ty: ast::TypeSpecifierNonArray::Float,
+            ty: ast::TypeSpecifierNonArrayData::Float.into(),
             array_specifier: None,
         },
         identifiers: vec!["a".into()],
@@ -1663,7 +1664,7 @@ fn parse_declaration_buffer_block() {
     let f1 = ast::StructFieldSpecifier {
         qualifier: None,
         ty: ast::TypeSpecifier {
-            ty: ast::TypeSpecifierNonArray::Vec3,
+            ty: ast::TypeSpecifierNonArrayData::Vec3.into(),
             array_specifier: None,
         },
         identifiers: vec![ast::ArrayedIdentifier::new(
@@ -1676,7 +1677,7 @@ fn parse_declaration_buffer_block() {
     let f2 = ast::StructFieldSpecifier {
         qualifier: None,
         ty: ast::TypeSpecifier {
-            ty: foo_var.into(),
+            ty: ast::TypeSpecifierNonArrayData::TypeName(foo_var).into(),
             array_specifier: None,
         },
         identifiers: vec!["c".into(), "d".into()],
@@ -1906,7 +1907,7 @@ fn parse_iteration_statement_for_empty() {
                 ty: ast::FullySpecifiedType {
                     qualifier: None,
                     ty: ast::TypeSpecifier {
-                        ty: ast::TypeSpecifierNonArray::Float,
+                        ty: ast::TypeSpecifierNonArrayData::Float.into(),
                         array_specifier: None,
                     },
                 },
@@ -2031,7 +2032,7 @@ fn parse_compound_statement() {
                 ty: ast::FullySpecifiedType {
                     qualifier: None,
                     ty: ast::TypeSpecifier {
-                        ty: ast::TypeSpecifierNonArray::ISampler3D,
+                        ty: ast::TypeSpecifierNonArrayData::ISampler3D.into(),
                         array_specifier: None,
                     },
                 },
@@ -2066,7 +2067,7 @@ fn parse_function_definition() {
     let rt = ast::FullySpecifiedType {
         qualifier: None,
         ty: ast::TypeSpecifier {
-            ty: ast::TypeSpecifierNonArray::IImage2DArray,
+            ty: ast::TypeSpecifierNonArrayData::IImage2DArray.into(),
             array_specifier: None,
         },
     };
@@ -2111,7 +2112,7 @@ fn parse_buffer_block_0() {
                 ty: ast::FullySpecifiedType {
                     qualifier: None,
                     ty: ast::TypeSpecifier {
-                        ty: ast::TypeSpecifierNonArray::Void,
+                        ty: ast::TypeSpecifierNonArrayData::Void.into(),
                         array_specifier: None,
                     },
                 },
@@ -2138,7 +2139,7 @@ fn parse_buffer_block_0() {
             fields: vec![ast::StructFieldSpecifier {
                 qualifier: None,
                 ty: ast::TypeSpecifier {
-                    ty: ast::TypeSpecifierNonArray::Float,
+                    ty: ast::TypeSpecifierNonArrayData::Float.into(),
                     array_specifier: None,
                 },
                 identifiers: vec![ast::ArrayedIdentifier::new(
@@ -2185,7 +2186,7 @@ fn parse_layout_buffer_block_0() {
             name: "Foo".into_node(),
             fields: vec![ast::StructFieldSpecifier {
                 qualifier: None,
-                ty: ast::TypeSpecifierNonArray::Float.into(),
+                ty: ast::TypeSpecifierNonArrayData::Float.into(),
                 identifiers: vec!["a".into()],
             }],
             identifier: Some("foo".into()),
@@ -2528,11 +2529,11 @@ fn parse_dot_field_expr_statement() {
     let fun = ast::FunIdentifier::ident("smoothstep");
     let args = vec![
         ast::Expr::FunCall(
-            ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifierNonArray::Vec3.into()),
+            ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifierNonArrayData::Vec3.into()),
             vec![ast::Expr::Variable("border_width".into_node())],
         ),
         ast::Expr::FunCall(
-            ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifierNonArray::Vec3.into()),
+            ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifierNonArrayData::Vec3.into()),
             vec![ast::Expr::FloatConst(0.)],
         ),
         ast::Expr::Variable("v_barycenter".into_node()),
@@ -2545,7 +2546,7 @@ fn parse_dot_field_expr_statement() {
         ty: ast::FullySpecifiedType {
             qualifier: None,
             ty: ast::TypeSpecifier {
-                ty: ast::TypeSpecifierNonArray::Vec3,
+                ty: ast::TypeSpecifierNonArrayData::Vec3.into(),
                 array_specifier: None,
             },
         },

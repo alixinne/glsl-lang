@@ -766,23 +766,23 @@ pub fn show_storage_qualifier<F>(
 where
     F: Write,
 {
-    match *q {
-        ast::StorageQualifier::Const => f.write_str("const"),
-        ast::StorageQualifier::InOut => f.write_str("inout"),
-        ast::StorageQualifier::In => f.write_str("in"),
-        ast::StorageQualifier::Out => f.write_str("out"),
-        ast::StorageQualifier::Centroid => f.write_str("centroid"),
-        ast::StorageQualifier::Patch => f.write_str("patch"),
-        ast::StorageQualifier::Sample => f.write_str("sample"),
-        ast::StorageQualifier::Uniform => f.write_str("uniform"),
-        ast::StorageQualifier::Buffer => f.write_str("buffer"),
-        ast::StorageQualifier::Shared => f.write_str("shared"),
-        ast::StorageQualifier::Coherent => f.write_str("coherent"),
-        ast::StorageQualifier::Volatile => f.write_str("volatile"),
-        ast::StorageQualifier::Restrict => f.write_str("restrict"),
-        ast::StorageQualifier::ReadOnly => f.write_str("readonly"),
-        ast::StorageQualifier::WriteOnly => f.write_str("writeonly"),
-        ast::StorageQualifier::Subroutine(ref n) => show_subroutine(f, &n, state),
+    match **q {
+        ast::StorageQualifierData::Const => f.write_str("const"),
+        ast::StorageQualifierData::InOut => f.write_str("inout"),
+        ast::StorageQualifierData::In => f.write_str("in"),
+        ast::StorageQualifierData::Out => f.write_str("out"),
+        ast::StorageQualifierData::Centroid => f.write_str("centroid"),
+        ast::StorageQualifierData::Patch => f.write_str("patch"),
+        ast::StorageQualifierData::Sample => f.write_str("sample"),
+        ast::StorageQualifierData::Uniform => f.write_str("uniform"),
+        ast::StorageQualifierData::Buffer => f.write_str("buffer"),
+        ast::StorageQualifierData::Shared => f.write_str("shared"),
+        ast::StorageQualifierData::Coherent => f.write_str("coherent"),
+        ast::StorageQualifierData::Volatile => f.write_str("volatile"),
+        ast::StorageQualifierData::Restrict => f.write_str("restrict"),
+        ast::StorageQualifierData::ReadOnly => f.write_str("readonly"),
+        ast::StorageQualifierData::WriteOnly => f.write_str("writeonly"),
+        ast::StorageQualifierData::Subroutine(ref n) => show_subroutine(f, &n, state),
     }
 }
 

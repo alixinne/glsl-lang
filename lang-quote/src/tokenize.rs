@@ -687,31 +687,60 @@ fn tokenize_type_qualifier_spec(q: &ast::TypeQualifierSpec) -> TokenStream {
 }
 
 fn tokenize_storage_qualifier(q: &ast::StorageQualifier) -> TokenStream {
-    match *q {
-        ast::StorageQualifier::Const => quote! { glsl_lang::ast::StorageQualifier::Const },
-        ast::StorageQualifier::InOut => quote! { glsl_lang::ast::StorageQualifier::InOut },
-        ast::StorageQualifier::In => quote! { glsl_lang::ast::StorageQualifier::In },
-        ast::StorageQualifier::Out => quote! { glsl_lang::ast::StorageQualifier::Out },
-        ast::StorageQualifier::Centroid => quote! { glsl_lang::ast::StorageQualifier::Centroid },
-        ast::StorageQualifier::Patch => quote! { glsl_lang::ast::StorageQualifier::Patch },
-        ast::StorageQualifier::Sample => quote! { glsl_lang::ast::StorageQualifier::Sample },
-        ast::StorageQualifier::Uniform => quote! { glsl_lang::ast::StorageQualifier::Uniform },
-        ast::StorageQualifier::Buffer => quote! { glsl_lang::ast::StorageQualifier::Buffer },
-        ast::StorageQualifier::Shared => quote! { glsl_lang::ast::StorageQualifier::Shared },
-        ast::StorageQualifier::Coherent => quote! { glsl_lang::ast::StorageQualifier::Coherent },
-        ast::StorageQualifier::Volatile => quote! { glsl_lang::ast::StorageQualifier::Volatile },
-        ast::StorageQualifier::Restrict => quote! { glsl_lang::ast::StorageQualifier::Restrict },
-        ast::StorageQualifier::ReadOnly => quote! { glsl_lang::ast::StorageQualifier::ReadOnly },
-        ast::StorageQualifier::WriteOnly => quote! { glsl_lang::ast::StorageQualifier::WriteOnly },
+    let span = tokenize_span(&q.span);
+    let q = match **q {
+        ast::StorageQualifierData::Const => {
+            quote! { glsl_lang::ast::StorageQualifierData::Const }
+        }
+        ast::StorageQualifierData::InOut => {
+            quote! { glsl_lang::ast::StorageQualifierData::InOut }
+        }
+        ast::StorageQualifierData::In => quote! { glsl_lang::ast::StorageQualifierData::In },
+        ast::StorageQualifierData::Out => quote! { glsl_lang::ast::StorageQualifierData::Out },
+        ast::StorageQualifierData::Centroid => {
+            quote! { glsl_lang::ast::StorageQualifierData::Centroid }
+        }
+        ast::StorageQualifierData::Patch => {
+            quote! { glsl_lang::ast::StorageQualifierData::Patch }
+        }
+        ast::StorageQualifierData::Sample => {
+            quote! { glsl_lang::ast::StorageQualifierData::Sample }
+        }
+        ast::StorageQualifierData::Uniform => {
+            quote! { glsl_lang::ast::StorageQualifierData::Uniform }
+        }
+        ast::StorageQualifierData::Buffer => {
+            quote! { glsl_lang::ast::StorageQualifierData::Buffer }
+        }
+        ast::StorageQualifierData::Shared => {
+            quote! { glsl_lang::ast::StorageQualifierData::Shared }
+        }
+        ast::StorageQualifierData::Coherent => {
+            quote! { glsl_lang::ast::StorageQualifierData::Coherent }
+        }
+        ast::StorageQualifierData::Volatile => {
+            quote! { glsl_lang::ast::StorageQualifierData::Volatile }
+        }
+        ast::StorageQualifierData::Restrict => {
+            quote! { glsl_lang::ast::StorageQualifierData::Restrict }
+        }
+        ast::StorageQualifierData::ReadOnly => {
+            quote! { glsl_lang::ast::StorageQualifierData::ReadOnly }
+        }
+        ast::StorageQualifierData::WriteOnly => {
+            quote! { glsl_lang::ast::StorageQualifierData::WriteOnly }
+        }
 
-        ast::StorageQualifier::Subroutine(ref n) => {
+        ast::StorageQualifierData::Subroutine(ref n) => {
             let n = n.iter().map(|t| tokenize_type_specifier(t));
 
             quote! {
-              StorageQualifier::Subroutine(vec![#(#n),*])
+                glsl_lang::ast::StorageQualifierData::Subroutine(vec![#(#n),*])
             }
         }
-    }
+    };
+
+    quote! { glsl_lang::ast::StorageQualifier::new(#q, #span) }
 }
 
 fn tokenize_layout_qualifier(l: &ast::LayoutQualifier) -> TokenStream {

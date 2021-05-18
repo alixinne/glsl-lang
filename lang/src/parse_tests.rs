@@ -159,67 +159,67 @@ fn parse_precision_qualifier() {
 fn parse_storage_qualifier() {
     assert_eq!(
         ast::StorageQualifier::parse("const"),
-        Ok(ast::StorageQualifier::Const)
+        Ok(ast::StorageQualifierData::Const.into())
     );
     assert_eq!(
         ast::StorageQualifier::parse("inout"),
-        Ok(ast::StorageQualifier::InOut)
+        Ok(ast::StorageQualifierData::InOut.into())
     );
     assert_eq!(
         ast::StorageQualifier::parse("in"),
-        Ok(ast::StorageQualifier::In)
+        Ok(ast::StorageQualifierData::In.into())
     );
     assert_eq!(
         ast::StorageQualifier::parse("out"),
-        Ok(ast::StorageQualifier::Out)
+        Ok(ast::StorageQualifierData::Out.into())
     );
     assert_eq!(
         ast::StorageQualifier::parse("centroid"),
-        Ok(ast::StorageQualifier::Centroid)
+        Ok(ast::StorageQualifierData::Centroid.into())
     );
     assert_eq!(
         ast::StorageQualifier::parse("patch"),
-        Ok(ast::StorageQualifier::Patch)
+        Ok(ast::StorageQualifierData::Patch.into())
     );
     assert_eq!(
         ast::StorageQualifier::parse("sample"),
-        Ok(ast::StorageQualifier::Sample)
+        Ok(ast::StorageQualifierData::Sample.into())
     );
     assert_eq!(
         ast::StorageQualifier::parse("uniform"),
-        Ok(ast::StorageQualifier::Uniform)
+        Ok(ast::StorageQualifierData::Uniform.into())
     );
     assert_eq!(
         ast::StorageQualifier::parse("buffer"),
-        Ok(ast::StorageQualifier::Buffer)
+        Ok(ast::StorageQualifierData::Buffer.into())
     );
     assert_eq!(
         ast::StorageQualifier::parse("shared"),
-        Ok(ast::StorageQualifier::Shared)
+        Ok(ast::StorageQualifierData::Shared.into())
     );
     assert_eq!(
         ast::StorageQualifier::parse("coherent"),
-        Ok(ast::StorageQualifier::Coherent)
+        Ok(ast::StorageQualifierData::Coherent.into())
     );
     assert_eq!(
         ast::StorageQualifier::parse("volatile"),
-        Ok(ast::StorageQualifier::Volatile)
+        Ok(ast::StorageQualifierData::Volatile.into())
     );
     assert_eq!(
         ast::StorageQualifier::parse("restrict"),
-        Ok(ast::StorageQualifier::Restrict)
+        Ok(ast::StorageQualifierData::Restrict.into())
     );
     assert_eq!(
         ast::StorageQualifier::parse("readonly"),
-        Ok(ast::StorageQualifier::ReadOnly)
+        Ok(ast::StorageQualifierData::ReadOnly.into())
     );
     assert_eq!(
         ast::StorageQualifier::parse("writeonly"),
-        Ok(ast::StorageQualifier::WriteOnly)
+        Ok(ast::StorageQualifierData::WriteOnly.into())
     );
     assert_eq!(
         ast::StorageQualifier::parse("subroutine"),
-        Ok(ast::StorageQualifier::Subroutine(vec![]))
+        Ok(ast::StorageQualifierData::Subroutine(vec![]).into())
     );
 }
 
@@ -292,7 +292,7 @@ fn parse_layout_qualifier_list() {
 
 #[test]
 fn parse_type_qualifier() {
-    let storage_qual = ast::TypeQualifierSpecData::Storage(ast::StorageQualifier::Const);
+    let storage_qual = ast::TypeQualifierSpecData::Storage(ast::StorageQualifierData::Const.into());
     let id_0 = ast::LayoutQualifierSpec::Shared;
     let id_1 = ast::LayoutQualifierSpec::Identifier("std140".into_node(), None);
     let id_2 = ast::LayoutQualifierSpec::Identifier(
@@ -1035,10 +1035,13 @@ fn parse_fully_specified_type_with_qualifier() {
     let opts = ParseOptions::new().build();
     let tn = opts.add_type_name(ast::IdentifierData::from("S032_29k").into());
 
-    let qual_spec = ast::TypeQualifierSpecData::Storage(ast::StorageQualifier::Subroutine(vec![
-        ast::TypeSpecifierData::from(ast::TypeSpecifierNonArrayData::Vec2).into(),
-        ast::TypeSpecifierData::from(ast::TypeSpecifierNonArrayData::from(tn)).into(),
-    ]));
+    let qual_spec = ast::TypeQualifierSpecData::Storage(
+        ast::StorageQualifierData::Subroutine(vec![
+            ast::TypeSpecifierData::from(ast::TypeSpecifierNonArrayData::Vec2).into(),
+            ast::TypeSpecifierData::from(ast::TypeSpecifierNonArrayData::from(tn)).into(),
+        ])
+        .into(),
+    );
     let qual = ast::TypeQualifierData {
         qualifiers: vec![qual_spec.into()],
     }
@@ -1470,7 +1473,7 @@ fn parse_declaration_function_prototype() {
         array_specifier: None,
     };
     let arg0 = ast::FunctionParameterDeclarationData::Unnamed(None, arg0_ty.into());
-    let qual_spec = ast::TypeQualifierSpecData::Storage(ast::StorageQualifier::Out);
+    let qual_spec = ast::TypeQualifierSpecData::Storage(ast::StorageQualifierData::Out.into());
     let qual = ast::TypeQualifierData {
         qualifiers: vec![qual_spec.into()],
     }
@@ -1631,7 +1634,7 @@ fn parse_declaration_uniform_block() {
     let opts = ParseOptions::new().build();
     let foo_var = opts.add_type_name(ast::IdentifierData::from("foo").into());
 
-    let qual_spec = ast::TypeQualifierSpecData::Storage(ast::StorageQualifier::Uniform);
+    let qual_spec = ast::TypeQualifierSpecData::Storage(ast::StorageQualifierData::Uniform.into());
     let qual = ast::TypeQualifierData {
         qualifiers: vec![qual_spec.into()],
     }
@@ -1694,7 +1697,7 @@ fn parse_declaration_buffer_block() {
     let opts = ParseOptions::new().build();
     let foo_var = opts.add_type_name(ast::IdentifierData::from("foo").into());
 
-    let qual_spec = ast::TypeQualifierSpecData::Storage(ast::StorageQualifier::Buffer);
+    let qual_spec = ast::TypeQualifierSpecData::Storage(ast::StorageQualifierData::Buffer.into());
     let qual = ast::TypeQualifierData {
         qualifiers: vec![qual_spec.into()],
     }
@@ -2186,7 +2189,7 @@ fn parse_buffer_block_0() {
         ast::DeclarationData::Block(ast::Block {
             qualifier: ast::TypeQualifierData {
                 qualifiers: vec![ast::TypeQualifierSpecData::Storage(
-                    ast::StorageQualifier::Buffer,
+                    ast::StorageQualifierData::Buffer.into(),
                 )
                 .into()],
             }
@@ -2236,7 +2239,7 @@ fn parse_layout_buffer_block_0() {
     let type_qual = ast::TypeQualifierData {
         qualifiers: vec![
             ast::TypeQualifierSpecData::Layout(layout).into(),
-            ast::TypeQualifierSpecData::Storage(ast::StorageQualifier::Buffer).into(),
+            ast::TypeQualifierSpecData::Storage(ast::StorageQualifierData::Buffer.into()).into(),
         ],
     }
     .into();

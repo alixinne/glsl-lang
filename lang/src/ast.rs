@@ -615,7 +615,7 @@ pub enum TypeQualifierSpecData {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub enum StorageQualifier {
+pub enum StorageQualifierData {
     /// `const` storage qualifier
     #[lang_util(display(extra = "const"))]
     Const,

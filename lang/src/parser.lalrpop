@@ -484,24 +484,28 @@ precision_qualifier: ast::PrecisionQualifier = {
     "lowp"    => ast::PrecisionQualifier::Low,
 };
 
-storage_qualifier: ast::StorageQualifier = {
-    "const"     => ast::StorageQualifier::Const,
-    "inout"     => ast::StorageQualifier::InOut,
-    "in"        => ast::StorageQualifier::In,
-    "out"       => ast::StorageQualifier::Out,
-    "centroid"  => ast::StorageQualifier::Centroid,
-    "patch"     => ast::StorageQualifier::Patch,
-    "sample"    => ast::StorageQualifier::Sample,
-    "uniform"   => ast::StorageQualifier::Uniform,
-    "buffer"    => ast::StorageQualifier::Buffer,
-    "shared"    => ast::StorageQualifier::Shared,
-    "coherent"  => ast::StorageQualifier::Coherent,
-    "volatile"  => ast::StorageQualifier::Volatile,
-    "restrict"  => ast::StorageQualifier::Restrict,
-    "readonly"  => ast::StorageQualifier::ReadOnly,
-    "writeonly" => ast::StorageQualifier::WriteOnly,
+storage_qualifier_data: ast::StorageQualifierData = {
+    "const"     => ast::StorageQualifierData::Const,
+    "inout"     => ast::StorageQualifierData::InOut,
+    "in"        => ast::StorageQualifierData::In,
+    "out"       => ast::StorageQualifierData::Out,
+    "centroid"  => ast::StorageQualifierData::Centroid,
+    "patch"     => ast::StorageQualifierData::Patch,
+    "sample"    => ast::StorageQualifierData::Sample,
+    "uniform"   => ast::StorageQualifierData::Uniform,
+    "buffer"    => ast::StorageQualifierData::Buffer,
+    "shared"    => ast::StorageQualifierData::Shared,
+    "coherent"  => ast::StorageQualifierData::Coherent,
+    "volatile"  => ast::StorageQualifierData::Volatile,
+    "restrict"  => ast::StorageQualifierData::Restrict,
+    "readonly"  => ast::StorageQualifierData::ReadOnly,
+    "writeonly" => ast::StorageQualifierData::WriteOnly,
     "subroutine" <t:("(" <comma<type_specifier>> ")")?> =>
-        ast::StorageQualifier::Subroutine(t.unwrap_or_else(|| vec![])),
+        ast::StorageQualifierData::Subroutine(t.unwrap_or_else(|| vec![])),
+};
+
+storage_qualifier: ast::StorageQualifier = {
+    <l:@L> <s:storage_qualifier_data> <r:@R> => s.spanned(l, r)
 };
 
 layout_qualifier_spec: ast::LayoutQualifierSpec = {

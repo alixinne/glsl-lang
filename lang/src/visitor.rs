@@ -897,7 +897,7 @@ macro_rules! make_host_trait {
         let visit = visitor.visit_storage_qualifier(self);
 
         if visit == Visit::Children {
-          if let ast::StorageQualifier::Subroutine(names) = self {
+          if let ast::StorageQualifierData::Subroutine(names) = $($ref)* **self {
             for name in names {
               name.$mthd_name(visitor);
             }

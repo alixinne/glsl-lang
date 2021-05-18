@@ -1108,9 +1108,9 @@ pub fn show_path<F>(f: &mut F, path: &ast::Path, _: &mut FormattingState<'_>) ->
 where
     F: Write,
 {
-    match path {
-        ast::Path::Absolute(s) => write!(f, "<{}>", s),
-        ast::Path::Relative(s) => write!(f, "\"{}\"", s),
+    match **path {
+        ast::PathData::Absolute(ref s) => write!(f, "<{}>", s),
+        ast::PathData::Relative(ref s) => write!(f, "\"{}\"", s),
     }
 }
 

@@ -120,9 +120,16 @@ impl_tokenize!(
 impl_tokenize!(ast::PreprocessorExtension, tokenize_preprocessor_extension);
 
 fn tokenize_path(p: &ast::Path) -> TokenStream {
+    let span = tokenize_span(&p.span);
+    let p = &p.content;
+
     match p {
-        ast::Path::Absolute(s) => quote! { glsl_lang::ast::Path::Absolute(#s.to_owned()) },
-        ast::Path::Relative(s) => quote! { glsl_lang::ast::Path::Relative(#s.to_owned()) },
+        ast::PathData::Absolute(ref s) => {
+            quote! { glsl_lang::ast::Path::new(glsl_lang::ast::PathData::Absolute(#s.to_owned()), #span) }
+        }
+        ast::PathData::Relative(ref s) => {
+            quote! { glsl_lang::ast::Path::new(glsl_lang::ast::PathData::Relative(#s.to_owned()), #span) }
+        }
     }
 }
 

@@ -36,7 +36,7 @@ pub use smol_str::SmolStr;
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub enum Path {
+pub enum PathData {
     /// Specified with angle brackets.
     Absolute(String),
     /// Specified with double quotes.

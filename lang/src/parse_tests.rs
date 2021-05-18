@@ -2421,7 +2421,7 @@ fn parse_pp_include() {
     assert_eq!(
         ast::Preprocessor::parse("#include <filename>\n"),
         Ok(ast::PreprocessorData::Include(ast::PreprocessorInclude {
-            path: ast::Path::Absolute("filename".to_owned())
+            path: ast::PathData::Absolute("filename".to_owned()).into()
         })
         .into())
     );
@@ -2429,7 +2429,7 @@ fn parse_pp_include() {
     assert_eq!(
         ast::Preprocessor::parse("#include \\\n\"filename\"\n"),
         Ok(ast::PreprocessorData::Include(ast::PreprocessorInclude {
-            path: ast::Path::Relative("filename".to_owned())
+            path: ast::PathData::Relative("filename".to_owned()).into()
         })
         .into())
     );

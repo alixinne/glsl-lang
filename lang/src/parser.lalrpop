@@ -630,8 +630,10 @@ preprocessor_if_n_def: ast::PreprocessorIfNDef = {
 };
 
 preprocessor_include: ast::PreprocessorInclude = {
-    pp_path_relative => ast::PreprocessorInclude { path: ast::Path::Relative(<>.as_str().to_owned()) },
-    pp_path_absolute => ast::PreprocessorInclude { path: ast::Path::Absolute(<>.as_str().to_owned()) },
+    <l:@L> <p:pp_path_relative> <r:@R> =>
+        ast::PreprocessorInclude { path: ast::PathData::Relative(p.as_str().to_owned()).spanned(l, r) },
+    <l:@L> <p:pp_path_absolute> <r:@R> =>
+        ast::PreprocessorInclude { path: ast::PathData::Absolute(p.as_str().to_owned()).spanned(l, r) },
 };
 
 preprocessor_line: ast::PreprocessorLine = {

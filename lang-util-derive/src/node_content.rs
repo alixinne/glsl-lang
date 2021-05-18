@@ -75,5 +75,14 @@ pub(crate) fn node_content(input: proc_macro::TokenStream) -> proc_macro::TokenS
 
     expanded.extend(display_quoted);
 
+    // Add From impl for node contents
+    expanded.extend(quote! {
+        impl From<::lang_util::node::Node<#struct_name>> for #struct_name {
+            fn from(node: ::lang_util::node::Node<#struct_name>) -> Self {
+                node.content
+            }
+        }
+    });
+
     proc_macro::TokenStream::from(expanded)
 }

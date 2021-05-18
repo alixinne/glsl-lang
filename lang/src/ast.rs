@@ -596,7 +596,7 @@ pub struct TypeQualifierData {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub enum TypeQualifierSpec {
+pub enum TypeQualifierSpecData {
     /// Storage qualifier
     Storage(StorageQualifier),
     /// Layout qualifier

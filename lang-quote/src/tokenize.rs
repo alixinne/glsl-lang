@@ -652,33 +652,38 @@ fn tokenize_type_qualifier(q: &ast::TypeQualifier) -> TokenStream {
 }
 
 fn tokenize_type_qualifier_spec(q: &ast::TypeQualifierSpec) -> TokenStream {
-    match *q {
-        ast::TypeQualifierSpec::Storage(ref s) => {
+    let span = tokenize_span(&q.span);
+    let q = match **q {
+        ast::TypeQualifierSpecData::Storage(ref s) => {
             let s = tokenize_storage_qualifier(s);
-            quote! { glsl_lang::ast::TypeQualifierSpec::Storage(#s) }
+            quote! { glsl_lang::ast::TypeQualifierSpecData::Storage(#s) }
         }
 
-        ast::TypeQualifierSpec::Layout(ref l) => {
+        ast::TypeQualifierSpecData::Layout(ref l) => {
             let l = tokenize_layout_qualifier(l);
-            quote! { glsl_lang::ast::TypeQualifierSpec::Layout(#l) }
+            quote! { glsl_lang::ast::TypeQualifierSpecData::Layout(#l) }
         }
 
-        ast::TypeQualifierSpec::Precision(ref p) => {
+        ast::TypeQualifierSpecData::Precision(ref p) => {
             let p = tokenize_precision_qualifier(p);
-            quote! { glsl_lang::ast::TypeQualifierSpec::Precision(#p) }
+            quote! { glsl_lang::ast::TypeQualifierSpecData::Precision(#p) }
         }
 
-        ast::TypeQualifierSpec::Interpolation(ref i) => {
+        ast::TypeQualifierSpecData::Interpolation(ref i) => {
             let i = tokenize_interpolation_qualifier(i);
-            quote! { glsl_lang::ast::TypeQualifierSpec::Interpolation(#i) }
+            quote! { glsl_lang::ast::TypeQualifierSpecData::Interpolation(#i) }
         }
 
-        ast::TypeQualifierSpec::Invariant => {
-            quote! { glsl_lang::ast::TypeQualifierSpec::Invariant }
+        ast::TypeQualifierSpecData::Invariant => {
+            quote! { glsl_lang::ast::TypeQualifierSpecData::Invariant }
         }
 
-        ast::TypeQualifierSpec::Precise => quote! { glsl_lang::ast::TypeQualifierSpec::Precise },
-    }
+        ast::TypeQualifierSpecData::Precise => {
+            quote! { glsl_lang::ast::TypeQualifierSpecData::Precise }
+        }
+    };
+
+    quote! { glsl_lang::ast::TypeQualifierSpec::new(#q, #span) }
 }
 
 fn tokenize_storage_qualifier(q: &ast::StorageQualifier) -> TokenStream {

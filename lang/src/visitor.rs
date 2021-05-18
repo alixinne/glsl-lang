@@ -878,11 +878,11 @@ macro_rules! make_host_trait {
         let visit = visitor.visit_type_qualifier_spec(self);
 
         if visit == Visit::Children {
-          match self {
-            ast::TypeQualifierSpec::Storage(sq) => sq.$mthd_name(visitor),
-            ast::TypeQualifierSpec::Layout(lq) => lq.$mthd_name(visitor),
-            ast::TypeQualifierSpec::Precision(pq) => pq.$mthd_name(visitor),
-            ast::TypeQualifierSpec::Interpolation(iq) => iq.$mthd_name(visitor),
+          match $($ref)* **self {
+            ast::TypeQualifierSpecData::Storage(sq) => sq.$mthd_name(visitor),
+            ast::TypeQualifierSpecData::Layout(lq) => lq.$mthd_name(visitor),
+            ast::TypeQualifierSpecData::Precision(pq) => pq.$mthd_name(visitor),
+            ast::TypeQualifierSpecData::Interpolation(iq) => iq.$mthd_name(visitor),
             _ => (),
           }
         }

@@ -745,13 +745,15 @@ pub fn show_type_qualifier_spec<F>(
 where
     F: Write,
 {
-    match *q {
-        ast::TypeQualifierSpec::Storage(ref st) => show_storage_qualifier(f, &st, state),
-        ast::TypeQualifierSpec::Layout(ref l) => show_layout_qualifier(f, &l, state),
-        ast::TypeQualifierSpec::Precision(ref p) => show_precision_qualifier(f, &p, state),
-        ast::TypeQualifierSpec::Interpolation(ref i) => show_interpolation_qualifier(f, &i, state),
-        ast::TypeQualifierSpec::Invariant => f.write_str("invariant"),
-        ast::TypeQualifierSpec::Precise => f.write_str("precise"),
+    match **q {
+        ast::TypeQualifierSpecData::Storage(ref st) => show_storage_qualifier(f, &st, state),
+        ast::TypeQualifierSpecData::Layout(ref l) => show_layout_qualifier(f, &l, state),
+        ast::TypeQualifierSpecData::Precision(ref p) => show_precision_qualifier(f, &p, state),
+        ast::TypeQualifierSpecData::Interpolation(ref i) => {
+            show_interpolation_qualifier(f, &i, state)
+        }
+        ast::TypeQualifierSpecData::Invariant => f.write_str("invariant"),
+        ast::TypeQualifierSpecData::Precise => f.write_str("precise"),
     }
 }
 

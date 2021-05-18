@@ -383,8 +383,8 @@ impl Parsable for ast::InterpolationQualifier {
                     ..
                 } = extdecls.into_iter().next().unwrap()
                 {
-                    if let ast::TypeQualifierSpec::Interpolation(interp) =
-                        qualifiers.into_iter().next().unwrap()
+                    if let ast::TypeQualifierSpecData::Interpolation(interp) =
+                        qualifiers.into_iter().next().unwrap().content
                     {
                         return Ok((interp, oo));
                     }
@@ -466,8 +466,8 @@ impl Parsable for ast::PrecisionQualifier {
                     ..
                 } = extdecls.into_iter().next().unwrap()
                 {
-                    if let ast::TypeQualifierSpec::Precision(q) =
-                        qualifiers.into_iter().next().unwrap()
+                    if let ast::TypeQualifierSpecData::Precision(q) =
+                        qualifiers.into_iter().next().unwrap().content
                     {
                         return Ok((q, oo));
                     }
@@ -516,8 +516,8 @@ impl Parsable for ast::StorageQualifier {
                     ..
                 } = extdecls.into_iter().next().unwrap()
                 {
-                    if let ast::TypeQualifierSpec::Storage(q) =
-                        qualifiers.into_iter().next().unwrap()
+                    if let ast::TypeQualifierSpecData::Storage(q) =
+                        qualifiers.into_iter().next().unwrap().content
                     {
                         return Ok((q, oo));
                     }
@@ -566,8 +566,8 @@ impl Parsable for ast::LayoutQualifier {
                     ..
                 } = extdecls.into_iter().next().unwrap()
                 {
-                    if let ast::TypeQualifierSpec::Layout(q) =
-                        qualifiers.into_iter().next().unwrap()
+                    if let ast::TypeQualifierSpecData::Layout(q) =
+                        qualifiers.into_iter().next().unwrap().content
                     {
                         return Ok((q, oo));
                     }

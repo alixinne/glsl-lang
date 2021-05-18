@@ -225,13 +225,17 @@ type_specifier: ast::TypeSpecifier = {
         ast::TypeSpecifierData { ty: t, array_specifier: a }.spanned(l, r)
 };
 
+type_qualifier_spec_data: ast::TypeQualifierSpecData = {
+    <storage_qualifier>       => ast::TypeQualifierSpecData::Storage(<>),
+    <layout_qualifier>        => ast::TypeQualifierSpecData::Layout(<>),
+    <precision_qualifier>     => ast::TypeQualifierSpecData::Precision(<>),
+    <interpolation_qualifier> => ast::TypeQualifierSpecData::Interpolation(<>),
+    "invariant"               => ast::TypeQualifierSpecData::Invariant,
+    "precise"                 => ast::TypeQualifierSpecData::Precise,
+};
+
 type_qualifier_spec: ast::TypeQualifierSpec = {
-    <storage_qualifier>       => ast::TypeQualifierSpec::Storage(<>),
-    <layout_qualifier>        => ast::TypeQualifierSpec::Layout(<>),
-    <precision_qualifier>     => ast::TypeQualifierSpec::Precision(<>),
-    <interpolation_qualifier> => ast::TypeQualifierSpec::Interpolation(<>),
-    "invariant"               => ast::TypeQualifierSpec::Invariant,
-    "precise"                 => ast::TypeQualifierSpec::Precise,
+    <l:@L> <s:type_qualifier_spec_data> <r:@R> => s.spanned(l, r)
 };
 
 type_qualifier: ast::TypeQualifier = {

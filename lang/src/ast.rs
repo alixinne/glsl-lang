@@ -672,7 +672,7 @@ pub enum StorageQualifierData {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub struct LayoutQualifier {
+pub struct LayoutQualifierData {
     /// List of layout qualifiers
     pub ids: Vec<LayoutQualifierSpec>,
 }

@@ -225,12 +225,13 @@ fn parse_storage_qualifier() {
 
 #[test]
 fn parse_layout_qualifier_std430() {
-    let expected = ast::LayoutQualifier {
+    let expected: ast::LayoutQualifier = ast::LayoutQualifierData {
         ids: vec![ast::LayoutQualifierSpec::Identifier(
             "std430".into_node(),
             None,
         )],
-    };
+    }
+    .into();
 
     assert_eq!(
         ast::LayoutQualifier::parse("layout (std430)"),
@@ -249,9 +250,10 @@ fn parse_layout_qualifier_std430() {
 
 #[test]
 fn parse_layout_qualifier_shared() {
-    let expected = ast::LayoutQualifier {
+    let expected: ast::LayoutQualifier = ast::LayoutQualifierData {
         ids: vec![ast::LayoutQualifierSpec::Shared],
-    };
+    }
+    .into();
 
     assert_eq!(
         ast::LayoutQualifier::parse("layout (shared)"),
@@ -272,9 +274,10 @@ fn parse_layout_qualifier_list() {
         "max_vertices".into_node(),
         Some(Box::new(ast::Expr::IntConst(3))),
     );
-    let expected = ast::LayoutQualifier {
+    let expected: ast::LayoutQualifier = ast::LayoutQualifierData {
         ids: vec![id_0, id_1, id_2],
-    };
+    }
+    .into();
 
     assert_eq!(
         ast::LayoutQualifier::parse("layout (shared, std140, max_vertices = 3)"),
@@ -299,9 +302,12 @@ fn parse_type_qualifier() {
         "max_vertices".into_node(),
         Some(Box::new(ast::Expr::IntConst(3))),
     );
-    let layout_qual = ast::TypeQualifierSpecData::Layout(ast::LayoutQualifier {
-        ids: vec![id_0, id_1, id_2],
-    });
+    let layout_qual = ast::TypeQualifierSpecData::Layout(
+        ast::LayoutQualifierData {
+            ids: vec![id_0, id_1, id_2],
+        }
+        .into(),
+    );
     let expected: ast::TypeQualifier = ast::TypeQualifierData {
         qualifiers: vec![storage_qual.into(), layout_qual.into()],
     }
@@ -2224,7 +2230,7 @@ fn parse_buffer_block_0() {
 #[test]
 fn parse_layout_buffer_block_0() {
     let src = include_str!("../data/tests/layout_buffer_block_0.glsl");
-    let layout = ast::LayoutQualifier {
+    let layout = ast::LayoutQualifierData {
         ids: vec![
             ast::LayoutQualifierSpec::Identifier(
                 "set".into_node(),
@@ -2235,7 +2241,8 @@ fn parse_layout_buffer_block_0() {
                 Some(Box::new(ast::Expr::IntConst(0))),
             ),
         ],
-    };
+    }
+    .into();
     let type_qual = ast::TypeQualifierData {
         qualifiers: vec![
             ast::TypeQualifierSpecData::Layout(layout).into(),

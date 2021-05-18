@@ -100,3 +100,10 @@ fn type_qualifier() {
         highp float x;
     };
 }
+
+#[test]
+fn layout_qualifier() {
+    let _ = glsl! {
+        layout(std140) struct Q { float f; };
+    };
+}

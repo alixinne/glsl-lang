@@ -744,13 +744,18 @@ fn tokenize_storage_qualifier(q: &ast::StorageQualifier) -> TokenStream {
 }
 
 fn tokenize_layout_qualifier(l: &ast::LayoutQualifier) -> TokenStream {
-    let ids = l.ids.iter().map(tokenize_layout_qualifier_spec);
+    let span = tokenize_span(&l.span);
+    let l = {
+        let ids = l.ids.iter().map(tokenize_layout_qualifier_spec);
 
-    quote! {
-      glsl_lang::ast::LayoutQualifier {
-        ids: vec![#(#ids),*]
-      }
-    }
+        quote! {
+          glsl_lang::ast::LayoutQualifierData {
+            ids: vec![#(#ids),*]
+          }
+        }
+    };
+
+    quote! { glsl_lang::ast::LayoutQualifier::new(#l, #span) }
 }
 
 fn tokenize_layout_qualifier_spec(l: &ast::LayoutQualifierSpec) -> TokenStream {

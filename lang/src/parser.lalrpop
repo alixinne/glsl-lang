@@ -515,7 +515,8 @@ layout_qualifier_spec: ast::LayoutQualifierSpec = {
 };
 
 layout_qualifier: ast::LayoutQualifier = {
-    "layout" "(" <comma<layout_qualifier_spec>> ")" => ast::LayoutQualifier { ids: <> },
+    <l:@L> "layout" "(" <s:comma<layout_qualifier_spec>> ")" <r:@R> =>
+        ast::LayoutQualifierData { ids: s }.spanned(l, r),
 };
 
 precision_declaration: ast::DeclarationData = {

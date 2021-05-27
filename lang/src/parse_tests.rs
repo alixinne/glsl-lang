@@ -127,15 +127,15 @@ fn parse_array_specifier_sized_multiple() {
 fn parse_interpolation_qualifier() {
     assert_eq!(
         ast::InterpolationQualifier::parse("smooth"),
-        Ok(ast::InterpolationQualifier::Smooth)
+        Ok(ast::InterpolationQualifierData::Smooth.into())
     );
     assert_eq!(
         ast::InterpolationQualifier::parse("flat"),
-        Ok(ast::InterpolationQualifier::Flat)
+        Ok(ast::InterpolationQualifierData::Flat.into())
     );
     assert_eq!(
         ast::InterpolationQualifier::parse("noperspective"),
-        Ok(ast::InterpolationQualifier::NoPerspective)
+        Ok(ast::InterpolationQualifierData::NoPerspective.into())
     );
 }
 

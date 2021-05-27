@@ -472,10 +472,14 @@ statement_no_short_if: ast::Statement = {
     simple_statement<statement_no_short_if, selection_statement_else<statement_no_short_if>>,
 };
 
+interpolation_qualifier_data: ast::InterpolationQualifierData = {
+    "smooth"        => ast::InterpolationQualifierData::Smooth,
+    "flat"          => ast::InterpolationQualifierData::Flat,
+    "noperspective" => ast::InterpolationQualifierData::NoPerspective,
+};
+
 interpolation_qualifier: ast::InterpolationQualifier = {
-    "smooth"        => ast::InterpolationQualifier::Smooth,
-    "flat"          => ast::InterpolationQualifier::Flat,
-    "noperspective" => ast::InterpolationQualifier::NoPerspective,
+    <l:@L> <i:interpolation_qualifier_data> <r:@R> => i.spanned(l, r)
 };
 
 precision_qualifier_data: ast::PrecisionQualifierData = {

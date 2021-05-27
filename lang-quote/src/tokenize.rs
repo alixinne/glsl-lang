@@ -794,17 +794,20 @@ fn tokenize_precision_qualifier(p: &ast::PrecisionQualifier) -> TokenStream {
 }
 
 fn tokenize_interpolation_qualifier(i: &ast::InterpolationQualifier) -> TokenStream {
-    match *i {
-        ast::InterpolationQualifier::Smooth => {
-            quote! { glsl_lang::ast::InterpolationQualifier::Smooth }
+    let span = tokenize_span(&i.span);
+    let i = match i.content {
+        ast::InterpolationQualifierData::Smooth => {
+            quote! { glsl_lang::ast::InterpolationQualifierData::Smooth }
         }
-        ast::InterpolationQualifier::Flat => {
-            quote! { glsl_lang::ast::InterpolationQualifier::Flat }
+        ast::InterpolationQualifierData::Flat => {
+            quote! { glsl_lang::ast::InterpolationQualifierData::Flat }
         }
-        ast::InterpolationQualifier::NoPerspective => {
-            quote! { glsl_lang::ast::InterpolationQualifier::NoPerspective }
+        ast::InterpolationQualifierData::NoPerspective => {
+            quote! { glsl_lang::ast::InterpolationQualifierData::NoPerspective }
         }
-    }
+    };
+
+    quote! { ast::InterpolationQualifier::new(#i, #span) }
 }
 
 fn tokenize_expr(expr: &ast::Expr) -> TokenStream {

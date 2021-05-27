@@ -709,7 +709,7 @@ pub enum PrecisionQualifierData {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub enum InterpolationQualifier {
+pub enum InterpolationQualifierData {
     /// `smooth` interpolation qualifier
     #[lang_util(display(extra = "smooth"))]
     Smooth,

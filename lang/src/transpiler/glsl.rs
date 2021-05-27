@@ -883,10 +883,10 @@ pub fn show_interpolation_qualifier<F>(
 where
     F: Write,
 {
-    match *i {
-        ast::InterpolationQualifier::Smooth => f.write_str("smooth"),
-        ast::InterpolationQualifier::Flat => f.write_str("flat"),
-        ast::InterpolationQualifier::NoPerspective => f.write_str("noperspective"),
+    match **i {
+        ast::InterpolationQualifierData::Smooth => f.write_str("smooth"),
+        ast::InterpolationQualifierData::Flat => f.write_str("flat"),
+        ast::InterpolationQualifierData::NoPerspective => f.write_str("noperspective"),
     }
 }
 

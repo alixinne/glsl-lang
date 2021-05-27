@@ -482,12 +482,12 @@ macro_rules! make_host_trait {
         let visit = visitor.visit_preprocessor_define(self);
 
         if visit == Visit::Children {
-          match self {
-            ast::PreprocessorDefine::ObjectLike { ident, .. } => {
+          match $($ref)* **self {
+            ast::PreprocessorDefineData::ObjectLike { ident, .. } => {
               ident.$mthd_name(visitor);
             }
 
-            ast::PreprocessorDefine::FunctionLike {
+            ast::PreprocessorDefineData::FunctionLike {
               ident,
               args,
               ..

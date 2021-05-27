@@ -1403,8 +1403,9 @@ fn tokenize_preprocessor(pp: &ast::Preprocessor) -> TokenStream {
 }
 
 fn tokenize_preprocessor_define(pd: &ast::PreprocessorDefine) -> TokenStream {
-    match *pd {
-        ast::PreprocessorDefine::ObjectLike {
+    let span = tokenize_span(&pd.span);
+    let pd = match pd.content {
+        ast::PreprocessorDefineData::ObjectLike {
             ref ident,
             ref value,
         } => {
@@ -1412,14 +1413,14 @@ fn tokenize_preprocessor_define(pd: &ast::PreprocessorDefine) -> TokenStream {
             let value = value.quote();
 
             quote! {
-              glsl_lang::ast::PreprocessorDefine::ObjectLike {
+              glsl_lang::ast::PreprocessorDefineData::ObjectLike {
                 ident: #ident,
                 value: #value
               }
             }
         }
 
-        ast::PreprocessorDefine::FunctionLike {
+        ast::PreprocessorDefineData::FunctionLike {
             ref ident,
             ref args,
             ref value,
@@ -1429,183 +1430,249 @@ fn tokenize_preprocessor_define(pd: &ast::PreprocessorDefine) -> TokenStream {
             let value = value.quote();
 
             quote! {
-              glsl_lang::ast::PreprocessorDefine::FunctionLike {
+              glsl_lang::ast::PreprocessorDefineData::FunctionLike {
                 ident: #ident,
                 args: vec![#(#args),*],
                 value: #value
               }
             }
         }
-    }
+    };
+
+    quote! { glsl_lang::ast::PreprocessorDefine::new(#pd, #span) }
 }
 
 fn tokenize_preprocessor_elseif(pei: &ast::PreprocessorElseIf) -> TokenStream {
-    let condition = pei.condition.quote();
+    let span = tokenize_span(&pei.span);
+    let pei = {
+        let condition = pei.condition.quote();
 
-    quote! {
-      glsl_lang::ast::PreprocessorElseIf {
-        condition: #condition
-      }
-    }
+        quote! {
+          glsl_lang::ast::PreprocessorElseIfData {
+            condition: #condition
+          }
+        }
+    };
+
+    quote! { glsl_lang::ast::PreprocessorElseIf::new(#pei, #span) }
 }
 
 fn tokenize_preprocessor_error(pe: &ast::PreprocessorError) -> TokenStream {
-    let message = &pe.message;
+    let span = tokenize_span(&pe.span);
+    let pe = {
+        let message = &pe.message;
 
-    quote! {
-      glsl_lang::ast::PreprocessorError {
-        message: #message.to_owned()
-      }
-    }
+        quote! {
+          glsl_lang::ast::PreprocessorErrorData {
+            message: #message.to_owned()
+          }
+        }
+    };
+
+    quote! { glsl_lang::ast::PreprocessorError::new(#pe, #span) }
 }
 
 fn tokenize_preprocessor_if(pi: &ast::PreprocessorIf) -> TokenStream {
-    let condition = pi.condition.quote();
+    let span = tokenize_span(&pi.span);
+    let pi = {
+        let condition = pi.condition.quote();
 
-    quote! {
-      glsl_lang::ast::PreprocessorIf {
-        condition: #condition
-      }
-    }
+        quote! {
+          glsl_lang::ast::PreprocessorIfData {
+            condition: #condition
+          }
+        }
+    };
+
+    quote! { glsl_lang::ast::PreprocessorIf::new(#pi, #span) }
 }
 
 fn tokenize_preprocessor_ifdef(pid: &ast::PreprocessorIfDef) -> TokenStream {
-    let ident = tokenize_identifier(&pid.ident);
+    let span = tokenize_span(&pid.span);
+    let pid = {
+        let ident = tokenize_identifier(&pid.ident);
 
-    quote! {
-      glsl_lang::ast::PreprocessorIfDef {
-        ident: #ident
-      }
-    }
+        quote! {
+          glsl_lang::ast::PreprocessorIfDefData {
+            ident: #ident
+          }
+        }
+    };
+
+    quote! { glsl_lang::ast::PreprocessorIfDef::new(#pid, #span) }
 }
 
 fn tokenize_preprocessor_ifndef(pind: &ast::PreprocessorIfNDef) -> TokenStream {
-    let ident = tokenize_identifier(&pind.ident);
+    let span = tokenize_span(&pind.span);
+    let pind = {
+        let ident = tokenize_identifier(&pind.ident);
 
-    quote! {
-      glsl_lang::ast::PreprocessorIfNDef {
-        ident: #ident
-      }
-    }
+        quote! {
+          glsl_lang::ast::PreprocessorIfNDefData {
+            ident: #ident
+          }
+        }
+    };
+
+    quote! { glsl_lang::ast::PreprocessorIfNDef::new(#pind, #span) }
 }
 
 fn tokenize_preprocessor_include(pi: &ast::PreprocessorInclude) -> TokenStream {
-    let path = tokenize_path(&pi.path);
+    let span = tokenize_span(&pi.span);
+    let pi = {
+        let path = tokenize_path(&pi.path);
 
-    quote! {
-      glsl_lang::ast::PreprocessorInclude {
-        path: #path
-      }
-    }
+        quote! {
+          glsl_lang::ast::PreprocessorIncludeData {
+            path: #path
+          }
+        }
+    };
+
+    quote! { glsl_lang::ast::PreprocessorInclude::new(#pi, #span) }
 }
 
 fn tokenize_preprocessor_line(pl: &ast::PreprocessorLine) -> TokenStream {
-    let line = pl.line;
-    let source_string_number = pl.source_string_number.quote();
+    let span = tokenize_span(&pl.span);
+    let pl = {
+        let line = pl.line;
+        let source_string_number = pl.source_string_number.quote();
 
-    quote! {
-      glsl_lang::ast::PreprocessorLine {
-        line: #line,
-        source_string_number: #source_string_number
-      }
-    }
+        quote! {
+          glsl_lang::ast::PreprocessorLineData {
+            line: #line,
+            source_string_number: #source_string_number
+          }
+        }
+    };
+
+    quote! { glsl_lang::ast::PreprocessorLine::new(#pl, #span) }
 }
 
 fn tokenize_preprocessor_pragma(pp: &ast::PreprocessorPragma) -> TokenStream {
-    let command = &pp.command;
+    let span = tokenize_span(&pp.span);
+    let pp = {
+        let command = &pp.command;
 
-    quote! {
-      glsl_lang::ast::PreprocessorPragma {
-        command: #command.to_owned()
-      }
-    }
+        quote! {
+          glsl_lang::ast::PreprocessorPragmaData {
+            command: #command.to_owned()
+          }
+        }
+    };
+
+    quote! { glsl_lang::ast::PreprocessorPragma::new(#pp, #span) }
 }
 
 fn tokenize_preprocessor_undef(pu: &ast::PreprocessorUndef) -> TokenStream {
-    let name = tokenize_identifier(&pu.name);
+    let span = tokenize_span(&pu.span);
+    let pu = {
+        let name = tokenize_identifier(&pu.name);
 
-    quote! {
-      glsl_lang::ast::PreprocessorUndef {
-        name: #name
-      }
-    }
+        quote! {
+          glsl_lang::ast::PreprocessorUndefData {
+            name: #name
+          }
+        }
+    };
+
+    quote! { glsl_lang::ast::PreprocessorUndef::new(#pu, #span) }
 }
 
 fn tokenize_preprocessor_version(pv: &ast::PreprocessorVersion) -> TokenStream {
-    let version = pv.version;
-    let profile = pv
-        .profile
-        .as_ref()
-        .map(tokenize_preprocessor_version_profile)
-        .quote();
+    let span = tokenize_span(&pv.span);
+    let pv = {
+        let version = pv.version;
+        let profile = pv
+            .profile
+            .as_ref()
+            .map(tokenize_preprocessor_version_profile)
+            .quote();
 
-    quote! {
-      glsl_lang::ast::PreprocessorVersion {
-        version: #version,
-        profile: #profile
-      }
-    }
+        quote! {
+          glsl_lang::ast::PreprocessorVersionData {
+            version: #version,
+            profile: #profile
+          }
+        }
+    };
+
+    quote! { glsl_lang::ast::PreprocessorVersion::new(#pv, #span) }
 }
 
 fn tokenize_preprocessor_version_profile(profile: &ast::PreprocessorVersionProfile) -> TokenStream {
-    match *profile {
-        ast::PreprocessorVersionProfile::Core => {
-            quote! { glsl_lang::ast::PreprocessorVersionProfile::Core }
+    let span = tokenize_span(&profile.span);
+    let profile = match profile.content {
+        ast::PreprocessorVersionProfileData::Core => {
+            quote! { glsl_lang::ast::PreprocessorVersionProfileData::Core }
         }
-        ast::PreprocessorVersionProfile::Compatibility => {
-            quote! { glsl_lang::ast::PreprocessorVersionProfile::Compatibility }
+        ast::PreprocessorVersionProfileData::Compatibility => {
+            quote! { glsl_lang::ast::PreprocessorVersionProfileData::Compatibility }
         }
-        ast::PreprocessorVersionProfile::Es => {
-            quote! { glsl_lang::ast::PreprocessorVersionProfile::Es }
+        ast::PreprocessorVersionProfileData::Es => {
+            quote! { glsl_lang::ast::PreprocessorVersionProfileData::Es }
         }
-    }
+    };
+
+    quote! { glsl_lang::ast::PreprocessorVersionProfile::new(#profile, #span) }
 }
 
 fn tokenize_preprocessor_extension(pe: &ast::PreprocessorExtension) -> TokenStream {
-    let name = tokenize_preprocessor_extension_name(&pe.name);
-    let behavior = pe
-        .behavior
-        .as_ref()
-        .map(tokenize_preprocessor_extension_behavior)
-        .quote();
+    let span = tokenize_span(&pe.span);
+    let pe = {
+        let name = tokenize_preprocessor_extension_name(&pe.name);
+        let behavior = pe
+            .behavior
+            .as_ref()
+            .map(tokenize_preprocessor_extension_behavior)
+            .quote();
 
-    quote! {
-      glsl_lang::ast::PreprocessorExtension {
-        name: #name,
-        behavior: #behavior
-      }
-    }
+        quote! {
+          glsl_lang::ast::PreprocessorExtensionData {
+            name: #name,
+            behavior: #behavior
+          }
+        }
+    };
+
+    quote! { glsl_lang::ast::PreprocessorExtension::new(#pe, #span) }
 }
 
 fn tokenize_preprocessor_extension_name(name: &ast::PreprocessorExtensionName) -> TokenStream {
-    match *name {
-        ast::PreprocessorExtensionName::All => {
-            quote! { glsl_lang::ast::PreprocessorExtensionName::All }
+    let span = tokenize_span(&name.span);
+    let name = match name.content {
+        ast::PreprocessorExtensionNameData::All => {
+            quote! { glsl_lang::ast::PreprocessorExtensionNameData::All }
         }
-        ast::PreprocessorExtensionName::Specific(ref n) => {
+        ast::PreprocessorExtensionNameData::Specific(ref n) => {
             let n = n.quote();
-            quote! { glsl_lang::ast::PreprocessorExtensionName::Specific(#n) }
+            quote! { glsl_lang::ast::PreprocessorExtensionNameData::Specific(#n) }
         }
-    }
+    };
+
+    quote! { glsl_lang::ast::PreprocessorExtensionName::new(#name, #span) }
 }
 
 fn tokenize_preprocessor_extension_behavior(
     behavior: &ast::PreprocessorExtensionBehavior,
 ) -> TokenStream {
-    match *behavior {
-        ast::PreprocessorExtensionBehavior::Require => {
-            quote! { glsl_lang::ast::PreprocessorExtensionBehavior::Require }
+    let span = tokenize_span(&behavior.span);
+    let behavior = match behavior.content {
+        ast::PreprocessorExtensionBehaviorData::Require => {
+            quote! { glsl_lang::ast::PreprocessorExtensionBehaviorData::Require }
         }
-        ast::PreprocessorExtensionBehavior::Enable => {
-            quote! { glsl_lang::ast::PreprocessorExtensionBehavior::Enable }
+        ast::PreprocessorExtensionBehaviorData::Enable => {
+            quote! { glsl_lang::ast::PreprocessorExtensionBehaviorData::Enable }
         }
-        ast::PreprocessorExtensionBehavior::Warn => {
-            quote! { glsl_lang::ast::PreprocessorExtensionBehavior::Warn }
+        ast::PreprocessorExtensionBehaviorData::Warn => {
+            quote! { glsl_lang::ast::PreprocessorExtensionBehaviorData::Warn }
         }
-        ast::PreprocessorExtensionBehavior::Disable => {
-            quote! { glsl_lang::ast::PreprocessorExtensionBehavior::Disable }
+        ast::PreprocessorExtensionBehaviorData::Disable => {
+            quote! { glsl_lang::ast::PreprocessorExtensionBehaviorData::Disable }
         }
-    }
+    };
+
+    quote! { glsl_lang::ast::PreprocessorExtensionBehavior::new(#behavior, #span) }
 }
 
 fn tokenize_span(s: &Option<ast::NodeSpan>) -> TokenStream {

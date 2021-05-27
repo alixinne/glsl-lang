@@ -2273,19 +2273,25 @@ fn parse_layout_buffer_block_0() {
 fn parse_pp_version() {
     assert_eq!(
         ast::Preprocessor::parse("#version 450\n"),
-        Ok(ast::PreprocessorData::Version(ast::PreprocessorVersion {
-            version: 450,
-            profile: None,
-        })
+        Ok(ast::PreprocessorData::Version(
+            ast::PreprocessorVersionData {
+                version: 450,
+                profile: None,
+            }
+            .into()
+        )
         .into())
     );
 
     assert_eq!(
         ast::Preprocessor::parse("#version 450 core\n"),
-        Ok(ast::PreprocessorData::Version(ast::PreprocessorVersion {
-            version: 450,
-            profile: Some(ast::PreprocessorVersionProfile::Core)
-        })
+        Ok(ast::PreprocessorData::Version(
+            ast::PreprocessorVersionData {
+                version: 450,
+                profile: Some(ast::PreprocessorVersionProfileData::Core.into())
+            }
+            .into()
+        )
         .into())
     );
 }
@@ -2294,19 +2300,25 @@ fn parse_pp_version() {
 fn parse_pp_version_newline() {
     assert_eq!(
         ast::Preprocessor::parse("#version 450\n"),
-        Ok(ast::PreprocessorData::Version(ast::PreprocessorVersion {
-            version: 450,
-            profile: None,
-        })
+        Ok(ast::PreprocessorData::Version(
+            ast::PreprocessorVersionData {
+                version: 450,
+                profile: None,
+            }
+            .into()
+        )
         .into())
     );
 
     assert_eq!(
         ast::Preprocessor::parse("#version 450 core\n"),
-        Ok(ast::PreprocessorData::Version(ast::PreprocessorVersion {
-            version: 450,
-            profile: Some(ast::PreprocessorVersionProfile::Core)
-        })
+        Ok(ast::PreprocessorData::Version(
+            ast::PreprocessorVersionData {
+                version: 450,
+                profile: Some(ast::PreprocessorVersionProfileData::Core.into())
+            }
+            .into()
+        )
         .into())
     );
 }
@@ -2314,13 +2326,14 @@ fn parse_pp_version_newline() {
 #[test]
 fn parse_pp_define() {
     let expect = |v: &str| {
-        Ok(
-            ast::PreprocessorData::Define(ast::PreprocessorDefine::ObjectLike {
+        Ok(ast::PreprocessorData::Define(
+            ast::PreprocessorDefineData::ObjectLike {
                 ident: "test".into_node(),
                 value: v.to_owned(),
-            })
+            }
             .into(),
         )
+        .into())
     };
 
     assert_eq!(ast::Preprocessor::parse("#define test 1.0"), expect("1.0"));
@@ -2335,35 +2348,43 @@ fn parse_pp_define() {
 
     assert_eq!(
         ast::Preprocessor::parse("#define test123 .0f\n"),
-        Ok(
-            ast::PreprocessorData::Define(ast::PreprocessorDefine::ObjectLike {
+        Ok(ast::PreprocessorData::Define(
+            ast::PreprocessorDefineData::ObjectLike {
                 ident: "test123".into_node(),
                 value: ".0f".to_owned()
-            })
+            }
             .into()
         )
+        .into())
     );
 
     assert_eq!(
         ast::Preprocessor::parse("#define test 1\n"),
-        Ok(
-            ast::PreprocessorData::Define(ast::PreprocessorDefine::ObjectLike {
+        Ok(ast::PreprocessorData::Define(
+            ast::PreprocessorDefineData::ObjectLike {
                 ident: "test".into_node(),
                 value: "1".to_owned()
-            })
+            }
             .into()
         )
+        .into())
     );
 
-    let a = ast::PreprocessorData::Define(ast::PreprocessorDefine::ObjectLike {
-        ident: "M_PI".into_node(),
-        value: "3.14".to_owned(),
-    })
+    let a = ast::PreprocessorData::Define(
+        ast::PreprocessorDefineData::ObjectLike {
+            ident: "M_PI".into_node(),
+            value: "3.14".to_owned(),
+        }
+        .into(),
+    )
     .into();
-    let b = ast::PreprocessorData::Define(ast::PreprocessorDefine::ObjectLike {
-        ident: "M_2PI".into_node(),
-        value: "(2. * M_PI)".to_owned(),
-    })
+    let b = ast::PreprocessorData::Define(
+        ast::PreprocessorDefineData::ObjectLike {
+            ident: "M_2PI".into_node(),
+            value: "(2. * M_PI)".to_owned(),
+        }
+        .into(),
+    )
     .into();
 
     assert_eq!(
@@ -2377,16 +2398,18 @@ fn parse_pp_define() {
 
 #[test]
 fn parse_pp_define_with_args() {
-    let expected: ast::Preprocessor =
-        ast::PreprocessorData::Define(ast::PreprocessorDefine::FunctionLike {
+    let expected: ast::Preprocessor = ast::PreprocessorData::Define(
+        ast::PreprocessorDefineData::FunctionLike {
             ident: "add".into_node(),
             args: vec![
                 ast::IdentifierData::from("x").into(),
                 ast::IdentifierData::from("y").into(),
             ],
             value: "(x + y)".to_owned(),
-        })
-        .into();
+        }
+        .into(),
+    )
+    .into();
 
     assert_eq!(
         ast::Preprocessor::parse("#define \\\n add(x, y) \\\n (x + y)"),
@@ -2406,13 +2429,14 @@ fn parse_pp_define_multiline() {
             r#"#define foo \
        32"#
         ),
-        Ok(
-            ast::PreprocessorData::Define(ast::PreprocessorDefine::ObjectLike {
+        Ok(ast::PreprocessorData::Define(
+            ast::PreprocessorDefineData::ObjectLike {
                 ident: "foo".into_node(),
                 value: "32".to_owned(),
-            })
+            }
             .into()
         )
+        .into())
     );
 }
 
@@ -2428,9 +2452,12 @@ fn parse_pp_else() {
 fn parse_pp_elif() {
     assert_eq!(
         ast::Preprocessor::parse("#   elif \\\n42\n"),
-        Ok(ast::PreprocessorData::ElseIf(ast::PreprocessorElseIf {
-            condition: "42".to_owned()
-        })
+        Ok(ast::PreprocessorData::ElseIf(
+            ast::PreprocessorElseIfData {
+                condition: "42".to_owned()
+            }
+            .into()
+        )
         .into())
     );
 }
@@ -2447,9 +2474,12 @@ fn parse_pp_endif() {
 fn parse_pp_error() {
     assert_eq!(
         ast::Preprocessor::parse("#error \\\n     some message"),
-        Ok(ast::PreprocessorData::Error(ast::PreprocessorError {
-            message: "some message".to_owned()
-        })
+        Ok(ast::PreprocessorData::Error(
+            ast::PreprocessorErrorData {
+                message: "some message".to_owned()
+            }
+            .into()
+        )
         .into())
     );
 }
@@ -2458,9 +2488,12 @@ fn parse_pp_error() {
 fn parse_pp_if() {
     assert_eq!(
         ast::Preprocessor::parse("# \\\nif 42"),
-        Ok(ast::PreprocessorData::If(ast::PreprocessorIf {
-            condition: "42".to_owned()
-        })
+        Ok(ast::PreprocessorData::If(
+            ast::PreprocessorIfData {
+                condition: "42".to_owned()
+            }
+            .into()
+        )
         .into())
     );
 }
@@ -2469,9 +2502,12 @@ fn parse_pp_if() {
 fn parse_pp_ifdef() {
     assert_eq!(
         ast::Preprocessor::parse("#ifdef       FOO\n"),
-        Ok(ast::PreprocessorData::IfDef(ast::PreprocessorIfDef {
-            ident: ast::IdentifierData("FOO".into()).into()
-        })
+        Ok(ast::PreprocessorData::IfDef(
+            ast::PreprocessorIfDefData {
+                ident: ast::IdentifierData("FOO".into()).into()
+            }
+            .into()
+        )
         .into())
     );
 }
@@ -2480,9 +2516,12 @@ fn parse_pp_ifdef() {
 fn parse_pp_ifndef() {
     assert_eq!(
         ast::Preprocessor::parse("#\\\nifndef \\\n   FOO\n"),
-        Ok(ast::PreprocessorData::IfNDef(ast::PreprocessorIfNDef {
-            ident: ast::IdentifierData("FOO".into()).into()
-        })
+        Ok(ast::PreprocessorData::IfNDef(
+            ast::PreprocessorIfNDefData {
+                ident: ast::IdentifierData("FOO".into()).into()
+            }
+            .into()
+        )
         .into())
     );
 }
@@ -2491,17 +2530,23 @@ fn parse_pp_ifndef() {
 fn parse_pp_include() {
     assert_eq!(
         ast::Preprocessor::parse("#include <filename>\n"),
-        Ok(ast::PreprocessorData::Include(ast::PreprocessorInclude {
-            path: ast::PathData::Absolute("filename".to_owned()).into()
-        })
+        Ok(ast::PreprocessorData::Include(
+            ast::PreprocessorIncludeData {
+                path: ast::PathData::Absolute("filename".to_owned()).into()
+            }
+            .into()
+        )
         .into())
     );
 
     assert_eq!(
         ast::Preprocessor::parse("#include \\\n\"filename\"\n"),
-        Ok(ast::PreprocessorData::Include(ast::PreprocessorInclude {
-            path: ast::PathData::Relative("filename".to_owned()).into()
-        })
+        Ok(ast::PreprocessorData::Include(
+            ast::PreprocessorIncludeData {
+                path: ast::PathData::Relative("filename".to_owned()).into()
+            }
+            .into()
+        )
         .into())
     );
 }
@@ -2510,19 +2555,25 @@ fn parse_pp_include() {
 fn parse_pp_line() {
     assert_eq!(
         ast::Preprocessor::parse("#   line \\\n2\n"),
-        Ok(ast::PreprocessorData::Line(ast::PreprocessorLine {
-            line: 2,
-            source_string_number: None,
-        })
+        Ok(ast::PreprocessorData::Line(
+            ast::PreprocessorLineData {
+                line: 2,
+                source_string_number: None,
+            }
+            .into()
+        )
         .into())
     );
 
     assert_eq!(
         ast::Preprocessor::parse("#line 2 \\\n 4\n"),
-        Ok(ast::PreprocessorData::Line(ast::PreprocessorLine {
-            line: 2,
-            source_string_number: Some(4),
-        })
+        Ok(ast::PreprocessorData::Line(
+            ast::PreprocessorLineData {
+                line: 2,
+                source_string_number: Some(4),
+            }
+            .into()
+        )
         .into())
     );
 }
@@ -2531,9 +2582,12 @@ fn parse_pp_line() {
 fn parse_pp_pragma() {
     assert_eq!(
         ast::Preprocessor::parse("#\\\npragma  some   flag"),
-        Ok(ast::PreprocessorData::Pragma(ast::PreprocessorPragma {
-            command: "some   flag".to_owned()
-        })
+        Ok(ast::PreprocessorData::Pragma(
+            ast::PreprocessorPragmaData {
+                command: "some   flag".to_owned()
+            }
+            .into()
+        )
         .into())
     );
 }
@@ -2542,9 +2596,12 @@ fn parse_pp_pragma() {
 fn parse_pp_undef() {
     assert_eq!(
         ast::Preprocessor::parse("# undef \\\n FOO"),
-        Ok(ast::PreprocessorData::Undef(ast::PreprocessorUndef {
-            name: ast::IdentifierData("FOO".into()).into()
-        })
+        Ok(ast::PreprocessorData::Undef(
+            ast::PreprocessorUndefData {
+                name: ast::IdentifierData("FOO".into()).into()
+            }
+            .into()
+        )
         .into())
     );
 }
@@ -2553,24 +2610,26 @@ fn parse_pp_undef() {
 fn parse_pp_extension() {
     assert_eq!(
         ast::Preprocessor::parse("#extension all: require\n"),
-        Ok(
-            ast::PreprocessorData::Extension(ast::PreprocessorExtension {
-                name: ast::PreprocessorExtensionName::All,
-                behavior: Some(ast::PreprocessorExtensionBehavior::Require)
-            })
+        Ok(ast::PreprocessorData::Extension(
+            ast::PreprocessorExtensionData {
+                name: ast::PreprocessorExtensionNameData::All.into(),
+                behavior: Some(ast::PreprocessorExtensionBehaviorData::Require.into())
+            }
             .into()
         )
+        .into())
     );
 
     assert_eq!(
         ast::Preprocessor::parse("#extension GL_foobar: warn\n"),
-        Ok(
-            ast::PreprocessorData::Extension(ast::PreprocessorExtension {
-                name: ast::PreprocessorExtensionName::Specific("GL_foobar".into()),
-                behavior: Some(ast::PreprocessorExtensionBehavior::Warn)
-            })
+        Ok(ast::PreprocessorData::Extension(
+            ast::PreprocessorExtensionData {
+                name: ast::PreprocessorExtensionNameData::Specific("GL_foobar".into()).into(),
+                behavior: Some(ast::PreprocessorExtensionBehaviorData::Warn.into())
+            }
             .into()
         )
+        .into())
     );
 }
 

@@ -1740,13 +1740,13 @@ pub fn show_preprocessor_define<F>(
 where
     F: Write,
 {
-    match *pd {
-        ast::PreprocessorDefine::ObjectLike {
+    match **pd {
+        ast::PreprocessorDefineData::ObjectLike {
             ref ident,
             ref value,
         } => writeln!(f, "#define {} {}", ident, value),
 
-        ast::PreprocessorDefine::FunctionLike {
+        ast::PreprocessorDefineData::FunctionLike {
             ref ident,
             ref args,
             ref value,
@@ -1914,14 +1914,14 @@ where
     write!(f, "#version {}", pv.version)?;
 
     if let Some(ref profile) = pv.profile {
-        match *profile {
-            ast::PreprocessorVersionProfile::Core => {
+        match **profile {
+            ast::PreprocessorVersionProfileData::Core => {
                 f.write_str(" core")?;
             }
-            ast::PreprocessorVersionProfile::Compatibility => {
+            ast::PreprocessorVersionProfileData::Compatibility => {
                 f.write_str(" compatibility")?;
             }
-            ast::PreprocessorVersionProfile::Es => {
+            ast::PreprocessorVersionProfileData::Es => {
                 f.write_str(" es")?;
             }
         }
@@ -1941,27 +1941,27 @@ where
 {
     f.write_str("#extension ")?;
 
-    match pe.name {
-        ast::PreprocessorExtensionName::All => {
+    match *pe.name {
+        ast::PreprocessorExtensionNameData::All => {
             f.write_str("all")?;
         }
-        ast::PreprocessorExtensionName::Specific(ref n) => {
+        ast::PreprocessorExtensionNameData::Specific(ref n) => {
             f.write_str(n)?;
         }
     }
 
     if let Some(ref behavior) = pe.behavior {
-        match *behavior {
-            ast::PreprocessorExtensionBehavior::Require => {
+        match **behavior {
+            ast::PreprocessorExtensionBehaviorData::Require => {
                 f.write_str(" : require")?;
             }
-            ast::PreprocessorExtensionBehavior::Enable => {
+            ast::PreprocessorExtensionBehaviorData::Enable => {
                 f.write_str(" : enable")?;
             }
-            ast::PreprocessorExtensionBehavior::Warn => {
+            ast::PreprocessorExtensionBehaviorData::Warn => {
                 f.write_str(" : warn")?;
             }
-            ast::PreprocessorExtensionBehavior::Disable => {
+            ast::PreprocessorExtensionBehaviorData::Disable => {
                 f.write_str(" : disable")?;
             }
         }

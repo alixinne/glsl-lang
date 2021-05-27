@@ -1446,7 +1446,7 @@ pub enum PreprocessorData {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub enum PreprocessorDefine {
+pub enum PreprocessorDefineData {
     /// A preprocessor definition
     ObjectLike {
         /// Identifier for the definition
@@ -1470,7 +1470,7 @@ pub enum PreprocessorDefine {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub struct PreprocessorElseIf {
+pub struct PreprocessorElseIfData {
     /// Condition expression
     #[lang_util(display(extra))]
     pub condition: String,
@@ -1480,7 +1480,7 @@ pub struct PreprocessorElseIf {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub struct PreprocessorError {
+pub struct PreprocessorErrorData {
     /// Error message
     #[lang_util(display(extra))]
     pub message: String,
@@ -1490,7 +1490,7 @@ pub struct PreprocessorError {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub struct PreprocessorIf {
+pub struct PreprocessorIfData {
     /// Condition expression
     #[lang_util(display(extra))]
     pub condition: String,
@@ -1500,7 +1500,7 @@ pub struct PreprocessorIf {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub struct PreprocessorIfDef {
+pub struct PreprocessorIfDefData {
     /// Identifier to test
     #[lang_util(display(extra))]
     pub ident: Identifier,
@@ -1510,7 +1510,7 @@ pub struct PreprocessorIfDef {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub struct PreprocessorIfNDef {
+pub struct PreprocessorIfNDefData {
     /// Identifier to test
     #[lang_util(display(extra))]
     pub ident: Identifier,
@@ -1520,7 +1520,7 @@ pub struct PreprocessorIfNDef {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub struct PreprocessorInclude {
+pub struct PreprocessorIncludeData {
     /// Include path
     pub path: Path,
 }
@@ -1529,7 +1529,7 @@ pub struct PreprocessorInclude {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub struct PreprocessorLine {
+pub struct PreprocessorLineData {
     /// Line index
     #[lang_util(display(extra))]
     pub line: u32,
@@ -1542,7 +1542,7 @@ pub struct PreprocessorLine {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub struct PreprocessorPragma {
+pub struct PreprocessorPragmaData {
     /// Raw pragma text
     #[lang_util(display(extra))]
     pub command: String,
@@ -1552,7 +1552,7 @@ pub struct PreprocessorPragma {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub struct PreprocessorUndef {
+pub struct PreprocessorUndefData {
     /// Identifier to undefine
     #[lang_util(display(extra))]
     pub name: Identifier,
@@ -1562,7 +1562,7 @@ pub struct PreprocessorUndef {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub struct PreprocessorVersion {
+pub struct PreprocessorVersionData {
     /// Version number
     #[lang_util(display(extra))]
     pub version: u16,
@@ -1574,7 +1574,7 @@ pub struct PreprocessorVersion {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub enum PreprocessorVersionProfile {
+pub enum PreprocessorVersionProfileData {
     /// `core` version profile
     #[lang_util(display(extra = "core"))]
     Core,
@@ -1590,7 +1590,7 @@ pub enum PreprocessorVersionProfile {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub struct PreprocessorExtension {
+pub struct PreprocessorExtensionData {
     /// Name of the target extension
     pub name: PreprocessorExtensionName,
     /// Behavior for the extension
@@ -1601,7 +1601,7 @@ pub struct PreprocessorExtension {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub enum PreprocessorExtensionName {
+pub enum PreprocessorExtensionNameData {
     /// All extensions you could ever imagine in your whole lifetime (how crazy is that!).
     #[lang_util(display(extra = "all"))]
     All,
@@ -1613,7 +1613,7 @@ pub enum PreprocessorExtensionName {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub enum PreprocessorExtensionBehavior {
+pub enum PreprocessorExtensionBehaviorData {
     /// `require` preprocessor extension behavior
     #[lang_util(display(extra = "require"))]
     Require,

@@ -929,7 +929,7 @@ macro_rules! make_host_trait {
         let visit = visitor.visit_layout_qualifier_spec(self);
 
         if visit == Visit::Children {
-          if let ast::LayoutQualifierSpec::Identifier(ident, expr) = self {
+          if let ast::LayoutQualifierSpecData::Identifier(ident, expr) = $($ref)* **self {
             ident.$mthd_name(visitor);
 
             if let Some(e) = expr {

@@ -508,10 +508,14 @@ storage_qualifier: ast::StorageQualifier = {
     <l:@L> <s:storage_qualifier_data> <r:@R> => s.spanned(l, r)
 };
 
+layout_qualifier_spec_data: ast::LayoutQualifierSpecData = {
+    "shared" => ast::LayoutQualifierSpecData::Shared,
+    <i:identifier> "=" <c:conditional_expression> => ast::LayoutQualifierSpecData::Identifier(i.0, Some(Box::new(c))),
+    <identifier> => ast::LayoutQualifierSpecData::Identifier(<>.0, None),
+};
+
 layout_qualifier_spec: ast::LayoutQualifierSpec = {
-    "shared" => ast::LayoutQualifierSpec::Shared,
-    <i:identifier> "=" <c:conditional_expression> => ast::LayoutQualifierSpec::Identifier(i.0, Some(Box::new(c))),
-    <identifier> => ast::LayoutQualifierSpec::Identifier(<>.0, None),
+    <l:@L> <s:layout_qualifier_spec_data> <r:@R> => s.spanned(l, r)
 };
 
 layout_qualifier: ast::LayoutQualifier = {

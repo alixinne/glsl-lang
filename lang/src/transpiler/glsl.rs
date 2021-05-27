@@ -848,13 +848,13 @@ pub fn show_layout_qualifier_spec<F>(
 where
     F: Write,
 {
-    match *l {
-        ast::LayoutQualifierSpec::Identifier(ref i, Some(ref e)) => {
+    match **l {
+        ast::LayoutQualifierSpecData::Identifier(ref i, Some(ref e)) => {
             write!(f, "{} = ", i)?;
             show_expr(f, &e, state)
         }
-        ast::LayoutQualifierSpec::Identifier(ref i, None) => show_identifier(f, &i, state),
-        ast::LayoutQualifierSpec::Shared => f.write_str("shared"),
+        ast::LayoutQualifierSpecData::Identifier(ref i, None) => show_identifier(f, &i, state),
+        ast::LayoutQualifierSpecData::Shared => f.write_str("shared"),
     }
 }
 

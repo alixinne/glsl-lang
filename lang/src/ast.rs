@@ -681,7 +681,7 @@ pub struct LayoutQualifierData {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub enum LayoutQualifierSpec {
+pub enum LayoutQualifierSpecData {
     /// An `ident = expr` layout qualifier
     Identifier(Identifier, Option<Box<Expr>>),
     /// `shared` layout qualifier

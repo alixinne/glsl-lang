@@ -759,18 +759,23 @@ fn tokenize_layout_qualifier(l: &ast::LayoutQualifier) -> TokenStream {
 }
 
 fn tokenize_layout_qualifier_spec(l: &ast::LayoutQualifierSpec) -> TokenStream {
-    match *l {
-        ast::LayoutQualifierSpec::Identifier(ref i, ref e) => {
+    let span = tokenize_span(&l.span);
+    let l = match l.content {
+        ast::LayoutQualifierSpecData::Identifier(ref i, ref e) => {
             let i = tokenize_identifier(i);
             let expr = e
                 .as_ref()
                 .map(|e| Box::new(tokenize_expr(&e)).quote())
                 .quote();
-            quote! { glsl_lang::ast::LayoutQualifierSpec::Identifier(#i, #expr) }
+            quote! { glsl_lang::ast::LayoutQualifierSpecData::Identifier(#i, #expr) }
         }
 
-        ast::LayoutQualifierSpec::Shared => quote! { glsl_lang::ast::LayoutQualifierSpec::Shared },
-    }
+        ast::LayoutQualifierSpecData::Shared => {
+            quote! { glsl_lang::ast::LayoutQualifierSpecData::Shared }
+        }
+    };
+
+    quote! { glsl_lang::ast::LayoutQualifierSpec::new(#l, #span) }
 }
 
 fn tokenize_precision_qualifier(p: &ast::PrecisionQualifier) -> TokenStream {

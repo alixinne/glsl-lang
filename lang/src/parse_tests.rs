@@ -226,10 +226,7 @@ fn parse_storage_qualifier() {
 #[test]
 fn parse_layout_qualifier_std430() {
     let expected: ast::LayoutQualifier = ast::LayoutQualifierData {
-        ids: vec![ast::LayoutQualifierSpec::Identifier(
-            "std430".into_node(),
-            None,
-        )],
+        ids: vec![ast::LayoutQualifierSpecData::Identifier("std430".into_node(), None).into()],
     }
     .into();
 
@@ -251,7 +248,7 @@ fn parse_layout_qualifier_std430() {
 #[test]
 fn parse_layout_qualifier_shared() {
     let expected: ast::LayoutQualifier = ast::LayoutQualifierData {
-        ids: vec![ast::LayoutQualifierSpec::Shared],
+        ids: vec![ast::LayoutQualifierSpecData::Shared.into()],
     }
     .into();
 
@@ -268,14 +265,14 @@ fn parse_layout_qualifier_shared() {
 
 #[test]
 fn parse_layout_qualifier_list() {
-    let id_0 = ast::LayoutQualifierSpec::Shared;
-    let id_1 = ast::LayoutQualifierSpec::Identifier("std140".into_node(), None);
-    let id_2 = ast::LayoutQualifierSpec::Identifier(
+    let id_0 = ast::LayoutQualifierSpecData::Shared;
+    let id_1 = ast::LayoutQualifierSpecData::Identifier("std140".into_node(), None);
+    let id_2 = ast::LayoutQualifierSpecData::Identifier(
         "max_vertices".into_node(),
         Some(Box::new(ast::Expr::IntConst(3))),
     );
     let expected: ast::LayoutQualifier = ast::LayoutQualifierData {
-        ids: vec![id_0, id_1, id_2],
+        ids: vec![id_0.into(), id_1.into(), id_2.into()],
     }
     .into();
 
@@ -296,15 +293,15 @@ fn parse_layout_qualifier_list() {
 #[test]
 fn parse_type_qualifier() {
     let storage_qual = ast::TypeQualifierSpecData::Storage(ast::StorageQualifierData::Const.into());
-    let id_0 = ast::LayoutQualifierSpec::Shared;
-    let id_1 = ast::LayoutQualifierSpec::Identifier("std140".into_node(), None);
-    let id_2 = ast::LayoutQualifierSpec::Identifier(
+    let id_0 = ast::LayoutQualifierSpecData::Shared;
+    let id_1 = ast::LayoutQualifierSpecData::Identifier("std140".into_node(), None);
+    let id_2 = ast::LayoutQualifierSpecData::Identifier(
         "max_vertices".into_node(),
         Some(Box::new(ast::Expr::IntConst(3))),
     );
     let layout_qual = ast::TypeQualifierSpecData::Layout(
         ast::LayoutQualifierData {
-            ids: vec![id_0, id_1, id_2],
+            ids: vec![id_0.into(), id_1.into(), id_2.into()],
         }
         .into(),
     );
@@ -2232,14 +2229,16 @@ fn parse_layout_buffer_block_0() {
     let src = include_str!("../data/tests/layout_buffer_block_0.glsl");
     let layout = ast::LayoutQualifierData {
         ids: vec![
-            ast::LayoutQualifierSpec::Identifier(
+            ast::LayoutQualifierSpecData::Identifier(
                 "set".into_node(),
                 Some(Box::new(ast::Expr::IntConst(0))),
-            ),
-            ast::LayoutQualifierSpec::Identifier(
+            )
+            .into(),
+            ast::LayoutQualifierSpecData::Identifier(
                 "binding".into_node(),
                 Some(Box::new(ast::Expr::IntConst(0))),
-            ),
+            )
+            .into(),
         ],
     }
     .into();

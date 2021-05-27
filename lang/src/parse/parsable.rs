@@ -231,7 +231,8 @@ impl Parsable for ast::ArraySpecifierDimension {
                             ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifier {
                                 content:
                                     ast::TypeSpecifierData {
-                                        array_specifier: Some(array),
+                                        array_specifier:
+                                            Some(ast::ArraySpecifier { content: array, .. }),
                                         ..
                                     },
                                 ..

@@ -683,9 +683,9 @@ where
     F: Write,
 {
     for dimension in &a.dimensions {
-        match *dimension {
-            ast::ArraySpecifierDimension::Unsized => f.write_str("[]")?,
-            ast::ArraySpecifierDimension::ExplicitlySized(ref e) => {
+        match **dimension {
+            ast::ArraySpecifierDimensionData::Unsized => f.write_str("[]")?,
+            ast::ArraySpecifierDimensionData::ExplicitlySized(ref e) => {
                 f.write_str("[")?;
                 show_expr(f, &e, state)?;
                 f.write_str("]")?

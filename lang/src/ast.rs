@@ -757,7 +757,7 @@ impl From<TypeSpecifierNonArrayData> for FullySpecifiedTypeData {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub struct ArraySpecifier {
+pub struct ArraySpecifierData {
     /// List of all the dimensions – possibly unsized or explicitly-sized.
     pub dimensions: Vec<ArraySpecifierDimension>,
 }
@@ -766,7 +766,7 @@ pub struct ArraySpecifier {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub enum ArraySpecifierDimension {
+pub enum ArraySpecifierDimensionData {
     /// `[]` dimension
     Unsized,
     /// `[expr]` dimension

@@ -66,15 +66,19 @@ function_call: ast::Expr = {
         ast::Expr::FunCall(i, vec![]),
 };
 
+array_specifier_dimension_data: ast::ArraySpecifierDimensionData = {
+    "[" "]" => ast::ArraySpecifierDimensionData::Unsized,
+    "[" <conditional_expression> "]" => ast::ArraySpecifierDimensionData::ExplicitlySized(Box::new(<>)),
+};
+
 array_specifier_dimension: ast::ArraySpecifierDimension = {
-    "[" "]" => ast::ArraySpecifierDimension::Unsized,
-    "[" <conditional_expression> "]" => ast::ArraySpecifierDimension::ExplicitlySized(Box::new(<>)),
+    <l:@L> <a:array_specifier_dimension_data> <r:@R> => a.spanned(l, r)
 };
 
 array_specifier: ast::ArraySpecifier = {
-    <array_specifier_dimension+> => ast::ArraySpecifier {
-        dimensions: <>,
-    }
+    <l:@L> <a:array_specifier_dimension+> <r:@R> => ast::ArraySpecifierData {
+        dimensions: a,
+    }.spanned(l, r)
 };
 
 struct_field_specifier: ast::StructFieldSpecifier = {

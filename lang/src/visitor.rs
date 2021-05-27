@@ -1107,7 +1107,7 @@ macro_rules! make_host_trait {
         let visit = visitor.visit_array_specifier_dimension(self);
 
         if visit == Visit::Children {
-          if let ast::ArraySpecifierDimension::ExplicitlySized(e) = self {
+          if let ast::ArraySpecifierDimensionData::ExplicitlySized(e) = $($ref)* **self {
             e.$mthd_name(visitor);
           }
         }

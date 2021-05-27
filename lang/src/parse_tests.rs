@@ -54,15 +54,15 @@ fn parse_unary_op() {
 fn parse_array_specifier_dimension_unsized() {
     assert_eq!(
         ast::ArraySpecifierDimension::parse("[]"),
-        Ok(ast::ArraySpecifierDimension::Unsized)
+        Ok(ast::ArraySpecifierDimensionData::Unsized.into())
     );
     assert_eq!(
         ast::ArraySpecifierDimension::parse("[ ]"),
-        Ok(ast::ArraySpecifierDimension::Unsized)
+        Ok(ast::ArraySpecifierDimensionData::Unsized.into())
     );
     assert_eq!(
         ast::ArraySpecifierDimension::parse("[\n]"),
-        Ok(ast::ArraySpecifierDimension::Unsized)
+        Ok(ast::ArraySpecifierDimensionData::Unsized.into())
     );
 }
 
@@ -72,13 +72,11 @@ fn parse_array_specifier_dimension_sized() {
 
     assert_eq!(
         ast::ArraySpecifierDimension::parse("[0]"),
-        Ok(ast::ArraySpecifierDimension::ExplicitlySized(Box::new(
-            ix.clone()
-        )))
+        Ok(ast::ArraySpecifierDimensionData::ExplicitlySized(Box::new(ix.clone())).into())
     );
     assert_eq!(
         ast::ArraySpecifierDimension::parse("[\n0   \t]"),
-        Ok(ast::ArraySpecifierDimension::ExplicitlySized(Box::new(ix)))
+        Ok(ast::ArraySpecifierDimensionData::ExplicitlySized(Box::new(ix)).into())
     );
 }
 
@@ -86,9 +84,10 @@ fn parse_array_specifier_dimension_sized() {
 fn parse_array_specifier_unsized() {
     assert_eq!(
         ast::ArraySpecifier::parse("[]"),
-        Ok(ast::ArraySpecifier {
-            dimensions: vec![ast::ArraySpecifierDimension::Unsized]
-        })
+        Ok(ast::ArraySpecifierData {
+            dimensions: vec![ast::ArraySpecifierDimensionData::Unsized.into()]
+        }
+        .into())
     )
 }
 
@@ -98,9 +97,12 @@ fn parse_array_specifier_sized() {
 
     assert_eq!(
         ast::ArraySpecifier::parse("[123]"),
-        Ok(ast::ArraySpecifier {
-            dimensions: vec![ast::ArraySpecifierDimension::ExplicitlySized(Box::new(ix))]
-        })
+        Ok(ast::ArraySpecifierData {
+            dimensions: vec![
+                ast::ArraySpecifierDimensionData::ExplicitlySized(Box::new(ix)).into()
+            ]
+        }
+        .into())
     )
 }
 
@@ -112,14 +114,15 @@ fn parse_array_specifier_sized_multiple() {
 
     assert_eq!(
         ast::ArraySpecifier::parse("[2][100][][5]"),
-        Ok(ast::ArraySpecifier {
+        Ok(ast::ArraySpecifierData {
             dimensions: vec![
-                ast::ArraySpecifierDimension::ExplicitlySized(Box::new(a)),
-                ast::ArraySpecifierDimension::ExplicitlySized(Box::new(b)),
-                ast::ArraySpecifierDimension::Unsized,
-                ast::ArraySpecifierDimension::ExplicitlySized(Box::new(d)),
+                ast::ArraySpecifierDimensionData::ExplicitlySized(Box::new(a)).into(),
+                ast::ArraySpecifierDimensionData::ExplicitlySized(Box::new(b)).into(),
+                ast::ArraySpecifierDimensionData::Unsized.into(),
+                ast::ArraySpecifierDimensionData::ExplicitlySized(Box::new(d)).into(),
             ]
-        })
+        }
+        .into())
     )
 }
 
@@ -1006,11 +1009,15 @@ fn parse_type_specifier() {
         ast::TypeSpecifier::parse("iimage2DMSArray[35]"),
         Ok(ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::IImage2DMsArray.into(),
-            array_specifier: Some(ast::ArraySpecifier {
-                dimensions: vec![ast::ArraySpecifierDimension::ExplicitlySized(Box::new(
-                    ast::Expr::IntConst(35)
-                ))]
-            })
+            array_specifier: Some(
+                ast::ArraySpecifierData {
+                    dimensions: vec![ast::ArraySpecifierDimensionData::ExplicitlySized(Box::new(
+                        ast::Expr::IntConst(35)
+                    ))
+                    .into()]
+                }
+                .into()
+            )
         }
         .into())
     );
@@ -1390,9 +1397,12 @@ fn parse_function_identifier_cast_array_unsized() {
     let expected = ast::FunIdentifier::TypeSpecifier(
         ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::Vec3.into(),
-            array_specifier: Some(ast::ArraySpecifier {
-                dimensions: vec![ast::ArraySpecifierDimension::Unsized],
-            }),
+            array_specifier: Some(
+                ast::ArraySpecifierData {
+                    dimensions: vec![ast::ArraySpecifierDimensionData::Unsized.into()],
+                }
+                .into(),
+            ),
         }
         .into(),
     );
@@ -1406,11 +1416,15 @@ fn parse_function_identifier_cast_array_sized() {
     let expected = ast::FunIdentifier::TypeSpecifier(
         ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::Vec3.into(),
-            array_specifier: Some(ast::ArraySpecifier {
-                dimensions: vec![ast::ArraySpecifierDimension::ExplicitlySized(Box::new(
-                    ast::Expr::IntConst(12),
-                ))],
-            }),
+            array_specifier: Some(
+                ast::ArraySpecifierData {
+                    dimensions: vec![ast::ArraySpecifierDimensionData::ExplicitlySized(Box::new(
+                        ast::Expr::IntConst(12),
+                    ))
+                    .into()],
+                }
+                .into(),
+            ),
         }
         .into(),
     );
@@ -1724,9 +1738,12 @@ fn parse_declaration_buffer_block() {
         .into(),
         identifiers: vec![ast::ArrayedIdentifierData::new(
             "b".into_node(),
-            Some(ast::ArraySpecifier {
-                dimensions: vec![ast::ArraySpecifierDimension::Unsized],
-            }),
+            Some(
+                ast::ArraySpecifierData {
+                    dimensions: vec![ast::ArraySpecifierDimensionData::Unsized.into()],
+                }
+                .into(),
+            ),
         )
         .into()],
     };
@@ -2211,9 +2228,12 @@ fn parse_buffer_block_0() {
                 .into(),
                 identifiers: vec![ast::ArrayedIdentifierData::new(
                     "tiles".into_node(),
-                    Some(ast::ArraySpecifier {
-                        dimensions: vec![ast::ArraySpecifierDimension::Unsized],
-                    }),
+                    Some(
+                        ast::ArraySpecifierData {
+                            dimensions: vec![ast::ArraySpecifierDimensionData::Unsized.into()],
+                        }
+                        .into(),
+                    ),
                 )
                 .into()],
             }
@@ -2709,9 +2729,12 @@ fn parse_dot_field_expr_statement() {
 fn parse_arrayed_identifier() {
     let expected: ast::ArrayedIdentifier = ast::ArrayedIdentifierData::new(
         "foo".into_node(),
-        ast::ArraySpecifier {
-            dimensions: vec![ast::ArraySpecifierDimension::Unsized],
-        },
+        Some(
+            ast::ArraySpecifierData {
+                dimensions: vec![ast::ArraySpecifierDimensionData::Unsized.into()],
+            }
+            .into(),
+        ),
     )
     .into();
 

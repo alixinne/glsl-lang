@@ -604,23 +604,31 @@ fn tokenize_struct_field(field: &ast::StructFieldSpecifier) -> TokenStream {
 }
 
 fn tokenize_array_spec(a: &ast::ArraySpecifier) -> TokenStream {
-    let dimensions = a.dimensions.iter().map(tokenize_array_spec_dim);
+    let span = tokenize_span(&a.span);
+    let a = {
+        let dimensions = a.dimensions.iter().map(tokenize_array_spec_dim);
 
-    quote! {
-      glsl_lang::ast::ArraySpecifier { dimensions: vec![#(#dimensions),*] }
-    }
+        quote! {
+          glsl_lang::ast::ArraySpecifierData { dimensions: vec![#(#dimensions),*] }
+        }
+    };
+
+    quote! { glsl_lang::ast::ArraySpecifier::new(#a, #span) }
 }
 
 fn tokenize_array_spec_dim(a: &ast::ArraySpecifierDimension) -> TokenStream {
-    match *a {
-        ast::ArraySpecifierDimension::Unsized => {
-            quote! { glsl_lang::ast::ArraySpecifierDimension::Unsized }
+    let span = tokenize_span(&a.span);
+    let a = match a.content {
+        ast::ArraySpecifierDimensionData::Unsized => {
+            quote! { glsl_lang::ast::ArraySpecifierDimensionData::Unsized }
         }
-        ast::ArraySpecifierDimension::ExplicitlySized(ref e) => {
+        ast::ArraySpecifierDimensionData::ExplicitlySized(ref e) => {
             let expr = Box::new(tokenize_expr(&e)).quote();
-            quote! { glsl_lang::ast::ArraySpecifierDimension::ExplicitlySized(#expr) }
+            quote! { glsl_lang::ast::ArraySpecifierDimensionData::ExplicitlySized(#expr) }
         }
-    }
+    };
+
+    quote! { glsl_lang::ast::ArraySpecifierDimension::new(#a, #span) }
 }
 
 fn tokenize_arrayed_identifier(identifier: &ast::ArrayedIdentifier) -> TokenStream {

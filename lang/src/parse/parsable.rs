@@ -366,12 +366,18 @@ impl Parsable for ast::InterpolationQualifier {
                                         ast::SingleDeclaration {
                                             ty:
                                                 ast::FullySpecifiedType {
-                                                    qualifier:
-                                                        Some(ast::TypeQualifier {
-                                                            content:
-                                                                ast::TypeQualifierData { qualifiers },
+                                                    content:
+                                                        ast::FullySpecifiedTypeData {
+                                                            qualifier:
+                                                                Some(ast::TypeQualifier {
+                                                                    content:
+                                                                        ast::TypeQualifierData {
+                                                                            qualifiers,
+                                                                        },
+                                                                    ..
+                                                                }),
                                                             ..
-                                                        }),
+                                                        },
                                                     ..
                                                 },
                                             ..
@@ -449,12 +455,18 @@ impl Parsable for ast::PrecisionQualifier {
                                         ast::SingleDeclaration {
                                             ty:
                                                 ast::FullySpecifiedType {
-                                                    qualifier:
-                                                        Some(ast::TypeQualifier {
-                                                            content:
-                                                                ast::TypeQualifierData { qualifiers },
+                                                    content:
+                                                        ast::FullySpecifiedTypeData {
+                                                            qualifier:
+                                                                Some(ast::TypeQualifier {
+                                                                    content:
+                                                                        ast::TypeQualifierData {
+                                                                            qualifiers,
+                                                                        },
+                                                                    ..
+                                                                }),
                                                             ..
-                                                        }),
+                                                        },
                                                     ..
                                                 },
                                             ..
@@ -499,12 +511,18 @@ impl Parsable for ast::StorageQualifier {
                                         ast::SingleDeclaration {
                                             ty:
                                                 ast::FullySpecifiedType {
-                                                    qualifier:
-                                                        Some(ast::TypeQualifier {
-                                                            content:
-                                                                ast::TypeQualifierData { qualifiers },
+                                                    content:
+                                                        ast::FullySpecifiedTypeData {
+                                                            qualifier:
+                                                                Some(ast::TypeQualifier {
+                                                                    content:
+                                                                        ast::TypeQualifierData {
+                                                                            qualifiers,
+                                                                        },
+                                                                    ..
+                                                                }),
                                                             ..
-                                                        }),
+                                                        },
                                                     ..
                                                 },
                                             ..
@@ -549,12 +567,18 @@ impl Parsable for ast::LayoutQualifier {
                                         ast::SingleDeclaration {
                                             ty:
                                                 ast::FullySpecifiedType {
-                                                    qualifier:
-                                                        Some(ast::TypeQualifier {
-                                                            content:
-                                                                ast::TypeQualifierData { qualifiers },
+                                                    content:
+                                                        ast::FullySpecifiedTypeData {
+                                                            qualifier:
+                                                                Some(ast::TypeQualifier {
+                                                                    content:
+                                                                        ast::TypeQualifierData {
+                                                                            qualifiers,
+                                                                        },
+                                                                    ..
+                                                                }),
                                                             ..
-                                                        }),
+                                                        },
                                                     ..
                                                 },
                                             ..
@@ -599,7 +623,12 @@ impl Parsable for ast::TypeQualifier {
                                         ast::SingleDeclaration {
                                             ty:
                                                 ast::FullySpecifiedType {
-                                                    qualifier: Some(q), ..
+                                                    content:
+                                                        ast::FullySpecifiedTypeData {
+                                                            qualifier: Some(q),
+                                                            ..
+                                                        },
+                                                    ..
                                                 },
                                             ..
                                         },
@@ -637,7 +666,11 @@ impl Parsable for ast::TypeSpecifier {
                                 ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
                                     head:
                                         ast::SingleDeclaration {
-                                            ty: ast::FullySpecifiedType { ty, .. },
+                                            ty:
+                                                ast::FullySpecifiedType {
+                                                    content: ast::FullySpecifiedTypeData { ty, .. },
+                                                    ..
+                                                },
                                             ..
                                         },
                                     ..
@@ -676,10 +709,17 @@ impl Parsable for ast::TypeSpecifierNonArray {
                                         ast::SingleDeclaration {
                                             ty:
                                                 ast::FullySpecifiedType {
-                                                    ty:
-                                                        ast::TypeSpecifier {
-                                                            content:
-                                                                ast::TypeSpecifierData { ty, .. },
+                                                    content:
+                                                        ast::FullySpecifiedTypeData {
+                                                            ty:
+                                                                ast::TypeSpecifier {
+                                                                    content:
+                                                                        ast::TypeSpecifierData {
+                                                                            ty,
+                                                                            ..
+                                                                        },
+                                                                    ..
+                                                                },
                                                             ..
                                                         },
                                                     ..
@@ -780,7 +820,8 @@ impl Parsable for ast::StructFieldSpecifier {
                                         ast::SingleDeclaration {
                                             ty:
                                                 ast::FullySpecifiedType {
-                                                    ty:
+                                                    content: ast::FullySpecifiedTypeData {
+                                                        ty:
                                                         ast::TypeSpecifier {
                                                             content: ast::TypeSpecifierData {
                                                                 ty:
@@ -801,6 +842,8 @@ impl Parsable for ast::StructFieldSpecifier {
                                                             ..
                                                         },
                                                         ..
+                                                    },
+                                                    ..
                                                 },
                                             ..
                                         },
@@ -840,7 +883,8 @@ impl Parsable for ast::StructSpecifier {
                                         ast::SingleDeclaration {
                                             ty:
                                                 ast::FullySpecifiedType {
-                                                    ty:
+                                                    content: ast::FullySpecifiedTypeData {
+                                                        ty:
                                                         ast::TypeSpecifier {
                                                             content: ast::TypeSpecifierData {
                                                                 ty:
@@ -852,6 +896,8 @@ impl Parsable for ast::StructSpecifier {
                                                                 },
                                                             ..
                                                         },
+                                                    ..
+                                                    },
                                                     ..
                                                 },
                                             ..

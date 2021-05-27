@@ -1022,14 +1022,14 @@ fn parse_fully_specified_type() {
         ty: ast::TypeSpecifierNonArrayData::IImage2DMsArray.into(),
         array_specifier: None,
     };
-    let expected = ast::FullySpecifiedType {
+    let expected = ast::FullySpecifiedTypeData {
         qualifier: None,
         ty: ty.into(),
     };
 
     assert_eq!(
         ast::FullySpecifiedType::parse("iimage2DMSArray"),
-        Ok(expected)
+        Ok(expected.into())
     );
 }
 
@@ -1053,10 +1053,11 @@ fn parse_fully_specified_type_with_qualifier() {
         ty: ast::TypeSpecifierNonArrayData::IImage2DMsArray.into(),
         array_specifier: None,
     };
-    let expected = ast::FullySpecifiedType {
+    let expected: ast::FullySpecifiedType = ast::FullySpecifiedTypeData {
         qualifier: Some(qual),
         ty: ty.into(),
-    };
+    }
+    .into();
 
     assert_eq!(
         ast::FullySpecifiedType::parse_with_options(
@@ -1463,7 +1464,7 @@ fn parse_expr_statement() {
 
 #[test]
 fn parse_declaration_function_prototype() {
-    let rt = ast::FullySpecifiedType {
+    let rt = ast::FullySpecifiedTypeData {
         qualifier: None,
         ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::Vec3.into(),
@@ -1493,7 +1494,7 @@ fn parse_declaration_function_prototype() {
         },
     );
     let fp = ast::FunctionPrototypeData {
-        ty: rt,
+        ty: rt.into(),
         name: "foo".into_node(),
         parameters: vec![arg0.into(), arg1.into()],
     };
@@ -1515,7 +1516,7 @@ fn parse_declaration_function_prototype() {
 
 #[test]
 fn parse_declaration_init_declarator_list_single() {
-    let ty = ast::FullySpecifiedType {
+    let ty = ast::FullySpecifiedTypeData {
         qualifier: None,
         ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::Int.into(),
@@ -1524,7 +1525,7 @@ fn parse_declaration_init_declarator_list_single() {
         .into(),
     };
     let sd = ast::SingleDeclaration {
-        ty,
+        ty: ty.into(),
         name: Some("foo".into_node()),
         array_specifier: None,
         initializer: Some(ast::Initializer::Simple(Box::new(ast::Expr::IntConst(34)))),
@@ -1548,7 +1549,7 @@ fn parse_declaration_init_declarator_list_single() {
 
 #[test]
 fn parse_declaration_init_declarator_list_complex() {
-    let ty = ast::FullySpecifiedType {
+    let ty = ast::FullySpecifiedTypeData {
         qualifier: None,
         ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::Int.into(),
@@ -1557,7 +1558,7 @@ fn parse_declaration_init_declarator_list_complex() {
         .into(),
     };
     let sd = ast::SingleDeclaration {
-        ty,
+        ty: ty.into(),
         name: Some("foo".into_node()),
         array_specifier: None,
         initializer: Some(ast::Initializer::Simple(Box::new(ast::Expr::IntConst(34)))),
@@ -1960,14 +1961,15 @@ fn parse_iteration_statement_for_empty() {
     let init = ast::ForInitStatement::Declaration(Box::new(
         ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
             head: ast::SingleDeclaration {
-                ty: ast::FullySpecifiedType {
+                ty: ast::FullySpecifiedTypeData {
                     qualifier: None,
                     ty: ast::TypeSpecifierData {
                         ty: ast::TypeSpecifierNonArrayData::Float.into(),
                         array_specifier: None,
                     }
                     .into(),
-                },
+                }
+                .into(),
                 name: Some("i".into_node()),
                 array_specifier: None,
                 initializer: Some(ast::Initializer::Simple(Box::new(ast::Expr::FloatConst(
@@ -2086,14 +2088,15 @@ fn parse_compound_statement() {
     let st1 = ast::StatementData::Declaration(
         ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
             head: ast::SingleDeclaration {
-                ty: ast::FullySpecifiedType {
+                ty: ast::FullySpecifiedTypeData {
                     qualifier: None,
                     ty: ast::TypeSpecifierData {
                         ty: ast::TypeSpecifierNonArrayData::ISampler3D.into(),
                         array_specifier: None,
                     }
                     .into(),
-                },
+                }
+                .into(),
                 name: Some("x".into_node()),
                 array_specifier: None,
                 initializer: None,
@@ -2122,7 +2125,7 @@ fn parse_compound_statement() {
 
 #[test]
 fn parse_function_definition() {
-    let rt = ast::FullySpecifiedType {
+    let rt = ast::FullySpecifiedTypeData {
         qualifier: None,
         ty: ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::IImage2DArray.into(),
@@ -2131,7 +2134,7 @@ fn parse_function_definition() {
         .into(),
     };
     let fp = ast::FunctionPrototypeData {
-        ty: rt,
+        ty: rt.into(),
         name: "foo".into_node(),
         parameters: Vec::new(),
     }
@@ -2168,14 +2171,15 @@ fn parse_buffer_block_0() {
     let main_fn = ast::ExternalDeclarationData::FunctionDefinition(
         ast::FunctionDefinitionData {
             prototype: ast::FunctionPrototypeData {
-                ty: ast::FullySpecifiedType {
+                ty: ast::FullySpecifiedTypeData {
                     qualifier: None,
                     ty: ast::TypeSpecifierData {
                         ty: ast::TypeSpecifierNonArrayData::Void.into(),
                         array_specifier: None,
                     }
                     .into(),
-                },
+                }
+                .into(),
                 name: "main".into_node(),
                 parameters: Vec::new(),
             }
@@ -2676,14 +2680,15 @@ fn parse_dot_field_expr_statement() {
         "zyx".into_node(),
     )));
     let sd = ast::SingleDeclaration {
-        ty: ast::FullySpecifiedType {
+        ty: ast::FullySpecifiedTypeData {
             qualifier: None,
             ty: ast::TypeSpecifierData {
                 ty: ast::TypeSpecifierNonArrayData::Vec3.into(),
                 array_specifier: None,
             }
             .into(),
-        },
+        }
+        .into(),
         name: Some("v".into_node()),
         array_specifier: None,
         initializer: Some(ini),

@@ -547,15 +547,20 @@ fn tokenize_type_specifier(t: &ast::TypeSpecifier) -> TokenStream {
 }
 
 fn tokenize_fully_specified_type(t: &ast::FullySpecifiedType) -> TokenStream {
-    let qual = t.qualifier.as_ref().map(tokenize_type_qualifier).quote();
-    let ty = tokenize_type_specifier(&t.ty);
+    let span = tokenize_span(&t.span);
+    let t = {
+        let qual = t.qualifier.as_ref().map(tokenize_type_qualifier).quote();
+        let ty = tokenize_type_specifier(&t.ty);
 
-    quote! {
-      glsl_lang::ast::FullySpecifiedType {
-        qualifier: #qual,
-        ty: #ty
-      }
-    }
+        quote! {
+          glsl_lang::ast::FullySpecifiedTypeData {
+            qualifier: #qual,
+            ty: #ty
+          }
+        }
+    };
+
+    quote! { glsl_lang::ast::FullySpecifiedType::new(#t, #span) }
 }
 
 fn tokenize_struct_non_declaration(s: &ast::StructSpecifier) -> TokenStream {

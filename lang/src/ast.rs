@@ -725,14 +725,14 @@ pub enum InterpolationQualifierData {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub struct FullySpecifiedType {
+pub struct FullySpecifiedTypeData {
     /// Optional type qualifier
     pub qualifier: Option<TypeQualifier>,
     /// Type specifier
     pub ty: TypeSpecifier,
 }
 
-impl FullySpecifiedType {
+impl FullySpecifiedTypeData {
     /// Create a new [FullySpecifiedType] from a [TypeSpecifierNonArray], with no qualifier and no
     /// array specifier
     pub fn new(ty: TypeSpecifierNonArray) -> Self {
@@ -747,15 +747,9 @@ impl FullySpecifiedType {
     }
 }
 
-impl From<TypeSpecifierNonArrayData> for FullySpecifiedType {
+impl From<TypeSpecifierNonArrayData> for FullySpecifiedTypeData {
     fn from(ty: TypeSpecifierNonArrayData) -> Self {
-        FullySpecifiedType::new(ty.into_node())
-    }
-}
-
-impl From<TypeSpecifierNonArray> for FullySpecifiedType {
-    fn from(ty: TypeSpecifierNonArray) -> Self {
-        FullySpecifiedType::new(ty)
+        Self::new(ty.into())
     }
 }
 
@@ -1249,7 +1243,7 @@ impl StatementData {
     /// `initializer`
     pub fn declare_var<T, N, A, I>(ty: T, name: N, array_specifier: A, initializer: I) -> Self
     where
-        T: Into<FullySpecifiedType>,
+        T: Into<FullySpecifiedTypeData>,
         N: Into<IdentifierData>,
         A: Into<Option<ArraySpecifier>>,
         I: Into<Option<Initializer>>,
@@ -1257,7 +1251,7 @@ impl StatementData {
         Self::Declaration(
             DeclarationData::InitDeclaratorList(InitDeclaratorList {
                 head: SingleDeclaration {
-                    ty: ty.into(),
+                    ty: ty.into().into(),
                     name: Some(name.into().into()),
                     array_specifier: array_specifier.into(),
                     initializer: initializer.into(),

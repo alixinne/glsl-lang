@@ -243,7 +243,8 @@ type_qualifier: ast::TypeQualifier = {
 };
 
 fully_specified_type: ast::FullySpecifiedType = {
-    <q:type_qualifier?> <s:type_specifier> => ast::FullySpecifiedType { qualifier: q, ty: s }
+    <l:@L> <q:type_qualifier?> <s:type_specifier> <r:@R> =>
+        ast::FullySpecifiedTypeData { qualifier: q, ty: s }.spanned(l, r)
 };
 
 fun_identifier: ast::FunIdentifier = {

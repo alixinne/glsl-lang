@@ -1684,12 +1684,15 @@ fn parse_declaration_uniform_block() {
         .into(),
         identifiers: vec!["c".into_node(), "d".into_node()],
     };
-    let expected: ast::Declaration = ast::DeclarationData::Block(ast::Block {
-        qualifier: qual,
-        name: "UniformBlockTest".into_node(),
-        fields: vec![f0.into(), f1.into(), f2.into()],
-        identifier: None,
-    })
+    let expected: ast::Declaration = ast::DeclarationData::Block(
+        ast::BlockData {
+            qualifier: qual,
+            name: "UniformBlockTest".into_node(),
+            fields: vec![f0.into(), f1.into(), f2.into()],
+            identifier: None,
+        }
+        .into(),
+    )
     .into();
 
     assert_eq!(
@@ -1756,12 +1759,15 @@ fn parse_declaration_buffer_block() {
         .into(),
         identifiers: vec!["c".into_node(), "d".into_node()],
     };
-    let expected: ast::Declaration = ast::DeclarationData::Block(ast::Block {
-        qualifier: qual,
-        name: "UniformBlockTest".into_node(),
-        fields: vec![f0.into(), f1.into(), f2.into()],
-        identifier: None,
-    })
+    let expected: ast::Declaration = ast::DeclarationData::Block(
+        ast::BlockData {
+            qualifier: qual,
+            name: "UniformBlockTest".into_node(),
+            fields: vec![f0.into(), f1.into(), f2.into()],
+            identifier: None,
+        }
+        .into(),
+    )
     .into();
 
     assert_eq!(
@@ -2210,36 +2216,39 @@ fn parse_buffer_block_0() {
     );
 
     let buffer_block = ast::ExternalDeclarationData::Declaration(
-        ast::DeclarationData::Block(ast::Block {
-            qualifier: ast::TypeQualifierData {
-                qualifiers: vec![ast::TypeQualifierSpecData::Storage(
-                    ast::StorageQualifierData::Buffer.into(),
-                )
-                .into()],
-            }
-            .into(),
-            name: "Foo".into_node(),
-            fields: vec![ast::StructFieldSpecifierData {
-                qualifier: None,
-                ty: ast::TypeSpecifierData {
-                    ty: ast::TypeSpecifierNonArrayData::Float.into(),
-                    array_specifier: None,
+        ast::DeclarationData::Block(
+            ast::BlockData {
+                qualifier: ast::TypeQualifierData {
+                    qualifiers: vec![ast::TypeQualifierSpecData::Storage(
+                        ast::StorageQualifierData::Buffer.into(),
+                    )
+                    .into()],
                 }
                 .into(),
-                identifiers: vec![ast::ArrayedIdentifierData::new(
-                    "tiles".into_node(),
-                    Some(
-                        ast::ArraySpecifierData {
-                            dimensions: vec![ast::ArraySpecifierDimensionData::Unsized.into()],
-                        }
-                        .into(),
-                    ),
-                )
+                name: "Foo".into_node(),
+                fields: vec![ast::StructFieldSpecifierData {
+                    qualifier: None,
+                    ty: ast::TypeSpecifierData {
+                        ty: ast::TypeSpecifierNonArrayData::Float.into(),
+                        array_specifier: None,
+                    }
+                    .into(),
+                    identifiers: vec![ast::ArrayedIdentifierData::new(
+                        "tiles".into_node(),
+                        Some(
+                            ast::ArraySpecifierData {
+                                dimensions: vec![ast::ArraySpecifierDimensionData::Unsized.into()],
+                            }
+                            .into(),
+                        ),
+                    )
+                    .into()],
+                }
                 .into()],
+                identifier: Some("main_tiles".into_node()),
             }
-            .into()],
-            identifier: Some("main_tiles".into_node()),
-        })
+            .into(),
+        )
         .into(),
     );
 
@@ -2274,17 +2283,20 @@ fn parse_layout_buffer_block_0() {
     }
     .into();
     let block = ast::ExternalDeclarationData::Declaration(
-        ast::DeclarationData::Block(ast::Block {
-            qualifier: type_qual,
-            name: "Foo".into_node(),
-            fields: vec![ast::StructFieldSpecifierData {
-                qualifier: None,
-                ty: ast::TypeSpecifierData::from(ast::TypeSpecifierNonArrayData::Float).into(),
-                identifiers: vec!["a".into_node()],
+        ast::DeclarationData::Block(
+            ast::BlockData {
+                qualifier: type_qual,
+                name: "Foo".into_node(),
+                fields: vec![ast::StructFieldSpecifierData {
+                    qualifier: None,
+                    ty: ast::TypeSpecifierData::from(ast::TypeSpecifierNonArrayData::Float).into(),
+                    identifiers: vec!["a".into_node()],
+                }
+                .into()],
+                identifier: Some("foo".into_node()),
             }
-            .into()],
-            identifier: Some("foo".into_node()),
-        })
+            .into(),
+        )
         .into(),
     );
 

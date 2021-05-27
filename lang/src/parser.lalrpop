@@ -599,8 +599,8 @@ init_declarator_list: ast::InitDeclaratorList = {
 };
 
 block_declaration: ast::Block = {
-    <q:type_qualifier> <n:identifier> "{" <f:struct_field_specifier*> "}" <a:arrayed_identifier?> =>
-        ast::Block { qualifier: q, name: n.0, fields: f, identifier: a }
+    <l:@L> <q:type_qualifier> <n:identifier> "{" <f:struct_field_specifier*> "}" <a:arrayed_identifier?> <r:@R> =>
+        ast::BlockData { qualifier: q, name: n.0, fields: f, identifier: a }.spanned(l, r)
 };
 
 declaration: ast::Declaration = {

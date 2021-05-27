@@ -793,7 +793,7 @@ pub enum DeclarationData {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub struct Block {
+pub struct BlockData {
     /// Block type qualifier
     pub qualifier: TypeQualifier,
     /// Block name

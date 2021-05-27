@@ -1114,23 +1114,28 @@ fn tokenize_initializer(i: &ast::Initializer) -> TokenStream {
 }
 
 fn tokenize_block(b: &ast::Block) -> TokenStream {
-    let qual = tokenize_type_qualifier(&b.qualifier);
-    let name = tokenize_identifier(&b.name);
-    let fields = b.fields.iter().map(tokenize_struct_field);
-    let identifier = b
-        .identifier
-        .as_ref()
-        .map(tokenize_arrayed_identifier)
-        .quote();
+    let span = tokenize_span(&b.span);
+    let b = {
+        let qual = tokenize_type_qualifier(&b.qualifier);
+        let name = tokenize_identifier(&b.name);
+        let fields = b.fields.iter().map(tokenize_struct_field);
+        let identifier = b
+            .identifier
+            .as_ref()
+            .map(tokenize_arrayed_identifier)
+            .quote();
 
-    quote! {
-      glsl_lang::ast::Block {
-        qualifier: #qual,
-        name: #name,
-        fields: vec![#(#fields),*],
-        identifier: #identifier
-      }
-    }
+        quote! {
+          glsl_lang::ast::BlockData {
+            qualifier: #qual,
+            name: #name,
+            fields: vec![#(#fields),*],
+            identifier: #identifier
+          }
+        }
+    };
+
+    quote! { glsl_lang::ast::Block::new(#b, #span) }
 }
 
 fn tokenize_function_definition(fd: &ast::FunctionDefinition) -> TokenStream {

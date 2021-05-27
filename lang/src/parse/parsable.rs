@@ -419,7 +419,11 @@ impl Parsable for ast::ArrayedIdentifier {
                         ast::ExternalDeclarationData::Declaration(ast::Node {
                             content:
                                 ast::DeclarationData::Block(ast::Block {
-                                    identifier: Some(a),
+                                    content:
+                                        ast::BlockData {
+                                            identifier: Some(a),
+                                            ..
+                                        },
                                     ..
                                 }),
                             ..

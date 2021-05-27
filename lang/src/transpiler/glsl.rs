@@ -867,10 +867,10 @@ pub fn show_precision_qualifier<F>(
 where
     F: Write,
 {
-    match *p {
-        ast::PrecisionQualifier::High => f.write_str("highp"),
-        ast::PrecisionQualifier::Medium => f.write_str("mediump"),
-        ast::PrecisionQualifier::Low => f.write_str("low"),
+    match **p {
+        ast::PrecisionQualifierData::High => f.write_str("highp"),
+        ast::PrecisionQualifierData::Medium => f.write_str("mediump"),
+        ast::PrecisionQualifierData::Low => f.write_str("low"),
     }
 }
 

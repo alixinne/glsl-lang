@@ -693,7 +693,7 @@ pub enum LayoutQualifierSpecData {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub enum PrecisionQualifier {
+pub enum PrecisionQualifierData {
     /// `high` precision qualifier
     #[lang_util(display(extra = "high"))]
     High,

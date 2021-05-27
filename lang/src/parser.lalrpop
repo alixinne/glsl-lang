@@ -478,10 +478,14 @@ interpolation_qualifier: ast::InterpolationQualifier = {
     "noperspective" => ast::InterpolationQualifier::NoPerspective,
 };
 
+precision_qualifier_data: ast::PrecisionQualifierData = {
+    "highp"   => ast::PrecisionQualifierData::High,
+    "mediump" => ast::PrecisionQualifierData::Medium,
+    "lowp"    => ast::PrecisionQualifierData::Low,
+};
+
 precision_qualifier: ast::PrecisionQualifier = {
-    "highp"   => ast::PrecisionQualifier::High,
-    "mediump" => ast::PrecisionQualifier::Medium,
-    "lowp"    => ast::PrecisionQualifier::Low,
+    <l:@L> <p:precision_qualifier_data> <r:@R> => p.spanned(l, r)
 };
 
 storage_qualifier_data: ast::StorageQualifierData = {

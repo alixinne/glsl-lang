@@ -779,11 +779,18 @@ fn tokenize_layout_qualifier_spec(l: &ast::LayoutQualifierSpec) -> TokenStream {
 }
 
 fn tokenize_precision_qualifier(p: &ast::PrecisionQualifier) -> TokenStream {
-    match *p {
-        ast::PrecisionQualifier::High => quote! { glsl_lang::ast::PrecisionQualifier::High },
-        ast::PrecisionQualifier::Medium => quote! { glsl_lang::ast::PrecisionQualifier::Medium },
-        ast::PrecisionQualifier::Low => quote! { glsl_lang::ast::PrecisionQualifier::Low },
-    }
+    let span = tokenize_span(&p.span);
+    let p = match p.content {
+        ast::PrecisionQualifierData::High => {
+            quote! { glsl_lang::ast::PrecisionQualifierData::High }
+        }
+        ast::PrecisionQualifierData::Medium => {
+            quote! { glsl_lang::ast::PrecisionQualifierData::Medium }
+        }
+        ast::PrecisionQualifierData::Low => quote! { glsl_lang::ast::PrecisionQualifierData::Low },
+    };
+
+    quote! { ast::PrecisionQualifier::new(#p, #span) }
 }
 
 fn tokenize_interpolation_qualifier(i: &ast::InterpolationQualifier) -> TokenStream {

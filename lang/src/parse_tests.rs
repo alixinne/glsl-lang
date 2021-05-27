@@ -143,15 +143,15 @@ fn parse_interpolation_qualifier() {
 fn parse_precision_qualifier() {
     assert_eq!(
         ast::PrecisionQualifier::parse("highp"),
-        Ok(ast::PrecisionQualifier::High)
+        Ok(ast::PrecisionQualifierData::High.into())
     );
     assert_eq!(
         ast::PrecisionQualifier::parse("mediump"),
-        Ok(ast::PrecisionQualifier::Medium)
+        Ok(ast::PrecisionQualifierData::Medium.into())
     );
     assert_eq!(
         ast::PrecisionQualifier::parse("lowp"),
-        Ok(ast::PrecisionQualifier::Low)
+        Ok(ast::PrecisionQualifierData::Low.into())
     );
 }
 
@@ -1589,12 +1589,12 @@ fn parse_declaration_init_declarator_list_complex() {
 
 #[test]
 fn parse_declaration_precision_low() {
-    let qual = ast::PrecisionQualifier::Low;
+    let qual = ast::PrecisionQualifierData::Low;
     let ty = ast::TypeSpecifierData {
         ty: ast::TypeSpecifierNonArrayData::Float.into(),
         array_specifier: None,
     };
-    let expected: ast::Declaration = ast::DeclarationData::Precision(qual, ty.into()).into();
+    let expected: ast::Declaration = ast::DeclarationData::Precision(qual.into(), ty.into()).into();
 
     assert_eq!(
         ast::Declaration::parse("precision lowp float;"),
@@ -1604,12 +1604,12 @@ fn parse_declaration_precision_low() {
 
 #[test]
 fn parse_declaration_precision_medium() {
-    let qual = ast::PrecisionQualifier::Medium;
+    let qual = ast::PrecisionQualifierData::Medium;
     let ty = ast::TypeSpecifierData {
         ty: ast::TypeSpecifierNonArrayData::Float.into(),
         array_specifier: None,
     };
-    let expected: ast::Declaration = ast::DeclarationData::Precision(qual, ty.into()).into();
+    let expected: ast::Declaration = ast::DeclarationData::Precision(qual.into(), ty.into()).into();
 
     assert_eq!(
         ast::Declaration::parse("precision mediump float;"),
@@ -1619,12 +1619,12 @@ fn parse_declaration_precision_medium() {
 
 #[test]
 fn parse_declaration_precision_high() {
-    let qual = ast::PrecisionQualifier::High;
+    let qual = ast::PrecisionQualifierData::High;
     let ty = ast::TypeSpecifierData {
         ty: ast::TypeSpecifierNonArrayData::Float.into(),
         array_specifier: None,
     };
-    let expected: ast::Declaration = ast::DeclarationData::Precision(qual, ty.into()).into();
+    let expected: ast::Declaration = ast::DeclarationData::Precision(qual.into(), ty.into()).into();
 
     assert_eq!(
         ast::Declaration::parse("precision highp float;"),

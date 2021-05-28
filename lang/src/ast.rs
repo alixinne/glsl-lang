@@ -1283,7 +1283,7 @@ pub struct ExprStatementData(pub Option<Expr>);
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub struct SelectionStatement {
+pub struct SelectionStatementData {
     /// Condition to evaluate
     pub cond: Box<Expr>,
     /// Rest of the selection statement

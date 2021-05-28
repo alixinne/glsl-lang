@@ -1942,10 +1942,11 @@ fn parse_selection_statement_if() {
         .into(),
     );
     let rest = ast::SelectionRestStatement::Statement(Box::new(body.into()));
-    let expected = ast::SelectionStatement {
+    let expected: ast::SelectionStatement = ast::SelectionStatementData {
         cond: Box::new(cond.into()),
         rest,
-    };
+    }
+    .into();
 
     assert_eq!(
         ast::SelectionStatement::parse("if (foo < 10) { return false; }"),
@@ -1982,10 +1983,11 @@ fn parse_selection_statement_if_else() {
     );
     let rest =
         ast::SelectionRestStatement::Else(Box::new(if_body.into()), Box::new(else_body.into()));
-    let expected = ast::SelectionStatement {
+    let expected: ast::SelectionStatement = ast::SelectionStatementData {
         cond: Box::new(cond.into()),
         rest,
-    };
+    }
+    .into();
 
     assert_eq!(
         ast::SelectionStatement::parse("if (foo < 10) { return 0.f; } else { return foo; }"),
@@ -2255,18 +2257,21 @@ fn parse_compound_statement_empty() {
 
 #[test]
 fn parse_compound_statement() {
-    let st0 = ast::StatementData::Selection(ast::SelectionStatement {
-        cond: Box::new(ast::ExprData::BoolConst(true).into()),
-        rest: ast::SelectionRestStatement::Statement(Box::new(
-            ast::StatementData::Compound(
-                ast::CompoundStatementData {
-                    statement_list: Vec::new(),
-                }
+    let st0 = ast::StatementData::Selection(
+        ast::SelectionStatementData {
+            cond: Box::new(ast::ExprData::BoolConst(true).into()),
+            rest: ast::SelectionRestStatement::Statement(Box::new(
+                ast::StatementData::Compound(
+                    ast::CompoundStatementData {
+                        statement_list: Vec::new(),
+                    }
+                    .into(),
+                )
                 .into(),
-            )
-            .into(),
-        )),
-    });
+            )),
+        }
+        .into(),
+    );
     let st1 = ast::StatementData::Declaration(
         ast::DeclarationData::InitDeclaratorList(
             ast::InitDeclaratorListData {
@@ -2944,43 +2949,49 @@ fn parse_dangling_else() {
 
     assert_eq!(
         ast::Statement::parse("if (ca) if (cb) ab(); else c();"),
-        Ok(ast::StatementData::Selection(ast::SelectionStatement {
-            cond: Box::new(ast::ExprData::variable("ca").into()),
-            rest: ast::SelectionRestStatement::Statement(Box::new(
-                ast::StatementData::Selection(ast::SelectionStatement {
-                    cond: Box::new(ast::ExprData::variable("cb").into()),
-                    rest: ast::SelectionRestStatement::Else(
-                        Box::new(
-                            ast::StatementData::Expression(
-                                ast::ExprStatementData(Some(
-                                    ast::ExprData::FunCall(
-                                        ast::FunIdentifierData::ident("ab").into(),
-                                        vec![]
+        Ok(ast::StatementData::Selection(
+            ast::SelectionStatementData {
+                cond: Box::new(ast::ExprData::variable("ca").into()),
+                rest: ast::SelectionRestStatement::Statement(Box::new(
+                    ast::StatementData::Selection(
+                        ast::SelectionStatementData {
+                            cond: Box::new(ast::ExprData::variable("cb").into()),
+                            rest: ast::SelectionRestStatement::Else(
+                                Box::new(
+                                    ast::StatementData::Expression(
+                                        ast::ExprStatementData(Some(
+                                            ast::ExprData::FunCall(
+                                                ast::FunIdentifierData::ident("ab").into(),
+                                                vec![]
+                                            )
+                                            .into()
+                                        ))
+                                        .into()
                                     )
                                     .into()
-                                ))
-                                .into()
-                            )
-                            .into()
-                        ),
-                        Box::new(
-                            ast::StatementData::Expression(
-                                ast::ExprStatementData(Some(
-                                    ast::ExprData::FunCall(
-                                        ast::FunIdentifierData::ident("c").into(),
-                                        vec![]
+                                ),
+                                Box::new(
+                                    ast::StatementData::Expression(
+                                        ast::ExprStatementData(Some(
+                                            ast::ExprData::FunCall(
+                                                ast::FunIdentifierData::ident("c").into(),
+                                                vec![]
+                                            )
+                                            .into()
+                                        ))
+                                        .into()
                                     )
                                     .into()
-                                ))
-                                .into()
-                            )
-                            .into()
-                        ),
-                    ),
-                })
-                .into()
-            ))
-        })
+                                ),
+                            ),
+                        }
+                        .into()
+                    )
+                    .into()
+                ))
+            }
+            .into()
+        )
         .into())
     );
 }

@@ -407,17 +407,17 @@ expr_statement: ast::ExprStatement = {
 };
 
 selection_statement_else<S>: ast::SelectionStatement = {
-    "if" "(" <e:expr> ")" <r:statement_no_short_if> "else" <s:S> => ast::SelectionStatement {
+    <a:@L> "if" "(" <e:expr> ")" <r:statement_no_short_if> "else" <s:S> <b:@R> => ast::SelectionStatementData {
         cond: Box::new(e),
         rest: ast::SelectionRestStatement::Else(Box::new(r), Box::new(s)),
-    }
+    }.spanned(a, b)
 };
 
 selection_statement<S>: ast::SelectionStatement = {
-    "if" "(" <e:expr> ")" <r:statement> => ast::SelectionStatement {
+    <a:@L> "if" "(" <e:expr> ")" <r:statement> <b:@R> => ast::SelectionStatementData {
         cond: Box::new(e),
         rest: ast::SelectionRestStatement::Statement(Box::new(r)),
-    },
+    }.spanned(a, b),
     selection_statement_else<S>,
 };
 

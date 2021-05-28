@@ -1264,15 +1264,20 @@ fn tokenize_expr_statement(est: &ast::ExprStatement) -> TokenStream {
 }
 
 fn tokenize_selection_statement(sst: &ast::SelectionStatement) -> TokenStream {
-    let cond = Box::new(tokenize_expr(&sst.cond)).quote();
-    let rest = tokenize_selection_rest_statement(&sst.rest);
+    let span = tokenize_span(&sst.span);
+    let sst = {
+        let cond = Box::new(tokenize_expr(&sst.cond)).quote();
+        let rest = tokenize_selection_rest_statement(&sst.rest);
 
-    quote! {
-      glsl_lang::ast::SelectionStatement {
-        cond: #cond,
-        rest: #rest
-      }
-    }
+        quote! {
+          glsl_lang::ast::SelectionStatementData {
+            cond: #cond,
+            rest: #rest
+          }
+        }
+    };
+
+    quote! { glsl_lang::ast::SelectionStatement::new(#sst, #span) }
 }
 
 fn tokenize_selection_rest_statement(sst: &ast::SelectionRestStatement) -> TokenStream {

@@ -1316,14 +1316,17 @@ fn tokenize_switch_statement(sst: &ast::SwitchStatement) -> TokenStream {
 }
 
 fn tokenize_case_label(cl: &ast::CaseLabel) -> TokenStream {
-    match *cl {
-        ast::CaseLabel::Case(ref e) => {
+    let span = tokenize_span(&cl.span);
+    let cl = match cl.content {
+        ast::CaseLabelData::Case(ref e) => {
             let e = Box::new(tokenize_expr(e)).quote();
-            quote! { glsl_lang::ast::CaseLabel::Case(#e) }
+            quote! { glsl_lang::ast::CaseLabelData::Case(#e) }
         }
 
-        ast::CaseLabel::Def => quote! { glsl_lang::ast::CaseLabel::Def },
-    }
+        ast::CaseLabelData::Def => quote! { glsl_lang::ast::CaseLabelData::Def },
+    };
+
+    quote! { glsl_lang::ast::CaseLabel::new(#cl, #span) }
 }
 
 fn tokenize_iteration_statement(ist: &ast::IterationStatement) -> TokenStream {

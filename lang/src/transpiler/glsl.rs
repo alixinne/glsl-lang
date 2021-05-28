@@ -1572,13 +1572,13 @@ pub fn show_case_label<F>(
 where
     F: Write,
 {
-    match *cl {
-        ast::CaseLabel::Case(ref e) => {
+    match **cl {
+        ast::CaseLabelData::Case(ref e) => {
             f.write_str("case ")?;
             show_expr(f, e, state)?;
             f.write_str(":\n")
         }
-        ast::CaseLabel::Def => f.write_str("default:\n"),
+        ast::CaseLabelData::Def => f.write_str("default:\n"),
     }
 }
 

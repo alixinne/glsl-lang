@@ -2028,12 +2028,12 @@ fn parse_switch_statement_empty() {
 #[test]
 fn parse_switch_statement_cases() {
     let head = Box::new(ast::ExprData::Variable("foo".into_node()).into());
-    let case0 = ast::StatementData::CaseLabel(ast::CaseLabel::Case(Box::new(
-        ast::ExprData::IntConst(0).into(),
-    )));
-    let case1 = ast::StatementData::CaseLabel(ast::CaseLabel::Case(Box::new(
-        ast::ExprData::IntConst(1).into(),
-    )));
+    let case0 = ast::StatementData::CaseLabel(
+        ast::CaseLabelData::Case(Box::new(ast::ExprData::IntConst(0).into())).into(),
+    );
+    let case1 = ast::StatementData::CaseLabel(
+        ast::CaseLabelData::Case(Box::new(ast::ExprData::IntConst(1).into())).into(),
+    );
     let ret = ast::StatementData::Jump(ast::JumpStatement::Return(Some(Box::new(
         ast::ExprData::UIntConst(12).into(),
     ))));
@@ -2051,16 +2051,20 @@ fn parse_switch_statement_cases() {
 
 #[test]
 fn parse_case_label_def() {
-    assert_eq!(ast::CaseLabel::parse("default:"), Ok(ast::CaseLabel::Def));
+    assert_eq!(
+        ast::CaseLabel::parse("default:"),
+        Ok(ast::CaseLabelData::Def.into())
+    );
     assert_eq!(
         ast::CaseLabel::parse("default   :"),
-        Ok(ast::CaseLabel::Def)
+        Ok(ast::CaseLabelData::Def.into())
     );
 }
 
 #[test]
 fn parse_case_label() {
-    let expected = ast::CaseLabel::Case(Box::new(ast::ExprData::IntConst(3).into()));
+    let expected: ast::CaseLabel =
+        ast::CaseLabelData::Case(Box::new(ast::ExprData::IntConst(3).into())).into();
 
     assert_eq!(ast::CaseLabel::parse("case 3:"), Ok(expected.clone()));
     assert_eq!(ast::CaseLabel::parse("case\n\t 3   :"), Ok(expected));

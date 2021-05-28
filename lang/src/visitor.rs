@@ -1274,7 +1274,7 @@ macro_rules! make_host_trait {
         let visit = visitor.visit_case_label(self);
 
         if visit == Visit::Children {
-          if let ast::CaseLabel::Case(e) = self {
+          if let ast::CaseLabelData::Case(e) = $($ref)* **self {
             e.$mthd_name(visitor);
           }
         }

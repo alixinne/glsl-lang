@@ -428,9 +428,13 @@ switch_statement: ast::SwitchStatement = {
     }.spanned(a, b)
 };
 
+case_label_data: ast::CaseLabelData = {
+    "case" <expr> ":" => ast::CaseLabelData::Case(Box::new(<>)),
+    "default" ":"     => ast::CaseLabelData::Def,
+};
+
 case_label: ast::CaseLabel = {
-    "case" <expr> ":" => ast::CaseLabel::Case(Box::new(<>)),
-    "default" ":"     => ast::CaseLabel::Def,
+    <l:@L> <c:case_label_data> <r:@R> => c.spanned(l, r)
 };
 
 initializer_data: ast::InitializerData = {

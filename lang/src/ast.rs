@@ -1327,7 +1327,7 @@ pub struct SwitchStatementData {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub enum CaseLabel {
+pub enum CaseLabelData {
     /// `case:` case label
     Case(Box<Expr>),
     /// `default:` case label

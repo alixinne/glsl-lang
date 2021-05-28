@@ -1393,19 +1393,24 @@ fn tokenize_for_init_statement(i: &ast::ForInitStatement) -> TokenStream {
 }
 
 fn tokenize_for_rest_statement(r: &ast::ForRestStatement) -> TokenStream {
-    let cond = r.condition.as_ref().map(tokenize_condition).quote();
-    let post = r
-        .post_expr
-        .as_ref()
-        .map(|e| Box::new(tokenize_expr(&e)).quote())
-        .quote();
+    let span = tokenize_span(&r.span);
+    let r = {
+        let cond = r.condition.as_ref().map(tokenize_condition).quote();
+        let post = r
+            .post_expr
+            .as_ref()
+            .map(|e| Box::new(tokenize_expr(&e)).quote())
+            .quote();
 
-    quote! {
-      glsl_lang::ast::ForRestStatement {
-        condition: #cond,
-        post: #post
-      }
-    }
+        quote! {
+          glsl_lang::ast::ForRestStatement {
+            condition: #cond,
+            post: #post
+          }
+        }
+    };
+
+    quote! { glsl_lang::ast::ForRestStatement::new(#r, #span) }
 }
 
 fn tokenize_jump_statement(j: &ast::JumpStatement) -> TokenStream {

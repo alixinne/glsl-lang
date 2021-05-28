@@ -465,7 +465,8 @@ for_init_statement: ast::ForInitStatement = {
 };
 
 for_rest_statement: ast::ForRestStatement = {
-    <c:condition?> ";" <e:expr?> => ast::ForRestStatement { condition: c, post_expr: e.map(Box::new) },
+    <l:@L> <c:condition?> ";" <e:expr?> <r:@R> =>
+        ast::ForRestStatementData { condition: c, post_expr: e.map(Box::new) }.spanned(l, r)
 };
 
 iteration_statement<S>: ast::IterationStatement = {

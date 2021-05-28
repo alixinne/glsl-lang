@@ -1365,7 +1365,7 @@ pub enum ForInitStatementData {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub struct ForRestStatement {
+pub struct ForRestStatementData {
     /// Loop condition
     pub condition: Option<Condition>,
     /// Loop increment operation

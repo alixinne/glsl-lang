@@ -2169,7 +2169,7 @@ fn parse_iteration_statement_for_empty() {
         .into(),
     ))
     .into();
-    let rest = ast::ForRestStatement {
+    let rest = ast::ForRestStatementData {
         condition: Some(
             ast::ConditionData::Expr(
                 ast::ExprData::Binary(
@@ -2188,7 +2188,8 @@ fn parse_iteration_statement_for_empty() {
             )
             .into(),
         )),
-    };
+    }
+    .into();
     let st = ast::StatementData::Compound(
         ast::CompoundStatementData {
             statement_list: Vec::new(),

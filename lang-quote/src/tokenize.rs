@@ -927,27 +927,30 @@ fn tokenize_unary_op(op: &ast::UnaryOp) -> TokenStream {
 }
 
 fn tokenize_binary_op(op: &ast::BinaryOp) -> TokenStream {
-    match *op {
-        ast::BinaryOp::Or => quote! { glsl_lang::ast::BinaryOp::Or },
-        ast::BinaryOp::Xor => quote! { glsl_lang::ast::BinaryOp::Xor },
-        ast::BinaryOp::And => quote! { glsl_lang::ast::BinaryOp::And },
-        ast::BinaryOp::BitOr => quote! { glsl_lang::ast::BinaryOp::BitOr },
-        ast::BinaryOp::BitXor => quote! { glsl_lang::ast::BinaryOp::BitXor },
-        ast::BinaryOp::BitAnd => quote! { glsl_lang::ast::BinaryOp::BitAnd },
-        ast::BinaryOp::Equal => quote! { glsl_lang::ast::BinaryOp::Equal },
-        ast::BinaryOp::NonEqual => quote! { glsl_lang::ast::BinaryOp::NonEqual },
-        ast::BinaryOp::Lt => quote! { glsl_lang::ast::BinaryOp::Lt },
-        ast::BinaryOp::Gt => quote! { glsl_lang::ast::BinaryOp::Gt },
-        ast::BinaryOp::Lte => quote! { glsl_lang::ast::BinaryOp::Lte },
-        ast::BinaryOp::Gte => quote! { glsl_lang::ast::BinaryOp::Gte },
-        ast::BinaryOp::LShift => quote! { glsl_lang::ast::BinaryOp::LShift },
-        ast::BinaryOp::RShift => quote! { glsl_lang::ast::BinaryOp::RShift },
-        ast::BinaryOp::Add => quote! { glsl_lang::ast::BinaryOp::Add },
-        ast::BinaryOp::Sub => quote! { glsl_lang::ast::BinaryOp::Sub },
-        ast::BinaryOp::Mult => quote! { glsl_lang::ast::BinaryOp::Mult },
-        ast::BinaryOp::Div => quote! { glsl_lang::ast::BinaryOp::Div },
-        ast::BinaryOp::Mod => quote! { glsl_lang::ast::BinaryOp::Mod },
-    }
+    let span = tokenize_span(&op.span);
+    let op = match op.content {
+        ast::BinaryOpData::Or => quote! { glsl_lang::ast::BinaryOpData::Or },
+        ast::BinaryOpData::Xor => quote! { glsl_lang::ast::BinaryOpData::Xor },
+        ast::BinaryOpData::And => quote! { glsl_lang::ast::BinaryOpData::And },
+        ast::BinaryOpData::BitOr => quote! { glsl_lang::ast::BinaryOpData::BitOr },
+        ast::BinaryOpData::BitXor => quote! { glsl_lang::ast::BinaryOpData::BitXor },
+        ast::BinaryOpData::BitAnd => quote! { glsl_lang::ast::BinaryOpData::BitAnd },
+        ast::BinaryOpData::Equal => quote! { glsl_lang::ast::BinaryOpData::Equal },
+        ast::BinaryOpData::NonEqual => quote! { glsl_lang::ast::BinaryOpData::NonEqual },
+        ast::BinaryOpData::Lt => quote! { glsl_lang::ast::BinaryOpData::Lt },
+        ast::BinaryOpData::Gt => quote! { glsl_lang::ast::BinaryOpData::Gt },
+        ast::BinaryOpData::Lte => quote! { glsl_lang::ast::BinaryOpData::Lte },
+        ast::BinaryOpData::Gte => quote! { glsl_lang::ast::BinaryOpData::Gte },
+        ast::BinaryOpData::LShift => quote! { glsl_lang::ast::BinaryOpData::LShift },
+        ast::BinaryOpData::RShift => quote! { glsl_lang::ast::BinaryOpData::RShift },
+        ast::BinaryOpData::Add => quote! { glsl_lang::ast::BinaryOpData::Add },
+        ast::BinaryOpData::Sub => quote! { glsl_lang::ast::BinaryOpData::Sub },
+        ast::BinaryOpData::Mult => quote! { glsl_lang::ast::BinaryOpData::Mult },
+        ast::BinaryOpData::Div => quote! { glsl_lang::ast::BinaryOpData::Div },
+        ast::BinaryOpData::Mod => quote! { glsl_lang::ast::BinaryOpData::Mod },
+    };
+
+    quote! { glsl_lang::ast::BinaryOp::new(#op, #span) }
 }
 
 fn tokenize_assignment_op(op: &ast::AssignmentOp) -> TokenStream {

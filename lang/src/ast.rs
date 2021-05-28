@@ -1068,7 +1068,7 @@ pub enum UnaryOpData {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub enum BinaryOp {
+pub enum BinaryOpData {
     /// `||` binary operator
     #[lang_util(display(extra = "||"))]
     Or,

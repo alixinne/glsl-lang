@@ -381,7 +381,7 @@ impl HasPrecedence for ast::UnaryOpData {
     }
 }
 
-impl HasPrecedence for ast::BinaryOp {
+impl HasPrecedence for ast::BinaryOpData {
     fn precedence(&self) -> u32 {
         match self {
             Self::Mult | Self::Div | Self::Mod => 4,
@@ -1147,26 +1147,26 @@ pub fn show_binary_op<F>(
 where
     F: Write,
 {
-    match *op {
-        ast::BinaryOp::Or => state.write_binary_op(f, "||"),
-        ast::BinaryOp::Xor => state.write_binary_op(f, "^^"),
-        ast::BinaryOp::And => state.write_binary_op(f, "&&"),
-        ast::BinaryOp::BitOr => state.write_binary_op(f, "|"),
-        ast::BinaryOp::BitXor => state.write_binary_op(f, "^"),
-        ast::BinaryOp::BitAnd => state.write_binary_op(f, "&"),
-        ast::BinaryOp::Equal => state.write_binary_op(f, "=="),
-        ast::BinaryOp::NonEqual => state.write_binary_op(f, "!="),
-        ast::BinaryOp::Lt => state.write_binary_op(f, "<"),
-        ast::BinaryOp::Gt => state.write_binary_op(f, ">"),
-        ast::BinaryOp::Lte => state.write_binary_op(f, "<="),
-        ast::BinaryOp::Gte => state.write_binary_op(f, ">="),
-        ast::BinaryOp::LShift => state.write_binary_op(f, "<<"),
-        ast::BinaryOp::RShift => state.write_binary_op(f, ">>"),
-        ast::BinaryOp::Add => state.write_binary_op(f, "+"),
-        ast::BinaryOp::Sub => state.write_binary_op(f, "-"),
-        ast::BinaryOp::Mult => state.write_binary_op(f, "*"),
-        ast::BinaryOp::Div => state.write_binary_op(f, "/"),
-        ast::BinaryOp::Mod => state.write_binary_op(f, "%"),
+    match **op {
+        ast::BinaryOpData::Or => state.write_binary_op(f, "||"),
+        ast::BinaryOpData::Xor => state.write_binary_op(f, "^^"),
+        ast::BinaryOpData::And => state.write_binary_op(f, "&&"),
+        ast::BinaryOpData::BitOr => state.write_binary_op(f, "|"),
+        ast::BinaryOpData::BitXor => state.write_binary_op(f, "^"),
+        ast::BinaryOpData::BitAnd => state.write_binary_op(f, "&"),
+        ast::BinaryOpData::Equal => state.write_binary_op(f, "=="),
+        ast::BinaryOpData::NonEqual => state.write_binary_op(f, "!="),
+        ast::BinaryOpData::Lt => state.write_binary_op(f, "<"),
+        ast::BinaryOpData::Gt => state.write_binary_op(f, ">"),
+        ast::BinaryOpData::Lte => state.write_binary_op(f, "<="),
+        ast::BinaryOpData::Gte => state.write_binary_op(f, ">="),
+        ast::BinaryOpData::LShift => state.write_binary_op(f, "<<"),
+        ast::BinaryOpData::RShift => state.write_binary_op(f, ">>"),
+        ast::BinaryOpData::Add => state.write_binary_op(f, "+"),
+        ast::BinaryOpData::Sub => state.write_binary_op(f, "-"),
+        ast::BinaryOpData::Mult => state.write_binary_op(f, "*"),
+        ast::BinaryOpData::Div => state.write_binary_op(f, "/"),
+        ast::BinaryOpData::Mod => state.write_binary_op(f, "%"),
     }
 }
 
@@ -2127,7 +2127,7 @@ return u;
             vec![view.into()],
         );
         let mul = ast::ExprData::Binary(
-            ast::BinaryOp::Mult,
+            ast::BinaryOpData::Mult.into(),
             Box::new(iview.into()),
             Box::new(vec4.into()),
         );

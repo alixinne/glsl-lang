@@ -1363,7 +1363,8 @@ fn parse_expr_float() {
 #[test]
 fn parse_expr_add_2() {
     let one: Box<ast::Expr> = Box::new(ast::ExprData::IntConst(1).into());
-    let expected: ast::Expr = ast::ExprData::Binary(ast::BinaryOp::Add, one.clone(), one).into();
+    let expected: ast::Expr =
+        ast::ExprData::Binary(ast::BinaryOpData::Add.into(), one.clone(), one).into();
 
     assert_eq!(ast::Expr::parse("1 + 1"), Ok(expected.clone()));
     assert_eq!(ast::Expr::parse("1+1"), Ok(expected.clone()));
@@ -1376,8 +1377,8 @@ fn parse_expr_add_3() {
     let two = Box::new(ast::ExprData::UIntConst(2).into());
     let three = Box::new(ast::ExprData::UIntConst(3).into());
     let expected: ast::Expr = ast::ExprData::Binary(
-        ast::BinaryOp::Add,
-        Box::new(ast::ExprData::Binary(ast::BinaryOp::Add, one, two).into()),
+        ast::BinaryOpData::Add.into(),
+        Box::new(ast::ExprData::Binary(ast::BinaryOpData::Add.into(), one, two).into()),
         three,
     )
     .into();
@@ -1393,8 +1394,8 @@ fn parse_expr_add_mult_3() {
     let two = Box::new(ast::ExprData::UIntConst(2).into());
     let three: Box<ast::Expr> = Box::new(ast::ExprData::UIntConst(3).into());
     let expected: ast::Expr = ast::ExprData::Binary(
-        ast::BinaryOp::Add,
-        Box::new(ast::ExprData::Binary(ast::BinaryOp::Mult, one, two).into()),
+        ast::BinaryOpData::Add.into(),
+        Box::new(ast::ExprData::Binary(ast::BinaryOpData::Mult.into(), one, two).into()),
         three.into(),
     )
     .into();
@@ -1413,20 +1414,20 @@ fn parse_expr_add_sub_mult_div() {
     let five = Box::new(ast::ExprData::IntConst(5).into());
     let six = Box::new(ast::ExprData::IntConst(6).into());
     let expected = ast::ExprData::Binary(
-        ast::BinaryOp::Add,
+        ast::BinaryOpData::Add.into(),
         Box::new(
             ast::ExprData::Binary(
-                ast::BinaryOp::Mult,
+                ast::BinaryOpData::Mult.into(),
                 one,
-                Box::new(ast::ExprData::Binary(ast::BinaryOp::Add, two, three).into()),
+                Box::new(ast::ExprData::Binary(ast::BinaryOpData::Add.into(), two, three).into()),
             )
             .into(),
         ),
         Box::new(
             ast::ExprData::Binary(
-                ast::BinaryOp::Div,
+                ast::BinaryOpData::Div.into(),
                 four,
-                Box::new(ast::ExprData::Binary(ast::BinaryOp::Add, five, six).into()),
+                Box::new(ast::ExprData::Binary(ast::BinaryOpData::Add.into(), five, six).into()),
             )
             .into(),
         ),
@@ -1455,7 +1456,7 @@ fn parse_complex_expr() {
         vec![view.into()],
     );
     let mul = ast::ExprData::Binary(
-        ast::BinaryOp::Mult,
+        ast::BinaryOpData::Mult.into(),
         Box::new(iview.into()),
         Box::new(vec4.into()),
     );
@@ -1900,7 +1901,7 @@ fn parse_declaration_buffer_block() {
 #[test]
 fn parse_selection_statement_if() {
     let cond = ast::ExprData::Binary(
-        ast::BinaryOp::Lt,
+        ast::BinaryOpData::Lt.into(),
         Box::new(ast::ExprData::Variable("foo".into_node()).into()),
         Box::new(ast::ExprData::IntConst(10).into()),
     );
@@ -1931,7 +1932,7 @@ fn parse_selection_statement_if() {
 #[test]
 fn parse_selection_statement_if_else() {
     let cond = ast::ExprData::Binary(
-        ast::BinaryOp::Lt,
+        ast::BinaryOpData::Lt.into(),
         Box::new(ast::ExprData::Variable("foo".into_node()).into()),
         Box::new(ast::ExprData::IntConst(10).into()),
     );
@@ -2036,7 +2037,7 @@ fn parse_case_label() {
 fn parse_iteration_statement_while_empty() {
     let cond = ast::Condition::Expr(
         ast::ExprData::Binary(
-            ast::BinaryOp::Gte,
+            ast::BinaryOpData::Gte.into(),
             Box::new(ast::ExprData::Variable("a".into_node()).into()),
             Box::new(ast::ExprData::Variable("b".into_node()).into()),
         )
@@ -2074,7 +2075,7 @@ fn parse_iteration_statement_do_while_empty() {
     );
     let cond = Box::new(
         ast::ExprData::Binary(
-            ast::BinaryOp::Gte,
+            ast::BinaryOpData::Gte.into(),
             Box::new(ast::ExprData::Variable("a".into_node()).into()),
             Box::new(ast::ExprData::Variable("b".into_node()).into()),
         )
@@ -2130,7 +2131,7 @@ fn parse_iteration_statement_for_empty() {
     let rest = ast::ForRestStatement {
         condition: Some(ast::Condition::Expr(
             ast::ExprData::Binary(
-                ast::BinaryOp::Lte,
+                ast::BinaryOpData::Lte.into(),
                 Box::new(ast::ExprData::Variable("i".into_node()).into()),
                 Box::new(ast::ExprData::FloatConst(10.).into()),
             )

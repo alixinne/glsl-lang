@@ -286,84 +286,84 @@ arrayed_identifier: ast::ArrayedIdentifier = {
 
 multiplicative_expression: ast::Expr = {
     unary_expression,
-    <a:@L> <l:multiplicative_expression> "*" <r:unary_expression> <b:@R> =>
-        ast::ExprData::Binary(ast::BinaryOp::Mult, Box::new(l), Box::new(r)).spanned(a, b),
-    <a:@L> <l:multiplicative_expression> "/" <r:unary_expression> <b:@R> =>
-        ast::ExprData::Binary(ast::BinaryOp::Div, Box::new(l), Box::new(r)).spanned(a, b),
-    <a:@L> <l:multiplicative_expression> "%" <r:unary_expression> <b:@R> =>
-        ast::ExprData::Binary(ast::BinaryOp::Mod, Box::new(l), Box::new(r)).spanned(a, b),
+    <a:@L> <l:multiplicative_expression> <c:@L> "*" <d:@R> <r:unary_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOpData::Mult.spanned(c, d), Box::new(l), Box::new(r)).spanned(a, b),
+    <a:@L> <l:multiplicative_expression> <c:@L> "/" <d:@R> <r:unary_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOpData::Div.spanned(c, d), Box::new(l), Box::new(r)).spanned(a, b),
+    <a:@L> <l:multiplicative_expression> <c:@L> "%" <d:@R> <r:unary_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOpData::Mod.spanned(c, d), Box::new(l), Box::new(r)).spanned(a, b),
 };
 
 additive_expression: ast::Expr = {
     multiplicative_expression,
-    <a:@L> <l:additive_expression> "+" <r:multiplicative_expression> <b:@R> =>
-        ast::ExprData::Binary(ast::BinaryOp::Add, Box::new(l), Box::new(r)).spanned(a, b),
-    <a:@L> <l:additive_expression> "-" <r:multiplicative_expression> <b:@R> =>
-        ast::ExprData::Binary(ast::BinaryOp::Sub, Box::new(l), Box::new(r)).spanned(a, b),
+    <a:@L> <l:additive_expression> <c:@L> "+" <d:@R> <r:multiplicative_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOpData::Add.spanned(c, d), Box::new(l), Box::new(r)).spanned(a, b),
+    <a:@L> <l:additive_expression> <c:@L> "-" <d:@R> <r:multiplicative_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOpData::Sub.spanned(c, d), Box::new(l), Box::new(r)).spanned(a, b),
 };
 
 shift_expression: ast::Expr = {
     additive_expression,
-    <a:@L> <l:shift_expression> "<<" <r:additive_expression> <b:@R> =>
-        ast::ExprData::Binary(ast::BinaryOp::LShift, Box::new(l), Box::new(r)).spanned(a, b),
-    <a:@L> <l:shift_expression> ">>" <r:additive_expression> <b:@R> =>
-        ast::ExprData::Binary(ast::BinaryOp::RShift, Box::new(l), Box::new(r)).spanned(a, b),
+    <a:@L> <l:shift_expression> <c:@L> "<<" <d:@R> <r:additive_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOpData::LShift.spanned(c, d), Box::new(l), Box::new(r)).spanned(a, b),
+    <a:@L> <l:shift_expression> <c:@L> ">>" <d:@R> <r:additive_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOpData::RShift.spanned(c, d), Box::new(l), Box::new(r)).spanned(a, b),
 };
 
 relational_expression: ast::Expr = {
     shift_expression,
-    <a:@L> <l:relational_expression> "<" <r:shift_expression> <b:@R> =>
-        ast::ExprData::Binary(ast::BinaryOp::Lt, Box::new(l), Box::new(r)).spanned(a, b),
-    <a:@L> <l:relational_expression> ">" <r:shift_expression> <b:@R> =>
-        ast::ExprData::Binary(ast::BinaryOp::Gt, Box::new(l), Box::new(r)).spanned(a, b),
-    <a:@L> <l:relational_expression> "<=" <r:shift_expression> <b:@R> =>
-        ast::ExprData::Binary(ast::BinaryOp::Lte, Box::new(l), Box::new(r)).spanned(a, b),
-    <a:@L> <l:relational_expression> ">=" <r:shift_expression> <b:@R> =>
-        ast::ExprData::Binary(ast::BinaryOp::Gte, Box::new(l), Box::new(r)).spanned(a, b),
+    <a:@L> <l:relational_expression> <c:@L> "<" <d:@R> <r:shift_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOpData::Lt.spanned(c, d), Box::new(l), Box::new(r)).spanned(a, b),
+    <a:@L> <l:relational_expression> <c:@L> ">" <d:@R> <r:shift_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOpData::Gt.spanned(c, d), Box::new(l), Box::new(r)).spanned(a, b),
+    <a:@L> <l:relational_expression> <c:@L> "<=" <d:@R> <r:shift_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOpData::Lte.spanned(c, d), Box::new(l), Box::new(r)).spanned(a, b),
+    <a:@L> <l:relational_expression> <c:@L> ">=" <d:@R> <r:shift_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOpData::Gte.spanned(c, d), Box::new(l), Box::new(r)).spanned(a, b),
 };
 
 equality_expression: ast::Expr = {
     relational_expression,
-    <a:@L> <l:equality_expression> "==" <r:relational_expression> <b:@R> =>
-        ast::ExprData::Binary(ast::BinaryOp::Equal, Box::new(l), Box::new(r)).spanned(a, b),
-    <a:@L> <l:equality_expression> "!=" <r:relational_expression> <b:@R> =>
-        ast::ExprData::Binary(ast::BinaryOp::NonEqual, Box::new(l), Box::new(r)).spanned(a, b),
+    <a:@L> <l:equality_expression> <c:@L> "==" <d:@R> <r:relational_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOpData::Equal.spanned(c, d), Box::new(l), Box::new(r)).spanned(a, b),
+    <a:@L> <l:equality_expression> <c:@L> "!=" <d:@R> <r:relational_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOpData::NonEqual.spanned(c, d), Box::new(l), Box::new(r)).spanned(a, b),
 };
 
 and_expression: ast::Expr = {
     equality_expression,
-    <a:@L> <l:and_expression> "&" <r:equality_expression> <b:@R> =>
-        ast::ExprData::Binary(ast::BinaryOp::BitAnd, Box::new(l), Box::new(r)).spanned(a, b),
+    <a:@L> <l:and_expression> <c:@L> "&" <d:@R> <r:equality_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOpData::BitAnd.spanned(c, d), Box::new(l), Box::new(r)).spanned(a, b),
 };
 
 exclusive_or_expression: ast::Expr = {
     and_expression,
-    <a:@L> <l:exclusive_or_expression> "^" <r:and_expression> <b:@R> =>
-        ast::ExprData::Binary(ast::BinaryOp::BitXor, Box::new(l), Box::new(r)).spanned(a, b),
+    <a:@L> <l:exclusive_or_expression> <c:@L> "^" <d:@R> <r:and_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOpData::BitXor.spanned(c, d), Box::new(l), Box::new(r)).spanned(a, b),
 };
 
 inclusive_or_expression: ast::Expr = {
     exclusive_or_expression,
-    <a:@L> <l:inclusive_or_expression> "|" <r:exclusive_or_expression> <b:@R> =>
-        ast::ExprData::Binary(ast::BinaryOp::BitOr, Box::new(l), Box::new(r)).spanned(a, b),
+    <a:@L> <l:inclusive_or_expression> <c:@L> "|" <d:@R> <r:exclusive_or_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOpData::BitOr.spanned(c, d), Box::new(l), Box::new(r)).spanned(a, b),
 };
 
 logical_and_expression: ast::Expr = {
     inclusive_or_expression,
-    <a:@L> <l:logical_and_expression> "&&" <r:inclusive_or_expression> <b:@R> =>
-        ast::ExprData::Binary(ast::BinaryOp::And, Box::new(l), Box::new(r)).spanned(a, b),
+    <a:@L> <l:logical_and_expression> <c:@L> "&&" <d:@R> <r:inclusive_or_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOpData::And.spanned(c, d), Box::new(l), Box::new(r)).spanned(a, b),
 };
 
 logical_xor_expression: ast::Expr = {
     logical_and_expression,
-    <a:@L> <l:logical_xor_expression> "^^" <r:logical_and_expression> <b:@R> =>
-        ast::ExprData::Binary(ast::BinaryOp::Xor, Box::new(l), Box::new(r)).spanned(a, b),
+    <a:@L> <l:logical_xor_expression> <c:@L> "^^" <d:@R> <r:logical_and_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOpData::Xor.spanned(c, d), Box::new(l), Box::new(r)).spanned(a, b),
 };
 
 logical_or_expression: ast::Expr = {
     logical_xor_expression,
-    <a:@L> <l:logical_or_expression> "||" <r:logical_xor_expression> <b:@R> =>
-        ast::ExprData::Binary(ast::BinaryOp::Or, Box::new(l), Box::new(r)).spanned(a, b),
+    <a:@L> <l:logical_or_expression> <c:@L> "||" <d:@R> <r:logical_xor_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOpData::Or.spanned(c, d), Box::new(l), Box::new(r)).spanned(a, b),
 };
 
 conditional_expression: ast::Expr = {

@@ -1122,9 +1122,9 @@ macro_rules! make_host_trait {
         let visit = visitor.visit_fun_identifier(self);
 
         if visit == Visit::Children {
-          match self {
-            ast::FunIdentifier::TypeSpecifier(t) => t.$mthd_name(visitor),
-            ast::FunIdentifier::Expr(e) => e.$mthd_name(visitor),
+          match $($ref)* **self {
+            ast::FunIdentifierData::TypeSpecifier(t) => t.$mthd_name(visitor),
+            ast::FunIdentifierData::Expr(e) => e.$mthd_name(visitor),
           }
         }
       }

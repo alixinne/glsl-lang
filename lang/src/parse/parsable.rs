@@ -228,15 +228,19 @@ impl Parsable for ast::ArraySpecifierDimension {
                 {
                     if let ast::StatementData::Expression(ast::ExprStatement(Some(
                         ast::Expr::FunCall(
-                            ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifier {
+                            ast::FunIdentifier {
                                 content:
-                                    ast::TypeSpecifierData {
-                                        array_specifier:
-                                            Some(ast::ArraySpecifier { content: array, .. }),
+                                    ast::FunIdentifierData::TypeSpecifier(ast::TypeSpecifier {
+                                        content:
+                                            ast::TypeSpecifierData {
+                                                array_specifier:
+                                                    Some(ast::ArraySpecifier { content: array, .. }),
+                                                ..
+                                            },
                                         ..
-                                    },
+                                    }),
                                 ..
-                            }),
+                            },
                             _,
                         ),
                     ))) = statement_list.into_iter().next().unwrap().into_inner()
@@ -282,14 +286,18 @@ impl Parsable for ast::ArraySpecifier {
                 {
                     if let ast::StatementData::Expression(ast::ExprStatement(Some(
                         ast::Expr::FunCall(
-                            ast::FunIdentifier::TypeSpecifier(ast::TypeSpecifier {
+                            ast::FunIdentifier {
                                 content:
-                                    ast::TypeSpecifierData {
-                                        array_specifier: Some(array),
+                                    ast::FunIdentifierData::TypeSpecifier(ast::TypeSpecifier {
+                                        content:
+                                            ast::TypeSpecifierData {
+                                                array_specifier: Some(array),
+                                                ..
+                                            },
                                         ..
-                                    },
+                                    }),
                                 ..
-                            }),
+                            },
                             _,
                         ),
                     ))) = statement_list.into_iter().next().unwrap().into_inner()

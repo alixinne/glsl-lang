@@ -251,9 +251,13 @@ fully_specified_type: ast::FullySpecifiedType = {
         ast::FullySpecifiedTypeData { qualifier: q, ty: s }.spanned(l, r)
 };
 
+fun_identifier_data: ast::FunIdentifierData = {
+    type_specifier     => ast::FunIdentifierData::TypeSpecifier(<>),
+    postfix_expression => ast::FunIdentifierData::Expr(Box::new(<>)),
+};
+
 fun_identifier: ast::FunIdentifier = {
-    type_specifier     => ast::FunIdentifier::TypeSpecifier(<>),
-    postfix_expression => ast::FunIdentifier::Expr(Box::new(<>)),
+    <l:@L> <i:fun_identifier_data> <r:@R> => i.spanned(l, r)
 };
 
 unary_expression: ast::Expr = {

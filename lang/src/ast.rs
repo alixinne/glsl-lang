@@ -808,14 +808,14 @@ pub struct BlockData {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub enum FunIdentifier {
+pub enum FunIdentifierData {
     /// Type name used for the function name (as a constructor)
     TypeSpecifier(TypeSpecifier),
     /// Expression used for the function name
     Expr(Box<Expr>),
 }
 
-impl FunIdentifier {
+impl FunIdentifierData {
     /// Create a function identifier from an identifier
     pub fn ident(i: impl Into<IdentifierData>) -> Self {
         Self::Expr(Box::new(Expr::Variable(i.into().into())))

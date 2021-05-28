@@ -966,17 +966,20 @@ fn tokenize_function_identifier(i: &ast::FunIdentifier) -> TokenStream {
         return quote! { #ident };
     }
 
-    match *i {
-        ast::FunIdentifier::TypeSpecifier(ref n) => {
+    let span = tokenize_span(&i.span);
+    let i = match i.content {
+        ast::FunIdentifierData::TypeSpecifier(ref n) => {
             let n = tokenize_type_specifier(n);
-            quote! { glsl_lang::ast::FunIdentifier::TypeSpecifier(#n) }
+            quote! { glsl_lang::ast::FunIdentifierData::TypeSpecifier(#n) }
         }
 
-        ast::FunIdentifier::Expr(ref e) => {
+        ast::FunIdentifierData::Expr(ref e) => {
             let e = Box::new(tokenize_expr(e)).quote();
-            quote! { glsl_lang::ast::FunIdentifier::Expr(#e) }
+            quote! { glsl_lang::ast::FunIdentifierData::Expr(#e) }
         }
-    }
+    };
+
+    quote! { glsl_lang::ast::FunIdentifier::new(#i, #span) }
 }
 
 fn tokenize_declaration(d: &ast::Declaration) -> TokenStream {

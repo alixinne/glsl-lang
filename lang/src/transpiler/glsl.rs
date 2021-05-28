@@ -1202,9 +1202,9 @@ pub fn show_function_identifier<F>(
 where
     F: Write,
 {
-    match *i {
-        ast::FunIdentifier::TypeSpecifier(ref n) => show_type_specifier(f, &n, state),
-        ast::FunIdentifier::Expr(ref e) => show_expr(f, &*e, state),
+    match **i {
+        ast::FunIdentifierData::TypeSpecifier(ref n) => show_type_specifier(f, &n, state),
+        ast::FunIdentifierData::Expr(ref e) => show_expr(f, &*e, state),
     }
 }
 
@@ -2114,16 +2114,18 @@ return u;
         let ray = ast::Expr::Variable("ray".into_node());
         let raydir = ast::Expr::Dot(Box::new(ray), "dir".into_node());
         let vec4 = ast::Expr::FunCall(
-            ast::FunIdentifier::TypeSpecifier(
+            ast::FunIdentifierData::TypeSpecifier(
                 ast::TypeSpecifierData::from(ast::TypeSpecifierNonArrayData::Vec4).into(),
-            ),
+            )
+            .into(),
             vec![raydir, zero],
         );
         let view = ast::Expr::variable("view");
-        let iview = ast::Expr::FunCall(ast::FunIdentifier::ident("inverse"), vec![view]);
+        let iview = ast::Expr::FunCall(ast::FunIdentifierData::ident("inverse").into(), vec![view]);
         let mul = ast::Expr::Binary(ast::BinaryOp::Mult, Box::new(iview), Box::new(vec4));
         let xyz = ast::Expr::Dot(Box::new(mul), "xyz".into_node());
-        let input = ast::Expr::FunCall(ast::FunIdentifier::ident("normalize"), vec![xyz]);
+        let input =
+            ast::Expr::FunCall(ast::FunIdentifierData::ident("normalize").into(), vec![xyz]);
 
         let mut output = String::new();
         show_expr(&mut output, &input, &mut FormattingState::default()).unwrap();

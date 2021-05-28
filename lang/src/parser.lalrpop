@@ -465,10 +465,12 @@ for_rest_statement: ast::ForRestStatement = {
 };
 
 iteration_statement<S>: ast::IterationStatement = {
-    "while" "(" <c:condition> ")" <s:S> => ast::IterationStatement::While(c, Box::new(s)),
-    "do" <s:statement> "while" "(" <c:expr> ")" ";" => ast::IterationStatement::DoWhile(Box::new(s), Box::new(c)),
-    "for" "(" <init:for_init_statement> <rest:for_rest_statement> ")" <s:S> =>
-        ast::IterationStatement::For(init, rest, Box::new(s)),
+    <a:@L> "while" "(" <c:condition> ")" <s:S> <b:@R> =>
+        ast::IterationStatementData::While(c, Box::new(s)).spanned(a, b),
+    <a:@L> "do" <s:statement> "while" "(" <c:expr> ")" ";" <b:@R> =>
+        ast::IterationStatementData::DoWhile(Box::new(s), Box::new(c)).spanned(a, b),
+    <a:@L> "for" "(" <init:for_init_statement> <rest:for_rest_statement> ")" <s:S> <b:@R> =>
+        ast::IterationStatementData::For(init, rest, Box::new(s)).spanned(a, b),
 };
 
 jump_statement: ast::JumpStatement = {

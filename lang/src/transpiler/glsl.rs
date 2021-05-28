@@ -1591,14 +1591,14 @@ pub fn show_iteration_statement<F>(
 where
     F: Write,
 {
-    match *ist {
-        ast::IterationStatement::While(ref cond, ref body) => {
+    match **ist {
+        ast::IterationStatementData::While(ref cond, ref body) => {
             f.write_str("while (")?;
             show_condition(f, cond, state)?;
             f.write_str(") ")?;
             show_statement(f, body, state)
         }
-        ast::IterationStatement::DoWhile(ref body, ref cond) => {
+        ast::IterationStatementData::DoWhile(ref body, ref cond) => {
             f.write_str("do ")?;
             show_statement(f, body, state)?;
             f.write_str(" while (")?;
@@ -1606,7 +1606,7 @@ where
             f.write_str(")")?;
             state.write_statement_terminator(f)
         }
-        ast::IterationStatement::For(ref init, ref rest, ref body) => {
+        ast::IterationStatementData::For(ref init, ref rest, ref body) => {
             f.write_str("for (")?;
             show_for_init_statement(f, init, state)?;
             state.flush_space(f)?;

@@ -1289,18 +1289,18 @@ macro_rules! make_host_trait {
         let visit = visitor.visit_iteration_statement(self);
 
         if visit == Visit::Children {
-          match self {
-            ast::IterationStatement::While(c, s) => {
+          match $($ref)* **self {
+            ast::IterationStatementData::While(c, s) => {
               c.$mthd_name(visitor);
               s.$mthd_name(visitor);
             }
 
-            ast::IterationStatement::DoWhile(s, e) => {
+            ast::IterationStatementData::DoWhile(s, e) => {
               s.$mthd_name(visitor);
               e.$mthd_name(visitor);
             }
 
-            ast::IterationStatement::For(fis, frs, s) => {
+            ast::IterationStatementData::For(fis, frs, s) => {
               fis.$mthd_name(visitor);
               frs.$mthd_name(visitor);
               s.$mthd_name(visitor);

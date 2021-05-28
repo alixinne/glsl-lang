@@ -1338,7 +1338,7 @@ pub enum CaseLabelData {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub enum IterationStatement {
+pub enum IterationStatementData {
     /// `while` iteration statement
     #[lang_util(display(extra = "while"))]
     While(Condition, Box<Statement>),

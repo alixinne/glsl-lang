@@ -1330,26 +1330,29 @@ fn tokenize_case_label(cl: &ast::CaseLabel) -> TokenStream {
 }
 
 fn tokenize_iteration_statement(ist: &ast::IterationStatement) -> TokenStream {
-    match *ist {
-        ast::IterationStatement::While(ref cond, ref body) => {
+    let span = tokenize_span(&ist.span);
+    let ist = match ist.content {
+        ast::IterationStatementData::While(ref cond, ref body) => {
             let cond = tokenize_condition(cond);
             let body = Box::new(tokenize_statement(body)).quote();
-            quote! { glsl_lang::ast::IterationStatement::While(#cond, #body) }
+            quote! { glsl_lang::ast::IterationStatementData::While(#cond, #body) }
         }
 
-        ast::IterationStatement::DoWhile(ref body, ref cond) => {
+        ast::IterationStatementData::DoWhile(ref body, ref cond) => {
             let body = Box::new(tokenize_statement(body)).quote();
             let cond = Box::new(tokenize_expr(cond)).quote();
-            quote! { glsl_lang::ast::IterationStatement::DoWhile(#body, #cond) }
+            quote! { glsl_lang::ast::IterationStatementData::DoWhile(#body, #cond) }
         }
 
-        ast::IterationStatement::For(ref init, ref rest, ref body) => {
+        ast::IterationStatementData::For(ref init, ref rest, ref body) => {
             let init = tokenize_for_init_statement(init);
             let rest = tokenize_for_rest_statement(rest);
             let body = Box::new(tokenize_statement(body)).quote();
-            quote! { glsl_lang::ast::IterationStatement::For(#init, #rest, #body) }
+            quote! { glsl_lang::ast::IterationStatementData::For(#init, #rest, #body) }
         }
-    }
+    };
+
+    quote! { glsl_lang::ast::IterationStatement::new(#ist, #span) }
 }
 
 fn tokenize_condition(c: &ast::Condition) -> TokenStream {

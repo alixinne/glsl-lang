@@ -2087,7 +2087,8 @@ fn parse_iteration_statement_while_empty() {
         }
         .into(),
     );
-    let expected = ast::IterationStatement::While(cond, Box::new(st.into()));
+    let expected: ast::IterationStatement =
+        ast::IterationStatementData::While(cond, Box::new(st.into())).into();
 
     assert_eq!(
         ast::IterationStatement::parse("while (a >= b) {}"),
@@ -2119,7 +2120,8 @@ fn parse_iteration_statement_do_while_empty() {
         )
         .into(),
     );
-    let expected = ast::IterationStatement::DoWhile(Box::new(st.into()), cond);
+    let expected: ast::IterationStatement =
+        ast::IterationStatementData::DoWhile(Box::new(st.into()), cond).into();
 
     assert_eq!(
         ast::IterationStatement::parse("do {} while (a >= b);"),
@@ -2192,7 +2194,8 @@ fn parse_iteration_statement_for_empty() {
         }
         .into(),
     );
-    let expected = ast::IterationStatement::For(init, rest, Box::new(st.into()));
+    let expected: ast::IterationStatement =
+        ast::IterationStatementData::For(init, rest, Box::new(st.into())).into();
 
     assert_eq!(
         ast::IterationStatement::parse("for (float i = 0.f; i <= 10.f; ++i) {}"),

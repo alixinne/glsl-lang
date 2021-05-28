@@ -1581,14 +1581,15 @@ fn parse_assignment_op() {
 
 #[test]
 fn parse_expr_statement() {
-    let expected = ast::ExprStatement(Some(
+    let expected: ast::ExprStatement = ast::ExprStatementData(Some(
         ast::ExprData::Assignment(
             Box::new(ast::ExprData::Variable("foo".into_node()).into()),
             ast::AssignmentOpData::Equal.into(),
             Box::new(ast::ExprData::FloatConst(314.).into()),
         )
         .into(),
-    ));
+    ))
+    .into();
 
     assert_eq!(
         ast::ExprStatement::parse("foo = 314.f;"),
@@ -2950,23 +2951,29 @@ fn parse_dangling_else() {
                     cond: Box::new(ast::ExprData::variable("cb").into()),
                     rest: ast::SelectionRestStatement::Else(
                         Box::new(
-                            ast::StatementData::Expression(ast::ExprStatement(Some(
-                                ast::ExprData::FunCall(
-                                    ast::FunIdentifierData::ident("ab").into(),
-                                    vec![]
-                                )
+                            ast::StatementData::Expression(
+                                ast::ExprStatementData(Some(
+                                    ast::ExprData::FunCall(
+                                        ast::FunIdentifierData::ident("ab").into(),
+                                        vec![]
+                                    )
+                                    .into()
+                                ))
                                 .into()
-                            )))
+                            )
                             .into()
                         ),
                         Box::new(
-                            ast::StatementData::Expression(ast::ExprStatement(Some(
-                                ast::ExprData::FunCall(
-                                    ast::FunIdentifierData::ident("c").into(),
-                                    vec![]
-                                )
+                            ast::StatementData::Expression(
+                                ast::ExprStatementData(Some(
+                                    ast::ExprData::FunCall(
+                                        ast::FunIdentifierData::ident("c").into(),
+                                        vec![]
+                                    )
+                                    .into()
+                                ))
                                 .into()
-                            )))
+                            )
                             .into()
                         ),
                     ),

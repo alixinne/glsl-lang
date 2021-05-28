@@ -1254,8 +1254,13 @@ fn tokenize_statement(sst: &ast::Statement) -> TokenStream {
 }
 
 fn tokenize_expr_statement(est: &ast::ExprStatement) -> TokenStream {
-    let e = est.0.as_ref().map(|e| tokenize_expr(&e)).quote();
-    quote! { glsl_lang::ast::ExprStatement(#e) }
+    let span = tokenize_span(&est.span);
+    let est = {
+        let e = est.0.as_ref().map(|e| tokenize_expr(&e)).quote();
+        quote! { glsl_lang::ast::ExprStatementData(#e) }
+    };
+
+    quote! { glsl_lang::ast::ExprStatement::new(#est, #span) }
 }
 
 fn tokenize_selection_statement(sst: &ast::SelectionStatement) -> TokenStream {

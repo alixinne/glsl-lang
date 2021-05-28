@@ -1277,7 +1277,7 @@ impl StatementData {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub struct ExprStatement(pub Option<Expr>);
+pub struct ExprStatementData(pub Option<Expr>);
 
 /// Selection statement.
 #[derive(Clone, Debug, PartialEq, NodeContent)]

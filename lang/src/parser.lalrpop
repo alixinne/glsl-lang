@@ -403,7 +403,7 @@ expr: ast::Expr = {
 };
 
 expr_statement: ast::ExprStatement = {
-    <e:expr?> ";" => ast::ExprStatement(e),
+    <l:@L> <e:expr?> ";" <r:@R> => ast::ExprStatementData(e).spanned(l, r),
 };
 
 selection_statement_else<S>: ast::SelectionStatement = {
@@ -448,7 +448,7 @@ condition: ast::Condition = {
 }
 
 for_init_statement: ast::ForInitStatement = {
-    <expr_statement> => ast::ForInitStatement::Expression(<>.0),
+    <expr_statement> => ast::ForInitStatement::Expression(<>.content.0),
     <declaration>    => ast::ForInitStatement::Declaration(Box::new(<>)),
 };
 

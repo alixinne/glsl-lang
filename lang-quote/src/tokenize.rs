@@ -981,7 +981,7 @@ fn tokenize_function_identifier(i: &ast::FunIdentifier) -> TokenStream {
     let span = tokenize_span(&i.span);
     let i = match i.content {
         ast::FunIdentifierData::TypeSpecifier(ref n) => {
-            let n = tokenize_type_specifier(n);
+            let n = Box::new(tokenize_type_specifier(n)).quote();
             quote! { glsl_lang::ast::FunIdentifierData::TypeSpecifier(#n) }
         }
 
@@ -1364,7 +1364,7 @@ fn tokenize_condition(c: &ast::Condition) -> TokenStream {
         }
 
         ast::ConditionData::Assignment(ref ty, ref name, ref initializer) => {
-            let ty = tokenize_fully_specified_type(ty);
+            let ty = Box::new(tokenize_fully_specified_type(ty)).quote();
             let name = tokenize_identifier(name);
             let initializer = tokenize_initializer(initializer);
 

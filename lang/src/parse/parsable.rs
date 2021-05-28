@@ -243,20 +243,7 @@ impl Parsable for ast::ArraySpecifierDimension {
                                     ast::ExprData::FunCall(
                                         ast::FunIdentifier {
                                             content:
-                                                ast::FunIdentifierData::TypeSpecifier(
-                                                    ast::TypeSpecifier {
-                                                        content:
-                                                            ast::TypeSpecifierData {
-                                                                array_specifier:
-                                                                    Some(ast::ArraySpecifier {
-                                                                        content: array,
-                                                                        ..
-                                                                    }),
-                                                                ..
-                                                            },
-                                                        ..
-                                                    },
-                                                ),
+                                                ast::FunIdentifierData::TypeSpecifier(type_specifier),
                                             ..
                                         },
                                         _,
@@ -266,7 +253,18 @@ impl Parsable for ast::ArraySpecifierDimension {
                         ..
                     }) = statement_list.into_iter().next().unwrap().into_inner()
                     {
-                        return Ok((array.dimensions.into_iter().next().unwrap(), oo));
+                        if let ast::TypeSpecifier {
+                            content:
+                                ast::TypeSpecifierData {
+                                    array_specifier:
+                                        Some(ast::ArraySpecifier { content: array, .. }),
+                                    ..
+                                },
+                            ..
+                        } = *type_specifier
+                        {
+                            return Ok((array.dimensions.into_iter().next().unwrap(), oo));
+                        }
                     }
                 }
             }
@@ -312,16 +310,7 @@ impl Parsable for ast::ArraySpecifier {
                                     ast::ExprData::FunCall(
                                         ast::FunIdentifier {
                                             content:
-                                                ast::FunIdentifierData::TypeSpecifier(
-                                                    ast::TypeSpecifier {
-                                                        content:
-                                                            ast::TypeSpecifierData {
-                                                                array_specifier: Some(array),
-                                                                ..
-                                                            },
-                                                        ..
-                                                    },
-                                                ),
+                                                ast::FunIdentifierData::TypeSpecifier(type_specifier),
                                             ..
                                         },
                                         _,
@@ -331,7 +320,17 @@ impl Parsable for ast::ArraySpecifier {
                         ..
                     }) = statement_list.into_iter().next().unwrap().into_inner()
                     {
-                        return Ok((array, oo));
+                        if let ast::TypeSpecifier {
+                            content:
+                                ast::TypeSpecifierData {
+                                    array_specifier: Some(array),
+                                    ..
+                                },
+                            ..
+                        } = *type_specifier
+                        {
+                            return Ok((array, oo));
+                        }
                     }
                 }
             }

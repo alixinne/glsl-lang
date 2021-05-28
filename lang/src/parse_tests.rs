@@ -1205,9 +1205,9 @@ fn parse_primary_expr_parens() {
 
 #[test]
 fn parse_postfix_function_call_no_args() {
-    let fun = ast::FunIdentifierData::TypeSpecifier(
+    let fun = ast::FunIdentifierData::TypeSpecifier(Box::new(
         ast::TypeSpecifierData::from(ast::TypeSpecifierNonArrayData::Vec3).into(),
-    );
+    ));
     let args = Vec::new();
     let expected: ast::Expr = ast::ExprData::FunCall(fun.into(), args).into();
 
@@ -1444,9 +1444,9 @@ fn parse_complex_expr() {
     let ray = ast::ExprData::Variable("ray".into_node());
     let raydir = ast::ExprData::Dot(Box::new(ray.into()), "dir".into_node());
     let vec4 = ast::ExprData::FunCall(
-        ast::FunIdentifierData::TypeSpecifier(
+        ast::FunIdentifierData::TypeSpecifier(Box::new(
             ast::TypeSpecifierData::from(ast::TypeSpecifierNonArrayData::Vec4).into(),
-        )
+        ))
         .into(),
         vec![raydir.into(), zero.into()],
     );
@@ -1480,9 +1480,9 @@ fn parse_function_identifier_typename() {
 
 #[test]
 fn parse_function_identifier_cast() {
-    let expected: ast::FunIdentifier = ast::FunIdentifierData::TypeSpecifier(
+    let expected: ast::FunIdentifier = ast::FunIdentifierData::TypeSpecifier(Box::new(
         ast::TypeSpecifierData::from(ast::TypeSpecifierNonArrayData::Vec3).into(),
-    )
+    ))
     .into();
     assert_eq!(ast::FunIdentifier::parse("vec3"), Ok(expected.clone()));
     assert_eq!(ast::FunIdentifier::parse("vec3\t\n\n \t"), Ok(expected));
@@ -1490,7 +1490,7 @@ fn parse_function_identifier_cast() {
 
 #[test]
 fn parse_function_identifier_cast_array_unsized() {
-    let expected: ast::FunIdentifier = ast::FunIdentifierData::TypeSpecifier(
+    let expected: ast::FunIdentifier = ast::FunIdentifierData::TypeSpecifier(Box::new(
         ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::Vec3.into(),
             array_specifier: Some(
@@ -1501,7 +1501,7 @@ fn parse_function_identifier_cast_array_unsized() {
             ),
         }
         .into(),
-    )
+    ))
     .into();
 
     assert_eq!(ast::FunIdentifier::parse("vec3[]"), Ok(expected.clone()));
@@ -1510,7 +1510,7 @@ fn parse_function_identifier_cast_array_unsized() {
 
 #[test]
 fn parse_function_identifier_cast_array_sized() {
-    let expected: ast::FunIdentifier = ast::FunIdentifierData::TypeSpecifier(
+    let expected: ast::FunIdentifier = ast::FunIdentifierData::TypeSpecifier(Box::new(
         ast::TypeSpecifierData {
             ty: ast::TypeSpecifierNonArrayData::Vec3.into(),
             array_specifier: Some(
@@ -1524,7 +1524,7 @@ fn parse_function_identifier_cast_array_sized() {
             ),
         }
         .into(),
-    )
+    ))
     .into();
 
     assert_eq!(ast::FunIdentifier::parse("vec3[12]"), Ok(expected.clone()));
@@ -2887,17 +2887,17 @@ fn parse_dot_field_expr_statement() {
     let fun = ast::FunIdentifierData::ident("smoothstep");
     let args = vec![
         ast::ExprData::FunCall(
-            ast::FunIdentifierData::TypeSpecifier(
+            ast::FunIdentifierData::TypeSpecifier(Box::new(
                 ast::TypeSpecifierData::from(ast::TypeSpecifierNonArrayData::Vec3).into(),
-            )
+            ))
             .into(),
             vec![ast::ExprData::Variable("border_width".into_node()).into()],
         )
         .into(),
         ast::ExprData::FunCall(
-            ast::FunIdentifierData::TypeSpecifier(
+            ast::FunIdentifierData::TypeSpecifier(Box::new(
                 ast::TypeSpecifierData::from(ast::TypeSpecifierNonArrayData::Vec3).into(),
-            )
+            ))
             .into(),
             vec![ast::ExprData::FloatConst(0.).into()],
         )

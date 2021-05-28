@@ -253,7 +253,7 @@ fully_specified_type: ast::FullySpecifiedType = {
 };
 
 fun_identifier_data: ast::FunIdentifierData = {
-    type_specifier     => ast::FunIdentifierData::TypeSpecifier(<>),
+    type_specifier     => ast::FunIdentifierData::TypeSpecifier(Box::new(<>)),
     postfix_expression => ast::FunIdentifierData::Expr(Box::new(<>)),
 };
 
@@ -448,7 +448,7 @@ initializer: ast::Initializer = {
 
 condition_data: ast::ConditionData = {
     <expr> => ast::ConditionData::Expr(<>),
-    <t:fully_specified_type> <i:identifier> "=" <e:initializer> => ast::ConditionData::Assignment(t, i.0, e),
+    <t:fully_specified_type> <i:identifier> "=" <e:initializer> => ast::ConditionData::Assignment(Box::new(t), i.0, e),
 };
 
 condition: ast::Condition = {

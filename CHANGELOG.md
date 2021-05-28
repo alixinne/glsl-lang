@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - PartialEq for Node now compares the contents of the node by default
+- `glsl-lang`: Box large enum variants (FunIdentifierData::TypeSpecifier, ConditionData::Assignment) to reduce size differences
 
 ### Removed
 - NodeContentEq trait in lang-util

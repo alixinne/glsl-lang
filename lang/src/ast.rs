@@ -810,7 +810,7 @@ pub struct BlockData {
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
 pub enum FunIdentifierData {
     /// Type name used for the function name (as a constructor)
-    TypeSpecifier(TypeSpecifier),
+    TypeSpecifier(Box<TypeSpecifier>),
     /// Expression used for the function name
     Expr(Box<Expr>),
 }
@@ -1298,7 +1298,7 @@ pub enum ConditionData {
     /// An expression
     Expr(Expr),
     /// A variable declaration used as a condition
-    Assignment(FullySpecifiedType, Identifier, Initializer),
+    Assignment(Box<FullySpecifiedType>, Identifier, Initializer),
 }
 
 /// Selection rest statement.

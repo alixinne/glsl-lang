@@ -2115,9 +2115,9 @@ return u;
         let ray = ast::ExprData::Variable("ray".into_node());
         let raydir = ast::ExprData::Dot(Box::new(ray.into()), "dir".into_node());
         let vec4 = ast::ExprData::FunCall(
-            ast::FunIdentifierData::TypeSpecifier(
+            ast::FunIdentifierData::TypeSpecifier(Box::new(
                 ast::TypeSpecifierData::from(ast::TypeSpecifierNonArrayData::Vec4).into(),
-            )
+            ))
             .into(),
             vec![raydir.into(), zero.into()],
         );

@@ -1299,15 +1299,20 @@ fn tokenize_selection_rest_statement(sst: &ast::SelectionRestStatement) -> Token
 }
 
 fn tokenize_switch_statement(sst: &ast::SwitchStatement) -> TokenStream {
-    let head = Box::new(tokenize_expr(&sst.head)).quote();
-    let body = sst.body.iter().map(tokenize_statement);
+    let span = tokenize_span(&sst.span);
+    let sst = {
+        let head = Box::new(tokenize_expr(&sst.head)).quote();
+        let body = sst.body.iter().map(tokenize_statement);
 
-    quote! {
-      glsl_lang::ast::SwitchStatement {
-        head: #head,
-        body: vec![#(#body),*]
-      }
-    }
+        quote! {
+          glsl_lang::ast::SwitchStatementData {
+            head: #head,
+            body: vec![#(#body),*]
+          }
+        }
+    };
+
+    quote! { glsl_lang::ast::SwitchStatement::new(#sst, #span) }
 }
 
 fn tokenize_case_label(cl: &ast::CaseLabel) -> TokenStream {

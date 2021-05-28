@@ -1316,7 +1316,7 @@ pub enum SelectionRestStatementData {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub struct SwitchStatement {
+pub struct SwitchStatementData {
     /// Expression to evaluate and switch on
     pub head: Box<Expr>,
     /// Body of the switch statement

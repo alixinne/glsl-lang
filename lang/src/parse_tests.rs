@@ -2005,10 +2005,11 @@ fn parse_selection_statement_if_else() {
 #[test]
 fn parse_switch_statement_empty() {
     let head = Box::new(ast::ExprData::Variable("foo".into_node()).into());
-    let expected = ast::SwitchStatement {
+    let expected: ast::SwitchStatement = ast::SwitchStatementData {
         head,
         body: Vec::new(),
-    };
+    }
+    .into();
 
     assert_eq!(
         ast::SwitchStatement::parse("switch (foo) {}"),
@@ -2036,10 +2037,11 @@ fn parse_switch_statement_cases() {
     let ret = ast::StatementData::Jump(ast::JumpStatement::Return(Some(Box::new(
         ast::ExprData::UIntConst(12).into(),
     ))));
-    let expected = ast::SwitchStatement {
+    let expected: ast::SwitchStatement = ast::SwitchStatementData {
         head,
         body: vec![case0.into(), case1.into(), ret.into()],
-    };
+    }
+    .into();
 
     assert_eq!(
         ast::SwitchStatement::parse("switch (foo) { case 0: case 1: return 12u; }"),

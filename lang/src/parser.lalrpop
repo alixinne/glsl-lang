@@ -422,10 +422,10 @@ selection_statement<S>: ast::SelectionStatement = {
 };
 
 switch_statement: ast::SwitchStatement = {
-    "switch" "(" <e:expr> ")" "{" <s:statement*> "}" => ast::SwitchStatement {
+    <a:@L> "switch" "(" <e:expr> ")" "{" <s:statement*> "}" <b:@R> => ast::SwitchStatementData {
         head: Box::new(e),
         body: s,
-    }
+    }.spanned(a, b)
 };
 
 case_label: ast::CaseLabel = {

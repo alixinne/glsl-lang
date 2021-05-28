@@ -1305,7 +1305,7 @@ pub enum ConditionData {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub enum SelectionRestStatement {
+pub enum SelectionRestStatementData {
     /// Body of the if.
     Statement(Box<Statement>),
     /// The first argument is the body of the if, the rest is the next statement.

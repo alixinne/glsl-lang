@@ -1237,10 +1237,10 @@ macro_rules! make_host_trait {
         let visit = visitor.visit_selection_rest_statement(self);
 
         if visit == Visit::Children {
-          match self {
-            ast::SelectionRestStatement::Statement(s) => s.$mthd_name(visitor),
+          match $($ref)* **self {
+            ast::SelectionRestStatementData::Statement(s) => s.$mthd_name(visitor),
 
-            ast::SelectionRestStatement::Else(a, b) => {
+            ast::SelectionRestStatementData::Else(a, b) => {
               a.$mthd_name(visitor);
               b.$mthd_name(visitor);
             }

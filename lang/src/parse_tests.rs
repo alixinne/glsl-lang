@@ -1941,7 +1941,7 @@ fn parse_selection_statement_if() {
         }
         .into(),
     );
-    let rest = ast::SelectionRestStatement::Statement(Box::new(body.into()));
+    let rest = ast::SelectionRestStatementData::Statement(Box::new(body.into())).into();
     let expected: ast::SelectionStatement = ast::SelectionStatementData {
         cond: Box::new(cond.into()),
         rest,
@@ -1982,7 +1982,8 @@ fn parse_selection_statement_if_else() {
         .into(),
     );
     let rest =
-        ast::SelectionRestStatement::Else(Box::new(if_body.into()), Box::new(else_body.into()));
+        ast::SelectionRestStatementData::Else(Box::new(if_body.into()), Box::new(else_body.into()))
+            .into();
     let expected: ast::SelectionStatement = ast::SelectionStatementData {
         cond: Box::new(cond.into()),
         rest,
@@ -2072,7 +2073,8 @@ fn parse_iteration_statement_while_empty() {
             Box::new(ast::ExprData::Variable("b".into_node()).into()),
         )
         .into(),
-    ).into();
+    )
+    .into();
     let st = ast::StatementData::Compound(
         ast::CompoundStatementData {
             statement_list: Vec::new(),
@@ -2159,14 +2161,17 @@ fn parse_iteration_statement_for_empty() {
         .into(),
     ));
     let rest = ast::ForRestStatement {
-        condition: Some(ast::ConditionData::Expr(
-            ast::ExprData::Binary(
-                ast::BinaryOpData::Lte.into(),
-                Box::new(ast::ExprData::Variable("i".into_node()).into()),
-                Box::new(ast::ExprData::FloatConst(10.).into()),
+        condition: Some(
+            ast::ConditionData::Expr(
+                ast::ExprData::Binary(
+                    ast::BinaryOpData::Lte.into(),
+                    Box::new(ast::ExprData::Variable("i".into_node()).into()),
+                    Box::new(ast::ExprData::FloatConst(10.).into()),
+                )
+                .into(),
             )
             .into(),
-        ).into()),
+        ),
         post_expr: Some(Box::new(
             ast::ExprData::Unary(
                 ast::UnaryOpData::Inc.into(),
@@ -2260,7 +2265,7 @@ fn parse_compound_statement() {
     let st0 = ast::StatementData::Selection(
         ast::SelectionStatementData {
             cond: Box::new(ast::ExprData::BoolConst(true).into()),
-            rest: ast::SelectionRestStatement::Statement(Box::new(
+            rest: ast::SelectionRestStatementData::Statement(Box::new(
                 ast::StatementData::Compound(
                     ast::CompoundStatementData {
                         statement_list: Vec::new(),
@@ -2268,7 +2273,8 @@ fn parse_compound_statement() {
                     .into(),
                 )
                 .into(),
-            )),
+            ))
+            .into(),
         }
         .into(),
     );
@@ -2952,11 +2958,11 @@ fn parse_dangling_else() {
         Ok(ast::StatementData::Selection(
             ast::SelectionStatementData {
                 cond: Box::new(ast::ExprData::variable("ca").into()),
-                rest: ast::SelectionRestStatement::Statement(Box::new(
+                rest: ast::SelectionRestStatementData::Statement(Box::new(
                     ast::StatementData::Selection(
                         ast::SelectionStatementData {
                             cond: Box::new(ast::ExprData::variable("cb").into()),
-                            rest: ast::SelectionRestStatement::Else(
+                            rest: ast::SelectionRestStatementData::Else(
                                 Box::new(
                                     ast::StatementData::Expression(
                                         ast::ExprStatementData(Some(
@@ -2983,12 +2989,14 @@ fn parse_dangling_else() {
                                     )
                                     .into()
                                 ),
-                            ),
+                            )
+                            .into(),
                         }
                         .into()
                     )
                     .into()
                 ))
+                .into()
             }
             .into()
         )

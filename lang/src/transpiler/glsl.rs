@@ -1530,9 +1530,9 @@ pub fn show_selection_rest_statement<F>(
 where
     F: Write,
 {
-    match *sst {
-        ast::SelectionRestStatement::Statement(ref if_st) => show_statement(f, if_st, state),
-        ast::SelectionRestStatement::Else(ref if_st, ref else_st) => {
+    match **sst {
+        ast::SelectionRestStatementData::Statement(ref if_st) => show_statement(f, if_st, state),
+        ast::SelectionRestStatementData::Else(ref if_st, ref else_st) => {
             show_statement(f, if_st, state)?;
             f.write_str(" else ")?;
             // TODO: This should be configurable instead of relying on show_statement's calling

@@ -1281,18 +1281,21 @@ fn tokenize_selection_statement(sst: &ast::SelectionStatement) -> TokenStream {
 }
 
 fn tokenize_selection_rest_statement(sst: &ast::SelectionRestStatement) -> TokenStream {
-    match *sst {
-        ast::SelectionRestStatement::Statement(ref if_st) => {
+    let span = tokenize_span(&sst.span);
+    let sst = match sst.content {
+        ast::SelectionRestStatementData::Statement(ref if_st) => {
             let e = Box::new(tokenize_statement(if_st)).quote();
-            quote! { glsl_lang::ast::SelectionRestStatement::Statement(#e) }
+            quote! { glsl_lang::ast::SelectionRestStatementData::Statement(#e) }
         }
 
-        ast::SelectionRestStatement::Else(ref if_st, ref else_st) => {
+        ast::SelectionRestStatementData::Else(ref if_st, ref else_st) => {
             let if_st = Box::new(tokenize_statement(if_st)).quote();
             let else_st = Box::new(tokenize_statement(else_st)).quote();
-            quote! { glsl_lang::ast::SelectionRestStatement::Else(#if_st, #else_st) }
+            quote! { glsl_lang::ast::SelectionRestStatementData::Else(#if_st, #else_st) }
         }
-    }
+    };
+
+    quote! { glsl_lang::ast::SelectionRestStatement::new(#sst, #span) }
 }
 
 fn tokenize_switch_statement(sst: &ast::SwitchStatement) -> TokenStream {

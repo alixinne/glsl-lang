@@ -1544,14 +1544,14 @@ fn parse_declaration_init_declarator_list_single() {
         }
         .into(),
     };
-    let sd = ast::SingleDeclaration {
+    let sd = ast::SingleDeclarationData {
         ty: ty.into(),
         name: Some("foo".into_node()),
         array_specifier: None,
         initializer: Some(ast::Initializer::Simple(Box::new(ast::Expr::IntConst(34)))),
     };
     let idl = ast::InitDeclaratorListData {
-        head: sd,
+        head: sd.into(),
         tail: Vec::new(),
     };
     let expected: ast::Declaration = ast::DeclarationData::InitDeclaratorList(idl.into()).into();
@@ -1577,7 +1577,7 @@ fn parse_declaration_init_declarator_list_complex() {
         }
         .into(),
     };
-    let sd = ast::SingleDeclaration {
+    let sd = ast::SingleDeclarationData {
         ty: ty.into(),
         name: Some("foo".into_node()),
         array_specifier: None,
@@ -1589,7 +1589,7 @@ fn parse_declaration_init_declarator_list_complex() {
     };
     let expected: ast::Declaration = ast::DeclarationData::InitDeclaratorList(
         ast::InitDeclaratorListData {
-            head: sd,
+            head: sd.into(),
             tail: vec![sdnt],
         }
         .into(),
@@ -1992,7 +1992,7 @@ fn parse_iteration_statement_for_empty() {
     let init = ast::ForInitStatement::Declaration(Box::new(
         ast::DeclarationData::InitDeclaratorList(
             ast::InitDeclaratorListData {
-                head: ast::SingleDeclaration {
+                head: ast::SingleDeclarationData {
                     ty: ast::FullySpecifiedTypeData {
                         qualifier: None,
                         ty: ast::TypeSpecifierData {
@@ -2007,7 +2007,8 @@ fn parse_iteration_statement_for_empty() {
                     initializer: Some(ast::Initializer::Simple(Box::new(ast::Expr::FloatConst(
                         0.,
                     )))),
-                },
+                }
+                .into(),
                 tail: Vec::new(),
             }
             .into(),
@@ -2122,7 +2123,7 @@ fn parse_compound_statement() {
     let st1 = ast::StatementData::Declaration(
         ast::DeclarationData::InitDeclaratorList(
             ast::InitDeclaratorListData {
-                head: ast::SingleDeclaration {
+                head: ast::SingleDeclarationData {
                     ty: ast::FullySpecifiedTypeData {
                         qualifier: None,
                         ty: ast::TypeSpecifierData {
@@ -2135,7 +2136,8 @@ fn parse_compound_statement() {
                     name: Some("x".into_node()),
                     array_specifier: None,
                     initializer: None,
-                },
+                }
+                .into(),
                 tail: Vec::new(),
             }
             .into(),
@@ -2727,7 +2729,7 @@ fn parse_dot_field_expr_statement() {
         Box::new(ast::Expr::FunCall(fun.into(), args)),
         "zyx".into_node(),
     )));
-    let sd = ast::SingleDeclaration {
+    let sd = ast::SingleDeclarationData {
         ty: ast::FullySpecifiedTypeData {
             qualifier: None,
             ty: ast::TypeSpecifierData {
@@ -2744,7 +2746,7 @@ fn parse_dot_field_expr_statement() {
     let expected: ast::Statement = ast::StatementData::Declaration(
         ast::DeclarationData::InitDeclaratorList(
             ast::InitDeclaratorListData {
-                head: sd,
+                head: sd.into(),
                 tail: Vec::new(),
             }
             .into(),

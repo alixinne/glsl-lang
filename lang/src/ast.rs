@@ -903,7 +903,7 @@ pub struct InitDeclaratorListData {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub struct SingleDeclaration {
+pub struct SingleDeclarationData {
     /// Declaration type
     pub ty: FullySpecifiedType,
     /// Declared identifier
@@ -1251,12 +1251,13 @@ impl StatementData {
         Self::Declaration(
             DeclarationData::InitDeclaratorList(
                 InitDeclaratorListData {
-                    head: SingleDeclaration {
+                    head: SingleDeclarationData {
                         ty: ty.into().into(),
                         name: Some(name.into().into()),
                         array_specifier: array_specifier.into(),
                         initializer: initializer.into(),
-                    },
+                    }
+                    .into(),
                     tail: Vec::new(),
                 }
                 .into(),

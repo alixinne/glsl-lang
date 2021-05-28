@@ -570,22 +570,26 @@ function_prototype: (ast::FunctionPrototype, LexerContext) = {
         )
 };
 
-single_declaration: ast::SingleDeclaration = {
+single_declaration_data: ast::SingleDeclarationData = {
     <t:fully_specified_type> <i:arrayed_identifier> <e:("=" <initializer>)?> => {
         let i = i.into_inner();
-        ast::SingleDeclaration {
+        ast::SingleDeclarationData {
             ty: t,
             name: Some(i.ident),
             array_specifier: i.array_spec,
             initializer: e,
         }
     },
-    <t:fully_specified_type> => ast::SingleDeclaration {
+    <t:fully_specified_type> => ast::SingleDeclarationData {
         ty: t,
         name: None,
         array_specifier: None,
         initializer: None,
     },
+};
+
+single_declaration: ast::SingleDeclaration = {
+    <l:@L> <s:single_declaration_data> <r:@R> => s.spanned(l, r)
 };
 
 single_declaration_no_type: ast::SingleDeclarationNoType = {

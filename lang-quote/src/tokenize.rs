@@ -1085,19 +1085,24 @@ fn tokenize_init_declarator_list(i: &ast::InitDeclaratorList) -> TokenStream {
 }
 
 fn tokenize_single_declaration(d: &ast::SingleDeclaration) -> TokenStream {
-    let ty = tokenize_fully_specified_type(&d.ty);
-    let name = d.name.as_ref().map(|i| tokenize_identifier(i)).quote();
-    let array_specifier = d.array_specifier.as_ref().map(tokenize_array_spec).quote();
-    let initializer = d.initializer.as_ref().map(tokenize_initializer).quote();
+    let span = tokenize_span(&d.span);
+    let d = {
+        let ty = tokenize_fully_specified_type(&d.ty);
+        let name = d.name.as_ref().map(|i| tokenize_identifier(i)).quote();
+        let array_specifier = d.array_specifier.as_ref().map(tokenize_array_spec).quote();
+        let initializer = d.initializer.as_ref().map(tokenize_initializer).quote();
 
-    quote! {
-      glsl_lang::ast::SingleDeclaration {
-        ty: #ty,
-        name: #name,
-        array_specifier: #array_specifier,
-        initializer: #initializer
-      }
-    }
+        quote! {
+          glsl_lang::ast::SingleDeclarationData {
+            ty: #ty,
+            name: #name,
+            array_specifier: #array_specifier,
+            initializer: #initializer
+          }
+        }
+    };
+
+    quote! { glsl_lang::ast::SingleDeclaration::new(#d, #span) }
 }
 
 fn tokenize_single_declaration_no_type(d: &ast::SingleDeclarationNoType) -> TokenStream {

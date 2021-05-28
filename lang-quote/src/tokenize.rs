@@ -1068,15 +1068,20 @@ fn tokenize_function_parameter_declarator(p: &ast::FunctionParameterDeclarator) 
 }
 
 fn tokenize_init_declarator_list(i: &ast::InitDeclaratorList) -> TokenStream {
-    let head = tokenize_single_declaration(&i.head);
-    let tail = i.tail.iter().map(tokenize_single_declaration_no_type);
+    let span = tokenize_span(&i.span);
+    let i = {
+        let head = tokenize_single_declaration(&i.head);
+        let tail = i.tail.iter().map(tokenize_single_declaration_no_type);
 
-    quote! {
-      glsl_lang::ast::InitDeclaratorList {
-        head: #head,
-        tail: vec![#(#tail),*]
-      }
-    }
+        quote! {
+          glsl_lang::ast::InitDeclaratorListData {
+            head: #head,
+            tail: vec![#(#tail),*]
+          }
+        }
+    };
+
+    quote! { glsl_lang::ast::InitDeclaratorList::new(#i, #span) }
 }
 
 fn tokenize_single_declaration(d: &ast::SingleDeclaration) -> TokenStream {

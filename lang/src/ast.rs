@@ -892,7 +892,7 @@ pub struct FunctionParameterDeclaratorData {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub struct InitDeclaratorList {
+pub struct InitDeclaratorListData {
     /// First declaration
     pub head: SingleDeclaration,
     /// Following declarations
@@ -1249,15 +1249,18 @@ impl StatementData {
         I: Into<Option<Initializer>>,
     {
         Self::Declaration(
-            DeclarationData::InitDeclaratorList(InitDeclaratorList {
-                head: SingleDeclaration {
-                    ty: ty.into().into(),
-                    name: Some(name.into().into()),
-                    array_specifier: array_specifier.into(),
-                    initializer: initializer.into(),
-                },
-                tail: Vec::new(),
-            })
+            DeclarationData::InitDeclaratorList(
+                InitDeclaratorListData {
+                    head: SingleDeclaration {
+                        ty: ty.into().into(),
+                        name: Some(name.into().into()),
+                        array_specifier: array_specifier.into(),
+                        initializer: initializer.into(),
+                    },
+                    tail: Vec::new(),
+                }
+                .into(),
+            )
             .into(),
         )
     }

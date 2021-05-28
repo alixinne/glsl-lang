@@ -596,10 +596,10 @@ single_declaration_no_type: ast::SingleDeclarationNoType = {
 };
 
 init_declarator_list: ast::InitDeclaratorList = {
-    <h:single_declaration> <t:("," <single_declaration_no_type>)*> => ast::InitDeclaratorList {
+    <l:@L> <h:single_declaration> <t:("," <single_declaration_no_type>)*> <r:@R> => ast::InitDeclaratorListData {
         head: h,
         tail: t,
-    }
+    }.spanned(l, r)
 };
 
 block_declaration: ast::Block = {

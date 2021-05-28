@@ -1550,11 +1550,11 @@ fn parse_declaration_init_declarator_list_single() {
         array_specifier: None,
         initializer: Some(ast::Initializer::Simple(Box::new(ast::Expr::IntConst(34)))),
     };
-    let idl = ast::InitDeclaratorList {
+    let idl = ast::InitDeclaratorListData {
         head: sd,
         tail: Vec::new(),
     };
-    let expected: ast::Declaration = ast::DeclarationData::InitDeclaratorList(idl).into();
+    let expected: ast::Declaration = ast::DeclarationData::InitDeclaratorList(idl.into()).into();
 
     assert_eq!(
         ast::Declaration::parse("int foo = 34;"),
@@ -1587,12 +1587,14 @@ fn parse_declaration_init_declarator_list_complex() {
         ident: "bar".into_node(),
         initializer: Some(ast::Initializer::Simple(Box::new(ast::Expr::IntConst(12)))),
     };
-    let expected: ast::Declaration =
-        ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
+    let expected: ast::Declaration = ast::DeclarationData::InitDeclaratorList(
+        ast::InitDeclaratorListData {
             head: sd,
             tail: vec![sdnt],
-        })
-        .into();
+        }
+        .into(),
+    )
+    .into();
 
     assert_eq!(
         ast::Declaration::parse("int foo = 34, bar = 12;"),
@@ -1988,25 +1990,28 @@ fn parse_iteration_statement_do_while_empty() {
 #[test]
 fn parse_iteration_statement_for_empty() {
     let init = ast::ForInitStatement::Declaration(Box::new(
-        ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
-            head: ast::SingleDeclaration {
-                ty: ast::FullySpecifiedTypeData {
-                    qualifier: None,
-                    ty: ast::TypeSpecifierData {
-                        ty: ast::TypeSpecifierNonArrayData::Float.into(),
-                        array_specifier: None,
+        ast::DeclarationData::InitDeclaratorList(
+            ast::InitDeclaratorListData {
+                head: ast::SingleDeclaration {
+                    ty: ast::FullySpecifiedTypeData {
+                        qualifier: None,
+                        ty: ast::TypeSpecifierData {
+                            ty: ast::TypeSpecifierNonArrayData::Float.into(),
+                            array_specifier: None,
+                        }
+                        .into(),
                     }
                     .into(),
-                }
-                .into(),
-                name: Some("i".into_node()),
-                array_specifier: None,
-                initializer: Some(ast::Initializer::Simple(Box::new(ast::Expr::FloatConst(
-                    0.,
-                )))),
-            },
-            tail: Vec::new(),
-        })
+                    name: Some("i".into_node()),
+                    array_specifier: None,
+                    initializer: Some(ast::Initializer::Simple(Box::new(ast::Expr::FloatConst(
+                        0.,
+                    )))),
+                },
+                tail: Vec::new(),
+            }
+            .into(),
+        )
         .into(),
     ));
     let rest = ast::ForRestStatement {
@@ -2115,23 +2120,26 @@ fn parse_compound_statement() {
         )),
     });
     let st1 = ast::StatementData::Declaration(
-        ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
-            head: ast::SingleDeclaration {
-                ty: ast::FullySpecifiedTypeData {
-                    qualifier: None,
-                    ty: ast::TypeSpecifierData {
-                        ty: ast::TypeSpecifierNonArrayData::ISampler3D.into(),
-                        array_specifier: None,
+        ast::DeclarationData::InitDeclaratorList(
+            ast::InitDeclaratorListData {
+                head: ast::SingleDeclaration {
+                    ty: ast::FullySpecifiedTypeData {
+                        qualifier: None,
+                        ty: ast::TypeSpecifierData {
+                            ty: ast::TypeSpecifierNonArrayData::ISampler3D.into(),
+                            array_specifier: None,
+                        }
+                        .into(),
                     }
                     .into(),
-                }
-                .into(),
-                name: Some("x".into_node()),
-                array_specifier: None,
-                initializer: None,
-            },
-            tail: Vec::new(),
-        })
+                    name: Some("x".into_node()),
+                    array_specifier: None,
+                    initializer: None,
+                },
+                tail: Vec::new(),
+            }
+            .into(),
+        )
         .into(),
     );
     let st2 = ast::StatementData::Jump(ast::JumpStatement::Return(Some(Box::new(
@@ -2734,10 +2742,13 @@ fn parse_dot_field_expr_statement() {
         initializer: Some(ini),
     };
     let expected: ast::Statement = ast::StatementData::Declaration(
-        ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
-            head: sd,
-            tail: Vec::new(),
-        })
+        ast::DeclarationData::InitDeclaratorList(
+            ast::InitDeclaratorListData {
+                head: sd,
+                tail: Vec::new(),
+            }
+            .into(),
+        )
         .into(),
     )
     .into();

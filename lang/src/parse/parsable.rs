@@ -371,20 +371,24 @@ impl Parsable for ast::InterpolationQualifier {
                         ast::ExternalDeclarationData::Declaration(ast::Node {
                             content:
                                 ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
-                                    head:
-                                        ast::SingleDeclaration {
-                                            ty:
-                                                ast::FullySpecifiedType {
-                                                    content:
-                                                        ast::FullySpecifiedTypeData {
-                                                            qualifier:
-                                                                Some(ast::TypeQualifier {
-                                                                    content:
-                                                                        ast::TypeQualifierData {
-                                                                            qualifiers,
-                                                                        },
+                                    content:
+                                        ast::InitDeclaratorListData {
+                                            head:
+                                                ast::SingleDeclaration {
+                                                    ty:
+                                                        ast::FullySpecifiedType {
+                                                            content:
+                                                                ast::FullySpecifiedTypeData {
+                                                                    qualifier:
+                                                                        Some(ast::TypeQualifier {
+                                                                            content:
+                                                                                ast::TypeQualifierData {
+                                                                                    qualifiers,
+                                                                                },
+                                                                            ..
+                                                                        }),
                                                                     ..
-                                                                }),
+                                                                },
                                                             ..
                                                         },
                                                     ..
@@ -464,20 +468,24 @@ impl Parsable for ast::PrecisionQualifier {
                         ast::ExternalDeclarationData::Declaration(ast::Node {
                             content:
                                 ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
-                                    head:
-                                        ast::SingleDeclaration {
-                                            ty:
-                                                ast::FullySpecifiedType {
-                                                    content:
-                                                        ast::FullySpecifiedTypeData {
-                                                            qualifier:
-                                                                Some(ast::TypeQualifier {
-                                                                    content:
-                                                                        ast::TypeQualifierData {
-                                                                            qualifiers,
-                                                                        },
+                                    content:
+                                        ast::InitDeclaratorListData {
+                                            head:
+                                                ast::SingleDeclaration {
+                                                    ty:
+                                                        ast::FullySpecifiedType {
+                                                            content:
+                                                                ast::FullySpecifiedTypeData {
+                                                                    qualifier:
+                                                                        Some(ast::TypeQualifier {
+                                                                            content:
+                                                                                ast::TypeQualifierData {
+                                                                                    qualifiers,
+                                                                                },
+                                                                            ..
+                                                                        }),
                                                                     ..
-                                                                }),
+                                                                },
                                                             ..
                                                         },
                                                     ..
@@ -520,20 +528,24 @@ impl Parsable for ast::StorageQualifier {
                         ast::ExternalDeclarationData::Declaration(ast::Node {
                             content:
                                 ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
-                                    head:
-                                        ast::SingleDeclaration {
-                                            ty:
-                                                ast::FullySpecifiedType {
-                                                    content:
-                                                        ast::FullySpecifiedTypeData {
-                                                            qualifier:
-                                                                Some(ast::TypeQualifier {
-                                                                    content:
-                                                                        ast::TypeQualifierData {
-                                                                            qualifiers,
-                                                                        },
+                                    content:
+                                        ast::InitDeclaratorListData {
+                                            head:
+                                                ast::SingleDeclaration {
+                                                    ty:
+                                                        ast::FullySpecifiedType {
+                                                            content:
+                                                                ast::FullySpecifiedTypeData {
+                                                                    qualifier:
+                                                                        Some(ast::TypeQualifier {
+                                                                            content:
+                                                                                ast::TypeQualifierData {
+                                                                                    qualifiers,
+                                                                                },
+                                                                            ..
+                                                                        }),
                                                                     ..
-                                                                }),
+                                                                },
                                                             ..
                                                         },
                                                     ..
@@ -576,20 +588,24 @@ impl Parsable for ast::LayoutQualifier {
                         ast::ExternalDeclarationData::Declaration(ast::Node {
                             content:
                                 ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
-                                    head:
-                                        ast::SingleDeclaration {
-                                            ty:
-                                                ast::FullySpecifiedType {
-                                                    content:
-                                                        ast::FullySpecifiedTypeData {
-                                                            qualifier:
-                                                                Some(ast::TypeQualifier {
-                                                                    content:
-                                                                        ast::TypeQualifierData {
-                                                                            qualifiers,
-                                                                        },
+                                    content:
+                                        ast::InitDeclaratorListData {
+                                            head:
+                                                ast::SingleDeclaration {
+                                                    ty:
+                                                        ast::FullySpecifiedType {
+                                                            content:
+                                                                ast::FullySpecifiedTypeData {
+                                                                    qualifier:
+                                                                        Some(ast::TypeQualifier {
+                                                                            content:
+                                                                                ast::TypeQualifierData {
+                                                                                    qualifiers,
+                                                                                },
+                                                                            ..
+                                                                        }),
                                                                     ..
-                                                                }),
+                                                                },
                                                             ..
                                                         },
                                                     ..
@@ -632,13 +648,17 @@ impl Parsable for ast::TypeQualifier {
                         ast::ExternalDeclarationData::Declaration(ast::Node {
                             content:
                                 ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
-                                    head:
-                                        ast::SingleDeclaration {
-                                            ty:
-                                                ast::FullySpecifiedType {
-                                                    content:
-                                                        ast::FullySpecifiedTypeData {
-                                                            qualifier: Some(q),
+                                    content:
+                                        ast::InitDeclaratorListData {
+                                            head:
+                                                ast::SingleDeclaration {
+                                                    ty:
+                                                        ast::FullySpecifiedType {
+                                                            content:
+                                                                ast::FullySpecifiedTypeData {
+                                                                    qualifier: Some(q),
+                                                                    ..
+                                                                },
                                                             ..
                                                         },
                                                     ..
@@ -677,11 +697,18 @@ impl Parsable for ast::TypeSpecifier {
                         ast::ExternalDeclarationData::Declaration(ast::Node {
                             content:
                                 ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
-                                    head:
-                                        ast::SingleDeclaration {
-                                            ty:
-                                                ast::FullySpecifiedType {
-                                                    content: ast::FullySpecifiedTypeData { ty, .. },
+                                    content:
+                                        ast::InitDeclaratorListData {
+                                            head:
+                                                ast::SingleDeclaration {
+                                                    ty:
+                                                        ast::FullySpecifiedType {
+                                                            content:
+                                                                ast::FullySpecifiedTypeData {
+                                                                    ty, ..
+                                                                },
+                                                            ..
+                                                        },
                                                     ..
                                                 },
                                             ..
@@ -718,17 +745,21 @@ impl Parsable for ast::TypeSpecifierNonArray {
                         ast::ExternalDeclarationData::Declaration(ast::Node {
                             content:
                                 ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
-                                    head:
-                                        ast::SingleDeclaration {
-                                            ty:
-                                                ast::FullySpecifiedType {
-                                                    content:
-                                                        ast::FullySpecifiedTypeData {
-                                                            ty:
-                                                                ast::TypeSpecifier {
-                                                                    content:
-                                                                        ast::TypeSpecifierData {
-                                                                            ty,
+                                    content:
+                                        ast::InitDeclaratorListData {
+                                            head:
+                                                ast::SingleDeclaration {
+                                                    ty:
+                                                        ast::FullySpecifiedType {
+                                                            content:
+                                                                ast::FullySpecifiedTypeData {
+                                                                    ty:
+                                                                        ast::TypeSpecifier {
+                                                                            content:
+                                                                                ast::TypeSpecifierData {
+                                                                                    ty,
+                                                                                    ..
+                                                                                },
                                                                             ..
                                                                         },
                                                                     ..
@@ -771,7 +802,11 @@ impl Parsable for ast::FullySpecifiedType {
                         ast::ExternalDeclarationData::Declaration(ast::Node {
                             content:
                                 ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
-                                    head: ast::SingleDeclaration { ty, .. },
+                                    content:
+                                        ast::InitDeclaratorListData {
+                                            head: ast::SingleDeclaration { ty, .. },
+                                            ..
+                                        },
                                     ..
                                 }),
                             ..
@@ -829,6 +864,7 @@ impl Parsable for ast::StructFieldSpecifier {
                         ast::ExternalDeclarationData::Declaration(ast::Node {
                             content:
                                 ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
+                                    content: ast::InitDeclaratorListData {
                                     head:
                                         ast::SingleDeclaration {
                                             ty:
@@ -861,7 +897,8 @@ impl Parsable for ast::StructFieldSpecifier {
                                             ..
                                         },
                                     ..
-                                }),
+                                },
+                                    .. }),
                             ..
                         }),
                     ..
@@ -892,6 +929,7 @@ impl Parsable for ast::StructSpecifier {
                         ast::ExternalDeclarationData::Declaration(ast::Node {
                             content:
                                 ast::DeclarationData::InitDeclaratorList(ast::InitDeclaratorList {
+                                    content: ast::InitDeclaratorListData {
                                     head:
                                         ast::SingleDeclaration {
                                             ty:
@@ -916,7 +954,8 @@ impl Parsable for ast::StructSpecifier {
                                             ..
                                         },
                                     ..
-                                }),
+                                },
+                                    .. }),
                             ..
                         }),
                     ..

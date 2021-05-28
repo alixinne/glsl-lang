@@ -593,10 +593,10 @@ single_declaration: ast::SingleDeclaration = {
 };
 
 single_declaration_no_type: ast::SingleDeclarationNoType = {
-    <i:arrayed_identifier> <e:("=" <initializer>)?> => ast::SingleDeclarationNoType {
+    <l:@L> <i:arrayed_identifier> <e:("=" <initializer>)?> <r:@R> => ast::SingleDeclarationNoTypeData {
         ident: i,
         initializer: e,
-    }
+    }.spanned(l, r)
 };
 
 init_declarator_list: ast::InitDeclaratorList = {

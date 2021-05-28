@@ -1583,14 +1583,14 @@ fn parse_declaration_init_declarator_list_complex() {
         array_specifier: None,
         initializer: Some(ast::Initializer::Simple(Box::new(ast::Expr::IntConst(34)))),
     };
-    let sdnt = ast::SingleDeclarationNoType {
+    let sdnt = ast::SingleDeclarationNoTypeData {
         ident: "bar".into_node(),
         initializer: Some(ast::Initializer::Simple(Box::new(ast::Expr::IntConst(12)))),
     };
     let expected: ast::Declaration = ast::DeclarationData::InitDeclaratorList(
         ast::InitDeclaratorListData {
             head: sd.into(),
-            tail: vec![sdnt],
+            tail: vec![sdnt.into()],
         }
         .into(),
     )

@@ -1106,15 +1106,20 @@ fn tokenize_single_declaration(d: &ast::SingleDeclaration) -> TokenStream {
 }
 
 fn tokenize_single_declaration_no_type(d: &ast::SingleDeclarationNoType) -> TokenStream {
-    let ident = tokenize_arrayed_identifier(&d.ident);
-    let initializer = d.initializer.as_ref().map(tokenize_initializer).quote();
+    let span = tokenize_span(&d.span);
+    let d = {
+        let ident = tokenize_arrayed_identifier(&d.ident);
+        let initializer = d.initializer.as_ref().map(tokenize_initializer).quote();
 
-    quote! {
-      glsl_lang::ast::SingleDeclarationNoType {
-        ident: #ident,
-        initializer: #initializer
-      }
-    }
+        quote! {
+          glsl_lang::ast::SingleDeclarationNoTypeData {
+            ident: #ident,
+            initializer: #initializer
+          }
+        }
+    };
+
+    quote! { glsl_lang::ast::SingleDeclarationNoType::new(#d, #span) }
 }
 
 fn tokenize_initializer(i: &ast::Initializer) -> TokenStream {

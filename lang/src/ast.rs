@@ -918,7 +918,7 @@ pub struct SingleDeclarationData {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub struct SingleDeclarationNoType {
+pub struct SingleDeclarationNoTypeData {
     /// Declared identifier
     pub ident: ArrayedIdentifier,
     /// Initializer expression

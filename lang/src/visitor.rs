@@ -1363,10 +1363,10 @@ macro_rules! make_host_trait {
         let visit = visitor.visit_condition(self);
 
         if visit == Visit::Children {
-          match self {
-            ast::Condition::Expr(e) => e.$mthd_name(visitor),
+          match $($ref)* **self {
+            ast::ConditionData::Expr(e) => e.$mthd_name(visitor),
 
-            ast::Condition::Assignment(fst, ident, init) => {
+            ast::ConditionData::Assignment(fst, ident, init) => {
               fst.$mthd_name(visitor);
               ident.$mthd_name(visitor);
               init.$mthd_name(visitor);

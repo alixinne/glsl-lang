@@ -1294,7 +1294,7 @@ pub struct SelectionStatementData {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub enum Condition {
+pub enum ConditionData {
     /// An expression
     Expr(Expr),
     /// A variable declaration used as a condition

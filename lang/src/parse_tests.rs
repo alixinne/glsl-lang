@@ -2065,14 +2065,14 @@ fn parse_case_label() {
 
 #[test]
 fn parse_iteration_statement_while_empty() {
-    let cond = ast::Condition::Expr(
+    let cond = ast::ConditionData::Expr(
         ast::ExprData::Binary(
             ast::BinaryOpData::Gte.into(),
             Box::new(ast::ExprData::Variable("a".into_node()).into()),
             Box::new(ast::ExprData::Variable("b".into_node()).into()),
         )
         .into(),
-    );
+    ).into();
     let st = ast::StatementData::Compound(
         ast::CompoundStatementData {
             statement_list: Vec::new(),
@@ -2159,14 +2159,14 @@ fn parse_iteration_statement_for_empty() {
         .into(),
     ));
     let rest = ast::ForRestStatement {
-        condition: Some(ast::Condition::Expr(
+        condition: Some(ast::ConditionData::Expr(
             ast::ExprData::Binary(
                 ast::BinaryOpData::Lte.into(),
                 Box::new(ast::ExprData::Variable("i".into_node()).into()),
                 Box::new(ast::ExprData::FloatConst(10.).into()),
             )
             .into(),
-        )),
+        ).into()),
         post_expr: Some(Box::new(
             ast::ExprData::Unary(
                 ast::UnaryOpData::Inc.into(),

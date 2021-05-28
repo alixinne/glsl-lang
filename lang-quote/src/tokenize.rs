@@ -1342,20 +1342,23 @@ fn tokenize_iteration_statement(ist: &ast::IterationStatement) -> TokenStream {
 }
 
 fn tokenize_condition(c: &ast::Condition) -> TokenStream {
-    match *c {
-        ast::Condition::Expr(ref e) => {
+    let span = tokenize_span(&c.span);
+    let c = match c.content {
+        ast::ConditionData::Expr(ref e) => {
             let e = Box::new(tokenize_expr(e)).quote();
-            quote! { glsl_lang::ast::Condition::Expr(#e) }
+            quote! { glsl_lang::ast::ConditionData::Expr(#e) }
         }
 
-        ast::Condition::Assignment(ref ty, ref name, ref initializer) => {
+        ast::ConditionData::Assignment(ref ty, ref name, ref initializer) => {
             let ty = tokenize_fully_specified_type(ty);
             let name = tokenize_identifier(name);
             let initializer = tokenize_initializer(initializer);
 
-            quote! { glsl_lang::ast::Condition::Assignment(#ty, #name, #initializer) }
+            quote! { glsl_lang::ast::ConditionData::Assignment(#ty, #name, #initializer) }
         }
-    }
+    };
+
+    quote! { glsl_lang::ast::Condition::new(#c, #span) }
 }
 
 fn tokenize_for_init_statement(i: &ast::ForInitStatement) -> TokenStream {

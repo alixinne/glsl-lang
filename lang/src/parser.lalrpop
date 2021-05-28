@@ -442,10 +442,14 @@ initializer: ast::Initializer = {
     <l:@L> <i:initializer_data> <r:@R> => i.spanned(l, r)
 };
 
+condition_data: ast::ConditionData = {
+    <expr> => ast::ConditionData::Expr(<>),
+    <t:fully_specified_type> <i:identifier> "=" <e:initializer> => ast::ConditionData::Assignment(t, i.0, e),
+};
+
 condition: ast::Condition = {
-    <expr> => ast::Condition::Expr(<>),
-    <t:fully_specified_type> <i:identifier> "=" <e:initializer> => ast::Condition::Assignment(t, i.0, e),
-}
+    <l:@L> <c:condition_data> <r:@R> => c.spanned(l, r)
+};
 
 for_init_statement: ast::ForInitStatement = {
     <expr_statement> => ast::ForInitStatement::Expression(<>.content.0),

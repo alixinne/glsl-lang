@@ -1626,9 +1626,9 @@ pub fn show_condition<F>(
 where
     F: Write,
 {
-    match *c {
-        ast::Condition::Expr(ref e) => show_expr(f, e, state),
-        ast::Condition::Assignment(ref ty, ref name, ref initializer) => {
+    match **c {
+        ast::ConditionData::Expr(ref e) => show_expr(f, e, state),
+        ast::ConditionData::Assignment(ref ty, ref name, ref initializer) => {
             show_fully_specified_type(f, ty, state)?;
             f.write_str(" ")?;
             show_identifier(f, name, state)?;

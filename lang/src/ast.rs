@@ -1354,7 +1354,7 @@ pub enum IterationStatementData {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub enum ForInitStatement {
+pub enum ForInitStatementData {
     /// Expression
     Expression(Option<Expr>),
     /// Variable declaration

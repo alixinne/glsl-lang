@@ -1318,9 +1318,9 @@ macro_rules! make_host_trait {
         let visit = visitor.visit_for_init_statement(self);
 
         if visit == Visit::Children {
-          match self {
-            ast::ForInitStatement::Expression(e) => e.$mthd_name(visitor),
-            ast::ForInitStatement::Declaration(d) => d.$mthd_name(visitor),
+          match $($ref)* **self {
+            ast::ForInitStatementData::Expression(e) => e.$mthd_name(visitor),
+            ast::ForInitStatementData::Declaration(d) => d.$mthd_name(visitor),
           }
         }
       }

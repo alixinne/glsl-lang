@@ -2139,7 +2139,7 @@ fn parse_iteration_statement_do_while_empty() {
 
 #[test]
 fn parse_iteration_statement_for_empty() {
-    let init = ast::ForInitStatement::Declaration(Box::new(
+    let init = ast::ForInitStatementData::Declaration(Box::new(
         ast::DeclarationData::InitDeclaratorList(
             ast::InitDeclaratorListData {
                 head: ast::SingleDeclarationData {
@@ -2167,7 +2167,8 @@ fn parse_iteration_statement_for_empty() {
             .into(),
         )
         .into(),
-    ));
+    ))
+    .into();
     let rest = ast::ForRestStatement {
         condition: Some(
             ast::ConditionData::Expr(

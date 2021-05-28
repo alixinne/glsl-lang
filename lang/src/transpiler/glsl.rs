@@ -1647,15 +1647,15 @@ pub fn show_for_init_statement<F>(
 where
     F: Write,
 {
-    match *i {
-        ast::ForInitStatement::Expression(ref expr) => {
+    match **i {
+        ast::ForInitStatementData::Expression(ref expr) => {
             if let Some(ref e) = *expr {
                 show_expr(f, e, state)?;
             }
 
             Ok(())
         }
-        ast::ForInitStatement::Declaration(ref d) => show_declaration(f, d, state),
+        ast::ForInitStatementData::Declaration(ref d) => show_declaration(f, d, state),
     }
 }
 

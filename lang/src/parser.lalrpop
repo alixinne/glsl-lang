@@ -455,9 +455,13 @@ condition: ast::Condition = {
     <l:@L> <c:condition_data> <r:@R> => c.spanned(l, r)
 };
 
+for_init_statement_data: ast::ForInitStatementData = {
+    <expr_statement> => ast::ForInitStatementData::Expression(<>.content.0),
+    <declaration>    => ast::ForInitStatementData::Declaration(Box::new(<>)),
+};
+
 for_init_statement: ast::ForInitStatement = {
-    <expr_statement> => ast::ForInitStatement::Expression(<>.content.0),
-    <declaration>    => ast::ForInitStatement::Declaration(Box::new(<>)),
+    <l:@L> <f:for_init_statement_data> <r:@R> => f.spanned(l, r)
 };
 
 for_rest_statement: ast::ForRestStatement = {

@@ -1376,17 +1376,20 @@ fn tokenize_condition(c: &ast::Condition) -> TokenStream {
 }
 
 fn tokenize_for_init_statement(i: &ast::ForInitStatement) -> TokenStream {
-    match *i {
-        ast::ForInitStatement::Expression(ref expr) => {
+    let span = tokenize_span(&i.span);
+    let i = match i.content {
+        ast::ForInitStatementData::Expression(ref expr) => {
             let e = expr.as_ref().map(|e| tokenize_expr(&e)).quote();
-            quote! { glsl_lang::ast::ForInitStatement::Expression(#e) }
+            quote! { glsl_lang::ast::ForInitStatementData::Expression(#e) }
         }
 
-        ast::ForInitStatement::Declaration(ref d) => {
+        ast::ForInitStatementData::Declaration(ref d) => {
             let d = Box::new(tokenize_declaration(d)).quote();
-            quote! { glsl_lang::ast::ForInitStatement::Declaration(#d) }
+            quote! { glsl_lang::ast::ForInitStatementData::Declaration(#d) }
         }
-    }
+    };
+
+    quote! { glsl_lang::ast::ForInitStatement::new(#i, #span) }
 }
 
 fn tokenize_for_rest_statement(r: &ast::ForRestStatement) -> TokenStream {

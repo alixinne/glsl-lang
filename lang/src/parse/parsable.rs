@@ -83,9 +83,10 @@ impl Parsable for ast::UnaryOp {
                     ..
                 } = extdecls.into_iter().next().unwrap()
                 {
-                    if let ast::StatementData::Expression(ast::ExprStatement(Some(
-                        ast::Expr::Unary(u, _),
-                    ))) = statement_list.into_iter().next().unwrap().into_inner()
+                    if let ast::StatementData::Expression(ast::ExprStatement(Some(ast::Expr {
+                        content: ast::ExprData::Unary(u, _),
+                        ..
+                    }))) = statement_list.into_iter().next().unwrap().into_inner()
                     {
                         return Ok((u, oo));
                     }
@@ -126,9 +127,10 @@ impl Parsable for ast::AssignmentOp {
                     ..
                 } = extdecls.into_iter().next().unwrap()
                 {
-                    if let ast::StatementData::Expression(ast::ExprStatement(Some(
-                        ast::Expr::Assignment(_, o, _),
-                    ))) = statement_list.into_iter().next().unwrap().into_inner()
+                    if let ast::StatementData::Expression(ast::ExprStatement(Some(ast::Expr {
+                        content: ast::ExprData::Assignment(_, o, _),
+                        ..
+                    }))) = statement_list.into_iter().next().unwrap().into_inner()
                     {
                         return Ok((o, oo));
                     }
@@ -226,24 +228,28 @@ impl Parsable for ast::ArraySpecifierDimension {
                     ..
                 } = extdecls.into_iter().next().unwrap()
                 {
-                    if let ast::StatementData::Expression(ast::ExprStatement(Some(
-                        ast::Expr::FunCall(
-                            ast::FunIdentifier {
-                                content:
-                                    ast::FunIdentifierData::TypeSpecifier(ast::TypeSpecifier {
-                                        content:
-                                            ast::TypeSpecifierData {
-                                                array_specifier:
-                                                    Some(ast::ArraySpecifier { content: array, .. }),
-                                                ..
-                                            },
-                                        ..
-                                    }),
-                                ..
-                            },
-                            _,
-                        ),
-                    ))) = statement_list.into_iter().next().unwrap().into_inner()
+                    if let ast::StatementData::Expression(ast::ExprStatement(Some(ast::Expr {
+                        content:
+                            ast::ExprData::FunCall(
+                                ast::FunIdentifier {
+                                    content:
+                                        ast::FunIdentifierData::TypeSpecifier(ast::TypeSpecifier {
+                                            content:
+                                                ast::TypeSpecifierData {
+                                                    array_specifier:
+                                                        Some(ast::ArraySpecifier {
+                                                            content: array, ..
+                                                        }),
+                                                    ..
+                                                },
+                                            ..
+                                        }),
+                                    ..
+                                },
+                                _,
+                            ),
+                        ..
+                    }))) = statement_list.into_iter().next().unwrap().into_inner()
                     {
                         return Ok((array.dimensions.into_iter().next().unwrap(), oo));
                     }
@@ -284,23 +290,25 @@ impl Parsable for ast::ArraySpecifier {
                     ..
                 } = extdecls.into_iter().next().unwrap()
                 {
-                    if let ast::StatementData::Expression(ast::ExprStatement(Some(
-                        ast::Expr::FunCall(
-                            ast::FunIdentifier {
-                                content:
-                                    ast::FunIdentifierData::TypeSpecifier(ast::TypeSpecifier {
-                                        content:
-                                            ast::TypeSpecifierData {
-                                                array_specifier: Some(array),
-                                                ..
-                                            },
-                                        ..
-                                    }),
-                                ..
-                            },
-                            _,
-                        ),
-                    ))) = statement_list.into_iter().next().unwrap().into_inner()
+                    if let ast::StatementData::Expression(ast::ExprStatement(Some(ast::Expr {
+                        content:
+                            ast::ExprData::FunCall(
+                                ast::FunIdentifier {
+                                    content:
+                                        ast::FunIdentifierData::TypeSpecifier(ast::TypeSpecifier {
+                                            content:
+                                                ast::TypeSpecifierData {
+                                                    array_specifier: Some(array),
+                                                    ..
+                                                },
+                                            ..
+                                        }),
+                                    ..
+                                },
+                                _,
+                            ),
+                        ..
+                    }))) = statement_list.into_iter().next().unwrap().into_inner()
                     {
                         return Ok((array, oo));
                     }
@@ -341,9 +349,10 @@ impl Parsable for ast::FunIdentifier {
                     ..
                 } = extdecls.into_iter().next().unwrap()
                 {
-                    if let ast::StatementData::Expression(ast::ExprStatement(Some(
-                        ast::Expr::FunCall(fi, _),
-                    ))) = statement_list.into_iter().next().unwrap().into_inner()
+                    if let ast::StatementData::Expression(ast::ExprStatement(Some(ast::Expr {
+                        content: ast::ExprData::FunCall(fi, _),
+                        ..
+                    }))) = statement_list.into_iter().next().unwrap().into_inner()
                     {
                         return Ok((fi, oo));
                     }

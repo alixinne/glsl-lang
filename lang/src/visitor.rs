@@ -13,7 +13,7 @@
 //! For instance, we can imagine visiting an AST to count how many variables are declared:
 //!
 //! ```
-//! use glsl_lang::ast::{CompoundStatement, CompoundStatementData, Expr, SingleDeclaration, StatementData, TypeSpecifierNonArrayData, NodeContent};
+//! use glsl_lang::ast::{CompoundStatement, CompoundStatementData, ExprData, SingleDeclaration, StatementData, TypeSpecifierNonArrayData, NodeContent};
 //! use glsl_lang::visitor::{Host, Visit, Visitor};
 //! use std::iter::FromIterator;
 //!
@@ -21,7 +21,7 @@
 //!   TypeSpecifierNonArrayData::Float,
 //!   "x",
 //!   None,
-//!   Some(Expr::from(3.14).into_node())
+//!   Some(ExprData::from(3.14).into_node())
 //! );
 //!
 //! let decl1 = StatementData::declare_var(
@@ -998,38 +998,38 @@ macro_rules! make_host_trait {
         let visit = visitor.visit_expr(self);
 
         if visit == Visit::Children {
-          match self {
-            ast::Expr::Variable(ident) => ident.$mthd_name(visitor),
+          match $($ref)* **self {
+            ast::ExprData::Variable(ident) => ident.$mthd_name(visitor),
 
-            ast::Expr::Unary(op, e) => {
+            ast::ExprData::Unary(op, e) => {
               op.$mthd_name(visitor);
               e.$mthd_name(visitor);
             }
 
-            ast::Expr::Binary(op, a, b) => {
+            ast::ExprData::Binary(op, a, b) => {
               op.$mthd_name(visitor);
               a.$mthd_name(visitor);
               b.$mthd_name(visitor);
             }
 
-            ast::Expr::Ternary(a, b, c) => {
+            ast::ExprData::Ternary(a, b, c) => {
               a.$mthd_name(visitor);
               b.$mthd_name(visitor);
               c.$mthd_name(visitor);
             }
 
-            ast::Expr::Assignment(lhs, op, rhs) => {
+            ast::ExprData::Assignment(lhs, op, rhs) => {
               lhs.$mthd_name(visitor);
               op.$mthd_name(visitor);
               rhs.$mthd_name(visitor);
             }
 
-            ast::Expr::Bracket(e, arr_spec) => {
+            ast::ExprData::Bracket(e, arr_spec) => {
               e.$mthd_name(visitor);
               arr_spec.$mthd_name(visitor);
             }
 
-            ast::Expr::FunCall(fi, params) => {
+            ast::ExprData::FunCall(fi, params) => {
               fi.$mthd_name(visitor);
 
               for param in params {
@@ -1037,16 +1037,16 @@ macro_rules! make_host_trait {
               }
             }
 
-            ast::Expr::Dot(e, i) => {
+            ast::ExprData::Dot(e, i) => {
               e.$mthd_name(visitor);
               i.$mthd_name(visitor);
             }
 
-            ast::Expr::PostInc(e) => e.$mthd_name(visitor),
+            ast::ExprData::PostInc(e) => e.$mthd_name(visitor),
 
-            ast::Expr::PostDec(e) => e.$mthd_name(visitor),
+            ast::ExprData::PostDec(e) => e.$mthd_name(visitor),
 
-            ast::Expr::Comma(a, b) => {
+            ast::ExprData::Comma(a, b) => {
               a.$mthd_name(visitor);
               b.$mthd_name(visitor);
             }
@@ -1421,7 +1421,7 @@ mod tests {
             ast::TypeSpecifierNonArrayData::Float,
             "x",
             None,
-            Some(ast::Expr::from(3.14).into_node()),
+            Some(ast::ExprData::from(3.14).into_node()),
         );
 
         let decl1 =

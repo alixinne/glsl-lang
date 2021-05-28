@@ -37,22 +37,23 @@ type_name: ast::TypeName = {
 };
 
 primary_expression: ast::Expr = {
-    identifier      => ast::Expr::Variable(<>.0),
-    double_constant => ast::Expr::DoubleConst(<>.into()),
-    float_constant  => ast::Expr::FloatConst(<>.into()),
-    uint_constant   => ast::Expr::UIntConst(<>.into()),
-    int_constant    => ast::Expr::IntConst(<>.into()),
-    bool_constant   => ast::Expr::BoolConst(<>.into()),
+    <l:@L> <e:identifier>      <r:@R> => ast::ExprData::Variable(e.0).spanned(l, r),
+    <l:@L> <e:double_constant> <r:@R> => ast::ExprData::DoubleConst(e.into()).spanned(l, r),
+    <l:@L> <e:float_constant>  <r:@R> => ast::ExprData::FloatConst(e.into()).spanned(l, r),
+    <l:@L> <e:uint_constant>   <r:@R> => ast::ExprData::UIntConst(e.into()).spanned(l, r),
+    <l:@L> <e:int_constant>    <r:@R> => ast::ExprData::IntConst(e.into()).spanned(l, r),
+    <l:@L> <e:bool_constant>   <r:@R> => ast::ExprData::BoolConst(e.into()).spanned(l, r),
     "(" <expr> ")",
 };
 
 postfix_expression: ast::Expr = {
     primary_expression,
-    <l:postfix_expression> "[" <a:expr> "]"   => ast::Expr::Bracket(Box::new(l), Box::new(a)),
+    <a:@L> <l:postfix_expression> "[" <e:expr> "]" <b:@R> =>
+        ast::ExprData::Bracket(Box::new(l), Box::new(e)).spanned(a, b),
     function_call,
-    <l:postfix_expression> "." <r:identifier> => ast::Expr::Dot(Box::new(l), r.0),
-    <postfix_expression> "++"                 => ast::Expr::PostInc(Box::new(<>)),
-    <postfix_expression> "--"                 => ast::Expr::PostDec(Box::new(<>)),
+    <a:@L> <l:postfix_expression> "." <r:identifier> <b:@R> => ast::ExprData::Dot(Box::new(l), r.0).spanned(a, b),
+    <a:@L> <e:postfix_expression> "++"               <b:@R> => ast::ExprData::PostInc(Box::new(e)).spanned(a, b),
+    <a:@L> <e:postfix_expression> "--"               <b:@R> => ast::ExprData::PostDec(Box::new(e)).spanned(a, b),
 };
 
 integer_expression = {
@@ -60,10 +61,10 @@ integer_expression = {
 };
 
 function_call: ast::Expr = {
-    <i:fun_identifier> "(" <a:comma<assignment_expression>> ")" =>
-        ast::Expr::FunCall(i, a),
-    <i:fun_identifier> "(" "void" ")" =>
-        ast::Expr::FunCall(i, vec![]),
+    <a:@L> <i:fun_identifier> "(" <e:comma<assignment_expression>> ")" <b:@R> =>
+        ast::ExprData::FunCall(i, e).spanned(a, b),
+    <a:@L> <i:fun_identifier> "(" "void" ")" <b:@R> =>
+        ast::ExprData::FunCall(i, vec![]).spanned(a, b),
 };
 
 array_specifier_dimension_data: ast::ArraySpecifierDimensionData = {
@@ -262,7 +263,7 @@ fun_identifier: ast::FunIdentifier = {
 
 unary_expression: ast::Expr = {
     postfix_expression,
-    <o:unary_op> <e:unary_expression> => ast::Expr::Unary(o, Box::new(e)),
+    <a:@L> <o:unary_op> <e:unary_expression> <b:@R> => ast::ExprData::Unary(o, Box::new(e)).spanned(a, b),
 };
 
 unary_op: ast::UnaryOp = {
@@ -281,96 +282,96 @@ arrayed_identifier: ast::ArrayedIdentifier = {
 
 multiplicative_expression: ast::Expr = {
     unary_expression,
-    <l:multiplicative_expression> "*" <r:unary_expression> =>
-        ast::Expr::Binary(ast::BinaryOp::Mult, Box::new(l), Box::new(r)),
-    <l:multiplicative_expression> "/" <r:unary_expression> =>
-        ast::Expr::Binary(ast::BinaryOp::Div, Box::new(l), Box::new(r)),
-    <l:multiplicative_expression> "%" <r:unary_expression> =>
-        ast::Expr::Binary(ast::BinaryOp::Mod, Box::new(l), Box::new(r)),
+    <a:@L> <l:multiplicative_expression> "*" <r:unary_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOp::Mult, Box::new(l), Box::new(r)).spanned(a, b),
+    <a:@L> <l:multiplicative_expression> "/" <r:unary_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOp::Div, Box::new(l), Box::new(r)).spanned(a, b),
+    <a:@L> <l:multiplicative_expression> "%" <r:unary_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOp::Mod, Box::new(l), Box::new(r)).spanned(a, b),
 };
 
 additive_expression: ast::Expr = {
     multiplicative_expression,
-    <l:additive_expression> "+" <r:multiplicative_expression> =>
-        ast::Expr::Binary(ast::BinaryOp::Add, Box::new(l), Box::new(r)),
-    <l:additive_expression> "-" <r:multiplicative_expression> =>
-        ast::Expr::Binary(ast::BinaryOp::Sub, Box::new(l), Box::new(r)),
+    <a:@L> <l:additive_expression> "+" <r:multiplicative_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOp::Add, Box::new(l), Box::new(r)).spanned(a, b),
+    <a:@L> <l:additive_expression> "-" <r:multiplicative_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOp::Sub, Box::new(l), Box::new(r)).spanned(a, b),
 };
 
 shift_expression: ast::Expr = {
     additive_expression,
-    <l:shift_expression> "<<" <r:additive_expression> =>
-        ast::Expr::Binary(ast::BinaryOp::LShift, Box::new(l), Box::new(r)),
-    <l:shift_expression> ">>" <r:additive_expression> =>
-        ast::Expr::Binary(ast::BinaryOp::RShift, Box::new(l), Box::new(r)),
+    <a:@L> <l:shift_expression> "<<" <r:additive_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOp::LShift, Box::new(l), Box::new(r)).spanned(a, b),
+    <a:@L> <l:shift_expression> ">>" <r:additive_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOp::RShift, Box::new(l), Box::new(r)).spanned(a, b),
 };
 
 relational_expression: ast::Expr = {
     shift_expression,
-    <l:relational_expression> "<" <r:shift_expression> =>
-        ast::Expr::Binary(ast::BinaryOp::Lt, Box::new(l), Box::new(r)),
-    <l:relational_expression> ">" <r:shift_expression> =>
-        ast::Expr::Binary(ast::BinaryOp::Gt, Box::new(l), Box::new(r)),
-    <l:relational_expression> "<=" <r:shift_expression> =>
-        ast::Expr::Binary(ast::BinaryOp::Lte, Box::new(l), Box::new(r)),
-    <l:relational_expression> ">=" <r:shift_expression> =>
-        ast::Expr::Binary(ast::BinaryOp::Gte, Box::new(l), Box::new(r)),
+    <a:@L> <l:relational_expression> "<" <r:shift_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOp::Lt, Box::new(l), Box::new(r)).spanned(a, b),
+    <a:@L> <l:relational_expression> ">" <r:shift_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOp::Gt, Box::new(l), Box::new(r)).spanned(a, b),
+    <a:@L> <l:relational_expression> "<=" <r:shift_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOp::Lte, Box::new(l), Box::new(r)).spanned(a, b),
+    <a:@L> <l:relational_expression> ">=" <r:shift_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOp::Gte, Box::new(l), Box::new(r)).spanned(a, b),
 };
 
 equality_expression: ast::Expr = {
     relational_expression,
-    <l:equality_expression> "==" <r:relational_expression> =>
-        ast::Expr::Binary(ast::BinaryOp::Equal, Box::new(l), Box::new(r)),
-    <l:equality_expression> "!=" <r:relational_expression> =>
-        ast::Expr::Binary(ast::BinaryOp::NonEqual, Box::new(l), Box::new(r)),
+    <a:@L> <l:equality_expression> "==" <r:relational_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOp::Equal, Box::new(l), Box::new(r)).spanned(a, b),
+    <a:@L> <l:equality_expression> "!=" <r:relational_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOp::NonEqual, Box::new(l), Box::new(r)).spanned(a, b),
 };
 
 and_expression: ast::Expr = {
     equality_expression,
-    <l:and_expression> "&" <r:equality_expression> =>
-        ast::Expr::Binary(ast::BinaryOp::BitAnd, Box::new(l), Box::new(r)),
+    <a:@L> <l:and_expression> "&" <r:equality_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOp::BitAnd, Box::new(l), Box::new(r)).spanned(a, b),
 };
 
 exclusive_or_expression: ast::Expr = {
     and_expression,
-    <l:exclusive_or_expression> "^" <r:and_expression> =>
-        ast::Expr::Binary(ast::BinaryOp::BitXor, Box::new(l), Box::new(r)),
+    <a:@L> <l:exclusive_or_expression> "^" <r:and_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOp::BitXor, Box::new(l), Box::new(r)).spanned(a, b),
 };
 
 inclusive_or_expression: ast::Expr = {
     exclusive_or_expression,
-    <l:inclusive_or_expression> "|" <r:exclusive_or_expression> =>
-        ast::Expr::Binary(ast::BinaryOp::BitOr, Box::new(l), Box::new(r)),
+    <a:@L> <l:inclusive_or_expression> "|" <r:exclusive_or_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOp::BitOr, Box::new(l), Box::new(r)).spanned(a, b),
 };
 
 logical_and_expression: ast::Expr = {
     inclusive_or_expression,
-    <l:logical_and_expression> "&&" <r:inclusive_or_expression> =>
-        ast::Expr::Binary(ast::BinaryOp::And, Box::new(l), Box::new(r)),
+    <a:@L> <l:logical_and_expression> "&&" <r:inclusive_or_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOp::And, Box::new(l), Box::new(r)).spanned(a, b),
 };
 
 logical_xor_expression: ast::Expr = {
     logical_and_expression,
-    <l:logical_xor_expression> "^^" <r:logical_and_expression> =>
-        ast::Expr::Binary(ast::BinaryOp::Xor, Box::new(l), Box::new(r)),
+    <a:@L> <l:logical_xor_expression> "^^" <r:logical_and_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOp::Xor, Box::new(l), Box::new(r)).spanned(a, b),
 };
 
 logical_or_expression: ast::Expr = {
     logical_xor_expression,
-    <l:logical_or_expression> "||" <r:logical_xor_expression> =>
-        ast::Expr::Binary(ast::BinaryOp::Or, Box::new(l), Box::new(r)),
+    <a:@L> <l:logical_or_expression> "||" <r:logical_xor_expression> <b:@R> =>
+        ast::ExprData::Binary(ast::BinaryOp::Or, Box::new(l), Box::new(r)).spanned(a, b),
 };
 
 conditional_expression: ast::Expr = {
     logical_or_expression,
-    <c:logical_or_expression> "?" <l:expr> ":" <r:assignment_expression> =>
-        ast::Expr::Ternary(Box::new(c), Box::new(l), Box::new(r)),
+    <a:@L> <c:logical_or_expression> "?" <l:expr> ":" <r:assignment_expression> <b:@R> =>
+        ast::ExprData::Ternary(Box::new(c), Box::new(l), Box::new(r)).spanned(a, b),
 };
 
 assignment_expression: ast::Expr = {
     conditional_expression,
-    <l:unary_expression> <o:assignment_op> <r:assignment_expression> =>
-        ast::Expr::Assignment(Box::new(l), o, Box::new(r)),
+    <a:@L> <l:unary_expression> <o:assignment_op> <r:assignment_expression> <b:@R> =>
+        ast::ExprData::Assignment(Box::new(l), o, Box::new(r)).spanned(a, b),
 };
 
 assignment_op: ast::AssignmentOp = {
@@ -389,8 +390,8 @@ assignment_op: ast::AssignmentOp = {
 
 expr: ast::Expr = {
     assignment_expression,
-    <l:expr> "," <r:assignment_expression> =>
-        ast::Expr::Comma(Box::new(l), Box::new(r)),
+    <a:@L> <l:expr> "," <r:assignment_expression> <b:@R> =>
+        ast::ExprData::Comma(Box::new(l), Box::new(r)).spanned(a, b),
 };
 
 expr_statement: ast::ExprStatement = {

@@ -818,14 +818,14 @@ pub enum FunIdentifierData {
 impl FunIdentifierData {
     /// Create a function identifier from an identifier
     pub fn ident(i: impl Into<IdentifierData>) -> Self {
-        Self::Expr(Box::new(Expr::Variable(i.into().into())))
+        Self::Expr(Box::new(ExprData::Variable(i.into().into()).into()))
     }
 
     /// Try to parse this function identifier as a raw identifier
     pub fn as_ident(&self) -> Option<&Identifier> {
         match self {
-            Self::Expr(expr) => match &**expr {
-                Expr::Variable(ident) => Some(ident),
+            Self::Expr(expr) => match &***expr {
+                ExprData::Variable(ident) => Some(ident),
                 _ => None,
             },
             _ => None,
@@ -835,8 +835,8 @@ impl FunIdentifierData {
     /// Try to parse this function identifier as a mutable raw identifier
     pub fn as_ident_mut(&mut self) -> Option<&mut Identifier> {
         match self {
-            Self::Expr(expr) => match &mut **expr {
-                Expr::Variable(ident) => Some(ident),
+            Self::Expr(expr) => match &mut ***expr {
+                ExprData::Variable(ident) => Some(ident),
                 _ => None,
             },
             _ => None,
@@ -936,6 +936,12 @@ pub enum InitializerData {
     List(Vec<Initializer>),
 }
 
+impl From<ExprData> for InitializerData {
+    fn from(e: ExprData) -> Self {
+        Self::Simple(Box::new(e.into()))
+    }
+}
+
 impl From<Expr> for InitializerData {
     fn from(e: Expr) -> Self {
         Self::Simple(Box::new(e))
@@ -952,7 +958,7 @@ impl From<Expr> for InitializerData {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub enum Expr {
+pub enum ExprData {
     /// A variable expression, using an identifier.
     Variable(Identifier),
     /// Integral constant expression.
@@ -988,7 +994,7 @@ pub enum Expr {
     Comma(Box<Expr>, Box<Expr>),
 }
 
-impl Expr {
+impl ExprData {
     /// Construct an `Expr::Variable(name)` from an identifier `name`
     pub fn variable(name: impl Into<IdentifierData>) -> Self {
         Self::Variable(name.into().into())
@@ -1003,33 +1009,33 @@ impl Expr {
     }
 }
 
-impl From<i32> for Expr {
-    fn from(x: i32) -> Expr {
-        Expr::IntConst(x)
+impl From<i32> for ExprData {
+    fn from(x: i32) -> ExprData {
+        Self::IntConst(x)
     }
 }
 
-impl From<u32> for Expr {
-    fn from(x: u32) -> Expr {
-        Expr::UIntConst(x)
+impl From<u32> for ExprData {
+    fn from(x: u32) -> ExprData {
+        Self::UIntConst(x)
     }
 }
 
-impl From<bool> for Expr {
-    fn from(x: bool) -> Expr {
-        Expr::BoolConst(x)
+impl From<bool> for ExprData {
+    fn from(x: bool) -> ExprData {
+        Self::BoolConst(x)
     }
 }
 
-impl From<f32> for Expr {
-    fn from(x: f32) -> Expr {
-        Expr::FloatConst(x)
+impl From<f32> for ExprData {
+    fn from(x: f32) -> ExprData {
+        Self::FloatConst(x)
     }
 }
 
-impl From<f64> for Expr {
-    fn from(x: f64) -> Expr {
-        Expr::DoubleConst(x)
+impl From<f64> for ExprData {
+    fn from(x: f64) -> ExprData {
+        Self::DoubleConst(x)
     }
 }
 

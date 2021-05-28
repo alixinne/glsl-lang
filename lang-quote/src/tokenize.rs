@@ -829,84 +829,87 @@ fn tokenize_expr(expr: &ast::Expr) -> TokenStream {
         return quote! { #ident };
     }
 
-    match *expr {
-        ast::Expr::Variable(ref i) => {
+    let span = tokenize_span(&expr.span);
+    let expr = match expr.content {
+        ast::ExprData::Variable(ref i) => {
             let i = tokenize_identifier(i);
-            quote! { glsl_lang::ast::Expr::Variable(#i) }
+            quote! { glsl_lang::ast::ExprData::Variable(#i) }
         }
 
-        ast::Expr::IntConst(ref x) => quote! { glsl_lang::ast::Expr::IntConst(#x) },
+        ast::ExprData::IntConst(ref x) => quote! { glsl_lang::ast::ExprData::IntConst(#x) },
 
-        ast::Expr::UIntConst(ref x) => quote! { glsl_lang::ast::Expr::UIntConst(#x) },
+        ast::ExprData::UIntConst(ref x) => quote! { glsl_lang::ast::ExprData::UIntConst(#x) },
 
-        ast::Expr::BoolConst(ref x) => quote! { glsl_lang::ast::Expr::BoolConst(#x) },
+        ast::ExprData::BoolConst(ref x) => quote! { glsl_lang::ast::ExprData::BoolConst(#x) },
 
-        ast::Expr::FloatConst(ref x) => quote! { glsl_lang::ast::Expr::FloatConst(#x) },
+        ast::ExprData::FloatConst(ref x) => quote! { glsl_lang::ast::ExprData::FloatConst(#x) },
 
-        ast::Expr::DoubleConst(ref x) => quote! { glsl_lang::ast::Expr::DoubleConst(#x) },
+        ast::ExprData::DoubleConst(ref x) => quote! { glsl_lang::ast::ExprData::DoubleConst(#x) },
 
-        ast::Expr::Unary(ref op, ref e) => {
+        ast::ExprData::Unary(ref op, ref e) => {
             let op = tokenize_unary_op(op);
             let e = Box::new(tokenize_expr(e)).quote();
-            quote! { glsl_lang::ast::Expr::Unary(#op, #e) }
+            quote! { glsl_lang::ast::ExprData::Unary(#op, #e) }
         }
 
-        ast::Expr::Binary(ref op, ref l, ref r) => {
+        ast::ExprData::Binary(ref op, ref l, ref r) => {
             let op = tokenize_binary_op(op);
             let l = Box::new(tokenize_expr(l)).quote();
             let r = Box::new(tokenize_expr(r)).quote();
-            quote! { glsl_lang::ast::Expr::Binary(#op, #l, #r) }
+            quote! { glsl_lang::ast::ExprData::Binary(#op, #l, #r) }
         }
 
-        ast::Expr::Ternary(ref c, ref s, ref e) => {
+        ast::ExprData::Ternary(ref c, ref s, ref e) => {
             let c = Box::new(tokenize_expr(c)).quote();
             let s = Box::new(tokenize_expr(s)).quote();
             let e = Box::new(tokenize_expr(e)).quote();
-            quote! { glsl_lang::ast::Expr::Ternary(#c, #s, #e) }
+            quote! { glsl_lang::ast::ExprData::Ternary(#c, #s, #e) }
         }
 
-        ast::Expr::Assignment(ref v, ref op, ref e) => {
+        ast::ExprData::Assignment(ref v, ref op, ref e) => {
             let v = Box::new(tokenize_expr(v)).quote();
             let op = tokenize_assignment_op(op);
             let e = Box::new(tokenize_expr(e)).quote();
-            quote! { glsl_lang::ast::Expr::Assignment(#v, #op, #e) }
+            quote! { glsl_lang::ast::ExprData::Assignment(#v, #op, #e) }
         }
 
-        ast::Expr::Bracket(ref e, ref a) => {
+        ast::ExprData::Bracket(ref e, ref a) => {
             let e = Box::new(tokenize_expr(e)).quote();
             let a = tokenize_expr(a);
-            quote! { glsl_lang::ast::Expr::Bracket(#e, #a) }
+            quote! { glsl_lang::ast::ExprData::Bracket(#e, #a) }
         }
 
-        ast::Expr::FunCall(ref fun, ref args) => {
+        ast::ExprData::FunCall(ref fun, ref args) => {
             let fun = tokenize_function_identifier(fun);
             let args = args.iter().map(tokenize_expr);
-            quote! { glsl_lang::ast::Expr::FunCall(#fun, vec![#(#args),*]) }
+            quote! { glsl_lang::ast::ExprData::FunCall(#fun, vec![#(#args),*]) }
         }
 
-        ast::Expr::Dot(ref e, ref i) => {
+        ast::ExprData::Dot(ref e, ref i) => {
             let e = Box::new(tokenize_expr(e)).quote();
             let i = tokenize_identifier(i);
 
-            quote! { glsl_lang::ast::Expr::Dot(#e, #i) }
+            quote! { glsl_lang::ast::ExprData::Dot(#e, #i) }
         }
 
-        ast::Expr::PostInc(ref e) => {
+        ast::ExprData::PostInc(ref e) => {
             let e = Box::new(tokenize_expr(e)).quote();
-            quote! { glsl_lang::ast::Expr::PostInc(#e) }
+            quote! { glsl_lang::ast::ExprData::PostInc(#e) }
         }
 
-        ast::Expr::PostDec(ref e) => {
+        ast::ExprData::PostDec(ref e) => {
             let e = Box::new(tokenize_expr(e)).quote();
-            quote! { glsl_lang::ast::Expr::PostDec(#e) }
+            quote! { glsl_lang::ast::ExprData::PostDec(#e) }
         }
 
-        ast::Expr::Comma(ref a, ref b) => {
+        ast::ExprData::Comma(ref a, ref b) => {
             let a = Box::new(tokenize_expr(a)).quote();
             let b = Box::new(tokenize_expr(b)).quote();
-            quote! { glsl_lang::ast::Expr::Comma(#a, #b) }
+            quote! { glsl_lang::ast::ExprData::Comma(#a, #b) }
         }
-    }
+    };
+
+    quote! { glsl_lang::ast::Expr::new(#expr, #span) }
 }
 
 fn tokenize_unary_op(op: &ast::UnaryOp) -> TokenStream {

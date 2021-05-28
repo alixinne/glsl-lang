@@ -350,7 +350,7 @@ trait HasPrecedence {
     fn precedence(&self) -> u32;
 }
 
-impl HasPrecedence for ast::Expr {
+impl HasPrecedence for ast::ExprData {
     fn precedence(&self) -> u32 {
         match self {
             // 0 isn't a valid precedence, but we use this to represent atomic expressions
@@ -923,14 +923,14 @@ pub fn show_expr<F>(
 where
     F: Write,
 {
-    match *expr {
-        ast::Expr::Variable(ref i) => show_identifier(f, &i, state),
-        ast::Expr::IntConst(ref x) => write!(f, "{}", x),
-        ast::Expr::UIntConst(ref x) => write!(f, "{}u", x),
-        ast::Expr::BoolConst(ref x) => write!(f, "{}", x),
-        ast::Expr::FloatConst(ref x) => show_float(f, *x, state),
-        ast::Expr::DoubleConst(ref x) => show_double(f, *x, state),
-        ast::Expr::Unary(ref op, ref e) => {
+    match **expr {
+        ast::ExprData::Variable(ref i) => show_identifier(f, &i, state),
+        ast::ExprData::IntConst(ref x) => write!(f, "{}", x),
+        ast::ExprData::UIntConst(ref x) => write!(f, "{}u", x),
+        ast::ExprData::BoolConst(ref x) => write!(f, "{}", x),
+        ast::ExprData::FloatConst(ref x) => show_float(f, *x, state),
+        ast::ExprData::DoubleConst(ref x) => show_double(f, *x, state),
+        ast::ExprData::Unary(ref op, ref e) => {
             // Note: all unary ops are right-to-left associative
             show_unary_op(f, &op, state)?;
 
@@ -938,7 +938,7 @@ where
                 f.write_str("(")?;
                 show_expr(f, &e, state)?;
                 f.write_str(")")
-            } else if let ast::Expr::Unary(eop, _) = &**e {
+            } else if let ast::ExprData::Unary(eop, _) = &***e {
                 // Prevent double-unary plus/minus turning into inc/dec
                 if eop == op && (*eop == ast::UnaryOp::Add || *eop == ast::UnaryOp::Minus) {
                     f.write_str("(")?;
@@ -951,7 +951,7 @@ where
                 show_expr(f, &e, state)
             }
         }
-        ast::Expr::Binary(ref op, ref l, ref r) => {
+        ast::ExprData::Binary(ref op, ref l, ref r) => {
             // Note: all binary ops are left-to-right associative (<= for left part)
 
             if l.precedence() <= op.precedence() {
@@ -972,7 +972,7 @@ where
                 f.write_str(")")
             }
         }
-        ast::Expr::Ternary(ref c, ref st, ref e) => {
+        ast::ExprData::Ternary(ref c, ref st, ref e) => {
             // Note: ternary is right-to-left associative (<= for right part)
 
             if c.precedence() < expr.precedence() {
@@ -993,7 +993,7 @@ where
                 f.write_str(")")
             }
         }
-        ast::Expr::Assignment(ref v, ref op, ref e) => {
+        ast::ExprData::Assignment(ref v, ref op, ref e) => {
             // Note: all assignment ops are right-to-left associative
 
             if v.precedence() < op.precedence() {
@@ -1014,7 +1014,7 @@ where
                 f.write_str(")")
             }
         }
-        ast::Expr::Bracket(ref e, ref a) => {
+        ast::ExprData::Bracket(ref e, ref a) => {
             // Note: bracket is left-to-right associative
 
             if e.precedence() <= expr.precedence() {
@@ -1027,7 +1027,7 @@ where
 
             show_expr(f, &a, state)
         }
-        ast::Expr::FunCall(ref fun, ref args) => {
+        ast::ExprData::FunCall(ref fun, ref args) => {
             show_function_identifier(f, &fun, state)?;
             f.write_str("(")?;
 
@@ -1044,7 +1044,7 @@ where
 
             f.write_str(")")
         }
-        ast::Expr::Dot(ref e, ref i) => {
+        ast::ExprData::Dot(ref e, ref i) => {
             // Note: dot is left-to-right associative
 
             if e.precedence() <= expr.precedence() {
@@ -1057,7 +1057,7 @@ where
             f.write_str(".")?;
             show_identifier(f, &i, state)
         }
-        ast::Expr::PostInc(ref e) => {
+        ast::ExprData::PostInc(ref e) => {
             // Note: post-increment is right-to-left associative
 
             if e.precedence() < expr.precedence() {
@@ -1070,7 +1070,7 @@ where
 
             f.write_str("++")
         }
-        ast::Expr::PostDec(ref e) => {
+        ast::ExprData::PostDec(ref e) => {
             // Note: post-decrement is right-to-left associative
 
             if e.precedence() < expr.precedence() {
@@ -1083,7 +1083,7 @@ where
 
             f.write_str("--")
         }
-        ast::Expr::Comma(ref a, ref b) => {
+        ast::ExprData::Comma(ref a, ref b) => {
             // Note: comma is left-to-right associative
 
             if a.precedence() <= expr.precedence() {
@@ -2110,22 +2110,32 @@ return u;
     fn roundtrip_glsl_complex_expr() {
         use lang_util::node::NodeContent;
 
-        let zero = ast::Expr::DoubleConst(0.);
-        let ray = ast::Expr::Variable("ray".into_node());
-        let raydir = ast::Expr::Dot(Box::new(ray), "dir".into_node());
-        let vec4 = ast::Expr::FunCall(
+        let zero = ast::ExprData::DoubleConst(0.);
+        let ray = ast::ExprData::Variable("ray".into_node());
+        let raydir = ast::ExprData::Dot(Box::new(ray.into()), "dir".into_node());
+        let vec4 = ast::ExprData::FunCall(
             ast::FunIdentifierData::TypeSpecifier(
                 ast::TypeSpecifierData::from(ast::TypeSpecifierNonArrayData::Vec4).into(),
             )
             .into(),
-            vec![raydir, zero],
+            vec![raydir.into(), zero.into()],
         );
-        let view = ast::Expr::variable("view");
-        let iview = ast::Expr::FunCall(ast::FunIdentifierData::ident("inverse").into(), vec![view]);
-        let mul = ast::Expr::Binary(ast::BinaryOp::Mult, Box::new(iview), Box::new(vec4));
-        let xyz = ast::Expr::Dot(Box::new(mul), "xyz".into_node());
-        let input =
-            ast::Expr::FunCall(ast::FunIdentifierData::ident("normalize").into(), vec![xyz]);
+        let view = ast::ExprData::variable("view");
+        let iview = ast::ExprData::FunCall(
+            ast::FunIdentifierData::ident("inverse").into(),
+            vec![view.into()],
+        );
+        let mul = ast::ExprData::Binary(
+            ast::BinaryOp::Mult,
+            Box::new(iview.into()),
+            Box::new(vec4.into()),
+        );
+        let xyz = ast::ExprData::Dot(Box::new(mul.into()), "xyz".into_node());
+        let input = ast::ExprData::FunCall(
+            ast::FunIdentifierData::ident("normalize").into(),
+            vec![xyz.into()],
+        )
+        .into();
 
         let mut output = String::new();
         show_expr(&mut output, &input, &mut FormattingState::default()).unwrap();

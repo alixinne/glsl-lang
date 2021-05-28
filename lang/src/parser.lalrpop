@@ -545,10 +545,10 @@ precision_declaration: ast::DeclarationData = {
 };
 
 function_parameter_declarator: ast::FunctionParameterDeclarator = {
-    <s:type_specifier> <i:arrayed_identifier> => ast::FunctionParameterDeclarator {
+    <l:@L> <s:type_specifier> <i:arrayed_identifier> <r:@R> => ast::FunctionParameterDeclaratorData {
         ty: s,
         ident: i,
-    }
+    }.spanned(l, r)
 };
 
 function_parameter_declaration: ast::FunctionParameterDeclaration = {

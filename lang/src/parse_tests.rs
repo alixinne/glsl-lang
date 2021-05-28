@@ -1503,14 +1503,15 @@ fn parse_declaration_function_prototype() {
     .into();
     let arg1 = ast::FunctionParameterDeclarationData::Named(
         Some(qual),
-        ast::FunctionParameterDeclarator {
+        ast::FunctionParameterDeclaratorData {
             ty: ast::TypeSpecifierData {
                 ty: ast::TypeSpecifierNonArrayData::Float.into(),
                 array_specifier: None,
             }
             .into(),
             ident: "the_arg".into_node(),
-        },
+        }
+        .into(),
     );
     let fp = ast::FunctionPrototypeData {
         ty: rt.into(),

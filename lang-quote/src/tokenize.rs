@@ -1051,15 +1051,20 @@ fn tokenize_function_parameter_declaration(p: &ast::FunctionParameterDeclaration
 }
 
 fn tokenize_function_parameter_declarator(p: &ast::FunctionParameterDeclarator) -> TokenStream {
-    let ty = tokenize_type_specifier(&p.ty);
-    let ident = tokenize_arrayed_identifier(&p.ident);
+    let span = tokenize_span(&p.span);
+    let p = {
+        let ty = tokenize_type_specifier(&p.ty);
+        let ident = tokenize_arrayed_identifier(&p.ident);
 
-    quote! {
-      glsl_lang::ast::FunctionParameterDeclarator {
-        ty: #ty,
-        ident: #ident
-      }
-    }
+        quote! {
+          glsl_lang::ast::FunctionParameterDeclaratorData {
+            ty: #ty,
+            ident: #ident
+          }
+        }
+    };
+
+    quote! { glsl_lang::ast::FunctionParameterDeclarator::new(#p, #span) }
 }
 
 fn tokenize_init_declarator_list(i: &ast::InitDeclaratorList) -> TokenStream {

@@ -80,6 +80,15 @@
 <span id="77">77</span>
 <span id="78">78</span>
 <span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
+<span id="84">84</span>
+<span id="85">85</span>
+<span id="86">86</span>
+<span id="87">87</span>
+<span id="88">88</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">darling</span>::<span class="ident">FromDeriveInput</span>;
 <span class="kw">use</span> <span class="ident">quote</span>::{<span class="ident">format_ident</span>, <span class="ident">quote</span>};
@@ -157,6 +166,15 @@
     <span class="kw">let</span> <span class="ident">display_quoted</span> <span class="op">=</span> <span class="ident">node_content_display</span>(<span class="kw-2">&amp;</span><span class="ident">input</span>, <span class="kw-2">&amp;</span><span class="ident">opts</span>, <span class="kw-2">&amp;</span><span class="ident">struct_name</span>, <span class="kw-2">&amp;</span><span class="ident">node_name</span>);
 
     <span class="ident">expanded</span>.<span class="ident">extend</span>(<span class="ident">display_quoted</span>);
+
+    <span class="comment">// Add From impl for node contents</span>
+    <span class="ident">expanded</span>.<span class="ident">extend</span>(<span class="macro">quote</span><span class="macro">!</span> {
+        <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span>::<span class="ident">lang_util</span>::<span class="ident">node</span>::<span class="ident">Node</span><span class="op">&lt;</span>#<span class="ident">struct_name</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> #<span class="ident">struct_name</span> {
+            <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">node</span>: ::<span class="ident">lang_util</span>::<span class="ident">node</span>::<span class="ident">Node</span><span class="op">&lt;</span>#<span class="ident">struct_name</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+                <span class="ident">node</span>.<span class="ident">content</span>
+            }
+        }
+    });
 
     <span class="ident">proc_macro</span>::<span class="ident">TokenStream</span>::<span class="ident">from</span>(<span class="ident">expanded</span>)
 }

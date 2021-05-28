@@ -1645,6 +1645,26 @@
 <span id="1642">1642</span>
 <span id="1643">1643</span>
 <span id="1644">1644</span>
+<span id="1645">1645</span>
+<span id="1646">1646</span>
+<span id="1647">1647</span>
+<span id="1648">1648</span>
+<span id="1649">1649</span>
+<span id="1650">1650</span>
+<span id="1651">1651</span>
+<span id="1652">1652</span>
+<span id="1653">1653</span>
+<span id="1654">1654</span>
+<span id="1655">1655</span>
+<span id="1656">1656</span>
+<span id="1657">1657</span>
+<span id="1658">1658</span>
+<span id="1659">1659</span>
+<span id="1660">1660</span>
+<span id="1661">1661</span>
+<span id="1662">1662</span>
+<span id="1663">1663</span>
+<span id="1664">1664</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! GLSL abstract syntax tree and grammar.</span>
 <span class="doccomment">//!</span>
@@ -1684,7 +1704,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Path</span> {
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">PathData</span> {
     <span class="doccomment">/// Specified with angle brackets.</span>
     <span class="ident">Absolute</span>(<span class="ident">String</span>),
     <span class="doccomment">/// Specified with double quotes.</span>
@@ -1770,7 +1790,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">TypeSpecifierNonArray</span> {
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">TypeSpecifierNonArrayData</span> {
     <span class="doccomment">/// `void` type specifier</span>
     <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span>(<span class="ident">extra</span> <span class="op">=</span> <span class="string">&quot;void&quot;</span>))]</span>
     <span class="ident">Void</span>,
@@ -2138,7 +2158,7 @@
     <span class="ident">TypeName</span>(<span class="ident">TypeName</span>),
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">TypeName</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">TypeSpecifierNonArray</span> {
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">TypeName</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">TypeSpecifierNonArrayData</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">tn</span>: <span class="ident">TypeName</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span>::<span class="ident">TypeName</span>(<span class="ident">tn</span>)
     }
@@ -2148,17 +2168,26 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">TypeSpecifier</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">TypeSpecifierData</span> {
     <span class="doccomment">/// Type name portion of the specifier</span>
     <span class="kw">pub</span> <span class="ident">ty</span>: <span class="ident">TypeSpecifierNonArray</span>,
     <span class="doccomment">/// Array part of the specifier</span>
     <span class="kw">pub</span> <span class="ident">array_specifier</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ArraySpecifier</span><span class="op">&gt;</span>,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">TypeSpecifierNonArray</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">TypeSpecifier</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">ty</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">TypeSpecifierNonArray</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">TypeSpecifierData</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">ty</span>: <span class="ident">TypeSpecifierNonArray</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span> {
-            <span class="ident">ty</span>: <span class="ident">ty</span>.<span class="ident">into</span>(),
+            <span class="ident">ty</span>,
+            <span class="ident">array_specifier</span>: <span class="prelude-val">None</span>,
+        }
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">TypeSpecifierNonArrayData</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">TypeSpecifierData</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">ty</span>: <span class="ident">TypeSpecifierNonArrayData</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">Self</span> {
+            <span class="ident">ty</span>: <span class="ident">ty</span>.<span class="ident">into_node</span>(),
             <span class="ident">array_specifier</span>: <span class="prelude-val">None</span>,
         }
     }
@@ -2168,7 +2197,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">StructSpecifier</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">StructSpecifierData</span> {
     <span class="doccomment">/// Structure name</span>
     <span class="kw">pub</span> <span class="ident">name</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TypeName</span><span class="op">&gt;</span>,
     <span class="doccomment">/// Field specifications</span>
@@ -2179,7 +2208,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">StructFieldSpecifier</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">StructFieldSpecifierData</span> {
     <span class="doccomment">/// Type qualifiers for the field</span>
     <span class="kw">pub</span> <span class="ident">qualifier</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TypeQualifier</span><span class="op">&gt;</span>,
     <span class="doccomment">/// Type of the field</span>
@@ -2192,30 +2221,30 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ArrayedIdentifier</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ArrayedIdentifierData</span> {
     <span class="doccomment">/// Raw identifier</span>
     <span class="kw">pub</span> <span class="ident">ident</span>: <span class="ident">Identifier</span>,
     <span class="doccomment">/// Attached array specification</span>
     <span class="kw">pub</span> <span class="ident">array_spec</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ArraySpecifier</span><span class="op">&gt;</span>,
 }
 
-<span class="kw">impl</span> <span class="ident">ArrayedIdentifier</span> {
+<span class="kw">impl</span> <span class="ident">ArrayedIdentifierData</span> {
     <span class="doccomment">/// Create a new [ArrayedIdentifier] from a raw identifier and a specification</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">I</span>, <span class="ident">AS</span><span class="op">&gt;</span>(<span class="ident">ident</span>: <span class="ident">I</span>, <span class="ident">array_spec</span>: <span class="ident">AS</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>
     <span class="kw">where</span>
         <span class="ident">I</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Identifier</span><span class="op">&gt;</span>,
         <span class="ident">AS</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ArraySpecifier</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     {
-        <span class="ident">ArrayedIdentifier</span> {
+        <span class="self">Self</span> {
             <span class="ident">ident</span>: <span class="ident">ident</span>.<span class="ident">into</span>(),
             <span class="ident">array_spec</span>: <span class="ident">array_spec</span>.<span class="ident">into</span>(),
         }
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ArrayedIdentifier</span> {
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ArrayedIdentifierData</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">ident</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="ident">ArrayedIdentifier</span> {
+        <span class="self">Self</span> {
             <span class="ident">ident</span>: <span class="ident">IdentifierData</span>::<span class="ident">from</span>(<span class="ident">ident</span>).<span class="ident">into</span>(),
             <span class="ident">array_spec</span>: <span class="prelude-val">None</span>,
         }
@@ -2226,7 +2255,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">TypeQualifier</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">TypeQualifierData</span> {
     <span class="doccomment">/// List of type qualifiers</span>
     <span class="kw">pub</span> <span class="ident">qualifiers</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">TypeQualifierSpec</span><span class="op">&gt;</span>,
 }
@@ -2235,7 +2264,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">TypeQualifierSpec</span> {
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">TypeQualifierSpecData</span> {
     <span class="doccomment">/// Storage qualifier</span>
     <span class="ident">Storage</span>(<span class="ident">StorageQualifier</span>),
     <span class="doccomment">/// Layout qualifier</span>
@@ -2254,7 +2283,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">StorageQualifier</span> {
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">StorageQualifierData</span> {
     <span class="doccomment">/// `const` storage qualifier</span>
     <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span>(<span class="ident">extra</span> <span class="op">=</span> <span class="string">&quot;const&quot;</span>))]</span>
     <span class="ident">Const</span>,
@@ -2311,7 +2340,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">LayoutQualifier</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">LayoutQualifierData</span> {
     <span class="doccomment">/// List of layout qualifiers</span>
     <span class="kw">pub</span> <span class="ident">ids</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">LayoutQualifierSpec</span><span class="op">&gt;</span>,
 }
@@ -2320,7 +2349,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">LayoutQualifierSpec</span> {
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">LayoutQualifierSpecData</span> {
     <span class="doccomment">/// An `ident = expr` layout qualifier</span>
     <span class="ident">Identifier</span>(<span class="ident">Identifier</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="ident">Expr</span><span class="op">&gt;</span><span class="op">&gt;</span>),
     <span class="doccomment">/// `shared` layout qualifier</span>
@@ -2332,7 +2361,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">PrecisionQualifier</span> {
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">PrecisionQualifierData</span> {
     <span class="doccomment">/// `high` precision qualifier</span>
     <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span>(<span class="ident">extra</span> <span class="op">=</span> <span class="string">&quot;high&quot;</span>))]</span>
     <span class="ident">High</span>,
@@ -2348,7 +2377,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">InterpolationQualifier</span> {
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">InterpolationQualifierData</span> {
     <span class="doccomment">/// `smooth` interpolation qualifier</span>
     <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span>(<span class="ident">extra</span> <span class="op">=</span> <span class="string">&quot;smooth&quot;</span>))]</span>
     <span class="ident">Smooth</span>,
@@ -2364,30 +2393,31 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">FullySpecifiedType</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">FullySpecifiedTypeData</span> {
     <span class="doccomment">/// Optional type qualifier</span>
     <span class="kw">pub</span> <span class="ident">qualifier</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TypeQualifier</span><span class="op">&gt;</span>,
     <span class="doccomment">/// Type specifier</span>
     <span class="kw">pub</span> <span class="ident">ty</span>: <span class="ident">TypeSpecifier</span>,
 }
 
-<span class="kw">impl</span> <span class="ident">FullySpecifiedType</span> {
+<span class="kw">impl</span> <span class="ident">FullySpecifiedTypeData</span> {
     <span class="doccomment">/// Create a new [FullySpecifiedType] from a [TypeSpecifierNonArray], with no qualifier and no</span>
     <span class="doccomment">/// array specifier</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">ty</span>: <span class="ident">TypeSpecifierNonArray</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">qualifier</span>: <span class="prelude-val">None</span>,
-            <span class="ident">ty</span>: <span class="ident">TypeSpecifier</span> {
+            <span class="ident">ty</span>: <span class="ident">TypeSpecifierData</span> {
                 <span class="ident">ty</span>,
                 <span class="ident">array_specifier</span>: <span class="prelude-val">None</span>,
-            },
+            }
+            .<span class="ident">into</span>(),
         }
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">TypeSpecifierNonArray</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">FullySpecifiedType</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">ty</span>: <span class="ident">TypeSpecifierNonArray</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="ident">FullySpecifiedType</span>::<span class="ident">new</span>(<span class="ident">ty</span>)
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">TypeSpecifierNonArrayData</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">FullySpecifiedTypeData</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">ty</span>: <span class="ident">TypeSpecifierNonArrayData</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">Self</span>::<span class="ident">new</span>(<span class="ident">ty</span>.<span class="ident">into</span>())
     }
 }
 
@@ -2395,7 +2425,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ArraySpecifier</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ArraySpecifierData</span> {
     <span class="doccomment">/// List of all the dimensions – possibly unsized or explicitly-sized.</span>
     <span class="kw">pub</span> <span class="ident">dimensions</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">ArraySpecifierDimension</span><span class="op">&gt;</span>,
 }
@@ -2404,7 +2434,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ArraySpecifierDimension</span> {
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ArraySpecifierDimensionData</span> {
     <span class="doccomment">/// `[]` dimension</span>
     <span class="ident">Unsized</span>,
     <span class="doccomment">/// `[expr]` dimension</span>
@@ -2431,7 +2461,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Block</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">BlockData</span> {
     <span class="doccomment">/// Block type qualifier</span>
     <span class="kw">pub</span> <span class="ident">qualifier</span>: <span class="ident">TypeQualifier</span>,
     <span class="doccomment">/// Block name</span>
@@ -2446,24 +2476,24 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">FunIdentifier</span> {
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">FunIdentifierData</span> {
     <span class="doccomment">/// Type name used for the function name (as a constructor)</span>
-    <span class="ident">TypeSpecifier</span>(<span class="ident">TypeSpecifier</span>),
+    <span class="ident">TypeSpecifier</span>(<span class="ident">Box</span><span class="op">&lt;</span><span class="ident">TypeSpecifier</span><span class="op">&gt;</span>),
     <span class="doccomment">/// Expression used for the function name</span>
     <span class="ident">Expr</span>(<span class="ident">Box</span><span class="op">&lt;</span><span class="ident">Expr</span><span class="op">&gt;</span>),
 }
 
-<span class="kw">impl</span> <span class="ident">FunIdentifier</span> {
+<span class="kw">impl</span> <span class="ident">FunIdentifierData</span> {
     <span class="doccomment">/// Create a function identifier from an identifier</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ident</span>(<span class="ident">i</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">IdentifierData</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span>::<span class="ident">Expr</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">Expr</span>::<span class="ident">Variable</span>(<span class="ident">i</span>.<span class="ident">into</span>().<span class="ident">into</span>())))
+        <span class="self">Self</span>::<span class="ident">Expr</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">ExprData</span>::<span class="ident">Variable</span>(<span class="ident">i</span>.<span class="ident">into</span>().<span class="ident">into</span>()).<span class="ident">into</span>()))
     }
 
     <span class="doccomment">/// Try to parse this function identifier as a raw identifier</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_ident</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Identifier</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="self">Self</span>::<span class="ident">Expr</span>(<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="kw-2">*</span><span class="ident">expr</span> {
-                <span class="ident">Expr</span>::<span class="ident">Variable</span>(<span class="ident">ident</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">ident</span>),
+            <span class="self">Self</span>::<span class="ident">Expr</span>(<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="kw-2">*</span><span class="kw-2">*</span><span class="ident">expr</span> {
+                <span class="ident">ExprData</span>::<span class="ident">Variable</span>(<span class="ident">ident</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">ident</span>),
                 <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
             },
             <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
@@ -2473,8 +2503,8 @@
     <span class="doccomment">/// Try to parse this function identifier as a mutable raw identifier</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_ident_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Identifier</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="self">Self</span>::<span class="ident">Expr</span>(<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">*</span><span class="kw-2">*</span><span class="ident">expr</span> {
-                <span class="ident">Expr</span>::<span class="ident">Variable</span>(<span class="ident">ident</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">ident</span>),
+            <span class="self">Self</span>::<span class="ident">Expr</span>(<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">*</span><span class="kw-2">*</span><span class="kw-2">*</span><span class="ident">expr</span> {
+                <span class="ident">ExprData</span>::<span class="ident">Variable</span>(<span class="ident">ident</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">ident</span>),
                 <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
             },
             <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
@@ -2519,7 +2549,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">FunctionParameterDeclarator</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">FunctionParameterDeclaratorData</span> {
     <span class="doccomment">/// Parameter type</span>
     <span class="kw">pub</span> <span class="ident">ty</span>: <span class="ident">TypeSpecifier</span>,
     <span class="doccomment">/// Parameter name</span>
@@ -2530,7 +2560,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">InitDeclaratorList</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">InitDeclaratorListData</span> {
     <span class="doccomment">/// First declaration</span>
     <span class="kw">pub</span> <span class="ident">head</span>: <span class="ident">SingleDeclaration</span>,
     <span class="doccomment">/// Following declarations</span>
@@ -2541,7 +2571,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SingleDeclaration</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SingleDeclarationData</span> {
     <span class="doccomment">/// Declaration type</span>
     <span class="kw">pub</span> <span class="ident">ty</span>: <span class="ident">FullySpecifiedType</span>,
     <span class="doccomment">/// Declared identifier</span>
@@ -2556,7 +2586,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SingleDeclarationNoType</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SingleDeclarationNoTypeData</span> {
     <span class="doccomment">/// Declared identifier</span>
     <span class="kw">pub</span> <span class="ident">ident</span>: <span class="ident">ArrayedIdentifier</span>,
     <span class="doccomment">/// Initializer expression</span>
@@ -2567,16 +2597,22 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Initializer</span> {
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">InitializerData</span> {
     <span class="doccomment">/// Simple initializer</span>
     <span class="ident">Simple</span>(<span class="ident">Box</span><span class="op">&lt;</span><span class="ident">Expr</span><span class="op">&gt;</span>),
     <span class="doccomment">/// Multiple initializer</span>
     <span class="ident">List</span>(<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Initializer</span><span class="op">&gt;</span>),
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Expr</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Initializer</span> {
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">ExprData</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">InitializerData</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">e</span>: <span class="ident">ExprData</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">Self</span>::<span class="ident">Simple</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">e</span>.<span class="ident">into</span>()))
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Expr</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">InitializerData</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">e</span>: <span class="ident">Expr</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="ident">Initializer</span>::<span class="ident">Simple</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">e</span>))
+        <span class="self">Self</span>::<span class="ident">Simple</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">e</span>))
     }
 }
 
@@ -2590,7 +2626,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Expr</span> {
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ExprData</span> {
     <span class="doccomment">/// A variable expression, using an identifier.</span>
     <span class="ident">Variable</span>(<span class="ident">Identifier</span>),
     <span class="doccomment">/// Integral constant expression.</span>
@@ -2626,7 +2662,7 @@
     <span class="ident">Comma</span>(<span class="ident">Box</span><span class="op">&lt;</span><span class="ident">Expr</span><span class="op">&gt;</span>, <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">Expr</span><span class="op">&gt;</span>),
 }
 
-<span class="kw">impl</span> <span class="ident">Expr</span> {
+<span class="kw">impl</span> <span class="ident">ExprData</span> {
     <span class="doccomment">/// Construct an `Expr::Variable(name)` from an identifier `name`</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">variable</span>(<span class="ident">name</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">IdentifierData</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span>::<span class="ident">Variable</span>(<span class="ident">name</span>.<span class="ident">into</span>().<span class="ident">into</span>())
@@ -2641,33 +2677,33 @@
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Expr</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">x</span>: <span class="ident">i32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Expr</span> {
-        <span class="ident">Expr</span>::<span class="ident">IntConst</span>(<span class="ident">x</span>)
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ExprData</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">x</span>: <span class="ident">i32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ExprData</span> {
+        <span class="self">Self</span>::<span class="ident">IntConst</span>(<span class="ident">x</span>)
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Expr</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">x</span>: <span class="ident">u32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Expr</span> {
-        <span class="ident">Expr</span>::<span class="ident">UIntConst</span>(<span class="ident">x</span>)
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ExprData</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">x</span>: <span class="ident">u32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ExprData</span> {
+        <span class="self">Self</span>::<span class="ident">UIntConst</span>(<span class="ident">x</span>)
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Expr</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">x</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Expr</span> {
-        <span class="ident">Expr</span>::<span class="ident">BoolConst</span>(<span class="ident">x</span>)
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ExprData</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">x</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ExprData</span> {
+        <span class="self">Self</span>::<span class="ident">BoolConst</span>(<span class="ident">x</span>)
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">f32</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Expr</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">x</span>: <span class="ident">f32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Expr</span> {
-        <span class="ident">Expr</span>::<span class="ident">FloatConst</span>(<span class="ident">x</span>)
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">f32</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ExprData</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">x</span>: <span class="ident">f32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ExprData</span> {
+        <span class="self">Self</span>::<span class="ident">FloatConst</span>(<span class="ident">x</span>)
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">f64</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Expr</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Expr</span> {
-        <span class="ident">Expr</span>::<span class="ident">DoubleConst</span>(<span class="ident">x</span>)
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">f64</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ExprData</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">x</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ExprData</span> {
+        <span class="self">Self</span>::<span class="ident">DoubleConst</span>(<span class="ident">x</span>)
     }
 }
 
@@ -2675,7 +2711,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">UnaryOp</span> {
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">UnaryOpData</span> {
     <span class="doccomment">/// `++` unary operator</span>
     <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span>(<span class="ident">extra</span> <span class="op">=</span> <span class="string">&quot;++&quot;</span>))]</span>
     <span class="ident">Inc</span>,
@@ -2700,7 +2736,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">BinaryOp</span> {
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">BinaryOpData</span> {
     <span class="doccomment">/// `||` binary operator</span>
     <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span>(<span class="ident">extra</span> <span class="op">=</span> <span class="string">&quot;||&quot;</span>))]</span>
     <span class="ident">Or</span>,
@@ -2764,7 +2800,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">AssignmentOp</span> {
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">AssignmentOpData</span> {
     <span class="doccomment">/// `=` assignment operator</span>
     <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span>(<span class="ident">extra</span> <span class="op">=</span> <span class="string">&quot;=&quot;</span>))]</span>
     <span class="ident">Equal</span>,
@@ -2881,21 +2917,25 @@
     <span class="doccomment">/// `initializer`</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">declare_var</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">N</span>, <span class="ident">A</span>, <span class="ident">I</span><span class="op">&gt;</span>(<span class="ident">ty</span>: <span class="ident">T</span>, <span class="ident">name</span>: <span class="ident">N</span>, <span class="ident">array_specifier</span>: <span class="ident">A</span>, <span class="ident">initializer</span>: <span class="ident">I</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>
     <span class="kw">where</span>
-        <span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">FullySpecifiedType</span><span class="op">&gt;</span>,
+        <span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">FullySpecifiedTypeData</span><span class="op">&gt;</span>,
         <span class="ident">N</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">IdentifierData</span><span class="op">&gt;</span>,
         <span class="ident">A</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ArraySpecifier</span><span class="op">&gt;</span><span class="op">&gt;</span>,
         <span class="ident">I</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Initializer</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     {
         <span class="self">Self</span>::<span class="ident">Declaration</span>(
-            <span class="ident">DeclarationData</span>::<span class="ident">InitDeclaratorList</span>(<span class="ident">InitDeclaratorList</span> {
-                <span class="ident">head</span>: <span class="ident">SingleDeclaration</span> {
-                    <span class="ident">ty</span>: <span class="ident">ty</span>.<span class="ident">into</span>(),
-                    <span class="ident">name</span>: <span class="prelude-val">Some</span>(<span class="ident">name</span>.<span class="ident">into</span>().<span class="ident">into</span>()),
-                    <span class="ident">array_specifier</span>: <span class="ident">array_specifier</span>.<span class="ident">into</span>(),
-                    <span class="ident">initializer</span>: <span class="ident">initializer</span>.<span class="ident">into</span>(),
-                },
-                <span class="ident">tail</span>: <span class="ident">Vec</span>::<span class="ident">new</span>(),
-            })
+            <span class="ident">DeclarationData</span>::<span class="ident">InitDeclaratorList</span>(
+                <span class="ident">InitDeclaratorListData</span> {
+                    <span class="ident">head</span>: <span class="ident">SingleDeclarationData</span> {
+                        <span class="ident">ty</span>: <span class="ident">ty</span>.<span class="ident">into</span>().<span class="ident">into</span>(),
+                        <span class="ident">name</span>: <span class="prelude-val">Some</span>(<span class="ident">name</span>.<span class="ident">into</span>().<span class="ident">into</span>()),
+                        <span class="ident">array_specifier</span>: <span class="ident">array_specifier</span>.<span class="ident">into</span>(),
+                        <span class="ident">initializer</span>: <span class="ident">initializer</span>.<span class="ident">into</span>(),
+                    }
+                    .<span class="ident">into</span>(),
+                    <span class="ident">tail</span>: <span class="ident">Vec</span>::<span class="ident">new</span>(),
+                }
+                .<span class="ident">into</span>(),
+            )
             .<span class="ident">into</span>(),
         )
     }
@@ -2905,13 +2945,13 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ExprStatement</span>(<span class="kw">pub</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Expr</span><span class="op">&gt;</span>);
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ExprStatementData</span>(<span class="kw">pub</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Expr</span><span class="op">&gt;</span>);
 
 <span class="doccomment">/// Selection statement.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SelectionStatement</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SelectionStatementData</span> {
     <span class="doccomment">/// Condition to evaluate</span>
     <span class="kw">pub</span> <span class="ident">cond</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">Expr</span><span class="op">&gt;</span>,
     <span class="doccomment">/// Rest of the selection statement</span>
@@ -2922,18 +2962,18 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Condition</span> {
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ConditionData</span> {
     <span class="doccomment">/// An expression</span>
     <span class="ident">Expr</span>(<span class="ident">Expr</span>),
     <span class="doccomment">/// A variable declaration used as a condition</span>
-    <span class="ident">Assignment</span>(<span class="ident">FullySpecifiedType</span>, <span class="ident">Identifier</span>, <span class="ident">Initializer</span>),
+    <span class="ident">Assignment</span>(<span class="ident">Box</span><span class="op">&lt;</span><span class="ident">FullySpecifiedType</span><span class="op">&gt;</span>, <span class="ident">Identifier</span>, <span class="ident">Initializer</span>),
 }
 
 <span class="doccomment">/// Selection rest statement.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">SelectionRestStatement</span> {
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">SelectionRestStatementData</span> {
     <span class="doccomment">/// Body of the if.</span>
     <span class="ident">Statement</span>(<span class="ident">Box</span><span class="op">&lt;</span><span class="ident">Statement</span><span class="op">&gt;</span>),
     <span class="doccomment">/// The first argument is the body of the if, the rest is the next statement.</span>
@@ -2944,7 +2984,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SwitchStatement</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SwitchStatementData</span> {
     <span class="doccomment">/// Expression to evaluate and switch on</span>
     <span class="kw">pub</span> <span class="ident">head</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">Expr</span><span class="op">&gt;</span>,
     <span class="doccomment">/// Body of the switch statement</span>
@@ -2955,7 +2995,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">CaseLabel</span> {
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">CaseLabelData</span> {
     <span class="doccomment">/// `case:` case label</span>
     <span class="ident">Case</span>(<span class="ident">Box</span><span class="op">&lt;</span><span class="ident">Expr</span><span class="op">&gt;</span>),
     <span class="doccomment">/// `default:` case label</span>
@@ -2966,7 +3006,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">IterationStatement</span> {
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">IterationStatementData</span> {
     <span class="doccomment">/// `while` iteration statement</span>
     <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span>(<span class="ident">extra</span> <span class="op">=</span> <span class="string">&quot;while&quot;</span>))]</span>
     <span class="ident">While</span>(<span class="ident">Condition</span>, <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">Statement</span><span class="op">&gt;</span>),
@@ -2982,7 +3022,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ForInitStatement</span> {
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ForInitStatementData</span> {
     <span class="doccomment">/// Expression</span>
     <span class="ident">Expression</span>(<span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Expr</span><span class="op">&gt;</span>),
     <span class="doccomment">/// Variable declaration</span>
@@ -2993,7 +3033,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ForRestStatement</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ForRestStatementData</span> {
     <span class="doccomment">/// Loop condition</span>
     <span class="kw">pub</span> <span class="ident">condition</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Condition</span><span class="op">&gt;</span>,
     <span class="doccomment">/// Loop increment operation</span>
@@ -3004,7 +3044,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">JumpStatement</span> {
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">JumpStatementData</span> {
     <span class="doccomment">/// `continue` jump statement</span>
     <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span>(<span class="ident">extra</span> <span class="op">=</span> <span class="string">&quot;continue&quot;</span>))]</span>
     <span class="ident">Continue</span>,
@@ -3078,7 +3118,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">PreprocessorDefine</span> {
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">PreprocessorDefineData</span> {
     <span class="doccomment">/// A preprocessor definition</span>
     <span class="ident">ObjectLike</span> {
         <span class="doccomment">/// Identifier for the definition</span>
@@ -3102,7 +3142,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PreprocessorElseIf</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PreprocessorElseIfData</span> {
     <span class="doccomment">/// Condition expression</span>
     <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span>(<span class="ident">extra</span>))]</span>
     <span class="kw">pub</span> <span class="ident">condition</span>: <span class="ident">String</span>,
@@ -3112,7 +3152,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PreprocessorError</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PreprocessorErrorData</span> {
     <span class="doccomment">/// Error message</span>
     <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span>(<span class="ident">extra</span>))]</span>
     <span class="kw">pub</span> <span class="ident">message</span>: <span class="ident">String</span>,
@@ -3122,7 +3162,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PreprocessorIf</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PreprocessorIfData</span> {
     <span class="doccomment">/// Condition expression</span>
     <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span>(<span class="ident">extra</span>))]</span>
     <span class="kw">pub</span> <span class="ident">condition</span>: <span class="ident">String</span>,
@@ -3132,7 +3172,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PreprocessorIfDef</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PreprocessorIfDefData</span> {
     <span class="doccomment">/// Identifier to test</span>
     <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span>(<span class="ident">extra</span>))]</span>
     <span class="kw">pub</span> <span class="ident">ident</span>: <span class="ident">Identifier</span>,
@@ -3142,7 +3182,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PreprocessorIfNDef</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PreprocessorIfNDefData</span> {
     <span class="doccomment">/// Identifier to test</span>
     <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span>(<span class="ident">extra</span>))]</span>
     <span class="kw">pub</span> <span class="ident">ident</span>: <span class="ident">Identifier</span>,
@@ -3152,7 +3192,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PreprocessorInclude</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PreprocessorIncludeData</span> {
     <span class="doccomment">/// Include path</span>
     <span class="kw">pub</span> <span class="ident">path</span>: <span class="ident">Path</span>,
 }
@@ -3161,7 +3201,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PreprocessorLine</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PreprocessorLineData</span> {
     <span class="doccomment">/// Line index</span>
     <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span>(<span class="ident">extra</span>))]</span>
     <span class="kw">pub</span> <span class="ident">line</span>: <span class="ident">u32</span>,
@@ -3174,7 +3214,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PreprocessorPragma</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PreprocessorPragmaData</span> {
     <span class="doccomment">/// Raw pragma text</span>
     <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span>(<span class="ident">extra</span>))]</span>
     <span class="kw">pub</span> <span class="ident">command</span>: <span class="ident">String</span>,
@@ -3184,7 +3224,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PreprocessorUndef</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PreprocessorUndefData</span> {
     <span class="doccomment">/// Identifier to undefine</span>
     <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span>(<span class="ident">extra</span>))]</span>
     <span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">Identifier</span>,
@@ -3194,7 +3234,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PreprocessorVersion</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PreprocessorVersionData</span> {
     <span class="doccomment">/// Version number</span>
     <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span>(<span class="ident">extra</span>))]</span>
     <span class="kw">pub</span> <span class="ident">version</span>: <span class="ident">u16</span>,
@@ -3206,7 +3246,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">PreprocessorVersionProfile</span> {
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">PreprocessorVersionProfileData</span> {
     <span class="doccomment">/// `core` version profile</span>
     <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span>(<span class="ident">extra</span> <span class="op">=</span> <span class="string">&quot;core&quot;</span>))]</span>
     <span class="ident">Core</span>,
@@ -3222,7 +3262,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PreprocessorExtension</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PreprocessorExtensionData</span> {
     <span class="doccomment">/// Name of the target extension</span>
     <span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">PreprocessorExtensionName</span>,
     <span class="doccomment">/// Behavior for the extension</span>
@@ -3233,7 +3273,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">PreprocessorExtensionName</span> {
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">PreprocessorExtensionNameData</span> {
     <span class="doccomment">/// All extensions you could ever imagine in your whole lifetime (how crazy is that!).</span>
     <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span>(<span class="ident">extra</span> <span class="op">=</span> <span class="string">&quot;all&quot;</span>))]</span>
     <span class="ident">All</span>,
@@ -3245,7 +3285,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">NodeContent</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="kw">crate</span> <span class="op">=</span> <span class="string">&quot;rserde&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">PreprocessorExtensionBehavior</span> {
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">PreprocessorExtensionBehaviorData</span> {
     <span class="doccomment">/// `require` preprocessor extension behavior</span>
     <span class="attribute">#[<span class="ident">lang_util</span>(<span class="ident">display</span>(<span class="ident">extra</span> <span class="op">=</span> <span class="string">&quot;require&quot;</span>))]</span>
     <span class="ident">Require</span>,

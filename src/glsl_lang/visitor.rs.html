@@ -1458,6 +1458,7 @@
 <span id="1455">1455</span>
 <span id="1456">1456</span>
 <span id="1457">1457</span>
+<span id="1458">1458</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! AST visitors (i.e. on-the-fly mutation at different places in the AST).</span>
 <span class="doccomment">//!</span>
@@ -1474,26 +1475,26 @@
 <span class="doccomment">//! For instance, we can imagine visiting an AST to count how many variables are declared:</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! ```</span>
-<span class="doccomment">//! use glsl_lang::ast::{CompoundStatement, CompoundStatementData, Expr, SingleDeclaration, StatementData, TypeSpecifierNonArray};</span>
+<span class="doccomment">//! use glsl_lang::ast::{CompoundStatement, CompoundStatementData, ExprData, SingleDeclaration, StatementData, TypeSpecifierNonArrayData, NodeContent};</span>
 <span class="doccomment">//! use glsl_lang::visitor::{Host, Visit, Visitor};</span>
 <span class="doccomment">//! use std::iter::FromIterator;</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! let decl0 = StatementData::declare_var(</span>
-<span class="doccomment">//!   TypeSpecifierNonArray::Float,</span>
+<span class="doccomment">//!   TypeSpecifierNonArrayData::Float,</span>
 <span class="doccomment">//!   &quot;x&quot;,</span>
 <span class="doccomment">//!   None,</span>
-<span class="doccomment">//!   Some(Expr::from(3.14).into())</span>
+<span class="doccomment">//!   Some(ExprData::from(3.14).into_node())</span>
 <span class="doccomment">//! );</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! let decl1 = StatementData::declare_var(</span>
-<span class="doccomment">//!   TypeSpecifierNonArray::Int,</span>
+<span class="doccomment">//!   TypeSpecifierNonArrayData::Int,</span>
 <span class="doccomment">//!   &quot;y&quot;,</span>
 <span class="doccomment">//!   None,</span>
 <span class="doccomment">//!   None</span>
 <span class="doccomment">//! );</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! let decl2 = StatementData::declare_var(</span>
-<span class="doccomment">//!   TypeSpecifierNonArray::Vec4,</span>
+<span class="doccomment">//!   TypeSpecifierNonArrayData::Vec4,</span>
 <span class="doccomment">//!   &quot;z&quot;,</span>
 <span class="doccomment">//!   None,</span>
 <span class="doccomment">//!   None</span>
@@ -1943,12 +1944,12 @@
         <span class="kw">let</span> <span class="ident">visit</span> <span class="op">=</span> <span class="ident">visitor</span>.<span class="ident">visit_preprocessor_define</span>(<span class="self">self</span>);
 
         <span class="kw">if</span> <span class="ident">visit</span> <span class="op">=</span><span class="op">=</span> <span class="ident">Visit</span>::<span class="ident">Children</span> {
-          <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">ast</span>::<span class="ident">PreprocessorDefine</span>::<span class="ident">ObjectLike</span> { <span class="ident">ident</span>, .. } <span class="op">=</span><span class="op">&gt;</span> {
+          <span class="kw">match</span> $(<span class="macro-nonterminal">$</span><span class="kw-2">ref</span>)<span class="op">*</span> <span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span> {
+            <span class="macro-nonterminal">ast</span>::<span class="ident">PreprocessorDefineData</span>::<span class="ident">ObjectLike</span> { <span class="ident">ident</span>, .. } <span class="op">=</span><span class="op">&gt;</span> {
               <span class="ident">ident</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
             }
 
-            <span class="ident">ast</span>::<span class="ident">PreprocessorDefine</span>::<span class="ident">FunctionLike</span> {
+            <span class="ident">ast</span>::<span class="ident">PreprocessorDefineData</span>::<span class="ident">FunctionLike</span> {
               <span class="ident">ident</span>,
               <span class="ident">args</span>,
               ..
@@ -2307,9 +2308,9 @@
         <span class="kw">let</span> <span class="ident">visit</span> <span class="op">=</span> <span class="ident">visitor</span>.<span class="ident">visit_type_specifier_non_array</span>(<span class="self">self</span>);
 
         <span class="kw">if</span> <span class="ident">visit</span> <span class="op">=</span><span class="op">=</span> <span class="ident">Visit</span>::<span class="ident">Children</span> {
-          <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">ast</span>::<span class="ident">TypeSpecifierNonArray</span>::<span class="ident">Struct</span>(<span class="ident">ss</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ss</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>),
-            <span class="ident">ast</span>::<span class="ident">TypeSpecifierNonArray</span>::<span class="ident">TypeName</span>(<span class="ident">tn</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">tn</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>),
+          <span class="kw">match</span> $(<span class="macro-nonterminal">$</span><span class="kw-2">ref</span>)<span class="op">*</span> <span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span> {
+            <span class="macro-nonterminal">ast</span>::<span class="ident">TypeSpecifierNonArrayData</span>::<span class="ident">Struct</span>(<span class="ident">ss</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ss</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>),
+            <span class="ident">ast</span>::<span class="ident">TypeSpecifierNonArrayData</span>::<span class="ident">TypeName</span>(<span class="ident">tn</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">tn</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>),
             <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> (),
           }
         }
@@ -2339,11 +2340,11 @@
         <span class="kw">let</span> <span class="ident">visit</span> <span class="op">=</span> <span class="ident">visitor</span>.<span class="ident">visit_type_qualifier_spec</span>(<span class="self">self</span>);
 
         <span class="kw">if</span> <span class="ident">visit</span> <span class="op">=</span><span class="op">=</span> <span class="ident">Visit</span>::<span class="ident">Children</span> {
-          <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">ast</span>::<span class="ident">TypeQualifierSpec</span>::<span class="ident">Storage</span>(<span class="ident">sq</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">sq</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>),
-            <span class="ident">ast</span>::<span class="ident">TypeQualifierSpec</span>::<span class="ident">Layout</span>(<span class="ident">lq</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">lq</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>),
-            <span class="ident">ast</span>::<span class="ident">TypeQualifierSpec</span>::<span class="ident">Precision</span>(<span class="ident">pq</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">pq</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>),
-            <span class="ident">ast</span>::<span class="ident">TypeQualifierSpec</span>::<span class="ident">Interpolation</span>(<span class="ident">iq</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">iq</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>),
+          <span class="kw">match</span> $(<span class="macro-nonterminal">$</span><span class="kw-2">ref</span>)<span class="op">*</span> <span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span> {
+            <span class="macro-nonterminal">ast</span>::<span class="ident">TypeQualifierSpecData</span>::<span class="ident">Storage</span>(<span class="ident">sq</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">sq</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>),
+            <span class="ident">ast</span>::<span class="ident">TypeQualifierSpecData</span>::<span class="ident">Layout</span>(<span class="ident">lq</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">lq</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>),
+            <span class="ident">ast</span>::<span class="ident">TypeQualifierSpecData</span>::<span class="ident">Precision</span>(<span class="ident">pq</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">pq</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>),
+            <span class="ident">ast</span>::<span class="ident">TypeQualifierSpecData</span>::<span class="ident">Interpolation</span>(<span class="ident">iq</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">iq</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>),
             <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> (),
           }
         }
@@ -2358,8 +2359,8 @@
         <span class="kw">let</span> <span class="ident">visit</span> <span class="op">=</span> <span class="ident">visitor</span>.<span class="ident">visit_storage_qualifier</span>(<span class="self">self</span>);
 
         <span class="kw">if</span> <span class="ident">visit</span> <span class="op">=</span><span class="op">=</span> <span class="ident">Visit</span>::<span class="ident">Children</span> {
-          <span class="kw">if</span> <span class="kw">let</span> <span class="ident">ast</span>::<span class="ident">StorageQualifier</span>::<span class="ident">Subroutine</span>(<span class="ident">names</span>) <span class="op">=</span> <span class="self">self</span> {
-            <span class="kw">for</span> <span class="ident">name</span> <span class="kw">in</span> <span class="ident">names</span> {
+          <span class="kw">if</span> <span class="kw">let</span> <span class="ident">ast</span>::<span class="ident">StorageQualifierData</span>::<span class="ident">Subroutine</span>(<span class="ident">names</span>) <span class="op">=</span> $(<span class="macro-nonterminal">$</span><span class="kw-2">ref</span>)<span class="op">*</span> <span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span> {
+            <span class="kw">for</span> <span class="macro-nonterminal">name</span> <span class="kw">in</span> <span class="ident">names</span> {
               <span class="ident">name</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
             }
           }
@@ -2390,8 +2391,8 @@
         <span class="kw">let</span> <span class="ident">visit</span> <span class="op">=</span> <span class="ident">visitor</span>.<span class="ident">visit_layout_qualifier_spec</span>(<span class="self">self</span>);
 
         <span class="kw">if</span> <span class="ident">visit</span> <span class="op">=</span><span class="op">=</span> <span class="ident">Visit</span>::<span class="ident">Children</span> {
-          <span class="kw">if</span> <span class="kw">let</span> <span class="ident">ast</span>::<span class="ident">LayoutQualifierSpec</span>::<span class="ident">Identifier</span>(<span class="ident">ident</span>, <span class="ident">expr</span>) <span class="op">=</span> <span class="self">self</span> {
-            <span class="ident">ident</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
+          <span class="kw">if</span> <span class="kw">let</span> <span class="ident">ast</span>::<span class="ident">LayoutQualifierSpecData</span>::<span class="ident">Identifier</span>(<span class="ident">ident</span>, <span class="ident">expr</span>) <span class="op">=</span> $(<span class="macro-nonterminal">$</span><span class="kw-2">ref</span>)<span class="op">*</span> <span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span> {
+            <span class="macro-nonterminal">ident</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
 
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="ident">expr</span> {
               <span class="ident">e</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
@@ -2459,38 +2460,38 @@
         <span class="kw">let</span> <span class="ident">visit</span> <span class="op">=</span> <span class="ident">visitor</span>.<span class="ident">visit_expr</span>(<span class="self">self</span>);
 
         <span class="kw">if</span> <span class="ident">visit</span> <span class="op">=</span><span class="op">=</span> <span class="ident">Visit</span>::<span class="ident">Children</span> {
-          <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">ast</span>::<span class="ident">Expr</span>::<span class="ident">Variable</span>(<span class="ident">ident</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ident</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>),
+          <span class="kw">match</span> $(<span class="macro-nonterminal">$</span><span class="kw-2">ref</span>)<span class="op">*</span> <span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span> {
+            <span class="macro-nonterminal">ast</span>::<span class="ident">ExprData</span>::<span class="ident">Variable</span>(<span class="ident">ident</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ident</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>),
 
-            <span class="ident">ast</span>::<span class="ident">Expr</span>::<span class="ident">Unary</span>(<span class="ident">op</span>, <span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">ast</span>::<span class="ident">ExprData</span>::<span class="ident">Unary</span>(<span class="ident">op</span>, <span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
               <span class="ident">op</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
               <span class="ident">e</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
             }
 
-            <span class="ident">ast</span>::<span class="ident">Expr</span>::<span class="ident">Binary</span>(<span class="ident">op</span>, <span class="ident">a</span>, <span class="ident">b</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">ast</span>::<span class="ident">ExprData</span>::<span class="ident">Binary</span>(<span class="ident">op</span>, <span class="ident">a</span>, <span class="ident">b</span>) <span class="op">=</span><span class="op">&gt;</span> {
               <span class="ident">op</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
               <span class="ident">a</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
               <span class="ident">b</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
             }
 
-            <span class="ident">ast</span>::<span class="ident">Expr</span>::<span class="ident">Ternary</span>(<span class="ident">a</span>, <span class="ident">b</span>, <span class="ident">c</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">ast</span>::<span class="ident">ExprData</span>::<span class="ident">Ternary</span>(<span class="ident">a</span>, <span class="ident">b</span>, <span class="ident">c</span>) <span class="op">=</span><span class="op">&gt;</span> {
               <span class="ident">a</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
               <span class="ident">b</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
               <span class="ident">c</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
             }
 
-            <span class="ident">ast</span>::<span class="ident">Expr</span>::<span class="ident">Assignment</span>(<span class="ident">lhs</span>, <span class="ident">op</span>, <span class="ident">rhs</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">ast</span>::<span class="ident">ExprData</span>::<span class="ident">Assignment</span>(<span class="ident">lhs</span>, <span class="ident">op</span>, <span class="ident">rhs</span>) <span class="op">=</span><span class="op">&gt;</span> {
               <span class="ident">lhs</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
               <span class="ident">op</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
               <span class="ident">rhs</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
             }
 
-            <span class="ident">ast</span>::<span class="ident">Expr</span>::<span class="ident">Bracket</span>(<span class="ident">e</span>, <span class="ident">arr_spec</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">ast</span>::<span class="ident">ExprData</span>::<span class="ident">Bracket</span>(<span class="ident">e</span>, <span class="ident">arr_spec</span>) <span class="op">=</span><span class="op">&gt;</span> {
               <span class="ident">e</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
               <span class="ident">arr_spec</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
             }
 
-            <span class="ident">ast</span>::<span class="ident">Expr</span>::<span class="ident">FunCall</span>(<span class="ident">fi</span>, <span class="ident">params</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">ast</span>::<span class="ident">ExprData</span>::<span class="ident">FunCall</span>(<span class="ident">fi</span>, <span class="ident">params</span>) <span class="op">=</span><span class="op">&gt;</span> {
               <span class="ident">fi</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
 
               <span class="kw">for</span> <span class="ident">param</span> <span class="kw">in</span> <span class="ident">params</span> {
@@ -2498,16 +2499,16 @@
               }
             }
 
-            <span class="ident">ast</span>::<span class="ident">Expr</span>::<span class="ident">Dot</span>(<span class="ident">e</span>, <span class="ident">i</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">ast</span>::<span class="ident">ExprData</span>::<span class="ident">Dot</span>(<span class="ident">e</span>, <span class="ident">i</span>) <span class="op">=</span><span class="op">&gt;</span> {
               <span class="ident">e</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
               <span class="ident">i</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
             }
 
-            <span class="ident">ast</span>::<span class="ident">Expr</span>::<span class="ident">PostInc</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">e</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>),
+            <span class="ident">ast</span>::<span class="ident">ExprData</span>::<span class="ident">PostInc</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">e</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>),
 
-            <span class="ident">ast</span>::<span class="ident">Expr</span>::<span class="ident">PostDec</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">e</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>),
+            <span class="ident">ast</span>::<span class="ident">ExprData</span>::<span class="ident">PostDec</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">e</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>),
 
-            <span class="ident">ast</span>::<span class="ident">Expr</span>::<span class="ident">Comma</span>(<span class="ident">a</span>, <span class="ident">b</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">ast</span>::<span class="ident">ExprData</span>::<span class="ident">Comma</span>(<span class="ident">a</span>, <span class="ident">b</span>) <span class="op">=</span><span class="op">&gt;</span> {
               <span class="ident">a</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
               <span class="ident">b</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
             }
@@ -2568,8 +2569,8 @@
         <span class="kw">let</span> <span class="ident">visit</span> <span class="op">=</span> <span class="ident">visitor</span>.<span class="ident">visit_array_specifier_dimension</span>(<span class="self">self</span>);
 
         <span class="kw">if</span> <span class="ident">visit</span> <span class="op">=</span><span class="op">=</span> <span class="ident">Visit</span>::<span class="ident">Children</span> {
-          <span class="kw">if</span> <span class="kw">let</span> <span class="ident">ast</span>::<span class="ident">ArraySpecifierDimension</span>::<span class="ident">ExplicitlySized</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="self">self</span> {
-            <span class="ident">e</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
+          <span class="kw">if</span> <span class="kw">let</span> <span class="ident">ast</span>::<span class="ident">ArraySpecifierDimensionData</span>::<span class="ident">ExplicitlySized</span>(<span class="ident">e</span>) <span class="op">=</span> $(<span class="macro-nonterminal">$</span><span class="kw-2">ref</span>)<span class="op">*</span> <span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span> {
+            <span class="macro-nonterminal">e</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
           }
         }
       }
@@ -2583,9 +2584,9 @@
         <span class="kw">let</span> <span class="ident">visit</span> <span class="op">=</span> <span class="ident">visitor</span>.<span class="ident">visit_fun_identifier</span>(<span class="self">self</span>);
 
         <span class="kw">if</span> <span class="ident">visit</span> <span class="op">=</span><span class="op">=</span> <span class="ident">Visit</span>::<span class="ident">Children</span> {
-          <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">ast</span>::<span class="ident">FunIdentifier</span>::<span class="ident">TypeSpecifier</span>(<span class="ident">t</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">t</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>),
-            <span class="ident">ast</span>::<span class="ident">FunIdentifier</span>::<span class="ident">Expr</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">e</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>),
+          <span class="kw">match</span> $(<span class="macro-nonterminal">$</span><span class="kw-2">ref</span>)<span class="op">*</span> <span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span> {
+            <span class="macro-nonterminal">ast</span>::<span class="ident">FunIdentifierData</span>::<span class="ident">TypeSpecifier</span>(<span class="ident">t</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">t</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>),
+            <span class="ident">ast</span>::<span class="ident">FunIdentifierData</span>::<span class="ident">Expr</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">e</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>),
           }
         }
       }
@@ -2698,10 +2699,10 @@
         <span class="kw">let</span> <span class="ident">visit</span> <span class="op">=</span> <span class="ident">visitor</span>.<span class="ident">visit_selection_rest_statement</span>(<span class="self">self</span>);
 
         <span class="kw">if</span> <span class="ident">visit</span> <span class="op">=</span><span class="op">=</span> <span class="ident">Visit</span>::<span class="ident">Children</span> {
-          <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">ast</span>::<span class="ident">SelectionRestStatement</span>::<span class="ident">Statement</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">s</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>),
+          <span class="kw">match</span> $(<span class="macro-nonterminal">$</span><span class="kw-2">ref</span>)<span class="op">*</span> <span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span> {
+            <span class="macro-nonterminal">ast</span>::<span class="ident">SelectionRestStatementData</span>::<span class="ident">Statement</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">s</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>),
 
-            <span class="ident">ast</span>::<span class="ident">SelectionRestStatement</span>::<span class="ident">Else</span>(<span class="ident">a</span>, <span class="ident">b</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">ast</span>::<span class="ident">SelectionRestStatementData</span>::<span class="ident">Else</span>(<span class="ident">a</span>, <span class="ident">b</span>) <span class="op">=</span><span class="op">&gt;</span> {
               <span class="ident">a</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
               <span class="ident">b</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
             }
@@ -2735,8 +2736,8 @@
         <span class="kw">let</span> <span class="ident">visit</span> <span class="op">=</span> <span class="ident">visitor</span>.<span class="ident">visit_case_label</span>(<span class="self">self</span>);
 
         <span class="kw">if</span> <span class="ident">visit</span> <span class="op">=</span><span class="op">=</span> <span class="ident">Visit</span>::<span class="ident">Children</span> {
-          <span class="kw">if</span> <span class="kw">let</span> <span class="ident">ast</span>::<span class="ident">CaseLabel</span>::<span class="ident">Case</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="self">self</span> {
-            <span class="ident">e</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
+          <span class="kw">if</span> <span class="kw">let</span> <span class="ident">ast</span>::<span class="ident">CaseLabelData</span>::<span class="ident">Case</span>(<span class="ident">e</span>) <span class="op">=</span> $(<span class="macro-nonterminal">$</span><span class="kw-2">ref</span>)<span class="op">*</span> <span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span> {
+            <span class="macro-nonterminal">e</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
           }
         }
       }
@@ -2750,18 +2751,18 @@
         <span class="kw">let</span> <span class="ident">visit</span> <span class="op">=</span> <span class="ident">visitor</span>.<span class="ident">visit_iteration_statement</span>(<span class="self">self</span>);
 
         <span class="kw">if</span> <span class="ident">visit</span> <span class="op">=</span><span class="op">=</span> <span class="ident">Visit</span>::<span class="ident">Children</span> {
-          <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">ast</span>::<span class="ident">IterationStatement</span>::<span class="ident">While</span>(<span class="ident">c</span>, <span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> {
+          <span class="kw">match</span> $(<span class="macro-nonterminal">$</span><span class="kw-2">ref</span>)<span class="op">*</span> <span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span> {
+            <span class="macro-nonterminal">ast</span>::<span class="ident">IterationStatementData</span>::<span class="ident">While</span>(<span class="ident">c</span>, <span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> {
               <span class="ident">c</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
               <span class="ident">s</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
             }
 
-            <span class="ident">ast</span>::<span class="ident">IterationStatement</span>::<span class="ident">DoWhile</span>(<span class="ident">s</span>, <span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">ast</span>::<span class="ident">IterationStatementData</span>::<span class="ident">DoWhile</span>(<span class="ident">s</span>, <span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
               <span class="ident">s</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
               <span class="ident">e</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
             }
 
-            <span class="ident">ast</span>::<span class="ident">IterationStatement</span>::<span class="ident">For</span>(<span class="ident">fis</span>, <span class="ident">frs</span>, <span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">ast</span>::<span class="ident">IterationStatementData</span>::<span class="ident">For</span>(<span class="ident">fis</span>, <span class="ident">frs</span>, <span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> {
               <span class="ident">fis</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
               <span class="ident">frs</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
               <span class="ident">s</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
@@ -2779,9 +2780,9 @@
         <span class="kw">let</span> <span class="ident">visit</span> <span class="op">=</span> <span class="ident">visitor</span>.<span class="ident">visit_for_init_statement</span>(<span class="self">self</span>);
 
         <span class="kw">if</span> <span class="ident">visit</span> <span class="op">=</span><span class="op">=</span> <span class="ident">Visit</span>::<span class="ident">Children</span> {
-          <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">ast</span>::<span class="ident">ForInitStatement</span>::<span class="ident">Expression</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">e</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>),
-            <span class="ident">ast</span>::<span class="ident">ForInitStatement</span>::<span class="ident">Declaration</span>(<span class="ident">d</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">d</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>),
+          <span class="kw">match</span> $(<span class="macro-nonterminal">$</span><span class="kw-2">ref</span>)<span class="op">*</span> <span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span> {
+            <span class="macro-nonterminal">ast</span>::<span class="ident">ForInitStatementData</span>::<span class="ident">Expression</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">e</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>),
+            <span class="ident">ast</span>::<span class="ident">ForInitStatementData</span>::<span class="ident">Declaration</span>(<span class="ident">d</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">d</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>),
           }
         }
       }
@@ -2809,8 +2810,8 @@
         <span class="kw">let</span> <span class="ident">visit</span> <span class="op">=</span> <span class="ident">visitor</span>.<span class="ident">visit_jump_statement</span>(<span class="self">self</span>);
 
         <span class="kw">if</span> <span class="ident">visit</span> <span class="op">=</span><span class="op">=</span> <span class="ident">Visit</span>::<span class="ident">Children</span> {
-          <span class="kw">if</span> <span class="kw">let</span> <span class="ident">ast</span>::<span class="ident">JumpStatement</span>::<span class="ident">Return</span>(<span class="ident">r</span>) <span class="op">=</span> <span class="self">self</span> {
-            <span class="ident">r</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
+          <span class="kw">if</span> <span class="kw">let</span> <span class="ident">ast</span>::<span class="ident">JumpStatementData</span>::<span class="ident">Return</span>(<span class="ident">r</span>) <span class="op">=</span> $(<span class="macro-nonterminal">$</span><span class="kw-2">ref</span>)<span class="op">*</span> <span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span> {
+            <span class="macro-nonterminal">r</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
           }
         }
       }
@@ -2824,10 +2825,10 @@
         <span class="kw">let</span> <span class="ident">visit</span> <span class="op">=</span> <span class="ident">visitor</span>.<span class="ident">visit_condition</span>(<span class="self">self</span>);
 
         <span class="kw">if</span> <span class="ident">visit</span> <span class="op">=</span><span class="op">=</span> <span class="ident">Visit</span>::<span class="ident">Children</span> {
-          <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">ast</span>::<span class="ident">Condition</span>::<span class="ident">Expr</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">e</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>),
+          <span class="kw">match</span> $(<span class="macro-nonterminal">$</span><span class="kw-2">ref</span>)<span class="op">*</span> <span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span> {
+            <span class="macro-nonterminal">ast</span>::<span class="ident">ConditionData</span>::<span class="ident">Expr</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">e</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>),
 
-            <span class="ident">ast</span>::<span class="ident">Condition</span>::<span class="ident">Assignment</span>(<span class="ident">fst</span>, <span class="ident">ident</span>, <span class="ident">init</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">ast</span>::<span class="ident">ConditionData</span>::<span class="ident">Assignment</span>(<span class="ident">fst</span>, <span class="ident">ident</span>, <span class="ident">init</span>) <span class="op">=</span><span class="op">&gt;</span> {
               <span class="ident">fst</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
               <span class="ident">ident</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
               <span class="ident">init</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
@@ -2845,10 +2846,10 @@
         <span class="kw">let</span> <span class="ident">visit</span> <span class="op">=</span> <span class="ident">visitor</span>.<span class="ident">visit_initializer</span>(<span class="self">self</span>);
 
         <span class="kw">if</span> <span class="ident">visit</span> <span class="op">=</span><span class="op">=</span> <span class="ident">Visit</span>::<span class="ident">Children</span> {
-          <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">ast</span>::<span class="ident">Initializer</span>::<span class="ident">Simple</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">e</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>),
+          <span class="kw">match</span> $(<span class="macro-nonterminal">$</span><span class="kw-2">ref</span>)<span class="op">*</span> <span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span> {
+            <span class="macro-nonterminal">ast</span>::<span class="ident">InitializerData</span>::<span class="ident">Simple</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">e</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>),
 
-            <span class="ident">ast</span>::<span class="ident">Initializer</span>::<span class="ident">List</span>(<span class="ident">i</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">ast</span>::<span class="ident">InitializerData</span>::<span class="ident">List</span>(<span class="ident">i</span>) <span class="op">=</span><span class="op">&gt;</span> {
               <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="ident">i</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">iter</span>() {
                 <span class="ident">i</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mthd_name</span>(<span class="ident">visitor</span>);
               }
@@ -2870,6 +2871,7 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
+    <span class="kw">use</span> <span class="ident">lang_util</span>::<span class="ident">NodeContent</span>;
     <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">iter</span>::<span class="ident">FromIterator</span>;
 
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
@@ -2878,17 +2880,17 @@
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">approx_constant</span>)]</span>
     <span class="kw">fn</span> <span class="ident">count_variables</span>() {
         <span class="kw">let</span> <span class="ident">decl0</span> <span class="op">=</span> <span class="ident">ast</span>::<span class="ident">StatementData</span>::<span class="ident">declare_var</span>(
-            <span class="ident">ast</span>::<span class="ident">TypeSpecifierNonArray</span>::<span class="ident">Float</span>,
+            <span class="ident">ast</span>::<span class="ident">TypeSpecifierNonArrayData</span>::<span class="ident">Float</span>,
             <span class="string">&quot;x&quot;</span>,
             <span class="prelude-val">None</span>,
-            <span class="prelude-val">Some</span>(<span class="ident">ast</span>::<span class="ident">Expr</span>::<span class="ident">from</span>(<span class="number">3.14</span>).<span class="ident">into</span>()),
+            <span class="prelude-val">Some</span>(<span class="ident">ast</span>::<span class="ident">ExprData</span>::<span class="ident">from</span>(<span class="number">3.14</span>).<span class="ident">into_node</span>()),
         );
 
         <span class="kw">let</span> <span class="ident">decl1</span> <span class="op">=</span>
-            <span class="ident">ast</span>::<span class="ident">StatementData</span>::<span class="ident">declare_var</span>(<span class="ident">ast</span>::<span class="ident">TypeSpecifierNonArray</span>::<span class="ident">Int</span>, <span class="string">&quot;y&quot;</span>, <span class="prelude-val">None</span>, <span class="prelude-val">None</span>);
+            <span class="ident">ast</span>::<span class="ident">StatementData</span>::<span class="ident">declare_var</span>(<span class="ident">ast</span>::<span class="ident">TypeSpecifierNonArrayData</span>::<span class="ident">Int</span>, <span class="string">&quot;y&quot;</span>, <span class="prelude-val">None</span>, <span class="prelude-val">None</span>);
 
         <span class="kw">let</span> <span class="ident">decl2</span> <span class="op">=</span>
-            <span class="ident">ast</span>::<span class="ident">StatementData</span>::<span class="ident">declare_var</span>(<span class="ident">ast</span>::<span class="ident">TypeSpecifierNonArray</span>::<span class="ident">Vec4</span>, <span class="string">&quot;z&quot;</span>, <span class="prelude-val">None</span>, <span class="prelude-val">None</span>);
+            <span class="ident">ast</span>::<span class="ident">StatementData</span>::<span class="ident">declare_var</span>(<span class="ident">ast</span>::<span class="ident">TypeSpecifierNonArrayData</span>::<span class="ident">Vec4</span>, <span class="string">&quot;z&quot;</span>, <span class="prelude-val">None</span>, <span class="prelude-val">None</span>);
 
         <span class="kw">let</span> <span class="ident">compound</span>: <span class="ident">ast</span>::<span class="ident">CompoundStatement</span> <span class="op">=</span>
             <span class="ident">ast</span>::<span class="ident">CompoundStatementData</span>::<span class="ident">from_iter</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">decl0</span>.<span class="ident">into</span>(), <span class="ident">decl1</span>.<span class="ident">into</span>(), <span class="ident">decl2</span>.<span class="ident">into</span>()])

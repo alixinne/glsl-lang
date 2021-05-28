@@ -1043,7 +1043,7 @@ impl From<f64> for ExprData {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub enum UnaryOp {
+pub enum UnaryOpData {
     /// `++` unary operator
     #[lang_util(display(extra = "++"))]
     Inc,

@@ -913,14 +913,17 @@ fn tokenize_expr(expr: &ast::Expr) -> TokenStream {
 }
 
 fn tokenize_unary_op(op: &ast::UnaryOp) -> TokenStream {
-    match *op {
-        ast::UnaryOp::Inc => quote! { glsl_lang::ast::UnaryOp::Inc },
-        ast::UnaryOp::Dec => quote! { glsl_lang::ast::UnaryOp::Dec },
-        ast::UnaryOp::Add => quote! { glsl_lang::ast::UnaryOp::Add },
-        ast::UnaryOp::Minus => quote! { glsl_lang::ast::UnaryOp::Minus },
-        ast::UnaryOp::Not => quote! { glsl_lang::ast::UnaryOp::Not },
-        ast::UnaryOp::Complement => quote! { glsl_lang::ast::UnaryOp::Complement },
-    }
+    let span = tokenize_span(&op.span);
+    let op = match op.content {
+        ast::UnaryOpData::Inc => quote! { glsl_lang::ast::UnaryOpData::Inc },
+        ast::UnaryOpData::Dec => quote! { glsl_lang::ast::UnaryOpData::Dec },
+        ast::UnaryOpData::Add => quote! { glsl_lang::ast::UnaryOpData::Add },
+        ast::UnaryOpData::Minus => quote! { glsl_lang::ast::UnaryOpData::Minus },
+        ast::UnaryOpData::Not => quote! { glsl_lang::ast::UnaryOpData::Not },
+        ast::UnaryOpData::Complement => quote! { glsl_lang::ast::UnaryOpData::Complement },
+    };
+
+    quote! { glsl_lang::ast::UnaryOp::new(#op, #span) }
 }
 
 fn tokenize_binary_op(op: &ast::BinaryOp) -> TokenStream {

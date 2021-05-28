@@ -42,12 +42,15 @@ fn parse_comments() {
 
 #[test]
 fn parse_unary_op() {
-    assert_eq!(ast::UnaryOp::parse("+"), Ok(ast::UnaryOp::Add));
-    assert_eq!(ast::UnaryOp::parse("-"), Ok(ast::UnaryOp::Minus));
-    assert_eq!(ast::UnaryOp::parse("!"), Ok(ast::UnaryOp::Not));
-    assert_eq!(ast::UnaryOp::parse("~"), Ok(ast::UnaryOp::Complement));
-    assert_eq!(ast::UnaryOp::parse("++"), Ok(ast::UnaryOp::Inc));
-    assert_eq!(ast::UnaryOp::parse("--"), Ok(ast::UnaryOp::Dec));
+    assert_eq!(ast::UnaryOp::parse("+"), Ok(ast::UnaryOpData::Add.into()));
+    assert_eq!(ast::UnaryOp::parse("-"), Ok(ast::UnaryOpData::Minus.into()));
+    assert_eq!(ast::UnaryOp::parse("!"), Ok(ast::UnaryOpData::Not.into()));
+    assert_eq!(
+        ast::UnaryOp::parse("~"),
+        Ok(ast::UnaryOpData::Complement.into())
+    );
+    assert_eq!(ast::UnaryOp::parse("++"), Ok(ast::UnaryOpData::Inc.into()));
+    assert_eq!(ast::UnaryOp::parse("--"), Ok(ast::UnaryOpData::Dec.into()));
 }
 
 #[test]
@@ -1293,7 +1296,7 @@ fn parse_postfix_postdec() {
 #[test]
 fn parse_unary_add() {
     let foo_var = ast::ExprData::Variable("foo".into_node());
-    let expected = ast::ExprData::Unary(ast::UnaryOp::Add, Box::new(foo_var.into()));
+    let expected = ast::ExprData::Unary(ast::UnaryOpData::Add.into(), Box::new(foo_var.into()));
 
     assert_eq!(ast::Expr::parse("+foo"), Ok(expected.into()));
 }
@@ -1301,7 +1304,7 @@ fn parse_unary_add() {
 #[test]
 fn parse_unary_minus() {
     let foo_var = ast::ExprData::Variable("foo".into_node());
-    let expected = ast::ExprData::Unary(ast::UnaryOp::Minus, Box::new(foo_var.into()));
+    let expected = ast::ExprData::Unary(ast::UnaryOpData::Minus.into(), Box::new(foo_var.into()));
 
     assert_eq!(ast::Expr::parse("-foo"), Ok(expected.into()));
 }
@@ -1309,7 +1312,7 @@ fn parse_unary_minus() {
 #[test]
 fn parse_unary_not() {
     let foo_var = ast::ExprData::Variable("foo".into_node());
-    let expected = ast::ExprData::Unary(ast::UnaryOp::Not, Box::new(foo_var.into()));
+    let expected = ast::ExprData::Unary(ast::UnaryOpData::Not.into(), Box::new(foo_var.into()));
 
     assert_eq!(ast::Expr::parse("!foo"), Ok(expected.into()));
 }
@@ -1317,7 +1320,10 @@ fn parse_unary_not() {
 #[test]
 fn parse_unary_complement() {
     let foo_var = ast::ExprData::Variable("foo".into_node());
-    let expected = ast::ExprData::Unary(ast::UnaryOp::Complement, Box::new(foo_var.into()));
+    let expected = ast::ExprData::Unary(
+        ast::UnaryOpData::Complement.into(),
+        Box::new(foo_var.into()),
+    );
 
     assert_eq!(ast::Expr::parse("~foo"), Ok(expected.into()));
 }
@@ -1325,7 +1331,7 @@ fn parse_unary_complement() {
 #[test]
 fn parse_unary_inc() {
     let foo_var = ast::ExprData::Variable("foo".into_node()).into();
-    let expected = ast::ExprData::Unary(ast::UnaryOp::Inc, Box::new(foo_var));
+    let expected = ast::ExprData::Unary(ast::UnaryOpData::Inc.into(), Box::new(foo_var));
 
     assert_eq!(ast::Expr::parse("++foo"), Ok(expected.into()));
 }
@@ -1333,7 +1339,7 @@ fn parse_unary_inc() {
 #[test]
 fn parse_unary_dec() {
     let foo_var = ast::ExprData::Variable("foo".into_node()).into();
-    let expected = ast::ExprData::Unary(ast::UnaryOp::Dec, Box::new(foo_var));
+    let expected = ast::ExprData::Unary(ast::UnaryOpData::Dec.into(), Box::new(foo_var));
 
     assert_eq!(ast::Expr::parse("--foo"), Ok(expected.into()));
 }
@@ -2132,7 +2138,7 @@ fn parse_iteration_statement_for_empty() {
         )),
         post_expr: Some(Box::new(
             ast::ExprData::Unary(
-                ast::UnaryOp::Inc,
+                ast::UnaryOpData::Inc.into(),
                 Box::new(ast::ExprData::Variable("i".into_node()).into()),
             )
             .into(),

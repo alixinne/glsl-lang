@@ -266,13 +266,17 @@ unary_expression: ast::Expr = {
     <a:@L> <o:unary_op> <e:unary_expression> <b:@R> => ast::ExprData::Unary(o, Box::new(e)).spanned(a, b),
 };
 
+unary_op_data: ast::UnaryOpData = {
+    "+"  => ast::UnaryOpData::Add,
+    "-"  => ast::UnaryOpData::Minus,
+    "!"  => ast::UnaryOpData::Not,
+    "~"  => ast::UnaryOpData::Complement,
+    "++" => ast::UnaryOpData::Inc,
+    "--" => ast::UnaryOpData::Dec,
+};
+
 unary_op: ast::UnaryOp = {
-    "+"  => ast::UnaryOp::Add,
-    "-"  => ast::UnaryOp::Minus,
-    "!"  => ast::UnaryOp::Not,
-    "~"  => ast::UnaryOp::Complement,
-    "++" => ast::UnaryOp::Inc,
-    "--" => ast::UnaryOp::Dec,
+    <l:@L> <u:unary_op_data> <r:@R> => u.spanned(l, r)
 };
 
 arrayed_identifier: ast::ArrayedIdentifier = {

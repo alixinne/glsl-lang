@@ -375,7 +375,7 @@ impl HasPrecedence for ast::ExprData {
     }
 }
 
-impl HasPrecedence for ast::UnaryOp {
+impl HasPrecedence for ast::UnaryOpData {
     fn precedence(&self) -> u32 {
         3
     }
@@ -940,7 +940,8 @@ where
                 f.write_str(")")
             } else if let ast::ExprData::Unary(eop, _) = &***e {
                 // Prevent double-unary plus/minus turning into inc/dec
-                if eop == op && (*eop == ast::UnaryOp::Add || *eop == ast::UnaryOp::Minus) {
+                if eop == op && (**eop == ast::UnaryOpData::Add || **eop == ast::UnaryOpData::Minus)
+                {
                     f.write_str("(")?;
                     show_expr(f, &e, state)?;
                     f.write_str(")")
@@ -1127,13 +1128,13 @@ pub fn show_unary_op<F>(
 where
     F: Write,
 {
-    match *op {
-        ast::UnaryOp::Inc => f.write_str("++"),
-        ast::UnaryOp::Dec => f.write_str("--"),
-        ast::UnaryOp::Add => f.write_str("+"),
-        ast::UnaryOp::Minus => f.write_str("-"),
-        ast::UnaryOp::Not => f.write_str("!"),
-        ast::UnaryOp::Complement => f.write_str("~"),
+    match **op {
+        ast::UnaryOpData::Inc => f.write_str("++"),
+        ast::UnaryOpData::Dec => f.write_str("--"),
+        ast::UnaryOpData::Add => f.write_str("+"),
+        ast::UnaryOpData::Minus => f.write_str("-"),
+        ast::UnaryOpData::Not => f.write_str("!"),
+        ast::UnaryOpData::Complement => f.write_str("~"),
     }
 }
 

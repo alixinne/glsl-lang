@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `lang-util`: Generate display impl for derive(Token)
 - `lang-util`: Add lang_util(as = "...") for mapping to lalrpop parser tokens
 - `lang-util`: Add TokenDescription metadata for lexer tokens
+- `glsl-lang`: Add location data to all AST nodes
 
 ### Changed
 - PartialEq for Node now compares the contents of the node by default

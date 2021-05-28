@@ -1132,7 +1132,7 @@ pub enum BinaryOpData {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub enum AssignmentOp {
+pub enum AssignmentOpData {
     /// `=` assignment operator
     #[lang_util(display(extra = "="))]
     Equal,

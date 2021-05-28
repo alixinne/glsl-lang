@@ -378,18 +378,22 @@ assignment_expression: ast::Expr = {
         ast::ExprData::Assignment(Box::new(l), o, Box::new(r)).spanned(a, b),
 };
 
+assignment_op_data: ast::AssignmentOpData = {
+    "="   => ast::AssignmentOpData::Equal,
+    "*="  => ast::AssignmentOpData::Mult,
+    "/="  => ast::AssignmentOpData::Div,
+    "%="  => ast::AssignmentOpData::Mod,
+    "+="  => ast::AssignmentOpData::Add,
+    "-="  => ast::AssignmentOpData::Sub,
+    "<<=" => ast::AssignmentOpData::LShift,
+    ">>=" => ast::AssignmentOpData::RShift,
+    "&="  => ast::AssignmentOpData::And,
+    "^="  => ast::AssignmentOpData::Xor,
+    "|="  => ast::AssignmentOpData::Or,
+};
+
 assignment_op: ast::AssignmentOp = {
-    "="   => ast::AssignmentOp::Equal,
-    "*="  => ast::AssignmentOp::Mult,
-    "/="  => ast::AssignmentOp::Div,
-    "%="  => ast::AssignmentOp::Mod,
-    "+="  => ast::AssignmentOp::Add,
-    "-="  => ast::AssignmentOp::Sub,
-    "<<=" => ast::AssignmentOp::LShift,
-    ">>=" => ast::AssignmentOp::RShift,
-    "&="  => ast::AssignmentOp::And,
-    "^="  => ast::AssignmentOp::Xor,
-    "|="  => ast::AssignmentOp::Or,
+    <l:@L> <o:assignment_op_data> <r:@R> => o.spanned(l, r)
 };
 
 expr: ast::Expr = {

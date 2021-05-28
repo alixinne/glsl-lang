@@ -954,19 +954,22 @@ fn tokenize_binary_op(op: &ast::BinaryOp) -> TokenStream {
 }
 
 fn tokenize_assignment_op(op: &ast::AssignmentOp) -> TokenStream {
-    match *op {
-        ast::AssignmentOp::Equal => quote! { glsl_lang::ast::AssignmentOp::Equal },
-        ast::AssignmentOp::Mult => quote! { glsl_lang::ast::AssignmentOp::Mult },
-        ast::AssignmentOp::Div => quote! { glsl_lang::ast::AssignmentOp::Div },
-        ast::AssignmentOp::Mod => quote! { glsl_lang::ast::AssignmentOp::Mod },
-        ast::AssignmentOp::Add => quote! { glsl_lang::ast::AssignmentOp::Add },
-        ast::AssignmentOp::Sub => quote! { glsl_lang::ast::AssignmentOp::Sub },
-        ast::AssignmentOp::LShift => quote! { glsl_lang::ast::AssignmentOp::LShift },
-        ast::AssignmentOp::RShift => quote! { glsl_lang::ast::AssignmentOp::RShift },
-        ast::AssignmentOp::And => quote! { glsl_lang::ast::AssignmentOp::And },
-        ast::AssignmentOp::Xor => quote! { glsl_lang::ast::AssignmentOp::Xor },
-        ast::AssignmentOp::Or => quote! { AssignmentOp::Or },
-    }
+    let span = tokenize_span(&op.span);
+    let op = match op.content {
+        ast::AssignmentOpData::Equal => quote! { glsl_lang::ast::AssignmentOpData::Equal },
+        ast::AssignmentOpData::Mult => quote! { glsl_lang::ast::AssignmentOpData::Mult },
+        ast::AssignmentOpData::Div => quote! { glsl_lang::ast::AssignmentOpData::Div },
+        ast::AssignmentOpData::Mod => quote! { glsl_lang::ast::AssignmentOpData::Mod },
+        ast::AssignmentOpData::Add => quote! { glsl_lang::ast::AssignmentOpData::Add },
+        ast::AssignmentOpData::Sub => quote! { glsl_lang::ast::AssignmentOpData::Sub },
+        ast::AssignmentOpData::LShift => quote! { glsl_lang::ast::AssignmentOpData::LShift },
+        ast::AssignmentOpData::RShift => quote! { glsl_lang::ast::AssignmentOpData::RShift },
+        ast::AssignmentOpData::And => quote! { glsl_lang::ast::AssignmentOpData::And },
+        ast::AssignmentOpData::Xor => quote! { glsl_lang::ast::AssignmentOpData::Xor },
+        ast::AssignmentOpData::Or => quote! { AssignmentOpData::Or },
+    };
+
+    quote! { glsl_lang::ast::AssignmentOp::new(#op, #span) }
 }
 
 fn tokenize_function_identifier(i: &ast::FunIdentifier) -> TokenStream {

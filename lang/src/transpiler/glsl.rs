@@ -1179,18 +1179,18 @@ pub fn show_assignment_op<F>(
 where
     F: Write,
 {
-    match *op {
-        ast::AssignmentOp::Equal => state.write_binary_op(f, "="),
-        ast::AssignmentOp::Mult => state.write_binary_op(f, "*="),
-        ast::AssignmentOp::Div => state.write_binary_op(f, "/="),
-        ast::AssignmentOp::Mod => state.write_binary_op(f, "%="),
-        ast::AssignmentOp::Add => state.write_binary_op(f, "+="),
-        ast::AssignmentOp::Sub => state.write_binary_op(f, "-="),
-        ast::AssignmentOp::LShift => state.write_binary_op(f, "<<="),
-        ast::AssignmentOp::RShift => state.write_binary_op(f, ">>="),
-        ast::AssignmentOp::And => state.write_binary_op(f, "&="),
-        ast::AssignmentOp::Xor => state.write_binary_op(f, "^="),
-        ast::AssignmentOp::Or => state.write_binary_op(f, "|="),
+    match **op {
+        ast::AssignmentOpData::Equal => state.write_binary_op(f, "="),
+        ast::AssignmentOpData::Mult => state.write_binary_op(f, "*="),
+        ast::AssignmentOpData::Div => state.write_binary_op(f, "/="),
+        ast::AssignmentOpData::Mod => state.write_binary_op(f, "%="),
+        ast::AssignmentOpData::Add => state.write_binary_op(f, "+="),
+        ast::AssignmentOpData::Sub => state.write_binary_op(f, "-="),
+        ast::AssignmentOpData::LShift => state.write_binary_op(f, "<<="),
+        ast::AssignmentOpData::RShift => state.write_binary_op(f, ">>="),
+        ast::AssignmentOpData::And => state.write_binary_op(f, "&="),
+        ast::AssignmentOpData::Xor => state.write_binary_op(f, "^="),
+        ast::AssignmentOpData::Or => state.write_binary_op(f, "|="),
     }
 }
 

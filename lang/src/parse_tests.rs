@@ -1533,23 +1533,50 @@ fn parse_function_identifier_cast_array_sized() {
 
 #[test]
 fn parse_assignment_op() {
-    assert_eq!(ast::AssignmentOp::parse("="), Ok(ast::AssignmentOp::Equal));
-    assert_eq!(ast::AssignmentOp::parse("*="), Ok(ast::AssignmentOp::Mult));
-    assert_eq!(ast::AssignmentOp::parse("/="), Ok(ast::AssignmentOp::Div));
-    assert_eq!(ast::AssignmentOp::parse("%="), Ok(ast::AssignmentOp::Mod));
-    assert_eq!(ast::AssignmentOp::parse("+="), Ok(ast::AssignmentOp::Add));
-    assert_eq!(ast::AssignmentOp::parse("-="), Ok(ast::AssignmentOp::Sub));
+    assert_eq!(
+        ast::AssignmentOp::parse("="),
+        Ok(ast::AssignmentOpData::Equal.into())
+    );
+    assert_eq!(
+        ast::AssignmentOp::parse("*="),
+        Ok(ast::AssignmentOpData::Mult.into())
+    );
+    assert_eq!(
+        ast::AssignmentOp::parse("/="),
+        Ok(ast::AssignmentOpData::Div.into())
+    );
+    assert_eq!(
+        ast::AssignmentOp::parse("%="),
+        Ok(ast::AssignmentOpData::Mod.into())
+    );
+    assert_eq!(
+        ast::AssignmentOp::parse("+="),
+        Ok(ast::AssignmentOpData::Add.into())
+    );
+    assert_eq!(
+        ast::AssignmentOp::parse("-="),
+        Ok(ast::AssignmentOpData::Sub.into())
+    );
     assert_eq!(
         ast::AssignmentOp::parse("<<="),
-        Ok(ast::AssignmentOp::LShift)
+        Ok(ast::AssignmentOpData::LShift.into())
     );
     assert_eq!(
         ast::AssignmentOp::parse(">>="),
-        Ok(ast::AssignmentOp::RShift)
+        Ok(ast::AssignmentOpData::RShift.into())
     );
-    assert_eq!(ast::AssignmentOp::parse("&="), Ok(ast::AssignmentOp::And));
-    assert_eq!(ast::AssignmentOp::parse("^="), Ok(ast::AssignmentOp::Xor));
-    assert_eq!(ast::AssignmentOp::parse("|="), Ok(ast::AssignmentOp::Or));
+    assert_eq!(
+        ast::AssignmentOp::parse("&="),
+        Ok(ast::AssignmentOpData::And.into())
+    );
+    assert_eq!(
+        ast::AssignmentOp::parse("^="),
+        Ok(ast::AssignmentOpData::Xor.into())
+    );
+    assert_eq!(
+        ast::AssignmentOp::parse("|="),
+        Ok(ast::AssignmentOpData::Or.into())
+    );
 }
 
 #[test]
@@ -1557,7 +1584,7 @@ fn parse_expr_statement() {
     let expected = ast::ExprStatement(Some(
         ast::ExprData::Assignment(
             Box::new(ast::ExprData::Variable("foo".into_node()).into()),
-            ast::AssignmentOp::Equal,
+            ast::AssignmentOpData::Equal.into(),
             Box::new(ast::ExprData::FloatConst(314.).into()),
         )
         .into(),

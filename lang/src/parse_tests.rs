@@ -1548,7 +1548,7 @@ fn parse_declaration_init_declarator_list_single() {
         ty: ty.into(),
         name: Some("foo".into_node()),
         array_specifier: None,
-        initializer: Some(ast::Initializer::Simple(Box::new(ast::Expr::IntConst(34)))),
+        initializer: Some(ast::InitializerData::Simple(Box::new(ast::Expr::IntConst(34))).into()),
     };
     let idl = ast::InitDeclaratorListData {
         head: sd.into(),
@@ -1581,11 +1581,11 @@ fn parse_declaration_init_declarator_list_complex() {
         ty: ty.into(),
         name: Some("foo".into_node()),
         array_specifier: None,
-        initializer: Some(ast::Initializer::Simple(Box::new(ast::Expr::IntConst(34)))),
+        initializer: Some(ast::InitializerData::Simple(Box::new(ast::Expr::IntConst(34))).into()),
     };
     let sdnt = ast::SingleDeclarationNoTypeData {
         ident: "bar".into_node(),
-        initializer: Some(ast::Initializer::Simple(Box::new(ast::Expr::IntConst(12)))),
+        initializer: Some(ast::InitializerData::Simple(Box::new(ast::Expr::IntConst(12))).into()),
     };
     let expected: ast::Declaration = ast::DeclarationData::InitDeclaratorList(
         ast::InitDeclaratorListData {
@@ -2004,9 +2004,9 @@ fn parse_iteration_statement_for_empty() {
                     .into(),
                     name: Some("i".into_node()),
                     array_specifier: None,
-                    initializer: Some(ast::Initializer::Simple(Box::new(ast::Expr::FloatConst(
-                        0.,
-                    )))),
+                    initializer: Some(
+                        ast::InitializerData::Simple(Box::new(ast::Expr::FloatConst(0.))).into(),
+                    ),
                 }
                 .into(),
                 tail: Vec::new(),
@@ -2725,7 +2725,7 @@ fn parse_dot_field_expr_statement() {
         ),
         ast::Expr::Variable("v_barycenter".into_node()),
     ];
-    let ini = ast::Initializer::Simple(Box::new(ast::Expr::Dot(
+    let ini = ast::InitializerData::Simple(Box::new(ast::Expr::Dot(
         Box::new(ast::Expr::FunCall(fun.into(), args)),
         "zyx".into_node(),
     )));
@@ -2741,7 +2741,7 @@ fn parse_dot_field_expr_statement() {
         .into(),
         name: Some("v".into_node()),
         array_specifier: None,
-        initializer: Some(ini),
+        initializer: Some(ini.into()),
     };
     let expected: ast::Statement = ast::StatementData::Declaration(
         ast::DeclarationData::InitDeclaratorList(

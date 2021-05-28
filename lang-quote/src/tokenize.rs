@@ -1123,17 +1123,20 @@ fn tokenize_single_declaration_no_type(d: &ast::SingleDeclarationNoType) -> Toke
 }
 
 fn tokenize_initializer(i: &ast::Initializer) -> TokenStream {
-    match *i {
-        ast::Initializer::Simple(ref e) => {
+    let span = tokenize_span(&i.span);
+    let i = match i.content {
+        ast::InitializerData::Simple(ref e) => {
             let e = Box::new(tokenize_expr(e)).quote();
-            quote! { glsl_lang::ast::Initializer::Simple(#e) }
+            quote! { glsl_lang::ast::InitializerData::Simple(#e) }
         }
 
-        ast::Initializer::List(ref list) => {
+        ast::InitializerData::List(ref list) => {
             let l = list.iter().map(tokenize_initializer);
-            quote! { glsl_lang::ast::Initializer::List(vec![#(#l),*]) }
+            quote! { glsl_lang::ast::InitializerData::List(vec![#(#l),*]) }
         }
-    }
+    };
+
+    quote! { ast::Initializer::new(#i, #span) }
 }
 
 fn tokenize_block(b: &ast::Block) -> TokenStream {

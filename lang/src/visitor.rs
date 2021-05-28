@@ -13,7 +13,7 @@
 //! For instance, we can imagine visiting an AST to count how many variables are declared:
 //!
 //! ```
-//! use glsl_lang::ast::{CompoundStatement, CompoundStatementData, Expr, SingleDeclaration, StatementData, TypeSpecifierNonArrayData};
+//! use glsl_lang::ast::{CompoundStatement, CompoundStatementData, Expr, SingleDeclaration, StatementData, TypeSpecifierNonArrayData, NodeContent};
 //! use glsl_lang::visitor::{Host, Visit, Visitor};
 //! use std::iter::FromIterator;
 //!
@@ -21,7 +21,7 @@
 //!   TypeSpecifierNonArrayData::Float,
 //!   "x",
 //!   None,
-//!   Some(Expr::from(3.14).into())
+//!   Some(Expr::from(3.14).into_node())
 //! );
 //!
 //! let decl1 = StatementData::declare_var(
@@ -1384,10 +1384,10 @@ macro_rules! make_host_trait {
         let visit = visitor.visit_initializer(self);
 
         if visit == Visit::Children {
-          match self {
-            ast::Initializer::Simple(e) => e.$mthd_name(visitor),
+          match $($ref)* **self {
+            ast::InitializerData::Simple(e) => e.$mthd_name(visitor),
 
-            ast::Initializer::List(i) => {
+            ast::InitializerData::List(i) => {
               for i in i.$iter() {
                 i.$mthd_name(visitor);
               }
@@ -1409,6 +1409,7 @@ make_host_trait!(HostMut, VisitorMut, visit_mut, iter_mut, &mut);
 
 #[cfg(test)]
 mod tests {
+    use lang_util::NodeContent;
     use std::iter::FromIterator;
 
     use super::*;
@@ -1420,7 +1421,7 @@ mod tests {
             ast::TypeSpecifierNonArrayData::Float,
             "x",
             None,
-            Some(ast::Expr::from(3.14).into()),
+            Some(ast::Expr::from(3.14).into_node()),
         );
 
         let decl1 =

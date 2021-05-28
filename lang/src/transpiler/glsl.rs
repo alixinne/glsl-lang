@@ -1384,9 +1384,9 @@ pub fn show_initializer<F>(
 where
     F: Write,
 {
-    match *i {
-        ast::Initializer::Simple(ref e) => show_expr(f, e, state),
-        ast::Initializer::List(ref list) => {
+    match **i {
+        ast::InitializerData::Simple(ref e) => show_expr(f, e, state),
+        ast::InitializerData::List(ref list) => {
             let mut iter = list.iter();
             let first = iter.next().unwrap();
 

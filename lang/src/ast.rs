@@ -929,16 +929,16 @@ pub struct SingleDeclarationNoTypeData {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub enum Initializer {
+pub enum InitializerData {
     /// Simple initializer
     Simple(Box<Expr>),
     /// Multiple initializer
     List(Vec<Initializer>),
 }
 
-impl From<Expr> for Initializer {
+impl From<Expr> for InitializerData {
     fn from(e: Expr) -> Self {
-        Initializer::Simple(Box::new(e))
+        Self::Simple(Box::new(e))
     }
 }
 

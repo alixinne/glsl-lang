@@ -424,9 +424,13 @@ case_label: ast::CaseLabel = {
     "default" ":"     => ast::CaseLabel::Def,
 };
 
+initializer_data: ast::InitializerData = {
+    <assignment_expression>               => ast::InitializerData::Simple(Box::new(<>)),
+    "{" <comma_trailing<initializer>> "}" => ast::InitializerData::List(<>),
+};
+
 initializer: ast::Initializer = {
-    <assignment_expression>               => ast::Initializer::Simple(Box::new(<>)),
-    "{" <comma_trailing<initializer>> "}" => ast::Initializer::List(<>),
+    <l:@L> <i:initializer_data> <r:@R> => i.spanned(l, r)
 };
 
 condition: ast::Condition = {

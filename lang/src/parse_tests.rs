@@ -1934,7 +1934,7 @@ fn parse_selection_statement_if() {
         Box::new(ast::ExprData::IntConst(10).into()),
     );
     let ret = Box::new(ast::ExprData::BoolConst(false).into());
-    let st = ast::StatementData::Jump(ast::JumpStatement::Return(Some(ret)));
+    let st = ast::StatementData::Jump(ast::JumpStatementData::Return(Some(ret)).into());
     let body = ast::StatementData::Compound(
         ast::CompoundStatementData {
             statement_list: vec![st.into()],
@@ -1966,7 +1966,7 @@ fn parse_selection_statement_if_else() {
         Box::new(ast::ExprData::IntConst(10).into()),
     );
     let if_ret = Box::new(ast::ExprData::FloatConst(0.).into());
-    let if_st = ast::StatementData::Jump(ast::JumpStatement::Return(Some(if_ret)));
+    let if_st = ast::StatementData::Jump(ast::JumpStatementData::Return(Some(if_ret)).into());
     let if_body = ast::StatementData::Compound(
         ast::CompoundStatementData {
             statement_list: vec![if_st.into()],
@@ -1974,7 +1974,7 @@ fn parse_selection_statement_if_else() {
         .into(),
     );
     let else_ret = Box::new(ast::ExprData::Variable("foo".into_node()).into());
-    let else_st = ast::StatementData::Jump(ast::JumpStatement::Return(Some(else_ret)));
+    let else_st = ast::StatementData::Jump(ast::JumpStatementData::Return(Some(else_ret)).into());
     let else_body = ast::StatementData::Compound(
         ast::CompoundStatementData {
             statement_list: vec![else_st.into()],
@@ -2034,9 +2034,9 @@ fn parse_switch_statement_cases() {
     let case1 = ast::StatementData::CaseLabel(
         ast::CaseLabelData::Case(Box::new(ast::ExprData::IntConst(1).into())).into(),
     );
-    let ret = ast::StatementData::Jump(ast::JumpStatement::Return(Some(Box::new(
-        ast::ExprData::UIntConst(12).into(),
-    ))));
+    let ret = ast::StatementData::Jump(
+        ast::JumpStatementData::Return(Some(Box::new(ast::ExprData::UIntConst(12).into()))).into(),
+    );
     let expected: ast::SwitchStatement = ast::SwitchStatementData {
         head,
         body: vec![case0.into(), case1.into(), ret.into()],
@@ -2219,7 +2219,7 @@ fn parse_iteration_statement_for_empty() {
 fn parse_jump_continue() {
     assert_eq!(
         ast::JumpStatement::parse("continue;"),
-        Ok(ast::JumpStatement::Continue)
+        Ok(ast::JumpStatementData::Continue.into())
     );
 }
 
@@ -2227,20 +2227,21 @@ fn parse_jump_continue() {
 fn parse_jump_break() {
     assert_eq!(
         ast::JumpStatement::parse("break;"),
-        Ok(ast::JumpStatement::Break)
+        Ok(ast::JumpStatementData::Break.into())
     );
 }
 
 #[test]
 fn parse_jump_return() {
-    let expected = ast::JumpStatement::Return(Some(Box::new(ast::ExprData::IntConst(3).into())));
-    assert_eq!(ast::JumpStatement::parse("return 3;"), Ok(expected));
+    let expected =
+        ast::JumpStatementData::Return(Some(Box::new(ast::ExprData::IntConst(3).into())));
+    assert_eq!(ast::JumpStatement::parse("return 3;"), Ok(expected.into()));
 }
 
 #[test]
 fn parse_jump_empty_return() {
     let expected: ast::Statement =
-        ast::StatementData::Jump(ast::JumpStatement::Return(None)).into();
+        ast::StatementData::Jump(ast::JumpStatementData::Return(None).into()).into();
     assert_eq!(ast::Statement::parse("return;"), Ok(expected));
 }
 
@@ -2248,7 +2249,7 @@ fn parse_jump_empty_return() {
 fn parse_jump_discard() {
     assert_eq!(
         ast::JumpStatement::parse("discard;"),
-        Ok(ast::JumpStatement::Discard)
+        Ok(ast::JumpStatementData::Discard.into())
     );
 }
 
@@ -2256,7 +2257,7 @@ fn parse_jump_discard() {
 fn parse_simple_statement_return() {
     let e = ast::ExprData::BoolConst(false).into();
     let expected: ast::Statement =
-        ast::StatementData::Jump(ast::JumpStatement::Return(Some(Box::new(e)))).into();
+        ast::StatementData::Jump(ast::JumpStatementData::Return(Some(Box::new(e))).into()).into();
 
     assert_eq!(ast::Statement::parse("return false;"), Ok(expected));
 }
@@ -2313,9 +2314,9 @@ fn parse_compound_statement() {
         )
         .into(),
     );
-    let st2 = ast::StatementData::Jump(ast::JumpStatement::Return(Some(Box::new(
-        ast::ExprData::IntConst(42).into(),
-    ))));
+    let st2 = ast::StatementData::Jump(
+        ast::JumpStatementData::Return(Some(Box::new(ast::ExprData::IntConst(42).into()))).into(),
+    );
     let expected: ast::CompoundStatement = ast::CompoundStatementData {
         statement_list: vec![st0.into(), st1.into(), st2.into()],
     }
@@ -2347,9 +2348,12 @@ fn parse_function_definition() {
         parameters: Vec::new(),
     }
     .into();
-    let st0 = ast::StatementData::Jump(ast::JumpStatement::Return(Some(Box::new(
-        ast::ExprData::Variable("bar".into_node()).into(),
-    ))));
+    let st0 = ast::StatementData::Jump(
+        ast::JumpStatementData::Return(Some(Box::new(
+            ast::ExprData::Variable("bar".into_node()).into(),
+        )))
+        .into(),
+    );
     let expected: ast::FunctionDefinition = ast::FunctionDefinitionData {
         prototype: fp,
         statement: ast::CompoundStatementData {

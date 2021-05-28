@@ -478,11 +478,15 @@ iteration_statement<S>: ast::IterationStatement = {
         ast::IterationStatementData::For(init, rest, Box::new(s)).spanned(a, b),
 };
 
+jump_statement_data: ast::JumpStatementData = {
+    "continue" ";"         => ast::JumpStatementData::Continue,
+    "break" ";"            => ast::JumpStatementData::Break,
+    "discard" ";"          => ast::JumpStatementData::Discard,
+    "return" <e:expr?> ";" => ast::JumpStatementData::Return(e.map(Box::new)),
+};
+
 jump_statement: ast::JumpStatement = {
-    "continue" ";"         => ast::JumpStatement::Continue,
-    "break" ";"            => ast::JumpStatement::Break,
-    "discard" ";"          => ast::JumpStatement::Discard,
-    "return" <e:expr?> ";" => ast::JumpStatement::Return(e.map(Box::new)),
+    <l:@L> <j:jump_statement_data> <r:@R> => j.spanned(l, r)
 };
 
 simple_statement<S, I>: ast::Statement = {

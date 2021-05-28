@@ -1376,7 +1376,7 @@ pub struct ForRestStatementData {
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub enum JumpStatement {
+pub enum JumpStatementData {
     /// `continue` jump statement
     #[lang_util(display(extra = "continue"))]
     Continue,

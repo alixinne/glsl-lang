@@ -1348,7 +1348,7 @@ macro_rules! make_host_trait {
         let visit = visitor.visit_jump_statement(self);
 
         if visit == Visit::Children {
-          if let ast::JumpStatement::Return(r) = self {
+          if let ast::JumpStatementData::Return(r) = $($ref)* **self {
             r.$mthd_name(visitor);
           }
         }

@@ -1414,18 +1414,21 @@ fn tokenize_for_rest_statement(r: &ast::ForRestStatement) -> TokenStream {
 }
 
 fn tokenize_jump_statement(j: &ast::JumpStatement) -> TokenStream {
-    match *j {
-        ast::JumpStatement::Continue => quote! { glsl_lang::ast::JumpStatement::Continue },
-        ast::JumpStatement::Break => quote! { glsl_lang::ast::JumpStatement::Break },
-        ast::JumpStatement::Discard => quote! { glsl_lang::ast::JumpStatement::Discard },
-        ast::JumpStatement::Return(ref e) => {
+    let span = tokenize_span(&j.span);
+    let j = match j.content {
+        ast::JumpStatementData::Continue => quote! { glsl_lang::ast::JumpStatementData::Continue },
+        ast::JumpStatementData::Break => quote! { glsl_lang::ast::JumpStatementData::Break },
+        ast::JumpStatementData::Discard => quote! { glsl_lang::ast::JumpStatementData::Discard },
+        ast::JumpStatementData::Return(ref e) => {
             let e = e
                 .as_ref()
                 .map(|e| Box::new(tokenize_expr(e)).quote())
                 .quote();
-            quote! { glsl_lang::ast::JumpStatement::Return(#e) }
+            quote! { glsl_lang::ast::JumpStatementData::Return(#e) }
         }
-    }
+    };
+
+    quote! { glsl_lang::ast::JumpStatement::new(#j, #span) }
 }
 
 fn tokenize_preprocessor(pp: &ast::Preprocessor) -> TokenStream {

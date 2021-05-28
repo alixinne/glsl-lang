@@ -1690,11 +1690,11 @@ pub fn show_jump_statement<F>(
 where
     F: Write,
 {
-    match *j {
-        ast::JumpStatement::Continue => f.write_str("continue")?,
-        ast::JumpStatement::Break => f.write_str("break")?,
-        ast::JumpStatement::Discard => f.write_str("discard")?,
-        ast::JumpStatement::Return(ref e) => {
+    match **j {
+        ast::JumpStatementData::Continue => f.write_str("continue")?,
+        ast::JumpStatementData::Break => f.write_str("break")?,
+        ast::JumpStatementData::Discard => f.write_str("discard")?,
+        ast::JumpStatementData::Return(ref e) => {
             f.write_str("return ")?;
             if let Some(e) = e {
                 show_expr(f, e, state)?;

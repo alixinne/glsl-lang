@@ -803,7 +803,7 @@ fn tokenize_precision_qualifier(p: &ast::PrecisionQualifier) -> TokenStream {
         ast::PrecisionQualifierData::Low => quote! { glsl_lang::ast::PrecisionQualifierData::Low },
     };
 
-    quote! { ast::PrecisionQualifier::new(#p, #span) }
+    quote! { glsl_lang::ast::PrecisionQualifier::new(#p, #span) }
 }
 
 fn tokenize_interpolation_qualifier(i: &ast::InterpolationQualifier) -> TokenStream {
@@ -820,7 +820,7 @@ fn tokenize_interpolation_qualifier(i: &ast::InterpolationQualifier) -> TokenStr
         }
     };
 
-    quote! { ast::InterpolationQualifier::new(#i, #span) }
+    quote! { glsl_lang::ast::InterpolationQualifier::new(#i, #span) }
 }
 
 fn tokenize_expr(expr: &ast::Expr) -> TokenStream {
@@ -1148,7 +1148,7 @@ fn tokenize_initializer(i: &ast::Initializer) -> TokenStream {
         }
     };
 
-    quote! { ast::Initializer::new(#i, #span) }
+    quote! { glsl_lang::ast::Initializer::new(#i, #span) }
 }
 
 fn tokenize_block(b: &ast::Block) -> TokenStream {

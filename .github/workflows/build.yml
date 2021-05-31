@@ -25,6 +25,9 @@ jobs:
           toolchain: stable
           override: true
           target: ${{ matrix.target }}
+      - name: Fetch glslang sources
+        run: |
+          git clone --depth=1 https://github.com/KhronosGroup/glslang.git
       - name: Run tests
         run: |
           cargo test

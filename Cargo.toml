@@ -1,6 +1,7 @@
 [workspace]
 members = [
 	"lang",
+	"lang-pp",
 	"lang-util",
 	"lang-util-derive",
 	"lang-quote",

@@ -69,7 +69,7 @@ impl<T> DerefMut for TextToken<T> {
 
 pub fn unescape_line_continuations(raw: &str) -> Cow<str> {
     // TODO: More efficient?
-    if let Some(_) = raw.find('\\') {
+    if raw.find('\\').is_some() {
         let mut s = String::with_capacity(raw.len());
         for ch in raw.chars() {
             s.push(ch);

@@ -41,7 +41,7 @@ fn main() {
                     })
                     .collect()
             })
-            .unwrap_or_else(|_| vec![])
+            .unwrap_or_else(|_| Vec::new())
     };
 
     let mut f =

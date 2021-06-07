@@ -4,6 +4,7 @@ use rowan::TextRange;
 
 /// Type of token for line splitting
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[allow(clippy::upper_case_acronyms)]
 #[repr(u16)]
 pub enum NewlineTokenKind {
     LETTER,
@@ -58,24 +59,20 @@ impl<I: Input> Iterator for NewlineSplitter<I> {
                         TextRange::new(newline_start_pos.start(), self.input.current_pos().end());
                 }
 
-                return Some(TextToken::new(NEWLINE, newline_start_pos));
+                Some(TextToken::new(NEWLINE, newline_start_pos))
             }
             Some(ch) if ch.is_ascii_alphabetic() => {
-                return Some(TextToken::new(LETTER, self.input.current_pos()));
+                Some(TextToken::new(LETTER, self.input.current_pos()))
             }
             Some(ch) if ch.is_ascii_digit() => {
-                return Some(TextToken::new(DIGIT, self.input.current_pos()));
+                Some(TextToken::new(DIGIT, self.input.current_pos()))
             }
             Some(ch) if ch.is_ascii_whitespace() => {
                 // \n and \r have been already matched
-                return Some(TextToken::new(WS, self.input.current_pos()));
+                Some(TextToken::new(WS, self.input.current_pos()))
             }
-            Some(_) => {
-                return Some(TextToken::new(PUNCT, self.input.current_pos()));
-            }
-            None => {
-                return None;
-            }
+            Some(_) => Some(TextToken::new(PUNCT, self.input.current_pos())),
+            None => None,
         }
     }
 }

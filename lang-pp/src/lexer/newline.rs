@@ -1,6 +1,7 @@
+//! First stage lexer declaration
+
 use std::{iter::Peekable, str::CharIndices};
 
-/// First stage lexer declaration
 use crate::TextToken;
 use rowan::{TextRange, TextSize};
 

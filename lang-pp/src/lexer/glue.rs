@@ -1,4 +1,5 @@
-/// Last stage lexer declaration
+//! Last stage lexer declaration
+
 use super::PreLexer;
 use crate::lexer::{PreTextToken, PreToken as InputToken};
 

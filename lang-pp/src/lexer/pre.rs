@@ -1,4 +1,5 @@
-/// Second stage lexer declaration
+//! Second stage lexer declaration
+
 use super::{NewlineSplitter, NewlineToken, NewlineTokenKind};
 use rowan::TextRange;
 

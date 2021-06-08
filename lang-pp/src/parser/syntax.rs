@@ -1,13 +1,13 @@
 use rowan::TextRange;
 
-use crate::{lexer, Input};
+use crate::lexer;
 
 use super::SyntaxKind::*;
 use super::{Error, ErrorKind, Parser};
 
 type InputToken = lexer::Token;
 
-pub fn file<I: Input>(parser: &mut Parser<I>) {
+pub fn file<'i>(parser: &mut Parser<'i>) {
     loop {
         // We need to buffer trivia before we can detect a control line
         parser.buffer_trivia();
@@ -43,7 +43,7 @@ pub fn file<I: Input>(parser: &mut Parser<I>) {
 }
 
 /// Parse a control line
-fn if_section_or_control_line<I: Input>(parser: &mut Parser<I>) {
+fn if_section_or_control_line<'i>(parser: &mut Parser<'i>) {
     let checkpoint = parser.checkpoint();
 
     parser.eat_trivia();
@@ -213,7 +213,7 @@ fn if_section_or_control_line<I: Input>(parser: &mut Parser<I>) {
     }
 }
 
-fn pp_include<I: Input>(parser: &mut Parser<I>) {
+fn pp_include<'i>(parser: &mut Parser<'i>) {
     // We're about to parse a path
     parser.input.set_expect_angle_string(true);
 
@@ -227,7 +227,7 @@ fn pp_include<I: Input>(parser: &mut Parser<I>) {
     parser.eat_trivia();
 }
 
-fn pp_include_path<I: Input>(parser: &mut Parser<I>) {
+fn pp_include_path<'i>(parser: &mut Parser<'i>) {
     if let Some(token) = parser.peek() {
         match *token {
             InputToken::ANGLE_STRING | InputToken::QUOTE_STRING => {
@@ -241,7 +241,7 @@ fn pp_include_path<I: Input>(parser: &mut Parser<I>) {
     }
 }
 
-fn pp_define<I: Input>(parser: &mut Parser<I>) {
+fn pp_define<'i>(parser: &mut Parser<'i>) {
     parser.skip_trivia();
 
     // Define name
@@ -327,7 +327,7 @@ fn pp_define<I: Input>(parser: &mut Parser<I>) {
     parser.eat_trivia();
 }
 
-fn pp_line<I: Input>(parser: &mut Parser<I>) {
+fn pp_line<'i>(parser: &mut Parser<'i>) {
     parser.skip_trivia();
 
     // Consume line body
@@ -339,7 +339,7 @@ fn pp_line<I: Input>(parser: &mut Parser<I>) {
     parser.eat_trivia();
 }
 
-fn pp_error<I: Input>(parser: &mut Parser<I>) {
+fn pp_error<'i>(parser: &mut Parser<'i>) {
     parser.skip_trivia();
 
     // Consume define body
@@ -351,7 +351,7 @@ fn pp_error<I: Input>(parser: &mut Parser<I>) {
     parser.eat_trivia();
 }
 
-fn pp_pragma<I: Input>(parser: &mut Parser<I>) {
+fn pp_pragma<'i>(parser: &mut Parser<'i>) {
     parser.skip_trivia();
 
     // Consume define body
@@ -363,7 +363,7 @@ fn pp_pragma<I: Input>(parser: &mut Parser<I>) {
     parser.eat_trivia();
 }
 
-fn pp_version<I: Input>(parser: &mut Parser<I>) {
+fn pp_version<'i>(parser: &mut Parser<'i>) {
     parser.skip_trivia();
 
     // Version
@@ -381,7 +381,7 @@ fn pp_version<I: Input>(parser: &mut Parser<I>) {
     }
 }
 
-fn pp_if_expr<I: Input>(parser: &mut Parser<I>) {
+fn pp_if_expr<'i>(parser: &mut Parser<'i>) {
     parser.skip_trivia();
 
     // Consume if expr
@@ -393,7 +393,7 @@ fn pp_if_expr<I: Input>(parser: &mut Parser<I>) {
     parser.eat_trivia();
 }
 
-fn pp_if_ident<I: Input>(parser: &mut Parser<I>) {
+fn pp_if_ident<'i>(parser: &mut Parser<'i>) {
     parser.skip_trivia();
 
     parser.start_node(PP_IDENT);
@@ -401,7 +401,7 @@ fn pp_if_ident<I: Input>(parser: &mut Parser<I>) {
     parser.finish_node();
 }
 
-fn pp_extension<I: Input>(parser: &mut Parser<I>) {
+fn pp_extension<'i>(parser: &mut Parser<'i>) {
     parser.skip_trivia();
 
     // Extension name
@@ -422,7 +422,7 @@ fn pp_extension<I: Input>(parser: &mut Parser<I>) {
     }
 }
 
-fn digits<I: Input>(parser: &mut Parser<I>) {
+fn digits<'i>(parser: &mut Parser<'i>) {
     if let Some(InputToken::DIGITS) = parser.peek().as_deref() {
         parser.bump();
     } else {
@@ -432,7 +432,7 @@ fn digits<I: Input>(parser: &mut Parser<I>) {
     }
 }
 
-fn ident<I: Input>(parser: &mut Parser<I>) {
+fn ident<'i>(parser: &mut Parser<'i>) {
     if let Some(InputToken::IDENT_KW) = parser.peek().as_deref() {
         parser.bump();
     } else {
@@ -442,7 +442,7 @@ fn ident<I: Input>(parser: &mut Parser<I>) {
     }
 }
 
-fn pp_tokens<I: Input>(parser: &mut Parser<I>) {
+fn pp_tokens<'i>(parser: &mut Parser<'i>) {
     // The replacement body is everything until the new-line
     loop {
         // Consume all trivia first

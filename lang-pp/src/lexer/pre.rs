@@ -1,6 +1,5 @@
 /// Second stage lexer declaration
 use super::{NewlineSplitter, NewlineToken, NewlineTokenKind};
-use crate::Input;
 use rowan::TextRange;
 
 mod token;
@@ -49,8 +48,9 @@ impl Default for State {
 /// * Eliminate backslash-escaped newlines
 /// * Identify single and multi-line comments
 /// * Tokenize double-quoted strings and (when asked to) angle-quoted strings
-pub struct PreLexer<I: Input> {
-    input: NewlineSplitter<I>,
+pub struct PreLexer<'i> {
+    source: &'i str,
+    input: NewlineSplitter<'i>,
     peeked: Option<Option<NewlineToken>>,
     state: State,
     start: TextRange,
@@ -58,9 +58,10 @@ pub struct PreLexer<I: Input> {
     expect_angle_string: bool,
 }
 
-impl<I: Input> PreLexer<I> {
-    pub fn new(input: I) -> Self {
+impl<'i> PreLexer<'i> {
+    pub fn new(input: &'i str) -> Self {
         Self {
+            source: input,
             input: NewlineSplitter::new(input),
             state: Default::default(),
             start: Default::default(),
@@ -70,15 +71,11 @@ impl<I: Input> PreLexer<I> {
         }
     }
 
-    pub fn input(&self) -> &dyn crate::Input {
-        self.input.input()
-    }
-
     pub fn set_expect_angle_string(&mut self, expect_angle_string: bool) {
         self.expect_angle_string = expect_angle_string;
     }
 
-    fn peek_token(&mut self) -> Option<(NewlineToken, &str)> {
+    fn peek_token(&mut self) -> Option<(NewlineToken, &'i str)> {
         self.peeked
             .clone()
             .unwrap_or_else(|| {
@@ -86,7 +83,7 @@ impl<I: Input> PreLexer<I> {
                 self.peeked = Some(next);
                 next
             })
-            .map(move |token| (token, token.raw(self.input().slice())))
+            .map(move |token| (token, token.raw(self.source)))
     }
 
     fn next_token(&mut self) -> Option<NewlineToken> {
@@ -105,7 +102,7 @@ impl<I: Input> PreLexer<I> {
     }
 }
 
-impl<I: Input> Iterator for PreLexer<I> {
+impl<'i> Iterator for PreLexer<'i> {
     type Item = TextToken;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -139,7 +136,7 @@ impl<I: Input> Iterator for PreLexer<I> {
                             range,
                         }) => {
                             let t = c.unwrap();
-                            let text = t.raw(self.input().slice());
+                            let text = t.raw(self.source);
 
                             match text {
                                 "\"" => {

@@ -5,9 +5,6 @@ use std::{
 
 use rowan::TextRange;
 
-mod input;
-pub use input::*;
-
 mod lexer;
 
 mod parser;
@@ -94,5 +91,5 @@ pub fn unescape_line_continuations(raw: &str) -> Cow<str> {
 // TODO: Remove this
 pub use parser::Ast;
 pub fn parse(input: &str) -> Ast {
-    parser::Parser::new(StringInput::from(input)).parse()
+    parser::Parser::new(input).parse()
 }

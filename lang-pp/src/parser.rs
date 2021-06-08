@@ -2,10 +2,9 @@
 use std::borrow::Cow;
 use std::collections::VecDeque;
 
-use crate::{
-    lexer::{self, Lexer},
-    Input,
-};
+use rowan::{TextRange, TextSize};
+
+use crate::lexer::{self, Lexer};
 
 mod ast;
 pub use ast::*;
@@ -27,28 +26,26 @@ static_assertions::const_assert!((SyntaxKind::_LAST as usize) < 256);
 
 type SyntaxNode = rowan::SyntaxNode<PreprocessorLang>;
 
-pub struct Parser<I: Input> {
+pub struct Parser<'i> {
     builder: rowan::GreenNodeBuilder<'static>,
-    input: Lexer<I>,
+    source: &'i str,
+    input: Lexer<'i>,
     peeked: Option<Option<lexer::TextToken>>,
     trivia_buffer: VecDeque<lexer::TextToken>,
     errors: Vec<Error>,
 }
 
 // Public parser API
-impl<I: Input> Parser<I> {
-    pub fn new(input: I) -> Self {
+impl<'i> Parser<'i> {
+    pub fn new(input: &'i str) -> Self {
         Self {
             builder: Default::default(),
+            source: input,
             input: Lexer::new(input),
             peeked: None,
             trivia_buffer: VecDeque::with_capacity(4),
             errors: Vec::new(),
         }
-    }
-
-    pub fn input(&self) -> &dyn crate::Input {
-        self.input.input()
     }
 
     pub fn parse(mut self) -> Ast {
@@ -61,7 +58,7 @@ impl<I: Input> Parser<I> {
 }
 
 // Builder wrapper methods
-impl<I: Input> Parser<I> {
+impl<'i> Parser<'i> {
     fn checkpoint(&mut self) -> rowan::Checkpoint {
         self.builder.checkpoint()
     }
@@ -80,7 +77,7 @@ impl<I: Input> Parser<I> {
 }
 
 // Private parser API
-impl<I: Input> Parser<I> {
+impl<'i> Parser<'i> {
     fn skip(&mut self, what: impl Fn(&lexer::Token) -> bool) {
         while self.peek().map(|tk| what(&tk.token)).unwrap_or(false) {
             self.bump();
@@ -102,8 +99,8 @@ impl<I: Input> Parser<I> {
         self.peeked.unwrap()
     }
 
-    fn raw(&self, token: lexer::TextToken) -> &str {
-        token.raw(self.input().slice())
+    fn raw(&self, token: lexer::TextToken) -> &'i str {
+        token.raw(self.source)
     }
 
     fn text(&self, token: lexer::TextToken) -> Cow<str> {
@@ -112,10 +109,8 @@ impl<I: Input> Parser<I> {
 
     fn eat_trivia(&mut self) {
         while let Some(token) = self.trivia_buffer.pop_front() {
-            self.builder.token(
-                SyntaxKind::from(token.token).into(),
-                token.raw(self.input.input().slice()),
-            );
+            self.builder
+                .token(SyntaxKind::from(token.token).into(), token.raw(self.source));
         }
     }
 
@@ -166,7 +161,7 @@ impl<I: Input> Parser<I> {
             ErrorKind::EndOfInput {
                 expected: expected.into(),
             },
-            self.input().end(),
+            TextRange::new(TextSize::of(self.source), TextSize::of(self.source)),
         ));
 
         None
@@ -181,10 +176,8 @@ impl<I: Input> Parser<I> {
         };
 
         if let Some(token) = token {
-            self.builder.token(
-                SyntaxKind::from(token.token).into(),
-                token.raw(self.input.input().slice()),
-            );
+            self.builder
+                .token(SyntaxKind::from(token.token).into(), token.raw(self.source));
         } else {
             panic!("tried to bump at end of input");
         }

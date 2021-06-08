@@ -1,15 +1,14 @@
 use super::*;
-use crate::StringInput;
 use std::borrow::Cow;
 use Token::*;
 
 fn tokenize(src: &str) -> Vec<Token> {
-    let pp = Lexer::new(StringInput::from(src));
+    let pp = Lexer::new(src);
     pp.map(|tk| tk.token).collect()
 }
 
 fn tokenize_str(src: &str) -> Vec<(Token, Cow<'_, str>)> {
-    let pp = Lexer::new(StringInput::from(src));
+    let pp = Lexer::new(src);
     pp.map(|tk| (tk.token, crate::unescape_line_continuations(tk.raw(src))))
         .collect()
 }

@@ -1,9 +1,6 @@
 /// Last stage lexer declaration
 use super::PreLexer;
-use crate::{
-    lexer::{PreTextToken, PreToken as InputToken},
-    Input,
-};
+use crate::lexer::{PreTextToken, PreToken as InputToken};
 
 mod token;
 use rowan::TextRange;
@@ -16,13 +13,13 @@ pub type TextToken = crate::TextToken<token::Token>;
 /// This lexer wraps earlier stages and glues punctuation together to form (longest)
 /// multi-character operator tokens. This is the entry point for lexing a pre-processor token
 /// stream for the GLSL language.
-pub struct Lexer<I: Input> {
-    input: PreLexer<I>,
+pub struct Lexer<'i> {
+    input: PreLexer<'i>,
     buffer: Vec<crate::lexer::PreTextToken>,
 }
 
-impl<I: Input> Lexer<I> {
-    pub fn new(input: I) -> Self {
+impl<'i> Lexer<'i> {
+    pub fn new(input: &'i str) -> Self {
         Self {
             input: PreLexer::new(input),
             buffer: Vec::with_capacity(2),
@@ -37,10 +34,6 @@ impl<I: Input> Lexer<I> {
     /// * `expect_angle_string`: true if the lexer should expect a string, false otherwise
     pub fn set_expect_angle_string(&mut self, expect_angle_string: bool) {
         self.input.set_expect_angle_string(expect_angle_string)
-    }
-
-    pub fn input(&self) -> &dyn Input {
-        self.input.input()
     }
 
     fn next(&mut self) -> Option<PreTextToken> {
@@ -107,7 +100,7 @@ impl<I: Input> Lexer<I> {
     }
 }
 
-impl<I: Input> Iterator for Lexer<I> {
+impl<'i> Iterator for Lexer<'i> {
     type Item = TextToken;
 
     fn next(&mut self) -> Option<Self::Item> {

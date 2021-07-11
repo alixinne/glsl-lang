@@ -5,6 +5,8 @@ use std::{iter::Peekable, str::CharIndices};
 use crate::TextToken;
 use rowan::{TextRange, TextSize};
 
+use super::LineMap;
+
 /// Type of token for line splitting
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[allow(clippy::upper_case_acronyms)]
@@ -27,6 +29,7 @@ pub type NewlineToken = TextToken<NewlineTokenKind>;
 pub struct NewlineSplitter<'i> {
     end: TextSize,
     chars: Peekable<CharIndices<'i>>,
+    line_map: LineMap,
 }
 
 impl<'i> NewlineSplitter<'i> {
@@ -34,7 +37,16 @@ impl<'i> NewlineSplitter<'i> {
         Self {
             end: TextSize::of(input),
             chars: input.char_indices().peekable(),
+            line_map: LineMap::new(),
         }
+    }
+
+    pub fn line_map(&self) -> &LineMap {
+        &self.line_map
+    }
+
+    pub fn into_line_map(self) -> LineMap {
+        self.line_map
     }
 
     fn current_pos(&mut self, start_pos: usize) -> TextRange {
@@ -83,6 +95,7 @@ impl<'i> Iterator for NewlineSplitter<'i> {
                     TextRange::new(TextSize::from(pos as u32), self.end)
                 };
 
+                self.line_map.add_line(range.end().into());
                 Some(TextToken::new(NEWLINE, range))
             }
             Some((pos, ch)) if ch.is_ascii_alphabetic() => {

@@ -3,7 +3,7 @@ use rowan::TextRange;
 use crate::lexer;
 
 use super::SyntaxKind::*;
-use super::{Error, ErrorKind, Parser};
+use super::{ErrorKind, Parser};
 
 type InputToken = lexer::Token;
 
@@ -134,7 +134,7 @@ fn if_section_or_control_line<'i>(parser: &mut Parser<'i>) {
                     Some(PP_EXTENSION)
                 }
                 other => {
-                    error = Some(Error::new(
+                    error = Some((
                         ErrorKind::UnknownPreprocessorDirective { name: other.into() },
                         token.range,
                     ));
@@ -143,7 +143,7 @@ fn if_section_or_control_line<'i>(parser: &mut Parser<'i>) {
             };
 
             if let Some(error) = error {
-                parser.errors.push(error);
+                parser.push_error(error.0, error.1);
             }
 
             result
@@ -192,10 +192,7 @@ fn if_section_or_control_line<'i>(parser: &mut Parser<'i>) {
             // Note the error, unless it's an unknown directive: it's unknown, so don't notify an
             // error twice
             if pp_type.is_some() {
-                parser.errors.push(Error::new(
-                    ErrorKind::ExtraTokensInPreprocessorDirective,
-                    start,
-                ));
+                parser.push_error(ErrorKind::ExtraTokensInPreprocessorDirective, start);
             }
         }
     }

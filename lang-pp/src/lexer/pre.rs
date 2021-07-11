@@ -1,6 +1,6 @@
 //! Second stage lexer declaration
 
-use super::{NewlineSplitter, NewlineToken, NewlineTokenKind};
+use super::{LineMap, NewlineSplitter, NewlineToken, NewlineTokenKind};
 use rowan::TextRange;
 
 mod token;
@@ -70,6 +70,14 @@ impl<'i> PreLexer<'i> {
             peeked: None,
             expect_angle_string: false,
         }
+    }
+
+    pub fn line_map(&self) -> &LineMap {
+        self.input.line_map()
+    }
+
+    pub fn into_line_map(self) -> LineMap {
+        self.input.into_line_map()
     }
 
     pub fn set_expect_angle_string(&mut self, expect_angle_string: bool) {

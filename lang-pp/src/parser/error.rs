@@ -1,21 +1,22 @@
 use rowan::TextRange;
 use smol_str::SmolStr;
 
-use crate::lexer;
+use crate::lexer::{self, LineMap};
 
 #[derive(Debug, Clone)]
 pub struct Error {
     kind: ErrorKind,
     pos: TextRange,
+    user_pos: (u32, u32),
 }
 
 impl std::fmt::Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
             f,
-            "{}..{}: {}",
-            u32::from(self.pos.start()),
-            u32::from(self.pos.end()),
+            "{}:{}: {}",
+            self.user_pos.0 + 1,
+            self.user_pos.1,
             self.kind
         )
     }
@@ -70,8 +71,12 @@ impl std::fmt::Display for ErrorKind {
 }
 
 impl Error {
-    pub fn new(kind: ErrorKind, pos: TextRange) -> Self {
-        Self { kind, pos }
+    pub fn new(kind: ErrorKind, pos: TextRange, line_map: &LineMap) -> Self {
+        Self {
+            kind,
+            pos,
+            user_pos: line_map.get_line_and_col(pos.start().into()),
+        }
     }
 
     pub fn kind(&self) -> &ErrorKind {

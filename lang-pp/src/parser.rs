@@ -127,6 +127,11 @@ impl<'i> Parser<'i> {
         }
     }
 
+    fn push_error(&mut self, error_kind: ErrorKind, range: TextRange) {
+        self.errors
+            .push(Error::new(error_kind, range, self.input.line_map()));
+    }
+
     #[must_use = "None is returned if the expected token was not found"]
     fn expect_any(
         &mut self,
@@ -145,24 +150,24 @@ impl<'i> Parser<'i> {
             if bitset.contains(*token as _) {
                 return Some(token);
             } else {
-                self.errors.push(Error::new(
+                self.push_error(
                     ErrorKind::Unexpected {
                         actual: *token,
                         expected: expected.into(),
                     },
                     token.range,
-                ));
+                );
 
                 return None;
             }
         }
 
-        self.errors.push(Error::new(
+        self.push_error(
             ErrorKind::EndOfInput {
                 expected: expected.into(),
             },
             TextRange::new(TextSize::of(self.source), TextSize::of(self.source)),
-        ));
+        );
 
         None
     }

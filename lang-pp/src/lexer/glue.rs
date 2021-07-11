@@ -1,7 +1,6 @@
 //! Last stage lexer declaration
 
-use super::PreLexer;
-use crate::lexer::{PreTextToken, PreToken as InputToken};
+use crate::lexer::{LineMap, PreLexer, PreTextToken, PreToken as InputToken};
 
 mod token;
 use rowan::TextRange;
@@ -16,7 +15,7 @@ pub type TextToken = crate::TextToken<token::Token>;
 /// stream for the GLSL language.
 pub struct Lexer<'i> {
     input: PreLexer<'i>,
-    buffer: Vec<crate::lexer::PreTextToken>,
+    buffer: Vec<PreTextToken>,
 }
 
 impl<'i> Lexer<'i> {
@@ -25,6 +24,16 @@ impl<'i> Lexer<'i> {
             input: PreLexer::new(input),
             buffer: Vec::with_capacity(2),
         }
+    }
+
+    /// Get a reference to the line map
+    pub fn line_map(&self) -> &LineMap {
+        self.input.line_map()
+    }
+
+    /// Consume this lexer and return the line map
+    pub fn into_line_map(self) -> LineMap {
+        self.input.into_line_map()
     }
 
     /// Notify the lexer we are parsing an #include directive, and it should expect the next `<`

@@ -1,7 +1,10 @@
 use std::io::prelude::*;
 use std::path::Path;
 
-use glsl_lang_pp::parse;
+use glsl_lang_pp::{
+    parse,
+    processor::{DirectiveExt, Event},
+};
 
 pub fn test_file(path: impl AsRef<Path>) {
     let path = path.as_ref();
@@ -37,12 +40,48 @@ pub fn test_file(path: impl AsRef<Path>) {
     if !errors.is_empty() {
         let mut f = std::fs::File::create(errors_file).unwrap();
 
-        for error in &errors {
+        for error in errors.iter() {
             writeln!(f, "{}", error).unwrap();
         }
     } else {
         std::fs::remove_file(&errors_file).ok();
     }
 
-    assert!(errors.is_empty());
+    // Write the result
+    let mut pp = glsl_lang_pp::processor::StdProcessor::default();
+
+    let events_file =
+        path.with_file_name(path.file_name().unwrap().to_string_lossy().to_string() + ".events");
+    let mut eventsf = std::fs::File::create(events_file).unwrap();
+    let pp_file =
+        path.with_file_name(path.file_name().unwrap().to_string_lossy().to_string() + ".pp");
+    let mut ppf = std::fs::File::create(pp_file).unwrap();
+
+    let mut unhandled_count = 0;
+
+    for event in pp.process(path) {
+        writeln!(eventsf, "{:?}", event).unwrap();
+
+        match event {
+            Event::IoError(_) => {}
+            Event::EnterFile { .. } => {}
+            Event::ParseError(_) => {}
+
+            Event::Token(token) => {
+                write!(ppf, "{}", token.text()).unwrap();
+            }
+            Event::Version { directive } => {
+                write!(ppf, "{}", directive.into_node()).unwrap();
+            }
+            Event::Extension { directive } => {
+                write!(ppf, "{}", directive.into_node()).unwrap();
+            }
+            Event::Unhandled(node) => {
+                unhandled_count += 1;
+                write!(ppf, "{}", node.text()).unwrap();
+            }
+        }
+    }
+
+    assert_eq!(unhandled_count, 0, "number of unhandled events should be 0");
 }

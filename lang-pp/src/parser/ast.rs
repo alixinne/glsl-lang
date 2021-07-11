@@ -2,6 +2,7 @@ use rowan::GreenNode;
 
 use super::{Error, SyntaxNode};
 
+#[derive(Debug, Clone)]
 pub struct Ast {
     green_node: GreenNode,
     errors: Vec<Error>,

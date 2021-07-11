@@ -18,6 +18,11 @@ rowan = "0.12"
 smol_str = "0.1"
 cbitset = "0.2"
 static_assertions = "1.1"
+string_cache = "0.8"
+thiserror = "1.0"
+lexical = "5.2"
+arrayvec = "0.7"
+lazy_static = "1.4"
 
 [dev-dependencies]
 expect-test = "1.1"
@@ -25,3 +30,4 @@ encoding_rs = "0.8"
 
 [build-dependencies]
 heck = "0.3"
+string_cache_codegen = "0.5"

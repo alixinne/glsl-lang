@@ -24,7 +24,8 @@ type SyntaxBitset = cbitset::BitSet256;
 // SyntaxBitset::capacity() isn't a const fn, keep this in sync
 static_assertions::const_assert!((SyntaxKind::_LAST as usize) < 256);
 
-type SyntaxNode = rowan::SyntaxNode<PreprocessorLang>;
+pub type SyntaxNode = rowan::SyntaxNode<PreprocessorLang>;
+pub type SyntaxToken = rowan::SyntaxToken<PreprocessorLang>;
 
 pub struct Parser<'i> {
     builder: rowan::GreenNodeBuilder<'static>,
@@ -54,6 +55,18 @@ impl<'i> Parser<'i> {
         self.finish_node();
 
         Ast::new(self.builder.finish(), self.errors)
+    }
+
+    pub fn parse_define_body(mut self) -> Option<SyntaxNode> {
+        self.start_node(SyntaxKind::ROOT);
+        syntax::define_body(&mut self);
+        self.finish_node();
+
+        if self.errors.is_empty() {
+            SyntaxNode::new_root(self.builder.finish()).first_child()
+        } else {
+            None
+        }
     }
 }
 

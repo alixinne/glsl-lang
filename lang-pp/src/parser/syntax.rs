@@ -42,6 +42,18 @@ pub fn file<'i>(parser: &mut Parser<'i>) {
     }
 }
 
+pub fn define_body<'i>(parser: &mut Parser<'i>) {
+    // Consume trivia first
+    parser.eat_trivia();
+
+    parser.start_node(PP_DEFINE_BODY);
+    pp_tokens(parser);
+    parser.finish_node();
+
+    // Finish eating trivia
+    parser.eat_trivia();
+}
+
 /// Parse a control line
 fn if_section_or_control_line<'i>(parser: &mut Parser<'i>) {
     let checkpoint = parser.checkpoint();

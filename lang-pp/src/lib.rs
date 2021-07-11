@@ -9,13 +9,21 @@ mod lexer;
 
 mod parser;
 
+pub mod processor;
+
 /// Unique file identifier
-#[derive(Default, Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Default, Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct FileId(u32);
 
 impl FileId {
     pub fn new(raw: u32) -> Self {
         Self(raw)
+    }
+}
+
+impl std::fmt::Display for FileId {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.0)
     }
 }
 

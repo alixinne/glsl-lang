@@ -1,5 +1,5 @@
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[allow(non_camel_case_types, clippy::clippy::upper_case_acronyms)]
+#[allow(non_camel_case_types, clippy::upper_case_acronyms)]
 #[repr(u16)]
 pub enum Token {
     /// Identifier or keyword

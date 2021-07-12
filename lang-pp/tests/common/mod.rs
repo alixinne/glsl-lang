@@ -64,8 +64,10 @@ pub fn test_file(path: impl AsRef<Path>) {
 
         match event {
             Event::IoError(_) => {}
-            Event::EnterFile { .. } => {}
             Event::ParseError(_) => {}
+            Event::ProcessorError(_) => {}
+
+            Event::EnterFile { .. } => {}
 
             Event::Token(token) => {
                 write!(ppf, "{}", token.text()).unwrap();
@@ -80,6 +82,12 @@ pub fn test_file(path: impl AsRef<Path>) {
                 unhandled_count += 1;
                 write!(ppf, "{}", node.text()).unwrap();
             }
+
+            Event::IfDef { .. } => {}
+            Event::IfNDef { .. } => {}
+            Event::Else => {}
+            Event::Undef { .. } => {}
+            Event::EndIf => {}
         }
     }
 

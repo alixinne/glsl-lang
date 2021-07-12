@@ -7,6 +7,7 @@ use std::{
 };
 
 use smol_str::SmolStr;
+use thiserror::Error;
 
 use crate::{
     parser::{Parser, SyntaxKind::*, SyntaxNode, SyntaxToken},
@@ -21,7 +22,7 @@ pub use fs::*;
 
 pub mod nodes;
 use nodes::{
-    Define, DefineObject, DirectiveResult, Extension, ExtensionName, Version,
+    Define, DefineObject, DirectiveResult, Extension, ExtensionName, IfDef, IfNDef, Undef, Version,
     GL_ARB_SHADING_LANGUAGE_INCLUDE, GL_GOOGLE_INCLUDE_DIRECTIVE,
 };
 
@@ -159,13 +160,30 @@ impl<F: FileSystem> Processor<F> {
     fn expand(&mut self, ast: Ast) -> Vec<Event<F::Error>> {
         let (root, mut errors) = ast.into_inner();
 
+        #[derive(Clone, Copy, PartialEq, Eq)]
+        enum IfState {
+            /// No #if group of this level was included
+            None,
+            /// The current #if group of this level is included
+            Active { else_seen: bool },
+            /// One past #if group of this level was included, but not the current one
+            One { else_seen: bool },
+        }
+
         // TODO: Smarter capacity calculation
         let mut result = Vec::with_capacity(1024);
+        let mut mask_stack = Vec::with_capacity(4);
+        let mut mask_active = true;
 
         for node_or_token in root.children_with_tokens() {
             if let Some(first) = errors.first() {
                 if node_or_token.text_range().end() >= first.pos().start() {
-                    result.push(Event::ParseError(errors.pop().unwrap()));
+                    let error = errors.pop().unwrap();
+
+                    // Parse errors in non-included blocks are ignored
+                    if mask_active {
+                        result.push(Event::ParseError(error));
+                    }
                 }
             }
 
@@ -176,45 +194,165 @@ impl<F: FileSystem> Processor<F> {
                             // Discard
                         }
                         PP_VERSION => {
-                            // TODO: Check that the version is the first thing in the file?
+                            if mask_active {
+                                // TODO: Check that the version is the first thing in the file?
 
-                            let directive: DirectiveResult<Version> = node.try_into();
+                                let directive: DirectiveResult<Version> = node.try_into();
 
-                            if let Ok(version) = &directive {
-                                self.current_state.version = **version;
+                                if let Ok(version) = &directive {
+                                    self.current_state.version = **version;
+                                }
+
+                                result.push(Event::Version { directive });
                             }
-
-                            result.push(Event::Version { directive });
                         }
                         PP_EXTENSION => {
-                            let directive: DirectiveResult<Extension> = node.try_into();
+                            if mask_active {
+                                let directive: DirectiveResult<Extension> = node.try_into();
 
-                            if let Ok(extension) = &directive {
-                                // Push onto the stack
-                                self.current_state
-                                    .extension_stack
-                                    .push((**extension).clone());
+                                if let Ok(extension) = &directive {
+                                    // Push onto the stack
+                                    self.current_state
+                                        .extension_stack
+                                        .push((**extension).clone());
 
-                                let target_include_mode =
-                                    if extension.name == *GL_ARB_SHADING_LANGUAGE_INCLUDE {
-                                        Some(IncludeMode::ArbInclude)
-                                    } else if extension.name == *GL_GOOGLE_INCLUDE_DIRECTIVE {
-                                        Some(IncludeMode::GoogleInclude)
-                                    } else {
-                                        None
-                                    };
+                                    let target_include_mode =
+                                        if extension.name == *GL_ARB_SHADING_LANGUAGE_INCLUDE {
+                                            Some(IncludeMode::ArbInclude)
+                                        } else if extension.name == *GL_GOOGLE_INCLUDE_DIRECTIVE {
+                                            Some(IncludeMode::GoogleInclude)
+                                        } else {
+                                            None
+                                        };
 
-                                if let Some(target) = target_include_mode {
-                                    if extension.behavior.is_active() {
-                                        self.current_state.include_mode = target;
-                                    } else {
-                                        // TODO: Implement current mode as a stack?
-                                        self.current_state.include_mode = IncludeMode::None;
+                                    if let Some(target) = target_include_mode {
+                                        if extension.behavior.is_active() {
+                                            self.current_state.include_mode = target;
+                                        } else {
+                                            // TODO: Implement current mode as a stack?
+                                            self.current_state.include_mode = IncludeMode::None;
+                                        }
                                     }
                                 }
-                            }
 
-                            result.push(Event::Extension { directive });
+                                result.push(Event::Extension { directive });
+                            }
+                        }
+                        PP_IFDEF => {
+                            if mask_active {
+                                let directive: DirectiveResult<IfDef> = node.try_into();
+
+                                if let Ok(ifdef) = &directive {
+                                    // Update masking state
+                                    mask_active =
+                                        self.current_state.definitions.contains_key(&ifdef.ident);
+                                    mask_stack.push(IfState::Active { else_seen: false });
+                                }
+
+                                result.push(Event::IfDef { directive });
+                            } else {
+                                // Record the #ifdef in the stack to support nesting
+                                mask_stack.push(IfState::None);
+                            }
+                        }
+                        PP_IFNDEF => {
+                            if mask_active {
+                                let directive: DirectiveResult<IfNDef> = node.try_into();
+
+                                if let Ok(ifdef) = &directive {
+                                    // Update masking state
+                                    mask_active =
+                                        !self.current_state.definitions.contains_key(&ifdef.ident);
+                                    mask_stack.push(IfState::Active { else_seen: false });
+                                }
+
+                                result.push(Event::IfNDef { directive });
+                            } else {
+                                // Record the #ifdef in the stack to support nesting
+                                mask_stack.push(IfState::None);
+                            }
+                        }
+                        PP_ELSE => {
+                            if let Some(top) = mask_stack.pop() {
+                                match top {
+                                    IfState::None => {
+                                        mask_active = mask_stack
+                                            .last()
+                                            .map(|top| matches!(*top, IfState::Active { .. }))
+                                            .unwrap_or(true);
+
+                                        mask_stack.push(IfState::Active { else_seen: true });
+                                    }
+                                    IfState::Active { else_seen } | IfState::One { else_seen } => {
+                                        if else_seen {
+                                            // Extra #else
+                                            result.push(Event::ProcessorError(
+                                                ProcessorError::ExtraElse { node },
+                                            ));
+
+                                            continue;
+                                        } else {
+                                            mask_active = false;
+                                            mask_stack.push(IfState::One { else_seen: true });
+                                        }
+                                    }
+                                }
+
+                                result.push(Event::Else);
+                            } else {
+                                // Stray #else
+                                result.push(Event::ProcessorError(ProcessorError::ExtraElse {
+                                    node,
+                                }));
+                            }
+                        }
+                        PP_ENDIF => {
+                            if let Some(_) = mask_stack.pop() {
+                                mask_active = mask_stack
+                                    .last()
+                                    .map(|top| matches!(*top, IfState::Active { .. }))
+                                    .unwrap_or(true);
+
+                                // TODO: Return syntax node?
+                                if mask_active {
+                                    result.push(Event::EndIf);
+                                }
+                            } else {
+                                // Stray #endif
+                                result.push(Event::ProcessorError(ProcessorError::ExtraEndIf {
+                                    node,
+                                }));
+                            }
+                        }
+                        PP_UNDEF => {
+                            if mask_active {
+                                let directive: DirectiveResult<Undef> = node.clone().try_into();
+
+                                let protected_ident = if let Ok(ifdef) = &directive {
+                                    if let Some(def) =
+                                        self.current_state.definitions.get(&ifdef.ident)
+                                    {
+                                        if def.protected() {
+                                            Some(ifdef.ident.clone())
+                                        } else {
+                                            self.current_state.definitions.remove(&ifdef.ident);
+                                            None
+                                        }
+                                    } else {
+                                        None
+                                    }
+                                } else {
+                                    None
+                                };
+
+                                result.push(Event::Undef { directive });
+
+                                if let Some(ident) = protected_ident {
+                                    result.push(Event::ProcessorError(
+                                        ProcessorError::ProtectedDefine { node, ident },
+                                    ));
+                                }
+                            }
                         }
                         _ => {
                             // Handle node, this is a preprocessor directive
@@ -223,7 +361,9 @@ impl<F: FileSystem> Processor<F> {
                     }
                 }
                 rowan::NodeOrToken::Token(token) => {
-                    result.push(Event::Token(token));
+                    if mask_active {
+                        result.push(Event::Token(token));
+                    }
                 }
             }
         }
@@ -232,20 +372,42 @@ impl<F: FileSystem> Processor<F> {
     }
 }
 
+#[derive(Debug, Error)]
+pub enum ProcessorError {
+    #[error("unmatched #endif")]
+    ExtraEndIf { node: SyntaxNode },
+    #[error("unmatched #else")]
+    ExtraElse { node: SyntaxNode },
+    #[error("protected definition cannot be undefined")]
+    ProtectedDefine { node: SyntaxNode, ident: SmolStr },
+}
+
 #[derive(Debug)]
 pub enum Event<E: std::error::Error> {
     IoError(E),
+    ParseError(crate::parser::Error),
+    ProcessorError(ProcessorError),
     EnterFile {
         file_id: FileId,
         path: PathBuf,
     },
-    ParseError(crate::parser::Error),
     Token(SyntaxToken),
     Version {
         directive: DirectiveResult<Version>,
     },
     Extension {
         directive: DirectiveResult<Extension>,
+    },
+    IfDef {
+        directive: DirectiveResult<IfDef>,
+    },
+    IfNDef {
+        directive: DirectiveResult<IfNDef>,
+    },
+    Else,
+    EndIf,
+    Undef {
+        directive: DirectiveResult<Undef>,
     },
     Unhandled(SyntaxNode),
 }

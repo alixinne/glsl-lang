@@ -419,3 +419,66 @@ impl Define {
         self.protected
     }
 }
+
+#[derive(Debug, Clone)]
+pub struct IfDef {
+    pub ident: SmolStr,
+}
+
+#[derive(Debug, Error)]
+pub enum IfDefError {
+    #[error("identifier for #ifdef is missing")]
+    MissingIdentifier,
+}
+
+impl TryFrom<SyntaxNode> for IfDef {
+    type Error = IfDefError;
+
+    fn try_from(value: SyntaxNode) -> Result<Self, Self::Error> {
+        let pp_ident = value
+            .children()
+            .find_map(|node| {
+                if node.kind() == PP_IDENT {
+                    node.first_child_or_token()
+                        .and_then(|node_or_token| node_or_token.into_token())
+                } else {
+                    None
+                }
+            })
+            .ok_or_else(|| Self::Error::MissingIdentifier)?;
+
+        Ok(Self {
+            ident: unescape_line_continuations(pp_ident.text()).into(),
+        })
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct IfNDef {
+    pub ident: SmolStr,
+}
+
+impl TryFrom<SyntaxNode> for IfNDef {
+    type Error = <IfDef as TryFrom<SyntaxNode>>::Error;
+
+    fn try_from(value: SyntaxNode) -> Result<Self, Self::Error> {
+        Ok(Self {
+            ident: IfDef::try_from(value)?.ident,
+        })
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct Undef {
+    pub ident: SmolStr,
+}
+
+impl TryFrom<SyntaxNode> for Undef {
+    type Error = <IfDef as TryFrom<SyntaxNode>>::Error;
+
+    fn try_from(value: SyntaxNode) -> Result<Self, Self::Error> {
+        Ok(Self {
+            ident: IfDef::try_from(value)?.ident,
+        })
+    }
+}

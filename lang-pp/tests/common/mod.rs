@@ -3,7 +3,7 @@ use std::path::Path;
 
 use glsl_lang_pp::{
     parse,
-    processor::{DirectiveExt, Event},
+    processor::{nodes::DirectiveExt, Event},
 };
 
 pub fn test_file(path: impl AsRef<Path>) {

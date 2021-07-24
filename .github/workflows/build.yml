@@ -5,6 +5,11 @@ on: push
 jobs:
   test:
     name: Test crate
+
+    defaults:
+      run:
+        shell: bash
+
     strategy:
       fail-fast: false
       matrix:
@@ -27,6 +32,7 @@ jobs:
           target: ${{ matrix.target }}
       - name: Run tests
         run: |
+          set -e
           cargo test
           cargo test -p lang-util --lib --features serde
           cargo test -p glsl-lang --lib --features serde

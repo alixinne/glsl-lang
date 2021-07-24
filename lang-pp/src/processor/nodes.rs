@@ -558,3 +558,35 @@ impl TryFrom<SyntaxNode> for Undef {
         })
     }
 }
+
+#[derive(Debug, Clone)]
+pub struct Error {
+    pub message: String,
+}
+
+#[derive(Debug, Error)]
+pub enum ErrorError {
+    #[error("missing body for #error")]
+    MissingBody,
+}
+
+impl TryFrom<SyntaxNode> for Error {
+    type Error = ErrorError;
+
+    fn try_from(value: SyntaxNode) -> Result<Self, Self::Error> {
+        let body = value
+            .children()
+            .find(|node| node.kind() == PP_ERROR_BODY)
+            .ok_or_else(|| Self::Error::MissingBody)?;
+
+        // Unescape line continuations
+        let raw_message = body.text();
+        let mut message = String::with_capacity(raw_message.len().into());
+
+        raw_message.for_each_chunk(|chunk| {
+            message.extend(Unescaped::new(chunk).chars());
+        });
+
+        Ok(Self { message })
+    }
+}

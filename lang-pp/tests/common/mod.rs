@@ -94,6 +94,7 @@ pub fn test_file(path: impl AsRef<Path>) {
             Event::IfNDef { .. } => {}
             Event::Else => {}
             Event::Undef { .. } => {}
+            Event::ErrorDirective { .. } => {}
             Event::EndIf => {}
         }
     }

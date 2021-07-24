@@ -23,8 +23,8 @@ pub use fs::*;
 
 pub mod nodes;
 use nodes::{
-    Define, DefineObject, DirectiveResult, Extension, ExtensionName, IfDef, IfNDef, Undef, Version,
-    GL_ARB_SHADING_LANGUAGE_INCLUDE, GL_GOOGLE_INCLUDE_DIRECTIVE,
+    Define, DefineObject, DirectiveResult, Error, Extension, ExtensionName, IfDef, IfNDef, Undef,
+    Version, GL_ARB_SHADING_LANGUAGE_INCLUDE, GL_GOOGLE_INCLUDE_DIRECTIVE,
 };
 
 /// Operating mode for #include directives
@@ -372,6 +372,26 @@ impl<F: FileSystem> Processor<F> {
                                 }
                             }
                         }
+                        PP_ERROR => {
+                            if mask_active {
+                                let directive: DirectiveResult<Error> = node.clone().try_into();
+
+                                let error = if let Ok(error) = &directive {
+                                    Some(Event::ProcessorError(ProcessorError::ErrorDirective {
+                                        node,
+                                        message: error.message.clone(),
+                                    }))
+                                } else {
+                                    None
+                                };
+
+                                result.push(Event::ErrorDirective { directive });
+
+                                if let Some(error_event) = error {
+                                    result.push(error_event);
+                                }
+                            }
+                        }
                         _ => {
                             // Handle node, this is a preprocessor directive
                             result.push(Event::Unhandled(node));
@@ -398,6 +418,8 @@ pub enum ProcessorError {
     ExtraElse { node: SyntaxNode },
     #[error("protected definition cannot be undefined")]
     ProtectedDefine { node: SyntaxNode, ident: SmolStr },
+    #[error("#error : {message}")]
+    ErrorDirective { node: SyntaxNode, message: String },
 }
 
 #[derive(Debug)]
@@ -429,6 +451,9 @@ pub enum Event<E: std::error::Error> {
     EndIf,
     Undef {
         directive: DirectiveResult<Undef>,
+    },
+    ErrorDirective {
+        directive: DirectiveResult<Error>,
     },
     Unhandled(SyntaxNode),
 }

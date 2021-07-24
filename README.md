@@ -20,6 +20,8 @@ modeled after [Dimitri Sabadie's `glsl` crate](https://github.com/phaazon/glsl).
     * [Syntax nodes have location information](#syntax-nodes-have-location-information)
     * [Re-written GLSL transpiler](#re-written-glsl-transpiler)
     * [`glsl-lang-quote` quoting support](#glsl-lang-quote-quoting-support)
+    * [Full preprocessing support](#full-preprocessing-support)
+    * [Tested on the glslangValidator test suite](#tested-on-the-glslangvalidator-test-suite)
   * [Why not pick this crate?](#why-not-pick-this-crate)
     * [Stateful lexer](#stateful-lexer)
     * [Parser generation and compile times](#parser-generation-and-compile-times)
@@ -36,6 +38,7 @@ modeled after [Dimitri Sabadie's `glsl` crate](https://github.com/phaazon/glsl).
 | crates.io                                                                                                   | Path                                   | Description                                                       |
 | ---                                                                                                         | ---                                    | ---                                                               |
 | [![Crates.io](https://img.shields.io/crates/v/glsl-lang)](https://crates.io/crates/glsl-lang)               | [`lang`](lang)                         | AST, parser, visitor, transpiler for GLSL language                |
+| [![Crates.io](https://img.shields.io/crates/v/glsl-lang-pp)](https://crates.io/crates/glsl-lang-pp)         | [`lang-pp`](lang-pp)                   | standalone preprocessor for the GLSL language                     |
 | [![Crates.io](https://img.shields.io/crates/v/glsl-lang-quote)](https://crates.io/crates/glsl-lang-quote)   | [`lang-quote`](lang-quote)             | proc-macro crate to parse GLSL at compile-time                    |
 | [![Crates.io](https://img.shields.io/crates/v/glsl-lang-cli)](https://crates.io/crates/glsl-lang-cli)       | [`lang-cli`](lang-cli)                 | simple CLI tool to show GLSL syntax trees                         |
 | [![Crates.io](https://img.shields.io/crates/v/lang-util)](https://crates.io/crates/lang-util)               | [`lang-util`](lang-util)               | utilities for implementing syntax trees                           |
@@ -79,6 +82,27 @@ insertion locations for the `#(ident)` syntax are supported:
 * Identifier
 * Expression
 * Function name
+
+#### Full preprocessing support
+
+***Planned for next release.*** `glsl-lang-pp` implements a preprocessor
+following the GLSL 4.60 language specification. While this adds a significant
+amount of complexity, preprocessing now happens in a proper stage before
+language parsing, thus supporting a wider family of inputs.
+
+Since the preprocessing stage is also responsible for enabling/disabling
+extensions and/or pragmas, this allows us to track extra state at the token
+granularity.
+
+The preprocessor also supports include directives:
+* `GL_ARB_shading_language_include`: run-time includes
+* `GL_GOOGLE_include_directive`: compile-time includes
+
+#### Tested on the glslangValidator test suite
+
+***Planned for next release.*** The `data` folder contains vendored test data
+from the [glslangValidator](https://github.com/KhronosGroup/glslang) project to
+be used as a reference point for validating the preprocessor and parser.
 
 ### Why not pick this crate?
 

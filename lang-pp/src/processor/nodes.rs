@@ -8,7 +8,7 @@ use thiserror::Error;
 
 use crate::{
     parser::{SyntaxKind::*, SyntaxNode},
-    unescape_line_continuations,
+    unescape_line_continuations, FileId,
 };
 
 use super::exts;
@@ -388,22 +388,36 @@ pub struct Define {
     kind: DefineKind,
     /// true if this definition can't be #undef-ined
     protected: bool,
+    /// Source file identifier
+    source_file: FileId,
 }
 
 impl Define {
-    pub fn object(name: SmolStr, object: DefineObject, protected: bool) -> Self {
+    pub fn object(
+        name: SmolStr,
+        object: DefineObject,
+        protected: bool,
+        source_file: FileId,
+    ) -> Self {
         Self {
             name,
             kind: DefineKind::Object(object),
             protected,
+            source_file,
         }
     }
 
-    pub fn function(name: SmolStr, function: DefineFunction, protected: bool) -> Self {
+    pub fn function(
+        name: SmolStr,
+        function: DefineFunction,
+        protected: bool,
+        source_file: FileId,
+    ) -> Self {
         Self {
             name,
             kind: DefineKind::Function(function),
             protected,
+            source_file,
         }
     }
 

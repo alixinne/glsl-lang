@@ -2,6 +2,7 @@ use std::{
     collections::{HashMap, VecDeque},
     convert::TryInto,
     iter::{FromIterator, FusedIterator},
+    num::NonZeroU32,
     path::{Path, PathBuf},
     rc::Rc,
 };
@@ -70,6 +71,7 @@ impl Default for ProcessorState {
                     "GL_core_profile".into(),
                     DefineObject::from_str("1").unwrap(),
                     true,
+                    FileId::default(),
                 )),
             )]),
             version: Version::default(),
@@ -135,7 +137,9 @@ impl<F: FileSystem> Processor<F> {
         let file_id = if let Some(file_id) = self.file_ids.get(canonical_path.as_path()) {
             file_id
         } else {
-            let file_id = FileId::new(self.file_ids.len() as _);
+            // SAFETY: n + 1 > 0
+            let file_id =
+                FileId::new(unsafe { NonZeroU32::new_unchecked(self.file_ids.len() as u32 + 1) });
             self.file_ids
                 .entry(canonical_path.to_owned())
                 .or_insert(file_id)

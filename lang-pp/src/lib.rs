@@ -1,5 +1,6 @@
 use std::{
     borrow::Cow,
+    num::NonZeroU32,
     ops::{Deref, DerefMut},
 };
 
@@ -13,17 +14,21 @@ pub mod processor;
 
 /// Unique file identifier
 #[derive(Default, Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub struct FileId(u32);
+pub struct FileId(Option<NonZeroU32>);
 
 impl FileId {
-    pub fn new(raw: u32) -> Self {
-        Self(raw)
+    pub fn new(raw: NonZeroU32) -> Self {
+        Self(Some(raw))
     }
 }
 
 impl std::fmt::Display for FileId {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.0)
+        if let Some(raw) = self.0 {
+            write!(f, "{}", u32::from(raw) - 1)
+        } else {
+            write!(f, "builtin")
+        }
     }
 }
 

@@ -50,7 +50,7 @@ pub struct ProcessorState {
     extension_stack: Vec<Extension>,
     include_mode: IncludeMode,
     // use Rc to make cloning the whole struct cheaper
-    definitions: HashMap<SmolStr, Rc<Define>>,
+    definitions: HashMap<SmolStr, Rc<(Define, FileId)>>,
     version: Version,
 }
 
@@ -67,10 +67,12 @@ impl Default for ProcessorState {
             // `#define GL_core_profile 1`
             definitions: HashMap::from_iter([(
                 "GL_core_profile".into(),
-                Rc::new(Define::object(
-                    "GL_core_profile".into(),
-                    DefineObject::from_str("1").unwrap(),
-                    true,
+                Rc::new((
+                    Define::object(
+                        "GL_core_profile".into(),
+                        DefineObject::from_str("1").unwrap(),
+                        true,
+                    ),
                     FileId::default(),
                 )),
             )]),
@@ -161,7 +163,7 @@ impl<F: FileSystem> Processor<F> {
             .unwrap())
     }
 
-    fn expand(&mut self, ast: Ast) -> Vec<Event<F::Error>> {
+    fn expand(&mut self, ast: Ast, current_file: FileId) -> Vec<Event<F::Error>> {
         let (root, mut errors) = ast.into_inner();
 
         #[derive(Clone, Copy, PartialEq, Eq)]
@@ -240,6 +242,22 @@ impl<F: FileSystem> Processor<F> {
                                 }
 
                                 result.push(Event::Extension { directive });
+                            }
+                        }
+                        PP_DEFINE => {
+                            if mask_active {
+                                let directive: DirectiveResult<Define> = node.try_into();
+
+                                if let Ok(define) = &directive {
+                                    // TODO: Check that we are not overwriting an incompatible
+                                    // definition
+                                    self.current_state.definitions.insert(
+                                        define.name().into(),
+                                        Rc::new(((**define).clone(), current_file)),
+                                    );
+                                }
+
+                                result.push(Event::Define { directive });
                             }
                         }
                         PP_IFDEF => {
@@ -336,7 +354,7 @@ impl<F: FileSystem> Processor<F> {
                                     if let Some(def) =
                                         self.current_state.definitions.get(&ifdef.ident)
                                     {
-                                        if def.protected() {
+                                        if def.0.protected() {
                                             Some(ifdef.ident.clone())
                                         } else {
                                             self.current_state.definitions.remove(&ifdef.ident);
@@ -402,6 +420,9 @@ pub enum Event<E: std::error::Error> {
     Extension {
         directive: DirectiveResult<Extension>,
     },
+    Define {
+        directive: DirectiveResult<Define>,
+    },
     IfDef {
         directive: DirectiveResult<IfDef>,
     },
@@ -447,7 +468,7 @@ impl<'p, F: FileSystem> Iterator for ProcessorEvents<'p, F> {
                             });
 
                             // Add all preprocessor events
-                            self.event_buf.extend(processor.expand(ast));
+                            self.event_buf.extend(processor.expand(ast, file_id));
 
                             continue;
                         }

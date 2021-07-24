@@ -89,6 +89,7 @@ pub fn test_file(path: impl AsRef<Path>) {
                 write!(ppf, "{}", node.text()).unwrap();
             }
 
+            Event::Define { .. } => {}
             Event::IfDef { .. } => {}
             Event::IfNDef { .. } => {}
             Event::Else => {}

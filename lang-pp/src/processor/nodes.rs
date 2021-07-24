@@ -8,7 +8,7 @@ use thiserror::Error;
 
 use crate::{
     parser::{SyntaxKind::*, SyntaxNode},
-    unescape_line_continuations, FileId,
+    unescape_line_continuations,
 };
 
 use super::exts;
@@ -360,6 +360,10 @@ pub struct DefineObject {
 }
 
 impl DefineObject {
+    pub fn new(tokens: SyntaxNode) -> Self {
+        Self { tokens }
+    }
+
     pub fn from_str(input: &str) -> Option<Self> {
         Some(Self {
             tokens: crate::parser::Parser::new(input).parse_define_body()?,
@@ -388,36 +392,22 @@ pub struct Define {
     kind: DefineKind,
     /// true if this definition can't be #undef-ined
     protected: bool,
-    /// Source file identifier
-    source_file: FileId,
 }
 
 impl Define {
-    pub fn object(
-        name: SmolStr,
-        object: DefineObject,
-        protected: bool,
-        source_file: FileId,
-    ) -> Self {
+    pub fn object(name: SmolStr, object: DefineObject, protected: bool) -> Self {
         Self {
             name,
             kind: DefineKind::Object(object),
             protected,
-            source_file,
         }
     }
 
-    pub fn function(
-        name: SmolStr,
-        function: DefineFunction,
-        protected: bool,
-        source_file: FileId,
-    ) -> Self {
+    pub fn function(name: SmolStr, function: DefineFunction, protected: bool) -> Self {
         Self {
             name,
             kind: DefineKind::Function(function),
             protected,
-            source_file,
         }
     }
 
@@ -431,6 +421,58 @@ impl Define {
 
     pub fn protected(&self) -> bool {
         self.protected
+    }
+}
+
+#[derive(Debug, Error)]
+pub enum DefineError {
+    #[error("missing name for #define")]
+    MissingName,
+    #[error("missing body for #define")]
+    MissingBody { name: SmolStr },
+    #[error("not yet implemented")]
+    Unimplemented,
+}
+
+impl TryFrom<SyntaxNode> for Define {
+    type Error = DefineError;
+
+    fn try_from(value: SyntaxNode) -> Result<Self, Self::Error> {
+        // Find out define name
+        let name = value
+            .children_with_tokens()
+            .filter_map(|node_or_token| {
+                if let NodeOrToken::Token(token) = node_or_token {
+                    if token.kind() == IDENT_KW {
+                        Some(token)
+                    } else {
+                        None
+                    }
+                } else {
+                    None
+                }
+            })
+            .skip(1)
+            .next()
+            .ok_or_else(|| Self::Error::MissingName)?;
+
+        let name = unescape_line_continuations(name.text());
+
+        // Find the body
+        let body = value
+            .children()
+            .find(|node| node.kind() == PP_DEFINE_BODY)
+            .ok_or_else(|| Self::Error::MissingBody {
+                name: name.clone().into(),
+            })?;
+
+        // Find the arguments
+        if let Some(_args) = value.children().find(|node| node.kind() == PP_DEFINE_ARGS) {
+            // TODO: Implement function-like #define
+            Err(DefineError::Unimplemented)
+        } else {
+            Ok(Self::object(name.into(), DefineObject::new(body), false))
+        }
     }
 }
 

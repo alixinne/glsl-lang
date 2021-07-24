@@ -1,10 +1,12 @@
 /// Preprocessor directive parser declaration
-use std::borrow::Cow;
 use std::collections::VecDeque;
 
 use rowan::{TextRange, TextSize};
 
-use crate::lexer::{self, Lexer};
+use crate::{
+    lexer::{self, Lexer},
+    Unescaped,
+};
 
 mod ast;
 pub use ast::*;
@@ -116,8 +118,8 @@ impl<'i> Parser<'i> {
         token.raw(self.source)
     }
 
-    fn text(&self, token: lexer::TextToken) -> Cow<str> {
-        crate::unescape_line_continuations(self.raw(token))
+    fn text(&self, token: lexer::TextToken) -> Unescaped {
+        Unescaped::new(self.raw(token))
     }
 
     fn eat_trivia(&mut self) {

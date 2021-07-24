@@ -1,4 +1,4 @@
-use std::{convert::TryFrom, str::FromStr};
+use std::{borrow::Cow, convert::TryFrom, str::FromStr};
 
 use arrayvec::ArrayVec;
 use rowan::NodeOrToken;
@@ -8,7 +8,7 @@ use thiserror::Error;
 
 use crate::{
     parser::{SyntaxKind::*, SyntaxNode},
-    unescape_line_continuations,
+    Unescaped,
 };
 
 use super::exts;
@@ -113,7 +113,7 @@ impl TryFrom<SyntaxNode> for Version {
             })
             .ok_or_else(|| Self::Error::MissingVersionNumber)
             .and_then(|token| {
-                lexical::parse(unescape_line_continuations(token.text()).as_ref())
+                lexical::parse(Unescaped::new(token.text()).to_string().as_ref())
                     .map_err(Into::into)
             })?;
 
@@ -130,7 +130,8 @@ impl TryFrom<SyntaxNode> for Version {
                 None
             }
         }) {
-            unescape_line_continuations(profile.text())
+            Unescaped::new(profile.text())
+                .to_string()
                 .parse()
                 .map_err(|_| Self::Error::InvalidVersionProfile { version_number })?
         } else {
@@ -247,7 +248,7 @@ pub enum ExtensionName {
 }
 
 impl ExtensionName {
-    pub fn new(name: &str) -> Self {
+    pub fn new(name: Cow<'_, str>) -> Self {
         if name == "all" {
             Self::All
         } else {
@@ -334,13 +335,13 @@ impl TryFrom<SyntaxNode> for Extension {
         let name = idents
             .get(0)
             .ok_or_else(|| Self::Error::MissingExtensionName)
-            .map(|name| ExtensionName::new(unescape_line_continuations(name.text()).as_ref()))?;
+            .map(|name| ExtensionName::new(Unescaped::new(name.text()).to_string()))?;
 
         let behavior = idents
             .get(1)
             .ok_or_else(|| Self::Error::MissingExtensionBehavior { name: name.clone() })
             .and_then(|behavior| {
-                ExtensionBehavior::from_str(unescape_line_continuations(behavior.text()).as_ref())
+                ExtensionBehavior::from_str(&Unescaped::new(behavior.text()).to_string())
                     .map_err(|_| Self::Error::InvalidExtensionBehavior { name: name.clone() })
             })?;
 
@@ -460,7 +461,7 @@ impl TryFrom<SyntaxNode> for Define {
             .next()
             .ok_or_else(|| Self::Error::MissingName)?;
 
-        let name = unescape_line_continuations(name.text());
+        let name = Unescaped::new(name.text());
 
         // Find the body
         let body = value
@@ -477,7 +478,7 @@ impl TryFrom<SyntaxNode> for Define {
                 .filter_map(|arg| {
                     if arg.kind() == PP_DEFINE_ARG {
                         arg.first_token()
-                            .map(|token| unescape_line_continuations(token.text()).into())
+                            .map(|token| Unescaped::new(token.text()).into())
                     } else {
                         None
                     }
@@ -523,7 +524,7 @@ impl TryFrom<SyntaxNode> for IfDef {
             .ok_or_else(|| Self::Error::MissingIdentifier)?;
 
         Ok(Self {
-            ident: unescape_line_continuations(pp_ident.text()).into(),
+            ident: Unescaped::new(pp_ident.text()).into(),
         })
     }
 }

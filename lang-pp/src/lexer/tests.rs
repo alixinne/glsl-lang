@@ -1,5 +1,7 @@
-use super::*;
 use std::borrow::Cow;
+
+use super::*;
+use crate::Unescaped;
 use Token::*;
 
 fn tokenize(src: &str) -> Vec<Token> {
@@ -9,7 +11,7 @@ fn tokenize(src: &str) -> Vec<Token> {
 
 fn tokenize_str(src: &str) -> Vec<(Token, Cow<'_, str>)> {
     let pp = Lexer::new(src);
-    pp.map(|tk| (tk.token, crate::unescape_line_continuations(tk.raw(src))))
+    pp.map(|tk| (tk.token, Unescaped::new(tk.raw(src)).to_string()))
         .collect()
 }
 

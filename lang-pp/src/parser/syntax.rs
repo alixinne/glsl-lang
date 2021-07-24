@@ -1,4 +1,5 @@
 use rowan::TextRange;
+use smol_str::SmolStr;
 
 use crate::lexer;
 
@@ -73,7 +74,7 @@ fn if_section_or_control_line<'i>(parser: &mut Parser<'i>) {
             Some(PP_EMPTY)
         } else {
             let mut error = None;
-            let result = match parser.text(token).as_ref() {
+            let result = match SmolStr::from(parser.text(token)).as_ref() {
                 "include" => {
                     parser.bump();
                     pp_include(parser);

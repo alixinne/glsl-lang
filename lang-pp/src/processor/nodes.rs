@@ -377,6 +377,12 @@ pub struct DefineFunction {
     tokens: SyntaxNode,
 }
 
+impl DefineFunction {
+    pub fn new(args: Vec<SmolStr>, tokens: SyntaxNode) -> Self {
+        Self { args, tokens }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum DefineKind {
     Object(DefineObject),
@@ -430,8 +436,6 @@ pub enum DefineError {
     MissingName,
     #[error("missing body for #define")]
     MissingBody { name: SmolStr },
-    #[error("not yet implemented")]
-    Unimplemented,
 }
 
 impl TryFrom<SyntaxNode> for Define {
@@ -467,9 +471,24 @@ impl TryFrom<SyntaxNode> for Define {
             })?;
 
         // Find the arguments
-        if let Some(_args) = value.children().find(|node| node.kind() == PP_DEFINE_ARGS) {
-            // TODO: Implement function-like #define
-            Err(DefineError::Unimplemented)
+        if let Some(args) = value.children().find(|node| node.kind() == PP_DEFINE_ARGS) {
+            let args = args
+                .children()
+                .filter_map(|arg| {
+                    if arg.kind() == PP_DEFINE_ARG {
+                        arg.first_token()
+                            .map(|token| unescape_line_continuations(token.text()).into())
+                    } else {
+                        None
+                    }
+                })
+                .collect();
+
+            Ok(Self::function(
+                name.into(),
+                DefineFunction::new(args, body),
+                false,
+            ))
         } else {
             Ok(Self::object(name.into(), DefineObject::new(body), false))
         }

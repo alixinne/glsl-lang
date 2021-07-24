@@ -1,5 +1,5 @@
 use std::{
-    collections::{HashMap, VecDeque},
+    collections::{hash_map::Entry, HashMap, VecDeque},
     convert::TryInto,
     iter::{FromIterator, FusedIterator},
     num::NonZeroU32,
@@ -125,42 +125,38 @@ impl<F: FileSystem> Processor<F> {
     }
 
     fn parse(&mut self, path: &Path) -> Result<(FileId, &Ast), F::Error> {
-        // Find the canonical path
+        // Find the canonical path. Not using the entry API because cloning a path is expensive.
         let canonical_path = if let Some(canonical_path) = self.canonical_paths.get(path) {
             canonical_path
         } else {
             let canonical_path = self.fs.canonicalize(&path)?;
+            // Using entry allows inserting and returning a reference
             self.canonical_paths
                 .entry(path.to_owned())
                 .or_insert(canonical_path)
         };
 
-        // Allocate a file id
+        // Allocate a file id. Not using the entry API because cloning a path is expensive.
         let file_id = if let Some(file_id) = self.file_ids.get(canonical_path.as_path()) {
-            file_id
+            *file_id
         } else {
             // SAFETY: n + 1 > 0
             let file_id =
                 FileId::new(unsafe { NonZeroU32::new_unchecked(self.file_ids.len() as u32 + 1) });
-            self.file_ids
-                .entry(canonical_path.to_owned())
-                .or_insert(file_id)
+            self.file_ids.insert(canonical_path.to_owned(), file_id);
+            file_id
         };
 
-        if !self.file_cache.contains_key(file_id) {
-            // Read the file
-            let input = self.fs.read(&canonical_path)?;
-            // Parse it
-            let ast = Parser::new(&input).parse();
-            self.file_cache.insert(*file_id, ast);
+        match self.file_cache.entry(file_id) {
+            Entry::Occupied(entry) => Ok((file_id, entry.into_mut())),
+            Entry::Vacant(entry) => {
+                // Read the file
+                let input = self.fs.read(&canonical_path)?;
+                // Parse it
+                let ast = Parser::new(&input).parse();
+                Ok((file_id, entry.insert(ast)))
+            }
         }
-
-        // Return the parsed result
-        Ok(self
-            .file_cache
-            .get_key_value(&file_id)
-            .map(|(&k, v)| (k, v))
-            .unwrap())
     }
 
     fn expand(&mut self, ast: Ast, current_file: FileId) -> Vec<Event<F::Error>> {

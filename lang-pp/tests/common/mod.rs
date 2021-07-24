@@ -1,27 +1,53 @@
 use std::path::Path;
-use std::{io::prelude::*, path::PathBuf};
+use std::{
+    fs::{self, File},
+    io::prelude::*,
+    path::PathBuf,
+};
 
 use glsl_lang_pp::{
     parse,
     processor::{nodes::DirectiveExt, DirectiveKind, ErrorKind, Event},
 };
 
-fn out_path(path: &Path, ext: &str) -> PathBuf {
-    let file_name = path.file_name().unwrap().to_string_lossy().to_string() + ext;
-    let dir_name = path.parent().unwrap();
-    let mut result = dir_name.to_owned();
-    result.push("localRsResults");
+struct Paths {
+    parsed: PathBuf,
+    events: PathBuf,
+    pp: PathBuf,
+    errors: PathBuf,
+}
 
-    std::fs::create_dir_all(&result).unwrap();
+impl Paths {
+    fn path(base: &Path, file_name: &str, ext: &str) -> PathBuf {
+        let mut base = base.to_owned();
+        let mut file_name = file_name.to_owned();
+        file_name.push_str(ext);
+        base.push(file_name);
+        base
+    }
 
-    result.push(file_name);
-    result
+    pub fn new(path: &Path) -> Self {
+        let dir_name = path.parent().unwrap();
+        let mut result = dir_name.to_owned();
+        result.push("localRsResults");
+
+        fs::create_dir_all(&result).unwrap();
+
+        let file_name = path.file_name().unwrap().to_string_lossy().to_string();
+
+        Self {
+            parsed: Self::path(&result, &file_name, ".parsed"),
+            events: Self::path(&result, &file_name, ".events"),
+            pp: Self::path(&result, &file_name, ".pp"),
+            errors: Self::path(&result, &file_name, ".errors"),
+        }
+    }
 }
 
 pub fn test_file(path: impl AsRef<Path>) {
     let path = path.as_ref();
     let input = {
-        let raw_bytes = std::fs::read(&path).expect("failed to read input file");
+        let raw_bytes = fs::read(&path).expect("failed to read input file");
         match String::from_utf8(raw_bytes) {
             Ok(string) => string,
             Err(error) => encoding_rs::WINDOWS_1252
@@ -31,6 +57,7 @@ pub fn test_file(path: impl AsRef<Path>) {
         }
     };
 
+    let paths = Paths::new(&path);
     let result = parse(&input);
 
     // Get the syntax tree
@@ -40,18 +67,14 @@ pub fn test_file(path: impl AsRef<Path>) {
     assert_eq!(u32::from(root.text_range().end()), input.len() as u32);
 
     // Write the resulting tree, even if there are errors
-    std::fs::write(out_path(path, ".parsed"), format!("{:#?}", root))
-        .expect("failed to write .parsed");
+    fs::write(&paths.parsed, format!("{:#?}", root)).expect("failed to write .parsed");
 
     // Write the result
     let mut pp = glsl_lang_pp::processor::StdProcessor::default();
 
-    let events_file = out_path(path, ".events");
-    let mut eventsf = std::fs::File::create(events_file).unwrap();
-    let pp_file = out_path(path, ".pp");
-    let mut ppf = std::fs::File::create(pp_file).unwrap();
-    let errors_file = out_path(path, ".errors");
-    let mut errorsf = std::fs::File::create(&errors_file).unwrap();
+    let mut eventsf = File::create(&paths.events).unwrap();
+    let mut ppf = File::create(&paths.pp).unwrap();
+    let mut errorsf = File::create(&paths.errors).unwrap();
 
     let mut unhandled_count = 0;
     let mut error_count = 0;
@@ -101,7 +124,7 @@ pub fn test_file(path: impl AsRef<Path>) {
 
     if error_count == 0 {
         drop(errorsf);
-        std::fs::remove_file(&errors_file).unwrap();
+        fs::remove_file(&paths.errors).unwrap();
     }
 
     assert_eq!(unhandled_count, 0, "number of unhandled events should be 0");

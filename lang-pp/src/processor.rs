@@ -52,8 +52,27 @@ pub struct ProcessorState {
     extension_stack: Vec<Extension>,
     include_mode: IncludeMode,
     // use Rc to make cloning the whole struct cheaper
-    definitions: HashMap<SmolStr, Rc<(Define, FileId)>>,
+    definitions: HashMap<SmolStr, Definition>,
     version: Version,
+}
+
+#[derive(Debug, Clone)]
+enum Definition {
+    Regular(Rc<Define>, FileId),
+    Line,
+    File,
+    Version,
+}
+
+impl Definition {
+    pub fn protected(&self) -> bool {
+        match self {
+            Definition::Regular(d, _) => d.protected(),
+            Definition::Line => true,
+            Definition::File => true,
+            Definition::Version => true,
+        }
+    }
 }
 
 impl Default for ProcessorState {
@@ -67,17 +86,22 @@ impl Default for ProcessorState {
             // Spec 3.3, "There is a built-in macro definition for each profile the implementation
             // supports. All implementations provide the following macro:
             // `#define GL_core_profile 1`
-            definitions: HashMap::from_iter([(
-                "GL_core_profile".into(),
-                Rc::new((
-                    Define::object(
-                        "GL_core_profile".into(),
-                        DefineObject::from_str("1").unwrap(),
-                        true,
+            definitions: HashMap::from_iter([
+                (
+                    "GL_core_profile".into(),
+                    Definition::Regular(
+                        Rc::new(Define::object(
+                            "GL_core_profile".into(),
+                            DefineObject::from_str("1").unwrap(),
+                            true,
+                        )),
+                        FileId::default(),
                     ),
-                    FileId::default(),
-                )),
-            )]),
+                ),
+                ("__LINE__".into(), Definition::Line),
+                ("__FILE__".into(), Definition::File),
+                ("__VERSION__".into(), Definition::Version),
+            ]),
             version: Version::default(),
         }
     }
@@ -244,18 +268,59 @@ impl<F: FileSystem> Processor<F> {
                         }
                         PP_DEFINE => {
                             if mask_active {
-                                let directive: DirectiveResult<Define> = node.try_into();
+                                let directive: DirectiveResult<Define> = node.clone().try_into();
 
-                                if let Ok(define) = &directive {
-                                    // TODO: Check that we are not overwriting an incompatible
-                                    // definition
-                                    self.current_state.definitions.insert(
-                                        define.name().into(),
-                                        Rc::new(((**define).clone(), current_file)),
-                                    );
-                                }
+                                let error = if let Ok(define) = &directive {
+                                    if define.name().starts_with("GL_") {
+                                        Some(
+                                            ProcessingErrorKind::ProtectedDefine {
+                                                ident: define.name().into(),
+                                                is_undef: false,
+                                            }
+                                            .with_node(node),
+                                        )
+                                    } else {
+                                        let definition = Definition::Regular(
+                                            Rc::new((**define).clone()),
+                                            current_file,
+                                        );
+
+                                        match self
+                                            .current_state
+                                            .definitions
+                                            .entry(define.name().into())
+                                        {
+                                            Entry::Occupied(mut entry) => {
+                                                if entry.get().protected() {
+                                                    Some(
+                                                        ProcessingErrorKind::ProtectedDefine {
+                                                            ident: define.name().into(),
+                                                            is_undef: false,
+                                                        }
+                                                        .with_node(node),
+                                                    )
+                                                } else {
+                                                    // TODO: Check that we are not overwriting an incompatible definition
+                                                    *entry.get_mut() = definition;
+
+                                                    None
+                                                }
+                                            }
+                                            Entry::Vacant(entry) => {
+                                                entry.insert(definition);
+                                                None
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    None
+                                };
 
                                 result.push(Event::directive(directive));
+
+                                if let Some(error) = error {
+                                    result.push(Event::error(error));
+                                }
                             }
                         }
                         PP_IFDEF => {
@@ -349,17 +414,21 @@ impl<F: FileSystem> Processor<F> {
                                 let directive: DirectiveResult<Undef> = node.clone().try_into();
 
                                 let protected_ident = if let Ok(ifdef) = &directive {
-                                    if let Some(def) =
-                                        self.current_state.definitions.get(&ifdef.ident)
-                                    {
-                                        if def.0.protected() {
-                                            Some(ifdef.ident.clone())
+                                    if ifdef.ident.starts_with("GL_") {
+                                        Some(ifdef.ident.clone())
+                                    } else {
+                                        if let Some(def) =
+                                            self.current_state.definitions.get(&ifdef.ident)
+                                        {
+                                            if def.protected() {
+                                                Some(ifdef.ident.clone())
+                                            } else {
+                                                self.current_state.definitions.remove(&ifdef.ident);
+                                                None
+                                            }
                                         } else {
-                                            self.current_state.definitions.remove(&ifdef.ident);
                                             None
                                         }
-                                    } else {
-                                        None
                                     }
                                 } else {
                                     None
@@ -369,8 +438,11 @@ impl<F: FileSystem> Processor<F> {
 
                                 if let Some(ident) = protected_ident {
                                     result.push(Event::error(
-                                        ProcessingErrorKind::ProtectedDefine { ident }
-                                            .with_node(node),
+                                        ProcessingErrorKind::ProtectedDefine {
+                                            ident,
+                                            is_undef: true,
+                                        }
+                                        .with_node(node),
                                     ));
                                 }
                             }

@@ -38,21 +38,50 @@ impl std::fmt::Display for ProcessingError {
 
 impl std::error::Error for ProcessingError {}
 
-#[derive(Debug, Error)]
+#[derive(Debug)]
 pub enum ProcessingErrorKind {
-    #[error("unmatched #endif")]
     ExtraEndIf,
-    #[error("unmatched #else")]
     ExtraElse,
-    #[error("protected definition cannot be undefined")]
-    ProtectedDefine { ident: SmolStr },
-    #[error("#error : {message}")]
+    ProtectedDefine { ident: SmolStr, is_undef: bool },
     ErrorDirective { message: String },
 }
 
 impl ProcessingErrorKind {
     pub fn with_node(self, node: SyntaxNode) -> ProcessingError {
         ProcessingError::new(node, self)
+    }
+}
+
+impl std::fmt::Display for ProcessingErrorKind {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            ProcessingErrorKind::ExtraEndIf => {
+                write!(f, "unmatched #endif")
+            }
+            ProcessingErrorKind::ExtraElse => {
+                write!(f, "unmatched #else")
+            }
+            ProcessingErrorKind::ProtectedDefine { ident, is_undef } => {
+                let directive = if *is_undef { "undef" } else { "define" };
+
+                if ident.starts_with("GL_") {
+                    write!(
+                        f,
+                        "'#{}' : names beginning with \"GL_\" can't be (un)defined: {}",
+                        directive, ident
+                    )
+                } else {
+                    write!(
+                        f,
+                        "'#{}' : predefined names can't be (un)defined: {}",
+                        directive, ident
+                    )
+                }
+            }
+            ProcessingErrorKind::ErrorDirective { message } => {
+                write!(f, "'#error' : {}", message)
+            }
+        }
     }
 }
 

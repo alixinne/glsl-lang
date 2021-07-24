@@ -178,7 +178,7 @@ mod tests {
     pub fn generate(out_dir: &Path) {
         let current_dir = env::current_dir().expect("failed to read current dir");
         let files: Vec<PathBuf> = {
-            fs::read_dir(current_dir.join("../glslang/Test"))
+            fs::read_dir(current_dir.join("../data"))
                 .map(|dir| {
                     dir.into_iter()
                         .filter_map(|entry| entry.ok())

@@ -1,10 +1,22 @@
-use std::io::prelude::*;
 use std::path::Path;
+use std::{io::prelude::*, path::PathBuf};
 
 use glsl_lang_pp::{
     parse,
     processor::{nodes::DirectiveExt, Event},
 };
+
+fn out_path(path: &Path, ext: &str) -> PathBuf {
+    let file_name = path.file_name().unwrap().to_string_lossy().to_string() + ext;
+    let dir_name = path.parent().unwrap();
+    let mut result = dir_name.to_owned();
+    result.push("localRsResults");
+
+    std::fs::create_dir_all(&result).unwrap();
+
+    result.push(file_name);
+    result
+}
 
 pub fn test_file(path: impl AsRef<Path>) {
     let path = path.as_ref();
@@ -28,15 +40,11 @@ pub fn test_file(path: impl AsRef<Path>) {
     assert_eq!(u32::from(root.text_range().end()), input.len() as u32);
 
     // Write the resulting tree, even if there are errors
-    std::fs::write(
-        path.with_file_name(path.file_name().unwrap().to_string_lossy().to_string() + ".parsed"),
-        format!("{:#?}", root),
-    )
-    .expect("failed to write .parsed");
+    std::fs::write(out_path(path, ".parsed"), format!("{:#?}", root))
+        .expect("failed to write .parsed");
 
     // Check that there are no errors
-    let errors_file =
-        path.with_file_name(path.file_name().unwrap().to_string_lossy().to_string() + ".errors");
+    let errors_file = out_path(path, ".errors");
     if !errors.is_empty() {
         let mut f = std::fs::File::create(errors_file).unwrap();
 
@@ -50,11 +58,9 @@ pub fn test_file(path: impl AsRef<Path>) {
     // Write the result
     let mut pp = glsl_lang_pp::processor::StdProcessor::default();
 
-    let events_file =
-        path.with_file_name(path.file_name().unwrap().to_string_lossy().to_string() + ".events");
+    let events_file = out_path(path, ".events");
     let mut eventsf = std::fs::File::create(events_file).unwrap();
-    let pp_file =
-        path.with_file_name(path.file_name().unwrap().to_string_lossy().to_string() + ".pp");
+    let pp_file = out_path(path, ".pp");
     let mut ppf = std::fs::File::create(pp_file).unwrap();
 
     let mut unhandled_count = 0;

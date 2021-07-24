@@ -3,7 +3,7 @@ use std::path::{Path, PathBuf};
 use super::Processor;
 
 pub trait FileSystem {
-    type Error: std::error::Error;
+    type Error: std::error::Error + 'static;
 
     fn canonicalize(&self, path: &Path) -> Result<PathBuf, Self::Error>;
     fn read(&self, path: &Path) -> Result<String, Self::Error>;

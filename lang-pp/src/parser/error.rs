@@ -10,6 +10,32 @@ pub struct Error {
     user_pos: (u32, u32),
 }
 
+impl Error {
+    pub fn new(kind: ErrorKind, pos: TextRange, line_map: &LineMap) -> Self {
+        Self {
+            kind,
+            pos,
+            user_pos: line_map.get_line_and_col(pos.start().into()),
+        }
+    }
+
+    pub fn kind(&self) -> &ErrorKind {
+        &self.kind
+    }
+
+    pub fn pos(&self) -> TextRange {
+        self.pos.clone()
+    }
+
+    pub fn line(&self) -> u32 {
+        self.user_pos.0
+    }
+
+    pub fn col(&self) -> u32 {
+        self.user_pos.1
+    }
+}
+
 impl std::fmt::Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
@@ -21,6 +47,8 @@ impl std::fmt::Display for Error {
         )
     }
 }
+
+impl std::error::Error for Error {}
 
 #[derive(Debug, Clone)]
 pub enum ErrorKind {
@@ -67,23 +95,5 @@ impl std::fmt::Display for ErrorKind {
                 }
             }
         }
-    }
-}
-
-impl Error {
-    pub fn new(kind: ErrorKind, pos: TextRange, line_map: &LineMap) -> Self {
-        Self {
-            kind,
-            pos,
-            user_pos: line_map.get_line_and_col(pos.start().into()),
-        }
-    }
-
-    pub fn kind(&self) -> &ErrorKind {
-        &self.kind
-    }
-
-    pub fn pos(&self) -> TextRange {
-        self.pos
     }
 }

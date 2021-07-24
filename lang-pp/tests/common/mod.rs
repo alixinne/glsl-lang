@@ -3,7 +3,7 @@ use std::{io::prelude::*, path::PathBuf};
 
 use glsl_lang_pp::{
     parse,
-    processor::{nodes::DirectiveExt, Event},
+    processor::{nodes::DirectiveExt, DirectiveKind, ErrorKind, Event},
 };
 
 fn out_path(path: &Path, ext: &str) -> PathBuf {
@@ -34,7 +34,7 @@ pub fn test_file(path: impl AsRef<Path>) {
     let result = parse(&input);
 
     // Get the syntax tree
-    let (root, errors) = result.into_inner();
+    let (root, _) = result.into_inner();
 
     // Check that we parsed the file with exact positions. If stages 0 or 1 fail, this should break
     assert_eq!(u32::from(root.text_range().end()), input.len() as u32);
@@ -43,18 +43,6 @@ pub fn test_file(path: impl AsRef<Path>) {
     std::fs::write(out_path(path, ".parsed"), format!("{:#?}", root))
         .expect("failed to write .parsed");
 
-    // Check that there are no errors
-    let errors_file = out_path(path, ".errors");
-    if !errors.is_empty() {
-        let mut f = std::fs::File::create(errors_file).unwrap();
-
-        for error in errors.iter() {
-            writeln!(f, "{}", error).unwrap();
-        }
-    } else {
-        std::fs::remove_file(&errors_file).ok();
-    }
-
     // Write the result
     let mut pp = glsl_lang_pp::processor::StdProcessor::default();
 
@@ -62,41 +50,58 @@ pub fn test_file(path: impl AsRef<Path>) {
     let mut eventsf = std::fs::File::create(events_file).unwrap();
     let pp_file = out_path(path, ".pp");
     let mut ppf = std::fs::File::create(pp_file).unwrap();
+    let errors_file = out_path(path, ".errors");
+    let mut errorsf = std::fs::File::create(&errors_file).unwrap();
 
     let mut unhandled_count = 0;
+    let mut error_count = 0;
 
     for event in pp.process(path) {
         writeln!(eventsf, "{:?}", event).unwrap();
 
         match event {
-            Event::IoError(_) => {}
-            Event::ParseError(_) => {}
-            Event::ProcessorError(_) => {}
+            Event::Error(error) => {
+                match error.kind() {
+                    ErrorKind::Io(_) => {}
+                    ErrorKind::Parse(_) => {}
+                    ErrorKind::Processing(_) => {}
+                    ErrorKind::Unhandled(node) => {
+                        unhandled_count += 1;
+                        write!(ppf, "{}", node.text()).unwrap();
+                    }
+                }
+
+                error_count += 1;
+                writeln!(errorsf, "{}", error).unwrap();
+            }
 
             Event::EnterFile { .. } => {}
 
             Event::Token(token) => {
                 write!(ppf, "{}", token.text()).unwrap();
             }
-            Event::Version { directive } => {
-                write!(ppf, "{}", directive.into_node()).unwrap();
-            }
-            Event::Extension { directive } => {
-                write!(ppf, "{}", directive.into_node()).unwrap();
-            }
-            Event::Unhandled(node) => {
-                unhandled_count += 1;
-                write!(ppf, "{}", node.text()).unwrap();
-            }
 
-            Event::Define { .. } => {}
-            Event::IfDef { .. } => {}
-            Event::IfNDef { .. } => {}
-            Event::Else => {}
-            Event::Undef { .. } => {}
-            Event::ErrorDirective { .. } => {}
-            Event::EndIf => {}
+            Event::Directive(directive) => match directive {
+                DirectiveKind::Version(directive) => {
+                    write!(ppf, "{}", directive.into_node()).unwrap();
+                }
+                DirectiveKind::Extension(directive) => {
+                    write!(ppf, "{}", directive.into_node()).unwrap();
+                }
+                DirectiveKind::Define(_) => {}
+                DirectiveKind::IfDef(_) => {}
+                DirectiveKind::IfNDef(_) => {}
+                DirectiveKind::Else => {}
+                DirectiveKind::EndIf => {}
+                DirectiveKind::Undef(_) => {}
+                DirectiveKind::Error(_) => {}
+            },
         }
+    }
+
+    if error_count == 0 {
+        drop(errorsf);
+        std::fs::remove_file(&errors_file).unwrap();
     }
 
     assert_eq!(unhandled_count, 0, "number of unhandled events should be 0");

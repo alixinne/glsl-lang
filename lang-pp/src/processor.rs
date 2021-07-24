@@ -8,15 +8,17 @@ use std::{
 };
 
 use smol_str::SmolStr;
-use thiserror::Error;
 
 use crate::{
-    parser::{Parser, SyntaxKind::*, SyntaxNode, SyntaxToken},
+    parser::{Parser, SyntaxKind::*},
     Ast, FileId,
 };
 
 #[macro_use]
 pub mod exts;
+
+mod event;
+pub use event::*;
 
 mod fs;
 pub use fs::*;
@@ -184,7 +186,7 @@ impl<F: FileSystem> Processor<F> {
 
                     // Parse errors in non-included blocks are ignored
                     if mask_active {
-                        result.push(Event::ParseError(error));
+                        result.push(Event::error(error));
                     }
                 }
             }
@@ -205,7 +207,7 @@ impl<F: FileSystem> Processor<F> {
                                     self.current_state.version = **version;
                                 }
 
-                                result.push(Event::Version { directive });
+                                result.push(Event::directive(directive));
                             }
                         }
                         PP_EXTENSION => {
@@ -237,7 +239,7 @@ impl<F: FileSystem> Processor<F> {
                                     }
                                 }
 
-                                result.push(Event::Extension { directive });
+                                result.push(Event::directive(directive));
                             }
                         }
                         PP_DEFINE => {
@@ -253,7 +255,7 @@ impl<F: FileSystem> Processor<F> {
                                     );
                                 }
 
-                                result.push(Event::Define { directive });
+                                result.push(Event::directive(directive));
                             }
                         }
                         PP_IFDEF => {
@@ -267,7 +269,7 @@ impl<F: FileSystem> Processor<F> {
                                     mask_stack.push(IfState::Active { else_seen: false });
                                 }
 
-                                result.push(Event::IfDef { directive });
+                                result.push(Event::directive(directive));
                             } else {
                                 // Record the #ifdef in the stack to support nesting
                                 mask_stack.push(IfState::None);
@@ -284,7 +286,7 @@ impl<F: FileSystem> Processor<F> {
                                     mask_stack.push(IfState::Active { else_seen: false });
                                 }
 
-                                result.push(Event::IfNDef { directive });
+                                result.push(Event::directive(directive));
                             } else {
                                 // Record the #ifdef in the stack to support nesting
                                 mask_stack.push(IfState::None);
@@ -304,8 +306,8 @@ impl<F: FileSystem> Processor<F> {
                                     IfState::Active { else_seen } | IfState::One { else_seen } => {
                                         if else_seen {
                                             // Extra #else
-                                            result.push(Event::ProcessorError(
-                                                ProcessorError::ExtraElse { node },
+                                            result.push(Event::error(
+                                                ProcessingErrorKind::ExtraElse.with_node(node),
                                             ));
 
                                             continue;
@@ -316,12 +318,12 @@ impl<F: FileSystem> Processor<F> {
                                     }
                                 }
 
-                                result.push(Event::Else);
+                                result.push(Event::directive(DirectiveKind::Else));
                             } else {
                                 // Stray #else
-                                result.push(Event::ProcessorError(ProcessorError::ExtraElse {
-                                    node,
-                                }));
+                                result.push(Event::error(
+                                    ProcessingErrorKind::ExtraElse.with_node(node),
+                                ));
                             }
                         }
                         PP_ENDIF => {
@@ -333,13 +335,13 @@ impl<F: FileSystem> Processor<F> {
 
                                 // TODO: Return syntax node?
                                 if mask_active {
-                                    result.push(Event::EndIf);
+                                    result.push(Event::directive(DirectiveKind::EndIf));
                                 }
                             } else {
                                 // Stray #endif
-                                result.push(Event::ProcessorError(ProcessorError::ExtraEndIf {
-                                    node,
-                                }));
+                                result.push(Event::error(
+                                    ProcessingErrorKind::ExtraEndIf.with_node(node),
+                                ));
                             }
                         }
                         PP_UNDEF => {
@@ -363,11 +365,12 @@ impl<F: FileSystem> Processor<F> {
                                     None
                                 };
 
-                                result.push(Event::Undef { directive });
+                                result.push(Event::directive(directive));
 
                                 if let Some(ident) = protected_ident {
-                                    result.push(Event::ProcessorError(
-                                        ProcessorError::ProtectedDefine { node, ident },
+                                    result.push(Event::error(
+                                        ProcessingErrorKind::ProtectedDefine { ident }
+                                            .with_node(node),
                                     ));
                                 }
                             }
@@ -377,15 +380,17 @@ impl<F: FileSystem> Processor<F> {
                                 let directive: DirectiveResult<Error> = node.clone().try_into();
 
                                 let error = if let Ok(error) = &directive {
-                                    Some(Event::ProcessorError(ProcessorError::ErrorDirective {
-                                        node,
-                                        message: error.message.clone(),
-                                    }))
+                                    Some(Event::error(
+                                        ProcessingErrorKind::ErrorDirective {
+                                            message: error.message.clone(),
+                                        }
+                                        .with_node(node),
+                                    ))
                                 } else {
                                     None
                                 };
 
-                                result.push(Event::ErrorDirective { directive });
+                                result.push(Event::directive(directive));
 
                                 if let Some(error_event) = error {
                                     result.push(error_event);
@@ -394,7 +399,7 @@ impl<F: FileSystem> Processor<F> {
                         }
                         _ => {
                             // Handle node, this is a preprocessor directive
-                            result.push(Event::Unhandled(node));
+                            result.push(Event::error(ErrorKind::Unhandled(node)));
                         }
                     }
                 }
@@ -408,54 +413,6 @@ impl<F: FileSystem> Processor<F> {
 
         result
     }
-}
-
-#[derive(Debug, Error)]
-pub enum ProcessorError {
-    #[error("unmatched #endif")]
-    ExtraEndIf { node: SyntaxNode },
-    #[error("unmatched #else")]
-    ExtraElse { node: SyntaxNode },
-    #[error("protected definition cannot be undefined")]
-    ProtectedDefine { node: SyntaxNode, ident: SmolStr },
-    #[error("#error : {message}")]
-    ErrorDirective { node: SyntaxNode, message: String },
-}
-
-#[derive(Debug)]
-pub enum Event<E: std::error::Error> {
-    IoError(E),
-    ParseError(crate::parser::Error),
-    ProcessorError(ProcessorError),
-    EnterFile {
-        file_id: FileId,
-        path: PathBuf,
-    },
-    Token(SyntaxToken),
-    Version {
-        directive: DirectiveResult<Version>,
-    },
-    Extension {
-        directive: DirectiveResult<Extension>,
-    },
-    Define {
-        directive: DirectiveResult<Define>,
-    },
-    IfDef {
-        directive: DirectiveResult<IfDef>,
-    },
-    IfNDef {
-        directive: DirectiveResult<IfNDef>,
-    },
-    Else,
-    EndIf,
-    Undef {
-        directive: DirectiveResult<Undef>,
-    },
-    ErrorDirective {
-        directive: DirectiveResult<Error>,
-    },
-    Unhandled(SyntaxNode),
 }
 
 pub struct ProcessorEvents<'p, F: FileSystem> {
@@ -495,7 +452,7 @@ impl<'p, F: FileSystem> Iterator for ProcessorEvents<'p, F> {
                         }
                         Err(err) => {
                             // Failed reading the file
-                            return Some(Event::IoError(err));
+                            return Some(Event::error(ErrorKind::Io(err)));
                         }
                     }
                 }

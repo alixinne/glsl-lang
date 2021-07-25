@@ -8,12 +8,16 @@ use std::{
 };
 
 use arrayvec::ArrayVec;
-use rowan::{GreenNodeBuilder, GreenToken, NodeOrToken, SyntaxElementChildren};
+use rowan::{GreenNodeBuilder, NodeOrToken, SyntaxElementChildren};
 use smol_str::SmolStr;
 
 use crate::{
     lexer::LineMap,
-    parser::{Parser, PreprocessorLang, SyntaxKind::*, SyntaxNode, SyntaxToken},
+    parser::{
+        Parser, PreprocessorLang,
+        SyntaxKind::{self, *},
+        SyntaxNode, SyntaxToken,
+    },
     Ast, FileId, Unescaped,
 };
 
@@ -86,45 +90,50 @@ impl Definition {
         }
     }
 
+    fn substitute_string(src: &str, kind: SyntaxKind) -> Vec<SyntaxToken> {
+        let replaced = {
+            // TODO: Reuse node cache
+            // TODO: Propagate correct offset in the output nodes
+            let mut builder = GreenNodeBuilder::new();
+            builder.start_node(ROOT.into());
+            builder.token(kind.into(), src);
+            builder.finish_node();
+            builder.finish()
+        };
+
+        SyntaxNode::new_root(replaced)
+            .children_with_tokens()
+            .filter_map(|node_or_token| {
+                if let NodeOrToken::Token(token) = node_or_token {
+                    Some(token)
+                } else {
+                    None
+                }
+            })
+            .collect()
+    }
+
     pub fn substitute(
         &self,
         source_token_sequence: &[&SyntaxToken],
+        current_state: &ProcessorState,
         line_map: &LineMap,
     ) -> Option<Vec<SyntaxToken>> {
         match self {
-            Definition::Line => {
-                let start = source_token_sequence[0];
-
-                let replaced = {
-                    let mut builder = GreenNodeBuilder::new();
-                    builder.start_node(ROOT.into());
-                    builder.token(
-                        DIGITS.into(),
-                        &format!(
-                            "{}",
-                            line_map
-                                .get_line_and_col(start.text_range().start().into())
-                                .0
-                                + 1
-                        ),
-                    );
-                    builder.finish_node();
-                    builder.finish()
-                };
-
-                Some(
-                    SyntaxNode::new_root(replaced)
-                        .children_with_tokens()
-                        .filter_map(|node_or_token| {
-                            if let NodeOrToken::Token(token) = node_or_token {
-                                Some(token)
-                            } else {
-                                None
-                            }
-                        })
-                        .collect(),
-                )
-            }
+            Definition::Line => Some(Self::substitute_string(
+                &format!(
+                    "{}",
+                    line_map
+                        .get_line_and_col(source_token_sequence[0].text_range().start().into())
+                        .0
+                        + 1
+                ),
+                DIGITS,
+            )),
+            Definition::Version => Some(Self::substitute_string(
+                &format!("{}", current_state.version.number),
+                DIGITS,
+            )),
             _ => None,
         }
     }
@@ -579,7 +588,11 @@ impl<'p, F: FileSystem> Expand<'p, F> {
                         // TODO: Handle macro substitutions
 
                         if definition.object_like() {
-                            if let Some(result) = definition.substitute(&[&token], &self.line_map) {
+                            if let Some(result) = definition.substitute(
+                                &[&token],
+                                &self.processor.current_state,
+                                &self.line_map,
+                            ) {
                                 // We handled this definition
                                 self.state = ExpandState::ExpandedTokens {
                                     current_file,

@@ -1,11 +1,12 @@
 use std::path::PathBuf;
 
+use derive_more::From;
 use rowan::NodeOrToken;
 use smol_str::SmolStr;
 use thiserror::Error;
 
 use crate::{
-    parser::{SyntaxNode, SyntaxToken},
+    parser::{self, SyntaxNode, SyntaxToken},
     FileId,
 };
 
@@ -115,8 +116,8 @@ impl<E: std::error::Error> From<ErrorKind<E>> for Error<E> {
     }
 }
 
-impl<E: std::error::Error> From<crate::parser::Error> for Error<E> {
-    fn from(error: crate::parser::Error) -> Self {
+impl<E: std::error::Error> From<parser::Error> for Error<E> {
+    fn from(error: parser::Error) -> Self {
         Self {
             kind: ErrorKind::Parse(error),
         }
@@ -136,14 +137,14 @@ pub enum ErrorKind<E: std::error::Error + 'static> {
     #[error("i/o error: {0}")]
     Io(#[source] E),
     #[error(transparent)]
-    Parse(#[from] crate::parser::Error),
+    Parse(#[from] parser::Error),
     #[error(transparent)]
     Processing(#[from] ProcessingError),
     #[error("unhandled directive or substitution: \"{}\"", .0.to_string().trim())]
     Unhandled(NodeOrToken<SyntaxNode, SyntaxToken>),
 }
 
-#[derive(Debug)]
+#[derive(Debug, From)]
 pub enum DirectiveKind {
     Version(DirectiveResult<nodes::Version>),
     Extension(DirectiveResult<nodes::Extension>),
@@ -156,49 +157,7 @@ pub enum DirectiveKind {
     Error(DirectiveResult<nodes::Error>),
 }
 
-impl From<DirectiveResult<nodes::Version>> for DirectiveKind {
-    fn from(d: DirectiveResult<nodes::Version>) -> Self {
-        Self::Version(d)
-    }
-}
-
-impl From<DirectiveResult<nodes::Extension>> for DirectiveKind {
-    fn from(d: DirectiveResult<nodes::Extension>) -> Self {
-        Self::Extension(d)
-    }
-}
-
-impl From<DirectiveResult<nodes::Define>> for DirectiveKind {
-    fn from(d: DirectiveResult<nodes::Define>) -> Self {
-        Self::Define(d)
-    }
-}
-
-impl From<DirectiveResult<nodes::IfDef>> for DirectiveKind {
-    fn from(d: DirectiveResult<nodes::IfDef>) -> Self {
-        Self::IfDef(d)
-    }
-}
-
-impl From<DirectiveResult<nodes::IfNDef>> for DirectiveKind {
-    fn from(d: DirectiveResult<nodes::IfNDef>) -> Self {
-        Self::IfNDef(d)
-    }
-}
-
-impl From<DirectiveResult<nodes::Undef>> for DirectiveKind {
-    fn from(d: DirectiveResult<nodes::Undef>) -> Self {
-        Self::Undef(d)
-    }
-}
-
-impl From<DirectiveResult<nodes::Error>> for DirectiveKind {
-    fn from(d: DirectiveResult<nodes::Error>) -> Self {
-        Self::Error(d)
-    }
-}
-
-#[derive(Debug)]
+#[derive(Debug, From)]
 pub enum Event<E: std::error::Error + 'static> {
     Error(Error<E>),
     EnterFile { file_id: FileId, path: PathBuf },
@@ -213,11 +172,5 @@ impl<E: std::error::Error> Event<E> {
 
     pub fn error<T: Into<Error<E>>>(e: T) -> Self {
         Self::Error(e.into())
-    }
-}
-
-impl<E: std::error::Error> From<DirectiveKind> for Event<E> {
-    fn from(directive_kind: DirectiveKind) -> Self {
-        Self::Directive(directive_kind)
     }
 }

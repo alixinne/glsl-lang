@@ -23,6 +23,7 @@ thiserror = "1.0"
 lexical = "5.2"
 arrayvec = "0.7"
 lazy_static = "1.4"
+derive_more = "0.99"
 
 [dev-dependencies]
 expect-test = "1.1"

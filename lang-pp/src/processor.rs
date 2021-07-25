@@ -511,11 +511,18 @@ impl<F: FileSystem> Processor<F> {
                 }
             }
             _ => {
-                // Handle node, this is a preprocessor directive
-                result.push(Event::error(
-                    ErrorKind::unhandled(NodeOrToken::Node(node), line_map),
-                    current_file,
-                ));
+                // Special case for PP_IF so #endif stack correctly
+                if node.kind() == PP_IF {
+                    *mask_active = false;
+                    mask_stack.push(IfState::None);
+                }
+
+                if *mask_active {
+                    result.push(Event::error(
+                        ErrorKind::unhandled(NodeOrToken::Node(node), line_map),
+                        current_file,
+                    ));
+                }
             }
         }
 

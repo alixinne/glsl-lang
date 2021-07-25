@@ -90,7 +90,7 @@ pub fn test_file(path: impl AsRef<Path>) {
                     ErrorKind::Io(_) => {}
                     ErrorKind::Parse(_) => {}
                     ErrorKind::Processing(_) => {}
-                    ErrorKind::Unhandled(node_or_token) => {
+                    ErrorKind::Unhandled(node_or_token, _) => {
                         unhandled_count += 1;
 
                         if let NodeOrToken::Node(node) = node_or_token {

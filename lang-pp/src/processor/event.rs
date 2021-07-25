@@ -6,6 +6,7 @@ use smol_str::SmolStr;
 use thiserror::Error;
 
 use crate::{
+    lexer::LineMap,
     parser::{self, SyntaxNode, SyntaxToken},
     FileId,
 };
@@ -16,11 +17,16 @@ use super::nodes::{self, DirectiveResult};
 pub struct ProcessingError {
     node: SyntaxNode,
     kind: ProcessingErrorKind,
+    user_pos: (u32, u32),
 }
 
 impl ProcessingError {
-    pub fn new(node: SyntaxNode, kind: ProcessingErrorKind) -> Self {
-        Self { node, kind }
+    pub fn new(node: SyntaxNode, kind: ProcessingErrorKind, user_pos: (u32, u32)) -> Self {
+        Self {
+            node,
+            kind,
+            user_pos,
+        }
     }
 
     pub fn node(&self) -> &SyntaxNode {
@@ -29,6 +35,14 @@ impl ProcessingError {
 
     pub fn kind(&self) -> &ProcessingErrorKind {
         &self.kind
+    }
+
+    pub fn line(&self) -> u32 {
+        self.user_pos.0
+    }
+
+    pub fn col(&self) -> u32 {
+        self.user_pos.1
     }
 }
 
@@ -49,8 +63,9 @@ pub enum ProcessingErrorKind {
 }
 
 impl ProcessingErrorKind {
-    pub fn with_node(self, node: SyntaxNode) -> ProcessingError {
-        ProcessingError::new(node, self)
+    pub fn with_node(self, node: SyntaxNode, line_map: &LineMap) -> ProcessingError {
+        let start = node.text_range().start();
+        ProcessingError::new(node, self, line_map.get_line_and_col(start.into()))
     }
 }
 
@@ -90,16 +105,31 @@ impl std::fmt::Display for ProcessingErrorKind {
 #[derive(Debug)]
 pub struct Error<E: std::error::Error + 'static> {
     kind: ErrorKind<E>,
+    current_file: FileId,
 }
 
 impl<E: std::error::Error> Error<E> {
     pub fn kind(&self) -> &ErrorKind<E> {
         &self.kind
     }
+
+    pub fn with_current_file(self, current_file: FileId) -> Self {
+        Self {
+            current_file,
+            ..self
+        }
+    }
 }
 
 impl<E: std::error::Error> std::fmt::Display for Error<E> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match &self.kind {
+            ErrorKind::Io(_) => (),
+            ErrorKind::Parse(err) => write!(f, "{}:{}: ", self.current_file, err.line() + 1)?,
+            ErrorKind::Processing(err) => write!(f, "{}:{}: ", self.current_file, err.line() + 1)?,
+            ErrorKind::Unhandled(_, pos) => write!(f, "{}:{}: ", self.current_file, pos.0 + 1)?,
+        }
+
         write!(f, "{}", self.kind)
     }
 }
@@ -112,7 +142,10 @@ impl<E: std::error::Error> std::error::Error for Error<E> {
 
 impl<E: std::error::Error> From<ErrorKind<E>> for Error<E> {
     fn from(kind: ErrorKind<E>) -> Self {
-        Self { kind }
+        Self {
+            kind,
+            current_file: FileId::default(),
+        }
     }
 }
 
@@ -120,6 +153,7 @@ impl<E: std::error::Error> From<parser::Error> for Error<E> {
     fn from(error: parser::Error) -> Self {
         Self {
             kind: ErrorKind::Parse(error),
+            current_file: FileId::default(),
         }
     }
 }
@@ -128,6 +162,7 @@ impl<E: std::error::Error> From<ProcessingError> for Error<E> {
     fn from(error: ProcessingError) -> Self {
         Self {
             kind: ErrorKind::Processing(error),
+            current_file: FileId::default(),
         }
     }
 }
@@ -141,7 +176,17 @@ pub enum ErrorKind<E: std::error::Error + 'static> {
     #[error(transparent)]
     Processing(#[from] ProcessingError),
     #[error("unhandled directive or substitution: \"{}\"", .0.to_string().trim())]
-    Unhandled(NodeOrToken<SyntaxNode, SyntaxToken>),
+    Unhandled(NodeOrToken<SyntaxNode, SyntaxToken>, (u32, u32)),
+}
+
+impl<E: std::error::Error + 'static> ErrorKind<E> {
+    pub fn unhandled(
+        node_or_token: NodeOrToken<SyntaxNode, SyntaxToken>,
+        line_map: &LineMap,
+    ) -> Self {
+        let user_pos = line_map.get_line_and_col(node_or_token.text_range().start().into());
+        Self::Unhandled(node_or_token, user_pos)
+    }
 }
 
 #[derive(Debug, From)]
@@ -229,7 +274,7 @@ impl<E: std::error::Error> Event<E> {
         Self::Directive(d.into())
     }
 
-    pub fn error<T: Into<Error<E>>>(e: T) -> Self {
-        Self::Error(e.into())
+    pub fn error<T: Into<Error<E>>>(e: T, current_file: FileId) -> Self {
+        Self::Error(e.into().with_current_file(current_file))
     }
 }

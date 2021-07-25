@@ -259,6 +259,7 @@ impl<F: FileSystem> Processor<F> {
         mask_active: &mut bool,
         mask_stack: &mut Vec<IfState>,
         current_file: FileId,
+        line_map: &LineMap,
     ) -> ArrayVec<Event<F::Error>, 2> {
         let mut result = ArrayVec::new();
 
@@ -322,7 +323,7 @@ impl<F: FileSystem> Processor<F> {
                                     ident: define.name().into(),
                                     is_undef: false,
                                 }
-                                .with_node(node),
+                                .with_node(node, line_map),
                             )
                         } else {
                             let definition =
@@ -336,7 +337,7 @@ impl<F: FileSystem> Processor<F> {
                                                 ident: define.name().into(),
                                                 is_undef: false,
                                             }
-                                            .with_node(node),
+                                            .with_node(node, line_map),
                                         )
                                     } else {
                                         // TODO: Check that we are not overwriting an incompatible definition
@@ -358,7 +359,7 @@ impl<F: FileSystem> Processor<F> {
                     result.push(Event::directive(directive));
 
                     if let Some(error) = error {
-                        result.push(Event::error(error));
+                        result.push(Event::error(error, current_file));
                     }
                 }
             }
@@ -409,7 +410,8 @@ impl<F: FileSystem> Processor<F> {
                             if else_seen {
                                 // Extra #else
                                 result.push(Event::error(
-                                    ProcessingErrorKind::ExtraElse.with_node(node),
+                                    ProcessingErrorKind::ExtraElse.with_node(node, line_map),
+                                    current_file,
                                 ));
 
                                 return result;
@@ -423,7 +425,10 @@ impl<F: FileSystem> Processor<F> {
                     result.push(Event::directive(DirectiveKind::Else));
                 } else {
                     // Stray #else
-                    result.push(Event::error(ProcessingErrorKind::ExtraElse.with_node(node)));
+                    result.push(Event::error(
+                        ProcessingErrorKind::ExtraElse.with_node(node, line_map),
+                        current_file,
+                    ));
                 }
             }
             PP_ENDIF => {
@@ -440,7 +445,8 @@ impl<F: FileSystem> Processor<F> {
                 } else {
                     // Stray #endif
                     result.push(Event::error(
-                        ProcessingErrorKind::ExtraEndIf.with_node(node),
+                        ProcessingErrorKind::ExtraEndIf.with_node(node, line_map),
+                        current_file,
                     ));
                 }
             }
@@ -475,7 +481,8 @@ impl<F: FileSystem> Processor<F> {
                                 ident,
                                 is_undef: true,
                             }
-                            .with_node(node),
+                            .with_node(node, line_map),
+                            current_file,
                         ));
                     }
                 }
@@ -489,7 +496,8 @@ impl<F: FileSystem> Processor<F> {
                             ProcessingErrorKind::ErrorDirective {
                                 message: error.message.clone(),
                             }
-                            .with_node(node),
+                            .with_node(node, line_map),
+                            current_file,
                         ))
                     } else {
                         None
@@ -504,7 +512,10 @@ impl<F: FileSystem> Processor<F> {
             }
             _ => {
                 // Handle node, this is a preprocessor directive
-                result.push(Event::error(ErrorKind::Unhandled(NodeOrToken::Node(node))));
+                result.push(Event::error(
+                    ErrorKind::unhandled(NodeOrToken::Node(node), line_map),
+                    current_file,
+                ));
             }
         }
 
@@ -579,6 +590,7 @@ impl<'p, F: FileSystem> Expand<'p, F> {
                         &mut self.mask_active,
                         &mut self.mask_stack,
                         current_file,
+                        &self.line_map,
                     ),
                 };
             }
@@ -615,9 +627,10 @@ impl<'p, F: FileSystem> Expand<'p, F> {
                         }
 
                         let mut events = ArrayVec::new();
-                        events.push(Event::error(ErrorKind::Unhandled(NodeOrToken::Token(
-                            token.clone(),
-                        ))));
+                        events.push(Event::error(
+                            ErrorKind::unhandled(NodeOrToken::Token(token.clone()), &self.line_map),
+                            current_file,
+                        ));
                         events.push(Event::Token(token.into()));
 
                         self.state = ExpandState::PendingEvents {
@@ -673,7 +686,7 @@ impl<'p, F: FileSystem> Iterator for Expand<'p, F> {
                         return Some(Event::EnterFile { file_id, path });
                     }
                     Err(err) => {
-                        return Some(Event::error(ErrorKind::Io(err)));
+                        return Some(Event::Error(ErrorKind::Io(err).into()));
                     }
                 },
                 ExpandState::Iterate {
@@ -695,7 +708,7 @@ impl<'p, F: FileSystem> Iterator for Expand<'p, F> {
                                         node_or_token,
                                     };
 
-                                    return Some(Event::error(error));
+                                    return Some(Event::error(error, current_file));
                                 }
                             }
                         }

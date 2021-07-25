@@ -4,11 +4,11 @@ use smol_str::SmolStr;
 use crate::lexer;
 
 use super::SyntaxKind::*;
-use super::{ErrorKind, Parser};
+use super::{ErrorKind, ParserRun};
 
 type InputToken = lexer::Token;
 
-pub fn file<'i>(parser: &mut Parser<'i>) {
+pub fn file<'i, 'cache>(parser: &mut ParserRun<'i, 'cache>) {
     loop {
         // We need to buffer trivia before we can detect a control line
         parser.buffer_trivia();
@@ -43,7 +43,7 @@ pub fn file<'i>(parser: &mut Parser<'i>) {
     }
 }
 
-pub fn define_body<'i>(parser: &mut Parser<'i>) {
+pub fn define_body<'i, 'cache>(parser: &mut ParserRun<'i, 'cache>) {
     // Consume trivia first
     parser.eat_trivia();
 
@@ -56,7 +56,7 @@ pub fn define_body<'i>(parser: &mut Parser<'i>) {
 }
 
 /// Parse a control line
-fn if_section_or_control_line<'i>(parser: &mut Parser<'i>) {
+fn if_section_or_control_line<'i, 'cache>(parser: &mut ParserRun<'i, 'cache>) {
     let checkpoint = parser.checkpoint();
 
     parser.eat_trivia();
@@ -223,7 +223,7 @@ fn if_section_or_control_line<'i>(parser: &mut Parser<'i>) {
     }
 }
 
-fn pp_include<'i>(parser: &mut Parser<'i>) {
+fn pp_include<'i, 'cache>(parser: &mut ParserRun<'i, 'cache>) {
     // We're about to parse a path
     parser.input.set_expect_angle_string(true);
 
@@ -237,7 +237,7 @@ fn pp_include<'i>(parser: &mut Parser<'i>) {
     parser.eat_trivia();
 }
 
-fn pp_include_path<'i>(parser: &mut Parser<'i>) {
+fn pp_include_path<'i, 'cache>(parser: &mut ParserRun<'i, 'cache>) {
     if let Some(token) = parser.peek() {
         match *token {
             InputToken::ANGLE_STRING | InputToken::QUOTE_STRING => {
@@ -251,7 +251,7 @@ fn pp_include_path<'i>(parser: &mut Parser<'i>) {
     }
 }
 
-fn pp_define<'i>(parser: &mut Parser<'i>) {
+fn pp_define<'i, 'cache>(parser: &mut ParserRun<'i, 'cache>) {
     parser.skip_trivia();
 
     // Define name
@@ -337,7 +337,7 @@ fn pp_define<'i>(parser: &mut Parser<'i>) {
     parser.eat_trivia();
 }
 
-fn pp_line<'i>(parser: &mut Parser<'i>) {
+fn pp_line<'i, 'cache>(parser: &mut ParserRun<'i, 'cache>) {
     parser.skip_trivia();
 
     // Consume line body
@@ -349,7 +349,7 @@ fn pp_line<'i>(parser: &mut Parser<'i>) {
     parser.eat_trivia();
 }
 
-fn pp_error<'i>(parser: &mut Parser<'i>) {
+fn pp_error<'i, 'cache>(parser: &mut ParserRun<'i, 'cache>) {
     parser.skip_trivia();
 
     // Consume define body
@@ -361,7 +361,7 @@ fn pp_error<'i>(parser: &mut Parser<'i>) {
     parser.eat_trivia();
 }
 
-fn pp_pragma<'i>(parser: &mut Parser<'i>) {
+fn pp_pragma<'i, 'cache>(parser: &mut ParserRun<'i, 'cache>) {
     parser.skip_trivia();
 
     // Consume define body
@@ -373,7 +373,7 @@ fn pp_pragma<'i>(parser: &mut Parser<'i>) {
     parser.eat_trivia();
 }
 
-fn pp_version<'i>(parser: &mut Parser<'i>) {
+fn pp_version<'i, 'cache>(parser: &mut ParserRun<'i, 'cache>) {
     parser.skip_trivia();
 
     // Version
@@ -391,7 +391,7 @@ fn pp_version<'i>(parser: &mut Parser<'i>) {
     }
 }
 
-fn pp_if_expr<'i>(parser: &mut Parser<'i>) {
+fn pp_if_expr<'i, 'cache>(parser: &mut ParserRun<'i, 'cache>) {
     parser.skip_trivia();
 
     // Consume if expr
@@ -403,7 +403,7 @@ fn pp_if_expr<'i>(parser: &mut Parser<'i>) {
     parser.eat_trivia();
 }
 
-fn pp_if_ident<'i>(parser: &mut Parser<'i>) {
+fn pp_if_ident<'i, 'cache>(parser: &mut ParserRun<'i, 'cache>) {
     parser.skip_trivia();
 
     parser.start_node(PP_IDENT);
@@ -411,7 +411,7 @@ fn pp_if_ident<'i>(parser: &mut Parser<'i>) {
     parser.finish_node();
 }
 
-fn pp_extension<'i>(parser: &mut Parser<'i>) {
+fn pp_extension<'i, 'cache>(parser: &mut ParserRun<'i, 'cache>) {
     parser.skip_trivia();
 
     // Extension name
@@ -432,7 +432,7 @@ fn pp_extension<'i>(parser: &mut Parser<'i>) {
     }
 }
 
-fn digits<'i>(parser: &mut Parser<'i>) {
+fn digits<'i, 'cache>(parser: &mut ParserRun<'i, 'cache>) {
     if let Some(InputToken::DIGITS) = parser.peek().as_deref() {
         parser.bump();
     } else {
@@ -442,7 +442,7 @@ fn digits<'i>(parser: &mut Parser<'i>) {
     }
 }
 
-fn ident<'i>(parser: &mut Parser<'i>) {
+fn ident<'i, 'cache>(parser: &mut ParserRun<'i, 'cache>) {
     if let Some(InputToken::IDENT_KW) = parser.peek().as_deref() {
         parser.bump();
     } else {
@@ -452,7 +452,7 @@ fn ident<'i>(parser: &mut Parser<'i>) {
     }
 }
 
-fn pp_tokens<'i>(parser: &mut Parser<'i>) {
+fn pp_tokens<'i, 'cache>(parser: &mut ParserRun<'i, 'cache>) {
     // The replacement body is everything until the new-line
     loop {
         // Consume all trivia first

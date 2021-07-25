@@ -30,28 +30,47 @@ pub type SyntaxNode = rowan::SyntaxNode<PreprocessorLang>;
 pub type SyntaxToken = rowan::SyntaxToken<PreprocessorLang>;
 
 pub struct Parser<'i> {
-    builder: rowan::GreenNodeBuilder<'static>,
     source: &'i str,
-    input: Lexer<'i>,
+}
+
+pub struct ParserRun<'i, 'cache> {
+    builder: rowan::GreenNodeBuilder<'cache>,
+    errors: Vec<Error>,
     peeked: Option<Option<lexer::TextToken>>,
     trivia_buffer: VecDeque<lexer::TextToken>,
-    errors: Vec<Error>,
+    source: &'i str,
+    input: Lexer<'i>,
 }
 
 // Public parser API
 impl<'i> Parser<'i> {
     pub fn new(input: &'i str) -> Self {
+        Self { source: input }
+    }
+
+    pub fn parse(self) -> Ast {
+        ParserRun::new(self.source).parse_ast()
+    }
+
+    pub fn parse_define_body(self) -> Option<SyntaxNode> {
+        ParserRun::new(self.source).parse_one(syntax::define_body)
+    }
+}
+
+// Builder wrapper methods
+impl<'i, 'cache> ParserRun<'i, 'cache> {
+    fn new(source: &'i str) -> Self {
         Self {
-            builder: Default::default(),
-            source: input,
-            input: Lexer::new(input),
+            builder: rowan::GreenNodeBuilder::new(),
+            errors: Vec::new(),
             peeked: None,
             trivia_buffer: VecDeque::with_capacity(4),
-            errors: Vec::new(),
+            source,
+            input: Lexer::new(source),
         }
     }
 
-    pub fn parse(mut self) -> Ast {
+    fn parse_ast(mut self) -> Ast {
         self.start_node(SyntaxKind::ROOT);
         syntax::file(&mut self);
         self.finish_node();
@@ -63,9 +82,9 @@ impl<'i> Parser<'i> {
         )
     }
 
-    pub fn parse_define_body(mut self) -> Option<SyntaxNode> {
+    fn parse_one(mut self, f: impl FnOnce(&mut Self) -> ()) -> Option<SyntaxNode> {
         self.start_node(SyntaxKind::ROOT);
-        syntax::define_body(&mut self);
+        f(&mut self);
         self.finish_node();
 
         if self.errors.is_empty() {
@@ -74,10 +93,7 @@ impl<'i> Parser<'i> {
             None
         }
     }
-}
 
-// Builder wrapper methods
-impl<'i> Parser<'i> {
     fn checkpoint(&mut self) -> rowan::Checkpoint {
         self.builder.checkpoint()
     }
@@ -96,7 +112,7 @@ impl<'i> Parser<'i> {
 }
 
 // Private parser API
-impl<'i> Parser<'i> {
+impl<'i, 'cache> ParserRun<'i, 'cache> {
     fn skip(&mut self, what: impl Fn(&lexer::Token) -> bool) {
         while self.peek().map(|tk| what(&tk.token)).unwrap_or(false) {
             self.bump();

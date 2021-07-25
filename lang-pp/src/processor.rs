@@ -8,7 +8,7 @@ use std::{
 };
 
 use arrayvec::ArrayVec;
-use rowan::{GreenNodeBuilder, NodeOrToken, SyntaxElementChildren};
+use rowan::{GreenNodeBuilder, NodeOrToken, SyntaxElementChildren, TextRange};
 use smol_str::SmolStr;
 
 use crate::{
@@ -90,10 +90,9 @@ impl Definition {
         }
     }
 
-    fn substitute_string(src: &str, kind: SyntaxKind) -> Vec<SyntaxToken> {
+    fn substitute_string(src: &str, kind: SyntaxKind) -> impl Iterator<Item = SyntaxToken> {
         let replaced = {
             // TODO: Reuse node cache
-            // TODO: Propagate correct offset in the output nodes
             let mut builder = GreenNodeBuilder::new();
             builder.start_node(ROOT.into());
             builder.token(kind.into(), src);
@@ -110,7 +109,6 @@ impl Definition {
                     None
                 }
             })
-            .collect()
     }
 
     pub fn substitute(
@@ -118,22 +116,32 @@ impl Definition {
         source_token_sequence: &[&SyntaxToken],
         current_state: &ProcessorState,
         line_map: &LineMap,
-    ) -> Option<Vec<SyntaxToken>> {
+    ) -> Option<Vec<OutputToken>> {
+        let entire_range = TextRange::new(
+            source_token_sequence.first().unwrap().text_range().start(),
+            source_token_sequence.last().unwrap().text_range().end(),
+        );
+
         match self {
-            Definition::Line => Some(Self::substitute_string(
-                &format!(
-                    "{}",
-                    line_map
-                        .get_line_and_col(source_token_sequence[0].text_range().start().into())
-                        .0
-                        + 1
-                ),
-                DIGITS,
-            )),
-            Definition::Version => Some(Self::substitute_string(
-                &format!("{}", current_state.version.number),
-                DIGITS,
-            )),
+            Definition::Line => Some(
+                Self::substitute_string(
+                    &format!(
+                        "{}",
+                        line_map
+                            .get_line_and_col(source_token_sequence[0].text_range().start().into())
+                            .0
+                            + 1
+                    ),
+                    DIGITS,
+                )
+                .map(|token| OutputToken::new(token, entire_range))
+                .collect(),
+            ),
+            Definition::Version => Some(
+                Self::substitute_string(&format!("{}", current_state.version.number), DIGITS)
+                    .map(|token| OutputToken::new(token, entire_range))
+                    .collect(),
+            ),
             _ => None,
         }
     }
@@ -537,7 +545,7 @@ enum ExpandState<F: FileSystem> {
         current_file: FileId,
         iterator: SyntaxElementChildren<PreprocessorLang>,
         errors: Vec<parser::Error>,
-        tokens: VecDeque<SyntaxToken>,
+        tokens: VecDeque<OutputToken>,
     },
     Complete,
 }
@@ -610,7 +618,7 @@ impl<'p, F: FileSystem> Expand<'p, F> {
                         events.push(Event::error(ErrorKind::Unhandled(NodeOrToken::Token(
                             token.clone(),
                         ))));
-                        events.push(Event::Token(token));
+                        events.push(Event::Token(token.into()));
 
                         self.state = ExpandState::PendingEvents {
                             current_file,
@@ -626,7 +634,7 @@ impl<'p, F: FileSystem> Expand<'p, F> {
                             errors,
                         };
 
-                        return Some(Event::Token(token));
+                        return Some(Event::Token(token.into()));
                     }
                 } else {
                     // Just keep iterating

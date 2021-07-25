@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 
 use derive_more::From;
-use rowan::NodeOrToken;
+use rowan::{NodeOrToken, TextRange};
 use smol_str::SmolStr;
 use thiserror::Error;
 
@@ -157,11 +157,70 @@ pub enum DirectiveKind {
     Error(DirectiveResult<nodes::Error>),
 }
 
+#[derive(Clone)]
+pub struct OutputToken {
+    inner: SyntaxToken,
+    source_range: Option<TextRange>,
+}
+
+impl OutputToken {
+    pub fn new(token: SyntaxToken, source_range: TextRange) -> Self {
+        Self {
+            inner: token,
+            source_range: Some(source_range),
+        }
+    }
+
+    pub fn text(&self) -> &str {
+        self.inner.text()
+    }
+
+    pub fn source_range(&self) -> TextRange {
+        if let Some(range) = self.source_range {
+            range
+        } else {
+            self.inner.text_range()
+        }
+    }
+
+    pub fn generated(&self) -> bool {
+        self.source_range.is_some()
+    }
+}
+
+impl From<SyntaxToken> for OutputToken {
+    fn from(token: SyntaxToken) -> Self {
+        Self {
+            inner: token,
+            source_range: None,
+        }
+    }
+}
+
+impl std::fmt::Debug for OutputToken {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{:?}@{:?}", self.inner.kind(), self.source_range())?;
+
+        if self.text().len() < 25 {
+            return write!(f, " {:?}", self.text());
+        }
+        let text = self.text();
+        for idx in 21..25 {
+            if text.is_char_boundary(idx) {
+                let text = format!("{} ...", &text[..idx]);
+                return write!(f, " {:?}", text);
+            }
+        }
+
+        unreachable!()
+    }
+}
+
 #[derive(Debug, From)]
 pub enum Event<E: std::error::Error + 'static> {
     Error(Error<E>),
     EnterFile { file_id: FileId, path: PathBuf },
-    Token(SyntaxToken),
+    Token(OutputToken),
     Directive(DirectiveKind),
 }
 

@@ -63,7 +63,7 @@ pub fn test_file(path: impl AsRef<Path>) {
     let result = parse(&input);
 
     // Get the syntax tree
-    let (root, _) = result.into_inner();
+    let (root, _, _) = result.into_inner();
 
     // Check that we parsed the file with exact positions. If stages 0 or 1 fail, this should break
     assert_eq!(u32::from(root.text_range().end()), input.len() as u32);

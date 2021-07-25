@@ -56,7 +56,11 @@ impl<'i> Parser<'i> {
         syntax::file(&mut self);
         self.finish_node();
 
-        Ast::new(self.builder.finish(), self.errors)
+        Ast::new(
+            self.builder.finish(),
+            self.errors,
+            self.input.into_line_map(),
+        )
     }
 
     pub fn parse_define_body(mut self) -> Option<SyntaxNode> {

@@ -1,5 +1,5 @@
 use std::{
-    collections::{hash_map::Entry, HashMap},
+    collections::{hash_map::Entry, HashMap, VecDeque},
     convert::TryInto,
     iter::{FromIterator, FusedIterator},
     num::NonZeroU32,
@@ -8,10 +8,11 @@ use std::{
 };
 
 use arrayvec::ArrayVec;
-use rowan::{NodeOrToken, SyntaxElementChildren};
+use rowan::{GreenNodeBuilder, GreenToken, NodeOrToken, SyntaxElementChildren};
 use smol_str::SmolStr;
 
 use crate::{
+    lexer::LineMap,
     parser::{Parser, PreprocessorLang, SyntaxKind::*, SyntaxNode, SyntaxToken},
     Ast, FileId, Unescaped,
 };
@@ -82,6 +83,49 @@ impl Definition {
             Definition::Line => true,
             Definition::File => true,
             Definition::Version => true,
+        }
+    }
+
+    pub fn substitute(
+        &self,
+        source_token_sequence: &[&SyntaxToken],
+        line_map: &LineMap,
+    ) -> Option<Vec<SyntaxToken>> {
+        match self {
+            Definition::Line => {
+                let start = source_token_sequence[0];
+
+                let replaced = {
+                    let mut builder = GreenNodeBuilder::new();
+                    builder.start_node(ROOT.into());
+                    builder.token(
+                        DIGITS.into(),
+                        &format!(
+                            "{}",
+                            line_map
+                                .get_line_and_col(start.text_range().start().into())
+                                .0
+                                + 1
+                        ),
+                    );
+                    builder.finish_node();
+                    builder.finish()
+                };
+
+                Some(
+                    SyntaxNode::new_root(replaced)
+                        .children_with_tokens()
+                        .filter_map(|node_or_token| {
+                            if let NodeOrToken::Token(token) = node_or_token {
+                                Some(token)
+                            } else {
+                                None
+                            }
+                        })
+                        .collect(),
+                )
+            }
+            _ => None,
         }
     }
 }
@@ -455,6 +499,7 @@ pub struct Expand<'p, F: FileSystem> {
     processor: &'p mut Processor<F>,
     mask_stack: Vec<IfState>,
     mask_active: bool,
+    line_map: LineMap,
     state: ExpandState<F>,
 }
 
@@ -479,6 +524,12 @@ enum ExpandState<F: FileSystem> {
         errors: Vec<crate::parser::Error>,
         events: ArrayVec<Event<F::Error>, 2>,
     },
+    ExpandedTokens {
+        current_file: FileId,
+        iterator: SyntaxElementChildren<PreprocessorLang>,
+        errors: Vec<crate::parser::Error>,
+        tokens: VecDeque<SyntaxToken>,
+    },
     Complete,
 }
 
@@ -488,6 +539,7 @@ impl<'p, F: FileSystem> Expand<'p, F> {
             processor,
             mask_stack: Vec::with_capacity(4),
             mask_active: true,
+            line_map: LineMap::default(),
             state: ExpandState::Init { path },
         }
     }
@@ -516,7 +568,7 @@ impl<'p, F: FileSystem> Expand<'p, F> {
             rowan::NodeOrToken::Token(token) => {
                 if self.mask_active {
                     // Look for macro substitutions
-                    if let Some(_definition) = (if token.kind() == IDENT_KW {
+                    if let Some(definition) = (if token.kind() == IDENT_KW {
                         Some(Unescaped::new(token.text()).to_string())
                     } else {
                         None
@@ -525,6 +577,22 @@ impl<'p, F: FileSystem> Expand<'p, F> {
                     {
                         // We matched a defined identifier
                         // TODO: Handle macro substitutions
+
+                        if definition.object_like() {
+                            if let Some(result) = definition.substitute(&[&token], &self.line_map) {
+                                // We handled this definition
+                                self.state = ExpandState::ExpandedTokens {
+                                    current_file,
+                                    iterator,
+                                    errors,
+                                    tokens: result.into(),
+                                };
+
+                                // Return tokens in the next iterations
+                                return None;
+                            }
+                        }
+
                         let mut events = ArrayVec::new();
                         events.push(Event::error(ErrorKind::Unhandled(NodeOrToken::Token(
                             token.clone(),
@@ -570,12 +638,17 @@ impl<'p, F: FileSystem> Iterator for Expand<'p, F> {
             match std::mem::replace(&mut self.state, ExpandState::Complete) {
                 ExpandState::Init { path } => match self.processor.parse(&path) {
                     Ok((file_id, ast)) => {
-                        let (root, errors) = ast.clone().into_inner();
+                        let (root, errors, line_map) = ast.clone().into_inner();
+
+                        // Store the current line map
+                        self.line_map = line_map;
+
                         self.state = ExpandState::Iterate {
                             current_file: file_id,
                             iterator: root.children_with_tokens(),
                             errors,
                         };
+
                         return Some(Event::EnterFile { file_id, path });
                     }
                     Err(err) => {
@@ -651,6 +724,31 @@ impl<'p, F: FileSystem> Iterator for Expand<'p, F> {
                         };
                     }
                 }
+
+                ExpandState::ExpandedTokens {
+                    current_file,
+                    iterator,
+                    errors,
+                    mut tokens,
+                } => {
+                    if let Some(token) = tokens.pop_front() {
+                        self.state = ExpandState::ExpandedTokens {
+                            current_file,
+                            iterator,
+                            errors,
+                            tokens,
+                        };
+
+                        return Some(Event::Token(token));
+                    } else {
+                        self.state = ExpandState::Iterate {
+                            current_file,
+                            iterator,
+                            errors,
+                        };
+                    }
+                }
+
                 ExpandState::Complete => {
                     return None;
                 }

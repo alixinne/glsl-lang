@@ -7,7 +7,7 @@ use thiserror::Error;
 
 use crate::{
     lexer::LineMap,
-    parser::{self, SyntaxNode, SyntaxToken},
+    parser::{self, SyntaxKind, SyntaxNode, SyntaxToken},
     FileId,
 };
 
@@ -15,13 +15,17 @@ use super::nodes::{self, DirectiveResult};
 
 #[derive(Debug)]
 pub struct ProcessingError {
-    node: SyntaxNode,
+    node: NodeOrToken<SyntaxNode, SyntaxToken>,
     kind: ProcessingErrorKind,
     user_pos: (u32, u32),
 }
 
 impl ProcessingError {
-    pub fn new(node: SyntaxNode, kind: ProcessingErrorKind, user_pos: (u32, u32)) -> Self {
+    pub fn new(
+        node: NodeOrToken<SyntaxNode, SyntaxToken>,
+        kind: ProcessingErrorKind,
+        user_pos: (u32, u32),
+    ) -> Self {
         Self {
             node,
             kind,
@@ -29,7 +33,7 @@ impl ProcessingError {
         }
     }
 
-    pub fn node(&self) -> &SyntaxNode {
+    pub fn node_or_token(&self) -> &NodeOrToken<SyntaxNode, SyntaxToken> {
         &self.node
     }
 
@@ -58,14 +62,40 @@ impl std::error::Error for ProcessingError {}
 pub enum ProcessingErrorKind {
     ExtraEndIf,
     ExtraElse,
-    ProtectedDefine { ident: SmolStr, is_undef: bool },
-    ErrorDirective { message: String },
+    ProtectedDefine {
+        ident: SmolStr,
+        is_undef: bool,
+    },
+    ErrorDirective {
+        message: String,
+    },
+    UnterminatedMacroInvocation {
+        ident: SmolStr,
+    },
+    UnexpectedDirective {
+        ident: SmolStr,
+        node: SyntaxNode,
+    },
+    MismatchedArguments {
+        ident: SmolStr,
+        expected: usize,
+        actual: usize,
+    },
 }
 
 impl ProcessingErrorKind {
-    pub fn with_node(self, node: SyntaxNode, line_map: &LineMap) -> ProcessingError {
+    pub fn with_node(
+        self,
+        node: NodeOrToken<SyntaxNode, SyntaxToken>,
+        line_map: &LineMap,
+    ) -> ProcessingError {
         let start = node.text_range().start();
         ProcessingError::new(node, self, line_map.get_line_and_col(start.into()))
+    }
+
+    pub fn with_token(self, token: impl TokenLike, line_map: &LineMap) -> ProcessingError {
+        let start = token.text_range().start();
+        ProcessingError::new(token.into(), self, line_map.get_line_and_col(start.into()))
     }
 }
 
@@ -97,6 +127,19 @@ impl std::fmt::Display for ProcessingErrorKind {
             }
             ProcessingErrorKind::ErrorDirective { message } => {
                 write!(f, "'#error' : {}", message)
+            }
+            ProcessingErrorKind::UnterminatedMacroInvocation { ident } => {
+                write!(f, "'macro expansion' : end of input in macro {}", ident)
+            }
+            ProcessingErrorKind::UnexpectedDirective { ident, node } => {
+                write!(f, "'macro expansion' : unexpected directive while scanning for macro invocation {} argument list: \"{}\"", ident, node.text())
+            }
+            ProcessingErrorKind::MismatchedArguments {
+                ident,
+                expected,
+                actual,
+            } => {
+                write!(f, "'macro expansion' : wrong number of arguments in input of macro {} : expected {}, got {}", ident, expected, actual)
             }
         }
     }
@@ -202,6 +245,26 @@ pub enum DirectiveKind {
     Error(DirectiveResult<nodes::Error>),
 }
 
+pub trait TokenLike: Into<NodeOrToken<SyntaxNode, SyntaxToken>> {
+    fn kind(&self) -> SyntaxKind;
+    fn text(&self) -> &str;
+    fn text_range(&self) -> TextRange;
+}
+
+impl TokenLike for SyntaxToken {
+    fn kind(&self) -> SyntaxKind {
+        self.kind()
+    }
+
+    fn text(&self) -> &str {
+        self.text()
+    }
+
+    fn text_range(&self) -> TextRange {
+        self.text_range()
+    }
+}
+
 #[derive(Clone)]
 pub struct OutputToken {
     inner: SyntaxToken,
@@ -216,10 +279,6 @@ impl OutputToken {
         }
     }
 
-    pub fn text(&self) -> &str {
-        self.inner.text()
-    }
-
     pub fn source_range(&self) -> TextRange {
         if let Some(range) = self.source_range {
             range
@@ -230,6 +289,27 @@ impl OutputToken {
 
     pub fn generated(&self) -> bool {
         self.source_range.is_some()
+    }
+}
+
+impl TokenLike for OutputToken {
+    fn kind(&self) -> SyntaxKind {
+        self.inner.kind()
+    }
+
+    fn text(&self) -> &str {
+        self.inner.text()
+    }
+
+    fn text_range(&self) -> TextRange {
+        self.source_range()
+    }
+}
+
+// TODO: This loses location information but should only be used in errors anyways
+impl From<OutputToken> for NodeOrToken<SyntaxNode, SyntaxToken> {
+    fn from(out: OutputToken) -> Self {
+        NodeOrToken::Token(out.inner)
     }
 }
 

@@ -370,6 +370,10 @@ impl DefineObject {
             tokens: crate::parser::Parser::new(input).parse_define_body()?,
         })
     }
+
+    pub fn body(&self) -> &SyntaxNode {
+        &self.tokens
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -381,6 +385,14 @@ pub struct DefineFunction {
 impl DefineFunction {
     pub fn new(args: Vec<SmolStr>, tokens: SyntaxNode) -> Self {
         Self { args, tokens }
+    }
+
+    pub fn arg_names(&self) -> &[SmolStr] {
+        &self.args
+    }
+
+    pub fn body(&self) -> &SyntaxNode {
+        &self.tokens
     }
 }
 

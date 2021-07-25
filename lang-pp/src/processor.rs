@@ -1,4 +1,5 @@
 use std::{
+    array::IntoIter,
     collections::{hash_map::Entry, HashMap, VecDeque},
     convert::TryInto,
     iter::{FromIterator, FusedIterator},
@@ -8,21 +9,20 @@ use std::{
 };
 
 use arrayvec::ArrayVec;
-use rowan::{GreenNodeBuilder, NodeOrToken, SyntaxElementChildren, TextRange};
+use rowan::{NodeOrToken, SyntaxElementChildren};
 use smol_str::SmolStr;
 
 use crate::{
     lexer::LineMap,
-    parser::{
-        self, Parser, PreprocessorLang,
-        SyntaxKind::{self, *},
-        SyntaxNode, SyntaxToken,
-    },
+    parser::{self, Parser, PreprocessorLang, SyntaxKind::*, SyntaxNode, SyntaxToken},
     Ast, FileId, Unescaped,
 };
 
 #[macro_use]
 pub mod exts;
+
+mod definition;
+pub use definition::*;
 
 mod event;
 pub use event::*;
@@ -32,8 +32,8 @@ pub use fs::*;
 
 pub mod nodes;
 use nodes::{
-    Define, DefineKind, DefineObject, DirectiveResult, Error, Extension, ExtensionName, IfDef,
-    IfNDef, Undef, Version, GL_ARB_SHADING_LANGUAGE_INCLUDE, GL_GOOGLE_INCLUDE_DIRECTIVE,
+    Define, DefineObject, DirectiveResult, Error, Extension, ExtensionName, IfDef, IfNDef, Undef,
+    Version, GL_ARB_SHADING_LANGUAGE_INCLUDE, GL_GOOGLE_INCLUDE_DIRECTIVE,
 };
 
 /// Operating mode for #include directives
@@ -63,90 +63,6 @@ pub struct ProcessorState {
     version: Version,
 }
 
-#[derive(Debug, Clone)]
-enum Definition {
-    Regular(Rc<Define>, FileId),
-    Line,
-    File,
-    Version,
-}
-
-impl Definition {
-    pub fn protected(&self) -> bool {
-        match self {
-            Definition::Regular(d, _) => d.protected(),
-            Definition::Line => true,
-            Definition::File => true,
-            Definition::Version => true,
-        }
-    }
-
-    pub fn object_like(&self) -> bool {
-        match self {
-            Definition::Regular(d, _) => matches!(d.kind(), DefineKind::Object(_)),
-            Definition::Line => true,
-            Definition::File => true,
-            Definition::Version => true,
-        }
-    }
-
-    fn substitute_string(src: &str, kind: SyntaxKind) -> impl Iterator<Item = SyntaxToken> {
-        let replaced = {
-            // TODO: Reuse node cache
-            let mut builder = GreenNodeBuilder::new();
-            builder.start_node(ROOT.into());
-            builder.token(kind.into(), src);
-            builder.finish_node();
-            builder.finish()
-        };
-
-        SyntaxNode::new_root(replaced)
-            .children_with_tokens()
-            .filter_map(|node_or_token| {
-                if let NodeOrToken::Token(token) = node_or_token {
-                    Some(token)
-                } else {
-                    None
-                }
-            })
-    }
-
-    pub fn substitute(
-        &self,
-        source_token_sequence: &[&SyntaxToken],
-        current_state: &ProcessorState,
-        line_map: &LineMap,
-    ) -> Option<Vec<OutputToken>> {
-        let entire_range = TextRange::new(
-            source_token_sequence.first().unwrap().text_range().start(),
-            source_token_sequence.last().unwrap().text_range().end(),
-        );
-
-        match self {
-            Definition::Line => Some(
-                Self::substitute_string(
-                    &format!(
-                        "{}",
-                        line_map
-                            .get_line_and_col(source_token_sequence[0].text_range().start().into())
-                            .0
-                            + 1
-                    ),
-                    DIGITS,
-                )
-                .map(|token| OutputToken::new(token, entire_range))
-                .collect(),
-            ),
-            Definition::Version => Some(
-                Self::substitute_string(&format!("{}", current_state.version.number), DIGITS)
-                    .map(|token| OutputToken::new(token, entire_range))
-                    .collect(),
-            ),
-            _ => None,
-        }
-    }
-}
-
 impl Default for ProcessorState {
     fn default() -> Self {
         Self {
@@ -158,9 +74,8 @@ impl Default for ProcessorState {
             // Spec 3.3, "There is a built-in macro definition for each profile the implementation
             // supports. All implementations provide the following macro:
             // `#define GL_core_profile 1`
-            definitions: HashMap::from_iter([
-                (
-                    "GL_core_profile".into(),
+            definitions: HashMap::from_iter(
+                IntoIter::new([
                     Definition::Regular(
                         Rc::new(Define::object(
                             "GL_core_profile".into(),
@@ -169,11 +84,12 @@ impl Default for ProcessorState {
                         )),
                         FileId::default(),
                     ),
-                ),
-                ("__LINE__".into(), Definition::Line),
-                ("__FILE__".into(), Definition::File),
-                ("__VERSION__".into(), Definition::Version),
-            ]),
+                    Definition::Line,
+                    Definition::File,
+                    Definition::Version,
+                ])
+                .map(|definition| (definition.name().into(), definition)),
+            ),
             version: Version::default(),
         }
     }
@@ -323,7 +239,7 @@ impl<F: FileSystem> Processor<F> {
                                     ident: define.name().into(),
                                     is_undef: false,
                                 }
-                                .with_node(node, line_map),
+                                .with_node(node.into(), line_map),
                             )
                         } else {
                             let definition =
@@ -337,7 +253,7 @@ impl<F: FileSystem> Processor<F> {
                                                 ident: define.name().into(),
                                                 is_undef: false,
                                             }
-                                            .with_node(node, line_map),
+                                            .with_node(node.into(), line_map),
                                         )
                                     } else {
                                         // TODO: Check that we are not overwriting an incompatible definition
@@ -410,7 +326,7 @@ impl<F: FileSystem> Processor<F> {
                             if else_seen {
                                 // Extra #else
                                 result.push(Event::error(
-                                    ProcessingErrorKind::ExtraElse.with_node(node, line_map),
+                                    ProcessingErrorKind::ExtraElse.with_node(node.into(), line_map),
                                     current_file,
                                 ));
 
@@ -426,7 +342,7 @@ impl<F: FileSystem> Processor<F> {
                 } else {
                     // Stray #else
                     result.push(Event::error(
-                        ProcessingErrorKind::ExtraElse.with_node(node, line_map),
+                        ProcessingErrorKind::ExtraElse.with_node(node.into(), line_map),
                         current_file,
                     ));
                 }
@@ -445,7 +361,7 @@ impl<F: FileSystem> Processor<F> {
                 } else {
                     // Stray #endif
                     result.push(Event::error(
-                        ProcessingErrorKind::ExtraEndIf.with_node(node, line_map),
+                        ProcessingErrorKind::ExtraEndIf.with_node(node.into(), line_map),
                         current_file,
                     ));
                 }
@@ -481,7 +397,7 @@ impl<F: FileSystem> Processor<F> {
                                 ident,
                                 is_undef: true,
                             }
-                            .with_node(node, line_map),
+                            .with_node(node.into(), line_map),
                             current_file,
                         ));
                     }
@@ -496,7 +412,7 @@ impl<F: FileSystem> Processor<F> {
                             ProcessingErrorKind::ErrorDirective {
                                 message: error.message.clone(),
                             }
-                            .with_node(node, line_map),
+                            .with_node(node.into(), line_map),
                             current_file,
                         ))
                     } else {
@@ -563,9 +479,30 @@ enum ExpandState<F: FileSystem> {
         current_file: FileId,
         iterator: SyntaxElementChildren<PreprocessorLang>,
         errors: Vec<parser::Error>,
-        tokens: VecDeque<OutputToken>,
+        events: VecDeque<Event<F::Error>>,
     },
     Complete,
+}
+
+impl<F: FileSystem> ExpandState<F> {
+    pub fn error_token(
+        e: impl Into<event::Error<F::Error>>,
+        token: SyntaxToken,
+        current_file: FileId,
+        iterator: SyntaxElementChildren<PreprocessorLang>,
+        errors: Vec<parser::Error>,
+    ) -> Self {
+        let mut events = ArrayVec::new();
+        events.push(Event::error(e.into(), current_file));
+        events.push(Event::Token(token.clone().into()));
+
+        Self::PendingEvents {
+            current_file,
+            iterator,
+            errors,
+            events,
+        }
+    }
 }
 
 impl<'p, F: FileSystem> Expand<'p, F> {
@@ -576,6 +513,85 @@ impl<'p, F: FileSystem> Expand<'p, F> {
             mask_active: true,
             line_map: LineMap::default(),
             state: ExpandState::Init { path },
+        }
+    }
+
+    fn handle_token(
+        &mut self,
+        token: SyntaxToken,
+        current_file: FileId,
+        iterator: SyntaxElementChildren<PreprocessorLang>,
+        errors: Vec<parser::Error>,
+    ) -> Option<Event<F::Error>> {
+        // Look for macro substitutions
+        if let Some(definition) = (if token.kind() == IDENT_KW {
+            Some(Unescaped::new(token.text()).to_string())
+        } else {
+            None
+        })
+        .and_then(|ident| self.processor.current_state.definitions.get(ident.as_ref()))
+        {
+            // We matched a defined identifier
+
+            match MacroInvocation::parse(
+                definition,
+                token.clone(),
+                iterator.clone(),
+                &self.line_map,
+            ) {
+                Ok(Some((invocation, new_iterator))) => {
+                    // We successfully parsed a macro invocation
+                    match invocation.substitute::<F>(&self.processor.current_state, &self.line_map)
+                    {
+                        Ok(result) => {
+                            // We handled this definition
+                            self.state = ExpandState::ExpandedTokens {
+                                current_file,
+                                iterator: new_iterator,
+                                errors,
+                                events: VecDeque::from_iter(result),
+                            };
+                        }
+                        Err(err) => {
+                            // Definition not handled yet
+                            // TODO: Remove this once substitute never fails
+                            self.state = ExpandState::error_token(
+                                err,
+                                token.into(),
+                                current_file,
+                                iterator,
+                                errors,
+                            );
+                        }
+                    }
+                }
+                Ok(None) => {
+                    // Could not parse a macro invocation starting at the current token, so just
+                    // resume iterating normally
+                    self.state = ExpandState::Iterate {
+                        current_file,
+                        iterator,
+                        errors,
+                    };
+
+                    return Some(Event::Token(token.into()));
+                }
+                Err(err) => {
+                    self.state =
+                        ExpandState::error_token(err, token, current_file, iterator, errors);
+                }
+            }
+
+            None
+        } else {
+            // No matching definition for this identifier, just keep iterating
+            self.state = ExpandState::Iterate {
+                current_file,
+                iterator,
+                errors,
+            };
+
+            Some(Event::Token(token.into()))
         }
     }
 
@@ -600,62 +616,12 @@ impl<'p, F: FileSystem> Expand<'p, F> {
                         &self.line_map,
                     ),
                 };
+
+                None
             }
             rowan::NodeOrToken::Token(token) => {
                 if self.mask_active {
-                    // Look for macro substitutions
-                    if let Some(definition) = (if token.kind() == IDENT_KW {
-                        Some(Unescaped::new(token.text()).to_string())
-                    } else {
-                        None
-                    })
-                    .and_then(|ident| self.processor.current_state.definitions.get(ident.as_ref()))
-                    {
-                        // We matched a defined identifier
-                        // TODO: Handle macro substitutions
-
-                        if definition.object_like() {
-                            if let Some(result) = definition.substitute(
-                                &[&token],
-                                &self.processor.current_state,
-                                &self.line_map,
-                            ) {
-                                // We handled this definition
-                                self.state = ExpandState::ExpandedTokens {
-                                    current_file,
-                                    iterator,
-                                    errors,
-                                    tokens: result.into(),
-                                };
-
-                                // Return tokens in the next iterations
-                                return None;
-                            }
-                        }
-
-                        let mut events = ArrayVec::new();
-                        events.push(Event::error(
-                            ErrorKind::unhandled(NodeOrToken::Token(token.clone()), &self.line_map),
-                            current_file,
-                        ));
-                        events.push(Event::Token(token.into()));
-
-                        self.state = ExpandState::PendingEvents {
-                            current_file,
-                            iterator,
-                            errors,
-                            events,
-                        };
-                    } else {
-                        // No matching definition for this identifier, just keep iterating
-                        self.state = ExpandState::Iterate {
-                            current_file,
-                            iterator,
-                            errors,
-                        };
-
-                        return Some(Event::Token(token.into()));
-                    }
+                    self.handle_token(token, current_file, iterator, errors)
                 } else {
                     // Just keep iterating
                     self.state = ExpandState::Iterate {
@@ -663,11 +629,11 @@ impl<'p, F: FileSystem> Expand<'p, F> {
                         iterator,
                         errors,
                     };
+
+                    None
                 }
             }
         }
-
-        None
     }
 }
 
@@ -770,17 +736,17 @@ impl<'p, F: FileSystem> Iterator for Expand<'p, F> {
                     current_file,
                     iterator,
                     errors,
-                    mut tokens,
+                    mut events,
                 } => {
-                    if let Some(token) = tokens.pop_front() {
+                    if let Some(event) = events.pop_front() {
                         self.state = ExpandState::ExpandedTokens {
                             current_file,
                             iterator,
                             errors,
-                            tokens,
+                            events,
                         };
 
-                        return Some(Event::Token(token));
+                        return Some(event);
                     } else {
                         self.state = ExpandState::Iterate {
                             current_file,

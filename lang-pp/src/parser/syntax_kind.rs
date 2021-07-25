@@ -172,6 +172,20 @@ pub enum SyntaxKind {
     _LAST,
 }
 
+impl SyntaxKind {
+    pub fn is_whitespace(&self) -> bool {
+        matches!(self, Self::COMMENT | Self::WS | Self::NEWLINE)
+    }
+
+    pub fn is_trivia(&self) -> bool {
+        matches!(self, Self::COMMENT | Self::WS)
+    }
+
+    pub fn is_newline(&self) -> bool {
+        matches!(self, Self::NEWLINE)
+    }
+}
+
 impl From<lexer::Token> for SyntaxKind {
     fn from(s: lexer::Token) -> Self {
         use SyntaxKind::*;

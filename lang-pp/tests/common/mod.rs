@@ -7,7 +7,7 @@ use std::{
 
 use glsl_lang_pp::{
     parse,
-    processor::{nodes::DirectiveExt, DirectiveKind, ErrorKind, Event},
+    processor::{nodes::DirectiveExt, DirectiveKind, ErrorKind, Event, TokenLike},
 };
 
 use rowan::NodeOrToken;

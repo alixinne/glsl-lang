@@ -632,12 +632,6 @@ enum IfState {
 
 impl<F: FileSystem + Default> Default for Processor<F> {
     fn default() -> Self {
-        Self {
-            file_cache: HashMap::with_capacity(1),
-            file_ids: HashMap::with_capacity(1),
-            canonical_paths: HashMap::with_capacity(1),
-            current_state: Default::default(),
-            fs: F::default(),
-        }
+        Self::new_with_fs(Default::default(), F::default())
     }
 }

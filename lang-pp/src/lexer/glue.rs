@@ -192,6 +192,10 @@ impl<'i> Iterator for Lexer<'i> {
                     InputToken::HASH => Some(PP_CONCAT),
                     _ => None,
                 }),
+                InputToken::PERIOD => self.maybe_concat(token, |input| match input {
+                    InputToken::DIGITS => Some(DIGITS),
+                    _ => None,
+                }),
                 _ => Some(token.transmute()),
             },
             None => None,

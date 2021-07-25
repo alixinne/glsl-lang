@@ -13,7 +13,7 @@ use smol_str::SmolStr;
 
 use crate::{
     parser::{Parser, PreprocessorLang, SyntaxKind::*, SyntaxNode, SyntaxToken},
-    Ast, FileId,
+    Ast, FileId, Unescaped,
 };
 
 #[macro_use]
@@ -27,8 +27,8 @@ pub use fs::*;
 
 pub mod nodes;
 use nodes::{
-    Define, DefineObject, DirectiveResult, Error, Extension, ExtensionName, IfDef, IfNDef, Undef,
-    Version, GL_ARB_SHADING_LANGUAGE_INCLUDE, GL_GOOGLE_INCLUDE_DIRECTIVE,
+    Define, DefineKind, DefineObject, DirectiveResult, Error, Extension, ExtensionName, IfDef,
+    IfNDef, Undef, Version, GL_ARB_SHADING_LANGUAGE_INCLUDE, GL_GOOGLE_INCLUDE_DIRECTIVE,
 };
 
 /// Operating mode for #include directives
@@ -70,6 +70,15 @@ impl Definition {
     pub fn protected(&self) -> bool {
         match self {
             Definition::Regular(d, _) => d.protected(),
+            Definition::Line => true,
+            Definition::File => true,
+            Definition::Version => true,
+        }
+    }
+
+    pub fn object_like(&self) -> bool {
+        match self {
+            Definition::Regular(d, _) => matches!(d.kind(), DefineKind::Object(_)),
             Definition::Line => true,
             Definition::File => true,
             Definition::Version => true,
@@ -434,7 +443,7 @@ impl<F: FileSystem> Processor<F> {
             }
             _ => {
                 // Handle node, this is a preprocessor directive
-                result.push(Event::error(ErrorKind::Unhandled(node)));
+                result.push(Event::error(ErrorKind::Unhandled(NodeOrToken::Node(node))));
             }
         }
 
@@ -505,14 +514,46 @@ impl<'p, F: FileSystem> Expand<'p, F> {
                 };
             }
             rowan::NodeOrToken::Token(token) => {
-                self.state = ExpandState::Iterate {
-                    current_file,
-                    iterator,
-                    errors,
-                };
-
                 if self.mask_active {
-                    return Some(Event::Token(token));
+                    // Look for macro substitutions
+                    if let Some(_definition) = (if token.kind() == IDENT_KW {
+                        Some(Unescaped::new(token.text()).to_string())
+                    } else {
+                        None
+                    })
+                    .and_then(|ident| self.processor.current_state.definitions.get(ident.as_ref()))
+                    {
+                        // We matched a defined identifier
+                        // TODO: Handle macro substitutions
+                        let mut events = ArrayVec::new();
+                        events.push(Event::error(ErrorKind::Unhandled(NodeOrToken::Token(
+                            token.clone(),
+                        ))));
+                        events.push(Event::Token(token));
+
+                        self.state = ExpandState::PendingEvents {
+                            current_file,
+                            iterator,
+                            errors,
+                            events,
+                        };
+                    } else {
+                        // No matching definition for this identifier, just keep iterating
+                        self.state = ExpandState::Iterate {
+                            current_file,
+                            iterator,
+                            errors,
+                        };
+
+                        return Some(Event::Token(token));
+                    }
+                } else {
+                    // Just keep iterating
+                    self.state = ExpandState::Iterate {
+                        current_file,
+                        iterator,
+                        errors,
+                    };
                 }
             }
         }

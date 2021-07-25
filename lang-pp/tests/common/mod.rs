@@ -10,6 +10,8 @@ use glsl_lang_pp::{
     processor::{nodes::DirectiveExt, DirectiveKind, ErrorKind, Event},
 };
 
+use rowan::NodeOrToken;
+
 struct Paths {
     parsed: PathBuf,
     events: PathBuf,
@@ -88,9 +90,12 @@ pub fn test_file(path: impl AsRef<Path>) {
                     ErrorKind::Io(_) => {}
                     ErrorKind::Parse(_) => {}
                     ErrorKind::Processing(_) => {}
-                    ErrorKind::Unhandled(node) => {
+                    ErrorKind::Unhandled(node_or_token) => {
                         unhandled_count += 1;
-                        write!(ppf, "{}", node.text()).unwrap();
+
+                        if let NodeOrToken::Node(node) = node_or_token {
+                            write!(ppf, "{}", node.text()).unwrap();
+                        }
                     }
                 }
 

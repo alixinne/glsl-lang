@@ -1,5 +1,6 @@
 use std::path::PathBuf;
 
+use rowan::NodeOrToken;
 use smol_str::SmolStr;
 use thiserror::Error;
 
@@ -138,8 +139,8 @@ pub enum ErrorKind<E: std::error::Error + 'static> {
     Parse(#[from] crate::parser::Error),
     #[error(transparent)]
     Processing(#[from] ProcessingError),
-    #[error("unhandled directive: {0:?}")]
-    Unhandled(SyntaxNode),
+    #[error("unhandled directive or substitution: \"{}\"", .0.to_string().trim())]
+    Unhandled(NodeOrToken<SyntaxNode, SyntaxToken>),
 }
 
 #[derive(Debug)]

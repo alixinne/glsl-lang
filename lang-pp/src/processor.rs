@@ -14,7 +14,7 @@ use smol_str::SmolStr;
 use crate::{
     lexer::LineMap,
     parser::{
-        Parser, PreprocessorLang,
+        self, Parser, PreprocessorLang,
         SyntaxKind::{self, *},
         SyntaxNode, SyntaxToken,
     },
@@ -519,24 +519,24 @@ enum ExpandState<F: FileSystem> {
     Iterate {
         current_file: FileId,
         iterator: SyntaxElementChildren<PreprocessorLang>,
-        errors: Vec<crate::parser::Error>,
+        errors: Vec<parser::Error>,
     },
     PendingOne {
         current_file: FileId,
         iterator: SyntaxElementChildren<PreprocessorLang>,
-        errors: Vec<crate::parser::Error>,
+        errors: Vec<parser::Error>,
         node_or_token: NodeOrToken<SyntaxNode, SyntaxToken>,
     },
     PendingEvents {
         current_file: FileId,
         iterator: SyntaxElementChildren<PreprocessorLang>,
-        errors: Vec<crate::parser::Error>,
+        errors: Vec<parser::Error>,
         events: ArrayVec<Event<F::Error>, 2>,
     },
     ExpandedTokens {
         current_file: FileId,
         iterator: SyntaxElementChildren<PreprocessorLang>,
-        errors: Vec<crate::parser::Error>,
+        errors: Vec<parser::Error>,
         tokens: VecDeque<SyntaxToken>,
     },
     Complete,
@@ -557,7 +557,7 @@ impl<'p, F: FileSystem> Expand<'p, F> {
         &mut self,
         current_file: FileId,
         iterator: SyntaxElementChildren<PreprocessorLang>,
-        errors: Vec<crate::parser::Error>,
+        errors: Vec<parser::Error>,
         node_or_token: NodeOrToken<SyntaxNode, SyntaxToken>,
     ) -> Option<Event<F::Error>> {
         match node_or_token {

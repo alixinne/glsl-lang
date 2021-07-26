@@ -1,9 +1,11 @@
-//! `lang-util` is a crate that implements utilities to parse and represent syntax trees using
+//! `lang-util` is a crate that implements utilities to parse and represent syntax trees.
+//! It also provides error formatting facilities for parsers using
 //! [`lalrpop`](https://crates.io/crates/lalrpop) and [`logos`](https://crates.io/crates/logos).
 //!
 //! This crate is tailored for use in the [`glsl-lang`](https://crates.io/crates/glsl-lang) crate,
 //! but you may use its utilities for implementing your own language parsers:
-//! - [error]: parsing error reporting module, with user-readable location information
+//! - [error]: parsing error reporting module, with user-readable location information. Only
+//!   available with the `lalrpop` feature enabled.
 //! - [node]: AST node structure and display
 //! - [position]: utilities for working with positions in strings
 
@@ -11,7 +13,9 @@
 
 pub use lang_util_derive::{NodeContent, Token};
 
+#[cfg(feature = "lalrpop")]
 pub mod error;
+#[cfg(feature = "lalrpop")]
 pub use error::Token;
 
 pub mod node;

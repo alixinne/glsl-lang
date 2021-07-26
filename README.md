@@ -43,6 +43,7 @@ modeled after [Dimitri Sabadie's `glsl` crate](https://github.com/phaazon/glsl).
 | [![Crates.io](https://img.shields.io/crates/v/glsl-lang-cli)](https://crates.io/crates/glsl-lang-cli)       | [`lang-cli`](lang-cli)                 | simple CLI tool to show GLSL syntax trees                         |
 | [![Crates.io](https://img.shields.io/crates/v/lang-util)](https://crates.io/crates/lang-util)               | [`lang-util`](lang-util)               | utilities for implementing syntax trees                           |
 | [![Crates.io](https://img.shields.io/crates/v/lang-util-derive)](https://crates.io/crates/lang-util-derive) | [`lang-util-derive`](lang-util-derive) | proc-macro crate to implement a syntax tree with span information |
+|                                                                                                             | [`xtask`](xtask)                       | task runner, invoke with `cargo xtask`                            |
 
 ## `glsl-lang` vs. `glsl` crates
 
@@ -103,6 +104,15 @@ The preprocessor also supports include directives:
 ***Planned for next release.*** The `data` folder contains vendored test data
 from the [glslangValidator](https://github.com/KhronosGroup/glslang) project to
 be used as a reference point for validating the preprocessor and parser.
+
+The `#[test]` definitions need to be generate before running the test suite on
+the glslang sources. Use the `gen-tests` task for this:
+
+    cargo xtask gen-tests
+
+Then run the tests:
+
+    cargo test --test glslang
 
 ### Why not pick this crate?
 

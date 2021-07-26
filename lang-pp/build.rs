@@ -1,7 +1,5 @@
 use std::env;
-use std::fs;
-use std::io::prelude::*;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 
 fn main() {
     let out_dir = PathBuf::from(env::var_os("OUT_DIR").unwrap());
@@ -158,75 +156,4 @@ fn main() {
         ])
         .write_to_file(&out_dir.join("ext_names.rs"))
         .expect("failed to generate atoms");
-
-    // Generate unit tests from glslangValidator test suite
-    tests::generate(&out_dir);
-}
-
-mod tests {
-    use super::*;
-    use heck::SnakeCase;
-
-    const EXCLUDE_PREFIXES: &[&str] = &[
-        "hlsl.", "spv.", /* TODO: Remove this when we support attributes */
-    ];
-
-    const SHADER_EXTS: &[&str] = &[
-        "mesh", "tese", "rgen", "tesc", "geom", "comp", "vert", "frag",
-    ];
-
-    pub fn generate(out_dir: &Path) {
-        let current_dir = env::current_dir().expect("failed to read current dir");
-        let files: Vec<PathBuf> = {
-            fs::read_dir(current_dir.join("../data"))
-                .map(|dir| {
-                    dir.into_iter()
-                        .filter_map(|entry| entry.ok())
-                        .filter(|entry| {
-                            entry
-                                .file_name()
-                                .to_str()
-                                .map(|file_name| {
-                                    !EXCLUDE_PREFIXES
-                                        .iter()
-                                        .any(|prefix| file_name.starts_with(prefix))
-                                        && SHADER_EXTS.iter().any(|ext| file_name.ends_with(ext))
-                                })
-                                .unwrap_or(false)
-                        })
-                        .map(|entry| {
-                            entry
-                                .path()
-                                .strip_prefix(&current_dir)
-                                .expect("failed to strip current dir")
-                                .to_owned()
-                        })
-                        .collect()
-                })
-                .unwrap_or_else(|_| Vec::new())
-        };
-
-        let mut f =
-            fs::File::create(out_dir.join("glslang_tests.rs")).expect("failed to open output file");
-
-        for test_case in files.into_iter() {
-            writeln!(
-                f,
-                "#[test]
-fn test_{test_name}() {{
-    common::test_file(r#\"{test_path}\"#);
-}}",
-                test_name = test_case
-                    .file_name()
-                    .unwrap()
-                    .to_str()
-                    .unwrap()
-                    .to_snake_case()
-                    .replace(".", "_")
-                    .replace("__", "_"),
-                test_path = test_case.to_string_lossy()
-            )
-            .unwrap();
-        }
-    }
 }

@@ -1,4 +1,13 @@
 [workspace]
+default-members = [
+	"lang",
+	"lang-pp",
+	"lang-util",
+	"lang-util-derive",
+	"lang-quote",
+	"lang-cli",
+]
+
 members = [
 	"lang",
 	"lang-pp",
@@ -6,6 +15,7 @@ members = [
 	"lang-util-derive",
 	"lang-quote",
 	"lang-cli",
+	"xtask",
 ]
 
 [patch.crates-io]

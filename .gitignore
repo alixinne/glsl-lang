@@ -1,4 +1,7 @@
 /glslang
 /target
 Cargo.lock
+
 /data/localRsResults
+/lang/tests/glslang.rs
+/lang-pp/tests/glslang.rs

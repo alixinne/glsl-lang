@@ -30,6 +30,8 @@ jobs:
           toolchain: stable
           override: true
           target: ${{ matrix.target }}
+      - name: Generate test driver
+        run: cargo xtask gen-tests
       - name: Run tests
         run: |
           set -e

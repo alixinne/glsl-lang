@@ -1,4 +1,4 @@
-use std::{convert::TryFrom, path::PathBuf};
+use std::convert::TryFrom;
 
 use derive_more::From;
 use rowan::{NodeOrToken, TextRange};
@@ -364,7 +364,7 @@ impl std::fmt::Debug for OutputToken {
 #[derive(Debug, From)]
 pub enum Event {
     Error(Error),
-    EnterFile { file_id: FileId, path: PathBuf },
+    EnterFile(FileId),
     Token(OutputToken),
     Directive(DirectiveKind),
 }
@@ -388,7 +388,7 @@ impl<E: std::error::Error + 'static> TryFrom<IoEvent<E>> for Event {
                 return Err(err);
             }
             IoEvent::Error(err) => Self::Error(err),
-            IoEvent::EnterFile { file_id, path } => Self::EnterFile { file_id, path },
+            IoEvent::EnterFile(file_id) => Self::EnterFile(file_id),
             IoEvent::Token(token) => Self::Token(token),
             IoEvent::Directive(directive) => Self::Directive(directive),
         })
@@ -399,7 +399,7 @@ impl<E: std::error::Error + 'static> TryFrom<IoEvent<E>> for Event {
 pub enum IoEvent<E: std::error::Error + 'static> {
     IoError(E),
     Error(Error),
-    EnterFile { file_id: FileId, path: PathBuf },
+    EnterFile(FileId),
     Token(OutputToken),
     Directive(DirectiveKind),
 }
@@ -408,7 +408,7 @@ impl<E: std::error::Error + 'static> From<Event> for IoEvent<E> {
     fn from(e: Event) -> Self {
         match e {
             Event::Error(err) => Self::Error(err),
-            Event::EnterFile { file_id, path } => Self::EnterFile { file_id, path },
+            Event::EnterFile(file_id) => Self::EnterFile(file_id),
             Event::Token(token) => Self::Token(token),
             Event::Directive(directive) => Self::Directive(directive),
         }

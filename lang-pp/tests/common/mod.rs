@@ -6,8 +6,9 @@ use std::{
 };
 
 use glsl_lang_pp::processor::{
-    event::{DirectiveKind, ErrorKind, IoEvent, TokenLike},
+    event::{DirectiveKind, ErrorKind, Event, TokenLike},
     nodes::DirectiveExt,
+    ProcessorState,
 };
 
 use rowan::NodeOrToken;
@@ -51,7 +52,7 @@ pub fn test_file(path: impl AsRef<Path>) {
     let mut pp = glsl_lang_pp::processor::fs::StdProcessor::default();
 
     let paths = Paths::new(&path);
-    let (_, ast) = match pp.parse(&path, None) {
+    let parsed = match pp.parse(&path, None) {
         Ok(inner) => Ok(inner),
         Err(err) => {
             if err.kind() == std::io::ErrorKind::InvalidData {
@@ -66,7 +67,7 @@ pub fn test_file(path: impl AsRef<Path>) {
     // Write the resulting tree, even if there are errors
     {
         let mut f = File::create(&paths.parsed).unwrap();
-        write!(f, "{:#?}", ast.clone().into_inner().0).unwrap();
+        write!(f, "{:#?}", parsed.ast().clone().into_inner().0).unwrap();
     }
 
     let mut eventsf = File::create(&paths.events).unwrap();
@@ -76,13 +77,11 @@ pub fn test_file(path: impl AsRef<Path>) {
     let mut unhandled_count = 0;
     let mut error_count = 0;
 
-    for event in pp.process(path) {
+    for event in parsed.process(ProcessorState::default()) {
         writeln!(eventsf, "{:?}", event).unwrap();
 
         match event {
-            IoEvent::IoError(_) => {}
-
-            IoEvent::Error(error) => {
+            Event::Error(error) => {
                 match error.kind() {
                     ErrorKind::Parse(_) => {}
                     ErrorKind::Processing(_) => {}
@@ -99,13 +98,13 @@ pub fn test_file(path: impl AsRef<Path>) {
                 writeln!(errorsf, "{}", error).unwrap();
             }
 
-            IoEvent::EnterFile { .. } => {}
+            Event::EnterFile { .. } => {}
 
-            IoEvent::Token(token) => {
+            Event::Token(token) => {
                 write!(ppf, "{}", token.text()).unwrap();
             }
 
-            IoEvent::Directive(directive) => match directive {
+            Event::Directive(directive) => match directive {
                 DirectiveKind::Version(directive) => {
                     write!(ppf, "{}", directive.into_node()).unwrap();
                 }

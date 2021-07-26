@@ -91,7 +91,9 @@ impl<'p, F: FileSystem> Iterator for ExpandStack<'p, F> {
                                         }
                                     }
                                     Event::Token(token) => IoEvent::Token(token),
-                                    Event::Directive(directive) => IoEvent::Directive(directive),
+                                    Event::Directive(node, directive) => {
+                                        IoEvent::Directive(node, directive)
+                                    }
                                 });
                             }
                             ExpandEvent::EnterFile(current_file, current_state, node, path) => {

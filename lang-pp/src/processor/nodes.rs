@@ -853,7 +853,7 @@ pub enum LineError {
     MissingBody,
     #[error("malformed line")]
     MalformedLine { tokens: Vec<Event> },
-    #[error("extra tokens in #include path")]
+    #[error("extra tokens in #line path")]
     ExtraTokens { tokens: Vec<OutputToken> },
     #[error("invalid line number")]
     InvalidLineNumber { token: OutputToken },
@@ -871,5 +871,35 @@ impl TryFrom<SyntaxNode> for Line {
                 .find(|node| node.kind() == PP_LINE_BODY)
                 .ok_or_else(|| Self::Error::MissingBody)?,
         })
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct Else;
+
+#[derive(Debug, Error)]
+pub enum ElseError {}
+
+impl TryFrom<SyntaxNode> for Else {
+    type Error = ElseError;
+
+    fn try_from(_: SyntaxNode) -> Result<Self, Self::Error> {
+        // TODO: Handle extra tokens?
+        Ok(Self)
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct EndIf;
+
+#[derive(Debug, Error)]
+pub enum EndIfError {}
+
+impl TryFrom<SyntaxNode> for EndIf {
+    type Error = EndIfError;
+
+    fn try_from(_: SyntaxNode) -> Result<Self, Self::Error> {
+        // TODO: Handle extra tokens?
+        Ok(Self)
     }
 }

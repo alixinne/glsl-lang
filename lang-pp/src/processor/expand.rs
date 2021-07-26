@@ -18,10 +18,10 @@ use crate::{
 
 use super::{
     definition::{Definition, MacroInvocation},
-    event::{self, DirectiveKind, ErrorKind, Event, ProcessingErrorKind},
+    event::{self, ErrorKind, Event, ProcessingErrorKind},
     nodes::{
-        Define, DirectiveResult, Error, Extension, IfDef, IfNDef, Include, Line, ParsedLine,
-        ParsedPath, Undef, Version,
+        Define, DirectiveResult, Else, EndIf, Error, Extension, IfDef, IfNDef, Include, Line,
+        ParsedLine, ParsedPath, Undef, Version,
     },
     IncludeMode, ProcessorState,
 };
@@ -179,75 +179,104 @@ impl ExpandOne {
             PP_VERSION => {
                 if self.mask_active {
                     // TODO: Check that the version is the first thing in the file?
-
                     let directive: DirectiveResult<Version> = node.try_into();
 
-                    if let Ok(version) = &directive {
-                        current_state.version = **version;
+                    match directive {
+                        Ok(directive) => {
+                            current_state.version = *directive;
+                            result.push(Event::directive(directive));
+                        }
+                        Err(error) => {
+                            result.push(Event::directive_error(
+                                error,
+                                current_file,
+                                &self.line_map,
+                                self.line_override(),
+                            ));
+                        }
                     }
-
-                    result.push(Event::directive(directive));
                 }
             }
             PP_EXTENSION => {
                 if self.mask_active {
                     let directive: DirectiveResult<Extension> = node.try_into();
 
-                    if let Ok(extension) = &directive {
-                        current_state.extension(&**&extension);
+                    match directive {
+                        Ok(directive) => {
+                            current_state.extension(&*directive);
+                            result.push(Event::directive(directive));
+                        }
+                        Err(error) => {
+                            result.push(Event::directive_error(
+                                error,
+                                current_file,
+                                &self.line_map,
+                                self.line_override(),
+                            ));
+                        }
                     }
-
-                    result.push(Event::directive(directive));
                 }
             }
             PP_DEFINE => {
                 if self.mask_active {
                     let directive: DirectiveResult<Define> = node.clone().try_into();
 
-                    let error = if let Ok(define) = &directive {
-                        if define.name().starts_with("GL_") {
-                            Some(
-                                ProcessingErrorKind::ProtectedDefine {
-                                    ident: define.name().into(),
-                                    is_undef: false,
-                                }
-                                .with_node(node.into(), &self.line_map),
-                            )
-                        } else {
-                            let definition =
-                                Definition::Regular(Rc::new((**define).clone()), current_file);
+                    match directive {
+                        Ok(define) => {
+                            let error = if define.name().starts_with("GL_") {
+                                Some(
+                                    ProcessingErrorKind::ProtectedDefine {
+                                        ident: define.name().into(),
+                                        is_undef: false,
+                                    }
+                                    .with_node(node.into(), &self.line_map),
+                                )
+                            } else {
+                                let definition =
+                                    Definition::Regular(Rc::new((*define).clone()), current_file);
 
-                            match current_state.definitions.entry(define.name().into()) {
-                                Entry::Occupied(mut entry) => {
-                                    if entry.get().protected() {
-                                        Some(
-                                            ProcessingErrorKind::ProtectedDefine {
-                                                ident: define.name().into(),
-                                                is_undef: false,
-                                            }
-                                            .with_node(node.into(), &self.line_map),
-                                        )
-                                    } else {
-                                        // TODO: Check that we are not overwriting an incompatible definition
-                                        *entry.get_mut() = definition;
+                                match current_state.definitions.entry(define.name().into()) {
+                                    Entry::Occupied(mut entry) => {
+                                        if entry.get().protected() {
+                                            Some(
+                                                ProcessingErrorKind::ProtectedDefine {
+                                                    ident: define.name().into(),
+                                                    is_undef: false,
+                                                }
+                                                .with_node(node.into(), &self.line_map),
+                                            )
+                                        } else {
+                                            // TODO: Check that we are not overwriting an incompatible definition
+                                            *entry.get_mut() = definition;
 
+                                            None
+                                        }
+                                    }
+                                    Entry::Vacant(entry) => {
+                                        entry.insert(definition);
                                         None
                                     }
                                 }
-                                Entry::Vacant(entry) => {
-                                    entry.insert(definition);
-                                    None
-                                }
+                            };
+
+                            result.push(Event::directive(define));
+
+                            if let Some(error) = error {
+                                result.push(Event::error(
+                                    error,
+                                    current_file,
+                                    self.line_override(),
+                                ));
                             }
                         }
-                    } else {
-                        None
-                    };
-
-                    result.push(Event::directive(directive));
-
-                    if let Some(error) = error {
-                        result.push(Event::error(error, current_file, self.line_override()));
+                        Err(error) => {
+                            result.push(Event::directive_error(
+                                error,
+                                current_file,
+                                &self.line_map,
+                                self.line_override(),
+                            ));
+                        }
                     }
                 }
             }
@@ -255,13 +284,23 @@ impl ExpandOne {
                 if self.mask_active {
                     let directive: DirectiveResult<IfDef> = node.try_into();
 
-                    if let Ok(ifdef) = &directive {
-                        // Update masking state
-                        self.mask_active = current_state.definitions.contains_key(&ifdef.ident);
-                        self.mask_stack.push(IfState::Active { else_seen: false });
-                    }
+                    match directive {
+                        Ok(ifdef) => {
+                            // Update masking state
+                            self.mask_active = current_state.definitions.contains_key(&ifdef.ident);
+                            self.mask_stack.push(IfState::Active { else_seen: false });
 
-                    result.push(Event::directive(directive));
+                            result.push(Event::directive(ifdef));
+                        }
+                        Err(error) => {
+                            result.push(Event::directive_error(
+                                error,
+                                current_file,
+                                &self.line_map,
+                                self.line_override(),
+                            ));
+                        }
+                    }
                 } else {
                     // Record the #ifdef in the stack to support nesting
                     self.mask_stack.push(IfState::None);
@@ -271,114 +310,165 @@ impl ExpandOne {
                 if self.mask_active {
                     let directive: DirectiveResult<IfNDef> = node.try_into();
 
-                    if let Ok(ifdef) = &directive {
-                        // Update masking state
-                        self.mask_active = !current_state.definitions.contains_key(&ifdef.ident);
-                        self.mask_stack.push(IfState::Active { else_seen: false });
-                    }
+                    match directive {
+                        Ok(ifndef) => {
+                            // Update masking state
+                            self.mask_active =
+                                !current_state.definitions.contains_key(&ifndef.ident);
+                            self.mask_stack.push(IfState::Active { else_seen: false });
 
-                    result.push(Event::directive(directive));
+                            result.push(Event::directive(ifndef));
+                        }
+                        Err((error, node)) => {
+                            result.push(Event::directive_error(
+                                (ProcessingErrorKind::DirectiveIfNDef(error), node),
+                                current_file,
+                                &self.line_map,
+                                self.line_override(),
+                            ));
+                        }
+                    }
                 } else {
                     // Record the #ifdef in the stack to support nesting
                     self.mask_stack.push(IfState::None);
                 }
             }
             PP_ELSE => {
-                if let Some(top) = self.mask_stack.pop() {
-                    match top {
-                        IfState::None => {
+                let directive: DirectiveResult<Else> = node.clone().try_into();
+
+                match directive {
+                    Ok(else_) => {
+                        if let Some(top) = self.mask_stack.pop() {
+                            match top {
+                                IfState::None => {
+                                    self.mask_active = self
+                                        .mask_stack
+                                        .last()
+                                        .map(|top| matches!(*top, IfState::Active { .. }))
+                                        .unwrap_or(true);
+
+                                    self.mask_stack.push(IfState::Active { else_seen: true });
+                                }
+                                IfState::Active { else_seen } | IfState::One { else_seen } => {
+                                    if else_seen {
+                                        // Extra #else
+                                        result.push(Event::error(
+                                            ProcessingErrorKind::ExtraElse
+                                                .with_node(node.into(), &self.line_map),
+                                            current_file,
+                                            self.line_override(),
+                                        ));
+
+                                        return result.into();
+                                    } else {
+                                        self.mask_active = false;
+                                        self.mask_stack.push(IfState::One { else_seen: true });
+                                    }
+                                }
+                            }
+
+                            result.push(Event::directive(else_));
+                        } else {
+                            // Stray #else
+                            result.push(Event::error(
+                                ProcessingErrorKind::ExtraElse
+                                    .with_node(node.into(), &self.line_map),
+                                current_file,
+                                self.line_override(),
+                            ));
+                        }
+                    }
+                    Err(error) => {
+                        result.push(Event::directive_error(
+                            error,
+                            current_file,
+                            &self.line_map,
+                            self.line_override(),
+                        ));
+                    }
+                }
+            }
+            PP_ENDIF => {
+                let directive: DirectiveResult<EndIf> = node.clone().try_into();
+
+                match directive {
+                    Ok(endif) => {
+                        if let Some(_) = self.mask_stack.pop() {
                             self.mask_active = self
                                 .mask_stack
                                 .last()
                                 .map(|top| matches!(*top, IfState::Active { .. }))
                                 .unwrap_or(true);
 
-                            self.mask_stack.push(IfState::Active { else_seen: true });
-                        }
-                        IfState::Active { else_seen } | IfState::One { else_seen } => {
-                            if else_seen {
-                                // Extra #else
-                                result.push(Event::error(
-                                    ProcessingErrorKind::ExtraElse
-                                        .with_node(node.into(), &self.line_map),
-                                    current_file,
-                                    self.line_override(),
-                                ));
-
-                                return result.into();
-                            } else {
-                                self.mask_active = false;
-                                self.mask_stack.push(IfState::One { else_seen: true });
+                            // TODO: Return syntax node?
+                            if self.mask_active {
+                                result.push(Event::directive(endif));
                             }
+                        } else {
+                            // Stray #endif
+                            result.push(Event::error(
+                                ProcessingErrorKind::ExtraEndIf
+                                    .with_node(node.into(), &self.line_map),
+                                current_file,
+                                self.line_override(),
+                            ));
                         }
                     }
-
-                    result.push(Event::directive(DirectiveKind::Else));
-                } else {
-                    // Stray #else
-                    result.push(Event::error(
-                        ProcessingErrorKind::ExtraElse.with_node(node.into(), &self.line_map),
-                        current_file,
-                        self.line_override(),
-                    ));
-                }
-            }
-            PP_ENDIF => {
-                if let Some(_) = self.mask_stack.pop() {
-                    self.mask_active = self
-                        .mask_stack
-                        .last()
-                        .map(|top| matches!(*top, IfState::Active { .. }))
-                        .unwrap_or(true);
-
-                    // TODO: Return syntax node?
-                    if self.mask_active {
-                        result.push(Event::directive(DirectiveKind::EndIf));
+                    Err(error) => {
+                        result.push(Event::directive_error(
+                            error,
+                            current_file,
+                            &self.line_map,
+                            self.line_override(),
+                        ));
                     }
-                } else {
-                    // Stray #endif
-                    result.push(Event::error(
-                        ProcessingErrorKind::ExtraEndIf.with_node(node.into(), &self.line_map),
-                        current_file,
-                        self.line_override(),
-                    ));
                 }
             }
             PP_UNDEF => {
                 if self.mask_active {
                     let directive: DirectiveResult<Undef> = node.clone().try_into();
 
-                    let protected_ident = if let Ok(ifdef) = &directive {
-                        if ifdef.ident.starts_with("GL_") {
-                            Some(ifdef.ident.clone())
-                        } else {
-                            if let Some(def) = current_state.definitions.get(&ifdef.ident) {
-                                if def.protected() {
-                                    Some(ifdef.ident.clone())
+                    match directive {
+                        Ok(undef) => {
+                            let protected_ident = {
+                                if undef.ident.starts_with("GL_") {
+                                    Some(undef.ident.clone())
                                 } else {
-                                    current_state.definitions.remove(&ifdef.ident);
-                                    None
+                                    if let Some(def) = current_state.definitions.get(&undef.ident) {
+                                        if def.protected() {
+                                            Some(undef.ident.clone())
+                                        } else {
+                                            current_state.definitions.remove(&undef.ident);
+                                            None
+                                        }
+                                    } else {
+                                        None
+                                    }
                                 }
-                            } else {
-                                None
+                            };
+
+                            result.push(Event::directive(undef));
+
+                            if let Some(ident) = protected_ident {
+                                result.push(Event::error(
+                                    ProcessingErrorKind::ProtectedDefine {
+                                        ident,
+                                        is_undef: true,
+                                    }
+                                    .with_node(node.into(), &self.line_map),
+                                    current_file,
+                                    self.line_override(),
+                                ));
                             }
                         }
-                    } else {
-                        None
-                    };
-
-                    result.push(Event::directive(directive));
-
-                    if let Some(ident) = protected_ident {
-                        result.push(Event::error(
-                            ProcessingErrorKind::ProtectedDefine {
-                                ident,
-                                is_undef: true,
-                            }
-                            .with_node(node.into(), &self.line_map),
-                            current_file,
-                            self.line_override(),
-                        ));
+                        Err((error, node)) => {
+                            result.push(Event::directive_error(
+                                (ProcessingErrorKind::DirectiveUndef(error), node),
+                                current_file,
+                                &self.line_map,
+                                self.line_override(),
+                            ));
+                        }
                     }
                 }
             }
@@ -386,23 +476,33 @@ impl ExpandOne {
                 if self.mask_active {
                     let directive: DirectiveResult<Error> = node.clone().try_into();
 
-                    let error = if let Ok(error) = &directive {
-                        Some(Event::error(
-                            ProcessingErrorKind::ErrorDirective {
-                                message: error.message.clone(),
+                    match directive {
+                        Ok(error) => {
+                            let user_error = {
+                                Some(Event::error(
+                                    ProcessingErrorKind::ErrorDirective {
+                                        message: error.message.clone(),
+                                    }
+                                    .with_node(node.into(), &self.line_map),
+                                    current_file,
+                                    self.line_override(),
+                                ))
+                            };
+
+                            result.push(Event::directive(error));
+
+                            if let Some(error_event) = user_error {
+                                result.push(error_event);
                             }
-                            .with_node(node.into(), &self.line_map),
-                            current_file,
-                            self.line_override(),
-                        ))
-                    } else {
-                        None
-                    };
-
-                    result.push(Event::directive(directive));
-
-                    if let Some(error_event) = error {
-                        result.push(error_event);
+                        }
+                        Err(error) => {
+                            result.push(Event::directive_error(
+                                error,
+                                current_file,
+                                &self.line_map,
+                                self.line_override(),
+                            ));
+                        }
                     }
                 }
             }
@@ -444,27 +544,39 @@ impl ExpandOne {
                         err => (err, None),
                     };
 
-                    if let Some(path) = path {
-                        match current_state.include_mode {
-                            IncludeMode::None => {
-                                // Already handled previously
+                    match directive {
+                        Ok(include) => {
+                            if let Some(path) = path {
+                                match current_state.include_mode {
+                                    IncludeMode::None => {
+                                        // Already handled previously
+                                    }
+                                    IncludeMode::ArbInclude => {
+                                        // Run-time include, also just forward the include through
+                                    }
+                                    IncludeMode::GoogleInclude => {
+                                        // Compile-time include, enter nested file
+                                        return HandleNodeResult::EnterFile(
+                                            Event::directive(include),
+                                            node,
+                                            path,
+                                        );
+                                    }
+                                }
                             }
-                            IncludeMode::ArbInclude => {
-                                // Run-time include, also just forward the include through
-                            }
-                            IncludeMode::GoogleInclude => {
-                                // Compile-time include, enter nested file
-                                return HandleNodeResult::EnterFile(
-                                    Event::directive(directive),
-                                    node,
-                                    path,
-                                );
-                            }
+
+                            // Forward the directive
+                            result.push(Event::directive(include));
+                        }
+                        Err(error) => {
+                            result.push(Event::directive_error(
+                                error,
+                                current_file,
+                                &self.line_map,
+                                self.line_override(),
+                            ));
                         }
                     }
-
-                    // Forward the directive
-                    result.push(Event::directive(directive));
                 }
             }
             PP_LINE => {
@@ -487,49 +599,72 @@ impl ExpandOne {
                         err => (err, None),
                     };
 
-                    if let Some(line) = line {
-                        let raw_line = self
-                            .line_map
-                            .get_line_and_col(node.text_range().start().into())
-                            .0;
+                    match directive {
+                        Ok(ld) => {
+                            if let Some(line) = line {
+                                let raw_line = self
+                                    .line_map
+                                    .get_line_and_col(node.text_range().start().into())
+                                    .0;
 
-                        // Check that we support cpp style line
-                        let line = match line {
-                            ParsedLine::Line(_) | ParsedLine::LineAndFileNumber(_, _) => line,
-                            ParsedLine::LineAndPath(_, _) if current_state.cpp_style_line() => line,
-                            ParsedLine::LineAndPath(line, _) => {
-                                result.push(Event::error(
-                                    ProcessingErrorKind::CppStyleLineNotSupported
-                                        .with_node(node.into(), &self.line_map),
-                                    current_file,
-                                    self.line_override(),
-                                ));
+                                // Check that we support cpp style line
+                                let line = match line {
+                                    ParsedLine::Line(_) | ParsedLine::LineAndFileNumber(_, _) => {
+                                        line
+                                    }
+                                    ParsedLine::LineAndPath(_, _)
+                                        if current_state.cpp_style_line() =>
+                                    {
+                                        line
+                                    }
+                                    ParsedLine::LineAndPath(line, _) => {
+                                        result.push(Event::error(
+                                            ProcessingErrorKind::CppStyleLineNotSupported
+                                                .with_node(node.into(), &self.line_map),
+                                            current_file,
+                                            self.line_override(),
+                                        ));
 
-                                ParsedLine::Line(line)
+                                        ParsedLine::Line(line)
+                                    }
+                                };
+
+                                // Combine the previous and the new override
+                                self.last_line_override = match self.last_line_override.take() {
+                                    Some((_, prev_override)) => match line {
+                                        ParsedLine::Line(line_number) => {
+                                            Some(match prev_override {
+                                                ParsedLine::Line(_) => line,
+                                                ParsedLine::LineAndFileNumber(_, file_number) => {
+                                                    ParsedLine::LineAndFileNumber(
+                                                        line_number,
+                                                        file_number,
+                                                    )
+                                                }
+                                                ParsedLine::LineAndPath(_, path) => {
+                                                    ParsedLine::LineAndPath(line_number, path)
+                                                }
+                                            })
+                                        }
+                                        ParsedLine::LineAndFileNumber(_, _)
+                                        | ParsedLine::LineAndPath(_, _) => Some(line),
+                                    },
+                                    None => Some(line),
+                                }
+                                .map(|ov| (raw_line, ov));
                             }
-                        };
 
-                        // Combine the previous and the new override
-                        self.last_line_override = match self.last_line_override.take() {
-                            Some((_, prev_override)) => match line {
-                                ParsedLine::Line(line_number) => Some(match prev_override {
-                                    ParsedLine::Line(_) => line,
-                                    ParsedLine::LineAndFileNumber(_, file_number) => {
-                                        ParsedLine::LineAndFileNumber(line_number, file_number)
-                                    }
-                                    ParsedLine::LineAndPath(_, path) => {
-                                        ParsedLine::LineAndPath(line_number, path)
-                                    }
-                                }),
-                                ParsedLine::LineAndFileNumber(_, _)
-                                | ParsedLine::LineAndPath(_, _) => Some(line),
-                            },
-                            None => Some(line),
+                            result.push(Event::directive(ld));
                         }
-                        .map(|ov| (raw_line, ov));
+                        Err(error) => {
+                            result.push(Event::directive_error(
+                                error,
+                                current_file,
+                                &self.line_map,
+                                self.line_override(),
+                            ));
+                        }
                     }
-
-                    result.push(Event::directive(directive));
                 }
             }
             _ => {

@@ -12,7 +12,7 @@ use crate::{
     parser::{self, SyntaxKind, SyntaxNode, SyntaxToken},
 };
 
-use super::nodes::{self, DirectiveResult, ParsedLine, ParsedPath};
+use super::nodes::{self, Directive, ParsedLine, ParsedPath};
 
 #[derive(Debug)]
 pub struct ProcessingError {
@@ -66,7 +66,7 @@ impl std::fmt::Display for ProcessingError {
 
 impl std::error::Error for ProcessingError {}
 
-#[derive(Debug)]
+#[derive(Debug, From)]
 pub enum ProcessingErrorKind {
     ExtraEndIf,
     ExtraElse,
@@ -93,6 +93,19 @@ pub enum ProcessingErrorKind {
         path: ParsedPath,
     },
     CppStyleLineNotSupported,
+    DirectiveVersion(nodes::VersionError),
+    DirectiveExtension(nodes::ExtensionError),
+    DirectiveDefine(nodes::DefineError),
+    DirectiveIfDef(nodes::IfDefError),
+    #[from(ignore)]
+    DirectiveIfNDef(nodes::IfDefError),
+    DirectiveElse(nodes::ElseError),
+    DirectiveEndIf(nodes::EndIfError),
+    #[from(ignore)]
+    DirectiveUndef(nodes::IfDefError),
+    DirectiveError(nodes::ErrorError),
+    DirectiveInclude(nodes::IncludeError),
+    DirectiveLine(nodes::LineError),
 }
 
 impl ProcessingErrorKind {
@@ -165,6 +178,39 @@ impl std::fmt::Display for ProcessingErrorKind {
             }
             ProcessingErrorKind::CppStyleLineNotSupported => {
                 write!(f, "'#line' : required extension not requested: GL_GOOGLE_cpp_style_line_directive")
+            }
+            ProcessingErrorKind::DirectiveVersion(inner) => {
+                write!(f, "'#version' : {}", inner)
+            }
+            ProcessingErrorKind::DirectiveExtension(inner) => {
+                write!(f, "'#extension' : {}", inner)
+            }
+            ProcessingErrorKind::DirectiveDefine(inner) => {
+                write!(f, "'#define' : {}", inner)
+            }
+            ProcessingErrorKind::DirectiveIfDef(inner) => {
+                write!(f, "'#ifdef' : {}", inner)
+            }
+            ProcessingErrorKind::DirectiveIfNDef(inner) => {
+                write!(f, "'#ifndef' : {}", inner)
+            }
+            ProcessingErrorKind::DirectiveElse(inner) => {
+                write!(f, "'#else' : {}", inner)
+            }
+            ProcessingErrorKind::DirectiveEndIf(inner) => {
+                write!(f, "'#endif' : {}", inner)
+            }
+            ProcessingErrorKind::DirectiveUndef(inner) => {
+                write!(f, "'#undef' : {}", inner)
+            }
+            ProcessingErrorKind::DirectiveError(inner) => {
+                write!(f, "'#error' : {}", inner)
+            }
+            ProcessingErrorKind::DirectiveInclude(inner) => {
+                write!(f, "'#include' : {}", inner)
+            }
+            ProcessingErrorKind::DirectiveLine(inner) => {
+                write!(f, "'#line' : {}", inner)
             }
         }
     }
@@ -376,17 +422,17 @@ impl ErrorKind {
 
 #[derive(Debug, From)]
 pub enum DirectiveKind {
-    Version(DirectiveResult<nodes::Version>),
-    Extension(DirectiveResult<nodes::Extension>),
-    Define(DirectiveResult<nodes::Define>),
-    IfDef(DirectiveResult<nodes::IfDef>),
-    IfNDef(DirectiveResult<nodes::IfNDef>),
-    Else,
-    EndIf,
-    Undef(DirectiveResult<nodes::Undef>),
-    Error(DirectiveResult<nodes::Error>),
-    Include(DirectiveResult<nodes::Include>),
-    Line(DirectiveResult<nodes::Line>),
+    Version(nodes::Version),
+    Extension(nodes::Extension),
+    Define(nodes::Define),
+    IfDef(nodes::IfDef),
+    IfNDef(nodes::IfNDef),
+    Else(nodes::Else),
+    EndIf(nodes::EndIf),
+    Undef(nodes::Undef),
+    Error(nodes::Error),
+    Include(nodes::Include),
+    Line(nodes::Line),
 }
 
 pub trait TokenLike: Into<NodeOrToken<SyntaxNode, SyntaxToken>> {
@@ -490,12 +536,28 @@ pub enum Event {
     Error(Error),
     EnterFile(FileId),
     Token(OutputToken),
-    Directive(DirectiveKind),
+    Directive(SyntaxNode, DirectiveKind),
 }
 
 impl Event {
-    pub fn directive<D: Into<DirectiveKind>>(d: D) -> Self {
-        Self::Directive(d.into())
+    pub fn directive<D: Into<DirectiveKind> + TryFrom<SyntaxNode> + std::fmt::Debug + Clone>(
+        d: Directive<D>,
+    ) -> Self {
+        let (inner, node) = d.into_inner();
+        Self::Directive(node, inner.into())
+    }
+
+    pub fn directive_error<E: Into<ProcessingErrorKind>>(
+        (error, node): (E, SyntaxNode),
+        current_file: FileId,
+        line_map: &LineMap,
+        line_override: Option<&(u32, ParsedLine)>,
+    ) -> Self {
+        Self::error(
+            error.into().with_node(node.into(), line_map),
+            current_file,
+            line_override,
+        )
     }
 
     pub fn error<T: Into<Error>>(
@@ -518,7 +580,7 @@ impl<E: std::error::Error + 'static> TryFrom<IoEvent<E>> for Event {
             IoEvent::Error(err) => Self::Error(err),
             IoEvent::EnterFile { file_id, .. } => Self::EnterFile(file_id),
             IoEvent::Token(token) => Self::Token(token),
-            IoEvent::Directive(directive) => Self::Directive(directive),
+            IoEvent::Directive(node, directive) => Self::Directive(node, directive),
         })
     }
 }
@@ -533,7 +595,7 @@ pub enum IoEvent<E: std::error::Error + 'static> {
         canonical_path: PathBuf,
     },
     Token(OutputToken),
-    Directive(DirectiveKind),
+    Directive(SyntaxNode, DirectiveKind),
 }
 
 impl<E: std::error::Error + 'static> IoEvent<E> {

@@ -7,7 +7,6 @@ use std::{
 
 use glsl_lang_pp::processor::{
     event::{DirectiveKind, ErrorKind, IoEvent, TokenLike},
-    nodes::DirectiveExt,
     ProcessorState,
 };
 
@@ -109,18 +108,18 @@ pub fn test_file(path: impl AsRef<Path>) {
                 write!(ppf, "{}", token.text()).unwrap();
             }
 
-            IoEvent::Directive(directive) => match directive {
-                DirectiveKind::Version(directive) => {
-                    write!(ppf, "{}", directive.into_node()).unwrap();
+            IoEvent::Directive(node, directive) => match directive {
+                DirectiveKind::Version(_) => {
+                    write!(ppf, "{}", node).unwrap();
                 }
-                DirectiveKind::Extension(directive) => {
-                    write!(ppf, "{}", directive.into_node()).unwrap();
+                DirectiveKind::Extension(_) => {
+                    write!(ppf, "{}", node).unwrap();
                 }
                 DirectiveKind::Define(_) => {}
                 DirectiveKind::IfDef(_) => {}
                 DirectiveKind::IfNDef(_) => {}
-                DirectiveKind::Else => {}
-                DirectiveKind::EndIf => {}
+                DirectiveKind::Else(_) => {}
+                DirectiveKind::EndIf(_) => {}
                 DirectiveKind::Undef(_) => {}
                 DirectiveKind::Error(_) => {}
                 DirectiveKind::Include(_) => {}

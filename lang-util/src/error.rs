@@ -480,7 +480,7 @@ mod tests {
 Hello,
 World"#;
 
-        let pos = LexerPosition::new(0, s.find('r').unwrap());
+        let pos = LexerPosition::new(FileId::new(0), s.find('r').unwrap());
         let resolved = ResolvedPosition::new(pos, s);
 
         assert_eq!(resolved.line(), 2);
@@ -494,7 +494,7 @@ World"#;
 Hello,
 World"#;
 
-        let pos = LexerPosition::new(0, s.find('d').unwrap());
+        let pos = LexerPosition::new(FileId::new(0), s.find('d').unwrap());
         let resolved = ResolvedPosition::new(pos, s);
 
         assert_eq!(resolved.line(), 2);
@@ -503,7 +503,7 @@ World"#;
 
     #[test]
     fn resolved_position_out_of_bounds() {
-        let pos = LexerPosition::new(0, 1);
+        let pos = LexerPosition::new(FileId::new(0), 1);
         assert_eq!(ResolvedPosition::new(pos, "").line(), 0);
     }
 }

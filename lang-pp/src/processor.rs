@@ -3,7 +3,6 @@ use std::{
     collections::{hash_map::Entry, HashMap, VecDeque},
     convert::TryInto,
     iter::{FromIterator, FusedIterator},
-    num::NonZeroU32,
     path::{Path, PathBuf},
     rc::Rc,
 };
@@ -157,9 +156,7 @@ impl<F: FileSystem> Processor<F> {
         let file_id = if let Some(file_id) = self.file_ids.get(canonical_path.as_path()) {
             *file_id
         } else {
-            // SAFETY: n + 1 > 0
-            let file_id =
-                FileId::new(unsafe { NonZeroU32::new_unchecked(self.file_ids.len() as u32 + 1) });
+            let file_id = FileId::new(self.file_ids.len() as _);
             self.file_ids.insert(canonical_path.to_owned(), file_id);
             file_id
         };

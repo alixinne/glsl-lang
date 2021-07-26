@@ -190,12 +190,24 @@ impl Error {
 impl std::fmt::Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match &self.kind {
-            ErrorKind::Parse(err) => write!(f, "{}:{}: ", self.current_file, err.line() + 1)?,
-            ErrorKind::Processing(err) => write!(f, "{}:{}: ", self.current_file, err.line() + 1)?,
-            ErrorKind::Unhandled(_, pos) => write!(f, "{}:{}: ", self.current_file, pos.0 + 1)?,
+            ErrorKind::Parse(err) => write!(
+                f,
+                "{}:{}: {}",
+                self.current_file,
+                err.line() + 1,
+                err.kind()
+            ),
+            ErrorKind::Processing(err) => write!(
+                f,
+                "{}:{}: {}",
+                self.current_file,
+                err.line() + 1,
+                err.kind()
+            ),
+            ErrorKind::Unhandled(_, pos) => {
+                write!(f, "{}:{}: {}", self.current_file, pos.0 + 1, self.kind)
+            }
         }
-
-        write!(f, "{}", self.kind)
     }
 }
 

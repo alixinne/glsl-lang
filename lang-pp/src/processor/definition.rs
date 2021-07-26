@@ -6,13 +6,15 @@ use std::{
 use rowan::{GreenNodeBuilder, NodeOrToken, TextRange};
 use smol_str::SmolStr;
 
+use lang_util::FileId;
+
 use crate::{
     lexer::LineMap,
     parser::{
         SyntaxKind::{self, *},
         SyntaxNode, SyntaxToken,
     },
-    FileId, Unescaped,
+    Unescaped,
 };
 
 use super::{

@@ -13,6 +13,9 @@
 
 pub use lang_util_derive::{NodeContent, Token};
 
+mod file_id;
+pub use file_id::FileId;
+
 #[cfg(feature = "lalrpop")]
 pub mod error;
 #[cfg(feature = "lalrpop")]

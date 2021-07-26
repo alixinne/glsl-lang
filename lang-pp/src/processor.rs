@@ -13,10 +13,12 @@ use encoding_rs::Encoding;
 use rowan::{NodeOrToken, SyntaxElementChildren};
 use smol_str::SmolStr;
 
+use lang_util::FileId;
+
 use crate::{
     lexer::LineMap,
     parser::{self, Ast, Parser, PreprocessorLang, SyntaxKind::*, SyntaxNode, SyntaxToken},
-    FileId, Unescaped,
+    Unescaped,
 };
 
 #[macro_use]

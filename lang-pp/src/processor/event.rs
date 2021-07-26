@@ -5,10 +5,11 @@ use rowan::{NodeOrToken, TextRange};
 use smol_str::SmolStr;
 use thiserror::Error;
 
+use lang_util::FileId;
+
 use crate::{
     lexer::LineMap,
     parser::{self, SyntaxKind, SyntaxNode, SyntaxToken},
-    FileId,
 };
 
 use super::nodes::{self, DirectiveResult};

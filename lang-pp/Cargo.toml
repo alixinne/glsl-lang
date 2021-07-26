@@ -14,6 +14,8 @@ categories = ["parser-implementations", "rendering"]
 build = "build.rs"
 
 [dependencies]
+lang-util = "0.2.0"
+
 rowan = "0.12"
 smol_str = "0.1"
 cbitset = "0.2"

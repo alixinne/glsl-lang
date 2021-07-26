@@ -16,10 +16,11 @@ use crate::{
 };
 
 use super::{
-    event::{Error, ErrorKind},
+    event::{
+        Error, ErrorKind, Event, OutputToken, ProcessingError, ProcessingErrorKind, TokenLike,
+    },
     nodes::{Define, DefineFunction, DefineKind, DefineObject},
-    Event, FileSystem, OutputToken, ProcessingError, ProcessingErrorKind, ProcessorState,
-    TokenLike,
+    ProcessorState,
 };
 
 #[derive(Debug, Clone)]
@@ -390,21 +391,21 @@ impl<'d, T: TokenLike> MacroInvocation<'d, T> {
         )))
     }
 
-    pub fn substitute<F: FileSystem>(
+    pub fn substitute(
         self,
         current_state: &ProcessorState,
         line_map: &LineMap,
-    ) -> Result<impl Iterator<Item = Event<F::Error>>, Error<F::Error>> {
+    ) -> Result<impl Iterator<Item = Event>, Error> {
         let mut subs_stack = HashSet::new();
-        self.substitute_inner::<F>(current_state, line_map, &mut subs_stack)
+        self.substitute_inner(current_state, line_map, &mut subs_stack)
     }
 
-    fn substitute_inner<F: FileSystem>(
+    fn substitute_inner(
         self,
         current_state: &ProcessorState,
         line_map: &LineMap,
         subs_stack: &mut HashSet<SmolStr>,
-    ) -> Result<impl Iterator<Item = Event<F::Error>>, Error<F::Error>> {
+    ) -> Result<impl Iterator<Item = Event>, Error> {
         let result = match self.tokens {
             MacroCall::Object => {
                 self.definition
@@ -450,7 +451,7 @@ impl<'d, T: TokenLike> MacroInvocation<'d, T> {
                                 Some(self.range),
                             ) {
                                 Ok(Some((invocation, new_iterator))) => {
-                                    match invocation.substitute_inner::<F>(
+                                    match invocation.substitute_inner(
                                         current_state,
                                         line_map,
                                         subs_stack,

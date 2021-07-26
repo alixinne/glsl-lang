@@ -7,7 +7,10 @@ use std::{
 
 use glsl_lang_pp::{
     parse,
-    processor::{nodes::DirectiveExt, DirectiveKind, ErrorKind, Event, TokenLike},
+    processor::{
+        event::{DirectiveKind, ErrorKind, IoEvent, TokenLike},
+        nodes::DirectiveExt,
+    },
 };
 
 use rowan::NodeOrToken;
@@ -72,7 +75,7 @@ pub fn test_file(path: impl AsRef<Path>) {
     fs::write(&paths.parsed, format!("{:#?}", root)).expect("failed to write .parsed");
 
     // Write the result
-    let mut pp = glsl_lang_pp::processor::StdProcessor::default();
+    let mut pp = glsl_lang_pp::processor::fs::StdProcessor::default();
 
     let mut eventsf = File::create(&paths.events).unwrap();
     let mut ppf = File::create(&paths.pp).unwrap();
@@ -85,9 +88,10 @@ pub fn test_file(path: impl AsRef<Path>) {
         writeln!(eventsf, "{:?}", event).unwrap();
 
         match event {
-            Event::Error(error) => {
+            IoEvent::IoError(_) => {}
+
+            IoEvent::Error(error) => {
                 match error.kind() {
-                    ErrorKind::Io(_) => {}
                     ErrorKind::Parse(_) => {}
                     ErrorKind::Processing(_) => {}
                     ErrorKind::Unhandled(node_or_token, _) => {
@@ -103,13 +107,13 @@ pub fn test_file(path: impl AsRef<Path>) {
                 writeln!(errorsf, "{}", error).unwrap();
             }
 
-            Event::EnterFile { .. } => {}
+            IoEvent::EnterFile { .. } => {}
 
-            Event::Token(token) => {
+            IoEvent::Token(token) => {
                 write!(ppf, "{}", token.text()).unwrap();
             }
 
-            Event::Directive(directive) => match directive {
+            IoEvent::Directive(directive) => match directive {
                 DirectiveKind::Version(directive) => {
                     write!(ppf, "{}", directive.into_node()).unwrap();
                 }

@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+use std::{convert::TryFrom, path::PathBuf};
 
 use derive_more::From;
 use rowan::{NodeOrToken, TextRange};
@@ -160,22 +160,21 @@ impl std::fmt::Display for ProcessingErrorKind {
 }
 
 #[derive(Debug)]
-pub struct Error<E: std::error::Error + 'static> {
-    kind: ErrorKind<E>,
+pub struct Error {
+    kind: ErrorKind,
     current_file: FileId,
 }
 
-impl<E: std::error::Error> Error<E> {
-    pub fn kind(&self) -> &ErrorKind<E> {
+impl Error {
+    pub fn kind(&self) -> &ErrorKind {
         &self.kind
     }
 
-    pub fn pos(&self) -> Option<TextRange> {
+    pub fn pos(&self) -> TextRange {
         match &self.kind {
-            ErrorKind::Io(_) => None,
-            ErrorKind::Parse(err) => Some(err.pos()),
-            ErrorKind::Processing(err) => Some(err.pos()),
-            ErrorKind::Unhandled(node, _) => Some(node.text_range()),
+            ErrorKind::Parse(err) => err.pos(),
+            ErrorKind::Processing(err) => err.pos(),
+            ErrorKind::Unhandled(node, _) => node.text_range(),
         }
     }
 
@@ -187,10 +186,9 @@ impl<E: std::error::Error> Error<E> {
     }
 }
 
-impl<E: std::error::Error> std::fmt::Display for Error<E> {
+impl std::fmt::Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match &self.kind {
-            ErrorKind::Io(_) => (),
             ErrorKind::Parse(err) => write!(f, "{}:{}: ", self.current_file, err.line() + 1)?,
             ErrorKind::Processing(err) => write!(f, "{}:{}: ", self.current_file, err.line() + 1)?,
             ErrorKind::Unhandled(_, pos) => write!(f, "{}:{}: ", self.current_file, pos.0 + 1)?,
@@ -200,14 +198,14 @@ impl<E: std::error::Error> std::fmt::Display for Error<E> {
     }
 }
 
-impl<E: std::error::Error> std::error::Error for Error<E> {
+impl std::error::Error for Error {
     fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
         self.kind.source()
     }
 }
 
-impl<E: std::error::Error> From<ErrorKind<E>> for Error<E> {
-    fn from(kind: ErrorKind<E>) -> Self {
+impl From<ErrorKind> for Error {
+    fn from(kind: ErrorKind) -> Self {
         Self {
             kind,
             current_file: FileId::default(),
@@ -215,7 +213,7 @@ impl<E: std::error::Error> From<ErrorKind<E>> for Error<E> {
     }
 }
 
-impl<E: std::error::Error> From<parser::Error> for Error<E> {
+impl From<parser::Error> for Error {
     fn from(error: parser::Error) -> Self {
         Self {
             kind: ErrorKind::Parse(error),
@@ -224,7 +222,7 @@ impl<E: std::error::Error> From<parser::Error> for Error<E> {
     }
 }
 
-impl<E: std::error::Error> From<ProcessingError> for Error<E> {
+impl From<ProcessingError> for Error {
     fn from(error: ProcessingError) -> Self {
         Self {
             kind: ErrorKind::Processing(error),
@@ -234,9 +232,7 @@ impl<E: std::error::Error> From<ProcessingError> for Error<E> {
 }
 
 #[derive(Debug, Error)]
-pub enum ErrorKind<E: std::error::Error + 'static> {
-    #[error("i/o error: {0}")]
-    Io(#[source] E),
+pub enum ErrorKind {
     #[error(transparent)]
     Parse(#[from] parser::Error),
     #[error(transparent)]
@@ -245,7 +241,7 @@ pub enum ErrorKind<E: std::error::Error + 'static> {
     Unhandled(NodeOrToken<SyntaxNode, SyntaxToken>, (u32, u32)),
 }
 
-impl<E: std::error::Error + 'static> ErrorKind<E> {
+impl ErrorKind {
     pub fn unhandled(
         node_or_token: NodeOrToken<SyntaxNode, SyntaxToken>,
         line_map: &LineMap,
@@ -365,19 +361,55 @@ impl std::fmt::Debug for OutputToken {
 }
 
 #[derive(Debug, From)]
-pub enum Event<E: std::error::Error + 'static> {
-    Error(Error<E>),
+pub enum Event {
+    Error(Error),
     EnterFile { file_id: FileId, path: PathBuf },
     Token(OutputToken),
     Directive(DirectiveKind),
 }
 
-impl<E: std::error::Error> Event<E> {
+impl Event {
     pub fn directive<D: Into<DirectiveKind>>(d: D) -> Self {
         Self::Directive(d.into())
     }
 
-    pub fn error<T: Into<Error<E>>>(e: T, current_file: FileId) -> Self {
+    pub fn error<T: Into<Error>>(e: T, current_file: FileId) -> Self {
         Self::Error(e.into().with_current_file(current_file))
+    }
+}
+
+impl<E: std::error::Error + 'static> TryFrom<IoEvent<E>> for Event {
+    type Error = E;
+
+    fn try_from(value: IoEvent<E>) -> Result<Self, E> {
+        Ok(match value {
+            IoEvent::IoError(err) => {
+                return Err(err);
+            }
+            IoEvent::Error(err) => Self::Error(err),
+            IoEvent::EnterFile { file_id, path } => Self::EnterFile { file_id, path },
+            IoEvent::Token(token) => Self::Token(token),
+            IoEvent::Directive(directive) => Self::Directive(directive),
+        })
+    }
+}
+
+#[derive(Debug)]
+pub enum IoEvent<E: std::error::Error + 'static> {
+    IoError(E),
+    Error(Error),
+    EnterFile { file_id: FileId, path: PathBuf },
+    Token(OutputToken),
+    Directive(DirectiveKind),
+}
+
+impl<E: std::error::Error + 'static> From<Event> for IoEvent<E> {
+    fn from(e: Event) -> Self {
+        match e {
+            Event::Error(err) => Self::Error(err),
+            Event::EnterFile { file_id, path } => Self::EnterFile { file_id, path },
+            Event::Token(token) => Self::Token(token),
+            Event::Directive(directive) => Self::Directive(directive),
+        }
     }
 }

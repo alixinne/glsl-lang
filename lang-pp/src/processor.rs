@@ -22,13 +22,13 @@ use crate::{
 pub mod exts;
 
 mod definition;
-pub use definition::*;
+use definition::{Definition, MacroInvocation};
 
-mod event;
-pub use event::*;
+pub mod event;
+use event::{DirectiveKind, ErrorKind, Event, IoEvent, ProcessingErrorKind};
 
-mod fs;
-pub use fs::*;
+pub mod fs;
+use fs::FileSystem;
 
 pub mod nodes;
 use nodes::{
@@ -176,7 +176,7 @@ impl<F: FileSystem> Processor<F> {
         mask_stack: &mut Vec<IfState>,
         current_file: FileId,
         line_map: &LineMap,
-    ) -> ArrayVec<Event<F::Error>, 2> {
+    ) -> ArrayVec<Event, 2> {
         let mut result = ArrayVec::new();
 
         match node.kind() {
@@ -451,10 +451,10 @@ pub struct Expand<'p, F: FileSystem> {
     mask_stack: Vec<IfState>,
     mask_active: bool,
     line_map: LineMap,
-    state: ExpandState<F>,
+    state: ExpandState,
 }
 
-enum ExpandState<F: FileSystem> {
+enum ExpandState {
     Init {
         path: PathBuf,
     },
@@ -473,20 +473,20 @@ enum ExpandState<F: FileSystem> {
         current_file: FileId,
         iterator: SyntaxElementChildren<PreprocessorLang>,
         errors: Vec<parser::Error>,
-        events: ArrayVec<Event<F::Error>, 2>,
+        events: ArrayVec<Event, 2>,
     },
     ExpandedTokens {
         current_file: FileId,
         iterator: SyntaxElementChildren<PreprocessorLang>,
         errors: Vec<parser::Error>,
-        events: VecDeque<Event<F::Error>>,
+        events: VecDeque<Event>,
     },
     Complete,
 }
 
-impl<F: FileSystem> ExpandState<F> {
+impl ExpandState {
     pub fn error_token(
-        e: impl Into<event::Error<F::Error>>,
+        e: impl Into<event::Error>,
         token: SyntaxToken,
         current_file: FileId,
         iterator: SyntaxElementChildren<PreprocessorLang>,
@@ -522,7 +522,7 @@ impl<'p, F: FileSystem> Expand<'p, F> {
         current_file: FileId,
         iterator: SyntaxElementChildren<PreprocessorLang>,
         errors: Vec<parser::Error>,
-    ) -> Option<Event<F::Error>> {
+    ) -> Option<Event> {
         // Look for macro substitutions
         if let Some(definition) = (if token.kind() == IDENT_KW {
             Some(Unescaped::new(token.text()).to_string())
@@ -541,8 +541,7 @@ impl<'p, F: FileSystem> Expand<'p, F> {
             ) {
                 Ok(Some((invocation, new_iterator))) => {
                     // We successfully parsed a macro invocation
-                    match invocation.substitute::<F>(&self.processor.current_state, &self.line_map)
-                    {
+                    match invocation.substitute(&self.processor.current_state, &self.line_map) {
                         Ok(result) => {
                             // We handled this definition
                             self.state = ExpandState::ExpandedTokens {
@@ -601,7 +600,7 @@ impl<'p, F: FileSystem> Expand<'p, F> {
         iterator: SyntaxElementChildren<PreprocessorLang>,
         errors: Vec<parser::Error>,
         node_or_token: NodeOrToken<SyntaxNode, SyntaxToken>,
-    ) -> Option<Event<F::Error>> {
+    ) -> Option<Event> {
         match node_or_token {
             rowan::NodeOrToken::Node(node) => {
                 self.state = ExpandState::PendingEvents {
@@ -638,7 +637,7 @@ impl<'p, F: FileSystem> Expand<'p, F> {
 }
 
 impl<'p, F: FileSystem> Iterator for Expand<'p, F> {
-    type Item = Event<F::Error>;
+    type Item = IoEvent<F::Error>;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {
@@ -656,10 +655,10 @@ impl<'p, F: FileSystem> Iterator for Expand<'p, F> {
                             errors,
                         };
 
-                        return Some(Event::EnterFile { file_id, path });
+                        return Some(Event::EnterFile { file_id, path }.into());
                     }
                     Err(err) => {
-                        return Some(Event::Error(ErrorKind::Io(err).into()));
+                        return Some(IoEvent::IoError(err));
                     }
                 },
                 ExpandState::Iterate {
@@ -681,7 +680,7 @@ impl<'p, F: FileSystem> Iterator for Expand<'p, F> {
                                         node_or_token,
                                     };
 
-                                    return Some(Event::error(error, current_file));
+                                    return Some(Event::error(error, current_file).into());
                                 }
                             }
                         }
@@ -689,7 +688,7 @@ impl<'p, F: FileSystem> Iterator for Expand<'p, F> {
                         if let Some(result) =
                             self.handle_node_or_token(current_file, iterator, errors, node_or_token)
                         {
-                            return Some(result);
+                            return Some(result.into());
                         }
                     } else {
                         // Iteration completed
@@ -705,7 +704,7 @@ impl<'p, F: FileSystem> Iterator for Expand<'p, F> {
                     if let Some(result) =
                         self.handle_node_or_token(current_file, iterator, errors, node_or_token)
                     {
-                        return Some(result);
+                        return Some(result.into());
                     }
                 }
                 ExpandState::PendingEvents {
@@ -722,7 +721,7 @@ impl<'p, F: FileSystem> Iterator for Expand<'p, F> {
                             events,
                         };
 
-                        return Some(event);
+                        return Some(event.into());
                     } else {
                         self.state = ExpandState::Iterate {
                             current_file,
@@ -746,7 +745,7 @@ impl<'p, F: FileSystem> Iterator for Expand<'p, F> {
                             events,
                         };
 
-                        return Some(event);
+                        return Some(event.into());
                     } else {
                         self.state = ExpandState::Iterate {
                             current_file,

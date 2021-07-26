@@ -432,7 +432,12 @@ impl ExpandOne {
                     // Perform macro substitution to get the path. If this fails, the directive is
                     // malformed and shouldn't be processed.
                     let (directive, path) = match directive {
-                        Ok(directive) => match directive.path(&current_state, &self.line_map) {
+                        Ok(directive) => match directive.path(
+                            &current_state,
+                            &self.line_map,
+                            current_file,
+                            self.line_override(),
+                        ) {
                             Ok(path) => (Ok(directive), Some(path)),
                             Err(err) => (Err((err, node.clone())), None),
                         },
@@ -470,7 +475,12 @@ impl ExpandOne {
                     // Perform macro substitution to get the path. If this fails, the directive is
                     // malformed and shouldn't be processed.
                     let (directive, line) = match directive {
-                        Ok(directive) => match directive.parse(&current_state, &self.line_map) {
+                        Ok(directive) => match directive.parse(
+                            &current_state,
+                            &self.line_map,
+                            current_file,
+                            self.line_override(),
+                        ) {
                             Ok(path) => (Ok(directive), Some(path)),
                             Err(err) => (Err((err, node.clone())), None),
                         },
@@ -568,7 +578,12 @@ impl ExpandOne {
             ) {
                 Ok(Some((invocation, new_iterator))) => {
                     // We successfully parsed a macro invocation
-                    match invocation.substitute(&current_state, &self.line_map) {
+                    match invocation.substitute(
+                        &current_state,
+                        &self.line_map,
+                        current_file,
+                        self.line_override(),
+                    ) {
                         Ok(result) => {
                             // We handled this definition
                             self.state = ExpandState::ExpandedTokens {
@@ -583,7 +598,7 @@ impl ExpandOne {
                             // Definition not handled yet
                             // TODO: Remove this once substitute never fails
                             self.state = ExpandState::error_token(
-                                err,
+                                err.with(current_file, self.line_override()),
                                 token.into(),
                                 current_file,
                                 iterator,

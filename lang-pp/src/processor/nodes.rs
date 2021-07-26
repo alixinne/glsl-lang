@@ -6,6 +6,8 @@ use smol_str::SmolStr;
 use string_cache::Atom;
 use thiserror::Error;
 
+use lang_util::FileId;
+
 use crate::{
     lexer::LineMap,
     parser::{SyntaxKind::*, SyntaxNode},
@@ -641,6 +643,8 @@ impl Include {
         &self,
         current_state: &ProcessorState,
         line_map: &LineMap,
+        current_file: FileId,
+        line_override: Option<&(u32, ParsedLine)>,
     ) -> Result<ParsedPath, IncludeError> {
         // Perform macro substitution
         let tokens = self
@@ -648,8 +652,14 @@ impl Include {
             .children_with_tokens()
             .filter_map(NodeOrToken::into_token)
             .collect();
-        let subs_events: Vec<_> =
-            MacroInvocation::substitute_vec(current_state, tokens, line_map).collect();
+        let subs_events: Vec<_> = MacroInvocation::substitute_vec(
+            current_state,
+            tokens,
+            line_map,
+            current_file,
+            line_override,
+        )
+        .collect();
 
         // Make sure they are all tokens
         if !subs_events.iter().all(|evt| matches!(evt, Event::Token(_))) {
@@ -753,6 +763,8 @@ impl Line {
         &self,
         current_state: &ProcessorState,
         line_map: &LineMap,
+        current_file: FileId,
+        line_override: Option<&(u32, ParsedLine)>,
     ) -> Result<ParsedLine, LineError> {
         // Perform macro substitution
         let tokens = self
@@ -760,8 +772,14 @@ impl Line {
             .children_with_tokens()
             .filter_map(NodeOrToken::into_token)
             .collect();
-        let subs_events: Vec<_> =
-            MacroInvocation::substitute_vec(current_state, tokens, line_map).collect();
+        let subs_events: Vec<_> = MacroInvocation::substitute_vec(
+            current_state,
+            tokens,
+            line_map,
+            current_file,
+            line_override,
+        )
+        .collect();
 
         // Make sure they are all tokens
         if !subs_events.iter().all(|evt| matches!(evt, Event::Token(_))) {

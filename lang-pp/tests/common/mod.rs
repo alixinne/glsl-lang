@@ -5,12 +5,9 @@ use std::{
     path::PathBuf,
 };
 
-use glsl_lang_pp::{
-    parse,
-    processor::{
-        event::{DirectiveKind, ErrorKind, IoEvent, TokenLike},
-        nodes::DirectiveExt,
-    },
+use glsl_lang_pp::processor::{
+    event::{DirectiveKind, ErrorKind, IoEvent, TokenLike},
+    nodes::DirectiveExt,
 };
 
 use rowan::NodeOrToken;
@@ -51,31 +48,26 @@ impl Paths {
 
 pub fn test_file(path: impl AsRef<Path>) {
     let path = path.as_ref();
-    let input = {
-        let raw_bytes = fs::read(&path).expect("failed to read input file");
-        match String::from_utf8(raw_bytes) {
-            Ok(string) => string,
-            Err(error) => encoding_rs::WINDOWS_1252
-                .decode(error.as_bytes())
-                .0
-                .to_string(),
-        }
-    };
+    let mut pp = glsl_lang_pp::processor::fs::StdProcessor::default();
 
     let paths = Paths::new(&path);
-    let result = parse(&input);
-
-    // Get the syntax tree
-    let (root, _, _) = result.into_inner();
-
-    // Check that we parsed the file with exact positions. If stages 0 or 1 fail, this should break
-    assert_eq!(u32::from(root.text_range().end()), input.len() as u32);
+    let (_, ast) = match pp.parse(&path, None) {
+        Ok(inner) => Ok(inner),
+        Err(err) => {
+            if err.kind() == std::io::ErrorKind::InvalidData {
+                pp.parse(&path, Some(encoding_rs::WINDOWS_1252))
+            } else {
+                Err(err)
+            }
+        }
+    }
+    .expect("failed to open file");
 
     // Write the resulting tree, even if there are errors
-    fs::write(&paths.parsed, format!("{:#?}", root)).expect("failed to write .parsed");
-
-    // Write the result
-    let mut pp = glsl_lang_pp::processor::fs::StdProcessor::default();
+    {
+        let mut f = File::create(&paths.parsed).unwrap();
+        write!(f, "{:#?}", ast.clone().into_inner().0).unwrap();
+    }
 
     let mut eventsf = File::create(&paths.events).unwrap();
     let mut ppf = File::create(&paths.pp).unwrap();

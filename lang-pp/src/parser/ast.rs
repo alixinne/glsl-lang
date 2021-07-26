@@ -28,11 +28,7 @@ impl Ast {
         )
     }
 
-    pub fn root(self) -> SyntaxNode {
-        SyntaxNode::new_root(self.green_node)
-    }
-
-    pub fn errors(&self) -> &[Error] {
-        &self.errors
+    pub fn green_node(&self) -> &GreenNode {
+        &self.green_node
     }
 }

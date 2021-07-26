@@ -190,9 +190,3 @@ impl<'s> Iterator for UnescapeIter<'s> {
         }
     }
 }
-
-// TODO: Remove this
-pub use parser::Ast;
-pub fn parse(input: &str) -> Ast {
-    parser::Parser::new(input).parse()
-}

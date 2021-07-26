@@ -1,10 +1,12 @@
 use super::*;
 use expect_test::expect;
 
-use crate::parse;
-
 fn check(actual: Ast, expect: expect_test::Expect) {
-    expect.assert_eq(&format!("{:#?}", actual.root()));
+    expect.assert_eq(&format!("{:#?}", actual.into_inner().0));
+}
+
+fn parse(input: &str) -> crate::parser::Ast {
+    crate::parser::Parser::new(input).parse()
 }
 
 #[test]

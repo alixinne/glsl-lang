@@ -1,12 +1,15 @@
 use std::path::{Path, PathBuf};
 
+use encoding_rs::Encoding;
+
 use super::Processor;
 
 pub trait FileSystem {
     type Error: std::error::Error + 'static;
 
     fn canonicalize(&self, path: &Path) -> Result<PathBuf, Self::Error>;
-    fn read(&self, path: &Path) -> Result<String, Self::Error>;
+    fn read(&self, path: &Path, encoding: Option<&'static Encoding>)
+        -> Result<String, Self::Error>;
 }
 
 #[derive(Default, Debug, Clone, Copy)]
@@ -19,8 +22,17 @@ impl FileSystem for Std {
         std::fs::canonicalize(path)
     }
 
-    fn read(&self, path: &Path) -> Result<String, Self::Error> {
-        std::fs::read_to_string(path)
+    fn read(
+        &self,
+        path: &Path,
+        encoding: Option<&'static Encoding>,
+    ) -> Result<String, Self::Error> {
+        if let Some(encoding) = encoding {
+            let bytes = std::fs::read(path)?;
+            Ok(encoding.decode(&bytes).0.to_string())
+        } else {
+            std::fs::read_to_string(path)
+        }
     }
 }
 

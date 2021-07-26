@@ -9,13 +9,14 @@ use std::{
 };
 
 use arrayvec::ArrayVec;
+use encoding_rs::Encoding;
 use rowan::{NodeOrToken, SyntaxElementChildren};
 use smol_str::SmolStr;
 
 use crate::{
     lexer::LineMap,
-    parser::{self, Parser, PreprocessorLang, SyntaxKind::*, SyntaxNode, SyntaxToken},
-    Ast, FileId, Unescaped,
+    parser::{self, Ast, Parser, PreprocessorLang, SyntaxKind::*, SyntaxNode, SyntaxToken},
+    FileId, Unescaped,
 };
 
 #[macro_use]
@@ -134,7 +135,11 @@ impl<F: FileSystem> Processor<F> {
         Expand::new(self, entry.to_owned())
     }
 
-    fn parse(&mut self, path: &Path) -> Result<(FileId, &Ast), F::Error> {
+    pub fn parse(
+        &mut self,
+        path: &Path,
+        encoding: Option<&'static Encoding>,
+    ) -> Result<(FileId, &Ast), F::Error> {
         // Find the canonical path. Not using the entry API because cloning a path is expensive.
         let canonical_path = if let Some(canonical_path) = self.canonical_paths.get(path) {
             canonical_path
@@ -161,9 +166,12 @@ impl<F: FileSystem> Processor<F> {
             Entry::Occupied(entry) => Ok((file_id, entry.into_mut())),
             Entry::Vacant(entry) => {
                 // Read the file
-                let input = self.fs.read(&canonical_path)?;
+                let input = self.fs.read(&canonical_path, encoding)?;
                 // Parse it
                 let ast = Parser::new(&input).parse();
+                // Check that the root node covers the entire range
+                debug_assert_eq!(u32::from(ast.green_node().text_len()), input.len() as u32);
+
                 Ok((file_id, entry.insert(ast)))
             }
         }
@@ -642,7 +650,7 @@ impl<'p, F: FileSystem> Iterator for Expand<'p, F> {
     fn next(&mut self) -> Option<Self::Item> {
         loop {
             match std::mem::replace(&mut self.state, ExpandState::Complete) {
-                ExpandState::Init { path } => match self.processor.parse(&path) {
+                ExpandState::Init { path } => match self.processor.parse(&path, None) {
                     Ok((file_id, ast)) => {
                         let (root, errors, line_map) = ast.clone().into_inner();
 

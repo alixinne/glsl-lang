@@ -12,7 +12,7 @@ use crate::{
     parser::{self, SyntaxKind, SyntaxNode, SyntaxToken},
 };
 
-use super::nodes::{self, DirectiveResult, ParsedPath};
+use super::nodes::{self, DirectiveResult, ParsedLine, ParsedPath};
 
 #[derive(Debug)]
 pub struct ProcessingError {
@@ -92,6 +92,7 @@ pub enum ProcessingErrorKind {
     IncludeNotFound {
         path: ParsedPath,
     },
+    CppStyleLineNotSupported,
 }
 
 impl ProcessingErrorKind {
@@ -162,6 +163,9 @@ impl std::fmt::Display for ProcessingErrorKind {
             ProcessingErrorKind::IncludeNotFound { path } => {
                 write!(f, "'#include' : could not find file for {}", path)
             }
+            ProcessingErrorKind::CppStyleLineNotSupported => {
+                write!(f, "'#line' : required extension not requested: GL_GOOGLE_cpp_style_line_directive")
+            }
         }
     }
 }
@@ -173,6 +177,7 @@ pub struct Located<E: std::error::Error + 'static> {
     current_file: FileId,
     pos: TextRange,
     user_pos: (u32, u32),
+    line_override: Option<(u32, ParsedLine)>,
 }
 
 impl<E: std::error::Error> Located<E> {
@@ -182,6 +187,7 @@ impl<E: std::error::Error> Located<E> {
         current_file: FileId,
         pos: TextRange,
         line_map: &LineMap,
+        line_override: Option<&(u32, ParsedLine)>,
     ) -> Self {
         let user_pos = line_map.get_line_and_col(pos.start().into());
 
@@ -191,7 +197,16 @@ impl<E: std::error::Error> Located<E> {
             current_file,
             pos,
             user_pos,
+            line_override: line_override.cloned(),
         }
+    }
+
+    pub fn line(&self) -> u32 {
+        Error::override_line(self.user_pos.0, self.line_override.as_ref())
+    }
+
+    pub fn string(&self) -> &dyn std::fmt::Display {
+        Error::override_string(&self.current_file, self.line_override.as_ref())
     }
 }
 
@@ -206,8 +221,8 @@ impl<E: std::error::Error> std::fmt::Display for Located<E> {
         write!(
             f,
             "{}:{}: '#include' : {} : {}",
-            self.current_file,
-            self.user_pos.0 + 1,
+            self.string(),
+            self.line() + 1,
             self.path.display(),
             self.inner
         )
@@ -218,6 +233,7 @@ impl<E: std::error::Error> std::fmt::Display for Located<E> {
 pub struct Error {
     kind: ErrorKind,
     current_file: FileId,
+    line_override: Option<(u32, ParsedLine)>,
 }
 
 impl Error {
@@ -233,9 +249,52 @@ impl Error {
         }
     }
 
-    pub fn with_current_file(self, current_file: FileId) -> Self {
+    fn override_line(raw_line: u32, line_override: Option<&(u32, ParsedLine)>) -> u32 {
+        if let Some((origin, line_override)) = line_override {
+            let offset = line_override.line_number() as i64 - *origin as i64 - 2;
+            (raw_line as i64 + offset) as u32
+        } else {
+            raw_line
+        }
+    }
+
+    pub fn line(&self) -> u32 {
+        let raw_line = match &self.kind {
+            ErrorKind::Parse(err) => err.line(),
+            ErrorKind::Processing(err) => err.line(),
+            ErrorKind::Unhandled(_, pos) => pos.0,
+        };
+
+        Self::override_line(raw_line, self.line_override.as_ref())
+    }
+
+    fn override_string<'a>(
+        current_file: &'a FileId,
+        line_override: Option<&'a (u32, ParsedLine)>,
+    ) -> &'a dyn std::fmt::Display {
+        if let Some((_, line_override)) = line_override {
+            match line_override {
+                ParsedLine::LineAndFileNumber(_, ref file_number) => {
+                    return file_number;
+                }
+                ParsedLine::LineAndPath(_, ref path) => {
+                    return path;
+                }
+                _ => {}
+            }
+        }
+
+        current_file
+    }
+
+    pub fn string(&self) -> &dyn std::fmt::Display {
+        Self::override_string(&self.current_file, self.line_override.as_ref())
+    }
+
+    pub fn with(self, current_file: FileId, line_override: Option<&(u32, ParsedLine)>) -> Self {
         Self {
             current_file,
+            line_override: line_override.cloned(),
             ..self
         }
     }
@@ -243,23 +302,17 @@ impl Error {
 
 impl std::fmt::Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}:{}: ", self.string(), self.line() + 1,)?;
+
         match &self.kind {
-            ErrorKind::Parse(err) => write!(
-                f,
-                "{}:{}: {}",
-                self.current_file,
-                err.line() + 1,
-                err.kind()
-            ),
-            ErrorKind::Processing(err) => write!(
-                f,
-                "{}:{}: {}",
-                self.current_file,
-                err.line() + 1,
-                err.kind()
-            ),
-            ErrorKind::Unhandled(_, pos) => {
-                write!(f, "{}:{}: {}", self.current_file, pos.0 + 1, self.kind)
+            ErrorKind::Parse(err) => {
+                write!(f, "{}", err.kind())
+            }
+            ErrorKind::Processing(err) => {
+                write!(f, "{}", err.kind())
+            }
+            ErrorKind::Unhandled(_, _) => {
+                write!(f, "{}", self.kind)
             }
         }
     }
@@ -276,6 +329,7 @@ impl From<ErrorKind> for Error {
         Self {
             kind,
             current_file: FileId::default(),
+            line_override: None,
         }
     }
 }
@@ -285,6 +339,7 @@ impl From<parser::Error> for Error {
         Self {
             kind: ErrorKind::Parse(error),
             current_file: FileId::default(),
+            line_override: None,
         }
     }
 }
@@ -294,6 +349,7 @@ impl From<ProcessingError> for Error {
         Self {
             kind: ErrorKind::Processing(error),
             current_file: FileId::default(),
+            line_override: None,
         }
     }
 }
@@ -330,6 +386,7 @@ pub enum DirectiveKind {
     Undef(DirectiveResult<nodes::Undef>),
     Error(DirectiveResult<nodes::Error>),
     Include(DirectiveResult<nodes::Include>),
+    Line(DirectiveResult<nodes::Line>),
 }
 
 pub trait TokenLike: Into<NodeOrToken<SyntaxNode, SyntaxToken>> {
@@ -441,8 +498,12 @@ impl Event {
         Self::Directive(d.into())
     }
 
-    pub fn error<T: Into<Error>>(e: T, current_file: FileId) -> Self {
-        Self::Error(e.into().with_current_file(current_file))
+    pub fn error<T: Into<Error>>(
+        e: T,
+        current_file: FileId,
+        line_override: Option<&(u32, ParsedLine)>,
+    ) -> Self {
+        Self::Error(e.into().with(current_file, line_override))
     }
 }
 
@@ -476,7 +537,11 @@ pub enum IoEvent<E: std::error::Error + 'static> {
 }
 
 impl<E: std::error::Error + 'static> IoEvent<E> {
-    pub fn error<T: Into<Error>>(e: T, current_file: FileId) -> Self {
-        Self::Error(e.into().with_current_file(current_file))
+    pub fn error<T: Into<Error>>(
+        e: T,
+        current_file: FileId,
+        line_override: Option<&(u32, ParsedLine)>,
+    ) -> Self {
+        Self::Error(e.into().with(current_file, line_override))
     }
 }

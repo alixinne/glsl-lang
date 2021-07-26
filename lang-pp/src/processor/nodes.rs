@@ -266,6 +266,7 @@ impl ExtensionName {
 lazy_static::lazy_static! {
     pub static ref GL_ARB_SHADING_LANGUAGE_INCLUDE: ExtensionName = ExtensionName::Specific(ext_name!("GL_ARB_shading_language_include"));
     pub static ref GL_GOOGLE_INCLUDE_DIRECTIVE: ExtensionName = ExtensionName::Specific(ext_name!("GL_GOOGLE_include_directive"));
+    pub static ref GL_GOOGLE_CPP_STYLE_LINE_DIRECTIVE: ExtensionName = ExtensionName::Specific(ext_name!("GL_GOOGLE_cpp_style_line_directive"));
 }
 
 #[derive(Debug, Clone)]
@@ -721,6 +722,136 @@ impl TryFrom<SyntaxNode> for Include {
                 .children()
                 .find(|node| node.kind() == PP_INCLUDE_PATH)
                 .ok_or_else(|| Self::Error::MissingPath)?,
+        })
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct Line {
+    body: SyntaxNode,
+}
+
+#[derive(Debug, Clone)]
+pub enum ParsedLine {
+    Line(u32),
+    LineAndFileNumber(u32, u32),
+    LineAndPath(u32, String),
+}
+
+impl ParsedLine {
+    pub fn line_number(&self) -> u32 {
+        match self {
+            ParsedLine::Line(line)
+            | ParsedLine::LineAndFileNumber(line, _)
+            | ParsedLine::LineAndPath(line, _) => *line,
+        }
+    }
+}
+
+impl Line {
+    pub fn parse(
+        &self,
+        current_state: &ProcessorState,
+        line_map: &LineMap,
+    ) -> Result<ParsedLine, LineError> {
+        // Perform macro substitution
+        let tokens = self
+            .body
+            .children_with_tokens()
+            .filter_map(NodeOrToken::into_token)
+            .collect();
+        let subs_events: Vec<_> =
+            MacroInvocation::substitute_vec(current_state, tokens, line_map).collect();
+
+        // Make sure they are all tokens
+        if !subs_events.iter().all(|evt| matches!(evt, Event::Token(_))) {
+            return Err(LineError::MalformedLine {
+                tokens: subs_events,
+            });
+        }
+
+        // Discard all trivial tokens
+        let subs_tokens: Vec<_> = subs_events
+            .into_iter()
+            .filter_map(|event| match event {
+                Event::Token(token) if !token.kind().is_trivia() => Some(token),
+                _ => None,
+            })
+            .collect();
+
+        // By now, the include should either be a quote string or an angle string, and this should
+        // be the only token
+        if subs_tokens.len() >= 1 && subs_tokens.len() <= 2 {
+            // Line number
+            let token = &subs_tokens[0];
+            let line_number: u32 = if token.kind() == DIGITS {
+                Some(token)
+            } else {
+                None
+            }
+            .and_then(|token| {
+                lexical::parse(Unescaped::new(token.text()).to_string().as_ref()).ok()
+            })
+            .ok_or_else(|| LineError::InvalidLineNumber {
+                token: token.clone(),
+            })?;
+
+            if subs_tokens.len() > 1 {
+                let token = &subs_tokens[1];
+                if token.kind() == QUOTE_STRING {
+                    let text = token.text();
+                    Ok(ParsedLine::LineAndPath(
+                        line_number,
+                        text[1..text.len() - 1].to_string(),
+                    ))
+                } else if token.kind() == DIGITS {
+                    Ok(ParsedLine::LineAndFileNumber(
+                        line_number,
+                        lexical::parse(Unescaped::new(token.text()).to_string().as_ref()).map_err(
+                            |_| LineError::InvalidPath {
+                                token: token.clone(),
+                            },
+                        )?,
+                    ))
+                } else {
+                    Err(LineError::InvalidPath {
+                        token: token.clone(),
+                    })
+                }
+            } else {
+                Ok(ParsedLine::Line(line_number))
+            }
+        } else {
+            Err(LineError::ExtraTokens {
+                tokens: subs_tokens.to_vec(),
+            })
+        }
+    }
+}
+
+#[derive(Debug, Error)]
+pub enum LineError {
+    #[error("missing body for #line directive")]
+    MissingBody,
+    #[error("malformed line")]
+    MalformedLine { tokens: Vec<Event> },
+    #[error("extra tokens in #include path")]
+    ExtraTokens { tokens: Vec<OutputToken> },
+    #[error("invalid line number")]
+    InvalidLineNumber { token: OutputToken },
+    #[error("invalid path")]
+    InvalidPath { token: OutputToken },
+}
+
+impl TryFrom<SyntaxNode> for Line {
+    type Error = LineError;
+
+    fn try_from(value: SyntaxNode) -> Result<Self, Self::Error> {
+        Ok(Self {
+            body: value
+                .children()
+                .find(|node| node.kind() == PP_LINE_BODY)
+                .ok_or_else(|| Self::Error::MissingBody)?,
         })
     }
 }

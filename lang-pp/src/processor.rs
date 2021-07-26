@@ -17,7 +17,10 @@ pub mod expand;
 pub mod fs;
 
 pub mod nodes;
-use nodes::{Define, DefineObject, Extension, ExtensionName, Version};
+use nodes::{
+    Define, DefineObject, Extension, ExtensionName, Version, GL_ARB_SHADING_LANGUAGE_INCLUDE,
+    GL_GOOGLE_CPP_STYLE_LINE_DIRECTIVE, GL_GOOGLE_INCLUDE_DIRECTIVE,
+};
 
 /// Operating mode for #include directives
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -44,6 +47,53 @@ pub struct ProcessorState {
     // use Rc to make cloning the whole struct cheaper
     definitions: HashMap<SmolStr, Definition>,
     version: Version,
+    cpp_style_line: bool,
+}
+
+impl ProcessorState {
+    pub fn extension(&mut self, extension: &nodes::Extension) {
+        // Push onto the stack
+        self.extension_stack.push(extension.clone());
+
+        // Process include extensions
+        let target_include_mode = if extension.name == *GL_ARB_SHADING_LANGUAGE_INCLUDE {
+            Some(IncludeMode::ArbInclude)
+        } else if extension.name == *GL_GOOGLE_INCLUDE_DIRECTIVE {
+            Some(IncludeMode::GoogleInclude)
+        } else {
+            None
+        };
+
+        if let Some(target) = target_include_mode {
+            if extension.behavior.is_active() {
+                self.include_mode = target;
+
+                // GL_GOOGLE_include_directive enable GL_GOOGLE_cpp_style_line
+                if target == IncludeMode::GoogleInclude {
+                    self.cpp_style_line = true;
+                }
+            } else {
+                // TODO: Implement current mode as a stack?
+                self.include_mode = IncludeMode::None;
+            }
+        }
+
+        // Process others
+        if extension.name == *GL_GOOGLE_CPP_STYLE_LINE_DIRECTIVE {
+            if extension.behavior.is_active() {
+                self.cpp_style_line = true;
+            } else {
+                // TODO: Notify instead of silently ignoring?
+                if self.include_mode != IncludeMode::GoogleInclude {
+                    self.cpp_style_line = false;
+                }
+            }
+        }
+    }
+
+    pub fn cpp_style_line(&self) -> bool {
+        self.cpp_style_line
+    }
 }
 
 impl Default for ProcessorState {
@@ -74,6 +124,7 @@ impl Default for ProcessorState {
                 .map(|definition| (definition.name().into(), definition)),
             ),
             version: Version::default(),
+            cpp_style_line: false,
         }
     }
 }

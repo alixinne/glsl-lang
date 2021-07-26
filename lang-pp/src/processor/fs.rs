@@ -111,25 +111,34 @@ impl<'p, F: FileSystem> Iterator for ExpandStack<'p, F> {
                                         Err(error) => {
                                             // Just return the error, we'll keep iterating on the lower
                                             // file by looping
-                                            let line_map = self.stack.last().unwrap().line_map();
+                                            let (line_map, line_override) = {
+                                                let last = self.stack.last().unwrap();
+                                                (last.line_map(), last.line_override())
+                                            };
+
                                             return Some(IoEvent::IoError(Located::new(
                                                 error,
                                                 resolved_path,
                                                 current_file,
                                                 node.text_range(),
                                                 line_map,
+                                                line_override,
                                             )));
                                         }
                                     }
                                 } else {
                                     // Resolving the path failed, throw an error located at the
                                     // right place
-                                    let line_map = self.stack.last().unwrap().line_map();
+                                    let (line_map, line_override) = {
+                                        let last = self.stack.last().unwrap();
+                                        (last.line_map(), last.line_override())
+                                    };
 
                                     return Some(IoEvent::error(
                                         ProcessingErrorKind::IncludeNotFound { path }
                                             .with_node(node.into(), line_map),
                                         current_file,
+                                        line_override,
                                     ));
                                 }
                             }

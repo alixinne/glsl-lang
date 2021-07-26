@@ -124,6 +124,7 @@ pub fn test_file(path: impl AsRef<Path>) {
                 DirectiveKind::Undef(_) => {}
                 DirectiveKind::Error(_) => {}
                 DirectiveKind::Include(_) => {}
+                DirectiveKind::Line(_) => {}
             },
         }
     }

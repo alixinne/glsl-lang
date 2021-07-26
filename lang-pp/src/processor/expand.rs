@@ -20,8 +20,8 @@ use super::{
     definition::{Definition, MacroInvocation},
     event::{self, DirectiveKind, ErrorKind, Event, ProcessingErrorKind},
     nodes::{
-        Define, DirectiveResult, Error, Extension, IfDef, IfNDef, Include, ParsedPath, Undef,
-        Version, GL_ARB_SHADING_LANGUAGE_INCLUDE, GL_GOOGLE_INCLUDE_DIRECTIVE,
+        Define, DirectiveResult, Error, Extension, IfDef, IfNDef, Include, Line, ParsedLine,
+        ParsedPath, Undef, Version,
     },
     IncludeMode, ProcessorState,
 };
@@ -31,6 +31,7 @@ pub struct ExpandOne {
     mask_active: bool,
     line_map: LineMap,
     state: ExpandState,
+    last_line_override: Option<(u32, ParsedLine)>,
 }
 
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -95,9 +96,10 @@ impl ExpandState {
         iterator: SyntaxElementChildren<PreprocessorLang>,
         errors: Vec<parser::Error>,
         current_state: ProcessorState,
+        line_override: Option<&(u32, ParsedLine)>,
     ) -> Self {
         let mut events = ArrayVec::new();
-        events.push(Event::error(e.into(), current_file));
+        events.push(Event::error(e.into(), current_file, line_override));
         events.push(Event::Token(token.clone().into()));
 
         Self::PendingEvents {
@@ -134,6 +136,7 @@ impl ExpandOne {
                 ast,
                 current_state,
             },
+            last_line_override: None,
         }
     }
 
@@ -155,6 +158,10 @@ impl ExpandOne {
 
     pub fn line_map(&self) -> &LineMap {
         &self.line_map
+    }
+
+    pub fn line_override(&self) -> Option<&(u32, ParsedLine)> {
+        self.last_line_override.as_ref()
     }
 
     fn handle_node(
@@ -187,26 +194,7 @@ impl ExpandOne {
                     let directive: DirectiveResult<Extension> = node.try_into();
 
                     if let Ok(extension) = &directive {
-                        // Push onto the stack
-                        current_state.extension_stack.push((**extension).clone());
-
-                        let target_include_mode =
-                            if extension.name == *GL_ARB_SHADING_LANGUAGE_INCLUDE {
-                                Some(IncludeMode::ArbInclude)
-                            } else if extension.name == *GL_GOOGLE_INCLUDE_DIRECTIVE {
-                                Some(IncludeMode::GoogleInclude)
-                            } else {
-                                None
-                            };
-
-                        if let Some(target) = target_include_mode {
-                            if extension.behavior.is_active() {
-                                current_state.include_mode = target;
-                            } else {
-                                // TODO: Implement current mode as a stack?
-                                current_state.include_mode = IncludeMode::None;
-                            }
-                        }
+                        current_state.extension(&**&extension);
                     }
 
                     result.push(Event::directive(directive));
@@ -259,7 +247,7 @@ impl ExpandOne {
                     result.push(Event::directive(directive));
 
                     if let Some(error) = error {
-                        result.push(Event::error(error, current_file));
+                        result.push(Event::error(error, current_file, self.line_override()));
                     }
                 }
             }
@@ -314,6 +302,7 @@ impl ExpandOne {
                                     ProcessingErrorKind::ExtraElse
                                         .with_node(node.into(), &self.line_map),
                                     current_file,
+                                    self.line_override(),
                                 ));
 
                                 return result.into();
@@ -330,6 +319,7 @@ impl ExpandOne {
                     result.push(Event::error(
                         ProcessingErrorKind::ExtraElse.with_node(node.into(), &self.line_map),
                         current_file,
+                        self.line_override(),
                     ));
                 }
             }
@@ -350,6 +340,7 @@ impl ExpandOne {
                     result.push(Event::error(
                         ProcessingErrorKind::ExtraEndIf.with_node(node.into(), &self.line_map),
                         current_file,
+                        self.line_override(),
                     ));
                 }
             }
@@ -386,6 +377,7 @@ impl ExpandOne {
                             }
                             .with_node(node.into(), &self.line_map),
                             current_file,
+                            self.line_override(),
                         ));
                     }
                 }
@@ -401,6 +393,7 @@ impl ExpandOne {
                             }
                             .with_node(node.into(), &self.line_map),
                             current_file,
+                            self.line_override(),
                         ))
                     } else {
                         None
@@ -427,6 +420,7 @@ impl ExpandOne {
                                 &self.line_map,
                             ),
                             current_file,
+                            self.line_override(),
                         ));
 
                         return result.into();
@@ -468,6 +462,66 @@ impl ExpandOne {
                     result.push(Event::directive(directive));
                 }
             }
+            PP_LINE => {
+                if self.mask_active {
+                    // Parse the directive itself
+                    let directive: DirectiveResult<Line> = node.clone().try_into();
+
+                    // Perform macro substitution to get the path. If this fails, the directive is
+                    // malformed and shouldn't be processed.
+                    let (directive, line) = match directive {
+                        Ok(directive) => match directive.parse(&current_state, &self.line_map) {
+                            Ok(path) => (Ok(directive), Some(path)),
+                            Err(err) => (Err((err, node.clone())), None),
+                        },
+                        err => (err, None),
+                    };
+
+                    if let Some(line) = line {
+                        let raw_line = self
+                            .line_map
+                            .get_line_and_col(node.text_range().start().into())
+                            .0;
+
+                        // Check that we support cpp style line
+                        let line = match line {
+                            ParsedLine::Line(_) | ParsedLine::LineAndFileNumber(_, _) => line,
+                            ParsedLine::LineAndPath(_, _) if current_state.cpp_style_line() => line,
+                            ParsedLine::LineAndPath(line, _) => {
+                                result.push(Event::error(
+                                    ProcessingErrorKind::CppStyleLineNotSupported
+                                        .with_node(node.into(), &self.line_map),
+                                    current_file,
+                                    self.line_override(),
+                                ));
+
+                                ParsedLine::Line(line)
+                            }
+                        };
+
+                        // Combine the previous and the new override
+                        self.last_line_override = match self.last_line_override.take() {
+                            Some((_, prev_override)) => match line {
+                                ParsedLine::Line(line_number) => Some(match prev_override {
+                                    ParsedLine::Line(_) => line,
+                                    ParsedLine::LineAndFileNumber(_, file_number) => {
+                                        ParsedLine::LineAndFileNumber(line_number, file_number)
+                                    }
+                                    ParsedLine::LineAndPath(_, path) => {
+                                        ParsedLine::LineAndPath(line_number, path)
+                                    }
+                                }),
+                                ParsedLine::LineAndFileNumber(_, _)
+                                | ParsedLine::LineAndPath(_, _) => Some(line),
+                            },
+                            None => Some(line),
+                        }
+                        .map(|ov| (raw_line, ov));
+                    }
+
+                    result.push(Event::directive(directive));
+                }
+            }
             _ => {
                 // Special case for PP_IF so #endif stack correctly
                 if node.kind() == PP_IF {
@@ -479,6 +533,7 @@ impl ExpandOne {
                     result.push(Event::error(
                         ErrorKind::unhandled(NodeOrToken::Node(node), &self.line_map),
                         current_file,
+                        self.line_override(),
                     ));
                 }
             }
@@ -534,6 +589,7 @@ impl ExpandOne {
                                 iterator,
                                 errors,
                                 current_state,
+                                self.line_override(),
                             );
                         }
                     }
@@ -558,6 +614,7 @@ impl ExpandOne {
                         iterator,
                         errors,
                         current_state,
+                        self.line_override(),
                     );
                 }
             }
@@ -690,7 +747,10 @@ impl Iterator for ExpandOne {
                                         current_state,
                                     };
 
-                                    return Some(Event::error(error, current_file).into());
+                                    return Some(
+                                        Event::error(error, current_file, self.line_override())
+                                            .into(),
+                                    );
                                 }
                             }
                         }

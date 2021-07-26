@@ -78,7 +78,21 @@ impl<'p, F: FileSystem> Iterator for ExpandStack<'p, F> {
                                 // Put it back on the stack
                                 self.stack.push(expand);
 
-                                return Some(event.into());
+                                return Some(match event {
+                                    Event::Error(error) => IoEvent::Error(error),
+                                    Event::EnterFile(file_id) => {
+                                        let (canonical_path, input_path) =
+                                            self.processor.get_paths(file_id).unwrap();
+
+                                        IoEvent::EnterFile {
+                                            file_id,
+                                            path: input_path.to_owned(),
+                                            canonical_path: canonical_path.to_owned(),
+                                        }
+                                    }
+                                    Event::Token(token) => IoEvent::Token(token),
+                                    Event::Directive(directive) => IoEvent::Directive(directive),
+                                });
                             }
                             ExpandEvent::EnterFile(current_file, current_state, node, path) => {
                                 // Put it back on the stack
@@ -112,14 +126,11 @@ impl<'p, F: FileSystem> Iterator for ExpandStack<'p, F> {
                                     // right place
                                     let line_map = self.stack.last().unwrap().line_map();
 
-                                    return Some(
-                                        Event::error(
-                                            ProcessingErrorKind::IncludeNotFound { path }
-                                                .with_node(node.into(), line_map),
-                                            current_file,
-                                        )
-                                        .into(),
-                                    );
+                                    return Some(IoEvent::error(
+                                        ProcessingErrorKind::IncludeNotFound { path }
+                                            .with_node(node.into(), line_map),
+                                        current_file,
+                                    ));
                                 }
                             }
                             ExpandEvent::Completed(state) => {
@@ -209,12 +220,18 @@ impl<F: FileSystem> Processor<F> {
         }
     }
 
-    pub fn resolve(&self, relative_to: FileId, path: &ParsedPath) -> Option<PathBuf> {
+    pub fn get_paths(&self, file_id: FileId) -> Option<(&PathBuf, &PathBuf)> {
         // Find the canonical path for the current file identifier
-        let canonical_path = self.file_ids.get_by_right(&relative_to)?;
+        let canonical_path = self.file_ids.get_by_right(&file_id)?;
 
         // Transform that back into a non-canonical path
         let input_path = self.canonical_paths.get_by_right(canonical_path)?;
+
+        Some((canonical_path, input_path))
+    }
+
+    pub fn resolve(&self, relative_to: FileId, path: &ParsedPath) -> Option<PathBuf> {
+        let (_, input_path) = self.get_paths(relative_to)?;
 
         match path.ty {
             PathType::Angle => {

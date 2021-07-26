@@ -6,7 +6,7 @@ use std::{
 };
 
 use glsl_lang_pp::processor::{
-    event::{DirectiveKind, ErrorKind, Event, TokenLike},
+    event::{DirectiveKind, ErrorKind, IoEvent, TokenLike},
     nodes::DirectiveExt,
     ProcessorState,
 };
@@ -67,7 +67,7 @@ pub fn test_file(path: impl AsRef<Path>) {
     // Write the resulting tree, even if there are errors
     {
         let mut f = File::create(&paths.parsed).unwrap();
-        write!(f, "{:#?}", parsed.ast().clone().into_inner().0).unwrap();
+        write!(f, "{:#?}", parsed.ast().into_inner().0).unwrap();
     }
 
     let mut eventsf = File::create(&paths.events).unwrap();
@@ -81,7 +81,12 @@ pub fn test_file(path: impl AsRef<Path>) {
         writeln!(eventsf, "{:?}", event).unwrap();
 
         match event {
-            Event::Error(error) => {
+            IoEvent::IoError(err) => {
+                error_count += 1;
+                writeln!(errorsf, "{}", err).unwrap();
+            }
+
+            IoEvent::Error(error) => {
                 match error.kind() {
                     ErrorKind::Parse(_) => {}
                     ErrorKind::Processing(_) => {}
@@ -98,13 +103,13 @@ pub fn test_file(path: impl AsRef<Path>) {
                 writeln!(errorsf, "{}", error).unwrap();
             }
 
-            Event::EnterFile { .. } => {}
+            IoEvent::EnterFile { .. } => {}
 
-            Event::Token(token) => {
+            IoEvent::Token(token) => {
                 write!(ppf, "{}", token.text()).unwrap();
             }
 
-            Event::Directive(directive) => match directive {
+            IoEvent::Directive(directive) => match directive {
                 DirectiveKind::Version(directive) => {
                     write!(ppf, "{}", directive.into_node()).unwrap();
                 }
@@ -118,6 +123,7 @@ pub fn test_file(path: impl AsRef<Path>) {
                 DirectiveKind::EndIf => {}
                 DirectiveKind::Undef(_) => {}
                 DirectiveKind::Error(_) => {}
+                DirectiveKind::Include(_) => {}
             },
         }
     }

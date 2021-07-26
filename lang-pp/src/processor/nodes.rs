@@ -7,11 +7,17 @@ use string_cache::Atom;
 use thiserror::Error;
 
 use crate::{
+    lexer::LineMap,
     parser::{SyntaxKind::*, SyntaxNode},
+    processor::event::TokenLike,
     Unescaped,
 };
 
-use super::exts;
+use super::{
+    definition::{trim_ws, MacroInvocation},
+    event::{Event, OutputToken},
+    exts, ProcessorState,
+};
 
 #[derive(Debug, Clone)]
 pub struct Directive<I: TryFrom<SyntaxNode> + std::fmt::Debug + Clone> {
@@ -600,5 +606,121 @@ impl TryFrom<SyntaxNode> for Error {
         });
 
         Ok(Self { message })
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct Include {
+    path: SyntaxNode,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ParsedPath {
+    pub path: String,
+    pub ty: PathType,
+}
+
+impl std::fmt::Display for ParsedPath {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self.ty {
+            PathType::Angle => write!(f, "<{}>", self.path),
+            PathType::Quote => write!(f, "\"{}\"", self.path),
+        }
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum PathType {
+    Angle,
+    Quote,
+}
+
+impl Include {
+    pub fn path(
+        &self,
+        current_state: &ProcessorState,
+        line_map: &LineMap,
+    ) -> Result<ParsedPath, IncludeError> {
+        // Perform macro substitution
+        let tokens = self
+            .path
+            .children_with_tokens()
+            .filter_map(NodeOrToken::into_token)
+            .collect();
+        let subs_events: Vec<_> =
+            MacroInvocation::substitute_vec(current_state, tokens, line_map).collect();
+
+        // Make sure they are all tokens
+        if !subs_events.iter().all(|evt| matches!(evt, Event::Token(_))) {
+            return Err(IncludeError::MalformedPath {
+                tokens: subs_events,
+            });
+        }
+
+        let subs_tokens: Vec<_> = subs_events
+            .into_iter()
+            .filter_map(|event| match event {
+                Event::Token(token) => Some(token),
+                _ => None,
+            })
+            .collect();
+
+        // Discard trivial tokens
+        let subs_tokens = trim_ws(&subs_tokens);
+
+        // By now, the include should either be a quote string or an angle string, and this should
+        // be the only token
+        if subs_tokens.len() == 0 {
+            return Err(IncludeError::MissingPath);
+        } else if subs_tokens.len() > 1 {
+            return Err(IncludeError::ExtraTokens {
+                tokens: subs_tokens.to_vec(),
+            });
+        }
+
+        // unwrap: we just checked there is one
+        let first_token = subs_tokens.first().unwrap();
+        let ty = match first_token.kind() {
+            ANGLE_STRING => PathType::Angle,
+            QUOTE_STRING => PathType::Quote,
+            _ => {
+                return Err(IncludeError::InvalidPathLiteral {
+                    token: first_token.clone(),
+                });
+            }
+        };
+
+        let text = first_token.text();
+        let text = &text[1..text.len() - 1];
+
+        Ok(ParsedPath {
+            path: text.to_string(),
+            ty,
+        })
+    }
+}
+
+#[derive(Debug, Error)]
+pub enum IncludeError {
+    #[error("missing path for #include directive")]
+    MissingPath,
+    #[error("malformed path")]
+    MalformedPath { tokens: Vec<Event> },
+    #[error("extra tokens in #include path")]
+    ExtraTokens { tokens: Vec<OutputToken> },
+    #[error("invalid path literal")]
+    InvalidPathLiteral { token: OutputToken },
+}
+
+impl TryFrom<SyntaxNode> for Include {
+    type Error = IncludeError;
+
+    fn try_from(value: SyntaxNode) -> Result<Self, Self::Error> {
+        Ok(Self {
+            path: value
+                .children()
+                .find(|node| node.kind() == PP_INCLUDE_PATH)
+                .ok_or_else(|| Self::Error::MissingPath)?,
+        })
     }
 }

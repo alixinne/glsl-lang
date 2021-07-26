@@ -155,19 +155,7 @@ impl Definition {
                         if let Some(value) = args.get(token.text()) {
                             // There is an argument with those tokens
                             // TODO: Should we trim whitespace out of macro arguments?
-                            let value = {
-                                let leading_ws = value
-                                    .iter()
-                                    .take_while(|token| token.kind().is_whitespace())
-                                    .count();
-                                let trailing_ws = value
-                                    .iter()
-                                    .rev()
-                                    .take_while(|token| token.kind().is_whitespace())
-                                    .count();
-
-                                &value[leading_ws..(value.len() - trailing_ws)]
-                            };
+                            let value = trim_ws(&value);
 
                             for subs_token in value.iter() {
                                 builder.token(subs_token.kind().into(), subs_token.text());
@@ -244,6 +232,20 @@ impl Definition {
     }
 }
 
+pub(crate) fn trim_ws<T: TokenLike>(tokens: &[T]) -> &[T] {
+    let leading_ws = tokens
+        .iter()
+        .take_while(|token| token.kind().is_whitespace())
+        .count();
+    let trailing_ws = tokens
+        .iter()
+        .rev()
+        .take_while(|token| token.kind().is_whitespace())
+        .count();
+
+    &tokens[leading_ws..(tokens.len() - trailing_ws)]
+}
+
 pub struct MacroInvocation<'d, T> {
     definition: &'d Definition,
     tokens: MacroCall<T>,
@@ -256,7 +258,7 @@ enum MacroCall<T> {
     Function(Vec<Vec<T>>),
 }
 
-impl<'d, T: TokenLike> MacroInvocation<'d, T> {
+impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
     pub fn parse<I>(
         definition: &'d Definition,
         first_token: T,
@@ -393,6 +395,85 @@ impl<'d, T: TokenLike> MacroInvocation<'d, T> {
         )))
     }
 
+    pub fn substitute_vec(
+        current_state: &ProcessorState,
+        tokens: Vec<T>,
+        line_map: &LineMap,
+    ) -> impl Iterator<Item = Event> {
+        let mut subs_stack = HashSet::new();
+        Self::substitute_vec_inner(current_state, tokens, line_map, &mut subs_stack, None)
+    }
+
+    fn substitute_vec_inner(
+        current_state: &ProcessorState,
+        tokens: Vec<T>,
+        line_map: &LineMap,
+        subs_stack: &mut HashSet<SmolStr>,
+        range: Option<TextRange>,
+    ) -> impl Iterator<Item = Event> {
+        // Macros are recursive, so we need to scan again for further substitutions
+        let mut result = Vec::with_capacity(tokens.len());
+        let mut iterator = tokens.into_iter().map(|item| NodeOrToken::Token(item));
+
+        while let Some(node_or_token) = iterator.next() {
+            // Just a regular token
+            match node_or_token {
+                NodeOrToken::Node(_) => unreachable!(),
+                NodeOrToken::Token(token) => {
+                    if let Some(definition) = (if token.kind() == IDENT_KW {
+                        Some(Unescaped::new(token.text()).to_string())
+                    } else {
+                        None
+                    })
+                    .and_then(|ident| {
+                        if subs_stack.contains(ident.as_ref()) {
+                            None
+                        } else {
+                            Some(ident)
+                        }
+                    })
+                    .and_then(|ident| current_state.definitions.get(ident.as_ref()))
+                    {
+                        match MacroInvocation::parse_nested(
+                            definition,
+                            token.clone(),
+                            iterator.clone(),
+                            line_map,
+                            range,
+                        ) {
+                            Ok(Some((invocation, new_iterator))) => {
+                                match invocation.substitute_inner(
+                                    current_state,
+                                    line_map,
+                                    subs_stack,
+                                ) {
+                                    Ok(events) => {
+                                        result.extend(events);
+                                        iterator = new_iterator;
+                                    }
+                                    Err(err) => {
+                                        result.push(Event::Error(err.into()));
+                                        result.push(Event::Token(token.into()));
+                                    }
+                                }
+                            }
+                            Ok(None) => {
+                                result.push(Event::Token(token.into()));
+                            }
+                            Err(err) => {
+                                result.push(Event::Error(err.into()));
+                            }
+                        }
+                    } else {
+                        result.push(Event::Token(token.into()));
+                    }
+                }
+            }
+        }
+
+        result.into_iter()
+    }
+
     pub fn substitute(
         self,
         current_state: &ProcessorState,
@@ -422,69 +503,17 @@ impl<'d, T: TokenLike> MacroInvocation<'d, T> {
             // Disable recursion for the current name
             subs_stack.insert(self.definition.name().into());
 
-            // Macros are recursive, so we need to scan again for further substitutions
-            let mut result = Vec::with_capacity(tokens.len());
-            let mut iterator = tokens.into_iter().map(|item| NodeOrToken::Token(item));
-
-            while let Some(node_or_token) = iterator.next() {
-                // Just a regular token
-                match node_or_token {
-                    NodeOrToken::Node(_) => unreachable!(),
-                    NodeOrToken::Token(token) => {
-                        if let Some(definition) = (if token.kind() == IDENT_KW {
-                            Some(Unescaped::new(token.text()).to_string())
-                        } else {
-                            None
-                        })
-                        .and_then(|ident| {
-                            if subs_stack.contains(ident.as_ref()) {
-                                None
-                            } else {
-                                Some(ident)
-                            }
-                        })
-                        .and_then(|ident| current_state.definitions.get(ident.as_ref()))
-                        {
-                            match MacroInvocation::parse_nested(
-                                definition,
-                                token.clone(),
-                                iterator.clone(),
-                                line_map,
-                                Some(self.range),
-                            ) {
-                                Ok(Some((invocation, new_iterator))) => {
-                                    match invocation.substitute_inner(
-                                        current_state,
-                                        line_map,
-                                        subs_stack,
-                                    ) {
-                                        Ok(events) => {
-                                            result.extend(events);
-                                            iterator = new_iterator;
-                                        }
-                                        Err(err) => {
-                                            result.push(Event::Error(err.into()));
-                                            result.push(Event::Token(token));
-                                        }
-                                    }
-                                }
-                                Ok(None) => {
-                                    result.push(Event::Token(token));
-                                }
-                                Err(err) => {
-                                    result.push(Event::Error(err.into()));
-                                }
-                            }
-                        } else {
-                            result.push(Event::Token(token));
-                        }
-                    }
-                }
-            }
+            let result = MacroInvocation::substitute_vec_inner(
+                current_state,
+                tokens,
+                line_map,
+                subs_stack,
+                Some(self.range),
+            );
 
             subs_stack.remove(self.definition.name());
 
-            Ok(result.into_iter())
+            Ok(result)
         } else {
             Err(ErrorKind::unhandled(self.first_token.into(), line_map).into())
         }

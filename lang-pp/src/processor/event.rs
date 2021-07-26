@@ -1,4 +1,4 @@
-use std::convert::TryFrom;
+use std::{convert::TryFrom, path::PathBuf};
 
 use derive_more::From;
 use rowan::{NodeOrToken, TextRange};
@@ -12,7 +12,7 @@ use crate::{
     parser::{self, SyntaxKind, SyntaxNode, SyntaxToken},
 };
 
-use super::nodes::{self, DirectiveResult};
+use super::nodes::{self, DirectiveResult, ParsedPath};
 
 #[derive(Debug)]
 pub struct ProcessingError {
@@ -89,6 +89,9 @@ pub enum ProcessingErrorKind {
         expected: usize,
         actual: usize,
     },
+    IncludeNotFound {
+        path: ParsedPath,
+    },
 }
 
 impl ProcessingErrorKind {
@@ -156,7 +159,58 @@ impl std::fmt::Display for ProcessingErrorKind {
             } => {
                 write!(f, "'macro expansion' : wrong number of arguments in input of macro {} : expected {}, got {}", ident, expected, actual)
             }
+            ProcessingErrorKind::IncludeNotFound { path } => {
+                write!(f, "'#include' : could not find file for {}", path)
+            }
         }
+    }
+}
+
+#[derive(Debug)]
+pub struct Located<E: std::error::Error + 'static> {
+    inner: E,
+    path: PathBuf,
+    current_file: FileId,
+    pos: TextRange,
+    user_pos: (u32, u32),
+}
+
+impl<E: std::error::Error> Located<E> {
+    pub fn new(
+        inner: E,
+        path: PathBuf,
+        current_file: FileId,
+        pos: TextRange,
+        line_map: &LineMap,
+    ) -> Self {
+        let user_pos = line_map.get_line_and_col(pos.start().into());
+
+        Self {
+            inner,
+            path,
+            current_file,
+            pos,
+            user_pos,
+        }
+    }
+}
+
+impl<E: std::error::Error> std::error::Error for Located<E> {
+    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+        self.inner.source()
+    }
+}
+
+impl<E: std::error::Error> std::fmt::Display for Located<E> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "{}:{}: '#include' : {} : {}",
+            self.current_file,
+            self.user_pos.0 + 1,
+            self.path.display(),
+            self.inner
+        )
     }
 }
 
@@ -275,6 +329,7 @@ pub enum DirectiveKind {
     EndIf,
     Undef(DirectiveResult<nodes::Undef>),
     Error(DirectiveResult<nodes::Error>),
+    Include(DirectiveResult<nodes::Include>),
 }
 
 pub trait TokenLike: Into<NodeOrToken<SyntaxNode, SyntaxToken>> {
@@ -392,9 +447,9 @@ impl Event {
 }
 
 impl<E: std::error::Error + 'static> TryFrom<IoEvent<E>> for Event {
-    type Error = E;
+    type Error = Located<E>;
 
-    fn try_from(value: IoEvent<E>) -> Result<Self, E> {
+    fn try_from(value: IoEvent<E>) -> Result<Self, Located<E>> {
         Ok(match value {
             IoEvent::IoError(err) => {
                 return Err(err);
@@ -409,7 +464,7 @@ impl<E: std::error::Error + 'static> TryFrom<IoEvent<E>> for Event {
 
 #[derive(Debug)]
 pub enum IoEvent<E: std::error::Error + 'static> {
-    IoError(E),
+    IoError(Located<E>),
     Error(Error),
     EnterFile(FileId),
     Token(OutputToken),

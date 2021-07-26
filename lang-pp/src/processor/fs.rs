@@ -3,13 +3,19 @@ use std::{
     path::{Path, PathBuf},
 };
 
+use bimap::BiHashMap;
 use encoding_rs::Encoding;
 
 use lang_util::FileId;
 
 use crate::parser::{Ast, Parser};
 
-use super::{Expand, ProcessorState};
+use super::{
+    event::{Event, IoEvent, Located, ProcessingErrorKind},
+    expand::{ExpandEvent, ExpandOne},
+    nodes::{ParsedPath, PathType},
+    ProcessorState,
+};
 
 pub trait FileSystem {
     type Error: std::error::Error + 'static;
@@ -45,29 +51,138 @@ impl FileSystem for Std {
 
 pub type StdProcessor = Processor<Std>;
 
-#[derive(Debug, Clone, Copy)]
-pub struct ParsedFile<'a> {
-    file_id: FileId,
-    ast: &'a Ast,
+pub struct ExpandStack<'p, F: FileSystem> {
+    processor: &'p mut Processor<F>,
+    stack: Vec<ExpandOne>,
+    state: Option<ProcessorState>,
 }
 
-impl<'a> ParsedFile<'a> {
+impl<'p, F: FileSystem> ExpandStack<'p, F> {
+    pub fn into_state(self) -> Option<ProcessorState> {
+        self.state
+    }
+}
+
+impl<'p, F: FileSystem> Iterator for ExpandStack<'p, F> {
+    type Item = IoEvent<F::Error>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        loop {
+            if let Some(mut expand) = self.stack.pop() {
+                let result = expand.next();
+
+                match result {
+                    Some(event) => {
+                        match event {
+                            ExpandEvent::Event(event) => {
+                                // Put it back on the stack
+                                self.stack.push(expand);
+
+                                return Some(event.into());
+                            }
+                            ExpandEvent::EnterFile(current_file, current_state, node, path) => {
+                                // Put it back on the stack
+                                self.stack.push(expand);
+
+                                // We are supposed to enter a new file
+                                // First, parse it using the preprocessor
+                                if let Some(resolved_path) =
+                                    self.processor.resolve(current_file, &path)
+                                {
+                                    // TODO: Allow passing an encoding from somewhere
+                                    match self.processor.parse(&resolved_path, None) {
+                                        Ok(parsed) => {
+                                            self.stack.push(parsed.expand_one(current_state));
+                                        }
+                                        Err(error) => {
+                                            // Just return the error, we'll keep iterating on the lower
+                                            // file by looping
+                                            let line_map = self.stack.last().unwrap().line_map();
+                                            return Some(IoEvent::IoError(Located::new(
+                                                error,
+                                                resolved_path,
+                                                current_file,
+                                                node.text_range(),
+                                                line_map,
+                                            )));
+                                        }
+                                    }
+                                } else {
+                                    // Resolving the path failed, throw an error located at the
+                                    // right place
+                                    let line_map = self.stack.last().unwrap().line_map();
+
+                                    return Some(
+                                        Event::error(
+                                            ProcessingErrorKind::IncludeNotFound { path }
+                                                .with_node(node.into(), line_map),
+                                            current_file,
+                                        )
+                                        .into(),
+                                    );
+                                }
+                            }
+                            ExpandEvent::Completed(state) => {
+                                if let Some(last) = self.stack.last_mut() {
+                                    // Propagate the updated state upwards in the stack
+                                    last.set_state(state);
+                                } else {
+                                    // No more, store the final state
+                                    self.state = Some(state);
+                                }
+                            }
+                        }
+                    }
+                    None => {
+                        // Loop around to fetch events from the lower expand since this one
+                        // completed
+                    }
+                }
+            } else {
+                return None;
+            }
+        }
+    }
+}
+
+#[derive(Debug)]
+pub struct ParsedFile<'p, F: FileSystem> {
+    processor: &'p mut Processor<F>,
+    file_id: FileId,
+}
+
+impl<'p, F: FileSystem> ParsedFile<'p, F> {
     pub fn file_id(&self) -> FileId {
         self.file_id
     }
 
-    pub fn ast(&self) -> &Ast {
-        self.ast
+    pub fn process(self, initial_state: ProcessorState) -> ExpandStack<'p, F> {
+        let ast = self.ast();
+
+        ExpandStack {
+            processor: self.processor,
+            stack: vec![ExpandOne::new((self.file_id, ast), initial_state)],
+            state: None,
+        }
     }
 
-    pub fn process(self, initial_state: ProcessorState) -> Expand {
-        Expand::new(self, initial_state)
+    pub fn ast(&self) -> Ast {
+        self.processor
+            .file_cache
+            .get(&self.file_id)
+            .unwrap()
+            .clone()
+    }
+
+    fn expand_one(self, initial_state: ProcessorState) -> ExpandOne {
+        ExpandOne::new(self, initial_state)
     }
 }
 
-impl<'a> From<ParsedFile<'a>> for (FileId, Ast) {
-    fn from(parsed_file: ParsedFile<'a>) -> Self {
-        (parsed_file.file_id, parsed_file.ast.clone())
+impl<'p, F: FileSystem> From<ParsedFile<'p, F>> for (FileId, Ast) {
+    fn from(parsed_file: ParsedFile<'p, F>) -> Self {
+        let ast = parsed_file.ast();
+        (parsed_file.file_id, ast)
     }
 }
 
@@ -77,9 +192,9 @@ pub struct Processor<F: FileSystem> {
     /// Cache of parsed files (preprocessor token sequences)
     file_cache: HashMap<FileId, Ast>,
     /// Mapping from canonical paths to FileIds
-    file_ids: HashMap<PathBuf, FileId>,
+    file_ids: BiHashMap<PathBuf, FileId>,
     /// Mapping from #include/input paths to canonical paths
-    canonical_paths: HashMap<PathBuf, PathBuf>,
+    canonical_paths: BiHashMap<PathBuf, PathBuf>,
     /// Filesystem abstraction
     fs: F,
 }
@@ -88,9 +203,25 @@ impl<F: FileSystem> Processor<F> {
     pub fn new_with_fs(fs: F) -> Self {
         Self {
             file_cache: HashMap::with_capacity(1),
-            file_ids: HashMap::with_capacity(1),
-            canonical_paths: HashMap::with_capacity(1),
+            file_ids: BiHashMap::with_capacity(1),
+            canonical_paths: BiHashMap::with_capacity(1),
             fs,
+        }
+    }
+
+    pub fn resolve(&self, relative_to: FileId, path: &ParsedPath) -> Option<PathBuf> {
+        // Find the canonical path for the current file identifier
+        let canonical_path = self.file_ids.get_by_right(&relative_to)?;
+
+        // Transform that back into a non-canonical path
+        let input_path = self.canonical_paths.get_by_right(canonical_path)?;
+
+        match path.ty {
+            PathType::Angle => {
+                // TODO: Handle angle-quoted paths
+                None
+            }
+            PathType::Quote => Some(input_path.parent()?.join(&path.path)),
         }
     }
 
@@ -98,20 +229,18 @@ impl<F: FileSystem> Processor<F> {
         &mut self,
         path: &Path,
         encoding: Option<&'static Encoding>,
-    ) -> Result<ParsedFile, F::Error> {
+    ) -> Result<ParsedFile<F>, F::Error> {
         // Find the canonical path. Not using the entry API because cloning a path is expensive.
-        let canonical_path = if let Some(canonical_path) = self.canonical_paths.get(path) {
+        let canonical_path = if let Some(canonical_path) = self.canonical_paths.get_by_left(path) {
             canonical_path
         } else {
             let canonical_path = self.fs.canonicalize(&path)?;
-            // Using entry allows inserting and returning a reference
-            self.canonical_paths
-                .entry(path.to_owned())
-                .or_insert(canonical_path)
+            self.canonical_paths.insert(path.to_owned(), canonical_path);
+            self.canonical_paths.get_by_left(path).unwrap()
         };
 
         // Allocate a file id. Not using the entry API because cloning a path is expensive.
-        let file_id = if let Some(file_id) = self.file_ids.get(canonical_path.as_path()) {
+        let file_id = if let Some(file_id) = self.file_ids.get_by_left(canonical_path.as_path()) {
             *file_id
         } else {
             let file_id = FileId::new(self.file_ids.len() as _);
@@ -120,9 +249,9 @@ impl<F: FileSystem> Processor<F> {
         };
 
         match self.file_cache.entry(file_id) {
-            Entry::Occupied(entry) => Ok(ParsedFile {
+            Entry::Occupied(_) => Ok(ParsedFile {
+                processor: self,
                 file_id,
-                ast: entry.into_mut(),
             }),
             Entry::Vacant(entry) => {
                 // Read the file
@@ -131,10 +260,12 @@ impl<F: FileSystem> Processor<F> {
                 let ast = Parser::new(&input).parse();
                 // Check that the root node covers the entire range
                 debug_assert_eq!(u32::from(ast.green_node().text_len()), input.len() as u32);
+                // Insert it
+                entry.insert(ast);
 
                 Ok(ParsedFile {
+                    processor: self,
                     file_id,
-                    ast: entry.insert(ast),
                 })
             }
         }

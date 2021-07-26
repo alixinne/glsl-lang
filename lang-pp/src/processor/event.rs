@@ -17,6 +17,7 @@ use super::nodes::{self, DirectiveResult};
 pub struct ProcessingError {
     node: NodeOrToken<SyntaxNode, SyntaxToken>,
     kind: ProcessingErrorKind,
+    pos: TextRange,
     user_pos: (u32, u32),
 }
 
@@ -24,11 +25,13 @@ impl ProcessingError {
     pub fn new(
         node: NodeOrToken<SyntaxNode, SyntaxToken>,
         kind: ProcessingErrorKind,
+        pos: TextRange,
         user_pos: (u32, u32),
     ) -> Self {
         Self {
             node,
             kind,
+            pos,
             user_pos,
         }
     }
@@ -39,6 +42,10 @@ impl ProcessingError {
 
     pub fn kind(&self) -> &ProcessingErrorKind {
         &self.kind
+    }
+
+    pub fn pos(&self) -> TextRange {
+        self.pos
     }
 
     pub fn line(&self) -> u32 {
@@ -89,13 +96,20 @@ impl ProcessingErrorKind {
         node: NodeOrToken<SyntaxNode, SyntaxToken>,
         line_map: &LineMap,
     ) -> ProcessingError {
-        let start = node.text_range().start();
-        ProcessingError::new(node, self, line_map.get_line_and_col(start.into()))
+        let pos = node.text_range();
+        let start = pos.start();
+        ProcessingError::new(node, self, pos, line_map.get_line_and_col(start.into()))
     }
 
     pub fn with_token(self, token: impl TokenLike, line_map: &LineMap) -> ProcessingError {
-        let start = token.text_range().start();
-        ProcessingError::new(token.into(), self, line_map.get_line_and_col(start.into()))
+        let pos = token.text_range();
+        let start = pos.start();
+        ProcessingError::new(
+            token.into(),
+            self,
+            pos,
+            line_map.get_line_and_col(start.into()),
+        )
     }
 }
 
@@ -154,6 +168,15 @@ pub struct Error<E: std::error::Error + 'static> {
 impl<E: std::error::Error> Error<E> {
     pub fn kind(&self) -> &ErrorKind<E> {
         &self.kind
+    }
+
+    pub fn pos(&self) -> Option<TextRange> {
+        match &self.kind {
+            ErrorKind::Io(_) => None,
+            ErrorKind::Parse(err) => Some(err.pos()),
+            ErrorKind::Processing(err) => Some(err.pos()),
+            ErrorKind::Unhandled(node, _) => Some(node.text_range()),
+        }
     }
 
     pub fn with_current_file(self, current_file: FileId) -> Self {

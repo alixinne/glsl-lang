@@ -18,6 +18,7 @@
 use std::io::prelude::*;
 
 use anyhow::bail;
+use argh::FromArgs;
 
 use glsl_lang::ast::{NodeDisplay, TranslationUnit};
 use glsl_lang::parse::Parse;
@@ -47,16 +48,24 @@ fn output_glsl(output: &mut dyn std::io::Write, tu: TranslationUnit) -> anyhow::
     Ok(())
 }
 
+#[derive(Debug, FromArgs)]
+/// glsl-lang command-line interface
+struct Opts {
+    #[argh(option, default = "\"text\".to_owned()")]
+    /// output format (text, json or glsl)
+    format: String,
+
+    #[argh(positional)]
+    /// input file path
+    path: Option<String>,
+}
+
 /// CLI entry point
 fn main() -> anyhow::Result<()> {
-    let mut args = pico_args::Arguments::from_env();
+    let args: Opts = argh::from_env();
 
     // Figure out output format
-    let output_fn = match args
-        .opt_value_from_str("--format")?
-        .unwrap_or_else(|| "text".to_owned())
-        .as_str()
-    {
+    let output_fn = match args.format.as_str() {
         "text" => output_text,
         #[cfg(feature = "json")]
         "json" => output_json,
@@ -67,9 +76,7 @@ fn main() -> anyhow::Result<()> {
     let mut s = String::new();
 
     // Read input from argument or stdin
-    if let Some(path) =
-        args.opt_free_from_os_str::<_, &'static str>(|s| Ok(std::path::PathBuf::from(s)))?
-    {
+    if let Some(path) = args.path.as_deref() {
         s = std::fs::read_to_string(path)?;
     } else {
         std::io::stdin().read_to_string(&mut s)?;

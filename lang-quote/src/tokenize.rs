@@ -1792,10 +1792,10 @@ fn tokenize_text_range(text_range: glsl_lang::ast::TextRange) -> TokenStream {
 
 fn tokenize_span(s: &Option<ast::NodeSpan>) -> TokenStream {
     if let Some(s) = s {
-        let source_id = s.source_id();
+        let source_id = u32::from(s.source_id());
         let range = tokenize_text_range(s.range());
 
-        quote! { Some(glsl_lang::ast::NodeSpan::new(#source_id, #range)) }
+        quote! { Some(glsl_lang::ast::NodeSpan::new(#source_id.into(), #range)) }
     } else {
         quote! { None }
     }

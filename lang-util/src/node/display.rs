@@ -1,5 +1,7 @@
 use std::fmt;
 
+use crate::FileId;
+
 /// A wrapper for a syntax node to be displayed
 #[derive(Clone, Copy)]
 pub struct NodeDisplayWrapper<'a, T: ?Sized> {
@@ -144,7 +146,7 @@ pub trait NodeDisplay: Sized {
     /// Ending position of the node
     fn end(&self) -> Option<usize>;
     /// Source id of the node
-    fn source_id(&self) -> Option<usize>;
+    fn source_id(&self) -> Option<FileId>;
 
     /// Obtain a display wrapper for the current node
     fn display(&self) -> NodeDisplayWrapper<Self>;
@@ -178,7 +180,7 @@ impl<T: NodeContentDisplay + super::NodeContent> NodeDisplay for super::Node<T> 
         self.span.map(|s| s.end().offset)
     }
 
-    fn source_id(&self) -> Option<usize> {
+    fn source_id(&self) -> Option<FileId> {
         self.span.map(|s| s.source_id())
     }
 
@@ -211,7 +213,7 @@ impl<T: NodeContentDisplay> NodeDisplay for T {
         None
     }
 
-    fn source_id(&self) -> Option<usize> {
+    fn source_id(&self) -> Option<FileId> {
         None
     }
 

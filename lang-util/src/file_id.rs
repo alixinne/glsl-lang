@@ -56,3 +56,15 @@ impl std::fmt::Display for FileId {
         }
     }
 }
+
+impl From<u32> for FileId {
+    fn from(value: u32) -> Self {
+        Self(value)
+    }
+}
+
+impl From<FileId> for u32 {
+    fn from(value: FileId) -> Self {
+        value.0
+    }
+}

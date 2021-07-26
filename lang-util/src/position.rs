@@ -4,11 +4,13 @@ use std::{convert::TryFrom, fmt::Display};
 
 use text_size::{TextRange, TextSize};
 
+use crate::FileId;
+
 /// A position in the lexer's input
 #[derive(Default, Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct LexerPosition {
     /// Source id
-    pub source_id: usize,
+    pub source_id: FileId,
     /// Raw byte offset
     pub offset: usize,
 }
@@ -20,7 +22,7 @@ impl LexerPosition {
     ///
     /// * `source_id`: source id
     /// * `offset`: raw byte offset in the input
-    pub fn new(source_id: usize, offset: usize) -> Self {
+    pub fn new(source_id: FileId, offset: usize) -> Self {
         Self { source_id, offset }
     }
 }
@@ -36,7 +38,7 @@ impl Display for LexerPosition {
 pub struct NodeSpan {
     /// The index of this span into the list of parsed units. This is used to
     /// identify which source string this span refers to when combining multiple ASTs
-    source_id: usize,
+    source_id: FileId,
 
     /// Range of the node in the input slice
     range: TextRange,
@@ -44,7 +46,7 @@ pub struct NodeSpan {
 
 impl NodeSpan {
     /// Create a new node span
-    pub fn new(source_id: usize, range: TextRange) -> Self {
+    pub fn new(source_id: FileId, range: TextRange) -> Self {
         Self { source_id, range }
     }
 
@@ -62,7 +64,7 @@ impl NodeSpan {
     /// Return a 0-length span located at the start of the given source
     ///
     /// This may be used in span range queries.
-    pub fn new_start(source_id: usize) -> Self {
+    pub fn new_start(source_id: FileId) -> Self {
         Self {
             source_id,
             range: TextRange::default(),
@@ -72,7 +74,7 @@ impl NodeSpan {
     /// Return a 0-length span located at the end of the given source (as indicated by the offset)
     ///
     /// This may be used in span range queries.
-    pub fn new_end(source_id: usize, length: usize) -> Self {
+    pub fn new_end(source_id: FileId, length: usize) -> Self {
         let length = TextSize::try_from(length).expect("length is too large");
 
         Self {
@@ -82,7 +84,7 @@ impl NodeSpan {
     }
 
     /// Return the source identifier for this node span
-    pub fn source_id(&self) -> usize {
+    pub fn source_id(&self) -> FileId {
         self.source_id
     }
 

@@ -2,6 +2,8 @@ use std::cell::RefCell;
 use std::collections::{BTreeMap, HashSet};
 use std::rc::Rc;
 
+use lang_util::FileId;
+
 use crate::ast;
 
 /// Parsing options
@@ -10,7 +12,7 @@ pub struct ParseOptions {
     /// `true` if the GLSL target should be Vulkan instead of OpenGL
     pub target_vulkan: bool,
     /// Unique source identifier for token positions
-    pub source_id: usize,
+    pub source_id: FileId,
     /// Allow Rust quoting identifiers (`#(ident)`) in the source
     pub allow_rs_ident: bool,
 }

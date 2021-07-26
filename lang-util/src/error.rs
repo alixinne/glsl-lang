@@ -5,7 +5,7 @@ use std::collections::{HashMap, HashSet};
 use std::error::Error;
 use std::fmt;
 
-use crate::position::LexerPosition;
+use crate::{position::LexerPosition, FileId};
 
 /// Information about a known token
 #[derive(Debug, Clone, PartialEq, PartialOrd, Hash)]
@@ -157,7 +157,7 @@ impl ResolvedPosition {
     }
 
     /// Source string id for this position
-    pub fn source_id(&self) -> usize {
+    pub fn source_id(&self) -> FileId {
         self.raw.source_id
     }
 
@@ -175,35 +175,11 @@ impl ResolvedPosition {
     pub fn col(&self) -> usize {
         self.pos_index
     }
-
-    /// Display the resolved position without source number
-    pub fn without_source_number(self) -> OptionalSourceNumber<Self> {
-        OptionalSourceNumber(self)
-    }
 }
 
 impl fmt::Display for ResolvedPosition {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}:{}:{}", self.source_id(), self.line() + 1, self.col())
-    }
-}
-
-/// Display wrapper for optional source numbers in resolved positions
-pub struct OptionalSourceNumber<T>(T);
-
-impl<T> fmt::Display for OptionalSourceNumber<T>
-where
-    ResolvedPosition: From<T>,
-    T: Copy,
-{
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let pos = ResolvedPosition::from(self.0);
-
-        if pos.source_id() == 0 {
-            write!(f, "{}:{}", pos.line() + 1, pos.col())
-        } else {
-            write!(f, "{}", pos)
-        }
     }
 }
 

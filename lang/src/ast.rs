@@ -32,6 +32,8 @@ pub use lang_util::{
 
 pub use smol_str::SmolStr;
 
+pub use text_size::{TextRange, TextSize};
+
 /// A path literal.
 #[derive(Clone, Debug, PartialEq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]

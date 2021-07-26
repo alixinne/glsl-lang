@@ -1779,15 +1779,23 @@ fn tokenize_preprocessor_extension_behavior(
     quote! { glsl_lang::ast::PreprocessorExtensionBehavior::new(#behavior, #span) }
 }
 
+fn tokenize_text_size(text_size: glsl_lang::ast::TextSize) -> TokenStream {
+    let inner = u32::from(text_size);
+    quote! { glsl_lang::ast::TextSize::from(#inner) }
+}
+
+fn tokenize_text_range(text_range: glsl_lang::ast::TextRange) -> TokenStream {
+    let start = tokenize_text_size(text_range.start());
+    let end = tokenize_text_size(text_range.end());
+    quote! { glsl_lang::ast::TextRange::new(#start, #end) }
+}
+
 fn tokenize_span(s: &Option<ast::NodeSpan>) -> TokenStream {
     if let Some(s) = s {
-        let ast::NodeSpan {
-            source_id,
-            start,
-            end,
-        } = s;
+        let source_id = s.source_id();
+        let range = tokenize_text_range(s.range());
 
-        quote! { Some(glsl_lang::ast::NodeSpan { source_id: #source_id, start: #start, end: #end }) }
+        quote! { Some(glsl_lang::ast::NodeSpan::new(#source_id, #range)) }
     } else {
         quote! { None }
     }

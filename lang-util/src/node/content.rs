@@ -20,11 +20,7 @@ pub trait NodeContent: fmt::Debug + Clone + PartialEq + Sized {
 
         Node {
             content: self,
-            span: Some(NodeSpan {
-                source_id: start.source_id,
-                start: start.offset,
-                end: end.offset,
-            }),
+            span: Some(NodeSpan::from_lexer(start, end)),
         }
     }
 }

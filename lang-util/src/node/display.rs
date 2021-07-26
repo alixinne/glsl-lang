@@ -171,15 +171,15 @@ impl<T: NodeContentDisplay + super::NodeContent> NodeDisplay for super::Node<T> 
     }
 
     fn start(&self) -> Option<usize> {
-        self.span.map(|s| s.start)
+        self.span.map(|s| s.start().offset)
     }
 
     fn end(&self) -> Option<usize> {
-        self.span.map(|s| s.end)
+        self.span.map(|s| s.end().offset)
     }
 
     fn source_id(&self) -> Option<usize> {
-        self.span.map(|s| s.source_id)
+        self.span.map(|s| s.source_id())
     }
 
     fn display(&self) -> NodeDisplayWrapper<Self> {

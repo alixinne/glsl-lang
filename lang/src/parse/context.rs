@@ -7,7 +7,7 @@ use lang_util::FileId;
 use crate::ast;
 
 /// Parsing options
-#[derive(Default, Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub struct ParseOptions {
     /// `true` if the GLSL target should be Vulkan instead of OpenGL
     pub target_vulkan: bool,
@@ -15,6 +15,16 @@ pub struct ParseOptions {
     pub source_id: FileId,
     /// Allow Rust quoting identifiers (`#(ident)`) in the source
     pub allow_rs_ident: bool,
+}
+
+impl Default for ParseOptions {
+    fn default() -> Self {
+        Self {
+            target_vulkan: false,
+            source_id: FileId::new(0),
+            allow_rs_ident: false,
+        }
+    }
 }
 
 impl ParseOptions {

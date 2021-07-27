@@ -7,7 +7,7 @@ use string_cache::Atom;
 use thiserror::Error;
 
 use crate::{
-    parser::{SyntaxKind::*, SyntaxNode},
+    parser::{SyntaxKind::*, SyntaxNode, SyntaxToken},
     processor::event::TokenLike,
     Unescaped,
 };
@@ -887,5 +887,102 @@ impl TryFrom<SyntaxNode> for EndIf {
     fn try_from(_: SyntaxNode) -> Result<Self, Self::Error> {
         // TODO: Handle extra tokens?
         Ok(Self)
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct Pragma {
+    value: ParsedPragma,
+}
+
+impl Pragma {
+    pub fn value(&self) -> &ParsedPragma {
+        &self.value
+    }
+
+    fn parse_function_pragma(tokens: &[SyntaxToken]) -> Option<bool> {
+        if tokens.len() == 4 {
+            let value = Unescaped::new(tokens[2].text()).to_string();
+
+            if tokens[1].kind() == LPAREN && tokens[3].kind() == RPAREN {
+                if value == "on" {
+                    return Some(true);
+                } else if value == "off" {
+                    return Some(false);
+                }
+            }
+        }
+
+        None
+    }
+}
+
+#[derive(Debug, Clone)]
+pub enum ParsedPragma {
+    StdGl(SyntaxNode),
+    Optimize(bool),
+    Debug(bool),
+    Unknown(SyntaxNode),
+}
+
+#[derive(Debug, Error)]
+pub enum PragmaError {
+    #[error("missing body")]
+    MissingBody,
+    #[error("{name} pragma syntax is incorrect")]
+    IncorrectSyntax { name: SmolStr },
+}
+
+impl TryFrom<SyntaxNode> for Pragma {
+    type Error = PragmaError;
+
+    fn try_from(value: SyntaxNode) -> Result<Self, Self::Error> {
+        let body = value
+            .children()
+            .find(|node| node.kind() == PP_PRAGMA_BODY)
+            .ok_or_else(|| Self::Error::MissingBody)?;
+
+        // Collect non-trivial tokens
+        let tokens: Vec<_> = body
+            .children_with_tokens()
+            .filter_map(NodeOrToken::into_token)
+            .filter(|token| !token.kind().is_whitespace())
+            .collect();
+
+        if let Some(first_token) = tokens.first() {
+            if first_token.kind() == IDENT_KW {
+                let name = SmolStr::from(Unescaped::new(first_token.text()));
+                match name.as_str() {
+                    "STDGL" => {
+                        return Ok(Self {
+                            value: ParsedPragma::StdGl(body),
+                        });
+                    }
+                    "optimize" => {
+                        return if let Some(value) = Self::parse_function_pragma(&tokens) {
+                            Ok(Self {
+                                value: ParsedPragma::Optimize(value),
+                            })
+                        } else {
+                            Err(Self::Error::IncorrectSyntax { name })
+                        };
+                    }
+                    "debug" => {
+                        return if let Some(value) = Self::parse_function_pragma(&tokens) {
+                            Ok(Self {
+                                value: ParsedPragma::Debug(value),
+                            })
+                        } else {
+                            Err(Self::Error::IncorrectSyntax { name })
+                        };
+                    }
+                    _ => {}
+                }
+            }
+        }
+
+        Ok(Self {
+            value: ParsedPragma::Unknown(body),
+        })
     }
 }

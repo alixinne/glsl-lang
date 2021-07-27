@@ -109,6 +109,7 @@ pub enum ProcessingErrorKind {
     DirectiveError(nodes::ErrorError),
     DirectiveInclude(nodes::IncludeError),
     DirectiveLine(nodes::LineError),
+    DirectivePragma(nodes::PragmaError),
 }
 
 impl ProcessingErrorKind {
@@ -221,6 +222,9 @@ impl std::fmt::Display for ProcessingErrorKind {
             }
             ProcessingErrorKind::DirectiveLine(inner) => {
                 write!(f, "'#line' : {}", inner)
+            }
+            ProcessingErrorKind::DirectivePragma(inner) => {
+                write!(f, "'#pragma' : {}", inner)
             }
         }
     }
@@ -404,6 +408,7 @@ pub enum DirectiveKind {
     Error(nodes::Error),
     Include(nodes::Include),
     Line(nodes::Line),
+    Pragma(nodes::Pragma),
 }
 
 pub trait TokenLike: Into<NodeOrToken<SyntaxNode, SyntaxToken>> {

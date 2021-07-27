@@ -21,7 +21,7 @@ use super::{
     event::{self, ErrorKind, Event, ProcessingErrorKind},
     nodes::{
         Define, DirectiveResult, Else, EndIf, Error, Extension, IfDef, IfNDef, Include, Line,
-        ParsedLine, ParsedPath, Undef, Version,
+        ParsedLine, ParsedPath, Pragma, Undef, Version,
     },
     IncludeMode, ProcessorState,
 };
@@ -652,6 +652,20 @@ impl ExpandOne {
                             }
 
                             result.push(Event::directive(ld));
+                        }
+                        Err(error) => {
+                            result.push(Event::directive_error(error, &self.location));
+                        }
+                    }
+                }
+            }
+            PP_PRAGMA => {
+                if self.mask_active {
+                    let directive: DirectiveResult<Pragma> = node.try_into();
+
+                    match directive {
+                        Ok(pragma) => {
+                            result.push(Event::directive(pragma));
                         }
                         Err(error) => {
                             result.push(Event::directive_error(error, &self.location));

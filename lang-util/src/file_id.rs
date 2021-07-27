@@ -33,6 +33,20 @@ impl FileId {
 
         Self(BUILTIN_BIT | raw + 1)
     }
+
+    /// Get the number behind this id, regardless of its type
+    pub fn number(&self) -> u32 {
+        if (self.0 & BUILTIN_BIT) == BUILTIN_BIT {
+            let raw = self.0 & !BUILTIN_BIT;
+            if raw == 0 {
+                raw
+            } else {
+                raw - 1
+            }
+        } else {
+            self.0
+        }
+    }
 }
 
 impl Default for FileId {

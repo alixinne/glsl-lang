@@ -32,6 +32,27 @@ pub struct ExpandLocation {
     line_override: Option<(u32, ParsedLine)>,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum LocationString<'p> {
+    Number(u32),
+    String(&'p str),
+}
+
+impl LocationString<'_> {
+    pub fn is_number(&self) -> bool {
+        matches!(self, Self::Number(_))
+    }
+}
+
+impl std::fmt::Display for LocationString<'_> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            LocationString::Number(num) => write!(f, "{}", num),
+            LocationString::String(path) => write!(f, "{}", path),
+        }
+    }
+}
+
 impl ExpandLocation {
     pub fn new(current_file: FileId) -> Self {
         Self {
@@ -85,6 +106,22 @@ impl ExpandLocation {
             None => Some(line),
         }
         .map(|ov| (raw_line, ov));
+    }
+
+    pub fn string(&self) -> LocationString {
+        if let Some(line_override) = &self.line_override {
+            match &line_override.1 {
+                ParsedLine::LineAndFileNumber(_, number) => {
+                    return LocationString::Number(*number);
+                }
+                ParsedLine::LineAndPath(_, path) => {
+                    return LocationString::String(path.as_str());
+                }
+                _ => {}
+            }
+        }
+
+        LocationString::Number(self.current_file.number())
     }
 }
 

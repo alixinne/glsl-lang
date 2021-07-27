@@ -197,6 +197,20 @@ impl Definition {
                 .map(|token| OutputToken::new(token, entire_range))
                 .collect(),
             ),
+            Definition::File => {
+                let string = location.string();
+                let (string, kind) = if string.is_number() {
+                    (string.to_string(), DIGITS)
+                } else {
+                    (format!("\"{}\"", string), QUOTE_STRING)
+                };
+
+                Some(
+                    Self::substitute_string(&string, kind)
+                        .map(|token| OutputToken::new(token, entire_range))
+                        .collect(),
+                )
+            }
             Definition::Version => Some(
                 Self::substitute_string(&format!("{}", current_state.version.number), DIGITS)
                     .map(|token| OutputToken::new(token, entire_range))
@@ -209,7 +223,6 @@ impl Definition {
                     None
                 }
             }
-            _ => None,
         }
     }
 

@@ -673,6 +673,9 @@ impl ExpandOne {
                     }
                 }
             }
+            ERROR => {
+                // Unknown preprocessor directive, these are already reported as parse errors
+            }
             _ => {
                 // Special case for PP_IF so #endif stack correctly
                 if node.kind() == PP_IF {

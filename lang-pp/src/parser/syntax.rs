@@ -68,13 +68,16 @@ fn if_section_or_control_line<'i, 'cache>(parser: &mut ParserRun<'i, 'cache>) {
     parser.skip_trivia();
 
     // Find directive type
+    let mut pp_type_name = None;
     let pp_type = if let Some(token) = parser.peek() {
         if *token == InputToken::NEWLINE {
             // Empty, don't bump newline
             Some(PP_EMPTY)
         } else {
             let mut error = None;
-            let result = match SmolStr::from(parser.text(token)).as_ref() {
+            let name = SmolStr::from(parser.text(token));
+            pp_type_name = Some(name.clone());
+            let result = match name.as_ref() {
                 "include" => {
                     parser.bump();
                     pp_include(parser);
@@ -205,7 +208,12 @@ fn if_section_or_control_line<'i, 'cache>(parser: &mut ParserRun<'i, 'cache>) {
             // Note the error, unless it's an unknown directive: it's unknown, so don't notify an
             // error twice
             if pp_type.is_some() {
-                parser.push_error(ErrorKind::ExtraTokensInPreprocessorDirective, start);
+                parser.push_error(
+                    ErrorKind::ExtraTokensInPreprocessorDirective {
+                        name: pp_type_name.unwrap(),
+                    },
+                    start,
+                );
             }
         }
     }

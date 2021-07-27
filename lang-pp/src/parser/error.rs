@@ -55,7 +55,9 @@ pub enum ErrorKind {
     UnknownPreprocessorDirective {
         name: SmolStr,
     },
-    ExtraTokensInPreprocessorDirective,
+    ExtraTokensInPreprocessorDirective {
+        name: SmolStr,
+    },
     UnexpectedTokensInDefineArgs,
     Unexpected {
         actual: lexer::Token,
@@ -76,8 +78,8 @@ impl std::fmt::Display for ErrorKind {
                     write!(f, "unknown preprocessor directive `#{}`", name)
                 }
             }
-            ErrorKind::ExtraTokensInPreprocessorDirective => {
-                write!(f, "extra tokens in preprocessor directive")
+            ErrorKind::ExtraTokensInPreprocessorDirective { name } => {
+                write!(f, "'#{}' : extra tokens in preprocessor directive", name)
             }
             ErrorKind::UnexpectedTokensInDefineArgs => {
                 write!(f, "unexpected tokens in #define function arguments")

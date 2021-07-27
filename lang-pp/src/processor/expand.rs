@@ -6,7 +6,7 @@ use std::{
 };
 
 use arrayvec::ArrayVec;
-use rowan::{NodeOrToken, SyntaxElementChildren};
+use rowan::{NodeOrToken, SyntaxElementChildren, TextSize};
 
 use lang_util::FileId;
 
@@ -26,12 +26,73 @@ use super::{
     IncludeMode, ProcessorState,
 };
 
+pub struct ExpandLocation {
+    current_file: FileId,
+    line_map: LineMap,
+    line_override: Option<(u32, ParsedLine)>,
+}
+
+impl ExpandLocation {
+    pub fn new(current_file: FileId) -> Self {
+        Self {
+            current_file,
+            line_map: Default::default(),
+            line_override: Default::default(),
+        }
+    }
+
+    pub fn line_map(&self) -> &LineMap {
+        &self.line_map
+    }
+
+    pub fn current_file(&self) -> FileId {
+        self.current_file
+    }
+
+    pub fn line_override(&self) -> Option<&(u32, ParsedLine)> {
+        self.line_override.as_ref()
+    }
+
+    pub fn offset_to_line_number(&self, offset: TextSize) -> u32 {
+        let raw_line = self.line_map().get_line_and_col(offset.into()).0;
+        self.line_to_line_number(raw_line)
+    }
+
+    pub fn line_to_line_number(&self, raw_line: u32) -> u32 {
+        if let Some((origin, line_override)) = &self.line_override {
+            let offset = line_override.line_number() as i64 - *origin as i64 - 2;
+            (raw_line as i64 + offset) as u32
+        } else {
+            raw_line
+        }
+    }
+
+    pub fn add_override(&mut self, current_offset: TextSize, line: ParsedLine) {
+        let raw_line = self.line_map.get_line_and_col(current_offset.into()).0;
+
+        // Combine the previous and the new override
+        self.line_override = match self.line_override.take() {
+            Some((_, prev_override)) => match line {
+                ParsedLine::Line(line_number) => Some(match prev_override {
+                    ParsedLine::Line(_) => line,
+                    ParsedLine::LineAndFileNumber(_, file_number) => {
+                        ParsedLine::LineAndFileNumber(line_number, file_number)
+                    }
+                    ParsedLine::LineAndPath(_, path) => ParsedLine::LineAndPath(line_number, path),
+                }),
+                ParsedLine::LineAndFileNumber(_, _) | ParsedLine::LineAndPath(_, _) => Some(line),
+            },
+            None => Some(line),
+        }
+        .map(|ov| (raw_line, ov));
+    }
+}
+
 pub struct ExpandOne {
     mask_stack: Vec<IfState>,
     mask_active: bool,
-    line_map: LineMap,
+    location: ExpandLocation,
     state: ExpandState,
-    last_line_override: Option<(u32, ParsedLine)>,
 }
 
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -46,18 +107,15 @@ enum IfState {
 
 enum ExpandState {
     Init {
-        current_file: FileId,
         ast: Ast,
         current_state: ProcessorState,
     },
     Iterate {
-        current_file: FileId,
         iterator: SyntaxElementChildren<PreprocessorLang>,
         errors: Vec<parser::Error>,
         current_state: ProcessorState,
     },
     EnterNewFile {
-        current_file: FileId,
         iterator: SyntaxElementChildren<PreprocessorLang>,
         errors: Vec<parser::Error>,
         current_state: ProcessorState,
@@ -65,21 +123,18 @@ enum ExpandState {
         node: SyntaxNode,
     },
     PendingOne {
-        current_file: FileId,
         iterator: SyntaxElementChildren<PreprocessorLang>,
         errors: Vec<parser::Error>,
         node_or_token: NodeOrToken<SyntaxNode, SyntaxToken>,
         current_state: ProcessorState,
     },
     PendingEvents {
-        current_file: FileId,
         iterator: SyntaxElementChildren<PreprocessorLang>,
         errors: Vec<parser::Error>,
         events: ArrayVec<Event, 2>,
         current_state: ProcessorState,
     },
     ExpandedTokens {
-        current_file: FileId,
         iterator: SyntaxElementChildren<PreprocessorLang>,
         errors: Vec<parser::Error>,
         events: VecDeque<Event>,
@@ -92,18 +147,15 @@ impl ExpandState {
     pub fn error_token(
         e: impl Into<event::Error>,
         token: SyntaxToken,
-        current_file: FileId,
         iterator: SyntaxElementChildren<PreprocessorLang>,
         errors: Vec<parser::Error>,
         current_state: ProcessorState,
-        line_override: Option<&(u32, ParsedLine)>,
     ) -> Self {
         let mut events = ArrayVec::new();
-        events.push(Event::error(e.into(), current_file, line_override));
+        events.push(Event::Error(e.into()));
         events.push(Event::Token(token.clone().into()));
 
         Self::PendingEvents {
-            current_file,
             iterator,
             errors,
             events,
@@ -130,13 +182,8 @@ impl ExpandOne {
         Self {
             mask_stack: Vec::with_capacity(4),
             mask_active: true,
-            line_map: LineMap::default(),
-            state: ExpandState::Init {
-                current_file: file_id,
-                ast,
-                current_state,
-            },
-            last_line_override: None,
+            location: ExpandLocation::new(file_id),
+            state: ExpandState::Init { ast, current_state },
         }
     }
 
@@ -156,19 +203,14 @@ impl ExpandOne {
         }
     }
 
-    pub fn line_map(&self) -> &LineMap {
-        &self.line_map
-    }
-
-    pub fn line_override(&self) -> Option<&(u32, ParsedLine)> {
-        self.last_line_override.as_ref()
+    pub fn location(&self) -> &ExpandLocation {
+        &self.location
     }
 
     fn handle_node(
         &mut self,
         current_state: &mut ProcessorState,
         node: SyntaxNode,
-        current_file: FileId,
     ) -> HandleNodeResult {
         let mut result = ArrayVec::new();
 
@@ -187,12 +229,7 @@ impl ExpandOne {
                             result.push(Event::directive(directive));
                         }
                         Err(error) => {
-                            result.push(Event::directive_error(
-                                error,
-                                current_file,
-                                &self.line_map,
-                                self.line_override(),
-                            ));
+                            result.push(Event::directive_error(error, &self.location));
                         }
                     }
                 }
@@ -207,19 +244,14 @@ impl ExpandOne {
                             result.push(Event::directive(directive));
                         }
                         Err(error) => {
-                            result.push(Event::directive_error(
-                                error,
-                                current_file,
-                                &self.line_map,
-                                self.line_override(),
-                            ));
+                            result.push(Event::directive_error(error, &self.location));
                         }
                     }
                 }
             }
             PP_DEFINE => {
                 if self.mask_active {
-                    let directive: DirectiveResult<Define> = node.clone().try_into();
+                    let directive: DirectiveResult<Define> = node.try_into();
 
                     match directive {
                         Ok(define) => {
@@ -229,11 +261,13 @@ impl ExpandOne {
                                         ident: define.name().into(),
                                         is_undef: false,
                                     }
-                                    .with_node(node.into(), &self.line_map),
+                                    .with_node(define.node().clone().into(), &self.location),
                                 )
                             } else {
-                                let definition =
-                                    Definition::Regular(Rc::new((*define).clone()), current_file);
+                                let definition = Definition::Regular(
+                                    Rc::new((*define).clone()),
+                                    self.location.current_file(),
+                                );
 
                                 match current_state.definitions.entry(define.name().into()) {
                                     Entry::Occupied(mut entry) => {
@@ -243,7 +277,10 @@ impl ExpandOne {
                                                     ident: define.name().into(),
                                                     is_undef: false,
                                                 }
-                                                .with_node(node.into(), &self.line_map),
+                                                .with_node(
+                                                    define.node().clone().into(),
+                                                    &self.location,
+                                                ),
                                             )
                                         } else {
                                             // TODO: Check that we are not overwriting an incompatible definition
@@ -262,20 +299,11 @@ impl ExpandOne {
                             result.push(Event::directive(define));
 
                             if let Some(error) = error {
-                                result.push(Event::error(
-                                    error,
-                                    current_file,
-                                    self.line_override(),
-                                ));
+                                result.push(Event::error(error, &self.location));
                             }
                         }
                         Err(error) => {
-                            result.push(Event::directive_error(
-                                error,
-                                current_file,
-                                &self.line_map,
-                                self.line_override(),
-                            ));
+                            result.push(Event::directive_error(error, &self.location));
                         }
                     }
                 }
@@ -293,12 +321,7 @@ impl ExpandOne {
                             result.push(Event::directive(ifdef));
                         }
                         Err(error) => {
-                            result.push(Event::directive_error(
-                                error,
-                                current_file,
-                                &self.line_map,
-                                self.line_override(),
-                            ));
+                            result.push(Event::directive_error(error, &self.location));
                         }
                     }
                 } else {
@@ -322,9 +345,7 @@ impl ExpandOne {
                         Err((error, node)) => {
                             result.push(Event::directive_error(
                                 (ProcessingErrorKind::DirectiveIfNDef(error), node),
-                                current_file,
-                                &self.line_map,
-                                self.line_override(),
+                                &self.location,
                             ));
                         }
                     }
@@ -354,9 +375,8 @@ impl ExpandOne {
                                         // Extra #else
                                         result.push(Event::error(
                                             ProcessingErrorKind::ExtraElse
-                                                .with_node(node.into(), &self.line_map),
-                                            current_file,
-                                            self.line_override(),
+                                                .with_node(node.into(), &self.location),
+                                            &self.location,
                                         ));
 
                                         return result.into();
@@ -372,19 +392,13 @@ impl ExpandOne {
                             // Stray #else
                             result.push(Event::error(
                                 ProcessingErrorKind::ExtraElse
-                                    .with_node(node.into(), &self.line_map),
-                                current_file,
-                                self.line_override(),
+                                    .with_node(node.into(), &self.location),
+                                &self.location,
                             ));
                         }
                     }
                     Err(error) => {
-                        result.push(Event::directive_error(
-                            error,
-                            current_file,
-                            &self.line_map,
-                            self.line_override(),
-                        ));
+                        result.push(Event::directive_error(error, &self.location));
                     }
                 }
             }
@@ -408,19 +422,13 @@ impl ExpandOne {
                             // Stray #endif
                             result.push(Event::error(
                                 ProcessingErrorKind::ExtraEndIf
-                                    .with_node(node.into(), &self.line_map),
-                                current_file,
-                                self.line_override(),
+                                    .with_node(node.into(), &self.location),
+                                &self.location,
                             ));
                         }
                     }
                     Err(error) => {
-                        result.push(Event::directive_error(
-                            error,
-                            current_file,
-                            &self.line_map,
-                            self.line_override(),
-                        ));
+                        result.push(Event::directive_error(error, &self.location));
                     }
                 }
             }
@@ -455,18 +463,15 @@ impl ExpandOne {
                                         ident,
                                         is_undef: true,
                                     }
-                                    .with_node(node.into(), &self.line_map),
-                                    current_file,
-                                    self.line_override(),
+                                    .with_node(node.into(), &self.location),
+                                    &self.location,
                                 ));
                             }
                         }
                         Err((error, node)) => {
                             result.push(Event::directive_error(
                                 (ProcessingErrorKind::DirectiveUndef(error), node),
-                                current_file,
-                                &self.line_map,
-                                self.line_override(),
+                                &self.location,
                             ));
                         }
                     }
@@ -474,7 +479,7 @@ impl ExpandOne {
             }
             PP_ERROR => {
                 if self.mask_active {
-                    let directive: DirectiveResult<Error> = node.clone().try_into();
+                    let directive: DirectiveResult<Error> = node.try_into();
 
                     match directive {
                         Ok(error) => {
@@ -483,9 +488,8 @@ impl ExpandOne {
                                     ProcessingErrorKind::ErrorDirective {
                                         message: error.message.clone(),
                                     }
-                                    .with_node(node.into(), &self.line_map),
-                                    current_file,
-                                    self.line_override(),
+                                    .with_node(error.node().clone().into(), &self.location),
+                                    &self.location,
                                 ))
                             };
 
@@ -496,12 +500,7 @@ impl ExpandOne {
                             }
                         }
                         Err(error) => {
-                            result.push(Event::directive_error(
-                                error,
-                                current_file,
-                                &self.line_map,
-                                self.line_override(),
-                            ));
+                            result.push(Event::directive_error(error, &self.location));
                         }
                     }
                 }
@@ -517,29 +516,23 @@ impl ExpandOne {
                                     name: "include".into(),
                                 },
                                 node.text_range(),
-                                &self.line_map,
+                                self.location.line_map(),
                             ),
-                            current_file,
-                            self.line_override(),
+                            &self.location,
                         ));
 
                         return result.into();
                     }
 
                     // Parse the directive itself
-                    let directive: DirectiveResult<Include> = node.clone().try_into();
+                    let directive: DirectiveResult<Include> = node.try_into();
 
                     // Perform macro substitution to get the path. If this fails, the directive is
                     // malformed and shouldn't be processed.
                     let (directive, path) = match directive {
-                        Ok(directive) => match directive.path(
-                            &current_state,
-                            &self.line_map,
-                            current_file,
-                            self.line_override(),
-                        ) {
+                        Ok(directive) => match directive.path(&current_state, &self.location) {
                             Ok(path) => (Ok(directive), Some(path)),
-                            Err(err) => (Err((err, node.clone())), None),
+                            Err(err) => (Err((err, directive.node().clone())), None),
                         },
                         err => (err, None),
                     };
@@ -556,6 +549,7 @@ impl ExpandOne {
                                     }
                                     IncludeMode::GoogleInclude => {
                                         // Compile-time include, enter nested file
+                                        let node = include.node().clone();
                                         return HandleNodeResult::EnterFile(
                                             Event::directive(include),
                                             node,
@@ -569,12 +563,7 @@ impl ExpandOne {
                             result.push(Event::directive(include));
                         }
                         Err(error) => {
-                            result.push(Event::directive_error(
-                                error,
-                                current_file,
-                                &self.line_map,
-                                self.line_override(),
-                            ));
+                            result.push(Event::directive_error(error, &self.location));
                         }
                     }
                 }
@@ -582,19 +571,14 @@ impl ExpandOne {
             PP_LINE => {
                 if self.mask_active {
                     // Parse the directive itself
-                    let directive: DirectiveResult<Line> = node.clone().try_into();
+                    let directive: DirectiveResult<Line> = node.try_into();
 
                     // Perform macro substitution to get the path. If this fails, the directive is
                     // malformed and shouldn't be processed.
                     let (directive, line) = match directive {
-                        Ok(directive) => match directive.parse(
-                            &current_state,
-                            &self.line_map,
-                            current_file,
-                            self.line_override(),
-                        ) {
+                        Ok(directive) => match directive.parse(&current_state, &self.location) {
                             Ok(path) => (Ok(directive), Some(path)),
-                            Err(err) => (Err((err, node.clone())), None),
+                            Err(err) => (Err((err, directive.node().clone())), None),
                         },
                         err => (err, None),
                     };
@@ -602,11 +586,6 @@ impl ExpandOne {
                     match directive {
                         Ok(ld) => {
                             if let Some(line) = line {
-                                let raw_line = self
-                                    .line_map
-                                    .get_line_and_col(node.text_range().start().into())
-                                    .0;
-
                                 // Check that we support cpp style line
                                 let line = match line {
                                     ParsedLine::Line(_) | ParsedLine::LineAndFileNumber(_, _) => {
@@ -620,49 +599,25 @@ impl ExpandOne {
                                     ParsedLine::LineAndPath(line, _) => {
                                         result.push(Event::error(
                                             ProcessingErrorKind::CppStyleLineNotSupported
-                                                .with_node(node.into(), &self.line_map),
-                                            current_file,
-                                            self.line_override(),
+                                                .with_node(
+                                                    ld.node().clone().into(),
+                                                    &self.location,
+                                                ),
+                                            &self.location,
                                         ));
 
                                         ParsedLine::Line(line)
                                     }
                                 };
 
-                                // Combine the previous and the new override
-                                self.last_line_override = match self.last_line_override.take() {
-                                    Some((_, prev_override)) => match line {
-                                        ParsedLine::Line(line_number) => {
-                                            Some(match prev_override {
-                                                ParsedLine::Line(_) => line,
-                                                ParsedLine::LineAndFileNumber(_, file_number) => {
-                                                    ParsedLine::LineAndFileNumber(
-                                                        line_number,
-                                                        file_number,
-                                                    )
-                                                }
-                                                ParsedLine::LineAndPath(_, path) => {
-                                                    ParsedLine::LineAndPath(line_number, path)
-                                                }
-                                            })
-                                        }
-                                        ParsedLine::LineAndFileNumber(_, _)
-                                        | ParsedLine::LineAndPath(_, _) => Some(line),
-                                    },
-                                    None => Some(line),
-                                }
-                                .map(|ov| (raw_line, ov));
+                                self.location
+                                    .add_override(ld.node().text_range().start(), line);
                             }
 
                             result.push(Event::directive(ld));
                         }
                         Err(error) => {
-                            result.push(Event::directive_error(
-                                error,
-                                current_file,
-                                &self.line_map,
-                                self.line_override(),
-                            ));
+                            result.push(Event::directive_error(error, &self.location));
                         }
                     }
                 }
@@ -676,9 +631,8 @@ impl ExpandOne {
 
                 if self.mask_active {
                     result.push(Event::error(
-                        ErrorKind::unhandled(NodeOrToken::Node(node), &self.line_map),
-                        current_file,
-                        self.line_override(),
+                        ErrorKind::unhandled(NodeOrToken::Node(node), self.location.line_map()),
+                        &self.location,
                     ));
                 }
             }
@@ -691,7 +645,6 @@ impl ExpandOne {
         &mut self,
         current_state: ProcessorState,
         token: SyntaxToken,
-        current_file: FileId,
         iterator: SyntaxElementChildren<PreprocessorLang>,
         errors: Vec<parser::Error>,
     ) -> Option<Event> {
@@ -709,20 +662,14 @@ impl ExpandOne {
                 definition,
                 token.clone(),
                 iterator.clone(),
-                &self.line_map,
+                &self.location,
             ) {
                 Ok(Some((invocation, new_iterator))) => {
                     // We successfully parsed a macro invocation
-                    match invocation.substitute(
-                        &current_state,
-                        &self.line_map,
-                        current_file,
-                        self.line_override(),
-                    ) {
+                    match invocation.substitute(&current_state, &self.location) {
                         Ok(result) => {
                             // We handled this definition
                             self.state = ExpandState::ExpandedTokens {
-                                current_file,
                                 iterator: new_iterator,
                                 errors,
                                 events: VecDeque::from_iter(result),
@@ -733,13 +680,11 @@ impl ExpandOne {
                             // Definition not handled yet
                             // TODO: Remove this once substitute never fails
                             self.state = ExpandState::error_token(
-                                err.with(current_file, self.line_override()),
+                                err,
                                 token.into(),
-                                current_file,
                                 iterator,
                                 errors,
                                 current_state,
-                                self.line_override(),
                             );
                         }
                     }
@@ -748,7 +693,6 @@ impl ExpandOne {
                     // Could not parse a macro invocation starting at the current token, so just
                     // resume iterating normally
                     self.state = ExpandState::Iterate {
-                        current_file,
                         iterator,
                         errors,
                         current_state,
@@ -758,13 +702,11 @@ impl ExpandOne {
                 }
                 Err(err) => {
                     self.state = ExpandState::error_token(
-                        err,
+                        event::Error::new(err, &self.location),
                         token,
-                        current_file,
                         iterator,
                         errors,
                         current_state,
-                        self.line_override(),
                     );
                 }
             }
@@ -773,7 +715,6 @@ impl ExpandOne {
         } else {
             // No matching definition for this identifier, just keep iterating
             self.state = ExpandState::Iterate {
-                current_file,
                 iterator,
                 errors,
                 current_state,
@@ -786,47 +727,41 @@ impl ExpandOne {
     fn handle_node_or_token(
         &mut self,
         mut current_state: ProcessorState,
-        current_file: FileId,
         iterator: SyntaxElementChildren<PreprocessorLang>,
         errors: Vec<parser::Error>,
         node_or_token: NodeOrToken<SyntaxNode, SyntaxToken>,
     ) -> Option<Event> {
         match node_or_token {
-            rowan::NodeOrToken::Node(node) => {
-                match self.handle_node(&mut current_state, node, current_file) {
-                    HandleNodeResult::Events(events) => {
-                        self.state = ExpandState::PendingEvents {
-                            current_file,
-                            iterator,
-                            errors,
-                            events,
-                            current_state,
-                        };
+            rowan::NodeOrToken::Node(node) => match self.handle_node(&mut current_state, node) {
+                HandleNodeResult::Events(events) => {
+                    self.state = ExpandState::PendingEvents {
+                        iterator,
+                        errors,
+                        events,
+                        current_state,
+                    };
 
-                        None
-                    }
-
-                    HandleNodeResult::EnterFile(event, node, path) => {
-                        self.state = ExpandState::EnterNewFile {
-                            current_file,
-                            iterator,
-                            errors,
-                            current_state,
-                            path,
-                            node,
-                        };
-
-                        Some(event)
-                    }
+                    None
                 }
-            }
+
+                HandleNodeResult::EnterFile(event, node, path) => {
+                    self.state = ExpandState::EnterNewFile {
+                        iterator,
+                        errors,
+                        current_state,
+                        path,
+                        node,
+                    };
+
+                    Some(event)
+                }
+            },
             rowan::NodeOrToken::Token(token) => {
                 if self.mask_active {
-                    self.handle_token(current_state, token, current_file, iterator, errors)
+                    self.handle_token(current_state, token, iterator, errors)
                 } else {
                     // Just keep iterating
                     self.state = ExpandState::Iterate {
-                        current_file,
                         iterator,
                         errors,
                         current_state,
@@ -841,7 +776,7 @@ impl ExpandOne {
 
 pub enum ExpandEvent {
     Event(Event),
-    EnterFile(FileId, ProcessorState, SyntaxNode, ParsedPath),
+    EnterFile(ProcessorState, SyntaxNode, ParsedPath),
     Completed(ProcessorState),
 }
 
@@ -857,27 +792,21 @@ impl Iterator for ExpandOne {
     fn next(&mut self) -> Option<Self::Item> {
         loop {
             match std::mem::replace(&mut self.state, ExpandState::Complete) {
-                ExpandState::Init {
-                    current_file,
-                    ast,
-                    current_state,
-                } => {
+                ExpandState::Init { ast, current_state } => {
                     let (root, errors, line_map) = ast.into_inner();
 
                     // Store the current line map
-                    self.line_map = line_map;
+                    self.location.line_map = line_map;
 
                     self.state = ExpandState::Iterate {
-                        current_file,
                         iterator: root.children_with_tokens(),
                         errors,
                         current_state,
                     };
 
-                    return Some(Event::EnterFile(current_file).into());
+                    return Some(Event::EnterFile(self.location.current_file).into());
                 }
                 ExpandState::Iterate {
-                    current_file,
                     mut iterator,
                     mut errors,
                     current_state,
@@ -890,24 +819,19 @@ impl Iterator for ExpandOne {
                                 // Parse errors in non-included blocks are ignored
                                 if self.mask_active {
                                     self.state = ExpandState::PendingOne {
-                                        current_file,
                                         iterator,
                                         errors,
                                         node_or_token,
                                         current_state,
                                     };
 
-                                    return Some(
-                                        Event::error(error, current_file, self.line_override())
-                                            .into(),
-                                    );
+                                    return Some(Event::error(error, &self.location).into());
                                 }
                             }
                         }
 
                         if let Some(result) = self.handle_node_or_token(
                             current_state,
-                            current_file,
                             iterator,
                             errors,
                             node_or_token,
@@ -921,7 +845,6 @@ impl Iterator for ExpandOne {
                 }
 
                 ExpandState::EnterNewFile {
-                    current_file,
                     iterator,
                     errors,
                     current_state,
@@ -929,39 +852,27 @@ impl Iterator for ExpandOne {
                     node,
                 } => {
                     self.state = ExpandState::Iterate {
-                        current_file,
                         iterator,
                         errors,
                         current_state: current_state.clone(),
                     };
 
-                    return Some(ExpandEvent::EnterFile(
-                        current_file,
-                        current_state,
-                        node,
-                        path.into(),
-                    ));
+                    return Some(ExpandEvent::EnterFile(current_state, node, path.into()));
                 }
 
                 ExpandState::PendingOne {
-                    current_file,
                     iterator,
                     errors,
                     node_or_token,
                     current_state,
                 } => {
-                    if let Some(result) = self.handle_node_or_token(
-                        current_state,
-                        current_file,
-                        iterator,
-                        errors,
-                        node_or_token,
-                    ) {
+                    if let Some(result) =
+                        self.handle_node_or_token(current_state, iterator, errors, node_or_token)
+                    {
                         return Some(result.into());
                     }
                 }
                 ExpandState::PendingEvents {
-                    current_file,
                     iterator,
                     errors,
                     mut events,
@@ -969,7 +880,6 @@ impl Iterator for ExpandOne {
                 } => {
                     if let Some(event) = events.swap_pop(0) {
                         self.state = ExpandState::PendingEvents {
-                            current_file,
                             iterator,
                             errors,
                             events,
@@ -979,7 +889,6 @@ impl Iterator for ExpandOne {
                         return Some(event.into());
                     } else {
                         self.state = ExpandState::Iterate {
-                            current_file,
                             iterator,
                             errors,
                             current_state,
@@ -988,7 +897,6 @@ impl Iterator for ExpandOne {
                 }
 
                 ExpandState::ExpandedTokens {
-                    current_file,
                     iterator,
                     errors,
                     mut events,
@@ -996,7 +904,6 @@ impl Iterator for ExpandOne {
                 } => {
                     if let Some(event) = events.pop_front() {
                         self.state = ExpandState::ExpandedTokens {
-                            current_file,
                             iterator,
                             errors,
                             events,
@@ -1006,7 +913,6 @@ impl Iterator for ExpandOne {
                         return Some(event.into());
                     } else {
                         self.state = ExpandState::Iterate {
-                            current_file,
                             iterator,
                             errors,
                             current_state,

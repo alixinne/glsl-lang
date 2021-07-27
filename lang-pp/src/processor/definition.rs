@@ -9,7 +9,6 @@ use smol_str::SmolStr;
 use lang_util::FileId;
 
 use crate::{
-    lexer::LineMap,
     parser::{
         SyntaxKind::{self, *},
         SyntaxNode, SyntaxToken,
@@ -21,7 +20,8 @@ use super::{
     event::{
         Error, ErrorKind, Event, OutputToken, ProcessingError, ProcessingErrorKind, TokenLike,
     },
-    nodes::{Define, DefineFunction, DefineKind, DefineObject, ParsedLine},
+    expand::ExpandLocation,
+    nodes::{Define, DefineFunction, DefineKind, DefineObject},
     ProcessorState,
 };
 
@@ -184,15 +184,14 @@ impl Definition {
         &self,
         entire_range: TextRange,
         current_state: &ProcessorState,
-        line_map: &LineMap,
+        location: &ExpandLocation,
     ) -> Option<Vec<OutputToken>> {
         match self {
             Definition::Line => Some(
                 Self::substitute_string(
-                    &format!(
-                        "{}",
-                        line_map.get_line_and_col(entire_range.start().into()).0 + 1
-                    ),
+                    &location
+                        .offset_to_line_number(entire_range.start())
+                        .to_string(),
                     DIGITS,
                 )
                 .map(|token| OutputToken::new(token, entire_range))
@@ -263,19 +262,19 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
         definition: &'d Definition,
         first_token: T,
         iterator: I,
-        line_map: &LineMap,
+        location: &ExpandLocation,
     ) -> Result<Option<(Self, I)>, ProcessingError>
     where
         I: Iterator<Item = NodeOrToken<SyntaxNode, T>>,
     {
-        Self::parse_nested(definition, first_token, iterator, line_map, None)
+        Self::parse_nested(definition, first_token, iterator, location, None)
     }
 
     fn parse_nested<I>(
         definition: &'d Definition,
         first_token: T,
         mut iterator: I,
-        line_map: &LineMap,
+        location: &ExpandLocation,
         text_range: Option<TextRange>,
     ) -> Result<Option<(Self, I)>, ProcessingError>
     where
@@ -299,7 +298,7 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
                                 ident: definition.name().into(),
                                 node,
                             }
-                            .with_node(first_token.into(), line_map));
+                            .with_node(first_token.into(), location));
                         }
                         NodeOrToken::Token(inner_token) => {
                             // A token
@@ -349,7 +348,7 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
                         return Err(ProcessingErrorKind::UnterminatedMacroInvocation {
                             ident: definition.name().into(),
                         }
-                        .with_node(first_token.into(), line_map));
+                        .with_node(first_token.into(), location));
                     }
                 }
             };
@@ -375,7 +374,7 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
                     expected: definition.arg_count(),
                     actual: args.len(),
                 }
-                .with_node(first_token.into(), line_map));
+                .with_node(first_token.into(), location));
             }
 
             (
@@ -398,30 +397,18 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
     pub fn substitute_vec(
         current_state: &ProcessorState,
         tokens: Vec<T>,
-        line_map: &LineMap,
-        current_file: FileId,
-        line_override: Option<&(u32, ParsedLine)>,
+        location: &ExpandLocation,
     ) -> impl Iterator<Item = Event> {
         let mut subs_stack = HashSet::new();
-        Self::substitute_vec_inner(
-            current_state,
-            tokens,
-            line_map,
-            &mut subs_stack,
-            None,
-            current_file,
-            line_override,
-        )
+        Self::substitute_vec_inner(current_state, tokens, location, &mut subs_stack, None)
     }
 
     fn substitute_vec_inner(
         current_state: &ProcessorState,
         tokens: Vec<T>,
-        line_map: &LineMap,
+        location: &ExpandLocation,
         subs_stack: &mut HashSet<SmolStr>,
         range: Option<TextRange>,
-        current_file: FileId,
-        line_override: Option<&(u32, ParsedLine)>,
     ) -> impl Iterator<Item = Event> {
         // Macros are recursive, so we need to scan again for further substitutions
         let mut result = Vec::with_capacity(tokens.len());
@@ -450,16 +437,14 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
                             definition,
                             token.clone(),
                             iterator.clone(),
-                            line_map,
+                            location,
                             range,
                         ) {
                             Ok(Some((invocation, new_iterator))) => {
                                 match invocation.substitute_inner(
                                     current_state,
-                                    line_map,
+                                    location,
                                     subs_stack,
-                                    current_file,
-                                    line_override,
                                 ) {
                                     Ok(events) => {
                                         result.extend(events);
@@ -475,7 +460,7 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
                                 result.push(Event::Token(token.into()));
                             }
                             Err(err) => {
-                                result.push(Event::Error(err.into()));
+                                result.push(Event::error(err, location));
                             }
                         }
                     } else {
@@ -491,32 +476,22 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
     pub fn substitute(
         self,
         current_state: &ProcessorState,
-        line_map: &LineMap,
-        current_file: FileId,
-        line_override: Option<&(u32, ParsedLine)>,
+        location: &ExpandLocation,
     ) -> Result<impl Iterator<Item = Event>, Error> {
         let mut subs_stack = HashSet::new();
-        self.substitute_inner(
-            current_state,
-            line_map,
-            &mut subs_stack,
-            current_file,
-            line_override,
-        )
+        self.substitute_inner(current_state, location, &mut subs_stack)
     }
 
     fn substitute_inner(
         self,
         current_state: &ProcessorState,
-        line_map: &LineMap,
+        location: &ExpandLocation,
         subs_stack: &mut HashSet<SmolStr>,
-        current_file: FileId,
-        line_override: Option<&(u32, ParsedLine)>,
     ) -> Result<impl Iterator<Item = Event>, Error> {
         let result = match self.tokens {
             MacroCall::Object => {
                 self.definition
-                    .substitute_object(self.range, current_state, line_map)
+                    .substitute_object(self.range, current_state, location)
             }
             MacroCall::Function(function) => {
                 self.definition.substitute_function(function, self.range)
@@ -530,21 +505,19 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
             let result = MacroInvocation::substitute_vec_inner(
                 current_state,
                 tokens,
-                line_map,
+                location,
                 subs_stack,
                 Some(self.range),
-                current_file,
-                line_override,
             );
 
             subs_stack.remove(self.definition.name());
 
             Ok(result)
         } else {
-            Err(
-                Error::from(ErrorKind::unhandled(self.first_token.into(), line_map))
-                    .with(current_file, line_override),
-            )
+            Err(Error::new(
+                ErrorKind::unhandled(self.first_token.into(), location.line_map()),
+                location,
+            ))
         }
     }
 }

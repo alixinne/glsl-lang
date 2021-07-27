@@ -96,14 +96,17 @@ impl<'p, F: FileSystem> Iterator for ExpandStack<'p, F> {
                                     }
                                 });
                             }
-                            ExpandEvent::EnterFile(current_file, current_state, node, path) => {
+                            ExpandEvent::EnterFile(current_state, node, path) => {
                                 // Put it back on the stack
                                 self.stack.push(expand);
+
+                                // Get the location
+                                let location = self.stack.last().unwrap().location();
 
                                 // We are supposed to enter a new file
                                 // First, parse it using the preprocessor
                                 if let Some(resolved_path) =
-                                    self.processor.resolve(current_file, &path)
+                                    self.processor.resolve(location.current_file(), &path)
                                 {
                                     // TODO: Allow passing an encoding from somewhere
                                     match self.processor.parse(&resolved_path, None) {
@@ -113,34 +116,21 @@ impl<'p, F: FileSystem> Iterator for ExpandStack<'p, F> {
                                         Err(error) => {
                                             // Just return the error, we'll keep iterating on the lower
                                             // file by looping
-                                            let (line_map, line_override) = {
-                                                let last = self.stack.last().unwrap();
-                                                (last.line_map(), last.line_override())
-                                            };
-
                                             return Some(IoEvent::IoError(Located::new(
                                                 error,
                                                 resolved_path,
-                                                current_file,
                                                 node.text_range(),
-                                                line_map,
-                                                line_override,
+                                                location,
                                             )));
                                         }
                                     }
                                 } else {
                                     // Resolving the path failed, throw an error located at the
                                     // right place
-                                    let (line_map, line_override) = {
-                                        let last = self.stack.last().unwrap();
-                                        (last.line_map(), last.line_override())
-                                    };
-
                                     return Some(IoEvent::error(
                                         ProcessingErrorKind::IncludeNotFound { path }
-                                            .with_node(node.into(), line_map),
-                                        current_file,
-                                        line_override,
+                                            .with_node(node.into(), &location),
+                                        location,
                                     ));
                                 }
                             }

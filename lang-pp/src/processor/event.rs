@@ -12,7 +12,10 @@ use crate::{
     parser::{self, SyntaxKind, SyntaxNode, SyntaxToken},
 };
 
-use super::nodes::{self, Directive, ParsedLine, ParsedPath};
+use super::{
+    expand::ExpandLocation,
+    nodes::{self, Directive, ParsedLine, ParsedPath},
+};
 
 #[derive(Debug)]
 pub struct ProcessingError {
@@ -112,21 +115,28 @@ impl ProcessingErrorKind {
     pub fn with_node(
         self,
         node: NodeOrToken<SyntaxNode, SyntaxToken>,
-        line_map: &LineMap,
+        location: &ExpandLocation,
     ) -> ProcessingError {
         let pos = node.text_range();
         let start = pos.start();
-        ProcessingError::new(node, self, pos, line_map.get_line_and_col(start.into()))
+
+        ProcessingError::new(
+            node,
+            self,
+            pos,
+            location.line_map().get_line_and_col(start.into()),
+        )
     }
 
-    pub fn with_token(self, token: impl TokenLike, line_map: &LineMap) -> ProcessingError {
+    pub fn with_token(self, token: impl TokenLike, location: &ExpandLocation) -> ProcessingError {
         let pos = token.text_range();
         let start = pos.start();
+
         ProcessingError::new(
             token.into(),
             self,
             pos,
-            line_map.get_line_and_col(start.into()),
+            location.line_map().get_line_and_col(start.into()),
         )
     }
 }
@@ -220,35 +230,28 @@ impl std::fmt::Display for ProcessingErrorKind {
 pub struct Located<E: std::error::Error + 'static> {
     inner: E,
     path: PathBuf,
-    current_file: FileId,
     pos: TextRange,
-    user_pos: (u32, u32),
+    current_file: FileId,
+    line: u32,
     line_override: Option<(u32, ParsedLine)>,
 }
 
 impl<E: std::error::Error> Located<E> {
-    pub fn new(
-        inner: E,
-        path: PathBuf,
-        current_file: FileId,
-        pos: TextRange,
-        line_map: &LineMap,
-        line_override: Option<&(u32, ParsedLine)>,
-    ) -> Self {
-        let user_pos = line_map.get_line_and_col(pos.start().into());
+    pub fn new(inner: E, path: PathBuf, pos: TextRange, location: &ExpandLocation) -> Self {
+        let line = location.offset_to_line_number(pos.start());
 
         Self {
             inner,
             path,
-            current_file,
             pos,
-            user_pos,
-            line_override: line_override.cloned(),
+            current_file: location.current_file(),
+            line,
+            line_override: location.line_override().cloned(),
         }
     }
 
     pub fn line(&self) -> u32 {
-        Error::override_line(self.user_pos.0, self.line_override.as_ref())
+        self.line
     }
 
     pub fn string(&self) -> &dyn std::fmt::Display {
@@ -279,10 +282,23 @@ impl<E: std::error::Error> std::fmt::Display for Located<E> {
 pub struct Error {
     kind: ErrorKind,
     current_file: FileId,
+    line: u32,
     line_override: Option<(u32, ParsedLine)>,
 }
 
 impl Error {
+    pub fn new(kind: impl Into<ErrorKind>, location: &ExpandLocation) -> Self {
+        let kind = kind.into();
+        let line = location.line_to_line_number(kind.raw_line());
+
+        Self {
+            kind,
+            current_file: location.current_file(),
+            line,
+            line_override: location.line_override().cloned(),
+        }
+    }
+
     pub fn kind(&self) -> &ErrorKind {
         &self.kind
     }
@@ -295,23 +311,8 @@ impl Error {
         }
     }
 
-    fn override_line(raw_line: u32, line_override: Option<&(u32, ParsedLine)>) -> u32 {
-        if let Some((origin, line_override)) = line_override {
-            let offset = line_override.line_number() as i64 - *origin as i64 - 2;
-            (raw_line as i64 + offset) as u32
-        } else {
-            raw_line
-        }
-    }
-
     pub fn line(&self) -> u32 {
-        let raw_line = match &self.kind {
-            ErrorKind::Parse(err) => err.line(),
-            ErrorKind::Processing(err) => err.line(),
-            ErrorKind::Unhandled(_, pos) => pos.0,
-        };
-
-        Self::override_line(raw_line, self.line_override.as_ref())
+        self.line
     }
 
     fn override_string<'a>(
@@ -335,14 +336,6 @@ impl Error {
 
     pub fn string(&self) -> &dyn std::fmt::Display {
         Self::override_string(&self.current_file, self.line_override.as_ref())
-    }
-
-    pub fn with(self, current_file: FileId, line_override: Option<&(u32, ParsedLine)>) -> Self {
-        Self {
-            current_file,
-            line_override: line_override.cloned(),
-            ..self
-        }
     }
 }
 
@@ -370,36 +363,6 @@ impl std::error::Error for Error {
     }
 }
 
-impl From<ErrorKind> for Error {
-    fn from(kind: ErrorKind) -> Self {
-        Self {
-            kind,
-            current_file: FileId::default(),
-            line_override: None,
-        }
-    }
-}
-
-impl From<parser::Error> for Error {
-    fn from(error: parser::Error) -> Self {
-        Self {
-            kind: ErrorKind::Parse(error),
-            current_file: FileId::default(),
-            line_override: None,
-        }
-    }
-}
-
-impl From<ProcessingError> for Error {
-    fn from(error: ProcessingError) -> Self {
-        Self {
-            kind: ErrorKind::Processing(error),
-            current_file: FileId::default(),
-            line_override: None,
-        }
-    }
-}
-
 #[derive(Debug, Error)]
 pub enum ErrorKind {
     #[error(transparent)]
@@ -417,6 +380,14 @@ impl ErrorKind {
     ) -> Self {
         let user_pos = line_map.get_line_and_col(node_or_token.text_range().start().into());
         Self::Unhandled(node_or_token, user_pos)
+    }
+
+    fn raw_line(&self) -> u32 {
+        match self {
+            ErrorKind::Parse(err) => err.line(),
+            ErrorKind::Processing(err) => err.line(),
+            ErrorKind::Unhandled(_, pos) => pos.0,
+        }
     }
 }
 
@@ -549,23 +520,13 @@ impl Event {
 
     pub fn directive_error<E: Into<ProcessingErrorKind>>(
         (error, node): (E, SyntaxNode),
-        current_file: FileId,
-        line_map: &LineMap,
-        line_override: Option<&(u32, ParsedLine)>,
+        location: &ExpandLocation,
     ) -> Self {
-        Self::error(
-            error.into().with_node(node.into(), line_map),
-            current_file,
-            line_override,
-        )
+        Self::error(error.into().with_node(node.into(), location), location)
     }
 
-    pub fn error<T: Into<Error>>(
-        e: T,
-        current_file: FileId,
-        line_override: Option<&(u32, ParsedLine)>,
-    ) -> Self {
-        Self::Error(e.into().with(current_file, line_override))
+    pub fn error<T: Into<ErrorKind>>(e: T, location: &ExpandLocation) -> Self {
+        Self::Error(Error::new(e, location))
     }
 }
 
@@ -599,11 +560,7 @@ pub enum IoEvent<E: std::error::Error + 'static> {
 }
 
 impl<E: std::error::Error + 'static> IoEvent<E> {
-    pub fn error<T: Into<Error>>(
-        e: T,
-        current_file: FileId,
-        line_override: Option<&(u32, ParsedLine)>,
-    ) -> Self {
-        Self::Error(e.into().with(current_file, line_override))
+    pub fn error<T: Into<ErrorKind>>(e: T, location: &ExpandLocation) -> Self {
+        Self::Error(Error::new(e, location))
     }
 }

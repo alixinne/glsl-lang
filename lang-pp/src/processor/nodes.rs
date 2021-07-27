@@ -6,10 +6,7 @@ use smol_str::SmolStr;
 use string_cache::Atom;
 use thiserror::Error;
 
-use lang_util::FileId;
-
 use crate::{
-    lexer::LineMap,
     parser::{SyntaxKind::*, SyntaxNode},
     processor::event::TokenLike,
     Unescaped,
@@ -18,6 +15,7 @@ use crate::{
 use super::{
     definition::{trim_ws, MacroInvocation},
     event::{Event, OutputToken},
+    expand::ExpandLocation,
     exts, ProcessorState,
 };
 
@@ -28,6 +26,10 @@ pub struct Directive<I: TryFrom<SyntaxNode> + std::fmt::Debug + Clone> {
 }
 
 impl<I: TryFrom<SyntaxNode> + std::fmt::Debug + Clone> Directive<I> {
+    pub fn node(&self) -> &SyntaxNode {
+        &self.node
+    }
+
     pub fn into_inner(self) -> (I, SyntaxNode) {
         (self.inner, self.node)
     }
@@ -642,9 +644,7 @@ impl Include {
     pub fn path(
         &self,
         current_state: &ProcessorState,
-        line_map: &LineMap,
-        current_file: FileId,
-        line_override: Option<&(u32, ParsedLine)>,
+        location: &ExpandLocation,
     ) -> Result<ParsedPath, IncludeError> {
         // Perform macro substitution
         let tokens = self
@@ -652,14 +652,8 @@ impl Include {
             .children_with_tokens()
             .filter_map(NodeOrToken::into_token)
             .collect();
-        let subs_events: Vec<_> = MacroInvocation::substitute_vec(
-            current_state,
-            tokens,
-            line_map,
-            current_file,
-            line_override,
-        )
-        .collect();
+        let subs_events: Vec<_> =
+            MacroInvocation::substitute_vec(current_state, tokens, location).collect();
 
         // Make sure they are all tokens
         if !subs_events.iter().all(|evt| matches!(evt, Event::Token(_))) {
@@ -762,9 +756,7 @@ impl Line {
     pub fn parse(
         &self,
         current_state: &ProcessorState,
-        line_map: &LineMap,
-        current_file: FileId,
-        line_override: Option<&(u32, ParsedLine)>,
+        location: &ExpandLocation,
     ) -> Result<ParsedLine, LineError> {
         // Perform macro substitution
         let tokens = self
@@ -772,14 +764,8 @@ impl Line {
             .children_with_tokens()
             .filter_map(NodeOrToken::into_token)
             .collect();
-        let subs_events: Vec<_> = MacroInvocation::substitute_vec(
-            current_state,
-            tokens,
-            line_map,
-            current_file,
-            line_override,
-        )
-        .collect();
+        let subs_events: Vec<_> =
+            MacroInvocation::substitute_vec(current_state, tokens, location).collect();
 
         // Make sure they are all tokens
         if !subs_events.iter().all(|evt| matches!(evt, Event::Token(_))) {

@@ -88,6 +88,7 @@ fn main() -> anyhow::Result<()> {
         }
         Err(error) => {
             eprintln!("{}", error);
+            std::process::exit(1);
         }
     }
 

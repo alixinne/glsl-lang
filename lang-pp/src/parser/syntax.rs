@@ -3,8 +3,7 @@ use smol_str::SmolStr;
 
 use crate::lexer;
 
-use super::SyntaxKind::*;
-use super::{ErrorKind, ParserRun};
+use super::{ErrorKind, ExpectAny, ParserRun, SyntaxKind::*};
 
 type InputToken = lexer::Token;
 
@@ -278,47 +277,85 @@ fn pp_define<'i, 'cache>(parser: &mut ParserRun<'i, 'cache>) {
             parser.skip_trivia();
 
             let arg_checkpoint = parser.checkpoint();
-            match parser
-                .expect_any(
-                    &[InputToken::IDENT_KW, InputToken::RPAREN],
-                    &[InputToken::NEWLINE],
-                )
-                .as_deref()
-            {
-                Some(InputToken::IDENT_KW) => {
-                    // Ident already bumped by expect_any
-                    parser.start_node_at(arg_checkpoint, PP_DEFINE_ARG);
-                    parser.finish_node();
+            match parser.expect_any(
+                &[InputToken::IDENT_KW, InputToken::RPAREN],
+                &[InputToken::NEWLINE],
+            ) {
+                ExpectAny::Found(found) => {
+                    match *found {
+                        InputToken::IDENT_KW => {
+                            // Ident already bumped by expect_any
+                            parser.start_node_at(arg_checkpoint, PP_DEFINE_ARG);
+                            parser.finish_node();
+                        }
+                        InputToken::RPAREN => {
+                            // We're done, LPAREN followed by RPAREN is an empty arg list
+                            break;
+                        }
+                        _ => {
+                            unreachable!()
+                        }
+                    }
                 }
-                Some(InputToken::RPAREN) => {
-                    // We're done, LPAREN followed by RPAREN is an empty arg list
-                    break;
-                }
-                _ => {
+
+                ExpectAny::Unexpected(other) => {
                     // Something else, propagate error
-                    parser.start_node_at(checkpoint.take().unwrap(), ERROR);
+                    if let Some(checkpoint) = checkpoint.take() {
+                        parser.start_node_at(checkpoint, ERROR);
+                    }
+
+                    if *other == InputToken::NEWLINE {
+                        break;
+                    }
+                }
+
+                ExpectAny::EndOfInput => {
+                    if let Some(checkpoint) = checkpoint.take() {
+                        parser.start_node_at(checkpoint, ERROR);
+                    }
+
+                    break;
                 }
             }
 
             parser.skip_trivia();
 
-            match parser
-                .expect_any(
-                    &[InputToken::COMMA, InputToken::RPAREN],
-                    &[InputToken::NEWLINE],
-                )
-                .as_deref()
-            {
-                Some(InputToken::COMMA) => {
-                    // More identifiers to come
+            match parser.expect_any(
+                &[InputToken::COMMA, InputToken::RPAREN],
+                &[InputToken::NEWLINE],
+            ) {
+                ExpectAny::Found(found) => {
+                    match *found {
+                        InputToken::COMMA => {
+                            // More identifiers to come
+                        }
+                        InputToken::RPAREN => {
+                            // We're done
+                            break;
+                        }
+                        _ => {
+                            unreachable!()
+                        }
+                    }
                 }
-                Some(InputToken::RPAREN) => {
-                    // We're done
+
+                ExpectAny::Unexpected(other) => {
+                    // Something else, propagate error
+                    if let Some(checkpoint) = checkpoint.take() {
+                        parser.start_node_at(checkpoint, ERROR);
+                    }
+
+                    if *other == InputToken::NEWLINE {
+                        break;
+                    }
+                }
+
+                ExpectAny::EndOfInput => {
+                    if let Some(checkpoint) = checkpoint.take() {
+                        parser.start_node_at(checkpoint, ERROR);
+                    }
+
                     break;
-                }
-                _ => {
-                    // The error was already bumped and recorded by expect_any
-                    parser.start_node_at(checkpoint.take().unwrap(), ERROR);
                 }
             }
         }
@@ -427,10 +464,7 @@ fn pp_extension<'i, 'cache>(parser: &mut ParserRun<'i, 'cache>) {
 
     parser.skip_trivia();
 
-    if let Some(InputToken::COLON) = parser
-        .expect_any(&[InputToken::COLON], &[InputToken::NEWLINE])
-        .as_deref()
-    {
+    if let ExpectAny::Found(_) = parser.expect_any(&[InputToken::COLON], &[InputToken::NEWLINE]) {
         parser.skip_trivia();
 
         // Extension behavior

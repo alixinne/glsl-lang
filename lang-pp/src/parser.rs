@@ -4,7 +4,7 @@ use std::collections::VecDeque;
 use rowan::{TextRange, TextSize};
 
 use crate::{
-    lexer::{self, Lexer},
+    lexer::{self, Lexer, TextToken},
     Unescaped,
 };
 
@@ -168,11 +168,7 @@ impl<'i, 'cache> ParserRun<'i, 'cache> {
     }
 
     #[must_use = "None is returned if the expected token was not found"]
-    fn expect_any(
-        &mut self,
-        expected: &[lexer::Token],
-        dont_bump: &[lexer::Token],
-    ) -> Option<lexer::TextToken> {
+    fn expect_any(&mut self, expected: &[lexer::Token], dont_bump: &[lexer::Token]) -> ExpectAny {
         let bitset: SyntaxBitset = expected.iter().map(|&k| k as u16).collect();
         let dont_bump_bitset: SyntaxBitset = dont_bump.iter().map(|&k| k as u16).collect();
 
@@ -183,7 +179,7 @@ impl<'i, 'cache> ParserRun<'i, 'cache> {
             }
 
             if bitset.contains(*token as _) {
-                return Some(token);
+                return ExpectAny::Found(token);
             } else {
                 self.push_error(
                     ErrorKind::Unexpected {
@@ -193,7 +189,7 @@ impl<'i, 'cache> ParserRun<'i, 'cache> {
                     token.range,
                 );
 
-                return None;
+                return ExpectAny::Unexpected(token);
             }
         }
 
@@ -204,7 +200,7 @@ impl<'i, 'cache> ParserRun<'i, 'cache> {
             TextRange::new(TextSize::of(self.source), TextSize::of(self.source)),
         );
 
-        None
+        ExpectAny::EndOfInput
     }
 
     fn bump(&mut self) {
@@ -222,6 +218,13 @@ impl<'i, 'cache> ParserRun<'i, 'cache> {
             panic!("tried to bump at end of input");
         }
     }
+}
+
+#[derive(Debug, Clone, Copy)]
+enum ExpectAny {
+    Found(TextToken),
+    Unexpected(TextToken),
+    EndOfInput,
 }
 
 #[cfg(test)]

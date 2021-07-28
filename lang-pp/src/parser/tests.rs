@@ -211,3 +211,30 @@ fn test_empty() {
         "##]],
     );
 }
+
+#[test]
+fn test_invalid_define() {
+    check(
+        parse("#define a((x, y) hello\n"),
+        expect![[r##"
+        ROOT@0..23
+          PP_DEFINE@0..23
+            HASH@0..1 "#"
+            IDENT_KW@1..7 "define"
+            WS@7..8 " "
+            IDENT_KW@8..9 "a"
+            ERROR@9..16
+              LPAREN@9..10 "("
+              LPAREN@10..11 "("
+              IDENT_KW@11..12 "x"
+              COMMA@12..13 ","
+              WS@13..14 " "
+              IDENT_KW@14..15 "y"
+              RPAREN@15..16 ")"
+            WS@16..17 " "
+            PP_DEFINE_BODY@17..22
+              IDENT_KW@17..22 "hello"
+            NEWLINE@22..23 "\n"
+    "##]],
+    );
+}

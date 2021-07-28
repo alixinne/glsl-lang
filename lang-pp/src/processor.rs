@@ -22,6 +22,8 @@ use nodes::{
     GL_GOOGLE_CPP_STYLE_LINE_DIRECTIVE, GL_GOOGLE_INCLUDE_DIRECTIVE,
 };
 
+pub mod str;
+
 /// Operating mode for #include directives
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum IncludeMode {

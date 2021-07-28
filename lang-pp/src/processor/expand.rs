@@ -125,7 +125,7 @@ impl ExpandLocation {
     }
 }
 
-pub struct ExpandOne {
+pub(crate) struct ExpandOne {
     mask_stack: Vec<IfState>,
     mask_active: bool,
     location: ExpandLocation,
@@ -828,7 +828,7 @@ impl ExpandOne {
     }
 }
 
-pub enum ExpandEvent {
+pub(crate) enum ExpandEvent {
     Event(Event),
     EnterFile(ProcessorState, SyntaxNode, ParsedPath),
     Completed(ProcessorState),

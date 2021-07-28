@@ -255,7 +255,13 @@ pub(crate) fn trim_ws<T: TokenLike>(tokens: &[T]) -> &[T] {
         .take_while(|token| token.kind().is_whitespace())
         .count();
 
-    &tokens[leading_ws..(tokens.len() - trailing_ws)]
+    let end = tokens.len() - trailing_ws;
+    if end < leading_ws {
+        // The slice is only whitespace
+        &[]
+    } else {
+        &tokens[leading_ws..(tokens.len() - trailing_ws)]
+    }
 }
 
 pub struct MacroInvocation<'d, T> {

@@ -475,22 +475,26 @@ fn pp_extension<'i, 'cache>(parser: &mut ParserRun<'i, 'cache>) {
 }
 
 fn digits<'i, 'cache>(parser: &mut ParserRun<'i, 'cache>) {
-    if let Some(InputToken::DIGITS) = parser.peek().as_deref() {
-        parser.bump();
-    } else {
-        parser.start_node(ERROR);
-        parser.bump();
-        parser.finish_node();
+    let checkpoint = parser.checkpoint();
+
+    match parser.expect_one(InputToken::DIGITS) {
+        ExpectAny::Found(_) => {}
+        ExpectAny::Unexpected(_) | ExpectAny::EndOfInput => {
+            parser.start_node_at(checkpoint, ERROR);
+            parser.finish_node();
+        }
     }
 }
 
 fn ident<'i, 'cache>(parser: &mut ParserRun<'i, 'cache>) {
-    if let Some(InputToken::IDENT_KW) = parser.peek().as_deref() {
-        parser.bump();
-    } else {
-        parser.start_node(ERROR);
-        parser.bump();
-        parser.finish_node();
+    let checkpoint = parser.checkpoint();
+
+    match parser.expect_one(InputToken::IDENT_KW) {
+        ExpectAny::Found(_) => {}
+        ExpectAny::Unexpected(_) | ExpectAny::EndOfInput => {
+            parser.start_node_at(checkpoint, ERROR);
+            parser.finish_node();
+        }
     }
 }
 

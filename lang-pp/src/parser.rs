@@ -167,6 +167,35 @@ impl<'i, 'cache> ParserRun<'i, 'cache> {
             .push(Error::new(error_kind, range, self.input.line_map()));
     }
 
+    fn expect_one(&mut self, expected: lexer::Token) -> ExpectAny {
+        if let Some(token) = self.peek() {
+            self.bump();
+
+            if expected == *token {
+                return ExpectAny::Found(token);
+            } else {
+                self.push_error(
+                    ErrorKind::Unexpected {
+                        actual: *token,
+                        expected: Box::new([expected]),
+                    },
+                    token.range,
+                );
+
+                return ExpectAny::Unexpected(token);
+            }
+        }
+
+        self.push_error(
+            ErrorKind::EndOfInput {
+                expected: Box::new([expected]),
+            },
+            TextRange::new(TextSize::of(self.source), TextSize::of(self.source)),
+        );
+
+        ExpectAny::EndOfInput
+    }
+
     #[must_use = "None is returned if the expected token was not found"]
     fn expect_any(&mut self, expected: &[lexer::Token], dont_bump: &[lexer::Token]) -> ExpectAny {
         let bitset: SyntaxBitset = expected.iter().map(|&k| k as u16).collect();

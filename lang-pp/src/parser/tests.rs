@@ -238,3 +238,32 @@ fn test_invalid_define() {
     "##]],
     );
 }
+
+#[test]
+fn test_eof() {
+    // digits
+    check(
+        parse("#version"),
+        expect![[r##"
+            ROOT@0..8
+              PP_VERSION@0..8
+                HASH@0..1 "#"
+                IDENT_KW@1..8 "version"
+                PP_VERSION_NUMBER@8..8
+                  ERROR@8..8
+        "##]],
+    );
+
+    // ident
+    check(
+        parse("#undef"),
+        expect![[r##"
+        ROOT@0..6
+          PP_UNDEF@0..6
+            HASH@0..1 "#"
+            IDENT_KW@1..6 "undef"
+            PP_IDENT@6..6
+              ERROR@6..6
+    "##]],
+    );
+}

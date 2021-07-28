@@ -1,5 +1,6 @@
 use argh::FromArgs;
 
+use glsl_lang::parse::Parse;
 use glsl_lang_pp::processor::ProcessorState;
 
 #[derive(FromArgs)]
@@ -10,7 +11,7 @@ struct Opts {
     parse_only: bool,
 }
 
-pub fn main(data: &[u8]) {
+pub fn main_pp(data: &[u8]) {
     if let Ok(s) = std::str::from_utf8(data) {
         let opts: Opts = argh::from_env();
 
@@ -20,5 +21,11 @@ pub fn main(data: &[u8]) {
             let _: Vec<_> =
                 glsl_lang_pp::processor::str::process(&s, ProcessorState::default()).collect();
         }
+    }
+}
+
+pub fn main_lang(data: &[u8]) {
+    if let Ok(s) = std::str::from_utf8(data) {
+        let _ = glsl_lang::ast::TranslationUnit::parse(&s);
     }
 }

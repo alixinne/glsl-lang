@@ -6,13 +6,22 @@ default-run = "pp-test"
 
 [[bin]]
 name = "pp-fuzz"
-path = "src/main.rs"
+path = "src/bin/pp_fuzz.rs"
 
 [[bin]]
 name = "pp-test"
-path = "src/bin/test.rs"
+path = "src/bin/pp_test.rs"
+
+[[bin]]
+name = "lang-fuzz"
+path = "src/bin/lang_fuzz.rs"
+
+[[bin]]
+name = "lang-test"
+path = "src/bin/lang_test.rs"
 
 [dependencies]
 glsl-lang-pp = "*"
+glsl-lang = "*"
 afl = "0.10"
 argh = "0.1.5"

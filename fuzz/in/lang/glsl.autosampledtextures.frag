@@ -1,0 +1,1 @@
+../../../data/glsl.autosampledtextures.frag

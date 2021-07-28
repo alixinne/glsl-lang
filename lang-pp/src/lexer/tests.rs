@@ -100,3 +100,10 @@ fn test_glued_tokens() {
         ]
     );
 }
+
+#[test]
+fn test_unterminated_comment() {
+    assert_eq!(&tokenize("/* comment")[..], &[ERROR]);
+    assert_eq!(&tokenize("/* comment *")[..], &[ERROR]);
+    assert_eq!(&tokenize("/* comment */")[..], &[COMMENT]);
+}

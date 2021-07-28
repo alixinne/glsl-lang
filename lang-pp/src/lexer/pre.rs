@@ -361,9 +361,12 @@ impl<'i> Iterator for PreLexer<'i> {
                             self.next_token();
                             State::MultiCommentStar
                         }
+                        None => {
+                            // Unfinished comment
+                            return Some(TextToken::new(Token::ERROR, self.start));
+                        }
                         _ => {
                             // Any other char
-                            // TODO: Handle None?
                             self.next_token();
                             State::MultiComment
                         }
@@ -376,9 +379,12 @@ impl<'i> Iterator for PreLexer<'i> {
                             self.next_token();
                             return Some(TextToken::new(Token::COMMENT, self.start));
                         }
+                        None => {
+                            // Unfinished comment
+                            return Some(TextToken::new(Token::ERROR, self.start));
+                        }
                         _ => {
                             // Any other char
-                            // TODO: Handle None?
                             self.next_token();
                             State::MultiComment
                         }

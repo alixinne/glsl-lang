@@ -9,6 +9,7 @@ default-members = [
 ]
 
 members = [
+	"fuzz",
 	"lang",
 	"lang-pp",
 	"lang-util",
@@ -20,6 +21,7 @@ members = [
 
 [patch.crates-io]
 glsl-lang       = { path = "lang" }
+glsl-lang-pp    = { path = "lang-pp" }
 glsl-lang-quote = { path = "lang-quote" }
 glsl-lang-cli   = { path = "lang-cli" }
 

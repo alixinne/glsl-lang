@@ -169,3 +169,9 @@ impl<'s> Iterator for UnescapeIter<'s> {
         }
     }
 }
+
+// Used by the fuzzer until a proper API is designed for parsing
+#[doc(hidden)]
+pub fn parse(input: &str) -> parser::Ast {
+    parser::Parser::new(input).parse()
+}

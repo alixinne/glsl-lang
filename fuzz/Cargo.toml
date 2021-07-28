@@ -1,0 +1,17 @@
+[package]
+name = "glsl-lang-fuzz"
+version = "0.1.0"
+edition = "2018"
+default-run = "pp-test"
+
+[[bin]]
+name = "pp-fuzz"
+path = "src/main.rs"
+
+[[bin]]
+name = "pp-test"
+path = "src/bin/test.rs"
+
+[dependencies]
+glsl-lang-pp = "*"
+afl = "0.10"

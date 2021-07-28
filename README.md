@@ -51,14 +51,17 @@ modeled after [Dimitri Sabadie's `glsl` crate](https://github.com/phaazon/glsl).
 
 #### It's fast
 
-Due to using a LALR parser and dedicated tokenizer, it's 500x faster than
+Due to using a LALR parser and dedicated tokenizer, it's 14-400x faster than
 `glsl`:
 
-    $ cargo criterion --bench glsl -- --sample-size 1000
+    $ cargo criterion --bench glsl
     TranslationUnit: void main() { ((((((((1.0f)))))))); }/lalrpop
-                            time:   [7.7858 us 7.7945 us 7.8027 us]
+                            time:   [7.2314 us 7.2377 us 7.2450 us]
     TranslationUnit: void main() { ((((((((1.0f)))))))); }/glsl
-                            time:   [3.1827 ms 3.1831 ms 3.1836 ms]
+                            time:   [3.1819 ms 3.1832 ms 3.1846 ms]
+
+    spv.400.frag/lalrpop    time:   [740.79 us 741.09 us 741.41 us]
+    spv.400.frag/glsl       time:   [10.835 ms 10.838 ms 10.842 ms]
 
 #### Syntax nodes have location information
 

@@ -5,7 +5,11 @@ where
     L: glsl_lang::parse::Parse,
     G: glsl::parser::Parse,
 {
-    let mut group = c.benchmark_group(format!("{}: {}", name, input));
+    let mut group = c.benchmark_group(&if input.contains('\n') {
+        name.to_owned()
+    } else {
+        format!("{}: {}", name, input)
+    });
 
     group.bench_function("lalrpop", |b| {
         use glsl_lang::parse::LangParser;
@@ -33,9 +37,6 @@ pub fn parse_expr(c: &mut Criterion) {
     parse_impl::<glsl_lang::ast::Expr, glsl::syntax::Expr>(c, input, "Expr")
 }
 
-#[cfg(feature = "parse-expr")]
-criterion_group!(glsl, parse_expr);
-
 pub fn parse_tu(c: &mut Criterion) {
     let input = "void main() { ((((((((1.0f)))))))); }";
     parse_impl::<glsl_lang::ast::TranslationUnit, glsl::syntax::TranslationUnit>(
@@ -45,6 +46,18 @@ pub fn parse_tu(c: &mut Criterion) {
     )
 }
 
-criterion_group!(glsl, parse_tu);
+pub fn parse_big_tu(c: &mut Criterion) {
+    let input = include_str!("../../data/spv.400.frag");
+    parse_impl::<glsl_lang::ast::TranslationUnit, glsl::syntax::TranslationUnit>(
+        c,
+        input,
+        "spv.400.frag",
+    )
+}
+
+#[cfg(feature = "parse-expr")]
+criterion_group!(glsl, parse_expr, parse_tu, parse_big_tu);
+#[cfg(not(feature = "parse-expr"))]
+criterion_group!(glsl, parse_tu, parse_big_tu);
 
 criterion_main!(glsl);

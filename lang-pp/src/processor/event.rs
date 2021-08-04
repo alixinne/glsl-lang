@@ -95,6 +95,9 @@ pub enum ProcessingErrorKind {
     IncludeNotFound {
         path: ParsedPath,
     },
+    InvalidTokenPaste {
+        token: Option<SmolStr>,
+    },
     CppStyleLineNotSupported,
     DirectiveVersion(nodes::VersionError),
     DirectiveExtension(nodes::ExtensionError),
@@ -129,8 +132,40 @@ impl ProcessingErrorKind {
         )
     }
 
+    pub fn with_node_and_range(
+        self,
+        node: NodeOrToken<SyntaxNode, SyntaxToken>,
+        pos: TextRange,
+        location: &ExpandLocation,
+    ) -> ProcessingError {
+        let start = pos.start();
+
+        ProcessingError::new(
+            node,
+            self,
+            pos,
+            location.line_map().get_line_and_col(start.into()),
+        )
+    }
+
     pub fn with_token(self, token: impl TokenLike, location: &ExpandLocation) -> ProcessingError {
         let pos = token.text_range();
+        let start = pos.start();
+
+        ProcessingError::new(
+            token.into(),
+            self,
+            pos,
+            location.line_map().get_line_and_col(start.into()),
+        )
+    }
+
+    pub fn with_token_and_range(
+        self,
+        token: impl TokenLike,
+        pos: TextRange,
+        location: &ExpandLocation,
+    ) -> ProcessingError {
         let start = pos.start();
 
         ProcessingError::new(
@@ -186,6 +221,17 @@ impl std::fmt::Display for ProcessingErrorKind {
             }
             ProcessingErrorKind::IncludeNotFound { path } => {
                 write!(f, "'#include' : could not find file for {}", path)
+            }
+            ProcessingErrorKind::InvalidTokenPaste { token } => {
+                if let Some(token) = token {
+                    if token.ends_with(" ##") {
+                        write!(f, "'##' : invalid use of paste operator")
+                    } else {
+                        write!(f, "'##' : invalid pasted token : {}", token)
+                    }
+                } else {
+                    write!(f, "'##' : invalid use of paste operator")
+                }
             }
             ProcessingErrorKind::CppStyleLineNotSupported => {
                 write!(f, "'#line' : required extension not requested: GL_GOOGLE_cpp_style_line_directive")
@@ -532,6 +578,14 @@ impl Event {
 
     pub fn error<T: Into<ErrorKind>>(e: T, location: &ExpandLocation) -> Self {
         Self::Error(Error::new(e, location))
+    }
+
+    pub fn into_token(self) -> Option<OutputToken> {
+        if let Event::Token(token) = self {
+            Some(token)
+        } else {
+            None
+        }
     }
 }
 

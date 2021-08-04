@@ -1,4 +1,4 @@
-use rowan::TextRange;
+use rowan::{Checkpoint, TextRange};
 use smol_str::SmolStr;
 
 use crate::lexer;
@@ -498,8 +498,48 @@ fn ident<'i, 'cache>(parser: &mut ParserRun<'i, 'cache>) {
     }
 }
 
+fn pp_concat<'i, 'cache>(parser: &mut ParserRun<'i, 'cache>, checkpoint: Checkpoint) {
+    // Start the concat node
+    parser.start_node_at(checkpoint, PP_CONCAT);
+
+    // We know there's a ## pending
+    parser.bump();
+
+    // Then, loop until the next non-trivial node
+    loop {
+        parser.buffer_trivia();
+
+        if let Some(current) = parser.peek() {
+            match *current {
+                InputToken::NEWLINE => {
+                    // End of directive
+                    break;
+                }
+                InputToken::PP_CONCAT => {
+                    // "nested" concatenation
+                    parser.eat_trivia();
+                    let checkpoint = parser.checkpoint();
+                    pp_concat(parser, checkpoint);
+                }
+                _ => {
+                    // Since we buffered trivia, this is a non-trivial token
+                    parser.eat_trivia();
+                    parser.bump();
+                }
+            }
+        }
+    }
+
+    // Finish the concat node
+    parser.finish_node();
+}
+
 fn pp_tokens<'i, 'cache>(parser: &mut ParserRun<'i, 'cache>) {
     // The replacement body is everything until the new-line
+
+    // Checkpoint for maybe wrapping in a PP_CONCAT node
+    let mut checkpoint = parser.checkpoint();
+
     loop {
         // Consume all trivia first
         parser.buffer_trivia();
@@ -511,10 +551,22 @@ fn pp_tokens<'i, 'cache>(parser: &mut ParserRun<'i, 'cache>) {
                     // Newline terminates body
                     break;
                 }
+                InputToken::PP_CONCAT => {
+                    // Consume trivia first
+                    parser.eat_trivia();
+
+                    // ## op, turn this into a node, consuming the checkpoint
+                    let checkpoint = std::mem::replace(&mut checkpoint, parser.checkpoint());
+                    pp_concat(parser, checkpoint);
+                }
                 _ => {
                     // Anything else: include buffered trivia in the body, and include the
                     // new non-trivial token
                     parser.eat_trivia();
+
+                    // Update checkpoint
+                    checkpoint = parser.checkpoint();
+
                     parser.bump();
                 }
             }

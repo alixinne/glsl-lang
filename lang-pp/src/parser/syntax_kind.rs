@@ -98,8 +98,9 @@ pub enum SyntaxKind {
     OR_ASSIGN,
     /// -=
     SUB_ASSIGN,
-    /// ##
     PP_CONCAT,
+    /// ##
+    PP_CONCAT_OP,
     // Single-char tokens
     /// (
     LPAREN,
@@ -184,6 +185,93 @@ impl SyntaxKind {
     pub fn is_newline(&self) -> bool {
         matches!(self, Self::NEWLINE)
     }
+
+    pub fn paste(lhs: Self, rhs: Self) -> Self {
+        use SyntaxKind::*;
+
+        match lhs {
+            IDENT_KW => match rhs {
+                DEFINED | IDENT_KW | DIGITS => IDENT_KW,
+                _ => ERROR,
+            },
+            DIGITS => match rhs {
+                IDENT_KW | DIGITS | PERIOD | DASH | PLUS => DIGITS,
+                _ => ERROR,
+            },
+            LEFT_OP => match rhs {
+                EQUAL => LEFT_ASSIGN,
+                _ => ERROR,
+            },
+            RIGHT_OP => match rhs {
+                EQUAL => RIGHT_ASSIGN,
+                _ => ERROR,
+            },
+            PERIOD => match rhs {
+                DIGITS => DIGITS,
+                _ => ERROR,
+            },
+            EQUAL => match rhs {
+                EQUAL => EQ_OP,
+                _ => ERROR,
+            },
+            BANG => match rhs {
+                EQUAL => NE_OP,
+                _ => ERROR,
+            },
+            DASH => match rhs {
+                DASH => DEC_OP,
+                EQUAL => SUB_ASSIGN,
+                _ => ERROR,
+            },
+            PLUS => match rhs {
+                PLUS => INC_OP,
+                EQUAL => ADD_ASSIGN,
+                _ => ERROR,
+            },
+            ASTERISK => match rhs {
+                EQUAL => MUL_ASSIGN,
+                _ => ERROR,
+            },
+            SLASH => match rhs {
+                EQUAL => DIV_ASSIGN,
+                _ => ERROR,
+            },
+            PERCENT => match rhs {
+                EQUAL => MOD_ASSIGN,
+                _ => ERROR,
+            },
+            LANGLE => match rhs {
+                LANGLE => LEFT_OP,
+                EQUAL => LE_OP,
+                _ => ERROR,
+            },
+            RANGLE => match rhs {
+                RANGLE => RIGHT_OP,
+                EQUAL => GE_OP,
+                _ => ERROR,
+            },
+            BAR => match rhs {
+                BAR => OR_OP,
+                EQUAL => OR_ASSIGN,
+                _ => ERROR,
+            },
+            CARET => match rhs {
+                CARET => XOR_OP,
+                EQUAL => XOR_ASSIGN,
+                _ => ERROR,
+            },
+            AMPERSAND => match rhs {
+                AMPERSAND => AND_OP,
+                EQUAL => AND_ASSIGN,
+                _ => ERROR,
+            },
+            HASH => match rhs {
+                HASH => PP_CONCAT_OP,
+                _ => ERROR,
+            },
+            _ => ERROR,
+        }
+    }
 }
 
 impl From<lexer::Token> for SyntaxKind {
@@ -247,7 +335,7 @@ impl From<lexer::Token> for SyntaxKind {
             lexer::Token::XOR_ASSIGN => XOR_ASSIGN,
             lexer::Token::OR_ASSIGN => OR_ASSIGN,
             lexer::Token::SUB_ASSIGN => SUB_ASSIGN,
-            lexer::Token::PP_CONCAT => PP_CONCAT,
+            lexer::Token::PP_CONCAT => PP_CONCAT_OP,
 
             // A stray line continuation should just be part of whitespace
             lexer::Token::LINECONT => WS,

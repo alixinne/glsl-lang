@@ -51,17 +51,23 @@ modeled after [Dimitri Sabadie's `glsl` crate](https://github.com/phaazon/glsl).
 
 #### It's fast
 
-Due to using a LALR parser and dedicated tokenizer, it's 14-400x faster than
-`glsl`:
+Due to using a LALR parser and dedicated tokenizer, it's 5-480x (average case
+10x) faster than `glsl`:
 
-    $ cargo criterion --bench glsl
-    TranslationUnit: void main() { ((((((((1.0f)))))))); }/lalrpop
-                            time:   [7.2314 us 7.2377 us 7.2450 us]
-    TranslationUnit: void main() { ((((((((1.0f)))))))); }/glsl
-                            time:   [3.1819 ms 3.1832 ms 3.1846 ms]
-
-    spv.400.frag/lalrpop    time:   [740.79 us 741.09 us 741.41 us]
-    spv.400.frag/glsl       time:   [10.835 ms 10.838 ms 10.842 ms]
+    $ cargo bench --bench glsl -- --samples 1000
+    # Install with `cargo install critcmp`:
+    $ critcmp new -g '([a-zA-Z0-9._-]*)/\w+'
+    group                                               new//glsl                               new//glsl_lang
+    -----                                               ---------                               --------------
+    preprocessor.extensions.vert                        4.27     24.6±0.09µs     9.9 MB/sec     1.00      5.8±0.05µs    42.5 MB/sec
+    [...]
+    300operations.frag                                  10.70  1802.5±4.87µs   836.5 KB/sec     1.00    168.4±1.51µs     8.7 MB/sec
+    310runtimeArray.vert                                10.32   317.7±0.77µs   965.2 KB/sec     1.00     30.8±0.10µs     9.7 MB/sec
+    [...]
+    400.vert                                            13.41     2.8±0.01ms   589.5 KB/sec     1.00    209.1±5.26µs     7.7 MB/sec
+    [...]
+    deepRvalue.frag                                     25.90     2.5±0.01ms   351.4 KB/sec     1.00     97.3±0.31µs     8.9 MB/sec
+    nested_parens                                       483.25     3.6±0.04ms    10.1 KB/sec    1.00      7.4±0.12µs     4.8 MB/sec
 
 #### Syntax nodes have location information
 

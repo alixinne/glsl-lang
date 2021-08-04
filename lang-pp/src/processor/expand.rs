@@ -677,17 +677,19 @@ impl ExpandOne {
                 // Unknown preprocessor directive, these are already reported as parse errors
             }
             _ => {
-                // Special case for PP_IF so #endif stack correctly
-                if node.kind() == PP_IF {
-                    self.mask_active = false;
-                    self.mask_stack.push(IfState::None);
-                }
+                let is_pp_if = node.kind() == PP_IF;
 
                 if self.mask_active {
                     result.push(Event::error(
                         ErrorKind::unhandled(NodeOrToken::Node(node), self.location.line_map()),
                         &self.location,
                     ));
+                }
+
+                // Special case for PP_IF so #endif stack correctly
+                if is_pp_if {
+                    self.mask_active = false;
+                    self.mask_stack.push(IfState::None);
                 }
             }
         }

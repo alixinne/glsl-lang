@@ -722,28 +722,14 @@ impl ExpandOne {
             ) {
                 Ok(Some((invocation, new_iterator))) => {
                     // We successfully parsed a macro invocation
-                    match invocation.substitute(&current_state, &self.location) {
-                        Ok(result) => {
-                            // We handled this definition
-                            self.state = ExpandState::ExpandedTokens {
-                                iterator: new_iterator,
-                                errors,
-                                events: VecDeque::from_iter(result),
-                                current_state,
-                            };
-                        }
-                        Err(err) => {
-                            // Definition not handled yet
-                            // TODO: Remove this once substitute never fails
-                            self.state = ExpandState::error_token(
-                                err,
-                                token.into(),
-                                iterator,
-                                errors,
-                                current_state,
-                            );
-                        }
-                    }
+                    self.state = ExpandState::ExpandedTokens {
+                        iterator: new_iterator,
+                        errors,
+                        events: VecDeque::from_iter(
+                            invocation.substitute(&current_state, &self.location),
+                        ),
+                        current_state,
+                    };
                 }
                 Ok(None) => {
                     // Could not parse a macro invocation starting at the current token, so just

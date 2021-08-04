@@ -18,9 +18,7 @@ use crate::{
 };
 
 use super::{
-    event::{
-        Error, ErrorKind, Event, OutputToken, ProcessingError, ProcessingErrorKind, TokenLike,
-    },
+    event::{Event, OutputToken, ProcessingError, ProcessingErrorKind, TokenLike},
     expand::ExpandLocation,
     nodes::{Define, DefineFunction, DefineKind, DefineObject},
     ProcessorState,
@@ -289,7 +287,7 @@ impl Definition {
         object: &DefineObject,
         entire_range: TextRange,
         location: &ExpandLocation,
-    ) -> Option<Vec<Event>> {
+    ) -> Vec<Event> {
         let replaced = {
             let mut builder = GreenNodeBuilder::new();
             builder.start_node(ROOT.into());
@@ -310,41 +308,39 @@ impl Definition {
             builder.finish()
         };
 
-        Some(
-            Self::tokens(replaced)
-                .map(|token| {
-                    if token.kind() == ERROR {
-                        Event::error(
-                            ProcessingErrorKind::InvalidTokenPaste {
-                                token: {
-                                    let text = token.text();
-                                    if text.is_empty() {
-                                        None
-                                    } else {
-                                        Some(text.into())
-                                    }
-                                },
-                            }
-                            .with_token_and_range(
-                                token,
-                                entire_range,
-                                location,
-                            ),
+        Self::tokens(replaced)
+            .map(|token| {
+                if token.kind() == ERROR {
+                    Event::error(
+                        ProcessingErrorKind::InvalidTokenPaste {
+                            token: {
+                                let text = token.text();
+                                if text.is_empty() {
+                                    None
+                                } else {
+                                    Some(text.into())
+                                }
+                            },
+                        }
+                        .with_token_and_range(
+                            token,
+                            entire_range,
                             location,
-                        )
-                    } else {
-                        OutputToken::new(token, entire_range).into()
-                    }
-                })
-                .collect(),
-        )
+                        ),
+                        location,
+                    )
+                } else {
+                    OutputToken::new(token, entire_range).into()
+                }
+            })
+            .collect()
     }
 
     fn substitute_define_function(
         function: &DefineFunction,
         args: &[Vec<impl TokenLike>],
         entire_range: TextRange,
-    ) -> Option<Vec<Event>> {
+    ) -> Vec<Event> {
         // Put the arguments into a hashmap
         let args: HashMap<_, _> = args
             .iter()
@@ -393,11 +389,9 @@ impl Definition {
             builder.finish()
         };
 
-        Some(
-            Self::tokens(replaced)
-                .map(|token| OutputToken::new(token, entire_range).into())
-                .collect(),
-        )
+        Self::tokens(replaced)
+            .map(|token| OutputToken::new(token, entire_range).into())
+            .collect()
     }
 
     fn substitute_object(
@@ -405,18 +399,17 @@ impl Definition {
         entire_range: TextRange,
         current_state: &ProcessorState,
         location: &ExpandLocation,
-    ) -> Option<Vec<Event>> {
+    ) -> Vec<Event> {
         match self {
-            Definition::Line => Some(
-                Self::substitute_string(
-                    &location
-                        .offset_to_line_number(entire_range.start())
-                        .to_string(),
-                    DIGITS,
-                )
-                .map(|token| OutputToken::new(token, entire_range).into())
-                .collect(),
-            ),
+            Definition::Line => Self::substitute_string(
+                &location
+                    .offset_to_line_number(entire_range.start())
+                    .to_string(),
+                DIGITS,
+            )
+            .map(|token| OutputToken::new(token, entire_range).into())
+            .collect(),
+
             Definition::File => {
                 let string = location.string();
                 let (string, kind) = if string.is_number() {
@@ -425,22 +418,21 @@ impl Definition {
                     (format!("\"{}\"", string), QUOTE_STRING)
                 };
 
-                Some(
-                    Self::substitute_string(&string, kind)
-                        .map(|token| OutputToken::new(token, entire_range).into())
-                        .collect(),
-                )
+                Self::substitute_string(&string, kind)
+                    .map(|token| OutputToken::new(token, entire_range).into())
+                    .collect()
             }
-            Definition::Version => Some(
+            Definition::Version => {
                 Self::substitute_string(&format!("{}", current_state.version.number), DIGITS)
                     .map(|token| OutputToken::new(token, entire_range).into())
-                    .collect(),
-            ),
+                    .collect()
+            }
+
             Definition::Regular(define, _) => {
                 if let DefineKind::Object(object) = define.kind() {
                     Self::substitute_define_object(object, entire_range, location)
                 } else {
-                    None
+                    panic!("expected object define")
                 }
             }
         }
@@ -450,16 +442,18 @@ impl Definition {
         &self,
         args: &[Vec<impl TokenLike>],
         entire_range: TextRange,
-    ) -> Option<Vec<Event>> {
+    ) -> Vec<Event> {
         match self {
             Definition::Regular(define, _) => {
                 if let DefineKind::Function(function) = define.kind() {
                     Self::substitute_define_function(function, args, entire_range)
                 } else {
-                    None
+                    panic!("expected function define");
                 }
             }
-            _ => None,
+            _ => {
+                panic!("expected function define");
+            }
         }
     }
 }
@@ -488,7 +482,6 @@ pub struct MacroInvocation<'d, T> {
     definition: &'d Definition,
     tokens: MacroCall<T>,
     range: TextRange,
-    first_token: T,
 }
 
 enum MacroCall<T> {
@@ -633,7 +626,6 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
                 definition,
                 tokens,
                 range: text_range.unwrap_or(computed_range),
-                first_token,
             },
             iterator,
         )))
@@ -687,20 +679,13 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
                             range,
                         ) {
                             Ok(Some((invocation, new_iterator))) => {
-                                match invocation.substitute_inner(
+                                result.extend(invocation.substitute_inner(
                                     current_state,
                                     location,
                                     subs_stack,
-                                ) {
-                                    Ok(events) => {
-                                        result.extend(events);
-                                        iterator = new_iterator;
-                                    }
-                                    Err(err) => {
-                                        result.push(Event::Error(err.into()));
-                                        result.push(Event::Token(token.into()));
-                                    }
-                                }
+                                ));
+
+                                iterator = new_iterator;
                             }
                             Ok(None) => {
                                 result.push(Event::Token(token.into()));
@@ -723,7 +708,7 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
         self,
         current_state: &ProcessorState,
         location: &ExpandLocation,
-    ) -> Result<impl Iterator<Item = Event>, Error> {
+    ) -> impl Iterator<Item = Event> {
         let mut subs_stack = HashSet::new();
         self.substitute_inner(current_state, location, &mut subs_stack)
     }
@@ -733,8 +718,8 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
         current_state: &ProcessorState,
         location: &ExpandLocation,
         subs_stack: &mut HashSet<SmolStr>,
-    ) -> Result<impl Iterator<Item = Event>, Error> {
-        let result = match self.tokens {
+    ) -> impl Iterator<Item = Event> {
+        let events = match self.tokens {
             MacroCall::Object => {
                 self.definition
                     .substitute_object(self.range, current_state, location)
@@ -744,46 +729,39 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
             }
         };
 
-        if let Some(events) = result {
-            // Disable recursion for the current name
-            subs_stack.insert(self.definition.name().into());
+        // Disable recursion for the current name
+        subs_stack.insert(self.definition.name().into());
 
-            let range = Some(self.range);
+        let range = Some(self.range);
 
-            // We use itertools group_by to insert the error events in the right locations in the
-            // output sequence. This means we split the token sequence at errors and this wouldn't
-            // return the "right" result accross errors, but since there's an error, there is no
-            // spec-defined expected result.
-            let result: Vec<_> = events
-                .into_iter()
-                .group_by(|event| matches!(event, Event::Token(_)))
-                .into_iter()
-                .map(|(is_token, events)| {
-                    if is_token {
-                        // A token sequence
-                        // TODO: Prevent re-allocation
-                        MacroInvocation::substitute_vec_inner(
-                            current_state,
-                            events.into_iter().filter_map(Event::into_token).collect(),
-                            location,
-                            subs_stack,
-                            range,
-                        )
-                    } else {
-                        events.collect()
-                    }
-                })
-                .flatten()
-                .collect();
+        // We use itertools group_by to insert the error events in the right locations in the
+        // output sequence. This means we split the token sequence at errors and this wouldn't
+        // return the "right" result accross errors, but since there's an error, there is no
+        // spec-defined expected result.
+        let result: Vec<_> = events
+            .into_iter()
+            .group_by(|event| matches!(event, Event::Token(_)))
+            .into_iter()
+            .map(|(is_token, events)| {
+                if is_token {
+                    // A token sequence
+                    // TODO: Prevent re-allocation
+                    MacroInvocation::substitute_vec_inner(
+                        current_state,
+                        events.into_iter().filter_map(Event::into_token).collect(),
+                        location,
+                        subs_stack,
+                        range,
+                    )
+                } else {
+                    events.collect()
+                }
+            })
+            .flatten()
+            .collect();
 
-            subs_stack.remove(self.definition.name());
+        subs_stack.remove(self.definition.name());
 
-            Ok(result.into_iter())
-        } else {
-            Err(Error::new(
-                ErrorKind::unhandled(self.first_token.into(), location.line_map()),
-                location,
-            ))
-        }
+        result.into_iter()
     }
 }

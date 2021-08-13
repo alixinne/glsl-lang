@@ -4,6 +4,8 @@
 pub enum Token {
     /// Identifier or keyword
     IDENT_KW,
+    /// defined preprocessor keyword
+    DEFINED,
     /// Digit sequence
     DIGITS,
     /// .

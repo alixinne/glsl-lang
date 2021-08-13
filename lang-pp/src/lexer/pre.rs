@@ -1,5 +1,7 @@
 //! Second stage lexer declaration
 
+use crate::Unescaped;
+
 use super::{LineMap, NewlineSplitter, NewlineToken, NewlineTokenKind};
 use rowan::TextRange;
 
@@ -283,7 +285,14 @@ impl<'i> Iterator for PreLexer<'i> {
                         }
                         _ => {
                             // Not an ident anymore, return the ident
-                            return Some(TextToken::new(Token::IDENT_KW, self.start));
+                            let token = TextToken::new(Token::IDENT_KW, self.start);
+
+                            // Check if IDENT_KW is the defined keyword
+                            if Unescaped::new(token.raw(self.source)) == "defined" {
+                                return Some(TextToken::new(Token::DEFINED, self.start));
+                            }
+
+                            return Some(token);
                         }
                     }
                 }

@@ -280,6 +280,7 @@ impl From<lexer::Token> for SyntaxKind {
 
         match s {
             lexer::Token::IDENT_KW => IDENT_KW,
+            lexer::Token::DEFINED => DEFINED,
             lexer::Token::DIGITS => DIGITS,
             lexer::Token::PERIOD => PERIOD,
             lexer::Token::PLUS => PLUS,

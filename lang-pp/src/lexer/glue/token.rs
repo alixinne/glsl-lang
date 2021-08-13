@@ -4,6 +4,8 @@
 pub enum Token {
     /// Identifier or keyword
     IDENT_KW,
+    /// defined preprocessor keyword
+    DEFINED,
     /// Digit sequence
     DIGITS,
     // Multi-char tokens
@@ -133,6 +135,7 @@ impl From<crate::lexer::PreToken> for Token {
 
         match pre {
             crate::lexer::PreToken::IDENT_KW => IDENT_KW,
+            crate::lexer::PreToken::DEFINED => DEFINED,
             crate::lexer::PreToken::DIGITS => DIGITS,
             crate::lexer::PreToken::PERIOD => PERIOD,
             crate::lexer::PreToken::PLUS => PLUS,

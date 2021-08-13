@@ -18,7 +18,7 @@ use crate::{
 
 use super::{
     definition::{Definition, MacroInvocation},
-    event::{self, ErrorKind, Event, ProcessingErrorKind},
+    event::{self, Event, ProcessingErrorKind},
     nodes::{
         Define, DirectiveResult, Elif, Else, EndIf, Error, Extension, If, IfDef, IfNDef, Include,
         Line, ParsedLine, ParsedPath, Pragma, Undef, Version,
@@ -691,12 +691,8 @@ impl ExpandOne {
                 // Unknown preprocessor directive, these are already reported as parse errors
             }
             _ => {
-                if self.if_stack.active() {
-                    result.push(Event::error(
-                        ErrorKind::unhandled(NodeOrToken::Node(node), self.location.line_map()),
-                        &self.location,
-                    ));
-                }
+                // Should never happen if all preprocessor directives are implemented
+                panic!("unhandled node type: {:?}", node.kind());
             }
         }
 

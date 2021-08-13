@@ -7,10 +7,7 @@ use thiserror::Error;
 
 use lang_util::FileId;
 
-use crate::{
-    lexer::LineMap,
-    parser::{self, SyntaxKind, SyntaxNode, SyntaxToken},
-};
+use crate::parser::{self, SyntaxKind, SyntaxNode, SyntaxToken};
 
 use super::{
     expand::ExpandLocation,
@@ -369,7 +366,6 @@ impl Error {
         match &self.kind {
             ErrorKind::Parse(err) => err.pos(),
             ErrorKind::Processing(err) => err.pos(),
-            ErrorKind::Unhandled(node, _) => node.text_range(),
         }
     }
 
@@ -412,9 +408,6 @@ impl std::fmt::Display for Error {
             ErrorKind::Processing(err) => {
                 write!(f, "{}", err.kind())
             }
-            ErrorKind::Unhandled(_, _) => {
-                write!(f, "{}", self.kind)
-            }
         }
     }
 }
@@ -431,24 +424,13 @@ pub enum ErrorKind {
     Parse(#[from] parser::Error),
     #[error(transparent)]
     Processing(#[from] ProcessingError),
-    #[error("unhandled directive or substitution: \"{}\"", .0.to_string().trim())]
-    Unhandled(NodeOrToken<SyntaxNode, SyntaxToken>, (u32, u32)),
 }
 
 impl ErrorKind {
-    pub fn unhandled(
-        node_or_token: NodeOrToken<SyntaxNode, SyntaxToken>,
-        line_map: &LineMap,
-    ) -> Self {
-        let user_pos = line_map.get_line_and_col(node_or_token.text_range().start().into());
-        Self::Unhandled(node_or_token, user_pos)
-    }
-
     fn raw_line(&self) -> u32 {
         match self {
             ErrorKind::Parse(err) => err.line(),
             ErrorKind::Processing(err) => err.line(),
-            ErrorKind::Unhandled(_, pos) => pos.0,
         }
     }
 }

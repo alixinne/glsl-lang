@@ -10,8 +10,6 @@ use glsl_lang_pp::processor::{
     ProcessorState,
 };
 
-use rowan::NodeOrToken;
-
 struct Paths {
     parsed: PathBuf,
     events: PathBuf,
@@ -73,7 +71,6 @@ pub fn test_file(path: impl AsRef<Path>) {
     let mut ppf = File::create(&paths.pp).unwrap();
     let mut errorsf = File::create(&paths.errors).unwrap();
 
-    let mut unhandled_count = 0;
     let mut error_count = 0;
 
     for event in parsed.process(ProcessorState::default()) {
@@ -89,13 +86,6 @@ pub fn test_file(path: impl AsRef<Path>) {
                 match error.kind() {
                     ErrorKind::Parse(_) => {}
                     ErrorKind::Processing(_) => {}
-                    ErrorKind::Unhandled(node_or_token, _) => {
-                        unhandled_count += 1;
-
-                        if let NodeOrToken::Node(node) = node_or_token {
-                            write!(ppf, "{}", node.text()).unwrap();
-                        }
-                    }
                 }
 
                 error_count += 1;
@@ -135,6 +125,4 @@ pub fn test_file(path: impl AsRef<Path>) {
         drop(errorsf);
         fs::remove_file(&paths.errors).unwrap();
     }
-
-    assert_eq!(unhandled_count, 0, "number of unhandled events should be 0");
 }

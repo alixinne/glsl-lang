@@ -31,7 +31,7 @@ impl FileId {
             panic!("file identifier is too large");
         }
 
-        Self(BUILTIN_BIT | raw + 1)
+        Self(BUILTIN_BIT | (raw + 1))
     }
 
     /// Get the number behind this id, regardless of its type

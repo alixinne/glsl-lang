@@ -1171,11 +1171,11 @@ fn parse_primary_expr_doubleconst() {
 fn parse_primary_expr_boolconst() {
     assert_eq!(
         ast::Expr::parse("false"),
-        Ok(ast::ExprData::BoolConst(false.to_owned().into()).into())
+        Ok(ast::ExprData::BoolConst(false.to_owned()).into())
     );
     assert_eq!(
         ast::Expr::parse("true"),
-        Ok(ast::ExprData::BoolConst(true.to_owned().into()).into())
+        Ok(ast::ExprData::BoolConst(true.to_owned()).into())
     );
 }
 
@@ -1396,7 +1396,7 @@ fn parse_expr_add_mult_3() {
     let expected: ast::Expr = ast::ExprData::Binary(
         ast::BinaryOpData::Add.into(),
         Box::new(ast::ExprData::Binary(ast::BinaryOpData::Mult.into(), one, two).into()),
-        three.into(),
+        three,
     )
     .into();
 

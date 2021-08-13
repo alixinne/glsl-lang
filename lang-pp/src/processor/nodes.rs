@@ -124,7 +124,7 @@ impl TryFrom<SyntaxNode> for Version {
                     None
                 }
             })
-            .ok_or_else(|| Self::Error::MissingVersionNumber)
+            .ok_or(Self::Error::MissingVersionNumber)
             .and_then(|token| {
                 lexical::parse(Unescaped::new(token.text()).to_string().as_ref())
                     .map_err(Into::into)
@@ -348,7 +348,7 @@ impl TryFrom<SyntaxNode> for Extension {
 
         let name = idents
             .get(0)
-            .ok_or_else(|| Self::Error::MissingExtensionName)
+            .ok_or(Self::Error::MissingExtensionName)
             .map(|name| ExtensionName::new(Unescaped::new(name.text()).to_string()))?;
 
         let behavior = idents
@@ -359,10 +359,11 @@ impl TryFrom<SyntaxNode> for Extension {
                     .map_err(|_| Self::Error::InvalidExtensionBehavior { name: name.clone() })
             })?;
 
-        if name == ExtensionName::All {
-            if behavior != ExtensionBehavior::Warn && behavior != ExtensionBehavior::Disable {
-                return Err(Self::Error::InvalidAllBehavior { behavior });
-            }
+        if name == ExtensionName::All
+            && behavior != ExtensionBehavior::Warn
+            && behavior != ExtensionBehavior::Disable
+        {
+            return Err(Self::Error::InvalidAllBehavior { behavior });
         }
 
         Ok(Self { name, behavior })
@@ -379,14 +380,20 @@ impl DefineObject {
         Self { tokens }
     }
 
-    pub fn from_str(input: &str) -> Option<Self> {
-        Some(Self {
-            tokens: crate::parser::Parser::new(input).parse_define_body()?,
-        })
-    }
-
     pub fn body(&self) -> &SyntaxNode {
         &self.tokens
+    }
+}
+
+impl FromStr for DefineObject {
+    type Err = ();
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(Self {
+            tokens: crate::parser::Parser::new(s)
+                .parse_define_body()
+                .ok_or(())?,
+        })
     }
 }
 
@@ -483,9 +490,8 @@ impl TryFrom<SyntaxNode> for Define {
                     None
                 }
             })
-            .skip(1)
-            .next()
-            .ok_or_else(|| Self::Error::MissingName)?;
+            .nth(1)
+            .ok_or(Self::Error::MissingName)?;
 
         let name = Unescaped::new(name.text());
 
@@ -493,9 +499,7 @@ impl TryFrom<SyntaxNode> for Define {
         let body = value
             .children()
             .find(|node| node.kind() == PP_DEFINE_BODY)
-            .ok_or_else(|| Self::Error::MissingBody {
-                name: name.clone().into(),
-            })?;
+            .ok_or_else(|| Self::Error::MissingBody { name: name.into() })?;
 
         // Find the arguments
         if let Some(args) = value.children().find(|node| node.kind() == PP_DEFINE_ARGS) {
@@ -547,7 +551,7 @@ impl TryFrom<SyntaxNode> for IfDef {
                     None
                 }
             })
-            .ok_or_else(|| Self::Error::MissingIdentifier)?;
+            .ok_or(Self::Error::MissingIdentifier)?;
 
         Ok(Self {
             ident: Unescaped::new(pp_ident.text()).into(),
@@ -603,7 +607,7 @@ impl TryFrom<SyntaxNode> for Error {
         let body = value
             .children()
             .find(|node| node.kind() == PP_ERROR_BODY)
-            .ok_or_else(|| Self::Error::MissingBody)?;
+            .ok_or(Self::Error::MissingBody)?;
 
         // Unescape line continuations
         let raw_message = body.text();
@@ -678,7 +682,7 @@ impl Include {
 
         // By now, the include should either be a quote string or an angle string, and this should
         // be the only token
-        if subs_tokens.len() == 0 {
+        if subs_tokens.is_empty() {
             return Err(IncludeError::MissingPath);
         } else if subs_tokens.len() > 1 {
             return Err(IncludeError::ExtraTokens {
@@ -728,7 +732,7 @@ impl TryFrom<SyntaxNode> for Include {
             path: value
                 .children()
                 .find(|node| node.kind() == PP_INCLUDE_PATH)
-                .ok_or_else(|| Self::Error::MissingPath)?,
+                .ok_or(Self::Error::MissingPath)?,
         })
     }
 }
@@ -792,7 +796,7 @@ impl Line {
 
         // By now, the include should either be a quote string or an angle string, and this should
         // be the only token
-        if eval_results.len() >= 1 && eval_results.len() <= 2 {
+        if !eval_results.is_empty() && eval_results.len() <= 2 {
             let token = &eval_results[0];
             // Line number
             let line_number: u32 = if let EvalResult::Constant(Ok(value)) = token {
@@ -840,14 +844,12 @@ impl Line {
             } else {
                 Ok(ParsedLine::Line(line_number))
             }
+        } else if eval_results.is_empty() {
+            Err(LineError::MissingLineNumber)
         } else {
-            if eval_results.is_empty() {
-                Err(LineError::MissingLineNumber)
-            } else {
-                Err(LineError::ExtraTokens {
-                    tokens: eval_results,
-                })
-            }
+            Err(LineError::ExtraTokens {
+                tokens: eval_results,
+            })
         }
     }
 }
@@ -876,7 +878,7 @@ impl TryFrom<SyntaxNode> for Line {
             body: value
                 .children()
                 .find(|node| node.kind() == PP_LINE_BODY)
-                .ok_or_else(|| Self::Error::MissingBody)?,
+                .ok_or(Self::Error::MissingBody)?,
         })
     }
 }
@@ -995,7 +997,7 @@ impl TryFrom<SyntaxNode> for If {
             body: value
                 .children()
                 .find(|node| node.kind() == PP_IF_EXPR)
-                .ok_or_else(|| Self::Error::MissingBody)?,
+                .ok_or(Self::Error::MissingBody)?,
         })
     }
 }
@@ -1031,7 +1033,7 @@ impl TryFrom<SyntaxNode> for Elif {
             body: value
                 .children()
                 .find(|node| node.kind() == PP_IF_EXPR)
-                .ok_or_else(|| Self::Error::MissingBody)?,
+                .ok_or(Self::Error::MissingBody)?,
         })
     }
 }
@@ -1116,7 +1118,7 @@ impl TryFrom<SyntaxNode> for Pragma {
         let body = value
             .children()
             .find(|node| node.kind() == PP_PRAGMA_BODY)
-            .ok_or_else(|| Self::Error::MissingBody)?;
+            .ok_or(Self::Error::MissingBody)?;
 
         // Collect non-trivial tokens
         let tokens: Vec<_> = body

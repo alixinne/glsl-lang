@@ -88,7 +88,6 @@ impl<'i> PreLexer<'i> {
 
     fn peek_token(&mut self) -> Option<(NewlineToken, &'i str)> {
         self.peeked
-            .clone()
             .unwrap_or_else(|| {
                 let next = self.input.next();
                 self.peeked = Some(next);

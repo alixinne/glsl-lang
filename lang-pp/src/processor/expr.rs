@@ -45,7 +45,7 @@ impl<'i, I: Iterator<Item = &'i OutputToken>> ExprEvaluator<'i, I> {
 
     fn peek(&mut self) -> Option<&'i OutputToken> {
         loop {
-            let token = self.input.peek().map(|token| *token);
+            let token = self.input.peek().copied();
             if let Some(token) = token {
                 if !token.kind().is_trivia() {
                     return Some(token);
@@ -69,8 +69,7 @@ impl<'i, I: Iterator<Item = &'i OutputToken>> ExprEvaluator<'i, I> {
             DIGITS => {
                 // Try to parse the value before bumping. If parsing fails, we'll return the DIGITS
                 // token unparsed
-                if let Some(value) =
-                    lexical::parse(Unescaped::new(token.text()).to_string().as_ref()).ok()
+                if let Ok(value) = lexical::parse(Unescaped::new(token.text()).to_string().as_ref())
                 {
                     self.bump();
                     return Some(Ok(value));
@@ -105,16 +104,16 @@ impl<'i, I: Iterator<Item = &'i OutputToken>> ExprEvaluator<'i, I> {
             }
             DASH => {
                 self.bump();
-                self.unary().map(|result| result.and_then(|val| Ok(-val)))
+                self.unary().map(|result| result.map(|val| -val))
             }
             TILDE => {
                 self.bump();
-                self.unary().map(|result| result.and_then(|val| Ok(!val)))
+                self.unary().map(|result| result.map(|val| !val))
             }
             BANG => {
                 self.bump();
                 self.unary()
-                    .map(|result| result.and_then(|val| Ok(if val == 0 { 1 } else { 0 })))
+                    .map(|result| result.map(|val| if val == 0 { 1 } else { 0 }))
             }
             DEFINED => {
                 self.bump();
@@ -404,6 +403,8 @@ impl<'i, I: Iterator<Item = &'i OutputToken>> Iterator for ExprEvaluator<'i, I> 
 
 #[cfg(test)]
 mod tests {
+    use std::str::FromStr;
+
     use lang_util::FileId;
 
     use crate::{

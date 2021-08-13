@@ -71,83 +71,77 @@ impl<'p, F: FileSystem> Iterator for ExpandStack<'p, F> {
             if let Some(mut expand) = self.stack.pop() {
                 let result = expand.next();
 
-                match result {
-                    Some(event) => {
-                        match event {
-                            ExpandEvent::Event(event) => {
-                                // Put it back on the stack
-                                self.stack.push(expand);
+                if let Some(event) = result {
+                    match event {
+                        ExpandEvent::Event(event) => {
+                            // Put it back on the stack
+                            self.stack.push(expand);
 
-                                return Some(match event {
-                                    Event::Error(error) => IoEvent::Error(error),
-                                    Event::EnterFile(file_id) => {
-                                        let (canonical_path, input_path) =
-                                            self.processor.get_paths(file_id).unwrap();
+                            return Some(match event {
+                                Event::Error(error) => IoEvent::Error(error),
+                                Event::EnterFile(file_id) => {
+                                    let (canonical_path, input_path) =
+                                        self.processor.get_paths(file_id).unwrap();
 
-                                        IoEvent::EnterFile {
-                                            file_id,
-                                            path: input_path.to_owned(),
-                                            canonical_path: canonical_path.to_owned(),
-                                        }
+                                    IoEvent::EnterFile {
+                                        file_id,
+                                        path: input_path.to_owned(),
+                                        canonical_path: canonical_path.to_owned(),
                                     }
-                                    Event::Token(token) => IoEvent::Token(token),
-                                    Event::Directive(node, directive) => {
-                                        IoEvent::Directive(node, directive)
-                                    }
-                                });
-                            }
-                            ExpandEvent::EnterFile(current_state, node, path) => {
-                                // Put it back on the stack
-                                self.stack.push(expand);
-
-                                // Get the location
-                                let location = self.stack.last().unwrap().location();
-
-                                // We are supposed to enter a new file
-                                // First, parse it using the preprocessor
-                                if let Some(resolved_path) =
-                                    self.processor.resolve(location.current_file(), &path)
-                                {
-                                    // TODO: Allow passing an encoding from somewhere
-                                    match self.processor.parse(&resolved_path, None) {
-                                        Ok(parsed) => {
-                                            self.stack.push(parsed.expand_one(current_state));
-                                        }
-                                        Err(error) => {
-                                            // Just return the error, we'll keep iterating on the lower
-                                            // file by looping
-                                            return Some(IoEvent::IoError(Located::new(
-                                                error,
-                                                resolved_path,
-                                                node.text_range(),
-                                                location,
-                                            )));
-                                        }
-                                    }
-                                } else {
-                                    // Resolving the path failed, throw an error located at the
-                                    // right place
-                                    return Some(IoEvent::error(
-                                        ProcessingErrorKind::IncludeNotFound { path }
-                                            .with_node(node.into(), &location),
-                                        location,
-                                    ));
                                 }
-                            }
-                            ExpandEvent::Completed(state) => {
-                                if let Some(last) = self.stack.last_mut() {
-                                    // Propagate the updated state upwards in the stack
-                                    last.set_state(state);
-                                } else {
-                                    // No more, store the final state
-                                    self.state = Some(state);
+                                Event::Token(token) => IoEvent::Token(token),
+                                Event::Directive(node, directive) => {
+                                    IoEvent::Directive(node, directive)
                                 }
+                            });
+                        }
+                        ExpandEvent::EnterFile(current_state, node, path) => {
+                            // Put it back on the stack
+                            self.stack.push(expand);
+
+                            // Get the location
+                            let location = self.stack.last().unwrap().location();
+
+                            // We are supposed to enter a new file
+                            // First, parse it using the preprocessor
+                            if let Some(resolved_path) =
+                                self.processor.resolve(location.current_file(), &path)
+                            {
+                                // TODO: Allow passing an encoding from somewhere
+                                match self.processor.parse(&resolved_path, None) {
+                                    Ok(parsed) => {
+                                        self.stack.push(parsed.expand_one(current_state));
+                                    }
+                                    Err(error) => {
+                                        // Just return the error, we'll keep iterating on the lower
+                                        // file by looping
+                                        return Some(IoEvent::IoError(Located::new(
+                                            error,
+                                            resolved_path,
+                                            node.text_range(),
+                                            location,
+                                        )));
+                                    }
+                                }
+                            } else {
+                                // Resolving the path failed, throw an error located at the
+                                // right place
+                                return Some(IoEvent::error(
+                                    ProcessingErrorKind::IncludeNotFound { path }
+                                        .with_node(node.into(), &location),
+                                    location,
+                                ));
                             }
                         }
-                    }
-                    None => {
-                        // Loop around to fetch events from the lower expand since this one
-                        // completed
+                        ExpandEvent::Completed(state) => {
+                            if let Some(last) = self.stack.last_mut() {
+                                // Propagate the updated state upwards in the stack
+                                last.set_state(state);
+                            } else {
+                                // No more, store the final state
+                                self.state = Some(state);
+                            }
+                        }
                     }
                 }
             } else {

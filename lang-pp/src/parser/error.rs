@@ -24,7 +24,7 @@ impl Error {
     }
 
     pub fn pos(&self) -> TextRange {
-        self.pos.clone()
+        self.pos
     }
 
     pub fn line(&self) -> u32 {

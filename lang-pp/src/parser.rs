@@ -82,7 +82,7 @@ impl<'i, 'cache> ParserRun<'i, 'cache> {
         )
     }
 
-    fn parse_one(mut self, f: impl FnOnce(&mut Self) -> ()) -> Option<SyntaxNode> {
+    fn parse_one(mut self, f: impl FnOnce(&mut Self)) -> Option<SyntaxNode> {
         self.start_node(SyntaxKind::ROOT);
         f(&mut self);
         self.finish_node();

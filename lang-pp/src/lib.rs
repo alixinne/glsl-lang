@@ -1,7 +1,7 @@
 use std::{
     borrow::Cow,
     fmt::Write,
-    iter::{FromIterator, Peekable},
+    iter::Peekable,
     ops::{Deref, DerefMut},
     str::{CharIndices, MatchIndices},
 };
@@ -82,7 +82,7 @@ impl<'s> Unescaped<'s> {
         }
     }
 
-    pub fn to_string(&self) -> Cow<'s, str> {
+    pub fn to_string(self) -> Cow<'s, str> {
         if self.backslashes().next().is_none() {
             Cow::Borrowed(self.src)
         } else {
@@ -93,7 +93,7 @@ impl<'s> Unescaped<'s> {
 
 impl<'s> From<Unescaped<'s>> for SmolStr {
     fn from(src: Unescaped<'s>) -> Self {
-        SmolStr::from_iter(src.chars())
+        src.chars().collect()
     }
 }
 

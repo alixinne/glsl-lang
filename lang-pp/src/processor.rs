@@ -1,4 +1,4 @@
-use std::{array::IntoIter, collections::HashMap, iter::FromIterator, rc::Rc};
+use std::{array::IntoIter, collections::HashMap, rc::Rc, str::FromStr};
 
 use smol_str::SmolStr;
 
@@ -135,22 +135,21 @@ impl Default for ProcessorState {
             // Spec 3.3, "There is a built-in macro definition for each profile the implementation
             // supports. All implementations provide the following macro:
             // `#define GL_core_profile 1`
-            definitions: HashMap::from_iter(
-                IntoIter::new([
-                    Definition::Regular(
-                        Rc::new(Define::object(
-                            "GL_core_profile".into(),
-                            DefineObject::from_str("1").unwrap(),
-                            true,
-                        )),
-                        FileId::default(),
-                    ),
-                    Definition::Line,
-                    Definition::File,
-                    Definition::Version,
-                ])
-                .map(|definition| (definition.name().into(), definition)),
-            ),
+            definitions: IntoIter::new([
+                Definition::Regular(
+                    Rc::new(Define::object(
+                        "GL_core_profile".into(),
+                        DefineObject::from_str("1").unwrap(),
+                        true,
+                    )),
+                    FileId::default(),
+                ),
+                Definition::Line,
+                Definition::File,
+                Definition::Version,
+            ])
+            .map(|definition| (definition.name().into(), definition))
+            .collect(),
             version: Version::default(),
             cpp_style_line: false,
         }

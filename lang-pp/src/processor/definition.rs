@@ -139,23 +139,21 @@ impl Definition {
                     current_arg.take();
                     continue;
                 }
-            } else {
-                if let Some(token) = input_tokens.next() {
-                    if token.kind() == IDENT_KW {
-                        if let Some(value) = args.and_then(|args| {
-                            args.get(Unescaped::new(token.text()).to_string().as_ref())
-                        }) {
-                            current_arg = Some(value.iter());
-                            continue;
-                        }
+            } else if let Some(token) = input_tokens.next() {
+                if token.kind() == IDENT_KW {
+                    if let Some(value) = args.and_then(|args| {
+                        args.get(Unescaped::new(token.text()).to_string().as_ref())
+                    }) {
+                        current_arg = Some(value.iter());
+                        continue;
                     }
-
-                    input_token = token;
-                    (input_token.kind(), input_token.text())
-                } else {
-                    // No more input tokens
-                    break;
                 }
+
+                input_token = token;
+                (input_token.kind(), input_token.text())
+            } else {
+                // No more input tokens
+                break;
             };
 
             match std::mem::take(&mut state) {
@@ -553,21 +551,19 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
                                     // compiler, the identifier will just get ignored
                                     return Ok(None);
                                 }
+                            } else if kind == COMMA && nesting_level == 1 {
+                                // Create space for next argument
+                                args.push(Vec::new());
+                                seen_comma = true;
                             } else {
-                                if kind == COMMA && nesting_level == 1 {
-                                    // Create space for next argument
-                                    args.push(Vec::new());
-                                    seen_comma = true;
-                                } else {
-                                    if kind == LPAREN {
-                                        nesting_level += 1;
-                                    } else if kind == RPAREN {
-                                        nesting_level -= 1;
-                                    }
+                                if kind == LPAREN {
+                                    nesting_level += 1;
+                                } else if kind == RPAREN {
+                                    nesting_level -= 1;
+                                }
 
-                                    if nesting_level > 0 {
-                                        args.last_mut().unwrap().push(inner_token);
-                                    }
+                                if nesting_level > 0 {
+                                    args.last_mut().unwrap().push(inner_token);
                                 }
                             }
 
@@ -650,7 +646,7 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
     ) -> Vec<Event> {
         // Macros are recursive, so we need to scan again for further substitutions
         let mut result = Vec::with_capacity(tokens.len());
-        let mut iterator = tokens.into_iter().map(|item| NodeOrToken::Token(item));
+        let mut iterator = tokens.into_iter().map(NodeOrToken::Token);
         let mut seen_defined_recently = false;
 
         while let Some(node_or_token) = iterator.next() {
@@ -710,10 +706,8 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
                                 seen_defined_recently = false;
                             }
                         }
-                    } else {
-                        if kind == DEFINED {
-                            seen_defined_recently = true;
-                        }
+                    } else if kind == DEFINED {
+                        seen_defined_recently = true;
                     }
                 }
             }

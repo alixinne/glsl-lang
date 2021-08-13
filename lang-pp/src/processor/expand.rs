@@ -1,7 +1,7 @@
 use std::{
     collections::{hash_map::Entry, VecDeque},
     convert::TryInto,
-    iter::{FromIterator, FusedIterator},
+    iter::FusedIterator,
     rc::Rc,
 };
 
@@ -134,6 +134,7 @@ pub(crate) struct ExpandOne {
     state: ExpandState,
 }
 
+#[allow(clippy::large_enum_variant)]
 enum ExpandState {
     Init {
         ast: Ast,
@@ -182,7 +183,7 @@ impl ExpandState {
     ) -> Self {
         let mut events = ArrayVec::new();
         events.push(Event::Error(e.into()));
-        events.push(Event::Token(token.clone().into()));
+        events.push(Event::Token(token.into()));
 
         Self::PendingEvents {
             iterator,
@@ -492,17 +493,17 @@ impl ExpandOne {
                             let protected_ident = {
                                 if undef.ident.starts_with("GL_") {
                                     Some(undef.ident.clone())
-                                } else {
-                                    if let Some(def) = current_state.definitions.get(&undef.ident) {
-                                        if def.protected() {
-                                            Some(undef.ident.clone())
-                                        } else {
-                                            current_state.definitions.remove(&undef.ident);
-                                            None
-                                        }
+                                } else if let Some(def) =
+                                    current_state.definitions.get(&undef.ident)
+                                {
+                                    if def.protected() {
+                                        Some(undef.ident.clone())
                                     } else {
+                                        current_state.definitions.remove(&undef.ident);
                                         None
                                     }
+                                } else {
+                                    None
                                 }
                             };
 
@@ -727,9 +728,9 @@ impl ExpandOne {
                     self.state = ExpandState::ExpandedTokens {
                         iterator: new_iterator,
                         errors,
-                        events: VecDeque::from_iter(
-                            invocation.substitute(&current_state, &self.location),
-                        ),
+                        events: invocation
+                            .substitute(&current_state, &self.location)
+                            .collect(),
                         current_state,
                     };
                 }
@@ -901,7 +902,7 @@ impl Iterator for ExpandOne {
                         current_state: current_state.clone(),
                     };
 
-                    return Some(ExpandEvent::EnterFile(current_state, node, path.into()));
+                    return Some(ExpandEvent::EnterFile(current_state, node, path));
                 }
 
                 ExpandState::PendingOne {

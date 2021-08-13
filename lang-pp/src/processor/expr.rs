@@ -174,10 +174,13 @@ impl<'i, I: Iterator<Item = &'i OutputToken>> ExprEvaluator<'i, I> {
     fn binary_op(
         lhs: Option<Result<i32, ()>>,
         rhs: Option<Result<i32, ()>>,
-        f: impl FnOnce(i32, i32) -> Result<i32, ()>,
+        f: impl FnOnce(i32, i32) -> Result<(i32, bool), ()>,
     ) -> Option<Result<i32, ()>> {
-        lhs.zip(rhs)
-            .map(|(lhs, rhs)| lhs.and_then(|a| rhs.and_then(|b| f(a, b))))
+        lhs.zip(rhs).map(|(lhs, rhs)| {
+            lhs.and_then(|a| {
+                rhs.and_then(|b| f(a, b).and_then(|(val, ovf)| if ovf { Err(()) } else { Ok(val) }))
+            })
+        })
     }
 
     fn multiplicative(&mut self) -> Option<Result<i32, ()>> {
@@ -187,7 +190,7 @@ impl<'i, I: Iterator<Item = &'i OutputToken>> ExprEvaluator<'i, I> {
             match kind {
                 ASTERISK => {
                     self.bump();
-                    lhs = Self::binary_op(lhs, self.unary(), |a, b| Ok(a * b));
+                    lhs = Self::binary_op(lhs, self.unary(), |a, b| Ok(a.overflowing_mul(b)));
                 }
                 SLASH => {
                     self.bump();
@@ -195,7 +198,7 @@ impl<'i, I: Iterator<Item = &'i OutputToken>> ExprEvaluator<'i, I> {
                         if b == 0 {
                             Err(())
                         } else {
-                            Ok(a / b)
+                            Ok(a.overflowing_div(b))
                         }
                     });
                 }
@@ -205,7 +208,7 @@ impl<'i, I: Iterator<Item = &'i OutputToken>> ExprEvaluator<'i, I> {
                         if b == 0 {
                             Err(())
                         } else {
-                            Ok(a % b)
+                            Ok(a.overflowing_rem(b))
                         }
                     });
                 }
@@ -225,11 +228,21 @@ impl<'i, I: Iterator<Item = &'i OutputToken>> ExprEvaluator<'i, I> {
             match kind {
                 PLUS => {
                     self.bump();
-                    lhs = Self::binary_op(lhs, self.multiplicative(), |a, b| Ok(a + b));
+                    lhs =
+                        Self::binary_op(
+                            lhs,
+                            self.multiplicative(),
+                            |a, b| Ok(a.overflowing_add(b)),
+                        );
                 }
                 DASH => {
                     self.bump();
-                    lhs = Self::binary_op(lhs, self.multiplicative(), |a, b| Ok(a - b));
+                    lhs =
+                        Self::binary_op(
+                            lhs,
+                            self.multiplicative(),
+                            |a, b| Ok(a.overflowing_sub(b)),
+                        );
                 }
                 _ => {
                     break;
@@ -247,11 +260,23 @@ impl<'i, I: Iterator<Item = &'i OutputToken>> ExprEvaluator<'i, I> {
             match kind {
                 LEFT_OP => {
                     self.bump();
-                    lhs = Self::binary_op(lhs, self.additive(), |a, b| Ok(a << b));
+                    lhs = Self::binary_op(lhs, self.additive(), |a, b| {
+                        if b < 0 {
+                            Err(())
+                        } else {
+                            Ok(a.overflowing_shl(b as u32))
+                        }
+                    });
                 }
                 RIGHT_OP => {
                     self.bump();
-                    lhs = Self::binary_op(lhs, self.additive(), |a, b| Ok(a >> b));
+                    lhs = Self::binary_op(lhs, self.additive(), |a, b| {
+                        if b < 0 {
+                            Err(())
+                        } else {
+                            Ok(a.overflowing_shr(b as u32))
+                        }
+                    });
                 }
                 _ => {
                     break;
@@ -269,19 +294,27 @@ impl<'i, I: Iterator<Item = &'i OutputToken>> ExprEvaluator<'i, I> {
             match kind {
                 LANGLE => {
                     self.bump();
-                    lhs = Self::binary_op(lhs, self.shift(), |a, b| Ok(if a < b { 1 } else { 0 }));
+                    lhs = Self::binary_op(lhs, self.shift(), |a, b| {
+                        Ok((if a < b { 1 } else { 0 }, false))
+                    });
                 }
                 RANGLE => {
                     self.bump();
-                    lhs = Self::binary_op(lhs, self.shift(), |a, b| Ok(if a > b { 1 } else { 0 }));
+                    lhs = Self::binary_op(lhs, self.shift(), |a, b| {
+                        Ok((if a > b { 1 } else { 0 }, false))
+                    });
                 }
                 LE_OP => {
                     self.bump();
-                    lhs = Self::binary_op(lhs, self.shift(), |a, b| Ok(if a <= b { 1 } else { 0 }));
+                    lhs = Self::binary_op(lhs, self.shift(), |a, b| {
+                        Ok((if a <= b { 1 } else { 0 }, false))
+                    });
                 }
                 GE_OP => {
                     self.bump();
-                    lhs = Self::binary_op(lhs, self.shift(), |a, b| Ok(if a >= b { 1 } else { 0 }));
+                    lhs = Self::binary_op(lhs, self.shift(), |a, b| {
+                        Ok((if a >= b { 1 } else { 0 }, false))
+                    });
                 }
                 _ => {
                     break;
@@ -300,13 +333,13 @@ impl<'i, I: Iterator<Item = &'i OutputToken>> ExprEvaluator<'i, I> {
                 EQ_OP => {
                     self.bump();
                     lhs = Self::binary_op(lhs, self.relational(), |a, b| {
-                        Ok(if a == b { 1 } else { 0 })
+                        Ok((if a == b { 1 } else { 0 }, false))
                     });
                 }
                 NE_OP => {
                     self.bump();
                     lhs = Self::binary_op(lhs, self.relational(), |a, b| {
-                        Ok(if a != b { 1 } else { 0 })
+                        Ok((if a != b { 1 } else { 0 }, false))
                     });
                 }
                 _ => {
@@ -327,7 +360,7 @@ impl<'i, I: Iterator<Item = &'i OutputToken>> ExprEvaluator<'i, I> {
             .unwrap_or(false)
         {
             self.bump();
-            lhs = Self::binary_op(lhs, self.equality(), |a, b| Ok(a & b));
+            lhs = Self::binary_op(lhs, self.equality(), |a, b| Ok((a & b, false)));
         }
 
         lhs
@@ -338,7 +371,7 @@ impl<'i, I: Iterator<Item = &'i OutputToken>> ExprEvaluator<'i, I> {
 
         while self.peek_kind().map(|kind| kind == CARET).unwrap_or(false) {
             self.bump();
-            lhs = Self::binary_op(lhs, self.and(), |a, b| Ok(a ^ b));
+            lhs = Self::binary_op(lhs, self.and(), |a, b| Ok((a ^ b, false)));
         }
 
         lhs
@@ -349,7 +382,7 @@ impl<'i, I: Iterator<Item = &'i OutputToken>> ExprEvaluator<'i, I> {
 
         while self.peek_kind().map(|kind| kind == BAR).unwrap_or(false) {
             self.bump();
-            lhs = Self::binary_op(lhs, self.xor(), |a, b| Ok(a | b));
+            lhs = Self::binary_op(lhs, self.xor(), |a, b| Ok((a | b, false)));
         }
 
         lhs
@@ -361,7 +394,7 @@ impl<'i, I: Iterator<Item = &'i OutputToken>> ExprEvaluator<'i, I> {
         while self.peek_kind().map(|kind| kind == AND_OP).unwrap_or(false) {
             self.bump();
             lhs = Self::binary_op(lhs, self.or(), |a, b| {
-                Ok(if a != 0 && b != 0 { 1 } else { 0 })
+                Ok((if a != 0 && b != 0 { 1 } else { 0 }, false))
             });
         }
 
@@ -374,7 +407,7 @@ impl<'i, I: Iterator<Item = &'i OutputToken>> ExprEvaluator<'i, I> {
         while self.peek_kind().map(|kind| kind == OR_OP).unwrap_or(false) {
             self.bump();
             lhs = Self::binary_op(lhs, self.logical_and(), |a, b| {
-                Ok(if a != 0 || b != 0 { 1 } else { 0 })
+                Ok((if a != 0 || b != 0 { 1 } else { 0 }, false))
             });
         }
 
@@ -600,5 +633,10 @@ mod tests {
         assert_eq!(&eval("3 || 2"), &[Constant(Ok(1))]);
         assert_eq!(&eval("0 || 2"), &[Constant(Ok(1))]);
         assert_eq!(&eval("0 || 0"), &[Constant(Ok(0))]);
+    }
+
+    #[test]
+    fn test_overflow() {
+        assert_eq!(&eval("1 << 60"), &[Constant(Err(()))]);
     }
 }

@@ -8,7 +8,10 @@ use thiserror::Error;
 
 use crate::{
     parser::{SyntaxKind::*, SyntaxNode, SyntaxToken},
-    processor::event::TokenLike,
+    processor::{
+        event::TokenLike,
+        expr::{EvalResult, ExprEvaluator},
+    },
     Unescaped,
 };
 
@@ -774,61 +777,77 @@ impl Line {
             });
         }
 
-        // Discard all trivial tokens
-        let subs_tokens: Vec<_> = subs_events
-            .into_iter()
-            .filter_map(|event| match event {
-                Event::Token(token) if !token.kind().is_trivia() => Some(token),
-                _ => None,
-            })
-            .collect();
+        // Evalute the expressions in the line directive
+        let eval_results: Vec<_> = ExprEvaluator::new(
+            subs_events.iter().filter_map(|evt| {
+                if let Event::Token(token) = evt {
+                    Some(token)
+                } else {
+                    None
+                }
+            }),
+            current_state,
+        )
+        .collect();
 
         // By now, the include should either be a quote string or an angle string, and this should
         // be the only token
-        if subs_tokens.len() >= 1 && subs_tokens.len() <= 2 {
+        if eval_results.len() >= 1 && eval_results.len() <= 2 {
+            let token = &eval_results[0];
             // Line number
-            let token = &subs_tokens[0];
-            let line_number: u32 = if token.kind() == DIGITS {
-                Some(token)
+            let line_number: u32 = if let EvalResult::Constant(Ok(value)) = token {
+                if *value >= 0 {
+                    Some(*value as _)
+                } else {
+                    None
+                }
             } else {
                 None
             }
-            .and_then(|token| {
-                lexical::parse(Unescaped::new(token.text()).to_string().as_ref()).ok()
-            })
             .ok_or_else(|| LineError::InvalidLineNumber {
                 token: token.clone(),
             })?;
 
-            if subs_tokens.len() > 1 {
-                let token = &subs_tokens[1];
-                if token.kind() == QUOTE_STRING {
-                    let text = token.text();
-                    Ok(ParsedLine::LineAndPath(
+            if eval_results.len() > 1 {
+                let token = &eval_results[1];
+                match token {
+                    EvalResult::Constant(value) => Ok(ParsedLine::LineAndFileNumber(
                         line_number,
-                        text[1..text.len() - 1].to_string(),
-                    ))
-                } else if token.kind() == DIGITS {
-                    Ok(ParsedLine::LineAndFileNumber(
-                        line_number,
-                        lexical::parse(Unescaped::new(token.text()).to_string().as_ref()).map_err(
-                            |_| LineError::InvalidPath {
+                        if let Ok(value) =
+                            value.and_then(|val| if val >= 0 { Ok(val as _) } else { Err(()) })
+                        {
+                            Ok(value)
+                        } else {
+                            Err(LineError::InvalidPath {
                                 token: token.clone(),
-                            },
-                        )?,
-                    ))
-                } else {
-                    Err(LineError::InvalidPath {
-                        token: token.clone(),
-                    })
+                            })
+                        }?,
+                    )),
+                    EvalResult::Token(token) => {
+                        if token.kind() == QUOTE_STRING {
+                            let text = token.text();
+                            Ok(ParsedLine::LineAndPath(
+                                line_number,
+                                text[1..text.len() - 1].to_string(),
+                            ))
+                        } else {
+                            Err(LineError::InvalidPath {
+                                token: EvalResult::Token(token.clone()),
+                            })
+                        }
+                    }
                 }
             } else {
                 Ok(ParsedLine::Line(line_number))
             }
         } else {
-            Err(LineError::ExtraTokens {
-                tokens: subs_tokens.to_vec(),
-            })
+            if eval_results.is_empty() {
+                Err(LineError::MissingLineNumber)
+            } else {
+                Err(LineError::ExtraTokens {
+                    tokens: eval_results,
+                })
+            }
         }
     }
 }
@@ -839,12 +858,14 @@ pub enum LineError {
     MissingBody,
     #[error("malformed line")]
     MalformedLine { tokens: Vec<Event> },
+    #[error("missing line number")]
+    MissingLineNumber,
     #[error("extra tokens in #line path")]
-    ExtraTokens { tokens: Vec<OutputToken> },
+    ExtraTokens { tokens: Vec<EvalResult> },
     #[error("invalid line number")]
-    InvalidLineNumber { token: OutputToken },
+    InvalidLineNumber { token: EvalResult },
     #[error("invalid path")]
-    InvalidPath { token: OutputToken },
+    InvalidPath { token: EvalResult },
 }
 
 impl TryFrom<SyntaxNode> for Line {

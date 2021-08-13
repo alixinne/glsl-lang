@@ -14,6 +14,8 @@ pub mod event;
 
 pub mod expand;
 
+mod expr;
+
 pub mod fs;
 
 pub mod nodes;
@@ -53,6 +55,30 @@ pub struct ProcessorState {
 }
 
 impl ProcessorState {
+    pub fn get_definition(&self, name: &str) -> Option<&Definition> {
+        self.definitions.get(name)
+    }
+
+    // TODO: Return a proper error type?
+    pub fn definition(&mut self, definition: Define, file_id: FileId) -> bool {
+        let entry = self.definitions.entry(definition.name().into());
+
+        match entry {
+            std::collections::hash_map::Entry::Occupied(mut occupied) => {
+                if occupied.get().protected() {
+                    false
+                } else {
+                    occupied.insert(Definition::Regular(Rc::new(definition), file_id));
+                    true
+                }
+            }
+            std::collections::hash_map::Entry::Vacant(vacant) => {
+                vacant.insert(Definition::Regular(Rc::new(definition), file_id));
+                true
+            }
+        }
+    }
+
     pub fn extension(&mut self, extension: &nodes::Extension) {
         // Push onto the stack
         self.extension_stack.push(extension.clone());

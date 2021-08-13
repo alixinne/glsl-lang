@@ -881,6 +881,161 @@ impl TryFrom<SyntaxNode> for Line {
     }
 }
 
+#[derive(Debug, Error)]
+pub enum IfEvalError {
+    #[error("malformed expression")]
+    MalformedExpr { tokens: Vec<Event> },
+    #[error("missing expression")]
+    MissingExpr,
+    #[error("extra tokens at end of expression")]
+    ExtraTokens { tokens: Vec<EvalResult> },
+    #[error("invalid constant expression")]
+    InvalidExpr { token: EvalResult },
+}
+
+fn eval_inner(
+    body: &SyntaxNode,
+    current_state: &ProcessorState,
+    location: &ExpandLocation,
+) -> (bool, Option<IfEvalError>) {
+    // Perform macro substitution
+    let tokens = body
+        .children_with_tokens()
+        .filter_map(NodeOrToken::into_token)
+        .collect();
+    let subs_events: Vec<_> =
+        MacroInvocation::substitute_vec(current_state, tokens, location).collect();
+
+    // Make sure they are all tokens
+    if !subs_events.iter().all(|evt| matches!(evt, Event::Token(_))) {
+        return (
+            true,
+            Some(IfEvalError::MalformedExpr {
+                tokens: subs_events,
+            }),
+        );
+    }
+
+    // Evalute the expressions in the line directive
+    let eval_results: Vec<_> = ExprEvaluator::new(
+        subs_events.iter().filter_map(|evt| {
+            if let Event::Token(token) = evt {
+                Some(token)
+            } else {
+                None
+            }
+        }),
+        current_state,
+    )
+    .collect();
+
+    // Check that we have at least "something" to evaluate
+    if eval_results.is_empty() {
+        return (true, Some(IfEvalError::MissingExpr));
+    }
+
+    // Split the result and the rest
+    let (first, rest): (_, Vec<_>) = {
+        let mut iter = eval_results.into_iter();
+        let first = iter.next().unwrap();
+        (first, iter.collect())
+    };
+
+    // Do we have extra tokens?
+    let error = if !rest.is_empty() {
+        Some(IfEvalError::ExtraTokens { tokens: rest })
+    } else {
+        None
+    };
+
+    // Is the result an int?
+    match first {
+        EvalResult::Constant(Ok(value)) => (value != 0, error),
+        other => (true, Some(IfEvalError::InvalidExpr { token: other })),
+    }
+}
+
+fn eval_if<E: From<IfEvalError>>(
+    body: &SyntaxNode,
+    current_state: &ProcessorState,
+    location: &ExpandLocation,
+) -> (bool, Option<E>) {
+    let (result, e) = eval_inner(body, current_state, location);
+    (result, e.map(E::from))
+}
+
+#[derive(Debug, Error)]
+pub enum IfError {
+    #[error("missing body for #if directive")]
+    MissingBody,
+    #[error(transparent)]
+    Eval(#[from] IfEvalError),
+}
+
+#[derive(Debug, Clone)]
+pub struct If {
+    body: SyntaxNode,
+}
+
+impl If {
+    pub fn eval(
+        &self,
+        current_state: &ProcessorState,
+        location: &ExpandLocation,
+    ) -> (bool, Option<IfError>) {
+        eval_if(&self.body, current_state, location)
+    }
+}
+
+impl TryFrom<SyntaxNode> for If {
+    type Error = IfError;
+
+    fn try_from(value: SyntaxNode) -> Result<Self, Self::Error> {
+        Ok(Self {
+            body: value
+                .children()
+                .find(|node| node.kind() == PP_IF_EXPR)
+                .ok_or_else(|| Self::Error::MissingBody)?,
+        })
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct Elif {
+    body: SyntaxNode,
+}
+
+impl Elif {
+    pub fn eval(
+        &self,
+        current_state: &ProcessorState,
+        location: &ExpandLocation,
+    ) -> (bool, Option<ElifError>) {
+        eval_if(&self.body, current_state, location)
+    }
+}
+
+#[derive(Debug, Error)]
+pub enum ElifError {
+    #[error("missing body for #elif directive")]
+    MissingBody,
+    #[error(transparent)]
+    Eval(#[from] IfEvalError),
+}
+
+impl TryFrom<SyntaxNode> for Elif {
+    type Error = ElifError;
+
+    fn try_from(value: SyntaxNode) -> Result<Self, Self::Error> {
+        Ok(Self {
+            body: value
+                .children()
+                .find(|node| node.kind() == PP_IF_EXPR)
+                .ok_or_else(|| Self::Error::MissingBody)?,
+        })
+    }
+}
+
 #[derive(Debug, Clone)]
 pub struct Else;
 

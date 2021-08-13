@@ -116,6 +116,8 @@ pub fn test_file(path: impl AsRef<Path>) {
                     write!(ppf, "{}", node).unwrap();
                 }
                 DirectiveKind::Define(_) => {}
+                DirectiveKind::If(_) => {}
+                DirectiveKind::Elif(_) => {}
                 DirectiveKind::IfDef(_) => {}
                 DirectiveKind::IfNDef(_) => {}
                 DirectiveKind::Else(_) => {}

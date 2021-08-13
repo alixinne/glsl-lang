@@ -73,6 +73,7 @@ impl std::error::Error for ProcessingError {}
 pub enum ProcessingErrorKind {
     ExtraEndIf,
     ExtraElse,
+    ExtraElif,
     ProtectedDefine {
         ident: SmolStr,
         is_undef: bool,
@@ -105,6 +106,8 @@ pub enum ProcessingErrorKind {
     DirectiveIfDef(nodes::IfDefError),
     #[from(ignore)]
     DirectiveIfNDef(nodes::IfDefError),
+    DirectiveIf(nodes::IfError),
+    DirectiveElif(nodes::ElifError),
     DirectiveElse(nodes::ElseError),
     DirectiveEndIf(nodes::EndIfError),
     #[from(ignore)]
@@ -186,6 +189,9 @@ impl std::fmt::Display for ProcessingErrorKind {
             ProcessingErrorKind::ExtraElse => {
                 write!(f, "unmatched #else")
             }
+            ProcessingErrorKind::ExtraElif => {
+                write!(f, "unmatched #elif")
+            }
             ProcessingErrorKind::ProtectedDefine { ident, is_undef } => {
                 let directive = if *is_undef { "undef" } else { "define" };
 
@@ -250,6 +256,12 @@ impl std::fmt::Display for ProcessingErrorKind {
             }
             ProcessingErrorKind::DirectiveIfNDef(inner) => {
                 write!(f, "'#ifndef' : {}", inner)
+            }
+            ProcessingErrorKind::DirectiveIf(inner) => {
+                write!(f, "'#if' : {}", inner)
+            }
+            ProcessingErrorKind::DirectiveElif(inner) => {
+                write!(f, "'#elif' : {}", inner)
             }
             ProcessingErrorKind::DirectiveElse(inner) => {
                 write!(f, "'#else' : {}", inner)
@@ -448,6 +460,8 @@ pub enum DirectiveKind {
     Define(nodes::Define),
     IfDef(nodes::IfDef),
     IfNDef(nodes::IfNDef),
+    If(nodes::If),
+    Elif(nodes::Elif),
     Else(nodes::Else),
     EndIf(nodes::EndIf),
     Undef(nodes::Undef),

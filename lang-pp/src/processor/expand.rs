@@ -20,11 +20,14 @@ use super::{
     definition::{Definition, MacroInvocation},
     event::{self, ErrorKind, Event, ProcessingErrorKind},
     nodes::{
-        Define, DirectiveResult, Else, EndIf, Error, Extension, IfDef, IfNDef, Include, Line,
-        ParsedLine, ParsedPath, Pragma, Undef, Version,
+        Define, DirectiveResult, Elif, Else, EndIf, Error, Extension, If, IfDef, IfNDef, Include,
+        Line, ParsedLine, ParsedPath, Pragma, Undef, Version,
     },
     IncludeMode, ProcessorState,
 };
+
+mod if_stack;
+use if_stack::IfStack;
 
 pub struct ExpandLocation {
     current_file: FileId,
@@ -126,20 +129,9 @@ impl ExpandLocation {
 }
 
 pub(crate) struct ExpandOne {
-    mask_stack: Vec<IfState>,
-    mask_active: bool,
+    if_stack: IfStack,
     location: ExpandLocation,
     state: ExpandState,
-}
-
-#[derive(Clone, Copy, PartialEq, Eq)]
-enum IfState {
-    /// No #if group of this level was included
-    None,
-    /// The current #if group of this level is included
-    Active { else_seen: bool },
-    /// One past #if group of this level was included, but not the current one
-    One { else_seen: bool },
 }
 
 enum ExpandState {
@@ -168,7 +160,7 @@ enum ExpandState {
     PendingEvents {
         iterator: SyntaxElementChildren<PreprocessorLang>,
         errors: Vec<parser::Error>,
-        events: ArrayVec<Event, 2>,
+        events: ArrayVec<Event, 3>,
         current_state: ProcessorState,
     },
     ExpandedTokens {
@@ -202,12 +194,12 @@ impl ExpandState {
 }
 
 enum HandleNodeResult {
-    Events(ArrayVec<Event, 2>),
+    Events(ArrayVec<Event, 3>),
     EnterFile(Event, SyntaxNode, ParsedPath),
 }
 
-impl From<ArrayVec<Event, 2>> for HandleNodeResult {
-    fn from(events: ArrayVec<Event, 2>) -> Self {
+impl From<ArrayVec<Event, 3>> for HandleNodeResult {
+    fn from(events: ArrayVec<Event, 3>) -> Self {
         Self::Events(events)
     }
 }
@@ -217,8 +209,7 @@ impl ExpandOne {
         let (file_id, ast) = parsed_file.into();
 
         Self {
-            mask_stack: Vec::with_capacity(4),
-            mask_active: true,
+            if_stack: IfStack::new(),
             location: ExpandLocation::new(file_id),
             state: ExpandState::Init { ast, current_state },
         }
@@ -256,7 +247,7 @@ impl ExpandOne {
                 // Discard
             }
             PP_VERSION => {
-                if self.mask_active {
+                if self.if_stack.active() {
                     // TODO: Check that the version is the first thing in the file?
                     let directive: DirectiveResult<Version> = node.try_into();
 
@@ -272,7 +263,7 @@ impl ExpandOne {
                 }
             }
             PP_EXTENSION => {
-                if self.mask_active {
+                if self.if_stack.active() {
                     let directive: DirectiveResult<Extension> = node.try_into();
 
                     match directive {
@@ -287,7 +278,7 @@ impl ExpandOne {
                 }
             }
             PP_DEFINE => {
-                if self.mask_active {
+                if self.if_stack.active() {
                     let directive: DirectiveResult<Define> = node.try_into();
 
                     match directive {
@@ -346,123 +337,146 @@ impl ExpandOne {
                 }
             }
             PP_IFDEF => {
-                if self.mask_active {
-                    let directive: DirectiveResult<IfDef> = node.try_into();
+                let directive: DirectiveResult<IfDef> = node.try_into();
 
-                    match directive {
-                        Ok(ifdef) => {
-                            // Update masking state
-                            self.mask_active = current_state.definitions.contains_key(&ifdef.ident);
-                            self.mask_stack.push(IfState::Active { else_seen: false });
-
-                            result.push(Event::directive(ifdef));
-                        }
-                        Err(error) => {
+                let result = match directive {
+                    Ok(ifdef) => {
+                        let is_defined = current_state.definitions.contains_key(&ifdef.ident);
+                        result.push(Event::directive(ifdef));
+                        is_defined
+                    }
+                    Err(error) => {
+                        if self.if_stack.active() {
                             result.push(Event::directive_error(error, &self.location));
                         }
+
+                        true
                     }
-                } else {
-                    // Record the #ifdef in the stack to support nesting
-                    self.mask_stack.push(IfState::None);
-                }
+                };
+
+                self.if_stack.on_if_like(result);
             }
             PP_IFNDEF => {
-                if self.mask_active {
-                    let directive: DirectiveResult<IfNDef> = node.try_into();
+                let directive: DirectiveResult<IfNDef> = node.try_into();
 
-                    match directive {
-                        Ok(ifndef) => {
-                            // Update masking state
-                            self.mask_active =
-                                !current_state.definitions.contains_key(&ifndef.ident);
-                            self.mask_stack.push(IfState::Active { else_seen: false });
-
-                            result.push(Event::directive(ifndef));
-                        }
-                        Err((error, node)) => {
+                let result = match directive {
+                    Ok(ifndef) => {
+                        // Update masking state
+                        let is_defined = current_state.definitions.contains_key(&ifndef.ident);
+                        result.push(Event::directive(ifndef));
+                        !is_defined
+                    }
+                    Err((error, node)) => {
+                        if self.if_stack.active() {
                             result.push(Event::directive_error(
                                 (ProcessingErrorKind::DirectiveIfNDef(error), node),
                                 &self.location,
                             ));
                         }
+
+                        true
                     }
-                } else {
-                    // Record the #ifdef in the stack to support nesting
-                    self.mask_stack.push(IfState::None);
+                };
+
+                self.if_stack.on_if_like(result);
+            }
+            PP_IF => {
+                let directive: DirectiveResult<If> = node.clone().try_into();
+
+                let result = match directive {
+                    Ok(if_) => {
+                        let (value, error) = if_.eval(&current_state, &self.location);
+
+                        if let Some(error) = error {
+                            if self.if_stack.active() {
+                                result.push(Event::directive_error(
+                                    (ProcessingErrorKind::DirectiveIf(error), node),
+                                    &self.location,
+                                ));
+                            }
+                        }
+
+                        result.push(Event::directive(if_));
+                        value
+                    }
+                    Err(error) => {
+                        result.push(Event::directive_error(error, &self.location));
+                        true
+                    }
+                };
+
+                self.if_stack.on_if_like(result);
+            }
+            PP_ELIF => {
+                let directive: DirectiveResult<Elif> = node.clone().try_into();
+
+                let expr = match &directive {
+                    Ok(elif_) => {
+                        if self.if_stack.if_group_active() {
+                            let (value, error) = elif_.eval(&current_state, &self.location);
+
+                            if let Some(error) = error {
+                                result.push(Event::directive_error(
+                                    (ProcessingErrorKind::DirectiveElif(error), node.clone()),
+                                    &self.location,
+                                ));
+                            }
+
+                            value
+                        } else {
+                            // Do not evaluate if the group is not active
+                            true
+                        }
+                    }
+                    Err(_) => true,
+                };
+
+                // Update the if stack, which may fail
+                if let Err(error) = self.if_stack.on_elif(expr) {
+                    result.push(Event::directive_error((error, node), &self.location));
+                }
+
+                match directive {
+                    Ok(elif_) => {
+                        result.push(Event::directive(elif_));
+                    }
+                    Err(error) => {
+                        if self.if_stack.if_group_active() {
+                            result.push(Event::directive_error(error, &self.location));
+                        }
+                    }
                 }
             }
             PP_ELSE => {
                 let directive: DirectiveResult<Else> = node.clone().try_into();
 
+                // Update the if stack, which may fail
+                if let Err(error) = self.if_stack.on_else() {
+                    result.push(Event::directive_error((error, node), &self.location));
+                }
+
                 match directive {
                     Ok(else_) => {
-                        if let Some(top) = self.mask_stack.pop() {
-                            match top {
-                                IfState::None => {
-                                    self.mask_active = self
-                                        .mask_stack
-                                        .last()
-                                        .map(|top| matches!(*top, IfState::Active { .. }))
-                                        .unwrap_or(true);
-
-                                    self.mask_stack.push(IfState::Active { else_seen: true });
-                                }
-                                IfState::Active { else_seen } | IfState::One { else_seen } => {
-                                    if else_seen {
-                                        // Extra #else
-                                        result.push(Event::error(
-                                            ProcessingErrorKind::ExtraElse
-                                                .with_node(node.into(), &self.location),
-                                            &self.location,
-                                        ));
-
-                                        return result.into();
-                                    } else {
-                                        self.mask_active = false;
-                                        self.mask_stack.push(IfState::One { else_seen: true });
-                                    }
-                                }
-                            }
-
-                            result.push(Event::directive(else_));
-                        } else {
-                            // Stray #else
-                            result.push(Event::error(
-                                ProcessingErrorKind::ExtraElse
-                                    .with_node(node.into(), &self.location),
-                                &self.location,
-                            ));
-                        }
+                        result.push(Event::directive(else_));
                     }
                     Err(error) => {
-                        result.push(Event::directive_error(error, &self.location));
+                        if self.if_stack.if_group_active() {
+                            result.push(Event::directive_error(error, &self.location));
+                        }
                     }
                 }
             }
             PP_ENDIF => {
                 let directive: DirectiveResult<EndIf> = node.clone().try_into();
 
+                // Update the if stack, which may fail
+                if let Err(error) = self.if_stack.on_endif() {
+                    result.push(Event::directive_error((error, node), &self.location));
+                }
+
                 match directive {
                     Ok(endif) => {
-                        if let Some(_) = self.mask_stack.pop() {
-                            self.mask_active = self
-                                .mask_stack
-                                .last()
-                                .map(|top| matches!(*top, IfState::Active { .. }))
-                                .unwrap_or(true);
-
-                            // TODO: Return syntax node?
-                            if self.mask_active {
-                                result.push(Event::directive(endif));
-                            }
-                        } else {
-                            // Stray #endif
-                            result.push(Event::error(
-                                ProcessingErrorKind::ExtraEndIf
-                                    .with_node(node.into(), &self.location),
-                                &self.location,
-                            ));
-                        }
+                        result.push(Event::directive(endif));
                     }
                     Err(error) => {
                         result.push(Event::directive_error(error, &self.location));
@@ -470,7 +484,7 @@ impl ExpandOne {
                 }
             }
             PP_UNDEF => {
-                if self.mask_active {
+                if self.if_stack.active() {
                     let directive: DirectiveResult<Undef> = node.clone().try_into();
 
                     match directive {
@@ -515,7 +529,7 @@ impl ExpandOne {
                 }
             }
             PP_ERROR => {
-                if self.mask_active {
+                if self.if_stack.active() {
                     let directive: DirectiveResult<Error> = node.try_into();
 
                     match directive {
@@ -543,7 +557,7 @@ impl ExpandOne {
                 }
             }
             PP_INCLUDE => {
-                if self.mask_active {
+                if self.if_stack.active() {
                     if current_state.include_mode == IncludeMode::None {
                         // No include mode requested, thus we are not expecting include
                         // directives and this is a parsing error
@@ -606,7 +620,7 @@ impl ExpandOne {
                 }
             }
             PP_LINE => {
-                if self.mask_active {
+                if self.if_stack.active() {
                     // Parse the directive itself
                     let directive: DirectiveResult<Line> = node.try_into();
 
@@ -660,7 +674,7 @@ impl ExpandOne {
                 }
             }
             PP_PRAGMA => {
-                if self.mask_active {
+                if self.if_stack.active() {
                     let directive: DirectiveResult<Pragma> = node.try_into();
 
                     match directive {
@@ -677,19 +691,11 @@ impl ExpandOne {
                 // Unknown preprocessor directive, these are already reported as parse errors
             }
             _ => {
-                let is_pp_if = node.kind() == PP_IF;
-
-                if self.mask_active {
+                if self.if_stack.active() {
                     result.push(Event::error(
                         ErrorKind::unhandled(NodeOrToken::Node(node), self.location.line_map()),
                         &self.location,
                     ));
-                }
-
-                // Special case for PP_IF so #endif stack correctly
-                if is_pp_if {
-                    self.mask_active = false;
-                    self.mask_stack.push(IfState::None);
                 }
             }
         }
@@ -799,7 +805,7 @@ impl ExpandOne {
                 }
             },
             rowan::NodeOrToken::Token(token) => {
-                if self.mask_active {
+                if self.if_stack.active() {
                     self.handle_token(current_state, token, iterator, errors)
                 } else {
                     // Just keep iterating
@@ -859,7 +865,7 @@ impl Iterator for ExpandOne {
                                 let error = errors.pop().unwrap();
 
                                 // Parse errors in non-included blocks are ignored
-                                if self.mask_active {
+                                if self.if_stack.active() {
                                     self.state = ExpandState::PendingOne {
                                         iterator,
                                         errors,

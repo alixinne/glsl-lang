@@ -651,13 +651,16 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
         // Macros are recursive, so we need to scan again for further substitutions
         let mut result = Vec::with_capacity(tokens.len());
         let mut iterator = tokens.into_iter().map(|item| NodeOrToken::Token(item));
+        let mut seen_defined_recently = false;
 
         while let Some(node_or_token) = iterator.next() {
             // Just a regular token
             match node_or_token {
                 NodeOrToken::Node(_) => unreachable!(),
                 NodeOrToken::Token(token) => {
-                    if let Some(definition) = (if token.kind() == IDENT_KW {
+                    let kind = token.kind();
+
+                    if let Some(definition) = (if kind == IDENT_KW && !seen_defined_recently {
                         Some(Unescaped::new(token.text()).to_string())
                     } else {
                         None
@@ -696,6 +699,21 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
                         }
                     } else {
                         result.push(Event::Token(token.into()));
+                    }
+
+                    if seen_defined_recently {
+                        if !kind.is_trivia() {
+                            if kind == LPAREN {
+                                // Wait for (maybe) an IDENT_KW
+                            } else {
+                                // IDENT_KW, RPAREN, anything else: done
+                                seen_defined_recently = false;
+                            }
+                        }
+                    } else {
+                        if kind == DEFINED {
+                            seen_defined_recently = true;
+                        }
                     }
                 }
             }

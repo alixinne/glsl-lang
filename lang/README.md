@@ -31,7 +31,6 @@ assert!(ast.is_ok());
 
 This crate has the following features:
 - `parser-expr`: generate parser code for parsing GLSL expressions
-- `parser-preprocessor`: generate parser code for parsing GLSL preprocessor directives
 - `parser-statement`: generate parser code for parsing GLSL statements
 
 None of these features are enabled by default, as they significantly increase the compile

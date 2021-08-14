@@ -1083,7 +1083,6 @@ impl Parsable for ast::Expr {
     }
 }
 
-#[cfg(not(feature = "parser-preprocessor"))]
 impl Parsable for ast::Preprocessor {
     fn parse_with_options(
         source: &str,

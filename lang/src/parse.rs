@@ -84,8 +84,6 @@ macro_rules! impl_parse {
 
 #[cfg(feature = "parser-expr")]
 impl_parse!(ast::Expr            => parser::ExprParser);
-#[cfg(feature = "parser-preprocessor")]
-impl_parse!(ast::Preprocessor    => parser::PreprocessorParser);
 #[cfg(feature = "parser-statement")]
 impl_parse!(ast::Statement       => parser::StatementParser);
 impl_parse!(ast::TranslationUnit => parser::TranslationUnitParser);

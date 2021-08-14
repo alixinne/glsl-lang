@@ -18,10 +18,9 @@
 //!
 //! # Parsing expressions
 //!
-//! This crate offers a set of features `quote-expr`, `quote-preprocessor`, and `quote-statement`.
-//! Enabling those features enable the respective `parser-expr`, `parser-preprocessor` and
-//! `parser-statement` in [glsl_lang], which creates dedicated parsers for those types of GLSL
-//! fragments of the language grammar.
+//! This crate offers a set of features `quote-expr`, and `quote-statement`. Enabling those
+//! features enable the respective `parser-expr`, and `parser-statement` in [glsl_lang], which
+//! creates dedicated parsers for those types of GLSL fragments of the language grammar.
 //!
 //! This is the most efficient option for parsing lots of expressions and statements at
 //! compile-time, however this will slow down the initial compilation of `glsl-lang-quote` since

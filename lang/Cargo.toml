@@ -42,7 +42,6 @@ default = []
 
 # Additional sub-parsers. Increases compilation time.
 parser-expr = []
-parser-preprocessor = []
 parser-statement = []
 
 # AST Serialization

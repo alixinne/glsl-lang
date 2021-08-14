@@ -799,8 +799,6 @@ translation_unit: ast::TranslationUnit = {
 
 #[cfg(feature = "parser-expr")]
 pub Expr            = { expr };
-#[cfg(feature = "parser-preprocessor")]
-pub Preprocessor    = { preprocessor };
 #[cfg(feature = "parser-statement")]
 pub Statement       = { statement };
 pub TranslationUnit = { translation_unit };

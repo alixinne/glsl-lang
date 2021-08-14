@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{array::IntoIter, collections::HashMap};
 
 use crate::last::type_names::TypeNameAtom;
 
@@ -13,6 +13,10 @@ pub struct ExtensionSpec {
 }
 
 impl ExtensionSpec {
+    pub fn new(name: ExtNameAtom, type_names: Vec<TypeNameAtom>) -> Self {
+        Self { name, type_names }
+    }
+
     pub fn name(&self) -> &ExtNameAtom {
         &self.name
     }
@@ -22,14 +26,17 @@ impl ExtensionSpec {
     }
 }
 
-// TODO: Fill registry with extension data from Khronos
-
-#[derive(Default)]
 pub struct Registry {
     extensions: HashMap<ExtNameAtom, ExtensionSpec>,
 }
 
 impl Registry {
+    pub fn new() -> Self {
+        Self {
+            extensions: Default::default(),
+        }
+    }
+
     pub fn all(&self) -> impl Iterator<Item = &ExtensionSpec> {
         self.extensions.values()
     }
@@ -39,6 +46,35 @@ impl Registry {
     }
 }
 
+// TODO: Fill registry with extension data from Khronos
+
+impl Default for Registry {
+    fn default() -> Self {
+        Self {
+            extensions: IntoIter::new([
+                ExtensionSpec::new(
+                    ExtNameAtom::from("GL_OES_EGL_image_external"),
+                    vec![TypeNameAtom::from("samplerExternalOES")],
+                ),
+                ExtensionSpec::new(
+                    ExtNameAtom::from("GL_OES_texture_buffer"),
+                    vec![
+                        TypeNameAtom::from("samplerBuffer"),
+                        TypeNameAtom::from("isamplerBuffer"),
+                        TypeNameAtom::from("usamplerBuffer"),
+                        TypeNameAtom::from("imageBuffer"),
+                        TypeNameAtom::from("iimageBuffer"),
+                        TypeNameAtom::from("uimageBuffer"),
+                    ],
+                ),
+            ])
+            .map(|spec| (spec.name.clone(), spec))
+            .collect(),
+        }
+    }
+}
+
 lazy_static::lazy_static! {
     pub static ref DEFAULT_REGISTRY: Registry = Registry::default();
+    pub static ref EMPTY_REGISTRY: Registry = Registry::new();
 }

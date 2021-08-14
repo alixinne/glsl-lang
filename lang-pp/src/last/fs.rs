@@ -40,6 +40,7 @@ pub enum Event<E: std::error::Error + 'static> {
 
 pub struct Tokenizer<'r, I> {
     inner: I,
+    target_vulkan: bool,
     type_table: TypeTable<'r>,
     pending_error: Option<Error>,
 }
@@ -56,9 +57,10 @@ impl<
         I: Iterator<Item = event::IoEvent<E>> + LocatedIterator,
     > Tokenizer<'r, I>
 {
-    pub fn new(inner: I, registry: &'r Registry) -> Self {
+    pub fn new(inner: I, target_vulkan: bool, registry: &'r Registry) -> Self {
         Self {
             inner,
+            target_vulkan,
             type_table: TypeTable::new(registry),
             pending_error: None,
         }
@@ -94,8 +96,9 @@ impl<
                 canonical_path,
             },
             event::IoEvent::Token { token, masked } => {
-                let (token_kind, state) =
-                    Token::from_token(&token, |tn| self.type_table.is_type_name(tn));
+                let (token_kind, state) = Token::from_token(&token, self.target_vulkan, |tn| {
+                    self.type_table.is_type_name(tn)
+                });
 
                 if !masked {
                     if let Some(TypeNameState::WarnType(extension)) = &state {

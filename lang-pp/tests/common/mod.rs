@@ -79,6 +79,7 @@ pub fn test_file(path: impl AsRef<Path>) {
 
     for event in glsl_lang_pp::last::fs::Tokenizer::new(
         parsed.process(ProcessorState::default()),
+        false,
         &DEFAULT_REGISTRY,
     ) {
         writeln!(eventsf, "{:?}", event).unwrap();

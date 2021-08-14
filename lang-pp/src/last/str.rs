@@ -38,14 +38,16 @@ pub enum Event {
 
 pub struct Tokenizer<'r, I> {
     inner: I,
+    target_vulkan: bool,
     type_table: TypeTable<'r>,
     pending_error: Option<Error>,
 }
 
 impl<'r, I> Tokenizer<'r, I> {
-    pub fn new(inner: I, registry: &'r Registry) -> Self {
+    pub fn new(inner: I, target_vulkan: bool, registry: &'r Registry) -> Self {
         Self {
             inner,
+            target_vulkan,
             type_table: TypeTable::new(registry),
             pending_error: None,
         }
@@ -76,8 +78,9 @@ impl<'r, I: Iterator<Item = Result<event::Event, ProcessStrError>> + LocatedIter
                 event::Event::Error { error, masked } => Event::Error { error, masked },
                 event::Event::EnterFile(file_id) => Event::EnterFile(file_id),
                 event::Event::Token { token, masked } => {
-                    let (token_kind, state) =
-                        Token::from_token(&token, |tn| self.type_table.is_type_name(tn));
+                    let (token_kind, state) = Token::from_token(&token, self.target_vulkan, |tn| {
+                        self.type_table.is_type_name(tn)
+                    });
 
                     if !masked {
                         if let Some(TypeNameState::WarnType(extension)) = &state {

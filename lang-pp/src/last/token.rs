@@ -521,6 +521,7 @@ pub enum TypeName {
 impl TypeName {
     fn parse(
         name: &str,
+        target_vulkan: bool,
         is_type_name: impl Fn(&TypeNameAtom) -> TypeNameState,
     ) -> Option<(Self, Option<TypeNameState>)> {
         use TypeName::*;
@@ -766,92 +767,96 @@ impl TypeName {
         } else if type_name_atom == type_name!("uimageBuffer") {
             return Some((UIMAGEBUFFER, None));
         }
+
         // Vulkan type names
-        else if type_name_atom == type_name!("texture1D") {
-            return Some((TEXTURE1D, None));
-        } else if type_name_atom == type_name!("texture1DArray") {
-            return Some((TEXTURE1DARRAY, None));
-        } else if type_name_atom == type_name!("itexture1D") {
-            return Some((ITEXTURE1D, None));
-        } else if type_name_atom == type_name!("itexture1DArray") {
-            return Some((ITEXTURE1DARRAY, None));
-        } else if type_name_atom == type_name!("utexture1D") {
-            return Some((UTEXTURE1D, None));
-        } else if type_name_atom == type_name!("utexture1DArray") {
-            return Some((UTEXTURE1DARRAY, None));
-        } else if type_name_atom == type_name!("texture2D") {
-            return Some((TEXTURE2D, None));
-        } else if type_name_atom == type_name!("texture2DArray") {
-            return Some((TEXTURE2DARRAY, None));
-        } else if type_name_atom == type_name!("itexture2D") {
-            return Some((ITEXTURE2D, None));
-        } else if type_name_atom == type_name!("itexture2DArray") {
-            return Some((ITEXTURE2DARRAY, None));
-        } else if type_name_atom == type_name!("utexture2D") {
-            return Some((UTEXTURE2D, None));
-        } else if type_name_atom == type_name!("utexture2DArray") {
-            return Some((UTEXTURE2DARRAY, None));
-        } else if type_name_atom == type_name!("texture2DRect") {
-            return Some((TEXTURE2DRECT, None));
-        } else if type_name_atom == type_name!("itexture2DRect") {
-            return Some((ITEXTURE2DRECT, None));
-        } else if type_name_atom == type_name!("utexture2DRect") {
-            return Some((UTEXTURE2DRECT, None));
-        } else if type_name_atom == type_name!("texture2DMS") {
-            return Some((TEXTURE2DMS, None));
-        } else if type_name_atom == type_name!("itexture2DMS") {
-            return Some((ITEXTURE2DMS, None));
-        } else if type_name_atom == type_name!("utexture2DMS") {
-            return Some((UTEXTURE2DMS, None));
-        } else if type_name_atom == type_name!("texture2DMSArray") {
-            return Some((TEXTURE2DMSARRAY, None));
-        } else if type_name_atom == type_name!("itexture2DMSArray") {
-            return Some((ITEXTURE2DMSARRAY, None));
-        } else if type_name_atom == type_name!("utexture2DMSArray") {
-            return Some((UTEXTURE2DMSARRAY, None));
-        } else if type_name_atom == type_name!("texture3D") {
-            return Some((TEXTURE3D, None));
-        } else if type_name_atom == type_name!("itexture3D") {
-            return Some((ITEXTURE3D, None));
-        } else if type_name_atom == type_name!("utexture3D") {
-            return Some((UTEXTURE3D, None));
-        } else if type_name_atom == type_name!("textureCube") {
-            return Some((TEXTURECUBE, None));
-        } else if type_name_atom == type_name!("itextureCube") {
-            return Some((ITEXTURECUBE, None));
-        } else if type_name_atom == type_name!("utextureCube") {
-            return Some((UTEXTURECUBE, None));
-        } else if type_name_atom == type_name!("textureCubeArray") {
-            return Some((TEXTURECUBEARRAY, None));
-        } else if type_name_atom == type_name!("itextureCubeArray") {
-            return Some((ITEXTURECUBEARRAY, None));
-        } else if type_name_atom == type_name!("utextureCubeArray") {
-            return Some((UTEXTURECUBEARRAY, None));
-        } else if type_name_atom == type_name!("textureBuffer") {
-            return Some((TEXTUREBUFFER, None));
-        } else if type_name_atom == type_name!("itextureBuffer") {
-            return Some((ITEXTUREBUFFER, None));
-        } else if type_name_atom == type_name!("utextureBuffer") {
-            return Some((UTEXTUREBUFFER, None));
-        } else if type_name_atom == type_name!("sampler") {
-            return Some((SAMPLER, None));
-        } else if type_name_atom == type_name!("samplerShadow") {
-            return Some((SAMPLERSHADOW, None));
-        } else if type_name_atom == type_name!("subpassInput") {
-            return Some((SUBPASSINPUT, None));
-        } else if type_name_atom == type_name!("isubpassInput") {
-            return Some((ISUBPASSINPUT, None));
-        } else if type_name_atom == type_name!("usubpassInput") {
-            return Some((USUBPASSINPUT, None));
-        } else if type_name_atom == type_name!("subpassInputMS") {
-            return Some((SUBPASSINPUTMS, None));
-        } else if type_name_atom == type_name!("isubpassInputMS") {
-            return Some((ISUBPASSINPUTMS, None));
-        } else if type_name_atom == type_name!("usubpassInputMS") {
-            return Some((USUBPASSINPUTMS, None));
+        if target_vulkan {
+            if type_name_atom == type_name!("texture1D") {
+                return Some((TEXTURE1D, None));
+            } else if type_name_atom == type_name!("texture1DArray") {
+                return Some((TEXTURE1DARRAY, None));
+            } else if type_name_atom == type_name!("itexture1D") {
+                return Some((ITEXTURE1D, None));
+            } else if type_name_atom == type_name!("itexture1DArray") {
+                return Some((ITEXTURE1DARRAY, None));
+            } else if type_name_atom == type_name!("utexture1D") {
+                return Some((UTEXTURE1D, None));
+            } else if type_name_atom == type_name!("utexture1DArray") {
+                return Some((UTEXTURE1DARRAY, None));
+            } else if type_name_atom == type_name!("texture2D") {
+                return Some((TEXTURE2D, None));
+            } else if type_name_atom == type_name!("texture2DArray") {
+                return Some((TEXTURE2DARRAY, None));
+            } else if type_name_atom == type_name!("itexture2D") {
+                return Some((ITEXTURE2D, None));
+            } else if type_name_atom == type_name!("itexture2DArray") {
+                return Some((ITEXTURE2DARRAY, None));
+            } else if type_name_atom == type_name!("utexture2D") {
+                return Some((UTEXTURE2D, None));
+            } else if type_name_atom == type_name!("utexture2DArray") {
+                return Some((UTEXTURE2DARRAY, None));
+            } else if type_name_atom == type_name!("texture2DRect") {
+                return Some((TEXTURE2DRECT, None));
+            } else if type_name_atom == type_name!("itexture2DRect") {
+                return Some((ITEXTURE2DRECT, None));
+            } else if type_name_atom == type_name!("utexture2DRect") {
+                return Some((UTEXTURE2DRECT, None));
+            } else if type_name_atom == type_name!("texture2DMS") {
+                return Some((TEXTURE2DMS, None));
+            } else if type_name_atom == type_name!("itexture2DMS") {
+                return Some((ITEXTURE2DMS, None));
+            } else if type_name_atom == type_name!("utexture2DMS") {
+                return Some((UTEXTURE2DMS, None));
+            } else if type_name_atom == type_name!("texture2DMSArray") {
+                return Some((TEXTURE2DMSARRAY, None));
+            } else if type_name_atom == type_name!("itexture2DMSArray") {
+                return Some((ITEXTURE2DMSARRAY, None));
+            } else if type_name_atom == type_name!("utexture2DMSArray") {
+                return Some((UTEXTURE2DMSARRAY, None));
+            } else if type_name_atom == type_name!("texture3D") {
+                return Some((TEXTURE3D, None));
+            } else if type_name_atom == type_name!("itexture3D") {
+                return Some((ITEXTURE3D, None));
+            } else if type_name_atom == type_name!("utexture3D") {
+                return Some((UTEXTURE3D, None));
+            } else if type_name_atom == type_name!("textureCube") {
+                return Some((TEXTURECUBE, None));
+            } else if type_name_atom == type_name!("itextureCube") {
+                return Some((ITEXTURECUBE, None));
+            } else if type_name_atom == type_name!("utextureCube") {
+                return Some((UTEXTURECUBE, None));
+            } else if type_name_atom == type_name!("textureCubeArray") {
+                return Some((TEXTURECUBEARRAY, None));
+            } else if type_name_atom == type_name!("itextureCubeArray") {
+                return Some((ITEXTURECUBEARRAY, None));
+            } else if type_name_atom == type_name!("utextureCubeArray") {
+                return Some((UTEXTURECUBEARRAY, None));
+            } else if type_name_atom == type_name!("textureBuffer") {
+                return Some((TEXTUREBUFFER, None));
+            } else if type_name_atom == type_name!("itextureBuffer") {
+                return Some((ITEXTUREBUFFER, None));
+            } else if type_name_atom == type_name!("utextureBuffer") {
+                return Some((UTEXTUREBUFFER, None));
+            } else if type_name_atom == type_name!("sampler") {
+                return Some((SAMPLER, None));
+            } else if type_name_atom == type_name!("samplerShadow") {
+                return Some((SAMPLERSHADOW, None));
+            } else if type_name_atom == type_name!("subpassInput") {
+                return Some((SUBPASSINPUT, None));
+            } else if type_name_atom == type_name!("isubpassInput") {
+                return Some((ISUBPASSINPUT, None));
+            } else if type_name_atom == type_name!("usubpassInput") {
+                return Some((USUBPASSINPUT, None));
+            } else if type_name_atom == type_name!("subpassInputMS") {
+                return Some((SUBPASSINPUTMS, None));
+            } else if type_name_atom == type_name!("isubpassInputMS") {
+                return Some((ISUBPASSINPUTMS, None));
+            } else if type_name_atom == type_name!("usubpassInputMS") {
+                return Some((USUBPASSINPUTMS, None));
+            }
         }
+
         // Reserved for future use
-        else if type_name_atom == type_name!("hvec2") {
+        if type_name_atom == type_name!("hvec2") {
             return Some((HVEC2, None));
         } else if type_name_atom == type_name!("hvec3") {
             return Some((HVEC3, None));
@@ -1331,6 +1336,7 @@ pub enum Token {
 impl Token {
     pub(super) fn from_token(
         value: &OutputToken,
+        target_vulkan: bool,
         is_type_name: impl Fn(&TypeNameAtom) -> TypeNameState,
     ) -> (Self, Option<TypeNameState>) {
         use Token::*;
@@ -1684,7 +1690,9 @@ impl Token {
             }
 
             // Else it might be a built-in type name
-            if let Some((type_name, state)) = TypeName::parse(text.as_ref(), is_type_name) {
+            if let Some((type_name, state)) =
+                TypeName::parse(text.as_ref(), target_vulkan, is_type_name)
+            {
                 return (TYPE_NAME(type_name), state);
             }
 

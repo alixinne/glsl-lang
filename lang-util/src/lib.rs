@@ -18,10 +18,11 @@ pub use file_id::FileId;
 
 #[cfg(feature = "lalrpop")]
 pub mod error;
-#[cfg(feature = "lalrpop")]
-pub use error::Token;
 
 pub mod node;
 pub use node::NodeContent;
 
 pub mod position;
+
+pub mod token;
+pub use token::Token;

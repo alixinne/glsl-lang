@@ -91,6 +91,8 @@ struct TokenVariant {
     display: Option<TokenDisplay>,
     #[darling(default, rename = "as")]
     as_parser: Option<AsParser>,
+    #[darling(default, rename = "token")]
+    fallback_token: Option<String>,
     #[darling(multiple, rename = "kind")]
     kinds: Vec<String>,
 }
@@ -174,7 +176,7 @@ impl<'s> Token<'s> {
                     Err(error) => {
                         let s = format!("invalid token attribute: {}", error);
                         quote_spanned! {
-                            attr.path.span() =>
+                            attr.span() =>
                                 compile_error!(#s)
                         }
                     }
@@ -291,7 +293,7 @@ impl<'s> Token<'s> {
                         Err(error) => {
                             let s = format!("invalid token attribute: {}", error);
                             quote_spanned! {
-                                attr.path.span() =>
+                                attr.span() =>
                                     compile_error!(#s)
                             }
                         }
@@ -363,32 +365,42 @@ impl<'s> Token<'s> {
 
         quote_spanned! {
             self.variant.ident.span() =>
-                ::lang_util::error::TokenDescriptor::new(#variant_name, #parser_token, #kinds)
+                ::lang_util::token::TokenDescriptor::new(#variant_name, #parser_token, #kinds)
         }
     }
 }
 
-type TokenAttrTy<'s> = Option<(darling::Result<TokenAttr>, &'s syn::Attribute)>;
+type TokenAttrTy<'s> = Option<(darling::Result<TokenAttr>, proc_macro2::Span)>;
 
-fn parse_token_attr(attrs: &[syn::Attribute]) -> TokenAttrTy {
+fn parse_token_attr(variant: &TokenVariant) -> TokenAttrTy {
     // Unit struct, is there a token impl?
-    attrs
-        .iter()
-        .find(|attr| {
-            attr.path
-                .get_ident()
-                .map(|ident| ident == "token")
-                .unwrap_or(false)
-        })
-        .map(|token| {
-            (
-                token
-                    .parse_meta()
+    for attr in variant.attrs.iter() {
+        if attr
+            .path
+            .get_ident()
+            .map(|ident| ident == "token")
+            .unwrap_or(false)
+        {
+            return Some((
+                attr.parse_meta()
                     .map_err(darling::Error::custom)
                     .and_then(|meta| TokenAttr::from_meta(&meta)),
-                token,
-            )
-        })
+                attr.span(),
+            ));
+        }
+    }
+
+    // Check for the fallback attr
+    if let Some(fallback) = &variant.fallback_token {
+        return Some((
+            Ok(TokenAttr {
+                token: fallback.clone(),
+            }),
+            proc_macro2::Span::call_site(),
+        ));
+    }
+
+    None
 }
 
 #[derive(Debug)]
@@ -441,7 +453,7 @@ fn parse_as_parser(variant: &TokenVariant, token: &TokenAttrTy) -> Result<String
 
 impl<'s> From<(&'s syn::Ident, &'s TokenVariant)> for Token<'s> {
     fn from((base_ident, variant): (&'s syn::Ident, &'s TokenVariant)) -> Self {
-        let token = parse_token_attr(&variant.attrs);
+        let token = parse_token_attr(&variant);
         let as_parser = parse_as_parser(&variant, &token);
 
         Self {
@@ -491,11 +503,11 @@ fn token_impl(base_ident: &syn::Ident, enum_name: &TokenStream, variants: &[Toke
 
     quote_spanned! {
         base_ident.span() =>
-            static #id: [::lang_util::error::TokenDescriptor; #cnt] = [
+            static #id: [::lang_util::token::TokenDescriptor; #cnt] = [
                 #(#all_tokens_arms),*
             ];
 
-            impl ::lang_util::error::Token for #enum_name {
+            impl ::lang_util::token::Token for #enum_name {
                 fn variant_name(&self) -> &'static str {
                     match self {
                         #(#variant_name_arms),*
@@ -514,7 +526,7 @@ fn token_impl(base_ident: &syn::Ident, enum_name: &TokenStream, variants: &[Toke
                     }
                 }
 
-                fn all_tokens() -> &'static [::lang_util::error::TokenDescriptor] {
+                fn all_tokens() -> &'static [::lang_util::token::TokenDescriptor] {
                     &#id
                 }
             }

@@ -10,6 +10,9 @@ use arrayvec::ArrayVec;
 use rowan::TextRange;
 use smol_str::SmolStr;
 
+#[macro_use]
+pub mod exts;
+
 mod lexer;
 
 mod parser;

@@ -7,6 +7,7 @@ use string_cache::Atom;
 use thiserror::Error;
 
 use crate::{
+    exts,
     parser::{SyntaxKind::*, SyntaxNode, SyntaxToken},
     processor::{
         event::TokenLike,
@@ -19,7 +20,7 @@ use super::{
     definition::{trim_ws, MacroInvocation},
     event::{Event, OutputToken},
     expand::ExpandLocation,
-    exts, ProcessorState,
+    ProcessorState,
 };
 
 #[derive(Debug, Clone)]
@@ -267,7 +268,7 @@ pub enum ExtensionName {
     /// All extensions
     All,
     /// Specific extension
-    Specific(Atom<exts::ExtNameAtomStaticSet>),
+    Specific(Atom<exts::names::ExtNameAtomStaticSet>),
 }
 
 impl ExtensionName {
@@ -280,10 +281,13 @@ impl ExtensionName {
     }
 }
 
-lazy_static::lazy_static! {
-    pub static ref GL_ARB_SHADING_LANGUAGE_INCLUDE: ExtensionName = ExtensionName::Specific(ext_name!("GL_ARB_shading_language_include"));
-    pub static ref GL_GOOGLE_INCLUDE_DIRECTIVE: ExtensionName = ExtensionName::Specific(ext_name!("GL_GOOGLE_include_directive"));
-    pub static ref GL_GOOGLE_CPP_STYLE_LINE_DIRECTIVE: ExtensionName = ExtensionName::Specific(ext_name!("GL_GOOGLE_cpp_style_line_directive"));
+impl PartialEq<Atom<exts::names::ExtNameAtomStaticSet>> for ExtensionName {
+    fn eq(&self, other: &Atom<exts::names::ExtNameAtomStaticSet>) -> bool {
+        match self {
+            ExtensionName::All => false,
+            ExtensionName::Specific(this) => this == other,
+        }
+    }
 }
 
 #[derive(Debug, Clone)]

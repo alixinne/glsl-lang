@@ -5,7 +5,7 @@ fn main() {
     let out_dir = PathBuf::from(env::var_os("OUT_DIR").unwrap());
 
     // Generate interned strings
-    string_cache_codegen::AtomType::new("processor::exts::ExtNameAtom", "ext_name!")
+    string_cache_codegen::AtomType::new("exts::names::ExtNameAtom", "ext_name!")
         .atoms(&[
             "GL_3DL_array_objects",
             "GL_AMD_gpu_shader_half_float",

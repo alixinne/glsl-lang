@@ -4,9 +4,6 @@ use smol_str::SmolStr;
 
 use lang_util::FileId;
 
-#[macro_use]
-pub mod exts;
-
 mod definition;
 use definition::Definition;
 
@@ -19,10 +16,7 @@ mod expr;
 pub mod fs;
 
 pub mod nodes;
-use nodes::{
-    Define, DefineObject, Extension, ExtensionName, Version, GL_ARB_SHADING_LANGUAGE_INCLUDE,
-    GL_GOOGLE_CPP_STYLE_LINE_DIRECTIVE, GL_GOOGLE_INCLUDE_DIRECTIVE,
-};
+use nodes::{Define, DefineObject, Extension, ExtensionName, Version};
 
 pub mod str;
 
@@ -84,9 +78,10 @@ impl ProcessorState {
         self.extension_stack.push(extension.clone());
 
         // Process include extensions
-        let target_include_mode = if extension.name == *GL_ARB_SHADING_LANGUAGE_INCLUDE {
+        let target_include_mode = if extension.name == ext_name!("GL_ARB_shading_language_include")
+        {
             Some(IncludeMode::ArbInclude)
-        } else if extension.name == *GL_GOOGLE_INCLUDE_DIRECTIVE {
+        } else if extension.name == ext_name!("GL_GOOGLE_include_directive") {
             Some(IncludeMode::GoogleInclude)
         } else {
             None
@@ -107,7 +102,7 @@ impl ProcessorState {
         }
 
         // Process others
-        if extension.name == *GL_GOOGLE_CPP_STYLE_LINE_DIRECTIVE {
+        if extension.name == ext_name!("GL_GOOGLE_cpp_style_line_directive") {
             if extension.behavior.is_active() {
                 self.cpp_style_line = true;
             } else {

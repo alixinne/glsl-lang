@@ -238,24 +238,10 @@ fn pp_include(parser: &mut ParserRun) {
 
     // Consume include path
     parser.start_node(PP_INCLUDE_PATH);
-    pp_include_path(parser);
+    pp_tokens(parser);
     parser.finish_node();
 
     parser.eat_trivia();
-}
-
-fn pp_include_path(parser: &mut ParserRun) {
-    if let Some(token) = parser.peek() {
-        match *token {
-            InputToken::ANGLE_STRING | InputToken::QUOTE_STRING => {
-                parser.bump();
-            }
-            _ => {
-                // Third form of include, just pp tokens
-                pp_tokens(parser);
-            }
-        }
-    }
 }
 
 fn pp_define(parser: &mut ParserRun) {

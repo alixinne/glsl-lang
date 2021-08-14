@@ -110,7 +110,6 @@ pub enum SyntaxKind {
     LBRACKET,
     /// ]
     RBRACKET,
-    // TODO: Add double-left/right bracket for Vulkan attributes?
     /// {
     LBRACE,
     /// }

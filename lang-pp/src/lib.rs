@@ -13,6 +13,9 @@ use smol_str::SmolStr;
 #[macro_use]
 pub mod exts;
 
+#[macro_use]
+pub mod last;
+
 mod lexer;
 
 mod parser;

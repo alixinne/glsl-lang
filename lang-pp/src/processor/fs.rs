@@ -8,7 +8,10 @@ use encoding_rs::Encoding;
 
 use lang_util::FileId;
 
-use crate::parser::{Ast, Parser};
+use crate::{
+    last::LocatedIterator,
+    parser::{Ast, Parser},
+};
 
 use super::{
     event::{Event, IoEvent, Located, ProcessingErrorKind},
@@ -302,5 +305,11 @@ impl<F: FileSystem + Default> Processor<F> {
 impl<F: FileSystem + Default> Default for Processor<F> {
     fn default() -> Self {
         Self::new_with_fs(F::default())
+    }
+}
+
+impl<'p, F: FileSystem> LocatedIterator for ExpandStack<'p, F> {
+    fn location(&self) -> &crate::processor::expand::ExpandLocation {
+        self.stack.last().unwrap().location()
     }
 }

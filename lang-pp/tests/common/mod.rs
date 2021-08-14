@@ -5,9 +5,13 @@ use std::{
     path::PathBuf,
 };
 
-use glsl_lang_pp::processor::{
-    event::{DirectiveKind, IoEvent, TokenLike},
-    ProcessorState,
+use glsl_lang_pp::{
+    exts::DEFAULT_REGISTRY,
+    last::fs::Event,
+    processor::{
+        event::{DirectiveKind, TokenLike},
+        ProcessorState,
+    },
 };
 
 struct Paths {
@@ -73,31 +77,38 @@ pub fn test_file(path: impl AsRef<Path>) {
 
     let mut error_count = 0;
 
-    for event in parsed.process(ProcessorState::default()) {
+    for event in glsl_lang_pp::last::fs::Tokenizer::new(
+        parsed.process(ProcessorState::default()),
+        &DEFAULT_REGISTRY,
+    ) {
         writeln!(eventsf, "{:?}", event).unwrap();
 
         match event {
-            IoEvent::IoError(err) => {
+            Event::IoError(err) => {
                 error_count += 1;
                 writeln!(errorsf, "{}", err).unwrap();
             }
 
-            IoEvent::Error { error, masked } => {
+            Event::Error { error, masked } => {
                 if !masked {
                     error_count += 1;
                     writeln!(errorsf, "{}", error).unwrap();
                 }
             }
 
-            IoEvent::EnterFile { .. } => {}
+            Event::EnterFile { .. } => {}
 
-            IoEvent::Token { token, masked } => {
-                if !masked {
-                    write!(ppf, "{}", token.text()).unwrap();
+            Event::Token {
+                source_token,
+                token_kind: _,
+                state,
+            } => {
+                if state.active() {
+                    write!(ppf, "{}", source_token.text()).unwrap();
                 }
             }
 
-            IoEvent::Directive {
+            Event::Directive {
                 node,
                 kind,
                 masked,

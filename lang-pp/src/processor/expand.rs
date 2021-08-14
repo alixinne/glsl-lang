@@ -19,7 +19,7 @@ use crate::{
 
 use super::{
     definition::{Definition, MacroInvocation},
-    event::{Event, ProcessingErrorKind},
+    event::{ErrorKind, Event, ProcessingErrorKind},
     nodes::{
         Define, Directive, DirectiveResult, Elif, Else, Empty, EndIf, Error, Extension, If, IfDef,
         IfNDef, Include, Invalid, Line, ParsedLine, ParsedPath, Pragma, Undef, Version,
@@ -538,20 +538,58 @@ impl ExpandOne {
                                 // directives and this is a parsing error
                                 Some(
                                     ProcessingErrorKind::IncludeNotSupported
-                                        .with_node(node.into(), &self.location),
+                                        .with_node(node.into(), &self.location)
+                                        .into(),
                                 )
                             }
-                            (Some(path), IncludeMode::GoogleInclude) if active => {
+                            (Some(path), IncludeMode::GoogleInclude { warn }) if active => {
                                 // Compile-time include, enter nested file
                                 let node = include.node().clone();
                                 return HandleNodeResult::EnterFile(
-                                    Event::directive(include, !active),
+                                    Event::directive_errors(
+                                        include,
+                                        !active,
+                                        if warn {
+                                            Some(ErrorKind::warn_ext_use(
+                                                ext_name!("GL_GOOGLE_include_directive"),
+                                                None,
+                                                node.text_range(),
+                                                &self.location,
+                                            ))
+                                        } else {
+                                            None
+                                        }
+                                        .into_iter(),
+                                        &self.location,
+                                    ),
                                     node,
                                     path,
                                 );
                             }
                             // Run-time ArbInclude or inactive if group
-                            _ => None,
+                            (_, other) => {
+                                if other.warn() {
+                                    if matches!(other, IncludeMode::GoogleInclude { .. }) {
+                                        Some(ErrorKind::warn_ext_use(
+                                            ext_name!("GL_GOOGLE_include_directive"),
+                                            None,
+                                            node.text_range(),
+                                            &self.location,
+                                        ))
+                                    } else if matches!(other, IncludeMode::ArbInclude { .. }) {
+                                        Some(ErrorKind::warn_ext_use(
+                                            ext_name!("GL_ARB_shading_language_include"),
+                                            None,
+                                            node.text_range(),
+                                            &self.location,
+                                        ))
+                                    } else {
+                                        None
+                                    }
+                                } else {
+                                    None
+                                }
+                            }
                         };
 
                         // Forward the directive

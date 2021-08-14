@@ -7,7 +7,11 @@ use thiserror::Error;
 
 use lang_util::FileId;
 
-use crate::parser::{self, SyntaxKind, SyntaxNode, SyntaxToken};
+use crate::{
+    exts::names::ExtNameAtom,
+    last::type_names::TypeNameAtom,
+    parser::{self, SyntaxKind, SyntaxNode, SyntaxToken},
+};
 
 use super::{
     expand::ExpandLocation,
@@ -370,6 +374,7 @@ impl Error {
         match &self.kind {
             ErrorKind::Parse(err) => err.pos(),
             ErrorKind::Processing(err) => err.pos(),
+            ErrorKind::WarnExtUse { pos, .. } => *pos,
         }
     }
 
@@ -412,6 +417,9 @@ impl std::fmt::Display for Error {
             ErrorKind::Processing(err) => {
                 write!(f, "{}", err.kind())
             }
+            ErrorKind::WarnExtUse { .. } => {
+                write!(f, "{}", &self.kind)
+            }
         }
     }
 }
@@ -428,13 +436,36 @@ pub enum ErrorKind {
     Parse(#[from] parser::Error),
     #[error(transparent)]
     Processing(#[from] ProcessingError),
+    #[error("warning use of '{extension}'")]
+    WarnExtUse {
+        extension: ExtNameAtom,
+        name: Option<TypeNameAtom>,
+        raw_line: u32,
+        pos: TextRange,
+    },
 }
 
 impl ErrorKind {
+    pub fn warn_ext_use(
+        extension: ExtNameAtom,
+        name: Option<TypeNameAtom>,
+        pos: TextRange,
+        location: &ExpandLocation,
+    ) -> Self {
+        let raw_line = location.line_map().get_line_and_col(pos.start().into()).0;
+        Self::WarnExtUse {
+            extension,
+            name,
+            raw_line,
+            pos,
+        }
+    }
+
     fn raw_line(&self) -> u32 {
         match self {
             ErrorKind::Parse(err) => err.line(),
             ErrorKind::Processing(err) => err.line(),
+            ErrorKind::WarnExtUse { raw_line, .. } => *raw_line,
         }
     }
 }
@@ -595,7 +626,7 @@ impl Event {
     pub fn directive_errors<D: Into<DirectiveKind>>(
         d: Directive<D>,
         masked: bool,
-        errors: impl Iterator<Item = ProcessingError>,
+        errors: impl Iterator<Item = impl Into<ErrorKind>>,
         location: &ExpandLocation,
     ) -> Self {
         let (inner, node) = d.into_inner();

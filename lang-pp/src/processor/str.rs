@@ -2,7 +2,10 @@ use thiserror::Error;
 
 use lang_util::FileId;
 
-use crate::parser::{self, SyntaxNode};
+use crate::{
+    last::LocatedIterator,
+    parser::{self, SyntaxNode},
+};
 
 use super::{
     event::Event,
@@ -56,5 +59,11 @@ impl Iterator for ExpandStr {
                 None
             }
         }
+    }
+}
+
+impl LocatedIterator for ExpandStr {
+    fn location(&self) -> &crate::processor::expand::ExpandLocation {
+        self.inner.location()
     }
 }

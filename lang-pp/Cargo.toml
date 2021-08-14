@@ -28,6 +28,7 @@ derive_more = "0.99"
 encoding_rs = "0.8"
 bimap = "0.6"
 itertools = "0.10"
+lazy_static = "1.4"
 
 [dev-dependencies]
 expect-test = "1.1"

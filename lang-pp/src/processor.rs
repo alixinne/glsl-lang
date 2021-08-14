@@ -18,6 +18,8 @@ pub mod fs;
 pub mod nodes;
 use nodes::{Define, DefineObject, Extension, ExtensionName, Version};
 
+use crate::processor::nodes::ExtensionBehavior;
+
 pub mod str;
 
 /// Operating mode for #include directives
@@ -26,9 +28,18 @@ pub enum IncludeMode {
     /// No #include directives are allowed
     None,
     /// GL_ARB_shading_language_include runtime includes
-    ArbInclude,
+    ArbInclude { warn: bool },
     /// GL_GOOGLE_include_directive compile-time includes
-    GoogleInclude,
+    GoogleInclude { warn: bool },
+}
+
+impl IncludeMode {
+    pub fn warn(self) -> bool {
+        match self {
+            IncludeMode::None => false,
+            IncludeMode::ArbInclude { warn } | IncludeMode::GoogleInclude { warn } => warn,
+        }
+    }
 }
 
 impl Default for IncludeMode {
@@ -80,9 +91,13 @@ impl ProcessorState {
         // Process include extensions
         let target_include_mode = if extension.name == ext_name!("GL_ARB_shading_language_include")
         {
-            Some(IncludeMode::ArbInclude)
+            Some(IncludeMode::ArbInclude {
+                warn: extension.behavior == ExtensionBehavior::Warn,
+            })
         } else if extension.name == ext_name!("GL_GOOGLE_include_directive") {
-            Some(IncludeMode::GoogleInclude)
+            Some(IncludeMode::GoogleInclude {
+                warn: extension.behavior == ExtensionBehavior::Warn,
+            })
         } else {
             None
         };
@@ -92,7 +107,7 @@ impl ProcessorState {
                 self.include_mode = target;
 
                 // GL_GOOGLE_include_directive enable GL_GOOGLE_cpp_style_line
-                if target == IncludeMode::GoogleInclude {
+                if let IncludeMode::GoogleInclude { .. } = target {
                     self.cpp_style_line = true;
                 }
             } else {
@@ -107,7 +122,7 @@ impl ProcessorState {
                 self.cpp_style_line = true;
             } else {
                 // TODO: Notify instead of silently ignoring?
-                if self.include_mode != IncludeMode::GoogleInclude {
+                if !matches!(self.include_mode, IncludeMode::GoogleInclude { .. }) {
                     self.cpp_style_line = false;
                 }
             }

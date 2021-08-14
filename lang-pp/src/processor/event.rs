@@ -90,6 +90,7 @@ pub enum ProcessingErrorKind {
         expected: usize,
         actual: usize,
     },
+    IncludeNotSupported,
     IncludeNotFound {
         path: ParsedPath,
     },
@@ -221,6 +222,9 @@ impl std::fmt::Display for ProcessingErrorKind {
                 actual,
             } => {
                 write!(f, "'macro expansion' : wrong number of arguments in input of macro {} : expected {}, got {}", ident, expected, actual)
+            }
+            ProcessingErrorKind::IncludeNotSupported => {
+                write!(f, "'#include' : required extension not requested: GL_GOOGLE_include_directive or GL_ARB_shading_language_include")
             }
             ProcessingErrorKind::IncludeNotFound { path } => {
                 write!(f, "'#include' : could not find file for {}", path)
@@ -452,6 +456,7 @@ pub enum DirectiveKind {
     Include(nodes::Include),
     Line(nodes::Line),
     Pragma(nodes::Pragma),
+    Invalid(nodes::Invalid),
 }
 
 pub trait TokenLike: Into<NodeOrToken<SyntaxNode, SyntaxToken>> {
@@ -565,6 +570,7 @@ pub enum Event {
         node: SyntaxNode,
         kind: DirectiveKind,
         masked: bool,
+        errors: Vec<Error>,
     },
 }
 
@@ -582,6 +588,22 @@ impl Event {
             node,
             kind: inner.into(),
             masked,
+            errors: vec![],
+        }
+    }
+
+    pub fn directive_errors<D: Into<DirectiveKind>>(
+        d: Directive<D>,
+        masked: bool,
+        errors: impl Iterator<Item = ProcessingError>,
+        location: &ExpandLocation,
+    ) -> Self {
+        let (inner, node) = d.into_inner();
+        Self::Directive {
+            node,
+            kind: inner.into(),
+            masked,
+            errors: errors.map(|error| Error::new(error, location)).collect(),
         }
     }
 
@@ -645,7 +667,17 @@ impl<E: std::error::Error + 'static> TryFrom<IoEvent<E>> for Event {
             IoEvent::EnterFile { file_id, .. } => Self::EnterFile(file_id),
             IoEvent::Error { error, masked } => Self::Error { error, masked },
             IoEvent::Token { token, masked } => Self::Token { token, masked },
-            IoEvent::Directive { node, kind, masked } => Self::Directive { node, kind, masked },
+            IoEvent::Directive {
+                node,
+                kind,
+                masked,
+                errors,
+            } => Self::Directive {
+                node,
+                kind,
+                masked,
+                errors,
+            },
         })
     }
 }
@@ -670,6 +702,7 @@ pub enum IoEvent<E: std::error::Error + 'static> {
         node: SyntaxNode,
         kind: DirectiveKind,
         masked: bool,
+        errors: Vec<Error>,
     },
 }
 

@@ -6,6 +6,7 @@ use std::{
 };
 
 use arrayvec::ArrayVec;
+use derive_more::From;
 use rowan::{NodeOrToken, SyntaxElementChildren, TextSize};
 
 use lang_util::FileId;
@@ -21,7 +22,7 @@ use super::{
     event::{Event, ProcessingErrorKind},
     nodes::{
         Define, Directive, DirectiveResult, Elif, Else, Empty, EndIf, Error, Extension, If, IfDef,
-        IfNDef, Include, Line, ParsedLine, ParsedPath, Pragma, Undef, Version,
+        IfNDef, Include, Invalid, Line, ParsedLine, ParsedPath, Pragma, Undef, Version,
     },
     IncludeMode, ProcessorState,
 };
@@ -173,15 +174,10 @@ enum ExpandState {
     Complete,
 }
 
+#[derive(From)]
 enum HandleNodeResult {
-    Events(ArrayVec<Event, 3>),
+    Event(Event),
     EnterFile(Event, SyntaxNode, ParsedPath),
-}
-
-impl From<ArrayVec<Event, 3>> for HandleNodeResult {
-    fn from(events: ArrayVec<Event, 3>) -> Self {
-        Self::Events(events)
-    }
 }
 
 impl ExpandOne {
@@ -220,15 +216,8 @@ impl ExpandOne {
         current_state: &mut ProcessorState,
         node: SyntaxNode,
     ) -> HandleNodeResult {
-        let mut result = ArrayVec::new();
-
         match node.kind() {
-            PP_EMPTY => {
-                result.push(Event::directive(
-                    Directive::new(node, Empty),
-                    !self.if_stack.active(),
-                ));
-            }
+            PP_EMPTY => Event::directive(Directive::new(node, Empty), !self.if_stack.active()),
             PP_VERSION => {
                 let active = self.if_stack.active();
                 let directive: DirectiveResult<Version> = node.try_into();
@@ -240,11 +229,9 @@ impl ExpandOne {
                             current_state.version = *directive;
                         }
 
-                        result.push(Event::directive(directive, !active));
+                        Event::directive(directive, !active)
                     }
-                    Err(error) => {
-                        result.push(Event::directive_error(error, &self.location, !active));
-                    }
+                    Err(error) => Event::directive_error(error, &self.location, !active),
                 }
             }
             PP_EXTENSION => {
@@ -257,11 +244,9 @@ impl ExpandOne {
                             current_state.extension(&*directive);
                         }
 
-                        result.push(Event::directive(directive, !active));
+                        Event::directive(directive, !active)
                     }
-                    Err(error) => {
-                        result.push(Event::directive_error(error, &self.location, !active));
-                    }
+                    Err(error) => Event::directive_error(error, &self.location, !active),
                 }
             }
             PP_DEFINE => {
@@ -315,64 +300,54 @@ impl ExpandOne {
                             None
                         };
 
-                        result.push(Event::directive(define, !active));
-
-                        if let Some(error) = error {
-                            result.push(Event::error(error, &self.location, !active));
-                        }
+                        Event::directive_errors(define, !active, error.into_iter(), &self.location)
                     }
-                    Err(error) => {
-                        result.push(Event::directive_error(error, &self.location, !active));
-                    }
+                    Err(error) => Event::directive_error(error, &self.location, !active),
                 }
             }
             PP_IFDEF => {
                 let active = self.if_stack.active();
                 let directive: DirectiveResult<IfDef> = node.try_into();
 
-                let result = match directive {
+                let (result, ret) = match directive {
                     Ok(ifdef) => {
                         let is_defined = current_state.definitions.contains_key(&ifdef.ident);
-                        result.push(Event::directive(ifdef, !active));
-                        is_defined
+                        (is_defined, Event::directive(ifdef, !active))
                     }
-                    Err(error) => {
-                        result.push(Event::directive_error(error, &self.location, !active));
-                        true
-                    }
+                    Err(error) => (true, Event::directive_error(error, &self.location, !active)),
                 };
 
                 self.if_stack.on_if_like(result);
+                ret
             }
             PP_IFNDEF => {
                 let active = self.if_stack.active();
                 let directive: DirectiveResult<IfNDef> = node.try_into();
 
-                let result = match directive {
+                let (result, ret) = match directive {
                     Ok(ifndef) => {
                         // Update masking state
                         let is_defined = current_state.definitions.contains_key(&ifndef.ident);
-                        result.push(Event::directive(ifndef, !active));
-                        !is_defined
+                        (!is_defined, Event::directive(ifndef, !active))
                     }
-                    Err((error, node)) => {
-                        result.push(Event::directive_error(
+                    Err((error, node)) => (
+                        true,
+                        Event::directive_error(
                             (ProcessingErrorKind::DirectiveIfNDef(error), node),
                             &self.location,
                             !active,
-                        ));
-
-                        true
-                    }
+                        ),
+                    ),
                 };
 
                 self.if_stack.on_if_like(result);
+                ret
             }
             PP_IF => {
                 let active = self.if_stack.active();
                 let directive: DirectiveResult<If> = node.clone().try_into();
 
-                let result = match directive {
+                let (result, ret) = match directive {
                     Ok(if_) => {
                         let (value, error) = if active {
                             if_.eval(&current_state, &self.location)
@@ -380,28 +355,28 @@ impl ExpandOne {
                             (true, None)
                         };
 
-                        if let Some(error) = error {
-                            result.push(Event::directive_error(
-                                (ProcessingErrorKind::DirectiveIf(error), node),
-                                &self.location,
+                        (
+                            value,
+                            Event::directive_errors(
+                                if_,
                                 !active,
-                            ));
-                        }
-
-                        result.push(Event::directive(if_, !active));
-                        value
+                                error.into_iter().map(ProcessingErrorKind::DirectiveIf).map(
+                                    |kind| kind.with_node(node.clone().into(), &self.location),
+                                ),
+                                &self.location,
+                            ),
+                        )
                     }
-                    Err(error) => {
-                        result.push(Event::directive_error(error, &self.location, !active));
-                        true
-                    }
+                    Err(error) => (true, Event::directive_error(error, &self.location, !active)),
                 };
 
                 self.if_stack.on_if_like(result);
+                ret
             }
             PP_ELIF => {
                 let active = self.if_stack.if_group_active();
                 let directive: DirectiveResult<Elif> = node.clone().try_into();
+                let mut errors: ArrayVec<_, 2> = ArrayVec::new();
 
                 let expr = match &directive {
                     Ok(elif_) => {
@@ -413,11 +388,10 @@ impl ExpandOne {
                             };
 
                             if let Some(error) = error {
-                                result.push(Event::directive_error(
-                                    (ProcessingErrorKind::DirectiveElif(error), node.clone()),
-                                    &self.location,
-                                    !active,
-                                ));
+                                errors.push(
+                                    ProcessingErrorKind::DirectiveElif(error)
+                                        .with_node(node.clone().into(), &self.location),
+                                );
                             }
 
                             value
@@ -431,20 +405,16 @@ impl ExpandOne {
 
                 // Update the if stack, which may fail
                 if let Err(error) = self.if_stack.on_elif(expr) {
-                    result.push(Event::directive_error(
-                        (error, node),
-                        &self.location,
-                        !active,
-                    ));
+                    errors.push(
+                        ProcessingErrorKind::from(error).with_node(node.into(), &self.location),
+                    );
                 }
 
                 match directive {
                     Ok(elif_) => {
-                        result.push(Event::directive(elif_, !active));
+                        Event::directive_errors(elif_, !active, errors.into_iter(), &self.location)
                     }
-                    Err(error) => {
-                        result.push(Event::directive_error(error, &self.location, !active));
-                    }
+                    Err(error) => Event::directive_error(error, &self.location, !active),
                 }
             }
             PP_ELSE => {
@@ -452,21 +422,15 @@ impl ExpandOne {
                 let directive: DirectiveResult<Else> = node.clone().try_into();
 
                 // Update the if stack, which may fail
-                if let Err(error) = self.if_stack.on_else() {
-                    result.push(Event::directive_error(
-                        (error, node),
-                        &self.location,
-                        !active,
-                    ));
-                }
+                let error = self.if_stack.on_else().err().map(|kind| {
+                    ProcessingErrorKind::from(kind).with_node(node.into(), &self.location)
+                });
 
                 match directive {
                     Ok(else_) => {
-                        result.push(Event::directive(else_, !active));
+                        Event::directive_errors(else_, !active, error.into_iter(), &self.location)
                     }
-                    Err(error) => {
-                        result.push(Event::directive_error(error, &self.location, !active));
-                    }
+                    Err(error) => Event::directive_error(error, &self.location, !active),
                 }
             }
             PP_ENDIF => {
@@ -474,21 +438,15 @@ impl ExpandOne {
                 let directive: DirectiveResult<EndIf> = node.clone().try_into();
 
                 // Update the if stack, which may fail
-                if let Err(error) = self.if_stack.on_endif() {
-                    result.push(Event::directive_error(
-                        (error, node),
-                        &self.location,
-                        !active,
-                    ));
-                }
+                let error = self.if_stack.on_endif().err().map(|kind| {
+                    ProcessingErrorKind::from(kind).with_node(node.into(), &self.location)
+                });
 
                 match directive {
                     Ok(endif) => {
-                        result.push(Event::directive(endif, !active));
+                        Event::directive_errors(endif, !active, error.into_iter(), &self.location)
                     }
-                    Err(error) => {
-                        result.push(Event::directive_error(error, &self.location, !active));
-                    }
+                    Err(error) => Event::directive_error(error, &self.location, !active),
                 }
             }
             PP_UNDEF => {
@@ -514,27 +472,26 @@ impl ExpandOne {
                             None
                         };
 
-                        result.push(Event::directive(undef, !active));
-
-                        if let Some(ident) = protected_ident {
-                            result.push(Event::error(
-                                ProcessingErrorKind::ProtectedDefine {
-                                    ident,
-                                    is_undef: true,
-                                }
-                                .with_node(node.into(), &self.location),
-                                &self.location,
-                                !active,
-                            ));
-                        }
-                    }
-                    Err((error, node)) => {
-                        result.push(Event::directive_error(
-                            (ProcessingErrorKind::DirectiveUndef(error), node),
-                            &self.location,
+                        Event::directive_errors(
+                            undef,
                             !active,
-                        ));
+                            protected_ident
+                                .map(|ident| {
+                                    ProcessingErrorKind::ProtectedDefine {
+                                        ident,
+                                        is_undef: true,
+                                    }
+                                    .with_node(node.into(), &self.location)
+                                })
+                                .into_iter(),
+                            &self.location,
+                        )
                     }
+                    Err((error, node)) => Event::directive_error(
+                        (ProcessingErrorKind::DirectiveUndef(error), node),
+                        &self.location,
+                        !active,
+                    ),
                 }
             }
             PP_ERROR => {
@@ -543,45 +500,25 @@ impl ExpandOne {
 
                 match directive {
                     Ok(error) => {
-                        let user_error = Event::error(
-                            ProcessingErrorKind::ErrorDirective {
-                                message: error.message.clone(),
-                            }
-                            .with_node(error.node().clone().into(), &self.location),
-                            &self.location,
-                            !active,
-                        );
+                        let user_error = ProcessingErrorKind::ErrorDirective {
+                            message: error.message.clone(),
+                        }
+                        .with_node(error.node().clone().into(), &self.location);
 
-                        result.push(Event::directive(error, !active));
-                        result.push(user_error);
+                        Event::directive_errors(
+                            error,
+                            !active,
+                            std::iter::once(user_error),
+                            &self.location,
+                        )
                     }
-                    Err(error) => {
-                        result.push(Event::directive_error(error, &self.location, !active));
-                    }
+                    Err(error) => Event::directive_error(error, &self.location, !active),
                 }
             }
             PP_INCLUDE => {
                 let active = self.if_stack.active();
-                if current_state.include_mode == IncludeMode::None {
-                    // No include mode requested, thus we are not expecting include
-                    // directives and this is a parsing error
-                    result.push(Event::error(
-                        parser::Error::new(
-                            parser::ErrorKind::UnknownPreprocessorDirective {
-                                name: "include".into(),
-                            },
-                            node.text_range(),
-                            self.location.line_map(),
-                        ),
-                        &self.location,
-                        !active,
-                    ));
-
-                    return result.into();
-                }
-
                 // Parse the directive itself
-                let directive: DirectiveResult<Include> = node.try_into();
+                let directive: DirectiveResult<Include> = node.clone().try_into();
 
                 // Perform macro substitution to get the path. If this fails, the directive is
                 // malformed and shouldn't be processed.
@@ -595,33 +532,43 @@ impl ExpandOne {
 
                 match directive {
                     Ok(include) => {
-                        if let Some(path) = path {
-                            if active {
-                                match current_state.include_mode {
-                                    IncludeMode::None => {
-                                        // Already handled previously
-                                    }
-                                    IncludeMode::ArbInclude => {
-                                        // Run-time include, also just forward the include through
-                                    }
-                                    IncludeMode::GoogleInclude => {
-                                        // Compile-time include, enter nested file
-                                        let node = include.node().clone();
-                                        return HandleNodeResult::EnterFile(
-                                            Event::directive(include, !active),
-                                            node,
-                                            path,
-                                        );
-                                    }
-                                }
+                        let error = match (path, current_state.include_mode) {
+                            (_, IncludeMode::None) if active => {
+                                // No include mode requested, thus we are not expecting include
+                                // directives and this is a parsing error
+                                Some(
+                                    ProcessingErrorKind::IncludeNotSupported
+                                        .with_node(node.into(), &self.location),
+                                )
                             }
-                        }
+                            (Some(path), IncludeMode::GoogleInclude) if active => {
+                                // Compile-time include, enter nested file
+                                let node = include.node().clone();
+                                return HandleNodeResult::EnterFile(
+                                    Event::directive(include, !active),
+                                    node,
+                                    path,
+                                );
+                            }
+                            // Run-time ArbInclude or inactive if group
+                            _ => None,
+                        };
 
                         // Forward the directive
-                        result.push(Event::directive(include, !active));
+                        Event::directive_errors(include, !active, error.into_iter(), &self.location)
                     }
                     Err(error) => {
-                        result.push(Event::directive_error(error, &self.location, !active));
+                        if current_state.include_mode == IncludeMode::None {
+                            // If includes are not enabled, the proper error we need to report is
+                            // IncludeNotSupported, ignoring any errors inside the directive body
+                            Event::directive_error(
+                                (ProcessingErrorKind::IncludeNotSupported, node),
+                                &self.location,
+                                !active,
+                            )
+                        } else {
+                            Event::directive_error(error, &self.location, !active)
+                        }
                     }
                 }
             }
@@ -642,43 +589,43 @@ impl ExpandOne {
 
                 match directive {
                     Ok(ld) => {
-                        if active {
+                        let error = if active {
                             if let Some(line) = line {
                                 // Check that we support cpp style line
-                                let line = match line {
+                                let (line, error) = match line {
                                     ParsedLine::Line(_) | ParsedLine::LineAndFileNumber(_, _) => {
-                                        line
+                                        (line, None)
                                     }
                                     ParsedLine::LineAndPath(_, _)
                                         if current_state.cpp_style_line() =>
                                     {
-                                        line
+                                        (line, None)
                                     }
-                                    ParsedLine::LineAndPath(line, _) => {
-                                        result.push(Event::error(
+                                    ParsedLine::LineAndPath(line, _) => (
+                                        ParsedLine::Line(line),
+                                        Some(
                                             ProcessingErrorKind::CppStyleLineNotSupported
                                                 .with_node(
                                                     ld.node().clone().into(),
                                                     &self.location,
                                                 ),
-                                            &self.location,
-                                            !active,
-                                        ));
-
-                                        ParsedLine::Line(line)
-                                    }
+                                        ),
+                                    ),
                                 };
 
                                 self.location
                                     .add_override(ld.node().text_range().start(), line);
+                                error
+                            } else {
+                                None
                             }
-                        }
+                        } else {
+                            None
+                        };
 
-                        result.push(Event::directive(ld, !active));
+                        Event::directive_errors(ld, !active, error.into_iter(), &self.location)
                     }
-                    Err(error) => {
-                        result.push(Event::directive_error(error, &self.location, !active));
-                    }
+                    Err(error) => Event::directive_error(error, &self.location, !active),
                 }
             }
             PP_PRAGMA => {
@@ -686,24 +633,20 @@ impl ExpandOne {
                 let directive: DirectiveResult<Pragma> = node.try_into();
 
                 match directive {
-                    Ok(pragma) => {
-                        result.push(Event::directive(pragma, !active));
-                    }
-                    Err(error) => {
-                        result.push(Event::directive_error(error, &self.location, !active));
-                    }
+                    Ok(pragma) => Event::directive(pragma, !active),
+                    Err(error) => Event::directive_error(error, &self.location, !active),
                 }
             }
             ERROR => {
                 // Unknown preprocessor directive, these are already reported as parse errors
+                Event::directive(Directive::new(node, Invalid), !self.if_stack.active())
             }
             _ => {
                 // Should never happen if all preprocessor directives are implemented
                 panic!("unhandled node type: {:?}", node.kind());
             }
         }
-
-        result.into()
+        .into()
     }
 
     fn handle_token(
@@ -787,15 +730,14 @@ impl ExpandOne {
     ) -> Option<Event> {
         match node_or_token {
             rowan::NodeOrToken::Node(node) => match self.handle_node(&mut current_state, node) {
-                HandleNodeResult::Events(events) => {
-                    self.state = ExpandState::PendingEvents {
+                HandleNodeResult::Event(event) => {
+                    self.state = ExpandState::Iterate {
                         iterator,
                         errors,
-                        events,
                         current_state,
                     };
 
-                    None
+                    Some(event)
                 }
 
                 HandleNodeResult::EnterFile(event, node, path) => {

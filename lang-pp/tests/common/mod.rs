@@ -6,7 +6,7 @@ use std::{
 };
 
 use glsl_lang_pp::processor::{
-    event::{DirectiveKind, ErrorKind, IoEvent, TokenLike},
+    event::{DirectiveKind, IoEvent, TokenLike},
     ProcessorState,
 };
 
@@ -84,11 +84,6 @@ pub fn test_file(path: impl AsRef<Path>) {
 
             IoEvent::Error { error, masked } => {
                 if !masked {
-                    match error.kind() {
-                        ErrorKind::Parse(_) => {}
-                        ErrorKind::Processing(_) => {}
-                    }
-
                     error_count += 1;
                     writeln!(errorsf, "{}", error).unwrap();
                 }
@@ -102,8 +97,18 @@ pub fn test_file(path: impl AsRef<Path>) {
                 }
             }
 
-            IoEvent::Directive { node, kind, masked } => {
+            IoEvent::Directive {
+                node,
+                kind,
+                masked,
+                errors,
+            } => {
                 if !masked {
+                    for error in errors {
+                        error_count += 1;
+                        writeln!(errorsf, "{}", error).unwrap();
+                    }
+
                     match kind {
                         DirectiveKind::Version(_)
                         | DirectiveKind::Pragma(_)

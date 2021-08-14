@@ -72,11 +72,7 @@ impl std::fmt::Display for ErrorKind {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             ErrorKind::UnknownPreprocessorDirective { name } => {
-                if name == "include" {
-                    write!(f, "'#include' : required extension not requested: GL_GOOGLE_include_directive or GL_ARB_shading_language_include")
-                } else {
-                    write!(f, "unknown preprocessor directive `#{}`", name)
-                }
+                write!(f, "unknown preprocessor directive `#{}`", name)
             }
             ErrorKind::ExtraTokensInPreprocessorDirective { name } => {
                 write!(f, "'#{}' : extra tokens in preprocessor directive", name)

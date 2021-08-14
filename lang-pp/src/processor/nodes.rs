@@ -77,6 +77,9 @@ impl<I: TryFrom<SyntaxNode> + std::fmt::Debug + Clone> DirectiveExt for Directiv
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct Invalid;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Empty;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

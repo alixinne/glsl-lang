@@ -1,4 +1,4 @@
-use std::{array::IntoIter, collections::HashMap, rc::Rc, str::FromStr};
+use std::{array::IntoIter, collections::HashMap, rc::Rc};
 
 use smol_str::SmolStr;
 
@@ -58,6 +58,8 @@ pub struct ProcessorState {
     version: Version,
     cpp_style_line: bool,
 }
+
+// TODO: Add builder/constructor
 
 impl ProcessorState {
     pub fn get_definition(&self, name: &str) -> Option<&Definition> {
@@ -149,7 +151,7 @@ impl Default for ProcessorState {
                 Definition::Regular(
                     Rc::new(Define::object(
                         "GL_core_profile".into(),
-                        DefineObject::from_str("1").unwrap(),
+                        DefineObject::one(),
                         true,
                     )),
                     FileId::default(),
@@ -158,6 +160,16 @@ impl Default for ProcessorState {
                 Definition::File,
                 Definition::Version,
             ])
+            .chain(crate::exts::DEFAULT_REGISTRY.all().map(|spec| {
+                Definition::Regular(
+                    Rc::new(Define::object(
+                        spec.name().as_ref().into(),
+                        DefineObject::one(),
+                        true,
+                    )),
+                    FileId::default(),
+                )
+            }))
             .map(|definition| (definition.name().into(), definition))
             .collect(),
             version: Version::default(),

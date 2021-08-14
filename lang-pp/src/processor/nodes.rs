@@ -394,6 +394,10 @@ impl DefineObject {
         Self { tokens }
     }
 
+    pub fn one() -> Self {
+        Self::from_str("1").unwrap()
+    }
+
     pub fn body(&self) -> &SyntaxNode {
         &self.tokens
     }

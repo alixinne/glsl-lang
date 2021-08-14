@@ -78,7 +78,6 @@ impl<'p, F: FileSystem> Iterator for ExpandStack<'p, F> {
                             self.stack.push(expand);
 
                             return Some(match event {
-                                Event::Error(error) => IoEvent::Error(error),
                                 Event::EnterFile(file_id) => {
                                     let (canonical_path, input_path) =
                                         self.processor.get_paths(file_id).unwrap();
@@ -89,9 +88,10 @@ impl<'p, F: FileSystem> Iterator for ExpandStack<'p, F> {
                                         canonical_path: canonical_path.to_owned(),
                                     }
                                 }
-                                Event::Token(token) => IoEvent::Token(token),
-                                Event::Directive(node, directive) => {
-                                    IoEvent::Directive(node, directive)
+                                Event::Error { error, masked } => IoEvent::Error { error, masked },
+                                Event::Token { token, masked } => IoEvent::Token { token, masked },
+                                Event::Directive { node, kind, masked } => {
+                                    IoEvent::Directive { node, kind, masked }
                                 }
                             });
                         }
@@ -130,6 +130,7 @@ impl<'p, F: FileSystem> Iterator for ExpandStack<'p, F> {
                                     ProcessingErrorKind::IncludeNotFound { path }
                                         .with_node(node.into(), &location),
                                     location,
+                                    false,
                                 ));
                             }
                         }

@@ -326,6 +326,7 @@ impl Definition {
                             location,
                         ),
                         location,
+                        false,
                     )
                 } else {
                     OutputToken::new(token, entire_range).into()
@@ -687,14 +688,14 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
                                 iterator = new_iterator;
                             }
                             Ok(None) => {
-                                result.push(Event::Token(token.into()));
+                                result.push(Event::token(token, false));
                             }
                             Err(err) => {
-                                result.push(Event::error(err, location));
+                                result.push(Event::error(err, location, false));
                             }
                         }
                     } else {
-                        result.push(Event::Token(token.into()));
+                        result.push(Event::token(token, false));
                     }
 
                     if seen_defined_recently {
@@ -752,7 +753,7 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
         // spec-defined expected result.
         let result: Vec<_> = events
             .into_iter()
-            .group_by(|event| matches!(event, Event::Token(_)))
+            .group_by(Event::is_token)
             .into_iter()
             .map(|(is_token, events)| {
                 if is_token {

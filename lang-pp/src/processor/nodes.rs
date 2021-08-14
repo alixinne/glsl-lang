@@ -23,12 +23,16 @@ use super::{
 };
 
 #[derive(Debug, Clone)]
-pub struct Directive<I: TryFrom<SyntaxNode> + std::fmt::Debug + Clone> {
+pub struct Directive<I> {
     node: SyntaxNode,
     inner: I,
 }
 
-impl<I: TryFrom<SyntaxNode> + std::fmt::Debug + Clone> Directive<I> {
+impl<I> Directive<I> {
+    pub fn new(node: SyntaxNode, inner: I) -> Self {
+        Self { node, inner }
+    }
+
     pub fn node(&self) -> &SyntaxNode {
         &self.node
     }
@@ -49,7 +53,7 @@ impl<I: TryFrom<SyntaxNode> + std::fmt::Debug + Clone> TryFrom<SyntaxNode> for D
     }
 }
 
-impl<I: TryFrom<SyntaxNode> + std::fmt::Debug + Clone> std::ops::Deref for Directive<I> {
+impl<I> std::ops::Deref for Directive<I> {
     type Target = I;
 
     fn deref(&self) -> &Self::Target {
@@ -71,6 +75,9 @@ impl<I: TryFrom<SyntaxNode> + std::fmt::Debug + Clone> DirectiveExt for Directiv
         }
     }
 }
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct Empty;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Version {
@@ -663,7 +670,7 @@ impl Include {
             MacroInvocation::substitute_vec(current_state, tokens, location).collect();
 
         // Make sure they are all tokens
-        if !subs_events.iter().all(|evt| matches!(evt, Event::Token(_))) {
+        if !subs_events.iter().all(Event::is_token) {
             return Err(IncludeError::MalformedPath {
                 tokens: subs_events,
             });
@@ -671,10 +678,7 @@ impl Include {
 
         let subs_tokens: Vec<_> = subs_events
             .into_iter()
-            .filter_map(|event| match event {
-                Event::Token(token) => Some(token),
-                _ => None,
-            })
+            .filter_map(Event::into_token)
             .collect();
 
         // Discard trivial tokens
@@ -775,7 +779,7 @@ impl Line {
             MacroInvocation::substitute_vec(current_state, tokens, location).collect();
 
         // Make sure they are all tokens
-        if !subs_events.iter().all(|evt| matches!(evt, Event::Token(_))) {
+        if !subs_events.iter().all(Event::is_token) {
             return Err(LineError::MalformedLine {
                 tokens: subs_events,
             });
@@ -783,13 +787,7 @@ impl Line {
 
         // Evalute the expressions in the line directive
         let eval_results: Vec<_> = ExprEvaluator::new(
-            subs_events.iter().filter_map(|evt| {
-                if let Event::Token(token) = evt {
-                    Some(token)
-                } else {
-                    None
-                }
-            }),
+            subs_events.iter().filter_map(Event::as_token),
             current_state,
         )
         .collect();
@@ -909,7 +907,7 @@ fn eval_inner(
         MacroInvocation::substitute_vec(current_state, tokens, location).collect();
 
     // Make sure they are all tokens
-    if !subs_events.iter().all(|evt| matches!(evt, Event::Token(_))) {
+    if !subs_events.iter().all(Event::is_token) {
         return (
             true,
             Some(IfEvalError::MalformedExpr {
@@ -920,13 +918,7 @@ fn eval_inner(
 
     // Evalute the expressions in the line directive
     let eval_results: Vec<_> = ExprEvaluator::new(
-        subs_events.iter().filter_map(|evt| {
-            if let Event::Token(token) = evt {
-                Some(token)
-            } else {
-                None
-            }
-        }),
+        subs_events.iter().filter_map(Event::as_token),
         current_state,
     )
     .collect();

@@ -82,42 +82,38 @@ pub fn test_file(path: impl AsRef<Path>) {
                 writeln!(errorsf, "{}", err).unwrap();
             }
 
-            IoEvent::Error(error) => {
-                match error.kind() {
-                    ErrorKind::Parse(_) => {}
-                    ErrorKind::Processing(_) => {}
-                }
+            IoEvent::Error { error, masked } => {
+                if !masked {
+                    match error.kind() {
+                        ErrorKind::Parse(_) => {}
+                        ErrorKind::Processing(_) => {}
+                    }
 
-                error_count += 1;
-                writeln!(errorsf, "{}", error).unwrap();
+                    error_count += 1;
+                    writeln!(errorsf, "{}", error).unwrap();
+                }
             }
 
             IoEvent::EnterFile { .. } => {}
 
-            IoEvent::Token(token) => {
-                write!(ppf, "{}", token.text()).unwrap();
+            IoEvent::Token { token, masked } => {
+                if !masked {
+                    write!(ppf, "{}", token.text()).unwrap();
+                }
             }
 
-            IoEvent::Directive(node, directive) => match directive {
-                DirectiveKind::Version(_) => {
-                    write!(ppf, "{}", node).unwrap();
+            IoEvent::Directive { node, kind, masked } => {
+                if !masked {
+                    match kind {
+                        DirectiveKind::Version(_)
+                        | DirectiveKind::Pragma(_)
+                        | DirectiveKind::Extension(_) => {
+                            write!(ppf, "{}", node).unwrap();
+                        }
+                        _ => {}
+                    }
                 }
-                DirectiveKind::Extension(_) => {
-                    write!(ppf, "{}", node).unwrap();
-                }
-                DirectiveKind::Define(_) => {}
-                DirectiveKind::If(_) => {}
-                DirectiveKind::Elif(_) => {}
-                DirectiveKind::IfDef(_) => {}
-                DirectiveKind::IfNDef(_) => {}
-                DirectiveKind::Else(_) => {}
-                DirectiveKind::EndIf(_) => {}
-                DirectiveKind::Undef(_) => {}
-                DirectiveKind::Error(_) => {}
-                DirectiveKind::Include(_) => {}
-                DirectiveKind::Line(_) => {}
-                DirectiveKind::Pragma(_) => {}
-            },
+            }
         }
     }
 

@@ -437,6 +437,7 @@ impl ErrorKind {
 
 #[derive(Debug, From)]
 pub enum DirectiveKind {
+    Empty(nodes::Empty),
     Version(nodes::Version),
     Extension(nodes::Extension),
     Define(nodes::Define),
@@ -551,36 +552,84 @@ impl std::fmt::Debug for OutputToken {
 
 #[derive(Debug, From)]
 pub enum Event {
-    Error(Error),
+    Error {
+        error: Error,
+        masked: bool,
+    },
     EnterFile(FileId),
-    Token(OutputToken),
-    Directive(SyntaxNode, DirectiveKind),
+    Token {
+        token: OutputToken,
+        masked: bool,
+    },
+    Directive {
+        node: SyntaxNode,
+        kind: DirectiveKind,
+        masked: bool,
+    },
 }
 
 impl Event {
-    pub fn directive<D: Into<DirectiveKind> + TryFrom<SyntaxNode> + std::fmt::Debug + Clone>(
-        d: Directive<D>,
-    ) -> Self {
+    pub fn token<T: Into<OutputToken>>(token: T, masked: bool) -> Self {
+        Self::Token {
+            token: token.into(),
+            masked,
+        }
+    }
+
+    pub fn directive<D: Into<DirectiveKind>>(d: Directive<D>, masked: bool) -> Self {
         let (inner, node) = d.into_inner();
-        Self::Directive(node, inner.into())
+        Self::Directive {
+            node,
+            kind: inner.into(),
+            masked,
+        }
     }
 
     pub fn directive_error<E: Into<ProcessingErrorKind>>(
         (error, node): (E, SyntaxNode),
         location: &ExpandLocation,
+        masked: bool,
     ) -> Self {
-        Self::error(error.into().with_node(node.into(), location), location)
+        Self::error(
+            error.into().with_node(node.into(), location),
+            location,
+            masked,
+        )
     }
 
-    pub fn error<T: Into<ErrorKind>>(e: T, location: &ExpandLocation) -> Self {
-        Self::Error(Error::new(e, location))
+    pub fn error<T: Into<ErrorKind>>(e: T, location: &ExpandLocation, masked: bool) -> Self {
+        Self::Error {
+            error: Error::new(e, location),
+            masked,
+        }
     }
 
-    pub fn into_token(self) -> Option<OutputToken> {
-        if let Event::Token(token) = self {
+    pub fn is_token(&self) -> bool {
+        matches!(self, Event::Token { .. })
+    }
+
+    pub fn as_token(&self) -> Option<&OutputToken> {
+        if let Event::Token { token, .. } = self {
             Some(token)
         } else {
             None
+        }
+    }
+
+    pub fn into_token(self) -> Option<OutputToken> {
+        if let Event::Token { token, .. } = self {
+            Some(token)
+        } else {
+            None
+        }
+    }
+}
+
+impl From<OutputToken> for Event {
+    fn from(token: OutputToken) -> Self {
+        Self::Token {
+            token,
+            masked: false,
         }
     }
 }
@@ -593,10 +642,10 @@ impl<E: std::error::Error + 'static> TryFrom<IoEvent<E>> for Event {
             IoEvent::IoError(err) => {
                 return Err(err);
             }
-            IoEvent::Error(err) => Self::Error(err),
             IoEvent::EnterFile { file_id, .. } => Self::EnterFile(file_id),
-            IoEvent::Token(token) => Self::Token(token),
-            IoEvent::Directive(node, directive) => Self::Directive(node, directive),
+            IoEvent::Error { error, masked } => Self::Error { error, masked },
+            IoEvent::Token { token, masked } => Self::Token { token, masked },
+            IoEvent::Directive { node, kind, masked } => Self::Directive { node, kind, masked },
         })
     }
 }
@@ -604,18 +653,31 @@ impl<E: std::error::Error + 'static> TryFrom<IoEvent<E>> for Event {
 #[derive(Debug)]
 pub enum IoEvent<E: std::error::Error + 'static> {
     IoError(Located<E>),
-    Error(Error),
+    Error {
+        error: Error,
+        masked: bool,
+    },
     EnterFile {
         file_id: FileId,
         path: PathBuf,
         canonical_path: PathBuf,
     },
-    Token(OutputToken),
-    Directive(SyntaxNode, DirectiveKind),
+    Token {
+        token: OutputToken,
+        masked: bool,
+    },
+    Directive {
+        node: SyntaxNode,
+        kind: DirectiveKind,
+        masked: bool,
+    },
 }
 
 impl<E: std::error::Error + 'static> IoEvent<E> {
-    pub fn error<T: Into<ErrorKind>>(e: T, location: &ExpandLocation) -> Self {
-        Self::Error(Error::new(e, location))
+    pub fn error<T: Into<ErrorKind>>(e: T, location: &ExpandLocation, masked: bool) -> Self {
+        Self::Error {
+            error: Error::new(e, location),
+            masked,
+        }
     }
 }

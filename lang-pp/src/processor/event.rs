@@ -15,7 +15,7 @@ use crate::{
 
 use super::{
     expand::ExpandLocation,
-    nodes::{self, Directive, ParsedLine, ParsedPath},
+    nodes::{self, Directive, ExtensionName, ParsedLine, ParsedPath},
 };
 
 #[derive(Debug)]
@@ -375,6 +375,7 @@ impl Error {
             ErrorKind::Parse(err) => err.pos(),
             ErrorKind::Processing(err) => err.pos(),
             ErrorKind::WarnExtUse { pos, .. } => *pos,
+            ErrorKind::UnsupportedExt { pos, .. } => *pos,
         }
     }
 
@@ -417,7 +418,7 @@ impl std::fmt::Display for Error {
             ErrorKind::Processing(err) => {
                 write!(f, "{}", err.kind())
             }
-            ErrorKind::WarnExtUse { .. } => {
+            _ => {
                 write!(f, "{}", &self.kind)
             }
         }
@@ -443,9 +444,28 @@ pub enum ErrorKind {
         raw_line: u32,
         pos: TextRange,
     },
+    #[error("extension not supported: {extension}")]
+    UnsupportedExt {
+        extension: ExtensionName,
+        raw_line: u32,
+        pos: TextRange,
+    },
 }
 
 impl ErrorKind {
+    pub fn unsupported_ext(
+        extension: ExtensionName,
+        pos: TextRange,
+        location: &ExpandLocation,
+    ) -> Self {
+        let raw_line = location.line_map().get_line_and_col(pos.start().into()).0;
+        Self::UnsupportedExt {
+            extension,
+            raw_line,
+            pos,
+        }
+    }
+
     pub fn warn_ext_use(
         extension: ExtNameAtom,
         name: Option<TypeNameAtom>,
@@ -466,6 +486,7 @@ impl ErrorKind {
             ErrorKind::Parse(err) => err.line(),
             ErrorKind::Processing(err) => err.line(),
             ErrorKind::WarnExtUse { raw_line, .. } => *raw_line,
+            ErrorKind::UnsupportedExt { raw_line, .. } => *raw_line,
         }
     }
 }

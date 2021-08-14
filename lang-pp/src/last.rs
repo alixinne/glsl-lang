@@ -122,7 +122,7 @@ impl<'r> TypeTable<'r> {
         }
     }
 
-    fn handle_extension(&mut self, extension: &Extension) {
+    fn handle_extension(&mut self, extension: &Extension) -> bool {
         match &extension.name {
             ExtensionName::All => {
                 if extension.behavior == ExtensionBehavior::Disable
@@ -139,10 +139,12 @@ impl<'r> TypeTable<'r> {
                 if let Some(spec) = self.registry.get(&name) {
                     self.set_extension_behavior(spec, extension.behavior);
                 } else {
-                    // TODO: Handle extension not found for require
+                    return false;
                 }
             }
         }
+
+        true
     }
 }
 

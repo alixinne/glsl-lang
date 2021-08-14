@@ -290,6 +290,15 @@ impl PartialEq<Atom<exts::names::ExtNameAtomStaticSet>> for ExtensionName {
     }
 }
 
+impl std::fmt::Display for ExtensionName {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            ExtensionName::All => write!(f, "all"),
+            ExtensionName::Specific(name) => write!(f, "{}", name),
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub struct Extension {
     pub name: ExtensionName,

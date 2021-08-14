@@ -130,7 +130,16 @@ impl<
             } => {
                 if !masked {
                     if let DirectiveKind::Extension(extension) = &kind {
-                        self.type_table.handle_extension(extension);
+                        if !self.type_table.handle_extension(extension) {
+                            self.pending_error = Some(Error::new(
+                                ErrorKind::unsupported_ext(
+                                    extension.name.clone(),
+                                    node.text_range(),
+                                    self.inner.location(),
+                                ),
+                                self.inner.location(),
+                            ));
+                        }
                     }
                 }
 

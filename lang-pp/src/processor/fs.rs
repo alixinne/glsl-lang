@@ -61,6 +61,14 @@ pub struct ExpandStack<'p, F: FileSystem> {
 }
 
 impl<'p, F: FileSystem> ExpandStack<'p, F> {
+    pub fn tokenize(
+        self,
+        target_vulkan: bool,
+        registry: &crate::exts::Registry,
+    ) -> crate::last::fs::Tokenizer<'_, Self> {
+        crate::last::fs::Tokenizer::new(self, target_vulkan, registry)
+    }
+
     pub fn into_state(self) -> Option<ProcessorState> {
         self.state
     }

@@ -77,11 +77,10 @@ pub fn test_file(path: impl AsRef<Path>) {
 
     let mut error_count = 0;
 
-    for event in glsl_lang_pp::last::fs::Tokenizer::new(
-        parsed.process(ProcessorState::default()),
-        false,
-        &DEFAULT_REGISTRY,
-    ) {
+    for event in parsed
+        .process(ProcessorState::default())
+        .tokenize(false, &DEFAULT_REGISTRY)
+    {
         writeln!(eventsf, "{:?}", event).unwrap();
 
         match event {

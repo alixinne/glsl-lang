@@ -143,7 +143,7 @@ impl<'i> Lexer<'i> {
 }
 
 impl<'i> Iterator for Lexer<'i> {
-    type Item = (LexerPosition, Token<'i>, LexerPosition);
+    type Item = Result<(LexerPosition, Token<'i>, LexerPosition), LexicalError>;
 
     fn next(&mut self) -> Option<Self::Item> {
         let result = match &mut self.inner {
@@ -305,7 +305,7 @@ impl<'i> Iterator for Lexer<'i> {
         };
 
         self.last_token = result.as_ref().map(|s| s.1.clone());
-        result
+        Ok(result).transpose()
     }
 }
 

@@ -24,9 +24,7 @@ pub trait IntoLexer<'i> {
 }
 
 /// GLSL language lexer
-pub trait LangLexer<'i>:
-    IntoIterator<Item = (LexerPosition, lexer::Token<'i>, LexerPosition)> + Sized
-{
+pub trait LangLexer<'i>: Sized {
     /// Type of lexical analysis error
     type Error: lang_util::error::LexicalError;
 
@@ -180,7 +178,14 @@ impl<'i, 'o, 'p, L: IntoLexer<'i>, P: LangParser<'i, L::Lexer> + 'p>
 
 macro_rules! impl_parse {
     ($t:ty => $p:ty) => {
-        impl<'i, L: LangLexer<'i>> LangParser<'i, L> for $p {
+        impl<
+                'i,
+                L: LangLexer<'i>
+                    + IntoIterator<
+                        Item = Result<(LexerPosition, lexer::Token<'i>, LexerPosition), L::Error>,
+                    >,
+            > LangParser<'i, L> for $p
+        {
             type Item = $t;
 
             fn new() -> Self {

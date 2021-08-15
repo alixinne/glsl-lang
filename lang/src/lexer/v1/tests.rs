@@ -12,7 +12,7 @@ fn check_ident(input: &str) {
     let mut lexer = Lexer::new(input, context.clone());
 
     assert_eq!(
-        lexer.next().map(|(_, n, _)| n),
+        lexer.next().map(|Ok((_, n, _))| n),
         Some(Token::Identifier((input, context)))
     );
 }
@@ -26,7 +26,7 @@ fn check(input: &str, token: Token) {
         }
         .into(),
     );
-    assert_eq!(lexer.next().map(|(_, n, _)| n), Some(token));
+    assert_eq!(lexer.next().map(|Ok((_, n, _))| n), Some(token));
 }
 
 fn check_vulkan(input: &str, token: Token) {
@@ -38,7 +38,7 @@ fn check_vulkan(input: &str, token: Token) {
         }
         .into(),
     );
-    assert_eq!(lexer.next().map(|(_, n, _)| n), Some(token));
+    assert_eq!(lexer.next().map(|Ok((_, n, _))| n), Some(token));
 }
 
 #[test]

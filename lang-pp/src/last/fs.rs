@@ -9,8 +9,7 @@ use crate::{
 };
 
 use super::{
-    type_names::TypeNameAtom, LocatedIterator, Token, TokenState, TypeName, TypeNameState,
-    TypeTable,
+    type_names::TypeNameAtom, LocatedIterator, Token, TokenState, TypeNameState, TypeTable,
 };
 
 #[derive(Debug)]
@@ -40,7 +39,6 @@ pub enum Event<E: std::error::Error + 'static> {
 
 pub struct Tokenizer<'r, I> {
     inner: I,
-    target_vulkan: bool,
     type_table: TypeTable<'r>,
     pending_error: Option<Error>,
 }
@@ -60,10 +58,17 @@ impl<
     pub fn new(inner: I, target_vulkan: bool, registry: &'r Registry) -> Self {
         Self {
             inner,
-            target_vulkan,
-            type_table: TypeTable::new(registry),
+            type_table: TypeTable::new(registry, target_vulkan),
             pending_error: None,
         }
+    }
+
+    pub fn tokenize_single(
+        &self,
+        token: &impl TokenLike,
+    ) -> (Token, Option<TypeNameState>, Option<Error>) {
+        self.type_table
+            .tokenize_single(token, self.inner.location())
     }
 }
 
@@ -96,27 +101,10 @@ impl<
                 canonical_path,
             },
             event::IoEvent::Token { token, masked } => {
-                let (token_kind, state) = Token::from_token(&token, self.target_vulkan, |tn| {
-                    self.type_table.is_type_name(tn)
-                });
+                let (token_kind, state, error) = self.tokenize_single(&token);
 
                 if !masked {
-                    if let Some(TypeNameState::WarnType(extension)) = &state {
-                        self.pending_error = Some(Error::new(
-                            ErrorKind::warn_ext_use(
-                                extension.clone(),
-                                match &token_kind {
-                                    Token::TYPE_NAME(TypeName::OTHER(type_name)) => {
-                                        Some(type_name.clone())
-                                    }
-                                    _ => unreachable!(),
-                                },
-                                token.text_range(),
-                                self.inner.location(),
-                            ),
-                            self.inner.location(),
-                        ));
-                    }
+                    self.pending_error = error;
                 }
 
                 Event::Token {

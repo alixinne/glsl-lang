@@ -1,10 +1,6 @@
 use smol_str::SmolStr;
 
-use crate::{
-    parser::SyntaxKind,
-    processor::event::{OutputToken, TokenLike},
-    Unescaped,
-};
+use crate::{parser::SyntaxKind, processor::event::TokenLike, Unescaped};
 
 use super::{keywords::KeywordAtom, type_names::TypeNameAtom, TypeNameState};
 
@@ -1052,6 +1048,9 @@ pub enum Token {
     /// ?
     #[lang_util(token = "?", kind = "operator")]
     QUESTION,
+    /// #
+    #[lang_util(token = "#")]
+    HASH,
     // Keywords
     /// "const"
     #[lang_util(token = "const", kind = "storage qualifier", kind = "type qualifier")]
@@ -1335,7 +1334,7 @@ pub enum Token {
 
 impl Token {
     pub(super) fn from_token(
-        value: &OutputToken,
+        value: &impl TokenLike,
         target_vulkan: bool,
         is_type_name: impl Fn(&TypeNameAtom) -> TypeNameState,
     ) -> (Self, Option<TypeNameState>) {
@@ -1373,7 +1372,6 @@ impl Token {
             | SyntaxKind::ERROR
             | SyntaxKind::ROOT
             | SyntaxKind::_LAST
-            | SyntaxKind::HASH
             | SyntaxKind::QUOTE_STRING
             | SyntaxKind::ANGLE_STRING
             | SyntaxKind::BACKSLASH
@@ -1519,6 +1517,9 @@ impl Token {
             }
             SyntaxKind::QUESTION => {
                 return (QUESTION, None);
+            }
+            SyntaxKind::HASH => {
+                return (HASH, None);
             }
             SyntaxKind::WS | SyntaxKind::NEWLINE => {
                 return (WS, None);

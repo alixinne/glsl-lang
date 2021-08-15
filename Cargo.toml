@@ -28,6 +28,9 @@ glsl-lang-cli   = { path = "lang-cli" }
 lang-util        = { path = "lang-util" }
 lang-util-derive = { path = "lang-util-derive" }
 
+lalrpop      = { git = "https://github.com/vtavernier/lalrpop", branch = "fix/573" }
+lalrpop-util = { git = "https://github.com/vtavernier/lalrpop", branch = "fix/573" }
+
 [profile.dev.build-override]
 opt-level = 2
 

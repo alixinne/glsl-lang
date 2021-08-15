@@ -15,6 +15,8 @@ mod tests;
 
 pub use lang_util::position::LexerPosition;
 
+use crate::parse::LangLexer;
+
 pub type LexerContext = crate::parse::ParseContext;
 
 enum LexerStage<'i> {
@@ -33,13 +35,6 @@ pub struct Lexer<'i> {
 }
 
 impl<'i> Lexer<'i> {
-    pub fn new(input: &'i str, context: LexerContext) -> Self {
-        Self {
-            inner: LexerStage::Source(Token::lexer_with_extras(input, context)),
-            last_token: None,
-        }
-    }
-
     fn consume_pp(
         pp: &mut logos::Lexer<'i, PreprocessorToken<'i>>,
     ) -> Option<(LexerPosition, PreprocessorToken<'i>, LexerPosition)> {
@@ -315,6 +310,17 @@ impl<'i> Iterator for Lexer<'i> {
 
         self.last_token = result.as_ref().map(|s| s.1.clone());
         result
+    }
+}
+
+impl<'i> LangLexer<'i> for Lexer<'i> {
+    type Error = LexicalError;
+
+    fn new(input: &'i str, context: LexerContext) -> Self {
+        Self {
+            inner: LexerStage::Source(Token::lexer_with_extras(input, context)),
+            last_token: None,
+        }
     }
 }
 

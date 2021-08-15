@@ -1,10 +1,10 @@
 use crate::{
     ast::{self, NodeContent},
-    lexer::{LexerContext, LexerPosition, LexicalError, Token},
-    parse::IdentifierContext,
+    lexer::{LexerContext, LexerPosition, Token},
+    parse::{IdentifierContext, LangLexer},
 };
 
-grammar<'i>(text: &'i str);
+grammar<'i, L>(text: &'i str) where L: LangLexer<'i>;
 
 comma<T>: Vec<T> = {
     <e:T?> <v:("," <T>)*> => match e {
@@ -805,7 +805,7 @@ pub TranslationUnit = { translation_unit };
 
 extern {
     type Location = LexerPosition;
-    type Error = LexicalError;
+    type Error = L::Error;
 
     enum Token<'i> {
         ident                    => Token::Identifier((_, _)),

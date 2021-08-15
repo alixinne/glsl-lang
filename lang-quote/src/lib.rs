@@ -80,7 +80,7 @@ mod tokenize;
 
 fn glsl_internal<F>(input: proc_macro::TokenStream) -> proc_macro::TokenStream
 where
-    F: Parsable + Tokenize + std::fmt::Debug,
+    F: for<'i> Parsable<'i> + Tokenize + std::fmt::Debug,
 {
     let s = format!("{}", &input);
     let opts = ParseOptions {

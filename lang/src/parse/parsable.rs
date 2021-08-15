@@ -10,32 +10,32 @@ use crate::{
 /// Due to the way it is currently implemented, we have to generate extra code around the input,
 /// thus, if you are matching on span positions, you will get a different result than if using the
 /// parser directly.
-pub trait Parsable: Sized {
+pub trait Parsable<'i>: Sized {
     /// Parse the input source
-    fn parse(source: &str) -> Result<Self, ParseError> {
+    fn parse(source: &'i str) -> Result<Self, ParseError> {
         <Self as Parsable>::parse_with_options(source, &Default::default())
             .map(|(parsed, _names)| parsed)
     }
 
     /// Parse the input source with the given options
     fn parse_with_options(
-        source: &str,
+        source: &'i str,
         opts: &ParseContext,
     ) -> Result<(Self, ParseContext), ParseError>;
 }
 
-impl<T: parse::Parse> Parsable for T {
+impl<'i, T: parse::Parse<'i>> Parsable<'i> for T {
     fn parse_with_options(
-        source: &str,
+        source: &'i str,
         opts: &ParseContext,
     ) -> Result<(Self, ParseContext), ParseError> {
         <Self as parse::Parse>::parse_with_options(source, opts)
     }
 }
 
-impl Parsable for ast::FunctionDefinition {
+impl<'i> Parsable<'i> for ast::FunctionDefinition {
     fn parse_with_options(
-        source: &str,
+        source: &'i str,
         opts: &ParseContext,
     ) -> Result<(Self, ParseContext), ParseError> {
         match ast::TranslationUnit::parse_with_options(source, opts) {
@@ -57,9 +57,9 @@ impl Parsable for ast::FunctionDefinition {
     }
 }
 
-impl Parsable for ast::UnaryOp {
+impl<'i> Parsable<'i> for ast::UnaryOp {
     fn parse_with_options(
-        source: &str,
+        source: &'i str,
         opts: &ParseContext,
     ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("void main() {{ {}x; }}", source);
@@ -105,9 +105,9 @@ impl Parsable for ast::UnaryOp {
     }
 }
 
-impl Parsable for ast::AssignmentOp {
+impl<'i> Parsable<'i> for ast::AssignmentOp {
     fn parse_with_options(
-        source: &str,
+        source: &'i str,
         opts: &ParseContext,
     ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("void main() {{ x {} 2; }}", source);
@@ -155,9 +155,9 @@ impl Parsable for ast::AssignmentOp {
 
 macro_rules! impl_parsable_statement {
     ($i:ident => $t:ty) => {
-        impl Parsable for $t {
+        impl<'i> Parsable<'i> for $t {
             fn parse_with_options(
-                source: &str,
+                source: &'i str,
                 opts: &ParseContext,
             ) -> Result<(Self, ParseContext), ParseError> {
                 let src = format!("void main() {{ {} }}", source);
@@ -210,9 +210,9 @@ impl_parsable_statement!(Iteration => ast::IterationStatement);
 impl_parsable_statement!(Jump => ast::JumpStatement);
 impl_parsable_statement!(Compound => ast::CompoundStatement);
 
-impl Parsable for ast::ArraySpecifierDimension {
+impl<'i> Parsable<'i> for ast::ArraySpecifierDimension {
     fn parse_with_options(
-        source: &str,
+        source: &'i str,
         opts: &ParseContext,
     ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("void main() {{ vec2{}(); }}", source);
@@ -277,9 +277,9 @@ impl Parsable for ast::ArraySpecifierDimension {
     }
 }
 
-impl Parsable for ast::ArraySpecifier {
+impl<'i> Parsable<'i> for ast::ArraySpecifier {
     fn parse_with_options(
-        source: &str,
+        source: &'i str,
         opts: &ParseContext,
     ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("void main() {{ vec2{}(); }}", source);
@@ -343,9 +343,9 @@ impl Parsable for ast::ArraySpecifier {
     }
 }
 
-impl Parsable for ast::FunIdentifier {
+impl<'i> Parsable<'i> for ast::FunIdentifier {
     fn parse_with_options(
-        source: &str,
+        source: &'i str,
         opts: &ParseContext,
     ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("void main() {{ {}(); }}", source);
@@ -391,9 +391,9 @@ impl Parsable for ast::FunIdentifier {
     }
 }
 
-impl Parsable for ast::InterpolationQualifier {
+impl<'i> Parsable<'i> for ast::InterpolationQualifier {
     fn parse_with_options(
-        source: &str,
+        source: &'i str,
         opts: &ParseContext,
     ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("{} float x;", source);
@@ -455,9 +455,9 @@ impl Parsable for ast::InterpolationQualifier {
     }
 }
 
-impl Parsable for ast::ArrayedIdentifier {
+impl<'i> Parsable<'i> for ast::ArrayedIdentifier {
     fn parse_with_options(
-        source: &str,
+        source: &'i str,
         opts: &ParseContext,
     ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("uniform Block {{ float x; }} {};", source);
@@ -492,9 +492,9 @@ impl Parsable for ast::ArrayedIdentifier {
     }
 }
 
-impl Parsable for ast::PrecisionQualifier {
+impl<'i> Parsable<'i> for ast::PrecisionQualifier {
     fn parse_with_options(
-        source: &str,
+        source: &'i str,
         opts: &ParseContext,
     ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("{} float x;", source);
@@ -554,9 +554,9 @@ impl Parsable for ast::PrecisionQualifier {
     }
 }
 
-impl Parsable for ast::StorageQualifier {
+impl<'i> Parsable<'i> for ast::StorageQualifier {
     fn parse_with_options(
-        source: &str,
+        source: &'i str,
         opts: &ParseContext,
     ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("{} float x;", source);
@@ -616,9 +616,9 @@ impl Parsable for ast::StorageQualifier {
     }
 }
 
-impl Parsable for ast::LayoutQualifier {
+impl<'i> Parsable<'i> for ast::LayoutQualifier {
     fn parse_with_options(
-        source: &str,
+        source: &'i str,
         opts: &ParseContext,
     ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("{} float x;", source);
@@ -678,9 +678,9 @@ impl Parsable for ast::LayoutQualifier {
     }
 }
 
-impl Parsable for ast::TypeQualifier {
+impl<'i> Parsable<'i> for ast::TypeQualifier {
     fn parse_with_options(
-        source: &str,
+        source: &'i str,
         opts: &ParseContext,
     ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("{} float x;", source);
@@ -731,9 +731,9 @@ impl Parsable for ast::TypeQualifier {
     }
 }
 
-impl Parsable for ast::TypeSpecifier {
+impl<'i> Parsable<'i> for ast::TypeSpecifier {
     fn parse_with_options(
-        source: &str,
+        source: &'i str,
         opts: &ParseContext,
     ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("{} x;", source);
@@ -784,9 +784,9 @@ impl Parsable for ast::TypeSpecifier {
     }
 }
 
-impl Parsable for ast::TypeSpecifierNonArray {
+impl<'i> Parsable<'i> for ast::TypeSpecifierNonArray {
     fn parse_with_options(
-        source: &str,
+        source: &'i str,
         opts: &ParseContext,
     ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("{} x;", source);
@@ -844,9 +844,9 @@ impl Parsable for ast::TypeSpecifierNonArray {
     }
 }
 
-impl Parsable for ast::FullySpecifiedType {
+impl<'i> Parsable<'i> for ast::FullySpecifiedType {
     fn parse_with_options(
-        source: &str,
+        source: &'i str,
         opts: &ParseContext,
     ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("{} x;", source);
@@ -885,9 +885,9 @@ impl Parsable for ast::FullySpecifiedType {
     }
 }
 
-impl Parsable for ast::Declaration {
+impl<'i> Parsable<'i> for ast::Declaration {
     fn parse_with_options(
-        source: &str,
+        source: &'i str,
         opts: &ParseContext,
     ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("{};", source);
@@ -910,9 +910,9 @@ impl Parsable for ast::Declaration {
     }
 }
 
-impl Parsable for ast::StructFieldSpecifier {
+impl<'i> Parsable<'i> for ast::StructFieldSpecifier {
     fn parse_with_options(
-        source: &str,
+        source: &'i str,
         opts: &ParseContext,
     ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("struct A {{ {} }};", source);
@@ -978,9 +978,9 @@ impl Parsable for ast::StructFieldSpecifier {
     }
 }
 
-impl Parsable for ast::StructSpecifier {
+impl<'i> Parsable<'i> for ast::StructSpecifier {
     fn parse_with_options(
-        source: &str,
+        source: &'i str,
         opts: &ParseContext,
     ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("{};", source);
@@ -1039,9 +1039,9 @@ impl Parsable for ast::StructSpecifier {
 }
 
 #[cfg(not(feature = "parser-expr"))]
-impl Parsable for ast::Expr {
+impl<'i> Parsable<'i> for ast::Expr {
     fn parse_with_options(
-        source: &str,
+        source: &'i str,
         opts: &ParseContext,
     ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("void main() {{ {}; }}", source);
@@ -1083,9 +1083,9 @@ impl Parsable for ast::Expr {
     }
 }
 
-impl Parsable for ast::Preprocessor {
+impl<'i> Parsable<'i> for ast::Preprocessor {
     fn parse_with_options(
-        source: &str,
+        source: &'i str,
         opts: &ParseContext,
     ) -> Result<(Self, ParseContext), ParseError> {
         match ast::TranslationUnit::parse_with_options(source, opts) {
@@ -1108,9 +1108,9 @@ impl Parsable for ast::Preprocessor {
 }
 
 #[cfg(not(feature = "parser-statement"))]
-impl Parsable for ast::Statement {
+impl<'i> Parsable<'i> for ast::Statement {
     fn parse_with_options(
-        source: &str,
+        source: &'i str,
         opts: &ParseContext,
     ) -> Result<(Self, ParseContext), ParseError> {
         let src = format!("void main() {{ {} }}", source);

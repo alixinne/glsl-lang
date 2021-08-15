@@ -1755,15 +1755,23 @@ impl Token {
                             .map_err(|_| ErrorKind::InvalidIntLiteral)
                     }
                 } else if let Some(text) = text.strip_prefix('0') {
-                    // Octal constant
-                    if unsigned {
-                        u32::from_str_radix(text, 8)
-                            .map(UINT_CONST)
-                            .map_err(|_| ErrorKind::InvalidUIntLiteral)
+                    if text.is_empty() {
+                        if unsigned {
+                            Ok(UINT_CONST(0))
+                        } else {
+                            Ok(INT_CONST(0))
+                        }
                     } else {
-                        i32::from_str_radix(text, 8)
-                            .map(INT_CONST)
-                            .map_err(|_| ErrorKind::InvalidIntLiteral)
+                        // Octal constant
+                        if unsigned {
+                            u32::from_str_radix(text, 8)
+                                .map(UINT_CONST)
+                                .map_err(|_| ErrorKind::InvalidUIntLiteral)
+                        } else {
+                            i32::from_str_radix(text, 8)
+                                .map(INT_CONST)
+                                .map_err(|_| ErrorKind::InvalidIntLiteral)
+                        }
                     }
                 } else {
                     // Decimal constant

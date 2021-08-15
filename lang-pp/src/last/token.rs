@@ -1329,7 +1329,21 @@ pub enum Token {
     COMMENT,
     /// Marker for invalid tokens
     #[lang_util(display = "<invalid token>", as(display), kind = "error")]
-    ERROR,
+    ERROR(ErrorKind),
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, derive_more::Display)]
+pub enum ErrorKind {
+    #[display(fmt = "invalid token")]
+    InvalidToken,
+    #[display(fmt = "invalid int literal")]
+    InvalidIntLiteral,
+    #[display(fmt = "invalid uint literal")]
+    InvalidUIntLiteral,
+    #[display(fmt = "invalid float literal")]
+    InvalidFloatLiteral,
+    #[display(fmt = "invalid double literal")]
+    InvalidDoubleLiteral,
 }
 
 impl Token {
@@ -1378,7 +1392,7 @@ impl Token {
             | SyntaxKind::DEFINED
             | SyntaxKind::PP_CONCAT
             | SyntaxKind::PP_CONCAT_OP => {
-                return (ERROR, None);
+                return (ERROR(ErrorKind::InvalidToken), None);
             }
             // Those need further processing
             SyntaxKind::IDENT_KW => {}
@@ -1704,14 +1718,18 @@ impl Token {
                 // Floating-point constant
 
                 if let Some(double) = text.strip_suffix("lf").or_else(|| text.strip_suffix("LF")) {
-                    lexical::parse(double).ok().map(DOUBLE_CONST)
+                    lexical::parse(double)
+                        .map(DOUBLE_CONST)
+                        .map_err(|_| ErrorKind::InvalidDoubleLiteral)
                 } else if let Some(float) = text
                     .strip_suffix('f')
                     .or_else(|| text.strip_suffix('F').or_else(|| Some(text.as_ref())))
                 {
-                    lexical::parse(float).ok().map(FLOAT_CONST)
+                    lexical::parse(float)
+                        .map(FLOAT_CONST)
+                        .map_err(|_| ErrorKind::InvalidFloatLiteral)
                 } else {
-                    None
+                    Err(ErrorKind::InvalidFloatLiteral)
                 }
             } else {
                 let (unsigned, text) = {
@@ -1728,30 +1746,42 @@ impl Token {
                 if let Some(text) = text.strip_prefix("0x").or_else(|| text.strip_prefix("0X")) {
                     // Hexadecimal constant
                     if unsigned {
-                        u32::from_str_radix(text, 16).ok().map(UINT_CONST)
+                        u32::from_str_radix(text, 16)
+                            .map(UINT_CONST)
+                            .map_err(|_| ErrorKind::InvalidUIntLiteral)
                     } else {
-                        i32::from_str_radix(text, 16).ok().map(INT_CONST)
+                        i32::from_str_radix(text, 16)
+                            .map(INT_CONST)
+                            .map_err(|_| ErrorKind::InvalidIntLiteral)
                     }
                 } else if let Some(text) = text.strip_prefix('0') {
                     // Octal constant
                     if unsigned {
-                        u32::from_str_radix(text, 8).ok().map(UINT_CONST)
+                        u32::from_str_radix(text, 8)
+                            .map(UINT_CONST)
+                            .map_err(|_| ErrorKind::InvalidUIntLiteral)
                     } else {
-                        i32::from_str_radix(text, 8).ok().map(INT_CONST)
+                        i32::from_str_radix(text, 8)
+                            .map(INT_CONST)
+                            .map_err(|_| ErrorKind::InvalidIntLiteral)
                     }
                 } else {
                     // Decimal constant
                     if unsigned {
-                        text.parse().ok().map(UINT_CONST)
+                        text.parse()
+                            .map(UINT_CONST)
+                            .map_err(|_| ErrorKind::InvalidUIntLiteral)
                     } else {
-                        text.parse().ok().map(INT_CONST)
+                        text.parse()
+                            .map(INT_CONST)
+                            .map_err(|_| ErrorKind::InvalidIntLiteral)
                     }
                 }
             };
 
             match result {
-                Some(res) => (res, None),
-                None => (ERROR, None),
+                Ok(res) => (res, None),
+                Err(err) => (ERROR(err), None),
             }
         } else {
             unreachable!()

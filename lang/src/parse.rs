@@ -2,20 +2,17 @@
 
 use crate::{
     ast,
-    lexer::{self, Lexer},
+    lexer::{self, v1::Lexer},
     parser,
 };
 
-pub use crate::lexer::{LexerPosition, LexicalError, Token};
+pub use crate::lexer::{LexerPosition, Token};
 
 mod parsable;
 pub use parsable::Parsable;
 
 mod context;
 pub use context::*;
-
-/// GLSL parsing error
-pub type ParseError = lang_util::error::ParseError<LexicalError>;
 
 /// GLSL lexer builder
 pub trait IntoLexer<'i> {
@@ -67,7 +64,7 @@ pub trait Parse<'i>: Sized {
     type Parser: LangParser<'i, Lexer<'i>, Item = Self>;
 
     /// Parse the input source
-    fn parse(source: &'i str) -> Result<Self, ParseError> {
+    fn parse(source: &'i str) -> Result<Self, ParseError<'i, Lexer<'i>>> {
         ParseBuilder::<Lexer, Self::Parser>::new(source)
             .parse()
             .map(|(parsed, _names)| parsed)
@@ -77,7 +74,7 @@ pub trait Parse<'i>: Sized {
     fn parse_with_options(
         source: &'i str,
         opts: &ParseContext,
-    ) -> Result<(Self, ParseContext), ParseError> {
+    ) -> ParseResult<'i, Lexer<'i>, Self::Parser> {
         ParseBuilder::<Lexer, Self::Parser>::new(source)
             .opts(opts)
             .parse()
@@ -98,8 +95,12 @@ pub type ParseResult<'i, L, P> = Result<
         <P as LangParser<'i, <L as IntoLexer<'i>>::Lexer>>::Item,
         ParseContext,
     ),
-    lang_util::error::ParseError<<<L as IntoLexer<'i>>::Lexer as LangLexer<'i>>::Error>,
+    ParseError<'i, L>,
 >;
+
+/// Errors returned by the parsing operation
+pub type ParseError<'i, L> =
+    lang_util::error::ParseError<<<L as IntoLexer<'i>>::Lexer as LangLexer<'i>>::Error>;
 
 impl<'i, 'o, 'p, L: IntoLexer<'i>, P: LangParser<'i, L::Lexer> + 'p>
     ParseBuilder<'i, 'o, 'p, L, P>

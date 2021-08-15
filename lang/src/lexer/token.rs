@@ -1,7 +1,9 @@
 use logos::Logos;
 
 use super::{
-    parse_cmt, parse_f32, parse_f64, parse_ident, parse_int, parse_rs_ident, parse_uint,
+    v1::parsers::{
+        parse_cmt, parse_f32, parse_f64, parse_ident, parse_int, parse_rs_ident, parse_uint,
+    },
     LexerContext,
 };
 

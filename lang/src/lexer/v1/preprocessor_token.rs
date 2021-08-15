@@ -1,6 +1,9 @@
 use logos::Logos;
 
-use super::{parse_pp_cmt, parse_pp_ident, parse_pp_int, parse_pp_path, LexerContext, Token};
+use super::{
+    parsers::{parse_pp_cmt, parse_pp_ident, parse_pp_int, parse_pp_path},
+    LexerContext, Token,
+};
 
 #[derive(Debug, Clone, PartialEq, Logos)]
 #[logos(extras = LexerContext)]

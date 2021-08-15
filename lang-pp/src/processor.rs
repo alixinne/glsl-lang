@@ -16,7 +16,7 @@ mod expr;
 pub mod fs;
 
 pub mod nodes;
-use nodes::{Define, DefineObject, Extension, ExtensionName, Version};
+use nodes::{Define, DefineObject, Version};
 
 use crate::processor::nodes::ExtensionBehavior;
 
@@ -51,7 +51,6 @@ impl Default for IncludeMode {
 /// Current state of the preprocessor
 #[derive(Debug, Clone)]
 pub struct ProcessorState {
-    extension_stack: Vec<Extension>,
     include_mode: IncludeMode,
     // use Rc to make cloning the whole struct cheaper
     definitions: HashMap<SmolStr, Definition>,
@@ -87,9 +86,6 @@ impl ProcessorState {
     }
 
     pub fn extension(&mut self, extension: &nodes::Extension) {
-        // Push onto the stack
-        self.extension_stack.push(extension.clone());
-
         // Process include extensions
         let target_include_mode = if extension.name == ext_name!("GL_ARB_shading_language_include")
         {
@@ -139,9 +135,6 @@ impl ProcessorState {
 impl Default for ProcessorState {
     fn default() -> Self {
         Self {
-            // Spec 3.3, "The initial state of the compiler is as if the directive
-            // `#extension all : disable` was issued
-            extension_stack: vec![Extension::disable(ExtensionName::All)],
             // No #include extensions enabled
             include_mode: IncludeMode::None,
             // Spec 3.3, "There is a built-in macro definition for each profile the implementation

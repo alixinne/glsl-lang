@@ -79,6 +79,18 @@ pub trait Parse<'i>: Sized {
             .opts(opts)
             .parse()
     }
+
+    /// Parse the input source with the given options and already instantiated parser
+    fn parse_with_parser(
+        source: &'i str,
+        opts: &ParseContext,
+        parser: &Self::Parser,
+    ) -> ParseResult<'i, Lexer<'i>, Self::Parser> {
+        ParseBuilder::<Lexer, Self::Parser>::new(source)
+            .opts(opts)
+            .parser(parser)
+            .parse()
+    }
 }
 
 /// Builder structure for a parsing operation

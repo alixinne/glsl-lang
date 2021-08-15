@@ -5,7 +5,7 @@ use criterion::{
 
 fn parse_impl_glsl_lang<T, M>(group: &mut BenchmarkGroup<'_, M>, input: &str)
 where
-    T: glsl_lang::parse::Parse,
+    T: for<'i> glsl_lang::parse::Parse<'i>,
     M: Measurement,
 {
     group.bench_with_input("glsl_lang", input, |b, input| {
@@ -34,7 +34,7 @@ where
 
 fn parse_impl<L, G>(c: &mut Criterion, input: &str, name: &str)
 where
-    L: glsl_lang::parse::Parse,
+    L: for<'i> glsl_lang::parse::Parse<'i>,
     G: glsl::parser::Parse,
 {
     let mut group = c.benchmark_group(name);

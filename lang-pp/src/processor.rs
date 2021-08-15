@@ -49,7 +49,7 @@ impl Default for IncludeMode {
 }
 
 /// Current state of the preprocessor
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ProcessorState {
     include_mode: IncludeMode,
     // use Rc to make cloning the whole struct cheaper

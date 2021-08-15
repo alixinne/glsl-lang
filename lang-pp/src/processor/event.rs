@@ -18,7 +18,7 @@ use super::{
     nodes::{self, Directive, ExtensionName, ParsedLine, ParsedPath},
 };
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub struct ProcessingError {
     node: NodeOrToken<SyntaxNode, SyntaxToken>,
     kind: ProcessingErrorKind,
@@ -70,7 +70,7 @@ impl std::fmt::Display for ProcessingError {
 
 impl std::error::Error for ProcessingError {}
 
-#[derive(Debug, From)]
+#[derive(Debug, PartialEq, Eq, From)]
 pub enum ProcessingErrorKind {
     ExtraEndIf,
     ExtraElse,
@@ -345,7 +345,7 @@ impl<E: std::error::Error> std::fmt::Display for Located<E> {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub struct Error {
     kind: ErrorKind,
     current_file: FileId,
@@ -368,6 +368,10 @@ impl Error {
 
     pub fn kind(&self) -> &ErrorKind {
         &self.kind
+    }
+
+    pub fn current_file(&self) -> FileId {
+        self.current_file
     }
 
     pub fn pos(&self) -> TextRange {
@@ -405,6 +409,13 @@ impl Error {
     pub fn string(&self) -> &dyn std::fmt::Display {
         Self::override_string(&self.current_file, self.line_override.as_ref())
     }
+
+    pub fn with_file_id(self, file_id: FileId) -> Self {
+        Self {
+            current_file: file_id,
+            ..self
+        }
+    }
 }
 
 impl std::fmt::Display for Error {
@@ -431,7 +442,7 @@ impl std::error::Error for Error {
     }
 }
 
-#[derive(Debug, Error)]
+#[derive(Debug, PartialEq, Eq, Error)]
 pub enum ErrorKind {
     #[error(transparent)]
     Parse(#[from] parser::Error),
@@ -491,7 +502,7 @@ impl ErrorKind {
     }
 }
 
-#[derive(Debug, From)]
+#[derive(Debug, PartialEq, Eq, From)]
 pub enum DirectiveKind {
     Empty(nodes::Empty),
     Version(nodes::Version),
@@ -531,7 +542,7 @@ impl TokenLike for SyntaxToken {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq, Eq)]
 pub struct OutputToken {
     inner: SyntaxToken,
     source_range: Option<TextRange>,
@@ -607,7 +618,7 @@ impl std::fmt::Debug for OutputToken {
     }
 }
 
-#[derive(Debug, From)]
+#[derive(Debug, PartialEq, Eq, From)]
 pub enum Event {
     Error {
         error: Error,

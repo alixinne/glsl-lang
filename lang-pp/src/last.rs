@@ -9,7 +9,7 @@ pub mod fs;
 
 pub mod str;
 
-mod token;
+pub mod token;
 use std::collections::HashMap;
 
 pub use token::{Token, TypeName};

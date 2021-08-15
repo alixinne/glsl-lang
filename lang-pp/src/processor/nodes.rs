@@ -100,7 +100,7 @@ impl Default for Version {
     }
 }
 
-#[derive(Debug, Error)]
+#[derive(Debug, PartialEq, Eq, Error)]
 pub enum VersionError {
     #[error("missing version number in #version directive")]
     MissingVersionNumber,
@@ -299,7 +299,7 @@ impl std::fmt::Display for ExtensionName {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Extension {
     pub name: ExtensionName,
     pub behavior: ExtensionBehavior,
@@ -335,7 +335,7 @@ impl Extension {
     }
 }
 
-#[derive(Debug, Error)]
+#[derive(Debug, PartialEq, Eq, Error)]
 pub enum ExtensionError {
     #[error("missing extension name in #extension directive")]
     MissingExtensionName,
@@ -393,7 +393,7 @@ impl TryFrom<SyntaxNode> for Extension {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct DefineObject {
     tokens: SyntaxNode,
 }
@@ -424,7 +424,7 @@ impl FromStr for DefineObject {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct DefineFunction {
     args: Vec<SmolStr>,
     tokens: SyntaxNode,
@@ -444,14 +444,14 @@ impl DefineFunction {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum DefineKind {
     Object(DefineObject),
     Function(DefineFunction),
 }
 
 /// A preprocessor definition
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Define {
     /// Name of this definition
     name: SmolStr,
@@ -491,7 +491,7 @@ impl Define {
     }
 }
 
-#[derive(Debug, Error)]
+#[derive(Debug, PartialEq, Eq, Error)]
 pub enum DefineError {
     #[error("missing name for #define")]
     MissingName,
@@ -553,12 +553,12 @@ impl TryFrom<SyntaxNode> for Define {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct IfDef {
     pub ident: SmolStr,
 }
 
-#[derive(Debug, Error)]
+#[derive(Debug, PartialEq, Eq, Error)]
 pub enum IfDefError {
     #[error("identifier for #ifdef is missing")]
     MissingIdentifier,
@@ -586,7 +586,7 @@ impl TryFrom<SyntaxNode> for IfDef {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct IfNDef {
     pub ident: SmolStr,
 }
@@ -601,7 +601,7 @@ impl TryFrom<SyntaxNode> for IfNDef {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Undef {
     pub ident: SmolStr,
 }
@@ -616,12 +616,12 @@ impl TryFrom<SyntaxNode> for Undef {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Error {
     pub message: String,
 }
 
-#[derive(Debug, Error)]
+#[derive(Debug, PartialEq, Eq, Error)]
 pub enum ErrorError {
     #[error("missing body for #error")]
     MissingBody,
@@ -648,7 +648,7 @@ impl TryFrom<SyntaxNode> for Error {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Include {
     path: SyntaxNode,
 }
@@ -736,7 +736,7 @@ impl Include {
     }
 }
 
-#[derive(Debug, Error)]
+#[derive(Debug, PartialEq, Eq, Error)]
 pub enum IncludeError {
     #[error("missing path for #include directive")]
     MissingPath,
@@ -761,12 +761,12 @@ impl TryFrom<SyntaxNode> for Include {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Line {
     body: SyntaxNode,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ParsedLine {
     Line(u32),
     LineAndFileNumber(u32, u32),
@@ -872,7 +872,7 @@ impl Line {
     }
 }
 
-#[derive(Debug, Error)]
+#[derive(Debug, PartialEq, Eq, Error)]
 pub enum LineError {
     #[error("missing body for #line directive")]
     MissingBody,
@@ -901,7 +901,7 @@ impl TryFrom<SyntaxNode> for Line {
     }
 }
 
-#[derive(Debug, Error)]
+#[derive(Debug, PartialEq, Eq, Error)]
 pub enum IfEvalError {
     #[error("malformed expression")]
     MalformedExpr { tokens: Vec<Event> },
@@ -978,7 +978,7 @@ fn eval_if<E: From<IfEvalError>>(
     (result, e.map(E::from))
 }
 
-#[derive(Debug, Error)]
+#[derive(Debug, PartialEq, Eq, Error)]
 pub enum IfError {
     #[error("missing body for #if directive")]
     MissingBody,
@@ -986,7 +986,7 @@ pub enum IfError {
     Eval(#[from] IfEvalError),
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct If {
     body: SyntaxNode,
 }
@@ -1014,7 +1014,7 @@ impl TryFrom<SyntaxNode> for If {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Elif {
     body: SyntaxNode,
 }
@@ -1029,7 +1029,7 @@ impl Elif {
     }
 }
 
-#[derive(Debug, Error)]
+#[derive(Debug, PartialEq, Eq, Error)]
 pub enum ElifError {
     #[error("missing body for #elif directive")]
     MissingBody,
@@ -1050,10 +1050,10 @@ impl TryFrom<SyntaxNode> for Elif {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Else;
 
-#[derive(Debug, Error)]
+#[derive(Debug, PartialEq, Eq, Error)]
 pub enum ElseError {}
 
 impl TryFrom<SyntaxNode> for Else {
@@ -1065,10 +1065,10 @@ impl TryFrom<SyntaxNode> for Else {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct EndIf;
 
-#[derive(Debug, Error)]
+#[derive(Debug, PartialEq, Eq, Error)]
 pub enum EndIfError {}
 
 impl TryFrom<SyntaxNode> for EndIf {
@@ -1080,7 +1080,7 @@ impl TryFrom<SyntaxNode> for EndIf {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Pragma {
     value: ParsedPragma,
 }
@@ -1107,7 +1107,7 @@ impl Pragma {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ParsedPragma {
     StdGl(SyntaxNode),
     Optimize(bool),
@@ -1115,7 +1115,7 @@ pub enum ParsedPragma {
     Unknown(SyntaxNode),
 }
 
-#[derive(Debug, Error)]
+#[derive(Debug, PartialEq, Eq, Error)]
 pub enum PragmaError {
     #[error("missing body")]
     MissingBody,

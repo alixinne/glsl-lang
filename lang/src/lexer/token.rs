@@ -1,4 +1,5 @@
 use logos::Logos;
+use smol_str::SmolStr;
 
 use super::{
     v1::parsers::{
@@ -596,9 +597,9 @@ pub enum Token<'i> {
     #[regex("[a-zA-Z_][a-zA-Z_0-9]*", parse_ident)]
     #[regex("#\\s*\\(\\s*[a-zA-Z_][a-zA-Z_0-9]*\\s*\\)", parse_rs_ident)]
     #[lang_util(display("{}", "_0.0"), as = "ident", kind = "identifier")]
-    Identifier((&'i str, LexerContext)),
+    Identifier((SmolStr, LexerContext)),
     #[lang_util(as = "ty_name", kind = "type name")]
-    TypeName(&'i str), // Cast from Identifier depending on known type names
+    TypeName(SmolStr), // Cast from Identifier depending on known type names
     #[regex(
         r"([0-9]+\.[0-9]+|[0-9]+\.|\.[0-9]+)([eE][+-]?[0-9]+)?(f|F)?",
         parse_f32
@@ -884,7 +885,7 @@ impl<'i> Token<'i> {
     }
 
     /// Return this token's inner text as a string slice
-    pub fn as_str(&self) -> &'i str {
+    pub fn as_str(&self) -> &str {
         match self {
             Self::Identifier((s, _)) => s,
             Self::TypeName(s) => s,

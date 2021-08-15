@@ -56,7 +56,7 @@ pub enum PreprocessorToken<'i> {
 impl<'i> From<PreprocessorToken<'i>> for Token<'i> {
     fn from(pp: PreprocessorToken<'i>) -> Self {
         match pp {
-            PreprocessorToken::Identifier(inner) => Self::Identifier(inner),
+            PreprocessorToken::Identifier((s, ctx)) => Self::Identifier((s.into(), ctx)),
             PreprocessorToken::Error => Self::Error,
             PreprocessorToken::LeftParen => Self::LeftParen,
             PreprocessorToken::RightParen => Self::RightParen,

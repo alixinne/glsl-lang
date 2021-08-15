@@ -3,7 +3,7 @@ use smol_str::SmolStr;
 
 use crate::lexer::{self, LineMap};
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Error {
     kind: ErrorKind,
     pos: TextRange,
@@ -50,7 +50,7 @@ impl std::fmt::Display for Error {
 
 impl std::error::Error for Error {}
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ErrorKind {
     UnknownPreprocessorDirective {
         name: SmolStr,

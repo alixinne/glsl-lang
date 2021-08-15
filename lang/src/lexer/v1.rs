@@ -177,7 +177,7 @@ impl<'i> Iterator for Lexer<'i> {
                             | TextureBuffer | ITextureBuffer | UTextureBuffer | Sampler
                             | SamplerShadow | SubpassInput | ISubpassInput | USubpassInput
                             | SubpassInputMs | ISubpassInputMs | USubpassInputMs => {
-                                Identifier((src.slice(), src.extras.clone()))
+                                Identifier((src.slice().into(), src.extras.clone()))
                             }
                             other => other,
                         },
@@ -186,9 +186,9 @@ impl<'i> Iterator for Lexer<'i> {
                 };
 
                 // Transform the ident into a type name if needed
-                if let Token::Identifier((ident, ref ctx)) = token.1 {
-                    if ctx.is_type_name(ident) {
-                        token.1 = Token::TypeName(ident);
+                if let Token::Identifier((ref ident, ref ctx)) = token.1 {
+                    if ctx.is_type_name(&ident) {
+                        token.1 = Token::TypeName(ident.clone());
                     }
                 }
 

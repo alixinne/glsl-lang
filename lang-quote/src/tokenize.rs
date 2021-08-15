@@ -2,8 +2,8 @@
 
 use glsl_lang::ast;
 use proc_macro2::TokenStream;
-use quote::{format_ident, quote, ToTokens};
-use std::iter::once;
+use quote::{quote, ToTokens};
+use std::{iter::once, str::FromStr};
 
 use crate::quoted::Quoted;
 
@@ -133,11 +133,13 @@ fn tokenize_path(p: &ast::Path) -> TokenStream {
     }
 }
 
+fn tokenize_rs_ident(rs_ident: &str) -> TokenStream {
+    TokenStream::from_str(rs_ident).expect("invalid rust code in interpolation")
+}
+
 fn tokenize_identifier(i: &ast::Identifier) -> TokenStream {
     if let Some(rs_ident) = i.as_rs_ident() {
-        // Rust identifier
-        let ident = format_ident!("{}", rs_ident);
-        quote! { #ident }
+        tokenize_rs_ident(rs_ident)
     } else {
         // Regular identifier
         let t = i.0.to_owned().quote();
@@ -825,8 +827,7 @@ fn tokenize_interpolation_qualifier(i: &ast::InterpolationQualifier) -> TokenStr
 
 fn tokenize_expr(expr: &ast::Expr) -> TokenStream {
     if let Some(rs_ident) = expr.as_rs_ident() {
-        let ident = format_ident!("{}", rs_ident);
-        return quote! { #ident };
+        return tokenize_rs_ident(rs_ident);
     }
 
     let span = tokenize_span(&expr.span);
@@ -974,8 +975,7 @@ fn tokenize_assignment_op(op: &ast::AssignmentOp) -> TokenStream {
 
 fn tokenize_function_identifier(i: &ast::FunIdentifier) -> TokenStream {
     if let Some(rs_ident) = i.as_rs_ident() {
-        let ident = format_ident!("{}", rs_ident);
-        return quote! { #ident };
+        return tokenize_rs_ident(rs_ident);
     }
 
     let span = tokenize_span(&i.span);

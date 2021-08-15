@@ -24,7 +24,7 @@ use super::{
     ProcessorState,
 };
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Definition {
     Regular(Rc<Define>, FileId),
     Line,

@@ -1,5 +1,7 @@
 use std::str::FromStr;
 
+use smol_str::SmolStr;
+
 use super::{LexerContext, LexerPosition, LexicalError, PreprocessorToken, Token};
 
 pub fn parse_int<'i>(
@@ -108,15 +110,15 @@ pub fn parse_pp_ident<'i>(
 
 pub fn parse_ident<'i>(
     lex: &mut logos::Lexer<'i, Token<'i>>,
-) -> Result<(&'i str, LexerContext), LexicalError> {
-    Ok((lex.slice(), lex.extras.clone()))
+) -> Result<(SmolStr, LexerContext), LexicalError> {
+    Ok((lex.slice().into(), lex.extras.clone()))
 }
 
 pub fn parse_rs_ident<'i>(
     lex: &mut logos::Lexer<'i, Token<'i>>,
-) -> Result<(&'i str, LexerContext), LexicalError> {
+) -> Result<(SmolStr, LexerContext), LexicalError> {
     if lex.extras.opts.allow_rs_ident {
-        Ok((lex.slice(), lex.extras.clone()))
+        Ok((lex.slice().into(), lex.extras.clone()))
     } else {
         Err(LexicalError::ForbiddenRsQuote {
             location: LexerPosition::new(lex.extras.opts.source_id, lex.span().start),

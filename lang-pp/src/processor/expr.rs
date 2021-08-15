@@ -16,7 +16,7 @@ pub struct ExprEvaluator<'i, I: Iterator<Item = &'i OutputToken>> {
     state: &'i ProcessorState,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum EvalResult {
     Constant(Result<i32, ()>),
     Token(OutputToken),

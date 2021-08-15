@@ -18,7 +18,7 @@ pub fn parse(input: &str) -> parser::Ast {
     parser::Parser::new(input).parse()
 }
 
-#[derive(Debug, Error)]
+#[derive(Debug, PartialEq, Eq, Error)]
 pub enum ProcessStrError {
     #[error("an include was requested without a filesystem context")]
     IncludeRequested(ProcessorState, SyntaxNode, ParsedPath),

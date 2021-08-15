@@ -87,7 +87,7 @@ It's still a work-in-progress but generates (mostly) readable code.
 `glsl-lang-quote` is the `glsl-lang` version of `glsl-quasiquote`. It parses
 GLSL at compile-time to generate an AST. However, you can also insert parts
 of runtime-generated AST using a quoting syntax. Currently, the following
-insertion locations for the `#(ident)` syntax are supported:
+insertion locations for the `#(rust code)` syntax are supported:
 
 * Identifier
 * Expression

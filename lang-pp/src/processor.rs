@@ -134,6 +134,8 @@ impl ProcessorState {
 
 impl Default for ProcessorState {
     fn default() -> Self {
+        let one = DefineObject::one();
+
         Self {
             // No #include extensions enabled
             include_mode: IncludeMode::None,
@@ -142,11 +144,7 @@ impl Default for ProcessorState {
             // `#define GL_core_profile 1`
             definitions: IntoIter::new([
                 Definition::Regular(
-                    Rc::new(Define::object(
-                        "GL_core_profile".into(),
-                        DefineObject::one(),
-                        true,
-                    )),
+                    Rc::new(Define::object("GL_core_profile".into(), one.clone(), true)),
                     FileId::default(),
                 ),
                 Definition::Line,
@@ -157,7 +155,7 @@ impl Default for ProcessorState {
                 Definition::Regular(
                     Rc::new(Define::object(
                         spec.name().as_ref().into(),
-                        DefineObject::one(),
+                        one.clone(),
                         true,
                     )),
                     FileId::default(),

@@ -95,10 +95,10 @@ insertion locations for the `#(rust code)` syntax are supported:
 
 #### Full preprocessing support
 
-***Planned for next release.*** `glsl-lang-pp` implements a preprocessor
-following the GLSL 4.60 language specification. While this adds a significant
-amount of complexity, preprocessing now happens in a proper stage before
-language parsing, thus supporting a wider family of inputs.
+`glsl-lang-pp` implements a preprocessor following the GLSL 4.60 language
+specification. While this adds a significant amount of complexity,
+preprocessing now happens in a proper stage before language parsing, thus
+supporting a wider family of inputs.
 
 Since the preprocessing stage is also responsible for enabling/disabling
 extensions and/or pragmas, this allows us to track extra state at the token
@@ -107,6 +107,11 @@ granularity.
 The preprocessor also supports include directives:
 * `GL_ARB_shading_language_include`: run-time includes
 * `GL_GOOGLE_include_directive`: compile-time includes
+
+The preprocessor and lexer based on `glsl-lang-pp` can be used in `glsl-lang`
+by enabling the `glsl-lang/lexer-v2` feature. If it is used, the
+`glsl-lang/lexer-v1` feature including the old non-preprocessing lexer can be
+disabled.
 
 #### Tested on the glslangValidator test suite
 

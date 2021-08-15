@@ -1,10 +1,11 @@
 //! Parsing utilities and entry points
 
-use crate::{
-    ast,
-    lexer::{self, v1::Lexer},
-    parser,
-};
+use crate::{ast, lexer, parser};
+
+#[cfg(all(feature = "lexer-v1", not(feature = "lexer-v2")))]
+use lexer::v1::Lexer;
+#[cfg(feature = "lexer-v2")]
+use lexer::v2::Lexer;
 
 pub use crate::lexer::{LexerPosition, Token};
 

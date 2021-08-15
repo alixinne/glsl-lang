@@ -30,13 +30,30 @@ jobs:
           toolchain: stable
           override: true
           target: ${{ matrix.target }}
-      - name: Generate test driver
-        run: cargo xtask gen-tests
-      - name: Run tests
+      - name: Run lib tests with serde
         run: |
           set -e
-          cargo test
           cargo test -p lang-util --lib --features serde
           cargo test -p glsl-lang --lib --features serde
+
+      - name: Run lib tests with the two lexers
+        run: |
+          set -e
+          cargo test -p glsl-lang --lib --no-default-features --features lexer-v1
+          cargo test -p glsl-lang --lib --no-default-features --features lexer-v2
+
+      - name: Generate test driver
+        run: cargo xtask gen-tests
+
+      - name: Run glslang tests
+        run: |
+          set -e
+          cargo test -p glsl-lang-pp --test glslang
+          cargo test -p glsl-lang --test glslang --no-default-features --features lexer-v1
+          cargo test -p glsl-lang --test glslang --no-default-features --features lexer-v2
+
+      - name: Run glsl-lang-quote tests
+        run: |
+          cargo test -p glsl-lang-quote
 
 # vim: ft=yaml:ts=2:sw=2:et

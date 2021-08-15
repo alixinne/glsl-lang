@@ -2495,6 +2495,10 @@ fn parse_layout_buffer_block_0() {
 }
 
 #[test]
+#[cfg_attr(
+    feature = "lexer-v2",
+    ignore = "no preprocessor directives in ast with lexer-v2"
+)]
 fn parse_pp_version() {
     assert_eq!(
         ast::Preprocessor::parse("#version 450\n"),
@@ -2522,6 +2526,10 @@ fn parse_pp_version() {
 }
 
 #[test]
+#[cfg_attr(
+    feature = "lexer-v2",
+    ignore = "no preprocessor directives in ast with lexer-v2"
+)]
 fn parse_pp_version_newline() {
     assert_eq!(
         ast::Preprocessor::parse("#version 450\n"),
@@ -2549,6 +2557,10 @@ fn parse_pp_version_newline() {
 }
 
 #[test]
+#[cfg_attr(
+    feature = "lexer-v2",
+    ignore = "no preprocessor directives in ast with lexer-v2"
+)]
 fn parse_pp_define() {
     let expect = |v: &str| {
         Ok(ast::PreprocessorData::Define(
@@ -2622,6 +2634,10 @@ fn parse_pp_define() {
 }
 
 #[test]
+#[cfg_attr(
+    feature = "lexer-v2",
+    ignore = "no preprocessor directives in ast with lexer-v2"
+)]
 fn parse_pp_define_with_args() {
     let expected: ast::Preprocessor = ast::PreprocessorData::Define(
         ast::PreprocessorDefineData::FunctionLike {
@@ -2648,6 +2664,10 @@ fn parse_pp_define_with_args() {
 }
 
 #[test]
+#[cfg_attr(
+    feature = "lexer-v2",
+    ignore = "no preprocessor directives in ast with lexer-v2"
+)]
 fn parse_pp_define_multiline() {
     assert_eq!(
         ast::Preprocessor::parse(
@@ -2666,6 +2686,10 @@ fn parse_pp_define_multiline() {
 }
 
 #[test]
+#[cfg_attr(
+    feature = "lexer-v2",
+    ignore = "no preprocessor directives in ast with lexer-v2"
+)]
 fn parse_pp_else() {
     assert_eq!(
         ast::Preprocessor::parse("#    else\n"),
@@ -2674,6 +2698,10 @@ fn parse_pp_else() {
 }
 
 #[test]
+#[cfg_attr(
+    feature = "lexer-v2",
+    ignore = "no preprocessor directives in ast with lexer-v2"
+)]
 fn parse_pp_elif() {
     assert_eq!(
         ast::Preprocessor::parse("#   elif \\\n42\n"),
@@ -2688,6 +2716,10 @@ fn parse_pp_elif() {
 }
 
 #[test]
+#[cfg_attr(
+    feature = "lexer-v2",
+    ignore = "no preprocessor directives in ast with lexer-v2"
+)]
 fn parse_pp_endif() {
     assert_eq!(
         ast::Preprocessor::parse("#\\\nendif"),
@@ -2696,6 +2728,10 @@ fn parse_pp_endif() {
 }
 
 #[test]
+#[cfg_attr(
+    feature = "lexer-v2",
+    ignore = "no preprocessor directives in ast with lexer-v2"
+)]
 fn parse_pp_error() {
     assert_eq!(
         ast::Preprocessor::parse("#error \\\n     some message"),
@@ -2710,6 +2746,10 @@ fn parse_pp_error() {
 }
 
 #[test]
+#[cfg_attr(
+    feature = "lexer-v2",
+    ignore = "no preprocessor directives in ast with lexer-v2"
+)]
 fn parse_pp_if() {
     assert_eq!(
         ast::Preprocessor::parse("# \\\nif 42"),
@@ -2724,6 +2764,10 @@ fn parse_pp_if() {
 }
 
 #[test]
+#[cfg_attr(
+    feature = "lexer-v2",
+    ignore = "no preprocessor directives in ast with lexer-v2"
+)]
 fn parse_pp_ifdef() {
     assert_eq!(
         ast::Preprocessor::parse("#ifdef       FOO\n"),
@@ -2738,6 +2782,10 @@ fn parse_pp_ifdef() {
 }
 
 #[test]
+#[cfg_attr(
+    feature = "lexer-v2",
+    ignore = "no preprocessor directives in ast with lexer-v2"
+)]
 fn parse_pp_ifndef() {
     assert_eq!(
         ast::Preprocessor::parse("#\\\nifndef \\\n   FOO\n"),
@@ -2752,6 +2800,10 @@ fn parse_pp_ifndef() {
 }
 
 #[test]
+#[cfg_attr(
+    feature = "lexer-v2",
+    ignore = "no preprocessor directives in ast with lexer-v2"
+)]
 fn parse_pp_include() {
     assert_eq!(
         ast::Preprocessor::parse("#include <filename>\n"),
@@ -2777,6 +2829,10 @@ fn parse_pp_include() {
 }
 
 #[test]
+#[cfg_attr(
+    feature = "lexer-v2",
+    ignore = "no preprocessor directives in ast with lexer-v2"
+)]
 fn parse_pp_line() {
     assert_eq!(
         ast::Preprocessor::parse("#   line \\\n2\n"),
@@ -2804,6 +2860,10 @@ fn parse_pp_line() {
 }
 
 #[test]
+#[cfg_attr(
+    feature = "lexer-v2",
+    ignore = "no preprocessor directives in ast with lexer-v2"
+)]
 fn parse_pp_pragma() {
     assert_eq!(
         ast::Preprocessor::parse("#\\\npragma  some   flag"),
@@ -2818,6 +2878,10 @@ fn parse_pp_pragma() {
 }
 
 #[test]
+#[cfg_attr(
+    feature = "lexer-v2",
+    ignore = "no preprocessor directives in ast with lexer-v2"
+)]
 fn parse_pp_undef() {
     assert_eq!(
         ast::Preprocessor::parse("# undef \\\n FOO"),
@@ -2832,6 +2896,10 @@ fn parse_pp_undef() {
 }
 
 #[test]
+#[cfg_attr(
+    feature = "lexer-v2",
+    ignore = "no preprocessor directives in ast with lexer-v2"
+)]
 fn parse_pp_extension() {
     assert_eq!(
         ast::Preprocessor::parse("#extension all: require\n"),

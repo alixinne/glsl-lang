@@ -15,11 +15,11 @@ categories = ["parser-implementations", "rendering"]
 [dependencies]
 lalrpop-util = { version = "0.19", default-features = false, features = ["std"] }
 lazy_static = "1.4"
-logos = "0.12"
+logos = { version = "0.12", optional = true }
 thiserror = "1.0"
 
 lang-util = { version = "0.2.0", features = ["lalrpop"] }
-glsl-lang-pp = { version = "0.2.0" }
+glsl-lang-pp = { version = "0.2.0", optional = true }
 smol_str = "0.1"
 
 rserde = { version = "1.0", optional = true, features = ["derive"], package = "serde" }
@@ -39,7 +39,10 @@ harness = false
 
 [features]
 # Default: only parse full translation units
-default = []
+default = ["lexer-v1"]
+
+lexer-v1 = ["logos"]
+lexer-v2 = ["glsl-lang-pp"]
 
 # Additional sub-parsers. Increases compilation time.
 parser-expr = []

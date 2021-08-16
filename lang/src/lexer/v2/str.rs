@@ -2,7 +2,7 @@
 
 use glsl_lang_pp::{
     exts::DEFAULT_REGISTRY,
-    last::{self, str::Event},
+    last::{self, Event},
     processor::{
         self,
         str::{ExpandStr, ProcessStrError},
@@ -19,10 +19,10 @@ use super::{
 
 /// glsl-lang-pp memory lexer
 pub struct Lexer<'i> {
-    inner: last::str::Tokenizer<'i, ExpandStr>,
+    inner: last::Tokenizer<'i, ExpandStr>,
     source: &'i str,
     core: LexerCore,
-    handle_token: HandleTokenResult<last::str::Tokenizer<'i, ExpandStr>>,
+    handle_token: HandleTokenResult<ProcessStrError>,
 }
 
 impl<'i> Iterator for Lexer<'i> {
@@ -43,9 +43,11 @@ impl<'i> Iterator for Lexer<'i> {
                                 return Some(result);
                             }
                         }
-                        Event::EnterFile(_) => {
+
+                        Event::EnterFile { .. } => {
                             // Ignore
                         }
+
                         Event::Token {
                             source_token,
                             token_kind,
@@ -59,6 +61,7 @@ impl<'i> Iterator for Lexer<'i> {
                                 &mut self.handle_token,
                             );
                         }
+
                         Event::Directive {
                             node,
                             kind,
@@ -68,6 +71,7 @@ impl<'i> Iterator for Lexer<'i> {
                             self.core.handle_directive(node, kind, masked, errors);
                         }
                     },
+
                     Err(err) => {
                         return Some(self.core.handle_str_err(err));
                     }

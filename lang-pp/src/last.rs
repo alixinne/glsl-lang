@@ -1,29 +1,51 @@
 //! Last preprocessing stage definitions
 
+use std::{collections::HashMap, iter::FusedIterator, path::PathBuf};
+
 #[macro_use]
 pub mod keywords;
 #[macro_use]
 pub mod type_names;
+use type_names::TypeNameAtom;
 
-pub mod fs;
-
-pub mod str;
+use lang_util::FileId;
 
 pub mod token;
-use std::{collections::HashMap, convert::TryInto};
-
 pub use token::{Token, TypeName};
-
-use type_names::TypeNameAtom;
 
 use crate::{
     exts::{names::ExtNameAtom, ExtensionSpec, Registry},
+    parser::SyntaxNode,
     processor::{
-        event::{Error, ErrorKind, OutputToken, TokenLike},
+        event::{self, DirectiveKind, Error, ErrorKind, OutputToken, TokenLike},
         expand::ExpandLocation,
         nodes::{Extension, ExtensionBehavior, ExtensionName},
     },
 };
+
+#[derive(Debug, PartialEq)]
+pub enum Event {
+    Error {
+        error: Error,
+        masked: bool,
+    },
+    EnterFile {
+        file_id: FileId,
+        path: PathBuf,
+        canonical_path: PathBuf,
+    },
+    Token {
+        source_token: OutputToken,
+        token_kind: Token,
+        state: TokenState,
+    },
+    Directive {
+        node: SyntaxNode,
+        kind: DirectiveKind,
+        masked: bool,
+        errors: Vec<Error>,
+    },
+}
 
 pub trait LocatedIterator {
     fn location(&self) -> &ExpandLocation;
@@ -180,20 +202,139 @@ impl<'r> TypeTable<'r> {
 }
 
 pub trait MaybeToken {
-    fn token(&self) -> Option<(&OutputToken, &Token, &TokenState)>;
+    fn as_token(&self) -> Option<(&OutputToken, &Token, &TokenState)>;
 
-    fn token_kind(&self) -> Option<&Token> {
-        self.token().map(|(_, kind, _)| kind)
+    fn as_token_kind(&self) -> Option<&Token> {
+        self.as_token().map(|(_, kind, _)| kind)
     }
 }
 
-pub trait Tokenizer {
-    type Item: TryInto<str::Event> + MaybeToken;
-    type Error: std::error::Error + 'static;
+impl<T: MaybeToken, E> MaybeToken for Result<T, E> {
+    fn as_token(&self) -> Option<(&OutputToken, &Token, &TokenState)> {
+        self.as_ref().ok().and_then(MaybeToken::as_token)
+    }
+}
 
-    fn promote_type_name(&mut self, name: TypeNameAtom) -> bool;
-    fn next_event(&mut self) -> Option<Self::Item>;
-    fn location(&self) -> &ExpandLocation;
+impl MaybeToken for Event {
+    fn as_token(&self) -> Option<(&OutputToken, &Token, &TokenState)> {
+        match self {
+            Event::Token {
+                source_token,
+                token_kind,
+                state,
+            } => Some((source_token, token_kind, state)),
+            _ => None,
+        }
+    }
+}
+
+pub struct Tokenizer<'r, I> {
+    inner: I,
+    type_table: TypeTable<'r>,
+    pending_error: Option<Error>,
+}
+
+impl<'r, I: LocatedIterator> Tokenizer<'r, I> {
+    pub fn new(inner: I, target_vulkan: bool, registry: &'r Registry) -> Self {
+        Self {
+            inner,
+            type_table: TypeTable::new(registry, target_vulkan),
+            pending_error: None,
+        }
+    }
+
+    pub fn tokenize_single(
+        &self,
+        token: &impl TokenLike,
+    ) -> (Token, Option<TypeNameState>, Option<Error>) {
+        self.type_table
+            .tokenize_single(token, self.inner.location())
+    }
+
+    pub fn promote_type_name(&mut self, name: TypeNameAtom) -> bool {
+        self.type_table.promote_type_name(name)
+    }
+
+    pub fn location(&self) -> &crate::processor::expand::ExpandLocation {
+        self.inner.location()
+    }
+}
+
+impl<'r, E, I: Iterator<Item = Result<event::Event, E>> + LocatedIterator> Iterator
+    for Tokenizer<'r, I>
+{
+    type Item = Result<Event, E>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if let Some(error) = self.pending_error.take() {
+            return Some(Ok(Event::Error {
+                error,
+                masked: false,
+            }));
+        }
+
+        self.inner.next().map(|result| match result {
+            Ok(event) => Ok(match event {
+                event::Event::Error { error, masked } => Event::Error { error, masked },
+                event::Event::EnterFile {
+                    file_id,
+                    path,
+                    canonical_path,
+                } => Event::EnterFile {
+                    file_id,
+                    path,
+                    canonical_path,
+                },
+                event::Event::Token { token, masked } => {
+                    let (token_kind, state, error) = self.tokenize_single(&token);
+
+                    if !masked {
+                        self.pending_error = error;
+                    }
+
+                    Event::Token {
+                        source_token: token,
+                        token_kind,
+                        state: TokenState::new(state, masked),
+                    }
+                }
+                event::Event::Directive {
+                    node,
+                    kind,
+                    masked,
+                    errors,
+                } => {
+                    if !masked {
+                        if let DirectiveKind::Extension(extension) = &kind {
+                            if !self.type_table.handle_extension(extension) {
+                                self.pending_error = Some(Error::new(
+                                    ErrorKind::unsupported_ext(
+                                        extension.name.clone(),
+                                        node.text_range(),
+                                        self.inner.location(),
+                                    ),
+                                    self.inner.location(),
+                                ));
+                            }
+                        }
+                    }
+
+                    Event::Directive {
+                        node,
+                        kind,
+                        masked,
+                        errors,
+                    }
+                }
+            }),
+            Err(err) => Err(err),
+        })
+    }
+}
+
+impl<'r, E, I: Iterator<Item = Result<event::Event, E>> + LocatedIterator> FusedIterator
+    for Tokenizer<'r, I>
+{
 }
 
 #[cfg(test)]
@@ -202,7 +343,7 @@ mod tests {
 
     use crate::processor::event::DirectiveKind;
 
-    use super::str::Event;
+    use super::Event;
 
     #[test]
     /// Ensure that we can extract #(...) for glsl-lang-quote. This is not part of the spec so this

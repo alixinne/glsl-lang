@@ -43,8 +43,8 @@ impl ExpandStr {
         self,
         target_vulkan: bool,
         registry: &crate::exts::Registry,
-    ) -> crate::last::str::Tokenizer<'_, Self> {
-        crate::last::str::Tokenizer::new(self, target_vulkan, registry)
+    ) -> crate::last::Tokenizer<'_, Self> {
+        crate::last::Tokenizer::new(self, target_vulkan, registry)
     }
 
     pub fn into_state(mut self) -> Option<ProcessorState> {

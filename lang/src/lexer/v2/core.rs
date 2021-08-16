@@ -1,9 +1,9 @@
 use std::collections::VecDeque;
 
 use glsl_lang_pp::{
-    last::{self, type_names::TypeNameAtom, MaybeToken, TokenState, Tokenizer},
+    last::{self, type_names::TypeNameAtom, LocatedIterator, MaybeToken, TokenState, Tokenizer},
     processor::{
-        event::{DirectiveKind, Error, OutputToken, SyntaxNode, TokenLike},
+        event::{self, DirectiveKind, Error, OutputToken, SyntaxNode, TokenLike},
         str::ProcessStrError,
     },
 };
@@ -22,14 +22,14 @@ pub struct LexerCore {
     offset: usize,
 }
 
-pub enum HandleTokenResult<T: Tokenizer> {
+pub enum HandleTokenResult<E: std::error::Error + 'static> {
     None,
-    Item(Item<T::Error>),
-    Pending(VecDeque<Item<T::Error>>, VecDeque<T::Item>),
+    Item(Item<E>),
+    Pending(VecDeque<Item<E>>, VecDeque<Result<last::Event, E>>),
 }
 
-impl<T: Tokenizer> HandleTokenResult<T> {
-    pub fn push_item(&mut self, item: Item<T::Error>) {
+impl<E: std::error::Error + 'static> HandleTokenResult<E> {
+    pub fn push_item(&mut self, item: Item<E>) {
         match std::mem::take(self) {
             HandleTokenResult::None => {
                 *self = HandleTokenResult::Item(item);
@@ -47,7 +47,7 @@ impl<T: Tokenizer> HandleTokenResult<T> {
         }
     }
 
-    pub fn pop_item(&mut self) -> Option<Item<T::Error>> {
+    pub fn pop_item(&mut self) -> Option<Item<E>> {
         match std::mem::take(self) {
             HandleTokenResult::None => None,
             HandleTokenResult::Item(item) => Some(item),
@@ -61,7 +61,7 @@ impl<T: Tokenizer> HandleTokenResult<T> {
         }
     }
 
-    pub fn pop_event(&mut self) -> Option<T::Item> {
+    pub fn pop_event(&mut self) -> Option<Result<last::Event, E>> {
         match std::mem::take(self) {
             HandleTokenResult::None => None,
             HandleTokenResult::Item(item) => {
@@ -79,7 +79,7 @@ impl<T: Tokenizer> HandleTokenResult<T> {
     }
 }
 
-impl<T: Tokenizer> Default for HandleTokenResult<T> {
+impl<E: std::error::Error + 'static> Default for HandleTokenResult<E> {
     fn default() -> Self {
         Self::None
     }
@@ -95,12 +95,15 @@ impl LexerCore {
         }
     }
 
-    fn lang_token(
+    fn lang_token<'r, I, T, E>(
         &self,
         source_token: &OutputToken,
         token_kind: last::Token,
-        tokenizer: &mut impl Tokenizer,
-    ) -> Result<(LexerPosition, Token, LexerPosition), Option<last::token::ErrorKind>> {
+        tokenizer: &mut Tokenizer<'r, I>,
+    ) -> Result<(LexerPosition, Token, LexerPosition), Option<last::token::ErrorKind>>
+    where
+        I: Iterator<Item = Result<T, E>> + LocatedIterator,
+    {
         let start = self.position(source_token.text_range().start());
         let end = self.position(source_token.text_range().end());
 
@@ -450,14 +453,18 @@ impl LexerCore {
         self.file_id = file_id;
     }
 
-    pub fn handle_token<T: Tokenizer>(
+    pub fn handle_token<'r, I, E>(
         &self,
         source_token: OutputToken,
         token_kind: last::Token,
         state: TokenState,
-        tokenizer: &mut T,
-        token_state: &mut HandleTokenResult<T>,
-    ) {
+        tokenizer: &mut Tokenizer<'r, I>,
+        token_state: &mut HandleTokenResult<E>,
+    ) where
+        E: std::error::Error + 'static,
+        I: Iterator<Item = Result<event::Event, E>> + LocatedIterator,
+        <Tokenizer<'r, I> as Iterator>::Item: MaybeToken,
+    {
         if state.active() {
             match self.lang_token(&source_token, token_kind, tokenizer) {
                 Ok(token) => {
@@ -513,14 +520,14 @@ impl LexerCore {
                             pos: start,
                         }));
 
-                        while let Some(maybe_lparen_result) = tokenizer.next_event() {
+                        while let Some(maybe_lparen_result) = tokenizer.next() {
                             // Skip whitespace
-                            if let Some(last::Token::WS) = maybe_lparen_result.token_kind() {
+                            if let Some(last::Token::WS) = maybe_lparen_result.as_token_kind() {
                                 pending_events.push_back(maybe_lparen_result);
                                 continue;
                             }
 
-                            if let Some(last::Token::LPAREN) = maybe_lparen_result.token_kind() {
+                            if let Some(last::Token::LPAREN) = maybe_lparen_result.as_token_kind() {
                                 // We have seen a left parenthesis
                                 // Now, consume everything until the
                                 // matching rparen
@@ -528,10 +535,10 @@ impl LexerCore {
                                 let mut quoted = "#(".to_owned();
 
                                 while level > 0 {
-                                    match tokenizer.next_event() {
+                                    match tokenizer.next() {
                                         Some(result) => {
                                             if let Some((source_token, token_kind, _)) =
-                                                result.token()
+                                                result.as_token()
                                             {
                                                 match token_kind {
                                                     last::Token::LPAREN => level += 1,

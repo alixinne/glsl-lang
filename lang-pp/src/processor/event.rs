@@ -1,4 +1,4 @@
-use std::{convert::TryFrom, path::PathBuf};
+use std::path::PathBuf;
 
 use derive_more::From;
 use rowan::{NodeOrToken, TextRange};
@@ -642,7 +642,11 @@ pub enum Event {
         error: Error,
         masked: bool,
     },
-    EnterFile(FileId),
+    EnterFile {
+        file_id: FileId,
+        path: PathBuf,
+        canonical_path: PathBuf,
+    },
     Token {
         token: OutputToken,
         masked: bool,
@@ -656,6 +660,14 @@ pub enum Event {
 }
 
 impl Event {
+    pub fn enter_file(file_id: FileId) -> Self {
+        Self::EnterFile {
+            file_id,
+            path: Default::default(),
+            canonical_path: Default::default(),
+        }
+    }
+
     pub fn token<T: Into<OutputToken>>(token: T, masked: bool) -> Self {
         Self::Token {
             token: token.into(),
@@ -733,65 +745,6 @@ impl From<OutputToken> for Event {
         Self::Token {
             token,
             masked: false,
-        }
-    }
-}
-
-impl<E: std::error::Error + 'static> TryFrom<IoEvent<E>> for Event {
-    type Error = Located<E>;
-
-    fn try_from(value: IoEvent<E>) -> Result<Self, Located<E>> {
-        Ok(match value {
-            IoEvent::IoError(err) => {
-                return Err(err);
-            }
-            IoEvent::EnterFile { file_id, .. } => Self::EnterFile(file_id),
-            IoEvent::Error { error, masked } => Self::Error { error, masked },
-            IoEvent::Token { token, masked } => Self::Token { token, masked },
-            IoEvent::Directive {
-                node,
-                kind,
-                masked,
-                errors,
-            } => Self::Directive {
-                node,
-                kind,
-                masked,
-                errors,
-            },
-        })
-    }
-}
-
-#[derive(Debug)]
-pub enum IoEvent<E: std::error::Error + 'static> {
-    IoError(Located<E>),
-    Error {
-        error: Error,
-        masked: bool,
-    },
-    EnterFile {
-        file_id: FileId,
-        path: PathBuf,
-        canonical_path: PathBuf,
-    },
-    Token {
-        token: OutputToken,
-        masked: bool,
-    },
-    Directive {
-        node: SyntaxNode,
-        kind: DirectiveKind,
-        masked: bool,
-        errors: Vec<Error>,
-    },
-}
-
-impl<E: std::error::Error + 'static> IoEvent<E> {
-    pub fn error<T: Into<ErrorKind>>(e: T, location: &ExpandLocation, masked: bool) -> Self {
-        Self::Error {
-            error: Error::new(e, location),
-            masked,
         }
     }
 }

@@ -827,7 +827,7 @@ impl Iterator for ExpandOne {
                         current_state,
                     };
 
-                    return Some(Event::EnterFile(self.location.current_file).into());
+                    return Some(Event::enter_file(self.location.current_file).into());
                 }
                 ExpandState::Iterate {
                     mut iterator,

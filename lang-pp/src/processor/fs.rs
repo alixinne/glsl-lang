@@ -15,7 +15,7 @@ use crate::{
 };
 
 use super::{
-    event::{Event, IoEvent, Located, ProcessingErrorKind},
+    event::{Event, Located, ProcessingErrorKind},
     expand::{ExpandEvent, ExpandOne},
     nodes::{ParsedPath, PathType},
     ProcessorState,
@@ -66,8 +66,8 @@ impl<'p, F: FileSystem> ExpandStack<'p, F> {
         self,
         target_vulkan: bool,
         registry: &crate::exts::Registry,
-    ) -> crate::last::fs::Tokenizer<'_, Self> {
-        crate::last::fs::Tokenizer::new(self, target_vulkan, registry)
+    ) -> crate::last::Tokenizer<'_, Self> {
+        crate::last::Tokenizer::new(self, target_vulkan, registry)
     }
 
     pub fn into_state(self) -> Option<(ProcessorState, Rc<String>)> {
@@ -76,7 +76,7 @@ impl<'p, F: FileSystem> ExpandStack<'p, F> {
 }
 
 impl<'p, F: FileSystem> Iterator for ExpandStack<'p, F> {
-    type Item = IoEvent<F::Error>;
+    type Item = Result<Event, Located<F::Error>>;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {
@@ -90,29 +90,17 @@ impl<'p, F: FileSystem> Iterator for ExpandStack<'p, F> {
                             self.stack.push((expand, source));
 
                             return Some(match event {
-                                Event::EnterFile(file_id) => {
+                                Event::EnterFile { file_id, .. } => {
                                     let (canonical_path, input_path) =
                                         self.processor.get_paths(file_id).unwrap();
 
-                                    IoEvent::EnterFile {
+                                    Ok(Event::EnterFile {
                                         file_id,
                                         path: input_path.to_owned(),
                                         canonical_path: canonical_path.to_owned(),
-                                    }
+                                    })
                                 }
-                                Event::Error { error, masked } => IoEvent::Error { error, masked },
-                                Event::Token { token, masked } => IoEvent::Token { token, masked },
-                                Event::Directive {
-                                    node,
-                                    kind,
-                                    masked,
-                                    errors,
-                                } => IoEvent::Directive {
-                                    node,
-                                    kind,
-                                    masked,
-                                    errors,
-                                },
+                                other => Ok(other),
                             });
                         }
                         ExpandEvent::EnterFile(current_state, node, path) => {
@@ -136,7 +124,7 @@ impl<'p, F: FileSystem> Iterator for ExpandStack<'p, F> {
                                     Err(error) => {
                                         // Just return the error, we'll keep iterating on the lower
                                         // file by looping
-                                        return Some(IoEvent::IoError(Located::new(
+                                        return Some(Err(Located::new(
                                             error,
                                             resolved_path,
                                             node.text_range(),
@@ -147,12 +135,12 @@ impl<'p, F: FileSystem> Iterator for ExpandStack<'p, F> {
                             } else {
                                 // Resolving the path failed, throw an error located at the
                                 // right place
-                                return Some(IoEvent::error(
+                                return Some(Ok(Event::error(
                                     ProcessingErrorKind::IncludeNotFound { path }
                                         .with_node(node.into(), &location),
                                     location,
                                     false,
-                                ));
+                                )));
                             }
                         }
                         ExpandEvent::Completed(state) => {
@@ -226,6 +214,15 @@ impl<'p, F: FileSystem> From<ParsedFile<'p, F>> for (FileId, Ast) {
     fn from(parsed_file: ParsedFile<'p, F>) -> Self {
         let ast = parsed_file.ast();
         (parsed_file.file_id, ast)
+    }
+}
+
+impl<'p, F: FileSystem> IntoIterator for ParsedFile<'p, F> {
+    type Item = <ExpandStack<'p, F> as Iterator>::Item;
+    type IntoIter = ExpandStack<'p, F>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.process(ProcessorState::default())
     }
 }
 

@@ -7,8 +7,9 @@ use std::{
 
 use glsl_lang_pp::{
     exts::{Registry, DEFAULT_REGISTRY},
-    last::{self, fs::Event},
+    last::{self, Event},
     processor::{
+        event::Located,
         fs::{ExpandStack, FileSystem, ParsedFile, Processor},
         ProcessorState,
     },
@@ -23,11 +24,11 @@ use super::{
 
 /// glsl-lang-pp filesystem lexer
 pub struct Lexer<'r, 'p, F: FileSystem + 'p> {
-    inner: last::fs::Tokenizer<'r, ExpandStack<'p, F>>,
+    inner: last::Tokenizer<'r, ExpandStack<'p, F>>,
     source: Rc<String>,
     core: LexerCore,
     current_file: PathBuf,
-    handle_token: HandleTokenResult<last::fs::Tokenizer<'r, ExpandStack<'p, F>>>,
+    handle_token: HandleTokenResult<Located<F::Error>>,
 }
 
 impl<'r, 'p, F: FileSystem> Lexer<'r, 'p, F> {
@@ -54,6 +55,7 @@ impl<'r, 'p, F: FileSystem> Iterator for Lexer<'r, 'p, F> {
         loop {
             // Pop pending events
             if let Some(item) = self.handle_token.pop_item() {
+                // TODO: Figure out why we need the io.into_inner()
                 return Some(item.map_err(|err| match err {
                     LexicalError::Token { kind, pos } => LexicalError::Token { kind, pos },
                     LexicalError::ProcessStrError { error, pos } => {
@@ -64,47 +66,50 @@ impl<'r, 'p, F: FileSystem> Iterator for Lexer<'r, 'p, F> {
                 }));
             }
 
-            if let Some(event) = self.handle_token.pop_event().or_else(|| self.inner.next()) {
-                match event {
-                    Event::Error { error, masked } => {
-                        if let Some(result) = self.core.handle_error(error, masked) {
-                            return Some(result);
+            if let Some(result) = self.handle_token.pop_event().or_else(|| self.inner.next()) {
+                match result {
+                    Ok(event) => match event {
+                        Event::Error { error, masked } => {
+                            if let Some(result) = self.core.handle_error(error, masked) {
+                                return Some(result);
+                            }
                         }
-                    }
 
-                    Event::Token {
-                        source_token,
-                        token_kind,
-                        state,
-                    } => {
-                        self.core.handle_token(
+                        Event::Token {
                             source_token,
                             token_kind,
                             state,
-                            &mut self.inner,
-                            &mut self.handle_token,
-                        );
-                    }
-                    Event::Directive {
-                        node,
-                        kind,
-                        masked,
-                        errors,
-                    } => {
-                        self.core.handle_directive(node, kind, masked, errors);
-                    }
+                        } => {
+                            self.core.handle_token(
+                                source_token,
+                                token_kind,
+                                state,
+                                &mut self.inner,
+                                &mut self.handle_token,
+                            );
+                        }
 
-                    Event::IoError(err) => {
+                        Event::Directive {
+                            node,
+                            kind,
+                            masked,
+                            errors,
+                        } => {
+                            self.core.handle_directive(node, kind, masked, errors);
+                        }
+
+                        Event::EnterFile {
+                            file_id,
+                            path,
+                            canonical_path: _,
+                        } => {
+                            self.current_file = path;
+                            self.core.handle_file_id(file_id);
+                        }
+                    },
+
+                    Err(err) => {
                         return Some(Err(LexicalError::Io(err)));
-                    }
-
-                    Event::EnterFile {
-                        file_id,
-                        path,
-                        canonical_path: _,
-                    } => {
-                        self.current_file = path;
-                        self.core.handle_file_id(file_id);
                     }
                 }
             } else {

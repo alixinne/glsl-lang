@@ -7,11 +7,8 @@ use std::{
 
 use glsl_lang_pp::{
     exts::DEFAULT_REGISTRY,
-    last::fs::Event,
-    processor::{
-        event::{DirectiveKind, TokenLike},
-        ProcessorState,
-    },
+    last::Event,
+    processor::event::{DirectiveKind, TokenLike},
 };
 
 struct Paths {
@@ -77,58 +74,57 @@ pub fn test_file(path: impl AsRef<Path>) {
 
     let mut error_count = 0;
 
-    for event in parsed
-        .process(ProcessorState::default())
-        .tokenize(false, &DEFAULT_REGISTRY)
-    {
-        writeln!(eventsf, "{:?}", event).unwrap();
+    for result in parsed.into_iter().tokenize(false, &DEFAULT_REGISTRY) {
+        writeln!(eventsf, "{:?}", result).unwrap();
 
-        match event {
-            Event::IoError(err) => {
-                error_count += 1;
-                writeln!(errorsf, "{}", err).unwrap();
-            }
-
-            Event::Error { error, masked } => {
-                if !masked {
-                    error_count += 1;
-                    writeln!(errorsf, "{}", error).unwrap();
-                }
-            }
-
-            Event::EnterFile { .. } => {}
-
-            Event::Token {
-                source_token,
-                token_kind: _,
-                state,
-            } => {
-                if state.active() {
-                    write!(ppf, "{}", source_token.text()).unwrap();
-                }
-            }
-
-            Event::Directive {
-                node,
-                kind,
-                masked,
-                errors,
-            } => {
-                if !masked {
-                    for error in errors {
+        match result {
+            Ok(event) => match event {
+                Event::Error { error, masked } => {
+                    if !masked {
                         error_count += 1;
                         writeln!(errorsf, "{}", error).unwrap();
                     }
+                }
 
-                    match kind {
-                        DirectiveKind::Version(_)
-                        | DirectiveKind::Pragma(_)
-                        | DirectiveKind::Extension(_) => {
-                            write!(ppf, "{}", node).unwrap();
-                        }
-                        _ => {}
+                Event::EnterFile { .. } => {}
+
+                Event::Token {
+                    source_token,
+                    token_kind: _,
+                    state,
+                } => {
+                    if state.active() {
+                        write!(ppf, "{}", source_token.text()).unwrap();
                     }
                 }
+
+                Event::Directive {
+                    node,
+                    kind,
+                    masked,
+                    errors,
+                } => {
+                    if !masked {
+                        for error in errors {
+                            error_count += 1;
+                            writeln!(errorsf, "{}", error).unwrap();
+                        }
+
+                        match kind {
+                            DirectiveKind::Version(_)
+                            | DirectiveKind::Pragma(_)
+                            | DirectiveKind::Extension(_) => {
+                                write!(ppf, "{}", node).unwrap();
+                            }
+                            _ => {}
+                        }
+                    }
+                }
+            },
+
+            Err(err) => {
+                error_count += 1;
+                writeln!(errorsf, "{}", err).unwrap();
             }
         }
     }

@@ -10,7 +10,7 @@ pub mod fs;
 pub mod str;
 
 pub mod token;
-use std::collections::HashMap;
+use std::{collections::HashMap, convert::TryInto};
 
 pub use token::{Token, TypeName};
 
@@ -19,7 +19,7 @@ use type_names::TypeNameAtom;
 use crate::{
     exts::{names::ExtNameAtom, ExtensionSpec, Registry},
     processor::{
-        event::{Error, ErrorKind, TokenLike},
+        event::{Error, ErrorKind, OutputToken, TokenLike},
         expand::ExpandLocation,
         nodes::{Extension, ExtensionBehavior, ExtensionName},
     },
@@ -179,8 +179,21 @@ impl<'r> TypeTable<'r> {
     }
 }
 
+pub trait MaybeToken {
+    fn token(&self) -> Option<(&OutputToken, &Token, &TokenState)>;
+
+    fn token_kind(&self) -> Option<&Token> {
+        self.token().map(|(_, kind, _)| kind)
+    }
+}
+
 pub trait Tokenizer {
+    type Item: TryInto<str::Event> + MaybeToken;
+    type Error: std::error::Error + 'static;
+
     fn promote_type_name(&mut self, name: TypeNameAtom) -> bool;
+    fn next_event(&mut self) -> Option<Self::Item>;
+    fn location(&self) -> &ExpandLocation;
 }
 
 #[cfg(test)]

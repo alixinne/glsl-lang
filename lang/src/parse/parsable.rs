@@ -1,8 +1,12 @@
 use std::borrow::Cow;
 
-use crate::{ast, parse::ParseContext};
+use crate::ast;
 
-pub type ParseError<'i> = super::ParseError<'i, super::Lexer<'i>>;
+#[cfg(feature = "lexer")]
+use super::ParseContext;
+
+#[cfg(feature = "lexer")]
+pub type ParseError<'i> = super::ParseError<super::Lexer<'i>>;
 
 /// A parsable is something we can parse either directly, or embedded in some other syntax
 /// structure.
@@ -11,6 +15,7 @@ pub type ParseError<'i> = super::ParseError<'i, super::Lexer<'i>>;
 /// Due to the way it is currently implemented, we have to generate extra code around the input,
 /// thus, if you are matching on span positions, you will get a different result than if using the
 /// parser directly.
+#[cfg(feature = "lexer")]
 pub trait Parsable<'i>: Sized {
     /// Parse the input source
     fn parse(source: &'i str) -> Result<Self, ParseError<'i>> {
@@ -25,6 +30,7 @@ pub trait Parsable<'i>: Sized {
     ) -> Result<(Self, ParseContext), ParseError<'i>>;
 }
 
+#[cfg(feature = "lexer")]
 impl<'i, T: Extractable> Parsable<'i> for T {
     fn parse_with_options(
         source: &'i str,

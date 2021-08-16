@@ -4,10 +4,7 @@ use smol_str::SmolStr;
 
 use super::{LexerContext, LexerPosition, LexicalError, PreprocessorToken, Token};
 
-pub fn parse_int<'i>(
-    lex: &mut logos::Lexer<'i, Token<'i>>,
-    radix: u32,
-) -> Result<i32, LexicalError> {
+pub fn parse_int(lex: &mut logos::Lexer<Token>, radix: u32) -> Result<i32, LexicalError> {
     let mut slice = lex.slice();
     let fb = slice.bytes().next();
     let sgn = if fb == Some(b'-') {
@@ -35,10 +32,7 @@ pub fn parse_int<'i>(
     ) as i32)
 }
 
-pub fn parse_uint<'i>(
-    lex: &mut logos::Lexer<'i, Token<'i>>,
-    radix: u32,
-) -> Result<u32, LexicalError> {
+pub fn parse_uint(lex: &mut logos::Lexer<Token>, radix: u32) -> Result<u32, LexicalError> {
     let mut slice = lex.slice();
     let fb = slice.bytes().next();
     let sgn = if fb == Some(b'-') {
@@ -66,7 +60,7 @@ pub fn parse_uint<'i>(
     ))
 }
 
-pub fn parse_f32<'i>(lex: &mut logos::Lexer<'i, Token<'i>>) -> Result<f32, LexicalError> {
+pub fn parse_f32(lex: &mut logos::Lexer<Token>) -> Result<f32, LexicalError> {
     let s = lex.slice();
     f32::from_str(s.strip_suffix(|c| c == 'f' || c == 'F').unwrap_or(s)).map_err(|source| {
         LexicalError::InvalidFloatLiteral {
@@ -76,7 +70,7 @@ pub fn parse_f32<'i>(lex: &mut logos::Lexer<'i, Token<'i>>) -> Result<f32, Lexic
     })
 }
 
-pub fn parse_f64<'i>(lex: &mut logos::Lexer<'i, Token<'i>>) -> Result<f64, LexicalError> {
+pub fn parse_f64(lex: &mut logos::Lexer<Token>) -> Result<f64, LexicalError> {
     let s = lex.slice();
     f64::from_str(
         s.strip_suffix(|c| c == 'f' || c == 'F')
@@ -108,14 +102,12 @@ pub fn parse_pp_ident<'i>(
     Ok((lex.slice(), lex.extras.clone()))
 }
 
-pub fn parse_ident<'i>(
-    lex: &mut logos::Lexer<'i, Token<'i>>,
-) -> Result<(SmolStr, LexerContext), LexicalError> {
+pub fn parse_ident(lex: &mut logos::Lexer<Token>) -> Result<(SmolStr, LexerContext), LexicalError> {
     Ok((lex.slice().into(), lex.extras.clone()))
 }
 
-pub fn parse_rs_ident<'i>(
-    lex: &mut logos::Lexer<'i, Token<'i>>,
+pub fn parse_rs_ident(
+    lex: &mut logos::Lexer<Token>,
 ) -> Result<(SmolStr, LexerContext), LexicalError> {
     if lex.extras.opts.allow_rs_ident {
         Ok((lex.slice().into(), lex.extras.clone()))
@@ -151,7 +143,7 @@ fn parse_cmt_int(
     }
 }
 
-pub fn parse_cmt<'i>(lex: &mut logos::Lexer<'i, Token<'i>>, is_single: bool) {
+pub fn parse_cmt(lex: &mut logos::Lexer<Token>, is_single: bool) {
     parse_cmt_int(&lex.extras, lex.slice(), lex.span(), is_single)
 }
 

@@ -1,4 +1,4 @@
-use std::iter::FusedIterator;
+use std::{convert::TryFrom, iter::FusedIterator};
 
 use lang_util::FileId;
 
@@ -12,7 +12,8 @@ use crate::{
 };
 
 use super::{
-    type_names::TypeNameAtom, LocatedIterator, Token, TokenState, TypeNameState, TypeTable,
+    type_names::TypeNameAtom, LocatedIterator, MaybeToken, Token, TokenState, TypeNameState,
+    TypeTable,
 };
 
 #[derive(Debug)]
@@ -33,6 +34,27 @@ pub enum Event {
         masked: bool,
         errors: Vec<Error>,
     },
+}
+
+impl TryFrom<Result<Event, ProcessStrError>> for Event {
+    type Error = ProcessStrError;
+
+    fn try_from(value: Result<Event, ProcessStrError>) -> Result<Self, ProcessStrError> {
+        value
+    }
+}
+
+impl MaybeToken for Result<Event, ProcessStrError> {
+    fn token(&self) -> Option<(&OutputToken, &Token, &TokenState)> {
+        match self {
+            Ok(Event::Token {
+                source_token,
+                token_kind,
+                state,
+            }) => Some((source_token, token_kind, state)),
+            _ => None,
+        }
+    }
 }
 
 pub struct Tokenizer<'r, I> {
@@ -59,9 +81,22 @@ impl<'r, I: LocatedIterator> Tokenizer<'r, I> {
     }
 }
 
-impl<'r, I> super::Tokenizer for Tokenizer<'r, I> {
+impl<'r, I: Iterator<Item = Result<event::Event, ProcessStrError>> + LocatedIterator>
+    super::Tokenizer for Tokenizer<'r, I>
+{
+    type Item = Result<Event, ProcessStrError>;
+    type Error = ProcessStrError;
+
     fn promote_type_name(&mut self, name: TypeNameAtom) -> bool {
         self.type_table.promote_type_name(name)
+    }
+
+    fn next_event(&mut self) -> Option<Self::Item> {
+        self.next()
+    }
+
+    fn location(&self) -> &crate::processor::expand::ExpandLocation {
+        self.inner.location()
     }
 }
 

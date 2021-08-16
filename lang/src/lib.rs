@@ -53,7 +53,7 @@
 use lalrpop_util::lalrpop_mod;
 
 pub mod ast;
-mod lexer;
+pub mod lexer;
 lalrpop_mod!(
     #[allow(clippy::all)]
     parser

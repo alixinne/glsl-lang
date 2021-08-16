@@ -20,6 +20,7 @@ thiserror = "1.0"
 
 lang-util = { version = "0.2.0", features = ["lalrpop"] }
 glsl-lang-pp = { version = "0.2.0", optional = true }
+encoding_rs = { version = "0.8", optional = true }
 smol_str = "0.1"
 
 rserde = { version = "1.0", optional = true, features = ["derive"], package = "serde" }
@@ -41,8 +42,9 @@ harness = false
 # Default: only parse full translation units
 default = ["lexer-v1"]
 
-lexer-v1 = ["logos"]
-lexer-v2 = ["glsl-lang-pp"]
+lexer = []
+lexer-v1 = ["logos", "lexer"]
+lexer-v2 = ["glsl-lang-pp", "encoding_rs", "lexer"]
 
 # Additional sub-parsers. Increases compilation time.
 parser-expr = []

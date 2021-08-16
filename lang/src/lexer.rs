@@ -1,3 +1,5 @@
+//! Lexical analysis definitions
+
 mod token;
 pub use token::*;
 
@@ -5,11 +7,8 @@ pub use token::*;
 pub mod v1;
 #[cfg(feature = "lexer-v2")]
 pub mod v2;
-#[cfg(not(any(feature = "lexer-v1", feature = "lexer-v2")))]
-compile_error!(
-    "no lexer selected, please enable glsl-lang/lexer-v1 or glsl-lang/lexer-v2 to use this crate"
-);
 
 pub use lang_util::position::LexerPosition;
 
+/// Type alias for contextual lexing context
 pub type LexerContext = crate::parse::ParseContext;

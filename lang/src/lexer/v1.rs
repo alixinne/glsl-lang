@@ -1,3 +1,5 @@
+//! Logos-based lexer definition
+
 use logos::Logos;
 use thiserror::Error;
 
@@ -16,18 +18,15 @@ use preprocessor_token::*;
 mod tests;
 
 enum LexerStage<'i> {
-    Source(logos::Lexer<'i, Token<'i>>),
-    Preprocessor(
-        logos::Lexer<'i, PreprocessorToken<'i>>,
-        Token<'i>,
-        bool,
-        bool,
-    ),
+    Source(logos::Lexer<'i, Token>),
+    Preprocessor(logos::Lexer<'i, PreprocessorToken<'i>>, Token, bool, bool),
 }
 
+/// Logos lexer for GLSL
 pub struct Lexer<'i> {
     inner: LexerStage<'i>,
-    last_token: Option<Token<'i>>,
+    source: &'i str,
+    last_token: Option<Token>,
 }
 
 impl<'i> Lexer<'i> {
@@ -143,7 +142,7 @@ impl<'i> Lexer<'i> {
 }
 
 impl<'i> Iterator for Lexer<'i> {
-    type Item = Result<(LexerPosition, Token<'i>, LexerPosition), LexicalError>;
+    type Item = Result<(LexerPosition, Token, LexerPosition), LexicalError>;
 
     fn next(&mut self) -> Option<Self::Item> {
         let result = match &mut self.inner {
@@ -309,14 +308,26 @@ impl<'i> Iterator for Lexer<'i> {
     }
 }
 
-impl<'i> LangLexer<'i> for Lexer<'i> {
+impl<'i> LangLexer for Lexer<'i> {
+    type Input = &'i str;
     type Error = LexicalError;
 
-    fn new(input: &'i str, context: LexerContext) -> Self {
+    fn new(input: Self::Input, context: LexerContext) -> Self {
         Self {
             inner: LexerStage::Source(Token::lexer_with_extras(input, context)),
+            source: input,
             last_token: None,
         }
+    }
+
+    fn chain<P: crate::parse::LangParser<Self>>(
+        self,
+        parser: &P,
+    ) -> Result<P::Item, crate::parse::ParseError<Self>> {
+        let source = self.source;
+        parser
+            .parse(source, self)
+            .map_err(|err| lang_util::error::ParseError::new(err, source))
     }
 }
 

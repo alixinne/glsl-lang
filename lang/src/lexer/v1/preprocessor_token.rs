@@ -53,7 +53,7 @@ pub enum PreprocessorToken<'i> {
     Error,
 }
 
-impl<'i> From<PreprocessorToken<'i>> for Token<'i> {
+impl<'i> From<PreprocessorToken<'i>> for Token {
     fn from(pp: PreprocessorToken<'i>) -> Self {
         match pp {
             PreprocessorToken::Identifier((s, ctx)) => Self::Identifier((s.into(), ctx)),
@@ -66,7 +66,7 @@ impl<'i> From<PreprocessorToken<'i>> for Token<'i> {
             PreprocessorToken::MultiLineComment => Self::MultiLineComment,
             PreprocessorToken::IntConstant(inner) => Self::IntConstant(inner),
             PreprocessorToken::Newline => Self::Whitespace,
-            PreprocessorToken::Rest(rest) => Self::PpRest(rest),
+            PreprocessorToken::Rest(rest) => Self::PpRest(rest.to_string()),
             PreprocessorToken::PpCore => Self::PpCore,
             PreprocessorToken::PpCompatibility => Self::PpCompatibility,
             PreprocessorToken::PpEs => Self::PpEs,
@@ -75,8 +75,8 @@ impl<'i> From<PreprocessorToken<'i>> for Token<'i> {
             PreprocessorToken::PpExtWarn => Self::PpExtWarn,
             PreprocessorToken::PpExtDisable => Self::PpExtDisable,
             PreprocessorToken::Colon => Self::Colon,
-            PreprocessorToken::PathAbsolute(inner) => Self::PpPathAbsolute(inner),
-            PreprocessorToken::PathRelative(inner) => Self::PpPathRelative(inner),
+            PreprocessorToken::PathAbsolute(inner) => Self::PpPathAbsolute(inner.to_string()),
+            PreprocessorToken::PathRelative(inner) => Self::PpPathRelative(inner.to_string()),
         }
     }
 }

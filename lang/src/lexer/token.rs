@@ -13,7 +13,7 @@ use logos::Logos;
 #[cfg_attr(feature = "lexer-v1", derive(Logos))]
 #[cfg_attr(feature = "lexer-v1", logos(extras = LexerContext))]
 #[allow(missing_docs)]
-pub enum Token<'i> {
+pub enum Token {
     #[cfg_attr(feature = "lexer-v1", token("const"))]
     #[lang_util(token = "const", kind = "storage qualifier", kind = "type qualifier")]
     Const,
@@ -1026,7 +1026,7 @@ pub enum Token<'i> {
         as(display),
         kind = "preprocessor string"
     )]
-    PpRest(std::borrow::Cow<'i, str>),
+    PpRest(String),
 
     #[lang_util(display = "core", as(display), kind = "version profile")]
     PpCore,
@@ -1045,16 +1045,16 @@ pub enum Token<'i> {
     PpExtDisable,
 
     #[lang_util(display = "<{}>", as(display), kind = "include path")]
-    PpPathAbsolute(&'i str),
+    PpPathAbsolute(String),
     #[lang_util(display = "\"{}\"", as(display), kind = "include path")]
-    PpPathRelative(&'i str),
+    PpPathRelative(String),
 
     #[cfg_attr(feature = "lexer-v1", error)]
     #[lang_util(display = "<invalid token>", as(display), kind = "error")]
     Error,
 }
 
-impl<'i> Token<'i> {
+impl Token {
     /// Return `true` if this token is a preprocessor token
     pub fn is_pp(&self) -> bool {
         matches!(
@@ -1098,8 +1098,8 @@ impl<'i> Token<'i> {
 
 macro_rules! impl_from {
     ($t:ty => $i:ident) => {
-        impl<'i> From<Token<'i>> for $t {
-            fn from(value: Token<'i>) -> Self {
+        impl From<Token> for $t {
+            fn from(value: Token) -> Self {
                 match value {
                     Token::$i(i) => i,
                     other => panic!(concat!("cannot convert {:?} into ", stringify!($i)), other),
@@ -1115,10 +1115,10 @@ impl_from!(f32 => FloatConstant);
 impl_from!(f64 => DoubleConstant);
 impl_from!(bool => BoolConstant);
 
-impl<'i> From<Token<'i>> for String {
-    fn from(value: Token<'i>) -> Self {
+impl From<Token> for String {
+    fn from(value: Token) -> Self {
         match value {
-            Token::PpRest(s) => s.to_string(),
+            Token::PpRest(s) => s,
             other => panic!("cannot convert {:?} into String", other),
         }
     }

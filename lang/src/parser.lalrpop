@@ -4,7 +4,7 @@ use crate::{
     parse::{IdentifierContext, LangLexer},
 };
 
-grammar<'i, L>(text: &'i str) where L: LangLexer<'i>;
+grammar<L>(text: &str) where L: LangLexer;
 
 comma<T>: Vec<T> = {
     <e:T?> <v:("," <T>)*> => match e {
@@ -807,7 +807,7 @@ extern {
     type Location = LexerPosition;
     type Error = L::Error;
 
-    enum Token<'i> {
+    enum Token {
         ident                    => Token::Identifier((_, _)),
         ty_name                  => Token::TypeName(_),
         int_constant             => Token::IntConstant(_),

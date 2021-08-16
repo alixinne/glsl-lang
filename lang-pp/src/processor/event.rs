@@ -10,13 +10,15 @@ use lang_util::FileId;
 use crate::{
     exts::names::ExtNameAtom,
     last::type_names::TypeNameAtom,
-    parser::{self, SyntaxKind, SyntaxNode, SyntaxToken},
+    parser::{self, SyntaxKind},
 };
 
 use super::{
     expand::ExpandLocation,
     nodes::{self, Directive, ExtensionName, ParsedLine, ParsedPath},
 };
+
+pub use crate::parser::{SyntaxNode, SyntaxToken};
 
 #[derive(Debug, PartialEq, Eq)]
 pub struct ProcessingError {
@@ -315,6 +317,22 @@ impl<E: std::error::Error> Located<E> {
             line,
             line_override: location.line_override().cloned(),
         }
+    }
+
+    pub fn into_inner(self) -> E {
+        self.inner
+    }
+
+    pub fn inner(&self) -> &E {
+        &self.inner
+    }
+
+    pub fn current_file(&self) -> FileId {
+        self.current_file
+    }
+
+    pub fn pos(&self) -> &TextRange {
+        &self.pos
     }
 
     pub fn line(&self) -> u32 {

@@ -1,5 +1,7 @@
 //! Last stage lexer declaration
 
+use arrayvec::ArrayVec;
+
 use crate::lexer::{LineMap, PreLexer, PreTextToken, PreToken as InputToken};
 
 mod token;
@@ -16,14 +18,16 @@ pub type TextToken = crate::TextToken<token::Token>;
 #[derive(Debug, Clone)]
 pub struct Lexer<'i> {
     input: PreLexer<'i>,
-    buffer: Vec<PreTextToken>,
+    /// Unglued token buffer. Since we're pasting at most 3 tokens together, and we always return
+    /// one, we only need space for storing 2 pending tokens.
+    buffer: ArrayVec<PreTextToken, 2>,
 }
 
 impl<'i> Lexer<'i> {
     pub fn new(input: &'i str) -> Self {
         Self {
             input: PreLexer::new(input),
-            buffer: Vec::with_capacity(2),
+            buffer: ArrayVec::new(),
         }
     }
 

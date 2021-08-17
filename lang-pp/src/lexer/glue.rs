@@ -13,6 +13,7 @@ pub type TextToken = crate::TextToken<token::Token>;
 /// This lexer wraps earlier stages and glues punctuation together to form (longest)
 /// multi-character operator tokens. This is the entry point for lexing a pre-processor token
 /// stream for the GLSL language.
+#[derive(Debug, Clone)]
 pub struct Lexer<'i> {
     input: PreLexer<'i>,
     buffer: Vec<PreTextToken>,

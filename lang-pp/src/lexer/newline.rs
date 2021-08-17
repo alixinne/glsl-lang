@@ -26,6 +26,7 @@ pub type NewlineToken = TextToken<NewlineTokenKind>;
 ///
 /// This only detects \r\n sequences and classifies other characters following the types declared
 /// in [NewlineTokenKind](NewlineTokenKind).
+#[derive(Debug, Clone)]
 pub struct NewlineSplitter<'i> {
     end: TextSize,
     chars: Peekable<CharIndices<'i>>,

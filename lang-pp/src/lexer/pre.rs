@@ -11,7 +11,7 @@ use Token::*;
 
 pub type TextToken = crate::TextToken<token::Token>;
 
-#[derive(Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 enum State {
     /// Initial state of the preprocessor
     Init,
@@ -51,6 +51,7 @@ impl Default for State {
 /// * Eliminate backslash-escaped newlines
 /// * Identify single and multi-line comments
 /// * Tokenize double-quoted strings and (when asked to) angle-quoted strings
+#[derive(Debug, Clone)]
 pub struct PreLexer<'i> {
     source: &'i str,
     input: NewlineSplitter<'i>,

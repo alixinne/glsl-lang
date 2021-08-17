@@ -235,9 +235,13 @@ pub struct Tokenizer<'r, I> {
 }
 
 impl<'r, I: LocatedIterator> Tokenizer<'r, I> {
-    pub fn new(inner: I, target_vulkan: bool, registry: &'r Registry) -> Self {
+    pub fn new(
+        inner: impl IntoIterator<IntoIter = I>,
+        target_vulkan: bool,
+        registry: &'r Registry,
+    ) -> Self {
         Self {
-            inner,
+            inner: inner.into_iter(),
             type_table: TypeTable::new(registry, target_vulkan),
             pending_error: None,
         }

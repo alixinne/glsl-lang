@@ -633,10 +633,9 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
         current_state: &ProcessorState,
         tokens: Vec<T>,
         location: &ExpandLocation,
-    ) -> impl Iterator<Item = Event> {
+    ) -> Vec<Event> {
         let mut subs_stack = HashSet::new();
         Self::substitute_vec_inner(current_state, tokens, location, &mut subs_stack, None)
-            .into_iter()
     }
 
     fn substitute_vec_inner(
@@ -722,7 +721,7 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
         self,
         current_state: &ProcessorState,
         location: &ExpandLocation,
-    ) -> impl Iterator<Item = Event> {
+    ) -> Vec<Event> {
         let mut subs_stack = HashSet::new();
         self.substitute_inner(current_state, location, &mut subs_stack)
     }
@@ -732,7 +731,7 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
         current_state: &ProcessorState,
         location: &ExpandLocation,
         subs_stack: &mut HashSet<SmolStr>,
-    ) -> impl Iterator<Item = Event> {
+    ) -> Vec<Event> {
         let events = match self.tokens {
             MacroCall::Object => {
                 self.definition
@@ -762,7 +761,10 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
                     // TODO: Prevent re-allocation
                     MacroInvocation::substitute_vec_inner(
                         current_state,
-                        events.into_iter().filter_map(Event::into_token).collect(),
+                        events
+                            .into_iter()
+                            .filter_map(Event::into_token)
+                            .collect::<Vec<_>>(),
                         location,
                         subs_stack,
                         range,
@@ -776,6 +778,6 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
 
         subs_stack.remove(self.definition.name());
 
-        result.into_iter()
+        result
     }
 }

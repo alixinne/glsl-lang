@@ -682,7 +682,7 @@ impl Event {
     pub fn directive_errors<D: Into<DirectiveKind>>(
         d: Directive<D>,
         masked: bool,
-        errors: impl Iterator<Item = impl Into<ErrorKind>>,
+        errors: impl IntoIterator<Item = impl Into<ErrorKind>>,
         location: &ExpandLocation,
     ) -> Self {
         let (inner, node) = d.into_inner();
@@ -690,7 +690,10 @@ impl Event {
             node,
             kind: inner.into(),
             masked,
-            errors: errors.map(|error| Error::new(error, location)).collect(),
+            errors: errors
+                .into_iter()
+                .map(|error| Error::new(error, location))
+                .collect(),
         }
     }
 

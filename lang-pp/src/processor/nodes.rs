@@ -685,8 +685,7 @@ impl Include {
             .children_with_tokens()
             .filter_map(NodeOrToken::into_token)
             .collect();
-        let subs_events: Vec<_> =
-            MacroInvocation::substitute_vec(current_state, tokens, location).collect();
+        let subs_events = MacroInvocation::substitute_vec(current_state, tokens, location);
 
         // Make sure they are all tokens
         if !subs_events.iter().all(Event::is_token) {
@@ -794,8 +793,7 @@ impl Line {
             .children_with_tokens()
             .filter_map(NodeOrToken::into_token)
             .collect();
-        let subs_events: Vec<_> =
-            MacroInvocation::substitute_vec(current_state, tokens, location).collect();
+        let subs_events = MacroInvocation::substitute_vec(current_state, tokens, location);
 
         // Make sure they are all tokens
         if !subs_events.iter().all(Event::is_token) {
@@ -922,8 +920,7 @@ fn eval_inner(
         .children_with_tokens()
         .filter_map(NodeOrToken::into_token)
         .collect();
-    let subs_events: Vec<_> =
-        MacroInvocation::substitute_vec(current_state, tokens, location).collect();
+    let subs_events = MacroInvocation::substitute_vec(current_state, tokens, location);
 
     // Make sure they are all tokens
     if !subs_events.iter().all(Event::is_token) {

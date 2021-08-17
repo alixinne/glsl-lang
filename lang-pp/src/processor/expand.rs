@@ -300,7 +300,7 @@ impl ExpandOne {
                             None
                         };
 
-                        Event::directive_errors(define, !active, error.into_iter(), &self.location)
+                        Event::directive_errors(define, !active, error, &self.location)
                     }
                     Err(error) => Event::directive_error(error, &self.location, !active),
                 }
@@ -360,9 +360,9 @@ impl ExpandOne {
                             Event::directive_errors(
                                 if_,
                                 !active,
-                                error.into_iter().map(ProcessingErrorKind::DirectiveIf).map(
-                                    |kind| kind.with_node(node.clone().into(), &self.location),
-                                ),
+                                error.map(ProcessingErrorKind::DirectiveIf).map(|kind| {
+                                    kind.with_node(node.clone().into(), &self.location)
+                                }),
                                 &self.location,
                             ),
                         )
@@ -411,9 +411,7 @@ impl ExpandOne {
                 }
 
                 match directive {
-                    Ok(elif_) => {
-                        Event::directive_errors(elif_, !active, errors.into_iter(), &self.location)
-                    }
+                    Ok(elif_) => Event::directive_errors(elif_, !active, errors, &self.location),
                     Err(error) => Event::directive_error(error, &self.location, !active),
                 }
             }
@@ -427,9 +425,7 @@ impl ExpandOne {
                 });
 
                 match directive {
-                    Ok(else_) => {
-                        Event::directive_errors(else_, !active, error.into_iter(), &self.location)
-                    }
+                    Ok(else_) => Event::directive_errors(else_, !active, error, &self.location),
                     Err(error) => Event::directive_error(error, &self.location, !active),
                 }
             }
@@ -443,9 +439,7 @@ impl ExpandOne {
                 });
 
                 match directive {
-                    Ok(endif) => {
-                        Event::directive_errors(endif, !active, error.into_iter(), &self.location)
-                    }
+                    Ok(endif) => Event::directive_errors(endif, !active, error, &self.location),
                     Err(error) => Event::directive_error(error, &self.location, !active),
                 }
             }
@@ -475,15 +469,13 @@ impl ExpandOne {
                         Event::directive_errors(
                             undef,
                             !active,
-                            protected_ident
-                                .map(|ident| {
-                                    ProcessingErrorKind::ProtectedDefine {
-                                        ident,
-                                        is_undef: true,
-                                    }
-                                    .with_node(node.into(), &self.location)
-                                })
-                                .into_iter(),
+                            protected_ident.map(|ident| {
+                                ProcessingErrorKind::ProtectedDefine {
+                                    ident,
+                                    is_undef: true,
+                                }
+                                .with_node(node.into(), &self.location)
+                            }),
                             &self.location,
                         )
                     }
@@ -558,8 +550,7 @@ impl ExpandOne {
                                             ))
                                         } else {
                                             None
-                                        }
-                                        .into_iter(),
+                                        },
                                         &self.location,
                                     ),
                                     node,
@@ -593,7 +584,7 @@ impl ExpandOne {
                         };
 
                         // Forward the directive
-                        Event::directive_errors(include, !active, error.into_iter(), &self.location)
+                        Event::directive_errors(include, !active, error, &self.location)
                     }
                     Err(error) => {
                         if current_state.include_mode == IncludeMode::None {
@@ -661,7 +652,7 @@ impl ExpandOne {
                             None
                         };
 
-                        Event::directive_errors(ld, !active, error.into_iter(), &self.location)
+                        Event::directive_errors(ld, !active, error, &self.location)
                     }
                     Err(error) => Event::directive_error(error, &self.location, !active),
                 }
@@ -715,9 +706,7 @@ impl ExpandOne {
                     self.state = ExpandState::ExpandedTokens {
                         iterator: new_iterator,
                         errors,
-                        events: invocation
-                            .substitute(&current_state, &self.location)
-                            .collect(),
+                        events: invocation.substitute(&current_state, &self.location).into(),
                         current_state,
                     };
                 }

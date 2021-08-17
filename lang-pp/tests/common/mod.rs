@@ -6,9 +6,12 @@ use std::{
 };
 
 use glsl_lang_pp::{
-    exts::DEFAULT_REGISTRY,
+    exts::{names::ExtNameAtom, DEFAULT_REGISTRY},
     last::Event,
-    processor::event::{DirectiveKind, TokenLike},
+    processor::{
+        event::{DirectiveKind, TokenLike},
+        nodes::ExtensionName,
+    },
 };
 
 struct Paths {
@@ -45,6 +48,13 @@ impl Paths {
     }
 }
 
+fn inspect_extension(name: &str, critical_error_count: &mut usize) {
+    if name.starts_with("GL_") && DEFAULT_REGISTRY.get(&ExtNameAtom::from(name)).is_none() {
+        eprintln!("unsupported extension: {}", name);
+        *critical_error_count += 1;
+    }
+}
+
 pub fn test_file(path: impl AsRef<Path>) {
     let path = path.as_ref();
     let mut pp = glsl_lang_pp::processor::fs::StdProcessor::default();
@@ -73,6 +83,7 @@ pub fn test_file(path: impl AsRef<Path>) {
     let mut errorsf = File::create(&paths.errors).unwrap();
 
     let mut error_count = 0;
+    let mut critical_error_count = 0;
 
     for result in parsed.into_iter().tokenize(false, &DEFAULT_REGISTRY) {
         writeln!(eventsf, "{:?}", result).unwrap();
@@ -111,10 +122,19 @@ pub fn test_file(path: impl AsRef<Path>) {
                         }
 
                         match kind {
-                            DirectiveKind::Version(_)
-                            | DirectiveKind::Pragma(_)
-                            | DirectiveKind::Extension(_) => {
+                            DirectiveKind::Version(_) | DirectiveKind::Pragma(_) => {
                                 write!(ppf, "{}", node).unwrap();
+                            }
+                            DirectiveKind::Extension(ext) => {
+                                write!(ppf, "{}", node).unwrap();
+
+                                if let ExtensionName::Specific(name) = &ext.name {
+                                    inspect_extension(name, &mut critical_error_count);
+                                }
+                            }
+                            DirectiveKind::IfDef(ifdef) => {
+                                let name = &ifdef.ident;
+                                inspect_extension(name, &mut critical_error_count);
                             }
                             _ => {}
                         }
@@ -133,4 +153,6 @@ pub fn test_file(path: impl AsRef<Path>) {
         drop(errorsf);
         fs::remove_file(&paths.errors).unwrap();
     }
+
+    assert_eq!(critical_error_count, 0);
 }

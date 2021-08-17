@@ -1059,7 +1059,6 @@ impl TryFrom<SyntaxNode> for Else {
     type Error = ElseError;
 
     fn try_from(_: SyntaxNode) -> Result<Self, Self::Error> {
-        // TODO: Handle extra tokens?
         Ok(Self)
     }
 }
@@ -1074,7 +1073,6 @@ impl TryFrom<SyntaxNode> for EndIf {
     type Error = EndIfError;
 
     fn try_from(_: SyntaxNode) -> Result<Self, Self::Error> {
-        // TODO: Handle extra tokens?
         Ok(Self)
     }
 }

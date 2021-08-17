@@ -3,11 +3,10 @@ use std::{borrow::Cow, convert::TryFrom, str::FromStr};
 use arrayvec::ArrayVec;
 use rowan::NodeOrToken;
 use smol_str::SmolStr;
-use string_cache::Atom;
 use thiserror::Error;
 
 use crate::{
-    exts,
+    exts::names::ExtNameAtom,
     parser::{SyntaxKind::*, SyntaxNode, SyntaxToken},
     processor::{
         event::TokenLike,
@@ -268,7 +267,7 @@ pub enum ExtensionName {
     /// All extensions
     All,
     /// Specific extension
-    Specific(Atom<exts::names::ExtNameAtomStaticSet>),
+    Specific(ExtNameAtom),
 }
 
 impl ExtensionName {
@@ -276,13 +275,13 @@ impl ExtensionName {
         if name == "all" {
             Self::All
         } else {
-            Self::Specific(Atom::from(name))
+            Self::Specific(ExtNameAtom::from(name))
         }
     }
 }
 
-impl PartialEq<Atom<exts::names::ExtNameAtomStaticSet>> for ExtensionName {
-    fn eq(&self, other: &Atom<exts::names::ExtNameAtomStaticSet>) -> bool {
+impl PartialEq<ExtNameAtom> for ExtensionName {
+    fn eq(&self, other: &ExtNameAtom) -> bool {
         match self {
             ExtensionName::All => false,
             ExtensionName::Specific(this) => this == other,

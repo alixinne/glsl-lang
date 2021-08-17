@@ -129,13 +129,12 @@ impl ProcessingErrorKind {
         location: &ExpandLocation,
     ) -> ProcessingError {
         let pos = node.text_range();
-        let start = pos.start();
 
         ProcessingError::new(
             node,
             self,
             pos,
-            location.line_map().get_line_and_col(start.into()),
+            location.offset_to_raw_line_and_col(pos.start()),
         )
     }
 
@@ -145,25 +144,22 @@ impl ProcessingErrorKind {
         pos: TextRange,
         location: &ExpandLocation,
     ) -> ProcessingError {
-        let start = pos.start();
-
         ProcessingError::new(
             node,
             self,
             pos,
-            location.line_map().get_line_and_col(start.into()),
+            location.offset_to_raw_line_and_col(pos.start()),
         )
     }
 
     pub fn with_token(self, token: impl TokenLike, location: &ExpandLocation) -> ProcessingError {
         let pos = token.text_range();
-        let start = pos.start();
 
         ProcessingError::new(
             token.into(),
             self,
             pos,
-            location.line_map().get_line_and_col(start.into()),
+            location.offset_to_raw_line_and_col(pos.start()),
         )
     }
 
@@ -173,13 +169,11 @@ impl ProcessingErrorKind {
         pos: TextRange,
         location: &ExpandLocation,
     ) -> ProcessingError {
-        let start = pos.start();
-
         ProcessingError::new(
             token.into(),
             self,
             pos,
-            location.line_map().get_line_and_col(start.into()),
+            location.offset_to_raw_line_and_col(pos.start()),
         )
     }
 }
@@ -307,7 +301,7 @@ pub struct Located<E: std::error::Error + 'static> {
 
 impl<E: std::error::Error> Located<E> {
     pub fn new(inner: E, path: PathBuf, pos: TextRange, location: &ExpandLocation) -> Self {
-        let line = location.offset_to_line_number(pos.start());
+        let line = location.offset_to_line_and_col(pos.start()).0;
 
         Self {
             inner,
@@ -487,7 +481,7 @@ impl ErrorKind {
         pos: TextRange,
         location: &ExpandLocation,
     ) -> Self {
-        let raw_line = location.line_map().get_line_and_col(pos.start().into()).0;
+        let raw_line = location.offset_to_raw_line_and_col(pos.start()).0;
         Self::UnsupportedExt {
             extension,
             raw_line,
@@ -501,7 +495,7 @@ impl ErrorKind {
         pos: TextRange,
         location: &ExpandLocation,
     ) -> Self {
-        let raw_line = location.line_map().get_line_and_col(pos.start().into()).0;
+        let raw_line = location.offset_to_raw_line_and_col(pos.start()).0;
         Self::WarnExtUse {
             extension,
             name,

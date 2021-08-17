@@ -402,7 +402,8 @@ impl Definition {
         match self {
             Definition::Line => Self::substitute_string(
                 &location
-                    .offset_to_line_number(entire_range.start())
+                    .offset_to_line_and_col(entire_range.start())
+                    .0
                     .to_string(),
                 DIGITS,
             )

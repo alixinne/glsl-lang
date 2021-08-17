@@ -66,10 +66,6 @@ impl ExpandLocation {
         }
     }
 
-    pub fn line_map(&self) -> &LineMap {
-        &self.line_map
-    }
-
     pub fn current_file(&self) -> FileId {
         self.current_file
     }
@@ -78,9 +74,13 @@ impl ExpandLocation {
         self.line_override.as_ref()
     }
 
-    pub fn offset_to_line_number(&self, offset: TextSize) -> u32 {
-        let raw_line = self.line_map().get_line_and_col(offset.into()).0;
-        self.line_to_line_number(raw_line)
+    pub fn offset_to_raw_line_and_col(&self, offset: TextSize) -> (u32, u32) {
+        self.line_map.get_line_and_col(offset.into())
+    }
+
+    pub fn offset_to_line_and_col(&self, offset: TextSize) -> (u32, u32) {
+        let line_and_col = self.offset_to_raw_line_and_col(offset);
+        (self.line_to_line_number(line_and_col.0), line_and_col.1)
     }
 
     pub fn line_to_line_number(&self, raw_line: u32) -> u32 {

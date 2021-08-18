@@ -25,6 +25,7 @@ pub trait FileSystem {
     type Error: std::error::Error + 'static;
 
     fn canonicalize(&self, path: &Path) -> Result<PathBuf, Self::Error>;
+    fn exists(&self, path: &Path) -> bool;
     fn read(&self, path: &Path, encoding: Option<&'static Encoding>)
         -> Result<String, Self::Error>;
 }
@@ -37,6 +38,10 @@ impl FileSystem for Std {
 
     fn canonicalize(&self, path: &Path) -> Result<PathBuf, Self::Error> {
         std::fs::canonicalize(path)
+    }
+
+    fn exists(&self, path: &Path) -> bool {
+        path.exists()
     }
 
     fn read(
@@ -235,6 +240,8 @@ pub struct Processor<F: FileSystem> {
     file_ids: BiHashMap<PathBuf, FileId>,
     /// Mapping from #include/input paths to canonical paths
     canonical_paths: BiHashMap<PathBuf, PathBuf>,
+    /// List of include paths in resolution order
+    system_paths: Vec<PathBuf>,
     /// Filesystem abstraction
     fs: F,
 }
@@ -245,6 +252,7 @@ impl<F: FileSystem> Processor<F> {
             file_cache: HashMap::with_capacity(1),
             file_ids: BiHashMap::with_capacity(1),
             canonical_paths: BiHashMap::with_capacity(1),
+            system_paths: Vec::new(),
             fs,
         }
     }
@@ -259,14 +267,22 @@ impl<F: FileSystem> Processor<F> {
         Some((canonical_path, input_path))
     }
 
+    pub fn system_paths(&self) -> &Vec<PathBuf> {
+        &self.system_paths
+    }
+
+    pub fn system_paths_mut(&mut self) -> &mut Vec<PathBuf> {
+        &mut self.system_paths
+    }
+
     pub fn resolve(&self, relative_to: FileId, path: &ParsedPath) -> Option<PathBuf> {
         let (_, input_path) = self.get_paths(relative_to)?;
 
         match path.ty {
-            PathType::Angle => {
-                // TODO: Handle angle-quoted paths
-                None
-            }
+            PathType::Angle => self.system_paths.iter().find_map(|system_path| {
+                let full_path = system_path.join(&input_path);
+                self.fs.exists(&full_path).then(|| full_path)
+            }),
             PathType::Quote => Some(input_path.parent()?.join(&path.path)),
         }
     }

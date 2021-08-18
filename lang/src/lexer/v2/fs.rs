@@ -1,6 +1,7 @@
 //! Filesystem based glsl-lang-pp preprocessing lexer
 
 use std::{
+    convert::TryInto,
     path::{Path, PathBuf},
     rc::Rc,
 };
@@ -14,6 +15,7 @@ use glsl_lang_pp::{
         ProcessorState,
     },
 };
+use lang_util::error::ResolvedPosition;
 
 use crate::parse::{IntoLexer, LangLexer, ParseContext};
 
@@ -134,11 +136,16 @@ impl<'r, 'p, F: FileSystem> LangLexer for Lexer<'r, 'p, F> {
         &mut self,
         parser: &P,
     ) -> Result<P::Item, crate::parse::ParseError<Self>> {
-        // TODO: Use line map to resolve the line numbers instead of lang_util::error::ParseError
-        let src = self.source.clone();
-        parser
-            .parse(src.as_str(), self)
-            .map_err(|err| lang_util::error::ParseError::new(err, src.as_str()))
+        let source = self.source.clone();
+        parser.parse(source.as_str(), self).map_err(|err| {
+            let location = self.inner.location();
+            let lexer = lang_util::error::error_location(&err);
+            let (line, col) = location.offset_to_line_and_col(
+                lexer.offset.try_into().expect("input length out of range"),
+            );
+            let position = ResolvedPosition::new_resolved(lexer, line as _, col as _);
+            lang_util::error::ParseError::new_resolved(err, position)
+        })
     }
 }
 

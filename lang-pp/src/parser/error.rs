@@ -38,13 +38,7 @@ impl Error {
 
 impl std::fmt::Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(
-            f,
-            "{}:{}: {}",
-            self.user_pos.0 + 1,
-            self.user_pos.1,
-            self.kind
-        )
+        write!(f, "{}", self.kind)
     }
 }
 

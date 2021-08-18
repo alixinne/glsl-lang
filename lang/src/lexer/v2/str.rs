@@ -1,5 +1,7 @@
 //! Memory based glsl-lang-pp preprocessing lexer
 
+use std::convert::TryInto;
+
 use glsl_lang_pp::{
     exts::DEFAULT_REGISTRY,
     last::{self, Event},
@@ -9,6 +11,7 @@ use glsl_lang_pp::{
         ProcessorState,
     },
 };
+use lang_util::error::ResolvedPosition;
 
 use crate::parse::{LangLexer, ParseContext};
 
@@ -101,10 +104,15 @@ impl<'i> LangLexer for Lexer<'i> {
         &mut self,
         parser: &P,
     ) -> Result<P::Item, crate::parse::ParseError<Self>> {
-        // TODO: Use line map to resolve the line numbers instead of lang_util::error::ParseError
         let source = self.source;
-        parser
-            .parse(source, self)
-            .map_err(|err| lang_util::error::ParseError::new(err, source))
+        parser.parse(source, self).map_err(|err| {
+            let location = self.inner.location();
+            let lexer = lang_util::error::error_location(&err);
+            let (line, col) = location.offset_to_line_and_col(
+                lexer.offset.try_into().expect("input length out of range"),
+            );
+            let position = ResolvedPosition::new_resolved(lexer, line as _, col as _);
+            lang_util::error::ParseError::new_resolved(err, position)
+        })
     }
 }

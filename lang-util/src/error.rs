@@ -112,6 +112,29 @@ impl ResolvedPosition {
         }
     }
 
+    /// Create a new resolved position from already resolved components
+    ///
+    /// # Parameters
+    ///
+    /// * `raw`: raw byte offset into the input
+    /// * `line_index`: line index of the error
+    /// * `pos_index`: column index of the error
+    ///
+    /// # Returns
+    ///
+    /// The resolved position.
+    pub fn new_resolved(
+        raw: LexerPosition,
+        line_index: usize,
+        pos_index: usize,
+    ) -> ResolvedPosition {
+        Self {
+            raw,
+            line_index,
+            pos_index,
+        }
+    }
+
     /// Source string id for this position
     pub fn source_id(&self) -> FileId {
         self.raw.source_id
@@ -159,9 +182,20 @@ impl<E: LexicalError> ParseError<E> {
         error: lalrpop_util::ParseError<LexerPosition, T, E>,
         input: &str,
     ) -> Self {
-        // Resolve position into something that is user readable
         let position = ResolvedPosition::from((&error, input));
+        Self::new_resolved(error, position)
+    }
 
+    /// Create a new [ParseError]
+    ///
+    /// # Parameters
+    ///
+    /// * `error`: lalrpop_util parsing error
+    /// * `position`: resolved position of the error
+    pub fn new_resolved<T: Token>(
+        error: lalrpop_util::ParseError<LexerPosition, T, E>,
+        position: ResolvedPosition,
+    ) -> Self {
         // Simplification function
         let simplify = || {
             // Lookup structure for token names and kinds
@@ -271,16 +305,20 @@ impl<'s, T, E: LexicalError> From<(&'s lalrpop_util::ParseError<LexerPosition, T
 {
     fn from((error, input): (&'s lalrpop_util::ParseError<LexerPosition, T, E>, &'s str)) -> Self {
         // Resolve position into something that is user readable
-        Self::new(
-            match error {
-                lalrpop_util::ParseError::InvalidToken { location } => *location,
-                lalrpop_util::ParseError::UnrecognizedEOF { location, .. } => *location,
-                lalrpop_util::ParseError::UnrecognizedToken { token, .. } => token.0,
-                lalrpop_util::ParseError::ExtraToken { token } => token.0,
-                lalrpop_util::ParseError::User { error } => error.location(),
-            },
-            input,
-        )
+        Self::new(error_location(error), input)
+    }
+}
+
+/// Return the LexerLocation of a lalrpop_util::ParseError
+pub fn error_location<T, E: LexicalError>(
+    error: &lalrpop_util::ParseError<LexerPosition, T, E>,
+) -> LexerPosition {
+    match error {
+        lalrpop_util::ParseError::InvalidToken { location } => *location,
+        lalrpop_util::ParseError::UnrecognizedEOF { location, .. } => *location,
+        lalrpop_util::ParseError::UnrecognizedToken { token, .. } => token.0,
+        lalrpop_util::ParseError::ExtraToken { token } => token.0,
+        lalrpop_util::ParseError::User { error } => error.location(),
     }
 }
 

@@ -70,7 +70,7 @@ pub trait LangLexer: Sized {
     fn new(source: Self::Input, opts: ParseContext) -> Self;
 
     /// Run the given parser with this lexer as input
-    fn chain<P: LangParser<Self>>(self, parser: &P) -> Result<P::Item, ParseError<Self>>;
+    fn chain<P: LangParser<Self>>(&mut self, parser: &P) -> Result<P::Item, ParseError<Self>>;
 }
 
 impl<T: LangLexer> IntoLexer for T {
@@ -97,7 +97,7 @@ pub trait LangParser<L: LangLexer>: Sized {
     fn parse(
         &self,
         source: &str,
-        input: L,
+        input: &mut L,
     ) -> Result<Self::Item, lalrpop_util::ParseError<LexerPosition, lexer::Token, L::Error>>;
 }
 
@@ -129,7 +129,7 @@ impl<'i, T: HasParser<Lexer<'i>>> Parse<'i> for T {
     fn parse(source: &'i str) -> Result<Self, ParseError<Lexer<'i>>> {
         ParseBuilder::<Lexer, Self>::new(source)
             .parse()
-            .map(|(parsed, _names)| parsed)
+            .map(|(parsed, _names, _lexer)| parsed)
     }
 
     fn parse_with_options(source: &'i str, opts: &ParseContext) -> ParseResult<Lexer<'i>, Self> {
@@ -157,7 +157,7 @@ pub struct ParseBuilder<'o, 'p, L: IntoLexer, T: HasParser<L::Lexer>> {
 }
 
 /// Result of a parsing operation
-pub type ParseResult<L, T> = Result<(T, ParseContext), ParseError<L>>;
+pub type ParseResult<L, T> = Result<(T, ParseContext, <L as IntoLexer>::Lexer), ParseError<L>>;
 
 /// Errors returned by the parsing operation
 pub type ParseError<L> =
@@ -202,7 +202,7 @@ impl<'o, 'p, L: IntoLexer, T: HasParser<L::Lexer>> ParseBuilder<'o, 'p, L, T> {
         };
 
         // Create the lexer
-        let lexer = if let Some(lexer) = self.lexer.take() {
+        let mut lexer = if let Some(lexer) = self.lexer.take() {
             lexer.into_lexer(source, cloned_opts.clone())
         } else {
             L::Lexer::new(source, cloned_opts.clone())
@@ -218,7 +218,9 @@ impl<'o, 'p, L: IntoLexer, T: HasParser<L::Lexer>> ParseBuilder<'o, 'p, L, T> {
         };
 
         // Invoke the parser
-        lexer.chain(parser).map(|parsed| (parsed, cloned_opts))
+        lexer
+            .chain(parser)
+            .map(|parsed| (parsed, cloned_opts, lexer))
     }
 }
 
@@ -226,7 +228,7 @@ macro_rules! impl_parse {
     ($t:ty => $p:ty) => {
         impl<
                 L: LangLexer
-                    + IntoIterator<
+                    + Iterator<
                         Item = Result<(LexerPosition, lexer::Token, LexerPosition), L::Error>,
                     >,
             > LangParser<L> for $p
@@ -240,7 +242,7 @@ macro_rules! impl_parse {
             fn parse(
                 &self,
                 source: &str,
-                input: L,
+                input: &mut L,
             ) -> Result<Self::Item, lalrpop_util::ParseError<LexerPosition, lexer::Token, L::Error>>
             {
                 self.parse::<L, _, _>(source, input)
@@ -249,7 +251,7 @@ macro_rules! impl_parse {
 
         impl<
                 L: LangLexer
-                    + IntoIterator<
+                    + Iterator<
                         Item = Result<(LexerPosition, lexer::Token, LexerPosition), L::Error>,
                     >,
             > HasParser<L> for $t

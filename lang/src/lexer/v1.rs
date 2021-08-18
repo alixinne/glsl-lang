@@ -321,7 +321,7 @@ impl<'i> LangLexer for Lexer<'i> {
     }
 
     fn chain<P: crate::parse::LangParser<Self>>(
-        self,
+        &mut self,
         parser: &P,
     ) -> Result<P::Item, crate::parse::ParseError<Self>> {
         let source = self.source;

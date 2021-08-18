@@ -131,7 +131,7 @@ impl<'r, 'p, F: FileSystem> LangLexer for Lexer<'r, 'p, F> {
     }
 
     fn chain<'i, P: crate::parse::LangParser<Self>>(
-        self,
+        &mut self,
         parser: &P,
     ) -> Result<P::Item, crate::parse::ParseError<Self>> {
         // TODO: Use line map to resolve the line numbers instead of lang_util::error::ParseError

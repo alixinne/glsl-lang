@@ -37,7 +37,7 @@ impl<'i, T: Extractable> Parsable<'i> for T {
         opts: &ParseContext,
     ) -> Result<(Self, ParseContext), ParseError<'i>> {
         <ast::TranslationUnit as super::Parse>::parse_with_options(&Self::wrap(source), opts)
-            .map(|(tu, oo)| (Self::extract(tu).expect("invalid parse result"), oo))
+            .map(|(tu, oo, _lexer)| (Self::extract(tu).expect("invalid parse result"), oo))
     }
 }
 

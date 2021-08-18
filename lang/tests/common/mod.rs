@@ -62,7 +62,7 @@ fn parse_tu(
         .expect("failed to open file")
         .builder()
         .parse()
-        .map(|(tu, _)| tu)
+        .map(|(tu, _, _)| tu)
 }
 
 #[cfg(not(any(feature = "lexer-v1", feature = "lexer-v2")))]

@@ -58,9 +58,6 @@ impl<'r, 'p, F: FileSystem> Iterator for Lexer<'r, 'p, F> {
                 // TODO: Figure out why we need the io.into_inner()
                 return Some(item.map_err(|err| match err {
                     LexicalError::Token { kind, pos } => LexicalError::Token { kind, pos },
-                    LexicalError::ProcessStrError { error, pos } => {
-                        LexicalError::ProcessStrError { error, pos }
-                    }
                     LexicalError::Processor(err) => LexicalError::Processor(err),
                     LexicalError::Io(io) => LexicalError::Io(io.into_inner()),
                 }));

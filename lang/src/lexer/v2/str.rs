@@ -73,7 +73,7 @@ impl<'i> Iterator for Lexer<'i> {
                     },
 
                     Err(err) => {
-                        return Some(self.core.handle_str_err(err));
+                        return Some(self.core.handle_str_err(err, self.inner.location()));
                     }
                 }
             } else {

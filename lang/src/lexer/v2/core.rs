@@ -3,7 +3,8 @@ use std::collections::VecDeque;
 use glsl_lang_pp::{
     last::{self, type_names::TypeNameAtom, LocatedIterator, MaybeToken, TokenState, Tokenizer},
     processor::{
-        event::{self, DirectiveKind, Error, OutputToken, SyntaxNode, TokenLike},
+        event::{self, DirectiveKind, Error, Located, OutputToken, SyntaxNode, TokenLike},
+        expand::ExpandLocation,
         str::ProcessStrError,
     },
 };
@@ -19,7 +20,6 @@ pub type Item<E> = Result<(LexerPosition, Token, LexerPosition), LexicalError<E>
 pub struct LexerCore {
     pub ctx: ParseContext,
     file_id: FileId,
-    offset: usize,
 }
 
 pub enum HandleTokenResult<E: std::error::Error + 'static> {
@@ -88,11 +88,7 @@ impl<E: std::error::Error + 'static> Default for HandleTokenResult<E> {
 impl LexerCore {
     pub fn new(ctx: ParseContext) -> Self {
         let file_id = ctx.opts.source_id;
-        Self {
-            ctx,
-            file_id,
-            offset: 0,
-        }
+        Self { ctx, file_id }
     }
 
     fn lang_token<'r, I, T, E>(
@@ -599,11 +595,22 @@ impl LexerCore {
         // TODO: Store directive information
     }
 
-    pub fn handle_str_err<E: std::error::Error + 'static>(&self, err: ProcessStrError) -> Item<E> {
-        Err(LexicalError::ProcessStrError {
-            error: err,
-            pos: self.position(self.offset),
-        })
+    pub fn handle_str_err(
+        &self,
+        err: ProcessStrError,
+        location: &ExpandLocation,
+    ) -> Item<ProcessStrError> {
+        match &err {
+            ProcessStrError::IncludeRequested(_, node, _) => {
+                let pos = node.text_range();
+                Err(LexicalError::Io(Located::new(
+                    err,
+                    Default::default(),
+                    pos,
+                    location,
+                )))
+            }
+        }
     }
 
     pub fn position(&self, offset: impl Into<usize>) -> LexerPosition {

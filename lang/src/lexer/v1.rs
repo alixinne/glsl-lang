@@ -324,10 +324,9 @@ impl<'i> LangLexer for Lexer<'i> {
         &mut self,
         parser: &P,
     ) -> Result<P::Item, crate::parse::ParseError<Self>> {
-        let source = self.source;
         parser
-            .parse(source, self)
-            .map_err(|err| lang_util::error::ParseError::new(err, source))
+            .parse(self)
+            .map_err(|err| lang_util::error::ParseError::new(err, self.source))
     }
 }
 

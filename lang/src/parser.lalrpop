@@ -4,7 +4,7 @@ use crate::{
     parse::{IdentifierContext, LangLexer},
 };
 
-grammar<L>(text: &str) where L: LangLexer;
+grammar<L> where L: LangLexer;
 
 comma<T>: Vec<T> = {
     <e:T?> <v:("," <T>)*> => match e {

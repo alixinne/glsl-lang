@@ -3,7 +3,6 @@
 use std::{
     convert::TryInto,
     path::{Path, PathBuf},
-    rc::Rc,
 };
 
 use glsl_lang_pp::{
@@ -27,22 +26,15 @@ use super::{
 /// glsl-lang-pp filesystem lexer
 pub struct Lexer<'r, 'p, F: FileSystem + 'p> {
     inner: last::Tokenizer<'r, ExpandStack<'p, F>>,
-    source: Rc<String>,
     core: LexerCore,
     current_file: PathBuf,
     handle_token: HandleTokenResult<Located<F::Error>>,
 }
 
 impl<'r, 'p, F: FileSystem> Lexer<'r, 'p, F> {
-    fn new(
-        inner: ExpandStack<'p, F>,
-        source: Rc<String>,
-        registry: &'r Registry,
-        opts: ParseContext,
-    ) -> Self {
+    fn new(inner: ExpandStack<'p, F>, registry: &'r Registry, opts: ParseContext) -> Self {
         Self {
             inner: inner.tokenize(opts.opts.target_vulkan, registry),
-            source,
             core: LexerCore::new(opts),
             current_file: Default::default(),
             handle_token: Default::default(),
@@ -123,10 +115,8 @@ impl<'r, 'p, F: FileSystem> LangLexer for Lexer<'r, 'p, F> {
     type Error = LexicalError<F::Error>;
 
     fn new(source: Self::Input, opts: ParseContext) -> Self {
-        let source_string = source.inner.source();
         Lexer::new(
             source.inner.process(ProcessorState::default()),
-            source_string,
             &DEFAULT_REGISTRY,
             opts,
         )
@@ -136,8 +126,7 @@ impl<'r, 'p, F: FileSystem> LangLexer for Lexer<'r, 'p, F> {
         &mut self,
         parser: &P,
     ) -> Result<P::Item, crate::parse::ParseError<Self>> {
-        let source = self.source.clone();
-        parser.parse(source.as_str(), self).map_err(|err| {
+        parser.parse(self).map_err(|err| {
             let location = self.inner.location();
             let lexer = lang_util::error::error_location(&err);
             let (line, col) = location.offset_to_line_and_col(

@@ -23,7 +23,6 @@ use super::{
 /// glsl-lang-pp memory lexer
 pub struct Lexer<'i> {
     inner: last::Tokenizer<'i, ExpandStr>,
-    source: &'i str,
     core: LexerCore,
     handle_token: HandleTokenResult<ProcessStrError>,
 }
@@ -94,7 +93,6 @@ impl<'i> LangLexer for Lexer<'i> {
         Self {
             inner: processor::str::process(source, ProcessorState::default())
                 .tokenize(opts.opts.target_vulkan, &DEFAULT_REGISTRY),
-            source,
             core: LexerCore::new(opts),
             handle_token: Default::default(),
         }
@@ -104,8 +102,7 @@ impl<'i> LangLexer for Lexer<'i> {
         &mut self,
         parser: &P,
     ) -> Result<P::Item, crate::parse::ParseError<Self>> {
-        let source = self.source;
-        parser.parse(source, self).map_err(|err| {
+        parser.parse(self).map_err(|err| {
             let location = self.inner.location();
             let lexer = lang_util::error::error_location(&err);
             let (line, col) = location.offset_to_line_and_col(

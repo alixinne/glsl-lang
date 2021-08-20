@@ -1,7 +1,6 @@
 use std::{
     collections::{hash_map::Entry, HashMap},
     path::{Path, PathBuf},
-    rc::Rc,
 };
 
 use bimap::BiHashMap;
@@ -62,8 +61,8 @@ pub type StdProcessor = Processor<Std>;
 
 pub struct ExpandStack<'p, F: FileSystem> {
     processor: &'p mut Processor<F>,
-    stack: Vec<(ExpandOne, Rc<String>)>,
-    state: Option<(ProcessorState, Rc<String>)>,
+    stack: Vec<ExpandOne>,
+    state: Option<ProcessorState>,
 }
 
 impl<'p, F: FileSystem> ExpandStack<'p, F> {
@@ -75,7 +74,7 @@ impl<'p, F: FileSystem> ExpandStack<'p, F> {
         crate::last::Tokenizer::new(self, target_vulkan, registry)
     }
 
-    pub fn into_state(self) -> Option<(ProcessorState, Rc<String>)> {
+    pub fn into_state(self) -> Option<ProcessorState> {
         self.state
     }
 }
@@ -85,14 +84,14 @@ impl<'p, F: FileSystem> Iterator for ExpandStack<'p, F> {
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {
-            if let Some((mut expand, source)) = self.stack.pop() {
+            if let Some(mut expand) = self.stack.pop() {
                 let result = expand.next();
 
                 if let Some(event) = result {
                     match event {
                         ExpandEvent::Event(event) => {
                             // Put it back on the stack
-                            self.stack.push((expand, source));
+                            self.stack.push(expand);
 
                             return Some(match event {
                                 Event::EnterFile { file_id, .. } => {
@@ -110,10 +109,10 @@ impl<'p, F: FileSystem> Iterator for ExpandStack<'p, F> {
                         }
                         ExpandEvent::EnterFile(current_state, node, path) => {
                             // Put it back on the stack
-                            self.stack.push((expand, source));
+                            self.stack.push(expand);
 
                             // Get the location
-                            let location = self.stack.last().unwrap().0.location();
+                            let location = self.stack.last().unwrap().location();
 
                             // We are supposed to enter a new file
                             // First, parse it using the preprocessor
@@ -123,8 +122,7 @@ impl<'p, F: FileSystem> Iterator for ExpandStack<'p, F> {
                                 // TODO: Allow passing an encoding from somewhere
                                 match self.processor.parse(&resolved_path, None) {
                                     Ok(parsed) => {
-                                        let source = parsed.source();
-                                        self.stack.push((parsed.expand_one(current_state), source));
+                                        self.stack.push(parsed.expand_one(current_state));
                                     }
                                     Err(error) => {
                                         // Just return the error, we'll keep iterating on the lower
@@ -151,10 +149,10 @@ impl<'p, F: FileSystem> Iterator for ExpandStack<'p, F> {
                         ExpandEvent::Completed(state) => {
                             if let Some(last) = self.stack.last_mut() {
                                 // Propagate the updated state upwards in the stack
-                                last.0.set_state(state);
+                                last.set_state(state);
                             } else {
                                 // No more, store the final state
-                                self.state = Some((state, source));
+                                self.state = Some(state);
                             }
                         }
                     }
@@ -178,27 +176,13 @@ impl<'p, F: FileSystem> ParsedFile<'p, F> {
     }
 
     pub fn process(self, initial_state: ProcessorState) -> ExpandStack<'p, F> {
-        let (source, ast) = self
-            .processor
-            .file_cache
-            .get(&self.file_id)
-            .unwrap()
-            .clone();
+        let ast = self.ast();
 
         ExpandStack {
             processor: self.processor,
-            stack: vec![(ExpandOne::new((self.file_id, ast), initial_state), source)],
+            stack: vec![ExpandOne::new((self.file_id, ast), initial_state)],
             state: None,
         }
-    }
-
-    pub fn source(&self) -> Rc<String> {
-        self.processor
-            .file_cache
-            .get(&self.file_id)
-            .unwrap()
-            .0
-            .clone()
     }
 
     pub fn ast(&self) -> Ast {
@@ -206,7 +190,6 @@ impl<'p, F: FileSystem> ParsedFile<'p, F> {
             .file_cache
             .get(&self.file_id)
             .unwrap()
-            .1
             .clone()
     }
 
@@ -235,7 +218,7 @@ impl<'p, F: FileSystem> IntoIterator for ParsedFile<'p, F> {
 #[derive(Debug)]
 pub struct Processor<F: FileSystem> {
     /// Cache of parsed files (preprocessor token sequences)
-    file_cache: HashMap<FileId, (Rc<String>, Ast)>,
+    file_cache: HashMap<FileId, Ast>,
     /// Mapping from canonical paths to FileIds
     file_ids: BiHashMap<PathBuf, FileId>,
     /// Mapping from #include/input paths to canonical paths
@@ -323,7 +306,7 @@ impl<F: FileSystem> Processor<F> {
                 // Check that the root node covers the entire range
                 debug_assert_eq!(u32::from(ast.green_node().text_len()), input.len() as u32);
                 // Insert it
-                entry.insert((Rc::new(input), ast));
+                entry.insert(ast);
 
                 Ok(ParsedFile {
                     processor: self,
@@ -348,6 +331,6 @@ impl<F: FileSystem + Default> Default for Processor<F> {
 
 impl<'p, F: FileSystem> LocatedIterator for ExpandStack<'p, F> {
     fn location(&self) -> &crate::processor::expand::ExpandLocation {
-        self.stack.last().unwrap().0.location()
+        self.stack.last().unwrap().location()
     }
 }

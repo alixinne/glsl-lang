@@ -96,7 +96,6 @@ pub trait LangParser<L: LangLexer>: Sized {
     /// Parse the input
     fn parse(
         &self,
-        source: &str,
         input: &mut L,
     ) -> Result<Self::Item, lalrpop_util::ParseError<LexerPosition, lexer::Token, L::Error>>;
 }
@@ -241,11 +240,10 @@ macro_rules! impl_parse {
 
             fn parse(
                 &self,
-                source: &str,
                 input: &mut L,
             ) -> Result<Self::Item, lalrpop_util::ParseError<LexerPosition, lexer::Token, L::Error>>
             {
-                self.parse::<L, _, _>(source, input)
+                self.parse::<L, _, _>(input)
             }
         }
 

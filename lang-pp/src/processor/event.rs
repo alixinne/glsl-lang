@@ -313,6 +313,17 @@ impl<E: std::error::Error> Located<E> {
         }
     }
 
+    pub fn new_at_file(inner: E, path: PathBuf) -> Self {
+        Self {
+            inner,
+            path,
+            pos: TextRange::default(),
+            current_file: FileId::default(),
+            line: 0,
+            line_override: None,
+        }
+    }
+
     pub fn into_inner(self) -> E {
         self.inner
     }

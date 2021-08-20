@@ -430,7 +430,7 @@ impl<E: LexicalError> fmt::Display for ParseErrorKind<E> {
                 write!(
                     f,
                     "unexpected end of input, expected {}",
-                    ListDisplay(&expected)
+                    ListDisplay(expected)
                 )
             }
             ParseErrorKind::UnrecognizedToken { token, expected } => {
@@ -438,7 +438,7 @@ impl<E: LexicalError> fmt::Display for ParseErrorKind<E> {
                     f,
                     "unexpected {}, expected {}",
                     token,
-                    ListDisplay(&expected)
+                    ListDisplay(expected)
                 )
             }
             ParseErrorKind::ExtraToken { token } => {

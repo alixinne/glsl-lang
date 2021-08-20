@@ -51,6 +51,7 @@ impl IfState {
 }
 
 #[derive(Debug, Error)]
+#[allow(clippy::enum_variant_names)]
 pub enum IfError {
     #[error("unmatched #elif directive")]
     ExtraElif,

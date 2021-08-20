@@ -71,9 +71,9 @@ fn parse_tu(path: &Path) -> Result<ast::TranslationUnit, &'static str> {
 
 pub fn test_file(path: impl AsRef<Path>) {
     let path = path.as_ref();
-    let paths = Paths::new(&path);
+    let paths = Paths::new(path);
 
-    let result = parse_tu(&path);
+    let result = parse_tu(path);
 
     // Write .ast file
     {

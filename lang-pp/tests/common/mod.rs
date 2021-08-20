@@ -59,12 +59,12 @@ pub fn test_file(path: impl AsRef<Path>) {
     let path = path.as_ref();
     let mut pp = glsl_lang_pp::processor::fs::StdProcessor::default();
 
-    let paths = Paths::new(&path);
-    let parsed = match pp.parse(&path, None) {
+    let paths = Paths::new(path);
+    let parsed = match pp.parse(path, None) {
         Ok(inner) => Ok(inner),
         Err(err) => {
             if err.kind() == std::io::ErrorKind::InvalidData {
-                pp.parse(&path, Some(encoding_rs::WINDOWS_1252))
+                pp.parse(path, Some(encoding_rs::WINDOWS_1252))
             } else {
                 Err(err)
             }

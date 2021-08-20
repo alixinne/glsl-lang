@@ -161,7 +161,7 @@ impl<'r> TypeTable<'r> {
                 }
             }
             ExtensionName::Specific(name) => {
-                if let Some(spec) = self.registry.get(&name) {
+                if let Some(spec) = self.registry.get(name) {
                     self.set_extension_behavior(spec, extension.behavior);
                 } else {
                     return false;

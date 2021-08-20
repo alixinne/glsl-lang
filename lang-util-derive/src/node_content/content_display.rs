@@ -59,7 +59,7 @@ pub(crate) fn node_content_display(
         match &input.data {
             Data::Struct(st) => {
                 for (i, field) in st.fields.iter().enumerate() {
-                    let df = NodeDisplayField::from_field(&field)
+                    let df = NodeDisplayField::from_field(field)
                         .expect("failed to parse field attributes");
 
                     let ident = if let Some(id) = &df.ident {
@@ -82,7 +82,7 @@ pub(crate) fn node_content_display(
 
                 // Are the variants all units?
                 for variant in &en.variants {
-                    let dv = NodeDisplayVariant::from_variant(&variant)
+                    let dv = NodeDisplayVariant::from_variant(variant)
                         .expect("failed to parse variant attributes");
 
                     let name = &dv.ident;
@@ -143,7 +143,7 @@ pub(crate) fn node_content_display(
         match &input.data {
             Data::Struct(st) => {
                 for (i, field) in st.fields.iter().enumerate() {
-                    let df = NodeDisplayField::from_field(&field)
+                    let df = NodeDisplayField::from_field(field)
                         .expect("failed to parse field attributes");
 
                     let ident = if let Some(id) = &df.ident {
@@ -162,9 +162,9 @@ pub(crate) fn node_content_display(
             Data::Enum(en) => {
                 let mut match_body = TokenStream::new();
 
-                if !is_unit_enum(&en) {
+                if !is_unit_enum(en) {
                     for variant in &en.variants {
-                        let dv = NodeDisplayVariant::from_variant(&variant)
+                        let dv = NodeDisplayVariant::from_variant(variant)
                             .expect("failed to parse variant attributes");
 
                         let name = &dv.ident;

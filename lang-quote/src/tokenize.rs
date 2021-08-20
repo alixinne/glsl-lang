@@ -625,7 +625,7 @@ fn tokenize_array_spec_dim(a: &ast::ArraySpecifierDimension) -> TokenStream {
             quote! { glsl_lang::ast::ArraySpecifierDimensionData::Unsized }
         }
         ast::ArraySpecifierDimensionData::ExplicitlySized(ref e) => {
-            let expr = Box::new(tokenize_expr(&e)).quote();
+            let expr = Box::new(tokenize_expr(e)).quote();
             quote! { glsl_lang::ast::ArraySpecifierDimensionData::ExplicitlySized(#expr) }
         }
     };
@@ -780,7 +780,7 @@ fn tokenize_layout_qualifier_spec(l: &ast::LayoutQualifierSpec) -> TokenStream {
             let i = tokenize_identifier(i);
             let expr = e
                 .as_ref()
-                .map(|e| Box::new(tokenize_expr(&e)).quote())
+                .map(|e| Box::new(tokenize_expr(e)).quote())
                 .quote();
             quote! { glsl_lang::ast::LayoutQualifierSpecData::Identifier(#i, #expr) }
         }
@@ -1256,7 +1256,7 @@ fn tokenize_statement(sst: &ast::Statement) -> TokenStream {
 fn tokenize_expr_statement(est: &ast::ExprStatement) -> TokenStream {
     let span = tokenize_span(&est.span);
     let est = {
-        let e = est.0.as_ref().map(|e| tokenize_expr(&e)).quote();
+        let e = est.0.as_ref().map(|e| tokenize_expr(e)).quote();
         quote! { glsl_lang::ast::ExprStatementData(#e) }
     };
 
@@ -1379,7 +1379,7 @@ fn tokenize_for_init_statement(i: &ast::ForInitStatement) -> TokenStream {
     let span = tokenize_span(&i.span);
     let i = match i.content {
         ast::ForInitStatementData::Expression(ref expr) => {
-            let e = expr.as_ref().map(|e| tokenize_expr(&e)).quote();
+            let e = expr.as_ref().map(|e| tokenize_expr(e)).quote();
             quote! { glsl_lang::ast::ForInitStatementData::Expression(#e) }
         }
 
@@ -1399,7 +1399,7 @@ fn tokenize_for_rest_statement(r: &ast::ForRestStatement) -> TokenStream {
         let post = r
             .post_expr
             .as_ref()
-            .map(|e| Box::new(tokenize_expr(&e)).quote())
+            .map(|e| Box::new(tokenize_expr(e)).quote())
             .quote();
 
         quote! {
@@ -1824,6 +1824,6 @@ fn tokenize_external_declaration(ed: &ast::ExternalDeclaration) -> TokenStream {
 }
 
 fn tokenize_translation_unit(tu: &ast::TranslationUnit) -> TokenStream {
-    let tu = (tu.0).iter().map(|d| tokenize_external_declaration(&d));
+    let tu = (tu.0).iter().map(|d| tokenize_external_declaration(d));
     quote! { glsl_lang::ast::TranslationUnit(vec![#(#tu),*]) }
 }

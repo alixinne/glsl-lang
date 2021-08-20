@@ -140,7 +140,7 @@ impl<'p, F: FileSystem> Iterator for ExpandStack<'p, F> {
                                 // right place
                                 return Some(Ok(Event::error(
                                     ProcessingErrorKind::IncludeNotFound { path }
-                                        .with_node(node.into(), &location),
+                                        .with_node(node.into(), location),
                                     location,
                                     false,
                                 )));
@@ -279,7 +279,7 @@ impl<F: FileSystem> Processor<F> {
         let canonical_path = if let Some(canonical_path) = self.canonical_paths.get_by_left(path) {
             canonical_path
         } else {
-            let canonical_path = self.fs.canonicalize(&path)?;
+            let canonical_path = self.fs.canonicalize(path)?;
             self.canonical_paths.insert(path.to_owned(), canonical_path);
             self.canonical_paths.get_by_left(path).unwrap()
         };
@@ -300,7 +300,7 @@ impl<F: FileSystem> Processor<F> {
             }),
             Entry::Vacant(entry) => {
                 // Read the file
-                let input = self.fs.read(&canonical_path, encoding)?;
+                let input = self.fs.read(canonical_path, encoding)?;
                 // Parse it
                 let ast = Parser::new(&input).parse();
                 // Check that the root node covers the entire range

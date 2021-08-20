@@ -348,7 +348,7 @@ impl Definition {
                 (
                     arg_name.as_str(),
                     // TODO: Should we trim whitespace out of macro arguments?
-                    trim_ws(&tokens),
+                    trim_ws(tokens),
                 )
             })
             .collect();

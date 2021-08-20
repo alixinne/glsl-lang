@@ -186,7 +186,7 @@ impl<'i> Iterator for Lexer<'i> {
 
                 // Transform the ident into a type name if needed
                 if let Token::Identifier((ref ident, ref ctx)) = token.1 {
-                    if ctx.is_type_name(&ident) {
+                    if ctx.is_type_name(ident) {
                         token.1 = Token::TypeName(ident.clone());
                     }
                 }

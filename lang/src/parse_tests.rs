@@ -1467,7 +1467,7 @@ fn parse_complex_expr() {
     );
     let expected = normalize.into();
 
-    assert_eq!(ast::Expr::parse(&input), Ok(expected));
+    assert_eq!(ast::Expr::parse(input), Ok(expected));
 }
 
 #[test]

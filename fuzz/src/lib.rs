@@ -16,16 +16,16 @@ pub fn main_pp(data: &[u8]) {
         let opts: Opts = argh::from_env();
 
         if opts.parse_only {
-            let _ = glsl_lang_pp::processor::str::parse(&s);
+            let _ = glsl_lang_pp::processor::str::parse(s);
         } else {
             let _: Vec<_> =
-                glsl_lang_pp::processor::str::process(&s, ProcessorState::default()).collect();
+                glsl_lang_pp::processor::str::process(s, ProcessorState::default()).collect();
         }
     }
 }
 
 pub fn main_lang(data: &[u8]) {
     if let Ok(s) = std::str::from_utf8(data) {
-        let _ = glsl_lang::ast::TranslationUnit::parse(&s);
+        let _ = glsl_lang::ast::TranslationUnit::parse(s);
     }
 }

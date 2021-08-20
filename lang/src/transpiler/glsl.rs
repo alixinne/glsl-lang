@@ -593,7 +593,7 @@ where
     F: Write,
 {
     if let Some(ref qual) = t.qualifier {
-        show_type_qualifier(f, &qual, state)?;
+        show_type_qualifier(f, qual, state)?;
         f.write_str(" ")?;
     }
 
@@ -651,7 +651,7 @@ where
     F: Write,
 {
     if let Some(ref qual) = field.qualifier {
-        show_type_qualifier(f, &qual, state)?;
+        show_type_qualifier(f, qual, state)?;
         f.write_str(" ")?;
     }
 
@@ -687,7 +687,7 @@ where
             ast::ArraySpecifierDimensionData::Unsized => f.write_str("[]")?,
             ast::ArraySpecifierDimensionData::ExplicitlySized(ref e) => {
                 f.write_str("[")?;
-                show_expr(f, &e, state)?;
+                show_expr(f, e, state)?;
                 f.write_str("]")?
             }
         }
@@ -746,11 +746,11 @@ where
     F: Write,
 {
     match **q {
-        ast::TypeQualifierSpecData::Storage(ref st) => show_storage_qualifier(f, &st, state),
-        ast::TypeQualifierSpecData::Layout(ref l) => show_layout_qualifier(f, &l, state),
-        ast::TypeQualifierSpecData::Precision(ref p) => show_precision_qualifier(f, &p, state),
+        ast::TypeQualifierSpecData::Storage(ref st) => show_storage_qualifier(f, st, state),
+        ast::TypeQualifierSpecData::Layout(ref l) => show_layout_qualifier(f, l, state),
+        ast::TypeQualifierSpecData::Precision(ref p) => show_precision_qualifier(f, p, state),
         ast::TypeQualifierSpecData::Interpolation(ref i) => {
-            show_interpolation_qualifier(f, &i, state)
+            show_interpolation_qualifier(f, i, state)
         }
         ast::TypeQualifierSpecData::Invariant => f.write_str("invariant"),
         ast::TypeQualifierSpecData::Precise => f.write_str("precise"),
@@ -782,7 +782,7 @@ where
         ast::StorageQualifierData::Restrict => f.write_str("restrict"),
         ast::StorageQualifierData::ReadOnly => f.write_str("readonly"),
         ast::StorageQualifierData::WriteOnly => f.write_str("writeonly"),
-        ast::StorageQualifierData::Subroutine(ref n) => show_subroutine(f, &n, state),
+        ast::StorageQualifierData::Subroutine(ref n) => show_subroutine(f, n, state),
     }
 }
 
@@ -851,9 +851,9 @@ where
     match **l {
         ast::LayoutQualifierSpecData::Identifier(ref i, Some(ref e)) => {
             write!(f, "{} = ", i)?;
-            show_expr(f, &e, state)
+            show_expr(f, e, state)
         }
-        ast::LayoutQualifierSpecData::Identifier(ref i, None) => show_identifier(f, &i, state),
+        ast::LayoutQualifierSpecData::Identifier(ref i, None) => show_identifier(f, i, state),
         ast::LayoutQualifierSpecData::Shared => f.write_str("shared"),
     }
 }
@@ -924,7 +924,7 @@ where
     F: Write,
 {
     match **expr {
-        ast::ExprData::Variable(ref i) => show_identifier(f, &i, state),
+        ast::ExprData::Variable(ref i) => show_identifier(f, i, state),
         ast::ExprData::IntConst(ref x) => write!(f, "{}", x),
         ast::ExprData::UIntConst(ref x) => write!(f, "{}u", x),
         ast::ExprData::BoolConst(ref x) => write!(f, "{}", x),
@@ -932,44 +932,44 @@ where
         ast::ExprData::DoubleConst(ref x) => show_double(f, *x, state),
         ast::ExprData::Unary(ref op, ref e) => {
             // Note: all unary ops are right-to-left associative
-            show_unary_op(f, &op, state)?;
+            show_unary_op(f, op, state)?;
 
             if e.precedence() > op.precedence() {
                 f.write_str("(")?;
-                show_expr(f, &e, state)?;
+                show_expr(f, e, state)?;
                 f.write_str(")")
             } else if let ast::ExprData::Unary(eop, _) = &***e {
                 // Prevent double-unary plus/minus turning into inc/dec
                 if eop == op && (**eop == ast::UnaryOpData::Add || **eop == ast::UnaryOpData::Minus)
                 {
                     f.write_str("(")?;
-                    show_expr(f, &e, state)?;
+                    show_expr(f, e, state)?;
                     f.write_str(")")
                 } else {
-                    show_expr(f, &e, state)
+                    show_expr(f, e, state)
                 }
             } else {
-                show_expr(f, &e, state)
+                show_expr(f, e, state)
             }
         }
         ast::ExprData::Binary(ref op, ref l, ref r) => {
             // Note: all binary ops are left-to-right associative (<= for left part)
 
             if l.precedence() <= op.precedence() {
-                show_expr(f, &l, state)?;
+                show_expr(f, l, state)?;
             } else {
                 f.write_str("(")?;
-                show_expr(f, &l, state)?;
+                show_expr(f, l, state)?;
                 f.write_str(")")?;
             }
 
-            show_binary_op(f, &op, state)?;
+            show_binary_op(f, op, state)?;
 
             if r.precedence() < op.precedence() {
-                show_expr(f, &r, state)
+                show_expr(f, r, state)
             } else {
                 f.write_str("(")?;
-                show_expr(f, &r, state)?;
+                show_expr(f, r, state)?;
                 f.write_str(")")
             }
         }
@@ -977,20 +977,20 @@ where
             // Note: ternary is right-to-left associative (<= for right part)
 
             if c.precedence() < expr.precedence() {
-                show_expr(f, &c, state)?;
+                show_expr(f, c, state)?;
             } else {
                 f.write_str("(")?;
-                show_expr(f, &c, state)?;
+                show_expr(f, c, state)?;
                 f.write_str(")")?;
             }
             f.write_str(" ? ")?;
-            show_expr(f, &st, state)?;
+            show_expr(f, st, state)?;
             f.write_str(" : ")?;
             if e.precedence() <= expr.precedence() {
-                show_expr(f, &e, state)
+                show_expr(f, e, state)
             } else {
                 f.write_str("(")?;
-                show_expr(f, &e, state)?;
+                show_expr(f, e, state)?;
                 f.write_str(")")
             }
         }
@@ -998,20 +998,20 @@ where
             // Note: all assignment ops are right-to-left associative
 
             if v.precedence() < op.precedence() {
-                show_expr(f, &v, state)?;
+                show_expr(f, v, state)?;
             } else {
                 f.write_str("(")?;
-                show_expr(f, &v, state)?;
+                show_expr(f, v, state)?;
                 f.write_str(")")?;
             }
 
-            show_assignment_op(f, &op, state)?;
+            show_assignment_op(f, op, state)?;
 
             if e.precedence() <= op.precedence() {
-                show_expr(f, &e, state)
+                show_expr(f, e, state)
             } else {
                 f.write_str("(")?;
-                show_expr(f, &e, state)?;
+                show_expr(f, e, state)?;
                 f.write_str(")")
             }
         }
@@ -1019,17 +1019,17 @@ where
             // Note: bracket is left-to-right associative
 
             if e.precedence() <= expr.precedence() {
-                show_expr(f, &e, state)?;
+                show_expr(f, e, state)?;
             } else {
                 f.write_str("(")?;
-                show_expr(f, &e, state)?;
+                show_expr(f, e, state)?;
                 f.write_str(")")?;
             }
 
-            show_expr(f, &a, state)
+            show_expr(f, a, state)
         }
         ast::ExprData::FunCall(ref fun, ref args) => {
-            show_function_identifier(f, &fun, state)?;
+            show_function_identifier(f, fun, state)?;
             f.write_str("(")?;
 
             if !args.is_empty() {
@@ -1049,23 +1049,23 @@ where
             // Note: dot is left-to-right associative
 
             if e.precedence() <= expr.precedence() {
-                show_expr(f, &e, state)?;
+                show_expr(f, e, state)?;
             } else {
                 f.write_str("(")?;
-                show_expr(f, &e, state)?;
+                show_expr(f, e, state)?;
                 f.write_str(")")?;
             }
             f.write_str(".")?;
-            show_identifier(f, &i, state)
+            show_identifier(f, i, state)
         }
         ast::ExprData::PostInc(ref e) => {
             // Note: post-increment is right-to-left associative
 
             if e.precedence() < expr.precedence() {
-                show_expr(f, &e, state)?;
+                show_expr(f, e, state)?;
             } else {
                 f.write_str("(")?;
-                show_expr(f, &e, state)?;
+                show_expr(f, e, state)?;
                 f.write_str(")")?;
             }
 
@@ -1075,10 +1075,10 @@ where
             // Note: post-decrement is right-to-left associative
 
             if e.precedence() < expr.precedence() {
-                show_expr(f, &e, state)?;
+                show_expr(f, e, state)?;
             } else {
                 f.write_str("(")?;
-                show_expr(f, &e, state)?;
+                show_expr(f, e, state)?;
                 f.write_str(")")?;
             }
 
@@ -1088,20 +1088,20 @@ where
             // Note: comma is left-to-right associative
 
             if a.precedence() <= expr.precedence() {
-                show_expr(f, &a, state)?;
+                show_expr(f, a, state)?;
             } else {
                 f.write_str("(")?;
-                show_expr(f, &a, state)?;
+                show_expr(f, a, state)?;
                 f.write_str(")")?;
             }
 
             f.write_str(", ")?;
 
             if b.precedence() < expr.precedence() {
-                show_expr(f, &b, state)
+                show_expr(f, b, state)
             } else {
                 f.write_str("(")?;
-                show_expr(f, &b, state)?;
+                show_expr(f, b, state)?;
                 f.write_str(")")
             }
         }
@@ -1204,7 +1204,7 @@ where
     F: Write,
 {
     match **i {
-        ast::FunIdentifierData::TypeSpecifier(ref n) => show_type_specifier(f, &n, state),
+        ast::FunIdentifierData::TypeSpecifier(ref n) => show_type_specifier(f, n, state),
         ast::FunIdentifierData::Expr(ref e) => show_expr(f, &*e, state),
     }
 }
@@ -1220,20 +1220,20 @@ where
 {
     match **d {
         ast::DeclarationData::FunctionPrototype(ref proto) => {
-            show_function_prototype(f, &proto, state)?;
+            show_function_prototype(f, proto, state)?;
             state.write_declaration_terminator(f)
         }
         ast::DeclarationData::InitDeclaratorList(ref list) => {
-            show_init_declarator_list(f, &list, state)?;
+            show_init_declarator_list(f, list, state)?;
             state.write_declaration_terminator(f)
         }
         ast::DeclarationData::Precision(ref qual, ref ty) => {
-            show_precision_qualifier(f, &qual, state)?;
-            show_type_specifier(f, &ty, state)?;
+            show_precision_qualifier(f, qual, state)?;
+            show_type_specifier(f, ty, state)?;
             state.write_declaration_terminator(f)
         }
         ast::DeclarationData::Block(ref block) => {
-            show_block(f, &block, state)?;
+            show_block(f, block, state)?;
             state.write_declaration_terminator(f)
         }
     }

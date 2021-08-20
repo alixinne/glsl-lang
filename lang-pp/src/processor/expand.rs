@@ -350,7 +350,7 @@ impl ExpandOne {
                 let (result, ret) = match directive {
                     Ok(if_) => {
                         let (value, error) = if active {
-                            if_.eval(&current_state, &self.location)
+                            if_.eval(current_state, &self.location)
                         } else {
                             (true, None)
                         };
@@ -382,7 +382,7 @@ impl ExpandOne {
                     Ok(elif_) => {
                         if self.if_stack.if_group_active() {
                             let (value, error) = if active {
-                                elif_.eval(&current_state, &self.location)
+                                elif_.eval(current_state, &self.location)
                             } else {
                                 (true, None)
                             };
@@ -515,7 +515,7 @@ impl ExpandOne {
                 // Perform macro substitution to get the path. If this fails, the directive is
                 // malformed and shouldn't be processed.
                 let (directive, path) = match directive {
-                    Ok(directive) => match directive.path(&current_state, &self.location) {
+                    Ok(directive) => match directive.path(current_state, &self.location) {
                         Ok(path) => (Ok(directive), Some(path)),
                         Err(err) => (Err((err, directive.node().clone())), None),
                     },
@@ -609,7 +609,7 @@ impl ExpandOne {
                 // Perform macro substitution to get the path. If this fails, the directive is
                 // malformed and shouldn't be processed.
                 let (directive, line) = match directive {
-                    Ok(directive) => match directive.parse(&current_state, &self.location) {
+                    Ok(directive) => match directive.parse(current_state, &self.location) {
                         Ok(path) => (Ok(directive), Some(path)),
                         Err(err) => (Err((err, directive.node().clone())), None),
                     },

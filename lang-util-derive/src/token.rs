@@ -453,8 +453,8 @@ fn parse_as_parser(variant: &TokenVariant, token: &TokenAttrTy) -> Result<String
 
 impl<'s> From<(&'s syn::Ident, &'s TokenVariant)> for Token<'s> {
     fn from((base_ident, variant): (&'s syn::Ident, &'s TokenVariant)) -> Self {
-        let token = parse_token_attr(&variant);
-        let as_parser = parse_as_parser(&variant, &token);
+        let token = parse_token_attr(variant);
+        let as_parser = parse_as_parser(variant, &token);
 
         Self {
             base_ident,
@@ -591,8 +591,8 @@ pub(crate) fn token(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
         }
     };
 
-    decls.push(display_impl(&base_ident, &enum_name, &fields));
-    decls.push(token_impl(&base_ident, &enum_name, &fields));
+    decls.push(display_impl(base_ident, &enum_name, &fields));
+    decls.push(token_impl(base_ident, &enum_name, &fields));
 
     proc_macro::TokenStream::from(quote_spanned! {
         opts.ident.span() =>

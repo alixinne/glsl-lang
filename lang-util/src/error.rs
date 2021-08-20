@@ -309,6 +309,15 @@ impl<'s, T, E: LexicalError> From<(&'s lalrpop_util::ParseError<LexerPosition, T
     }
 }
 
+impl<E: LexicalError> From<E> for ParseError<E> {
+    fn from(value: E) -> Self {
+        Self {
+            position: ResolvedPosition::new_resolved(LexerPosition::default(), 0, 0),
+            kind: ParseErrorKind::LexicalError { error: value },
+        }
+    }
+}
+
 /// Return the LexerLocation of a lalrpop_util::ParseError
 pub fn error_location<T, E: LexicalError>(
     error: &lalrpop_util::ParseError<LexerPosition, T, E>,

@@ -138,10 +138,30 @@ impl<'r, 'p, F: FileSystem> LangLexer for Lexer<'r, 'p, F> {
     }
 }
 
-/// Preprocessor wrapper for lexing
-#[derive(Debug)]
-pub struct Preprocessor<'p, F: FileSystem> {
-    processor: &'p mut Processor<F>,
+/// glsl-lang-pp preprocessor extensions
+pub trait PreprocessorExt<F: FileSystem> {
+    /// Open the given file for lexing
+    ///
+    /// # Parameters
+    ///
+    /// * `path`: path to the file to open
+    /// * `encoding`: encoding to use for decoding the file
+    fn open(
+        &mut self,
+        path: impl AsRef<Path>,
+        encoding: Option<&'static encoding_rs::Encoding>,
+    ) -> Result<File<'_, F>, F::Error>;
+}
+
+impl<F: FileSystem> PreprocessorExt<F> for Processor<F> {
+    fn open(
+        &mut self,
+        path: impl AsRef<Path>,
+        encoding: Option<&'static encoding_rs::Encoding>,
+    ) -> Result<File<'_, F>, F::Error> {
+        self.parse(path.as_ref(), encoding)
+            .map(|parsed_file| File { inner: parsed_file })
+    }
 }
 
 /// A preprocessor parsed file ready for lexing
@@ -158,28 +178,5 @@ impl<'p, F: FileSystem> IntoLexer for File<'p, F> {
         opts: ParseContext,
     ) -> Self::Lexer {
         <Self::Lexer as LangLexer>::new(source, opts)
-    }
-}
-
-impl<'p, F: FileSystem> Preprocessor<'p, F> {
-    /// Wrap a preprocessor instance for lexing
-    pub fn new(processor: &'p mut Processor<F>) -> Self {
-        Self { processor }
-    }
-
-    /// Open the given file for lexing
-    ///
-    /// # Parameters
-    ///
-    /// * `path`: path to the file to open
-    /// * `encoding`: encoding to use for decoding the file
-    pub fn open(
-        &'p mut self,
-        path: impl AsRef<Path>,
-        encoding: Option<&'static encoding_rs::Encoding>,
-    ) -> Result<File<'p, F>, F::Error> {
-        self.processor
-            .parse(path.as_ref(), encoding)
-            .map(|parsed_file| File { inner: parsed_file })
     }
 }

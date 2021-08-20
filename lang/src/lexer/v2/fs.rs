@@ -24,7 +24,7 @@ use super::{
 };
 
 /// glsl-lang-pp filesystem lexer
-pub struct Lexer<'r, 'p, F: FileSystem + 'p> {
+pub struct Lexer<'r, 'p, F: FileSystem> {
     inner: last::Tokenizer<'r, ExpandStack<'p, F>>,
     core: LexerCore,
     current_file: PathBuf,

@@ -14,7 +14,7 @@ use crate::{
         SyntaxKind::{self, *},
         SyntaxNode, SyntaxToken,
     },
-    Unescaped,
+    util::Unescaped,
 };
 
 use super::{

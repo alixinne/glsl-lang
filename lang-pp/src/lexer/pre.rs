@@ -1,15 +1,16 @@
 //! Second stage lexer declaration
 
-use crate::Unescaped;
+use rowan::TextRange;
+
+use crate::util::Unescaped;
 
 use super::{LineMap, NewlineSplitter, NewlineToken, NewlineTokenKind};
-use rowan::TextRange;
 
 mod token;
 pub use token::Token;
 use Token::*;
 
-pub type TextToken = crate::TextToken<token::Token>;
+pub type TextToken = crate::util::TextToken<token::Token>;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 enum State {

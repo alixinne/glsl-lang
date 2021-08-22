@@ -12,7 +12,7 @@ use crate::{
         event::TokenLike,
         expr::{EvalResult, ExprEvaluator},
     },
-    Unescaped,
+    util::Unescaped,
 };
 
 use super::{

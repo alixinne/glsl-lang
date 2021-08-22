@@ -1,7 +1,8 @@
 use std::borrow::Cow;
 
+use crate::util::Unescaped;
+
 use super::*;
-use crate::Unescaped;
 use Token::*;
 
 fn tokenize(src: &str) -> Vec<Token> {

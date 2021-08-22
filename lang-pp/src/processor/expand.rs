@@ -14,7 +14,7 @@ use lang_util::FileId;
 use crate::{
     lexer::LineMap,
     parser::{self, Ast, PreprocessorLang, SyntaxKind::*, SyntaxNode, SyntaxToken},
-    Unescaped,
+    util::Unescaped,
 };
 
 use super::{

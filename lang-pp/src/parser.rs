@@ -5,7 +5,7 @@ use rowan::{TextRange, TextSize};
 
 use crate::{
     lexer::{self, Lexer, TextToken},
-    Unescaped,
+    util::Unescaped,
 };
 
 mod ast;

@@ -1,6 +1,6 @@
 use smol_str::SmolStr;
 
-use crate::{parser::SyntaxKind, processor::event::TokenLike, Unescaped};
+use crate::{parser::SyntaxKind, processor::event::TokenLike, util::Unescaped};
 
 use super::{keywords::KeywordAtom, type_names::TypeNameAtom, TypeNameState};
 

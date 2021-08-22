@@ -2,7 +2,6 @@
 
 use std::{iter::Peekable, str::CharIndices};
 
-use crate::TextToken;
 use rowan::{TextRange, TextSize};
 
 use super::LineMap;
@@ -20,7 +19,7 @@ pub enum NewlineTokenKind {
 }
 
 /// First stage token with location
-pub type NewlineToken = TextToken<NewlineTokenKind>;
+pub type NewlineToken = crate::util::TextToken<NewlineTokenKind>;
 
 /// Basic lexer to split input lines according to the GLSL spec
 ///
@@ -97,19 +96,19 @@ impl<'i> Iterator for NewlineSplitter<'i> {
                 };
 
                 self.line_map.add_line(range.end().into());
-                Some(TextToken::new(NEWLINE, range))
+                Some(NewlineToken::new(NEWLINE, range))
             }
             Some((pos, ch)) if ch.is_ascii_alphabetic() => {
-                Some(TextToken::new(LETTER, self.current_pos(pos)))
+                Some(NewlineToken::new(LETTER, self.current_pos(pos)))
             }
             Some((pos, ch)) if ch.is_ascii_digit() => {
-                Some(TextToken::new(DIGIT, self.current_pos(pos)))
+                Some(NewlineToken::new(DIGIT, self.current_pos(pos)))
             }
             Some((pos, ch)) if ch.is_ascii_whitespace() => {
                 // \n and \r have been already matched
-                Some(TextToken::new(WS, self.current_pos(pos)))
+                Some(NewlineToken::new(WS, self.current_pos(pos)))
             }
-            Some((pos, _)) => Some(TextToken::new(PUNCT, self.current_pos(pos))),
+            Some((pos, _)) => Some(NewlineToken::new(PUNCT, self.current_pos(pos))),
             None => None,
         }
     }

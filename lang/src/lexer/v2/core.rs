@@ -412,7 +412,7 @@ impl LexerCore {
                 }
                 last::Token::WS => Token::Whitespace,
                 last::Token::COMMENT => {
-                    if glsl_lang_pp::Unescaped::new(source_token.text())
+                    if glsl_lang_pp::util::Unescaped::new(source_token.text())
                         .chars()
                         .take(2)
                         .eq("//".chars())
@@ -470,7 +470,7 @@ impl LexerCore {
                         Token::SingleLineComment | Token::MultiLineComment => {
                             if self.ctx.has_comments() {
                                 let mut text: String =
-                                    glsl_lang_pp::Unescaped::new(source_token.text())
+                                    glsl_lang_pp::util::Unescaped::new(source_token.text())
                                         .chars()
                                         .skip(2)
                                         .collect();

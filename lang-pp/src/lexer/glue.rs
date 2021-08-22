@@ -8,7 +8,7 @@ mod token;
 use rowan::TextRange;
 pub use token::Token;
 
-pub type TextToken = crate::TextToken<token::Token>;
+pub type TextToken = crate::util::TextToken<token::Token>;
 
 /// Final stage lexer.
 ///

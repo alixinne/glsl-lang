@@ -2,7 +2,7 @@ use std::iter::Peekable;
 
 use crate::{
     parser::SyntaxKind::{self, *},
-    Unescaped,
+    util::Unescaped,
 };
 
 use super::{

@@ -62,9 +62,9 @@ impl<E: std::error::Error + 'static> lang_util::error::LexicalError for LexicalE
         match self {
             LexicalError::Token { pos, .. } => *pos,
             LexicalError::Processor(err) => {
-                LexerPosition::new(err.current_file().unwrap(), err.pos().into())
+                LexerPosition::new(err.current_file().unwrap(), err.pos())
             }
-            LexicalError::Io(io) => LexerPosition::new(io.current_file().unwrap(), io.pos().into()),
+            LexicalError::Io(io) => LexerPosition::new(io.current_file().unwrap(), io.pos()),
         }
     }
 }

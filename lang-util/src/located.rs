@@ -1,6 +1,9 @@
 //! Located type definition
 
-use std::{fmt, path::PathBuf};
+use std::{
+    fmt,
+    path::{Path, PathBuf},
+};
 
 use text_size::{TextRange, TextSize};
 
@@ -75,10 +78,42 @@ pub trait Resolver {
     fn resolve(&self, offset: TextSize) -> (u32, u32);
 }
 
+impl<'s> Resolver for &'s str {
+    fn resolve(&self, offset: TextSize) -> (u32, u32) {
+        let offset: usize = offset.into();
+        let offset = if offset >= self.len() {
+            self.len().max(1) - 1
+        } else {
+            offset
+        };
+
+        // Find line start offset
+        let line_start = line_span::find_line_start(self, offset);
+
+        // Count newlines
+        let line_index = self
+            .bytes()
+            .take(line_start)
+            .filter(|c| *c == b'\n')
+            .count();
+
+        // Find column
+        let pos_index = offset - line_start;
+
+        (line_index as _, pos_index as _)
+    }
+}
+
 /// Trait for objects that can return the current file number
 pub trait HasFileNumber {
     /// Return the current file identifier
     fn current_file(&self) -> FileId;
+}
+
+/// Trait for resolving file identifiers to file names
+pub trait FileIdResolver {
+    /// Return the path corresponding to the FileId, if known
+    fn resolve(&self, file_id: FileId) -> Option<&Path>;
 }
 
 /// Builder for a [Located] struct
@@ -163,6 +198,16 @@ impl LocatedBuilder {
     /// the current file information
     pub fn resolve_file(self, resolver: &(impl Resolver + HasFileNumber)) -> Self {
         self.resolve(resolver).current_file(resolver.current_file())
+    }
+
+    /// Resolve the given file id into a path name, and store it in this builder
+    pub fn resolve_path(self, resolver: &impl FileIdResolver) -> Self {
+        Self {
+            path: self
+                .current_file
+                .and_then(|current_file| resolver.resolve(current_file).map(Path::to_owned)),
+            ..self
+        }
     }
 
     /// Build the final [Located] object from the given inner object
@@ -310,5 +355,43 @@ impl<E: std::fmt::Display> std::fmt::Display for Located<E> {
             self.column + 1,
             self.inner
         )
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::Resolver;
+    use std::convert::TryInto;
+
+    #[test]
+    fn resolved_position() {
+        let s = r#"
+Hello,
+World"#;
+
+        let offset = s.find('r').unwrap().try_into().unwrap();
+        let resolved = s.resolve(offset);
+
+        assert_eq!(resolved.0, 2);
+        assert_eq!(resolved.1, 2);
+    }
+
+    #[test]
+    fn resolved_position_last_char() {
+        let s = r#"
+Hello,
+World"#;
+
+        let offset = s.find('d').unwrap().try_into().unwrap();
+        let resolved = s.resolve(offset);
+
+        assert_eq!(resolved.0, 2);
+        assert_eq!(resolved.1, 4);
+    }
+
+    #[test]
+    fn resolved_position_out_of_bounds() {
+        let offset = 1.into();
+        assert_eq!("".resolve(offset).0, 0);
     }
 }

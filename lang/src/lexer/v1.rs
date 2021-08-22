@@ -38,9 +38,9 @@ impl<'i> Lexer<'i> {
         let source_id = pp.extras.opts.source_id;
 
         Some((
-            LexerPosition::new(source_id, span.end),
+            LexerPosition::new_raw(source_id, span.start),
             token,
-            LexerPosition::new(source_id, span.end),
+            LexerPosition::new_raw(source_id, span.end),
         ))
     }
 
@@ -132,11 +132,11 @@ impl<'i> Lexer<'i> {
 
         let source_id = pp.extras.opts.source_id;
         (
-            LexerPosition::new(source_id, start),
+            LexerPosition::new_raw(source_id, start),
             PreprocessorToken::Rest(std::borrow::Cow::Owned(
                 String::from_utf8(res).expect("invalid utf-8"),
             )),
-            LexerPosition::new(source_id, start + consumed_chars),
+            LexerPosition::new_raw(source_id, start + consumed_chars),
         )
     }
 }
@@ -154,16 +154,16 @@ impl<'i> Iterator for Lexer<'i> {
                 let mut token = if src.extras.opts.target_vulkan {
                     // Targetting Vulkan, nothing to change
                     (
-                        LexerPosition::new(source_id, span.start),
+                        LexerPosition::new_raw(source_id, span.start),
                         token,
-                        LexerPosition::new(source_id, span.end),
+                        LexerPosition::new_raw(source_id, span.end),
                     )
                 } else {
                     use Token::*;
 
                     // Replace Vulkan keywords with identifiers
                     (
-                        LexerPosition::new(source_id, span.start),
+                        LexerPosition::new_raw(source_id, span.start),
                         match token {
                             Texture1D | Texture1DArray | ITexture1D | ITexture1DArray
                             | UTexture1D | UTexture1DArray | Texture2D | Texture2DArray
@@ -180,7 +180,7 @@ impl<'i> Iterator for Lexer<'i> {
                             }
                             other => other,
                         },
-                        LexerPosition::new(source_id, span.end),
+                        LexerPosition::new_raw(source_id, span.end),
                     )
                 };
 
@@ -324,9 +324,12 @@ impl<'i> LangLexer for Lexer<'i> {
         &mut self,
         parser: &P,
     ) -> Result<P::Item, crate::parse::ParseError<Self>> {
-        parser
-            .parse(self)
-            .map_err(|err| lang_util::error::ParseError::new(err, self.source))
+        parser.parse(self).map_err(|err| {
+            lang_util::error::ParseError::<Self::Error>::builder()
+                .pos(lang_util::error::error_location(&err))
+                .resolve(&self.source)
+                .finish(err.into())
+        })
     }
 }
 

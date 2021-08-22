@@ -26,7 +26,7 @@ pub fn parse_int(lex: &mut logos::Lexer<Token>, radix: u32) -> Result<i32, Lexic
             radix,
         )
         .map_err(|source| LexicalError::InvalidIntLiteral {
-            location: LexerPosition::new(lex.extras.opts.source_id, lex.span().start),
+            location: LexerPosition::new_raw(lex.extras.opts.source_id, lex.span().start),
             source,
         })?,
     ) as i32)
@@ -54,7 +54,7 @@ pub fn parse_uint(lex: &mut logos::Lexer<Token>, radix: u32) -> Result<u32, Lexi
             radix,
         )
         .map_err(|source| LexicalError::InvalidIntLiteral {
-            location: LexerPosition::new(lex.extras.opts.source_id, lex.span().start),
+            location: LexerPosition::new_raw(lex.extras.opts.source_id, lex.span().start),
             source,
         })?,
     ))
@@ -64,7 +64,7 @@ pub fn parse_f32(lex: &mut logos::Lexer<Token>) -> Result<f32, LexicalError> {
     let s = lex.slice();
     f32::from_str(s.strip_suffix(|c| c == 'f' || c == 'F').unwrap_or(s)).map_err(|source| {
         LexicalError::InvalidFloatLiteral {
-            location: LexerPosition::new(lex.extras.opts.source_id, lex.span().start),
+            location: LexerPosition::new_raw(lex.extras.opts.source_id, lex.span().start),
             source,
         }
     })
@@ -78,7 +78,7 @@ pub fn parse_f64(lex: &mut logos::Lexer<Token>) -> Result<f64, LexicalError> {
             .unwrap_or(s),
     )
     .map_err(|source| LexicalError::InvalidFloatLiteral {
-        location: LexerPosition::new(lex.extras.opts.source_id, lex.span().start),
+        location: LexerPosition::new_raw(lex.extras.opts.source_id, lex.span().start),
         source,
     })
 }
@@ -87,7 +87,7 @@ pub fn parse_pp_int<'i>(
     lex: &mut logos::Lexer<'i, PreprocessorToken<'i>>,
 ) -> Result<i32, LexicalError> {
     i32::from_str(lex.slice()).map_err(|source| LexicalError::InvalidIntLiteral {
-        location: LexerPosition::new(lex.extras.opts.source_id, lex.span().start),
+        location: LexerPosition::new_raw(lex.extras.opts.source_id, lex.span().start),
         source,
     })
 }
@@ -113,7 +113,7 @@ pub fn parse_rs_ident(
         Ok((lex.slice().into(), lex.extras.clone()))
     } else {
         Err(LexicalError::ForbiddenRsQuote {
-            location: LexerPosition::new(lex.extras.opts.source_id, lex.span().start),
+            location: LexerPosition::new_raw(lex.extras.opts.source_id, lex.span().start),
         })
     }
 }
@@ -135,8 +135,8 @@ fn parse_cmt_int(
             crate::ast::CommentData::Multi(slice[2..slice.len() - 2].to_owned())
         }
         .spanned(
-            LexerPosition::new(source_id, span.start),
-            LexerPosition::new(source_id, span.end),
+            LexerPosition::new_raw(source_id, span.start),
+            LexerPosition::new_raw(source_id, span.end),
         );
 
         extras.add_comment(comment);

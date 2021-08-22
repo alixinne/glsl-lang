@@ -7,6 +7,7 @@ use glsl_lang_pp::{
 use lang_util::located::Located;
 
 use lang_util::{FileId, NodeContent};
+use text_size::TextSize;
 
 use crate::parse::ParseContext;
 
@@ -544,7 +545,7 @@ impl LexerCore {
                                                 } else {
                                                     end = LexerPosition::new(
                                                         self.file_id,
-                                                        source_token.text_range().start().into(),
+                                                        source_token.text_range().start(),
                                                     );
                                                 }
                                             }
@@ -592,7 +593,7 @@ impl LexerCore {
         // TODO: Store directive information
     }
 
-    pub fn position(&self, offset: impl Into<usize>) -> LexerPosition {
+    pub fn position(&self, offset: impl Into<TextSize>) -> LexerPosition {
         LexerPosition::new(self.file_id, offset.into())
     }
 }

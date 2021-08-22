@@ -1,10 +1,13 @@
 //! Input position representation types
 
-use std::{convert::TryFrom, fmt::Display};
+use std::{
+    convert::{TryFrom, TryInto},
+    fmt::Display,
+};
 
 use text_size::{TextRange, TextSize};
 
-use crate::FileId;
+use crate::{located::PointOrRange, FileId};
 
 /// A position in the lexer's input
 #[derive(Default, Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -12,7 +15,7 @@ pub struct LexerPosition {
     /// Source id
     pub source_id: FileId,
     /// Raw byte offset
-    pub offset: usize,
+    pub offset: TextSize,
 }
 
 impl LexerPosition {
@@ -21,15 +24,53 @@ impl LexerPosition {
     /// # Parameters
     ///
     /// * `source_id`: source id
-    /// * `offset`: raw byte offset in the input
-    pub fn new(source_id: FileId, offset: usize) -> Self {
+    /// * `offset`: byte offset in the input
+    pub fn new(source_id: FileId, offset: TextSize) -> Self {
         Self { source_id, offset }
+    }
+
+    /// Create a new [LexerPosition]
+    ///
+    /// # Parameters
+    ///
+    /// * `source_id`: source id
+    /// * `offset`: raw byte offset in the input
+    ///
+    /// # Panics
+    ///
+    /// Panics if the offset can't be converted to a u32.
+    pub fn new_raw<E: std::fmt::Debug>(
+        source_id: FileId,
+        offset: impl TryInto<u32, Error = E>,
+    ) -> Self {
+        Self {
+            source_id,
+            offset: offset.try_into().expect("input too large").into(),
+        }
     }
 }
 
 impl Display for LexerPosition {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}:{}", self.source_id, self.offset)
+        write!(f, "{}:{}", self.source_id, u32::from(self.offset))
+    }
+}
+
+impl From<LexerPosition> for FileId {
+    fn from(value: LexerPosition) -> Self {
+        value.source_id
+    }
+}
+
+impl From<LexerPosition> for TextSize {
+    fn from(value: LexerPosition) -> Self {
+        value.offset
+    }
+}
+
+impl From<LexerPosition> for PointOrRange {
+    fn from(value: LexerPosition) -> Self {
+        Self::Point(value.into())
     }
 }
 
@@ -54,10 +95,7 @@ impl NodeSpan {
     pub fn from_lexer(start: LexerPosition, end: LexerPosition) -> Self {
         Self {
             source_id: start.source_id,
-            range: TextRange::new(
-                TextSize::try_from(start.offset).expect("start is too large"),
-                TextSize::try_from(end.offset).expect("end is too large"),
-            ),
+            range: TextRange::new(start.offset, end.offset),
         }
     }
 
@@ -100,12 +138,12 @@ impl NodeSpan {
 
     /// Return the start of this span as a LexerPosition
     pub fn start(&self) -> LexerPosition {
-        LexerPosition::new(self.source_id, usize::from(self.range.start()))
+        LexerPosition::new(self.source_id, self.range.start())
     }
 
     /// Return the end of this span as a LexerPosition
     pub fn end(&self) -> LexerPosition {
-        LexerPosition::new(self.source_id, usize::from(self.range.end()))
+        LexerPosition::new(self.source_id, self.range.end())
     }
 }
 

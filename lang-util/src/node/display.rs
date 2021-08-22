@@ -1,5 +1,7 @@
 use std::fmt;
 
+use text_size::TextSize;
+
 use crate::FileId;
 
 /// A wrapper for a syntax node to be displayed
@@ -63,9 +65,16 @@ impl<T: NodeDisplay> fmt::Display for NodeDisplayWrapper<'_, T> {
 
             if let (Some(start), Some(end)) = (self.node.start(), self.node.end()) {
                 if let Some(source_id) = self.node.source_id() {
-                    write!(f, "{}@{}:{}..{}", name, source_id, start, end)?;
+                    write!(
+                        f,
+                        "{}@{}:{}..{}",
+                        name,
+                        source_id,
+                        u32::from(start),
+                        u32::from(end)
+                    )?;
                 } else {
-                    write!(f, "{}@{}..{}", name, start, end)?;
+                    write!(f, "{}@{}..{}", name, u32::from(start), u32::from(end))?;
                 }
             } else {
                 write!(f, "{}", name)?;
@@ -142,9 +151,9 @@ pub trait NodeDisplay: Sized {
     fn name() -> Option<&'static str>;
 
     /// Starting position of the node
-    fn start(&self) -> Option<usize>;
+    fn start(&self) -> Option<TextSize>;
     /// Ending position of the node
-    fn end(&self) -> Option<usize>;
+    fn end(&self) -> Option<TextSize>;
     /// Source id of the node
     fn source_id(&self) -> Option<FileId>;
 
@@ -172,11 +181,11 @@ impl<T: NodeContentDisplay + super::NodeContent> NodeDisplay for super::Node<T> 
         T::name()
     }
 
-    fn start(&self) -> Option<usize> {
+    fn start(&self) -> Option<TextSize> {
         self.span.map(|s| s.start().offset)
     }
 
-    fn end(&self) -> Option<usize> {
+    fn end(&self) -> Option<TextSize> {
         self.span.map(|s| s.end().offset)
     }
 
@@ -205,11 +214,11 @@ impl<T: NodeContentDisplay> NodeDisplay for T {
         T::name()
     }
 
-    fn start(&self) -> Option<usize> {
+    fn start(&self) -> Option<TextSize> {
         None
     }
 
-    fn end(&self) -> Option<usize> {
+    fn end(&self) -> Option<TextSize> {
         None
     }
 

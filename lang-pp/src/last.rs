@@ -8,7 +8,7 @@ pub mod keywords;
 pub mod type_names;
 use type_names::TypeNameAtom;
 
-use lang_util::FileId;
+use lang_util::{located::FileIdResolver, FileId};
 
 pub mod token;
 pub use token::{Token, TypeName};
@@ -343,6 +343,12 @@ impl<'r, E, I: Iterator<Item = Result<event::Event, E>> + LocatedIterator> Itera
 impl<'r, E, I: Iterator<Item = Result<event::Event, E>> + LocatedIterator> FusedIterator
     for Tokenizer<'r, I>
 {
+}
+
+impl<'r, I: FileIdResolver> FileIdResolver for Tokenizer<'r, I> {
+    fn resolve(&self, file_id: FileId) -> Option<&std::path::Path> {
+        self.inner.resolve(file_id)
+    }
 }
 
 #[cfg(test)]

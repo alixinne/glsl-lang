@@ -7,7 +7,7 @@ use bimap::BiHashMap;
 use encoding_rs::Encoding;
 
 use lang_util::{
-    located::{Located, LocatedBuilder},
+    located::{FileIdResolver, Located, LocatedBuilder},
     FileId,
 };
 
@@ -163,6 +163,12 @@ impl<'p, F: FileSystem> Iterator for ExpandStack<'p, F> {
                 return None;
             }
         }
+    }
+}
+
+impl<'p, F: FileSystem> FileIdResolver for ExpandStack<'p, F> {
+    fn resolve(&self, file_id: FileId) -> Option<&Path> {
+        <Processor<F> as FileIdResolver>::resolve(self.processor, file_id)
     }
 }
 
@@ -328,6 +334,15 @@ impl<F: FileSystem + Default> Processor<F> {
 impl<F: FileSystem + Default> Default for Processor<F> {
     fn default() -> Self {
         Self::new_with_fs(F::default())
+    }
+}
+
+impl<F: FileSystem> FileIdResolver for Processor<F> {
+    fn resolve(&self, file_id: FileId) -> Option<&Path> {
+        self.file_ids
+            .get_by_right(&file_id)
+            .and_then(|canonical_path| self.canonical_paths.get_by_right(canonical_path))
+            .map(|pathbuf| pathbuf.as_path())
     }
 }
 

@@ -1,9 +1,6 @@
 //! glsl-lang-pp based lexer
 
-use glsl_lang_pp::{
-    last,
-    processor::{self, event::Located},
-};
+use glsl_lang_pp::{last, processor, util::Located};
 
 use super::{LexerPosition, Token};
 
@@ -51,7 +48,7 @@ impl<E: std::error::Error + 'static> std::fmt::Display for LexicalError<E> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             LexicalError::Token { kind, .. } => write!(f, "{}", kind),
-            LexicalError::Processor(error) => write!(f, "{}", error.kind()),
+            LexicalError::Processor(error) => write!(f, "{}", error.inner()),
             LexicalError::Io(io) => write!(f, "{}", io.inner()),
         }
     }
@@ -64,9 +61,9 @@ impl<E: std::error::Error + 'static> lang_util::error::LexicalError for LexicalE
         match self {
             LexicalError::Token { pos, .. } => *pos,
             LexicalError::Processor(err) => {
-                LexerPosition::new(err.current_file(), err.pos().start().into())
+                LexerPosition::new(err.current_file().unwrap(), err.pos().into())
             }
-            LexicalError::Io(io) => LexerPosition::new(io.current_file(), io.pos().start().into()),
+            LexicalError::Io(io) => LexerPosition::new(io.current_file().unwrap(), io.pos().into()),
         }
     }
 }

@@ -9,7 +9,6 @@ use glsl_lang_pp::{
     exts::{Registry, DEFAULT_REGISTRY},
     last::{self, Event},
     processor::{
-        event::Located,
         fs::{ExpandStack, FileSystem, ParsedFile, Processor},
         ProcessorState,
     },
@@ -28,7 +27,7 @@ pub struct Lexer<'r, 'p, F: FileSystem> {
     inner: last::Tokenizer<'r, ExpandStack<'p, F>>,
     core: LexerCore,
     current_file: PathBuf,
-    handle_token: HandleTokenResult<Located<F::Error>>,
+    handle_token: HandleTokenResult<F::Error>,
 }
 
 impl<'r, 'p, F: FileSystem> Lexer<'r, 'p, F> {
@@ -49,12 +48,7 @@ impl<'r, 'p, F: FileSystem> Iterator for Lexer<'r, 'p, F> {
         loop {
             // Pop pending events
             if let Some(item) = self.handle_token.pop_item() {
-                // TODO: Figure out why we need the io.into_inner()
-                return Some(item.map_err(|err| match err {
-                    LexicalError::Token { kind, pos } => LexicalError::Token { kind, pos },
-                    LexicalError::Processor(err) => LexicalError::Processor(err),
-                    LexicalError::Io(io) => LexicalError::Io(io.into_inner()),
-                }));
+                return Some(item);
             }
 
             if let Some(result) = self.handle_token.pop_event().or_else(|| self.inner.next()) {

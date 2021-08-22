@@ -43,3 +43,9 @@ impl Default for LineMap {
         }
     }
 }
+
+impl super::Resolver for LineMap {
+    fn resolve(&self, offset: rowan::TextSize) -> (u32, u32) {
+        self.get_line_and_col(offset.into())
+    }
+}

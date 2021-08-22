@@ -181,18 +181,20 @@ impl<'r> TypeTable<'r> {
             Token::from_token(token, self.target_vulkan, |tn| self.is_type_name(tn));
 
         let error = if let Some(TypeNameState::WarnType(extension)) = &state {
-            Some(Error::new(
-                ErrorKind::warn_ext_use(
-                    extension.clone(),
-                    match &token_kind {
-                        Token::TYPE_NAME(TypeName::OTHER(type_name)) => Some(type_name.clone()),
-                        _ => unreachable!(),
-                    },
-                    token.text_range(),
-                    location,
-                ),
-                location,
-            ))
+            Some(
+                Error::builder()
+                    .pos(token.text_range())
+                    .resolve_file(location)
+                    .finish(ErrorKind::warn_ext_use(
+                        extension.clone(),
+                        match &token_kind {
+                            Token::TYPE_NAME(TypeName::OTHER(type_name)) => Some(type_name.clone()),
+                            _ => unreachable!(),
+                        },
+                        token.text_range(),
+                        location,
+                    )),
+            )
         } else {
             None
         };
@@ -311,14 +313,16 @@ impl<'r, E, I: Iterator<Item = Result<event::Event, E>> + LocatedIterator> Itera
                     if !masked {
                         if let DirectiveKind::Extension(extension) = &kind {
                             if !self.type_table.handle_extension(extension) {
-                                self.pending_error = Some(Error::new(
-                                    ErrorKind::unsupported_ext(
-                                        extension.name.clone(),
-                                        node.text_range(),
-                                        self.inner.location(),
-                                    ),
-                                    self.inner.location(),
-                                ));
+                                self.pending_error = Some(
+                                    Error::builder()
+                                        .pos(node.text_range())
+                                        .resolve_file(self.inner.location())
+                                        .finish(ErrorKind::unsupported_ext(
+                                            extension.name.clone(),
+                                            node.text_range(),
+                                            self.inner.location(),
+                                        )),
+                                );
                             }
                         }
                     }

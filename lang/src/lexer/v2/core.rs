@@ -2,11 +2,8 @@ use std::collections::VecDeque;
 
 use glsl_lang_pp::{
     last::{self, type_names::TypeNameAtom, LocatedIterator, MaybeToken, TokenState, Tokenizer},
-    processor::{
-        event::{self, DirectiveKind, Error, Located, OutputToken, SyntaxNode, TokenLike},
-        expand::ExpandLocation,
-        str::ProcessStrError,
-    },
+    processor::event::{self, DirectiveKind, Error, OutputToken, SyntaxNode, TokenLike},
+    util::Located,
 };
 
 use lang_util::{FileId, NodeContent};
@@ -25,7 +22,7 @@ pub struct LexerCore {
 pub enum HandleTokenResult<E: std::error::Error + 'static> {
     None,
     Item(Item<E>),
-    Pending(VecDeque<Item<E>>, VecDeque<Result<last::Event, E>>),
+    Pending(VecDeque<Item<E>>, VecDeque<Result<last::Event, Located<E>>>),
 }
 
 impl<E: std::error::Error + 'static> HandleTokenResult<E> {
@@ -61,7 +58,7 @@ impl<E: std::error::Error + 'static> HandleTokenResult<E> {
         }
     }
 
-    pub fn pop_event(&mut self) -> Option<Result<last::Event, E>> {
+    pub fn pop_event(&mut self) -> Option<Result<last::Event, Located<E>>> {
         match std::mem::take(self) {
             HandleTokenResult::None => None,
             HandleTokenResult::Item(item) => {
@@ -432,12 +429,12 @@ impl LexerCore {
 
     pub fn handle_error<E: std::error::Error + 'static>(
         &self,
-        error: Error,
+        mut error: Error,
         masked: bool,
     ) -> Option<Item<E>> {
         if !masked {
             // Replace source id
-            let error = error.with_file_id(self.file_id);
+            error.set_current_file(self.file_id);
             // Return errorr
             Some(Err(LexicalError::Processor(error)))
         } else {
@@ -458,7 +455,7 @@ impl LexerCore {
         token_state: &mut HandleTokenResult<E>,
     ) where
         E: std::error::Error + 'static,
-        I: Iterator<Item = Result<event::Event, E>> + LocatedIterator,
+        I: Iterator<Item = Result<event::Event, Located<E>>> + LocatedIterator,
         <Tokenizer<'r, I> as Iterator>::Item: MaybeToken,
     {
         if state.active() {
@@ -593,24 +590,6 @@ impl LexerCore {
         _errors: Vec<Error>,
     ) {
         // TODO: Store directive information
-    }
-
-    pub fn handle_str_err(
-        &self,
-        err: ProcessStrError,
-        location: &ExpandLocation,
-    ) -> Item<ProcessStrError> {
-        match &err {
-            ProcessStrError::IncludeRequested(_, node, _) => {
-                let pos = node.text_range();
-                Err(LexicalError::Io(Located::new(
-                    err,
-                    Default::default(),
-                    pos,
-                    location,
-                )))
-            }
-        }
     }
 
     pub fn position(&self, offset: impl Into<usize>) -> LexerPosition {

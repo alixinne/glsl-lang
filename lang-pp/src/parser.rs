@@ -163,8 +163,12 @@ impl<'i, 'cache> ParserRun<'i, 'cache> {
     }
 
     fn push_error(&mut self, error_kind: ErrorKind, range: TextRange) {
-        self.errors
-            .push(Error::new(error_kind, range, self.input.line_map()));
+        self.errors.push(
+            Error::builder()
+                .pos(range)
+                .resolve(self.input.line_map())
+                .finish(error_kind),
+        );
     }
 
     fn expect_one(&mut self, expected: lexer::Token) -> ExpectAny {

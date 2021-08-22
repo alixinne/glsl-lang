@@ -4,7 +4,7 @@ use std::{iter::Peekable, str::CharIndices};
 
 use rowan::{TextRange, TextSize};
 
-use super::LineMap;
+use crate::util::LineMap;
 
 /// Type of token for line splitting
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

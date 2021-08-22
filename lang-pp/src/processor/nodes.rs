@@ -12,7 +12,7 @@ use crate::{
         event::TokenLike,
         expr::{EvalResult, ExprEvaluator},
     },
-    util::Unescaped,
+    util::{FileOverride, Unescaped},
 };
 
 use super::{
@@ -777,6 +777,16 @@ impl ParsedLine {
             ParsedLine::Line(line)
             | ParsedLine::LineAndFileNumber(line, _)
             | ParsedLine::LineAndPath(line, _) => *line,
+        }
+    }
+}
+
+impl From<ParsedLine> for FileOverride {
+    fn from(value: ParsedLine) -> Self {
+        match value {
+            ParsedLine::Line(_) => Self::None,
+            ParsedLine::LineAndFileNumber(_, file) => Self::Number(file),
+            ParsedLine::LineAndPath(_, path) => Self::Path(path),
         }
     }
 }

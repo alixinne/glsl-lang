@@ -2,7 +2,10 @@
 
 use arrayvec::ArrayVec;
 
-use crate::lexer::{LineMap, PreLexer, PreTextToken, PreToken as InputToken};
+use crate::{
+    lexer::{PreLexer, PreTextToken, PreToken as InputToken},
+    util::LineMap,
+};
 
 mod token;
 use rowan::TextRange;

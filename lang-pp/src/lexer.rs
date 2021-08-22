@@ -1,6 +1,3 @@
-mod line_map;
-pub use line_map::*;
-
 mod newline;
 use newline::*;
 

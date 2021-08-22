@@ -319,12 +319,8 @@ impl Definition {
                                     Some(text.into())
                                 }
                             },
-                        }
-                        .with_token_and_range(
-                            token,
-                            entire_range,
-                            location,
-                        ),
+                        },
+                        entire_range,
                         location,
                         false,
                     )
@@ -527,11 +523,13 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
                     Some(node_or_token) => match node_or_token {
                         NodeOrToken::Node(node) => {
                             // Node, i.e. a processing directive. unexpected here
-                            return Err(ProcessingErrorKind::UnexpectedDirective {
-                                ident: definition.name().into(),
-                                node,
-                            }
-                            .with_node(first_token.into(), location));
+                            return Err(ProcessingError::builder()
+                                .pos(first_token.text_range())
+                                .resolve_file(location)
+                                .finish(ProcessingErrorKind::UnexpectedDirective {
+                                    ident: definition.name().into(),
+                                    node,
+                                }));
                         }
                         NodeOrToken::Token(inner_token) => {
                             // A token
@@ -577,14 +575,14 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
                     None => {
                         // End-of-file. Not that we haven't consumed any nodes yet
                         // so we just need to return the events via the state
-                        return Err(ProcessingErrorKind::UnterminatedMacroInvocation {
-                            ident: definition.name().into(),
-                        }
-                        .with_node_and_range(
-                            first_token.into(),
-                            text_range.unwrap_or_else(|| TextRange::new(token_start, last_end)),
-                            location,
-                        ));
+                        return Err(ProcessingError::builder()
+                            .pos(
+                                text_range.unwrap_or_else(|| TextRange::new(token_start, last_end)),
+                            )
+                            .resolve_file(location)
+                            .finish(ProcessingErrorKind::UnterminatedMacroInvocation {
+                                ident: definition.name().into(),
+                            }));
                     }
                 }
             };
@@ -605,12 +603,14 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
             }
 
             if args.len() != definition.arg_count() {
-                return Err(ProcessingErrorKind::MismatchedArguments {
-                    ident: definition.name().into(),
-                    expected: definition.arg_count(),
-                    actual: args.len(),
-                }
-                .with_node(first_token.into(), location));
+                return Err(ProcessingError::builder()
+                    .pos(first_token.text_range())
+                    .resolve_file(location)
+                    .finish(ProcessingErrorKind::MismatchedArguments {
+                        ident: definition.name().into(),
+                        expected: definition.arg_count(),
+                        actual: args.len(),
+                    }));
             }
 
             (
@@ -691,7 +691,7 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
                                 result.push(Event::token(token, false));
                             }
                             Err(err) => {
-                                result.push(Event::error(err, location, false));
+                                result.push(Event::map_error(err, false));
                             }
                         }
                     } else {

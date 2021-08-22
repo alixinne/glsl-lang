@@ -1,6 +1,6 @@
 use rowan::GreenNode;
 
-use crate::lexer::LineMap;
+use crate::util::LineMap;
 
 use super::{Error, SyntaxNode};
 

@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 
 use derive_more::From;
-use rowan::{NodeOrToken, TextRange};
+use rowan::TextRange;
 use smol_str::SmolStr;
 use thiserror::Error;
 
@@ -11,66 +11,17 @@ use crate::{
     exts::names::ExtNameAtom,
     last::type_names::TypeNameAtom,
     parser::{self, SyntaxKind},
+    util::{Located, PointOrRange},
 };
 
 use super::{
     expand::ExpandLocation,
-    nodes::{self, Directive, ExtensionName, ParsedLine, ParsedPath},
+    nodes::{self, Directive, ExtensionName, ParsedPath},
 };
 
 pub use crate::parser::{SyntaxNode, SyntaxToken};
 
-#[derive(Debug, PartialEq, Eq)]
-pub struct ProcessingError {
-    node: NodeOrToken<SyntaxNode, SyntaxToken>,
-    kind: ProcessingErrorKind,
-    pos: TextRange,
-    user_pos: (u32, u32),
-}
-
-impl ProcessingError {
-    pub fn new(
-        node: NodeOrToken<SyntaxNode, SyntaxToken>,
-        kind: ProcessingErrorKind,
-        pos: TextRange,
-        user_pos: (u32, u32),
-    ) -> Self {
-        Self {
-            node,
-            kind,
-            pos,
-            user_pos,
-        }
-    }
-
-    pub fn node_or_token(&self) -> &NodeOrToken<SyntaxNode, SyntaxToken> {
-        &self.node
-    }
-
-    pub fn kind(&self) -> &ProcessingErrorKind {
-        &self.kind
-    }
-
-    pub fn pos(&self) -> TextRange {
-        self.pos
-    }
-
-    pub fn line(&self) -> u32 {
-        self.user_pos.0
-    }
-
-    pub fn col(&self) -> u32 {
-        self.user_pos.1
-    }
-}
-
-impl std::fmt::Display for ProcessingError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.kind)
-    }
-}
-
-impl std::error::Error for ProcessingError {}
+pub type ProcessingError = Located<ProcessingErrorKind>;
 
 #[derive(Debug, PartialEq, Eq, From)]
 pub enum ProcessingErrorKind {
@@ -122,61 +73,7 @@ pub enum ProcessingErrorKind {
     DirectivePragma(nodes::PragmaError),
 }
 
-impl ProcessingErrorKind {
-    pub fn with_node(
-        self,
-        node: NodeOrToken<SyntaxNode, SyntaxToken>,
-        location: &ExpandLocation,
-    ) -> ProcessingError {
-        let pos = node.text_range();
-
-        ProcessingError::new(
-            node,
-            self,
-            pos,
-            location.offset_to_raw_line_and_col(pos.start()),
-        )
-    }
-
-    pub fn with_node_and_range(
-        self,
-        node: NodeOrToken<SyntaxNode, SyntaxToken>,
-        pos: TextRange,
-        location: &ExpandLocation,
-    ) -> ProcessingError {
-        ProcessingError::new(
-            node,
-            self,
-            pos,
-            location.offset_to_raw_line_and_col(pos.start()),
-        )
-    }
-
-    pub fn with_token(self, token: impl TokenLike, location: &ExpandLocation) -> ProcessingError {
-        let pos = token.text_range();
-
-        ProcessingError::new(
-            token.into(),
-            self,
-            pos,
-            location.offset_to_raw_line_and_col(pos.start()),
-        )
-    }
-
-    pub fn with_token_and_range(
-        self,
-        token: impl TokenLike,
-        pos: TextRange,
-        location: &ExpandLocation,
-    ) -> ProcessingError {
-        ProcessingError::new(
-            token.into(),
-            self,
-            pos,
-            location.offset_to_raw_line_and_col(pos.start()),
-        )
-    }
-}
+impl std::error::Error for ProcessingErrorKind {}
 
 impl std::fmt::Display for ProcessingErrorKind {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -289,188 +186,14 @@ impl std::fmt::Display for ProcessingErrorKind {
     }
 }
 
-#[derive(Debug)]
-pub struct Located<E: std::error::Error + 'static> {
-    inner: E,
-    path: PathBuf,
-    pos: TextRange,
-    current_file: FileId,
-    line: u32,
-    line_override: Option<(u32, ParsedLine)>,
-}
-
-impl<E: std::error::Error> Located<E> {
-    pub fn new(inner: E, path: PathBuf, pos: TextRange, location: &ExpandLocation) -> Self {
-        let line = location.offset_to_line_and_col(pos.start()).0;
-
-        Self {
-            inner,
-            path,
-            pos,
-            current_file: location.current_file(),
-            line,
-            line_override: location.line_override().cloned(),
-        }
-    }
-
-    pub fn new_at_file(inner: E, path: PathBuf) -> Self {
-        Self {
-            inner,
-            path,
-            pos: TextRange::default(),
-            current_file: FileId::default(),
-            line: 0,
-            line_override: None,
-        }
-    }
-
-    pub fn into_inner(self) -> E {
-        self.inner
-    }
-
-    pub fn inner(&self) -> &E {
-        &self.inner
-    }
-
-    pub fn current_file(&self) -> FileId {
-        self.current_file
-    }
-
-    pub fn pos(&self) -> &TextRange {
-        &self.pos
-    }
-
-    pub fn line(&self) -> u32 {
-        self.line
-    }
-
-    pub fn string(&self) -> &dyn std::fmt::Display {
-        Error::override_string(&self.current_file, self.line_override.as_ref())
-    }
-}
-
-impl<E: std::error::Error> std::error::Error for Located<E> {
-    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
-        self.inner.source()
-    }
-}
-
-impl<E: std::error::Error> std::fmt::Display for Located<E> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(
-            f,
-            "{}:{}: '#include' : {} : {}",
-            self.string(),
-            self.line() + 1,
-            self.path.display(),
-            self.inner
-        )
-    }
-}
-
-#[derive(Debug, PartialEq, Eq)]
-pub struct Error {
-    kind: ErrorKind,
-    current_file: FileId,
-    line: u32,
-    line_override: Option<(u32, ParsedLine)>,
-}
-
-impl Error {
-    pub fn new(kind: impl Into<ErrorKind>, location: &ExpandLocation) -> Self {
-        let kind = kind.into();
-        let line = location.line_to_line_number(kind.raw_line());
-
-        Self {
-            kind,
-            current_file: location.current_file(),
-            line,
-            line_override: location.line_override().cloned(),
-        }
-    }
-
-    pub fn kind(&self) -> &ErrorKind {
-        &self.kind
-    }
-
-    pub fn current_file(&self) -> FileId {
-        self.current_file
-    }
-
-    pub fn pos(&self) -> TextRange {
-        match &self.kind {
-            ErrorKind::Parse(err) => err.pos(),
-            ErrorKind::Processing(err) => err.pos(),
-            ErrorKind::WarnExtUse { pos, .. } => *pos,
-            ErrorKind::UnsupportedExt { pos, .. } => *pos,
-        }
-    }
-
-    pub fn line(&self) -> u32 {
-        self.line
-    }
-
-    fn override_string<'a>(
-        current_file: &'a FileId,
-        line_override: Option<&'a (u32, ParsedLine)>,
-    ) -> &'a dyn std::fmt::Display {
-        if let Some((_, line_override)) = line_override {
-            match line_override {
-                ParsedLine::LineAndFileNumber(_, ref file_number) => {
-                    return file_number;
-                }
-                ParsedLine::LineAndPath(_, ref path) => {
-                    return path;
-                }
-                _ => {}
-            }
-        }
-
-        current_file
-    }
-
-    pub fn string(&self) -> &dyn std::fmt::Display {
-        Self::override_string(&self.current_file, self.line_override.as_ref())
-    }
-
-    pub fn with_file_id(self, file_id: FileId) -> Self {
-        Self {
-            current_file: file_id,
-            ..self
-        }
-    }
-}
-
-impl std::fmt::Display for Error {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}:{}: ", self.string(), self.line() + 1,)?;
-
-        match &self.kind {
-            ErrorKind::Parse(err) => {
-                write!(f, "{}", err.kind())
-            }
-            ErrorKind::Processing(err) => {
-                write!(f, "{}", err.kind())
-            }
-            _ => {
-                write!(f, "{}", &self.kind)
-            }
-        }
-    }
-}
-
-impl std::error::Error for Error {
-    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
-        self.kind.source()
-    }
-}
+pub type Error = Located<ErrorKind>;
 
 #[derive(Debug, PartialEq, Eq, Error)]
 pub enum ErrorKind {
     #[error(transparent)]
-    Parse(#[from] parser::Error),
+    Parse(#[from] parser::ErrorKind),
     #[error(transparent)]
-    Processing(#[from] ProcessingError),
+    Processing(#[from] ProcessingErrorKind),
     #[error("warning use of '{extension}'")]
     WarnExtUse {
         extension: ExtNameAtom,
@@ -514,15 +237,6 @@ impl ErrorKind {
             pos,
         }
     }
-
-    fn raw_line(&self) -> u32 {
-        match self {
-            ErrorKind::Parse(err) => err.line(),
-            ErrorKind::Processing(err) => err.line(),
-            ErrorKind::WarnExtUse { raw_line, .. } => *raw_line,
-            ErrorKind::UnsupportedExt { raw_line, .. } => *raw_line,
-        }
-    }
 }
 
 #[derive(Debug, PartialEq, Eq, From)]
@@ -545,7 +259,7 @@ pub enum DirectiveKind {
     Invalid(nodes::Invalid),
 }
 
-pub trait TokenLike: Into<NodeOrToken<SyntaxNode, SyntaxToken>> {
+pub trait TokenLike {
     fn kind(&self) -> SyntaxKind;
     fn text(&self) -> &str;
     fn text_range(&self) -> TextRange;
@@ -603,13 +317,6 @@ impl TokenLike for OutputToken {
 
     fn text_range(&self) -> TextRange {
         self.source_range()
-    }
-}
-
-// TODO: This loses location information but should only be used in errors anyways
-impl From<OutputToken> for NodeOrToken<SyntaxNode, SyntaxToken> {
-    fn from(out: OutputToken) -> Self {
-        NodeOrToken::Token(out.inner)
     }
 }
 
@@ -697,13 +404,20 @@ impl Event {
         location: &ExpandLocation,
     ) -> Self {
         let (inner, node) = d.into_inner();
+        let pos = node.text_range();
+
         Self::Directive {
             node,
             kind: inner.into(),
             masked,
             errors: errors
                 .into_iter()
-                .map(|error| Error::new(error, location))
+                .map(|error| {
+                    Error::builder()
+                        .pos(pos)
+                        .resolve_file(location)
+                        .finish(error.into())
+                })
                 .collect(),
         }
     }
@@ -713,16 +427,27 @@ impl Event {
         location: &ExpandLocation,
         masked: bool,
     ) -> Self {
-        Self::error(
-            error.into().with_node(node.into(), location),
-            location,
-            masked,
-        )
+        Self::error(error.into(), node.text_range(), location, masked)
     }
 
-    pub fn error<T: Into<ErrorKind>>(e: T, location: &ExpandLocation, masked: bool) -> Self {
+    pub fn error<T: Into<ErrorKind>>(
+        e: T,
+        pos: impl Into<PointOrRange>,
+        location: &ExpandLocation,
+        masked: bool,
+    ) -> Self {
         Self::Error {
-            error: Error::new(e, location),
+            error: Error::builder()
+                .pos(pos)
+                .resolve_file(location)
+                .finish(e.into()),
+            masked,
+        }
+    }
+
+    pub fn map_error<T: Into<ErrorKind>>(e: Located<T>, masked: bool) -> Self {
+        Self::Error {
+            error: e.map(Into::into),
             masked,
         }
     }

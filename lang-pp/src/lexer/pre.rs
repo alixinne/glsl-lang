@@ -2,9 +2,9 @@
 
 use rowan::TextRange;
 
-use crate::util::Unescaped;
+use crate::util::{LineMap, Unescaped};
 
-use super::{LineMap, NewlineSplitter, NewlineToken, NewlineTokenKind};
+use super::{NewlineSplitter, NewlineToken, NewlineTokenKind};
 
 mod token;
 pub use token::Token;

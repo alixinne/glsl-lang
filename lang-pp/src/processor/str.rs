@@ -4,7 +4,8 @@ use lang_util::FileId;
 
 use crate::{
     last::LocatedIterator,
-    parser::{self, SyntaxNode},
+    parser,
+    util::{Located, LocatedBuilder},
 };
 
 use super::{
@@ -21,7 +22,7 @@ pub fn parse(input: &str) -> parser::Ast {
 #[derive(Debug, PartialEq, Eq, Error)]
 pub enum ProcessStrError {
     #[error("an include was requested without a filesystem context")]
-    IncludeRequested(ProcessorState, SyntaxNode, ParsedPath),
+    IncludeRequested(ProcessorState, ParsedPath),
 }
 
 pub fn process(input: &str, state: ProcessorState) -> ExpandStr {
@@ -53,15 +54,16 @@ impl ExpandStr {
 }
 
 impl Iterator for ExpandStr {
-    type Item = Result<Event, ProcessStrError>;
+    type Item = Result<Event, Located<ProcessStrError>>;
 
     fn next(&mut self) -> Option<Self::Item> {
         let event = self.inner.next()?;
         match event {
             ExpandEvent::Event(event) => Some(Ok(event)),
-            ExpandEvent::EnterFile(state, node, path) => {
-                Some(Err(ProcessStrError::IncludeRequested(state, node, path)))
-            }
+            ExpandEvent::EnterFile(state, node, path) => Some(Err(LocatedBuilder::new()
+                .pos(node.text_range())
+                .resolve_file(self.inner.location())
+                .finish(ProcessStrError::IncludeRequested(state, path)))),
             ExpandEvent::Completed(state) => {
                 self.final_state = Some(state);
                 None

@@ -11,10 +11,11 @@ use lang_util::FileId;
 use crate::{
     last::LocatedIterator,
     parser::{Ast, Parser},
+    util::{Located, LocatedBuilder},
 };
 
 use super::{
-    event::{Event, Located, ProcessingErrorKind},
+    event::{Event, ProcessingErrorKind},
     expand::{ExpandEvent, ExpandOne},
     nodes::{ParsedPath, PathType},
     ProcessorState,
@@ -127,20 +128,19 @@ impl<'p, F: FileSystem> Iterator for ExpandStack<'p, F> {
                                     Err(error) => {
                                         // Just return the error, we'll keep iterating on the lower
                                         // file by looping
-                                        return Some(Err(Located::new(
-                                            error,
-                                            resolved_path,
-                                            node.text_range(),
-                                            location,
-                                        )));
+                                        return Some(Err(LocatedBuilder::new()
+                                            .pos(node.text_range())
+                                            .path(resolved_path)
+                                            .resolve_file(location)
+                                            .finish(error)));
                                     }
                                 }
                             } else {
                                 // Resolving the path failed, throw an error located at the
                                 // right place
                                 return Some(Ok(Event::error(
-                                    ProcessingErrorKind::IncludeNotFound { path }
-                                        .with_node(node.into(), location),
+                                    ProcessingErrorKind::IncludeNotFound { path },
+                                    node.text_range(),
                                     location,
                                     false,
                                 )));

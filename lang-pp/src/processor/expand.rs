@@ -12,17 +12,17 @@ use rowan::{NodeOrToken, SyntaxElementChildren, TextSize};
 use lang_util::FileId;
 
 use crate::{
-    lexer::LineMap,
     parser::{self, Ast, PreprocessorLang, SyntaxKind::*, SyntaxNode, SyntaxToken},
-    util::Unescaped,
+    util::{HasFileNumber, LineMap, Resolver, Unescaped},
 };
 
 use super::{
     definition::{Definition, MacroInvocation},
     event::{ErrorKind, Event, ProcessingErrorKind},
     nodes::{
-        Define, Directive, DirectiveResult, Elif, Else, Empty, EndIf, Error, Extension, If, IfDef,
-        IfNDef, Include, Invalid, Line, ParsedLine, ParsedPath, Pragma, Undef, Version,
+        Define, Directive, DirectiveResult, Elif, Else, Empty, EndIf, Error as ErrorDirective,
+        Extension, If, IfDef, IfNDef, Include, Invalid, Line, ParsedLine, ParsedPath, Pragma,
+        Undef, Version,
     },
     IncludeMode, ProcessorState,
 };
@@ -34,6 +34,18 @@ pub struct ExpandLocation {
     current_file: FileId,
     line_map: LineMap,
     line_override: Option<(u32, ParsedLine)>,
+}
+
+impl Resolver for ExpandLocation {
+    fn resolve(&self, offset: TextSize) -> (u32, u32) {
+        self.offset_to_line_and_col(offset)
+    }
+}
+
+impl HasFileNumber for ExpandLocation {
+    fn current_file(&self) -> FileId {
+        self.current_file
+    }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -257,13 +269,10 @@ impl ExpandOne {
                     Ok(define) => {
                         let error = if active {
                             if define.name().starts_with("GL_") {
-                                Some(
-                                    ProcessingErrorKind::ProtectedDefine {
-                                        ident: define.name().into(),
-                                        is_undef: false,
-                                    }
-                                    .with_node(define.node().clone().into(), &self.location),
-                                )
+                                Some(ProcessingErrorKind::ProtectedDefine {
+                                    ident: define.name().into(),
+                                    is_undef: false,
+                                })
                             } else {
                                 let definition = Definition::Regular(
                                     Rc::new((*define).clone()),
@@ -273,16 +282,10 @@ impl ExpandOne {
                                 match current_state.definitions.entry(define.name().into()) {
                                     Entry::Occupied(mut entry) => {
                                         if entry.get().protected() {
-                                            Some(
-                                                ProcessingErrorKind::ProtectedDefine {
-                                                    ident: define.name().into(),
-                                                    is_undef: false,
-                                                }
-                                                .with_node(
-                                                    define.node().clone().into(),
-                                                    &self.location,
-                                                ),
-                                            )
+                                            Some(ProcessingErrorKind::ProtectedDefine {
+                                                ident: define.name().into(),
+                                                is_undef: false,
+                                            })
                                         } else {
                                             // TODO: Check that we are not overwriting an incompatible definition
                                             *entry.get_mut() = definition;
@@ -345,7 +348,7 @@ impl ExpandOne {
             }
             PP_IF => {
                 let active = self.if_stack.active();
-                let directive: DirectiveResult<If> = node.clone().try_into();
+                let directive: DirectiveResult<If> = node.try_into();
 
                 let (result, ret) = match directive {
                     Ok(if_) => {
@@ -360,9 +363,7 @@ impl ExpandOne {
                             Event::directive_errors(
                                 if_,
                                 !active,
-                                error.map(ProcessingErrorKind::DirectiveIf).map(|kind| {
-                                    kind.with_node(node.clone().into(), &self.location)
-                                }),
+                                error.map(ProcessingErrorKind::DirectiveIf),
                                 &self.location,
                             ),
                         )
@@ -375,7 +376,7 @@ impl ExpandOne {
             }
             PP_ELIF => {
                 let active = self.if_stack.if_group_active();
-                let directive: DirectiveResult<Elif> = node.clone().try_into();
+                let directive: DirectiveResult<Elif> = node.try_into();
                 let mut errors: ArrayVec<_, 2> = ArrayVec::new();
 
                 let expr = match &directive {
@@ -388,10 +389,7 @@ impl ExpandOne {
                             };
 
                             if let Some(error) = error {
-                                errors.push(
-                                    ProcessingErrorKind::DirectiveElif(error)
-                                        .with_node(node.clone().into(), &self.location),
-                                );
+                                errors.push(ProcessingErrorKind::DirectiveElif(error));
                             }
 
                             value
@@ -405,9 +403,7 @@ impl ExpandOne {
 
                 // Update the if stack, which may fail
                 if let Err(error) = self.if_stack.on_elif(expr) {
-                    errors.push(
-                        ProcessingErrorKind::from(error).with_node(node.into(), &self.location),
-                    );
+                    errors.push(ProcessingErrorKind::from(error));
                 }
 
                 match directive {
@@ -417,12 +413,10 @@ impl ExpandOne {
             }
             PP_ELSE => {
                 let active = self.if_stack.if_group_active();
-                let directive: DirectiveResult<Else> = node.clone().try_into();
+                let directive: DirectiveResult<Else> = node.try_into();
 
                 // Update the if stack, which may fail
-                let error = self.if_stack.on_else().err().map(|kind| {
-                    ProcessingErrorKind::from(kind).with_node(node.into(), &self.location)
-                });
+                let error = self.if_stack.on_else().err().map(ProcessingErrorKind::from);
 
                 match directive {
                     Ok(else_) => Event::directive_errors(else_, !active, error, &self.location),
@@ -431,12 +425,14 @@ impl ExpandOne {
             }
             PP_ENDIF => {
                 let active = self.if_stack.if_group_active();
-                let directive: DirectiveResult<EndIf> = node.clone().try_into();
+                let directive: DirectiveResult<EndIf> = node.try_into();
 
                 // Update the if stack, which may fail
-                let error = self.if_stack.on_endif().err().map(|kind| {
-                    ProcessingErrorKind::from(kind).with_node(node.into(), &self.location)
-                });
+                let error = self
+                    .if_stack
+                    .on_endif()
+                    .err()
+                    .map(ProcessingErrorKind::from);
 
                 match directive {
                     Ok(endif) => Event::directive_errors(endif, !active, error, &self.location),
@@ -445,7 +441,7 @@ impl ExpandOne {
             }
             PP_UNDEF => {
                 let active = self.if_stack.active();
-                let directive: DirectiveResult<Undef> = node.clone().try_into();
+                let directive: DirectiveResult<Undef> = node.try_into();
 
                 match directive {
                     Ok(undef) => {
@@ -469,12 +465,9 @@ impl ExpandOne {
                         Event::directive_errors(
                             undef,
                             !active,
-                            protected_ident.map(|ident| {
-                                ProcessingErrorKind::ProtectedDefine {
-                                    ident,
-                                    is_undef: true,
-                                }
-                                .with_node(node.into(), &self.location)
+                            protected_ident.map(|ident| ProcessingErrorKind::ProtectedDefine {
+                                ident,
+                                is_undef: true,
                             }),
                             &self.location,
                         )
@@ -488,14 +481,13 @@ impl ExpandOne {
             }
             PP_ERROR => {
                 let active = self.if_stack.active();
-                let directive: DirectiveResult<Error> = node.try_into();
+                let directive: DirectiveResult<ErrorDirective> = node.try_into();
 
                 match directive {
                     Ok(error) => {
                         let user_error = ProcessingErrorKind::ErrorDirective {
                             message: error.message.clone(),
-                        }
-                        .with_node(error.node().clone().into(), &self.location);
+                        };
 
                         Event::directive_errors(
                             error,
@@ -528,11 +520,9 @@ impl ExpandOne {
                             (_, IncludeMode::None) if active => {
                                 // No include mode requested, thus we are not expecting include
                                 // directives and this is a parsing error
-                                Some(
-                                    ProcessingErrorKind::IncludeNotSupported
-                                        .with_node(node.into(), &self.location)
-                                        .into(),
-                                )
+                                Some(ErrorKind::Processing(
+                                    ProcessingErrorKind::IncludeNotSupported,
+                                ))
                             }
                             (Some(path), IncludeMode::GoogleInclude { warn }) if active => {
                                 // Compile-time include, enter nested file
@@ -632,13 +622,7 @@ impl ExpandOne {
                                     }
                                     ParsedLine::LineAndPath(line, _) => (
                                         ParsedLine::Line(line),
-                                        Some(
-                                            ProcessingErrorKind::CppStyleLineNotSupported
-                                                .with_node(
-                                                    ld.node().clone().into(),
-                                                    &self.location,
-                                                ),
-                                        ),
+                                        Some(ProcessingErrorKind::CppStyleLineNotSupported),
                                     ),
                                 };
 
@@ -723,7 +707,12 @@ impl ExpandOne {
                 }
                 Err(err) => {
                     let mut events = ArrayVec::new();
-                    events.push(Event::error(err, &self.location, false));
+                    events.push(Event::error(
+                        err.into_inner(),
+                        token.text_range(),
+                        &self.location,
+                        false,
+                    ));
                     events.push(Event::token(token, false));
 
                     self.state = ExpandState::PendingEvents {
@@ -825,8 +814,9 @@ impl Iterator for ExpandOne {
                 } => {
                     if let Some(node_or_token) = iterator.next() {
                         if let Some(first) = errors.first() {
-                            if node_or_token.text_range().end() >= first.pos().start() {
+                            if node_or_token.text_range().end() >= first.pos() {
                                 let error = errors.pop().unwrap();
+                                let pos = node_or_token.text_range();
 
                                 self.state = ExpandState::PendingOne {
                                     iterator,
@@ -836,8 +826,13 @@ impl Iterator for ExpandOne {
                                 };
 
                                 return Some(
-                                    Event::error(error, &self.location, !self.if_stack.active())
-                                        .into(),
+                                    Event::error(
+                                        error.into_inner(),
+                                        pos,
+                                        &self.location,
+                                        !self.if_stack.active(),
+                                    )
+                                    .into(),
                                 );
                             }
                         }

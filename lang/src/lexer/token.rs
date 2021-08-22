@@ -215,6 +215,16 @@ pub enum Token {
         kind = "type qualifier"
     )]
     WriteOnly,
+    #[cfg_attr(feature = "lexer-v1", token("attribute"))]
+    #[lang_util(
+        token = "attribute",
+        kind = "storage qualifier",
+        kind = "type qualifier"
+    )]
+    Attribute,
+    #[cfg_attr(feature = "lexer-v1", token("varying"))]
+    #[lang_util(token = "varying", kind = "storage qualifier", kind = "type qualifier")]
+    Varying,
     #[cfg_attr(feature = "lexer-v1", token("noperspective"))]
     #[lang_util(
         token = "noperspective",

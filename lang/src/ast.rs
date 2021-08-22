@@ -663,6 +663,12 @@ pub enum StorageQualifierData {
     /// `writeonly` storage qualifier
     #[lang_util(display(extra = "writeonly"))]
     WriteOnly,
+    /// `attribute` storage qualifier
+    #[lang_util(display(extra = "attribute"))]
+    Attribute,
+    /// `varying` storage qualifier
+    #[lang_util(display(extra = "varying"))]
+    Varying,
     // Note: the grammar says TYPE_NAME but type_specifier makes more sense given the definition of
     // subroutine. The reference implementation is marked "to do".
     /// `subroutine` storage qualifier

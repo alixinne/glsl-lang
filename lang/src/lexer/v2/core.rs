@@ -370,10 +370,8 @@ impl LexerCore {
                 last::Token::HIGHP => Token::HighPrecision,
                 last::Token::PRECISION => Token::Precision,
                 last::Token::STRUCT => Token::Struct,
-                // GLSL <4
-                last::Token::ATTRIBUTE |
-                // GLSL <4
-                last::Token::VARYING |
+                last::Token::ATTRIBUTE => Token::Attribute,
+                last::Token::VARYING => Token::Varying,
                 last::Token::COMMON
                 | last::Token::PARTITION
                 | last::Token::ACTIVE

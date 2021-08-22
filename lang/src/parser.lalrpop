@@ -549,6 +549,8 @@ storage_qualifier_data: ast::StorageQualifierData = {
     "restrict"  => ast::StorageQualifierData::Restrict,
     "readonly"  => ast::StorageQualifierData::ReadOnly,
     "writeonly" => ast::StorageQualifierData::WriteOnly,
+    "attribute" => ast::StorageQualifierData::Attribute,
+    "varying"   => ast::StorageQualifierData::Varying,
     "subroutine" <t:("(" <comma<type_specifier>> ")")?> =>
         ast::StorageQualifierData::Subroutine(t.unwrap_or_else(|| vec![])),
 };
@@ -882,6 +884,8 @@ extern {
         "restrict"               => Token::Restrict,
         "readonly"               => Token::ReadOnly,
         "writeonly"              => Token::WriteOnly,
+        "attribute"              => Token::Attribute,
+        "varying"                => Token::Varying,
         "subroutine"             => Token::Subroutine,
         "layout"                 => Token::Layout,
         "precision"              => Token::Precision,

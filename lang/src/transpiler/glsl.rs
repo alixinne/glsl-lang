@@ -782,6 +782,8 @@ where
         ast::StorageQualifierData::Restrict => f.write_str("restrict"),
         ast::StorageQualifierData::ReadOnly => f.write_str("readonly"),
         ast::StorageQualifierData::WriteOnly => f.write_str("writeonly"),
+        ast::StorageQualifierData::Attribute => f.write_str("attribute"),
+        ast::StorageQualifierData::Varying => f.write_str("varying"),
         ast::StorageQualifierData::Subroutine(ref n) => show_subroutine(f, n, state),
     }
 }

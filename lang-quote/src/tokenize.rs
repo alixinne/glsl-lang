@@ -745,6 +745,12 @@ fn tokenize_storage_qualifier(q: &ast::StorageQualifier) -> TokenStream {
         ast::StorageQualifierData::WriteOnly => {
             quote! { glsl_lang::ast::StorageQualifierData::WriteOnly }
         }
+        ast::StorageQualifierData::Attribute => {
+            quote! { glsl_lang::ast::StorageQualifierData::Attribute }
+        }
+        ast::StorageQualifierData::Varying => {
+            quote! { glsl_lang::ast::StorageQualifierData::Varying }
+        }
 
         ast::StorageQualifierData::Subroutine(ref n) => {
             let n = n.iter().map(|t| tokenize_type_specifier(t));

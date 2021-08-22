@@ -12,7 +12,7 @@ use crate::{
         event::TokenLike,
         expr::{EvalResult, ExprEvaluator},
     },
-    util::{FileOverride, Unescaped},
+    util::Unescaped,
 };
 
 use super::{
@@ -781,7 +781,7 @@ impl ParsedLine {
     }
 }
 
-impl From<ParsedLine> for FileOverride {
+impl From<ParsedLine> for lang_util::located::FileOverride {
     fn from(value: ParsedLine) -> Self {
         match value {
             ParsedLine::Line(_) => Self::None,

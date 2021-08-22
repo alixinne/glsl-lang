@@ -1,8 +1,8 @@
 use smol_str::SmolStr;
 
-use crate::{lexer, util::Located};
+use crate::lexer;
 
-pub type Error = Located<ErrorKind>;
+pub type Error = lang_util::located::Located<ErrorKind>;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ErrorKind {

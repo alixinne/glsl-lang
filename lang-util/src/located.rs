@@ -1,9 +1,12 @@
+//! Located type definition
+
 use std::{fmt, path::PathBuf};
 
-use rowan::{TextRange, TextSize};
+use text_size::{TextRange, TextSize};
 
-use lang_util::FileId;
+use super::FileId;
 
+/// A point or range in a string
 #[derive(Debug, Clone, Copy, PartialEq, Eq, derive_more::From)]
 pub enum PointOrRange {
     /// Offset into the source string
@@ -13,6 +16,7 @@ pub enum PointOrRange {
 }
 
 impl PointOrRange {
+    /// Return the start point of this point or range
     pub fn start(&self) -> TextSize {
         match self {
             PointOrRange::Point(point) => *point,
@@ -27,6 +31,7 @@ impl Default for PointOrRange {
     }
 }
 
+/// Represents a file location override
 #[derive(Debug, Clone, PartialEq, Eq, derive_more::From)]
 pub enum FileOverride {
     /// No override
@@ -38,6 +43,7 @@ pub enum FileOverride {
 }
 
 impl FileOverride {
+    /// Return true if this file override is empty
     pub fn is_none(&self) -> bool {
         matches!(self, Self::None)
     }
@@ -61,14 +67,21 @@ impl fmt::Display for FileOverride {
 
 /// Trait for objects that can resolve offsets to line and column numbers
 pub trait Resolver {
+    /// Resolve the raw offset into a (line, column) tuple
+    ///
+    /// # Parameters
+    ///
+    /// * `offset`: raw offset into the source string
     fn resolve(&self, offset: TextSize) -> (u32, u32);
 }
 
 /// Trait for objects that can return the current file number
 pub trait HasFileNumber {
+    /// Return the current file identifier
     fn current_file(&self) -> FileId;
 }
 
+/// Builder for a [Located] struct
 #[derive(Default)]
 pub struct LocatedBuilder {
     /// Position at which the error occurred
@@ -86,10 +99,12 @@ pub struct LocatedBuilder {
 }
 
 impl LocatedBuilder {
+    /// Create a new builder for [Located] with default values
     pub fn new() -> Self {
         Self::default()
     }
 
+    /// Set the raw position
     pub fn pos(self, pos: impl Into<PointOrRange>) -> Self {
         Self {
             pos: pos.into(),
@@ -97,6 +112,7 @@ impl LocatedBuilder {
         }
     }
 
+    /// Set the file identifier
     pub fn current_file(self, file: impl Into<FileId>) -> Self {
         Self {
             current_file: Some(file.into()),
@@ -104,6 +120,7 @@ impl LocatedBuilder {
         }
     }
 
+    /// Set the source path
     pub fn path(self, path: impl Into<PathBuf>) -> Self {
         Self {
             path: Some(path.into()),
@@ -111,6 +128,7 @@ impl LocatedBuilder {
         }
     }
 
+    /// Set the source file override
     pub fn file_override(self, file_override: impl Into<FileOverride>) -> Self {
         Self {
             file_override: file_override.into(),
@@ -118,6 +136,7 @@ impl LocatedBuilder {
         }
     }
 
+    /// Set the resolved line number
     pub fn line_number(self, line_number: u32) -> Self {
         Self {
             line_number,
@@ -125,10 +144,12 @@ impl LocatedBuilder {
         }
     }
 
+    /// Set the resolved column number
     pub fn column(self, column: u32) -> Self {
         Self { column, ..self }
     }
 
+    /// Resolve the raw offset (see [LocatedBuilder::pos]) to line and column information
     pub fn resolve(self, resolver: &impl Resolver) -> Self {
         let (line, col) = resolver.resolve(self.pos.start());
         Self {
@@ -138,10 +159,13 @@ impl LocatedBuilder {
         }
     }
 
+    /// Resolve the raw offset (see [LocatedBuilder::pos]) to line and column information, and set
+    /// the current file information
     pub fn resolve_file(self, resolver: &(impl Resolver + HasFileNumber)) -> Self {
         self.resolve(resolver).current_file(resolver.current_file())
     }
 
+    /// Build the final [Located] object from the given inner object
     pub fn finish<E>(self, inner: E) -> Located<E> {
         Located {
             inner,
@@ -155,6 +179,7 @@ impl LocatedBuilder {
     }
 }
 
+/// Wraps an object with location data
 #[derive(Debug)]
 pub struct Located<E> {
     /// Inner error, without location information
@@ -174,10 +199,16 @@ pub struct Located<E> {
 }
 
 impl<E> Located<E> {
+    /// Create a builder for this located type
     pub fn builder() -> LocatedBuilder {
         LocatedBuilder::default()
     }
 
+    /// Transform the inner value wrapped by this instance
+    ///
+    /// # Parameters
+    ///
+    /// * `f`: function to apply to the inner value
     pub fn map<F>(self, f: impl FnOnce(E) -> F) -> Located<F> {
         Located {
             inner: f(self.inner),
@@ -190,28 +221,39 @@ impl<E> Located<E> {
         }
     }
 
+    /// Return a reference to the inner value
     pub fn inner(&self) -> &E {
         &self.inner
     }
 
+    /// Return the inner value
     pub fn into_inner(self) -> E {
         self.inner
     }
 
+    /// Get the current file identifier
     pub fn current_file(&self) -> Option<FileId> {
         self.current_file
     }
 
+    /// Set the current file identifier
     pub fn set_current_file(&mut self, current_file: FileId) {
         self.current_file = Some(current_file);
     }
 
+    /// Get the raw position into the source
     pub fn pos(&self) -> TextSize {
         self.pos.start()
     }
 
+    /// Get the line number for this location
     pub fn line(&self) -> u32 {
         self.line_number
+    }
+
+    /// Get the column number for this location
+    pub fn col(&self) -> u32 {
+        self.column
     }
 }
 

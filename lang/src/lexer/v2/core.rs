@@ -3,8 +3,8 @@ use std::collections::VecDeque;
 use glsl_lang_pp::{
     last::{self, type_names::TypeNameAtom, LocatedIterator, MaybeToken, TokenState, Tokenizer},
     processor::event::{self, DirectiveKind, Error, OutputToken, SyntaxNode, TokenLike},
-    util::Located,
 };
+use lang_util::located::Located;
 
 use lang_util::{FileId, NodeContent};
 

@@ -1,12 +1,11 @@
 use thiserror::Error;
 
-use lang_util::FileId;
-
-use crate::{
-    last::LocatedIterator,
-    parser,
-    util::{Located, LocatedBuilder},
+use lang_util::{
+    located::{Located, LocatedBuilder},
+    FileId,
 };
+
+use crate::{last::LocatedIterator, parser};
 
 use super::{
     event::Event,

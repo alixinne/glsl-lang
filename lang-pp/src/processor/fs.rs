@@ -6,12 +6,14 @@ use std::{
 use bimap::BiHashMap;
 use encoding_rs::Encoding;
 
-use lang_util::FileId;
+use lang_util::{
+    located::{Located, LocatedBuilder},
+    FileId,
+};
 
 use crate::{
     last::LocatedIterator,
     parser::{Ast, Parser},
-    util::{Located, LocatedBuilder},
 };
 
 use super::{

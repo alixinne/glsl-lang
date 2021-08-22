@@ -9,11 +9,14 @@ use arrayvec::ArrayVec;
 use derive_more::From;
 use rowan::{NodeOrToken, SyntaxElementChildren, TextSize};
 
-use lang_util::FileId;
+use lang_util::{
+    located::{HasFileNumber, Resolver},
+    FileId,
+};
 
 use crate::{
     parser::{self, Ast, PreprocessorLang, SyntaxKind::*, SyntaxNode, SyntaxToken},
-    util::{HasFileNumber, LineMap, Resolver, Unescaped},
+    util::{LineMap, Unescaped},
 };
 
 use super::{

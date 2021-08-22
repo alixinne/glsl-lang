@@ -1,6 +1,7 @@
 //! glsl-lang-pp based lexer
 
-use glsl_lang_pp::{last, processor, util::Located};
+use glsl_lang_pp::{last, processor};
+use lang_util::located::Located;
 
 use super::{LexerPosition, Token};
 

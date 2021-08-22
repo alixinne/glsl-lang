@@ -13,11 +13,13 @@
 
 pub use lang_util_derive::{NodeContent, Token};
 
+#[cfg(feature = "lalrpop")]
+pub mod error;
+
 mod file_id;
 pub use file_id::FileId;
 
-#[cfg(feature = "lalrpop")]
-pub mod error;
+pub mod located;
 
 pub mod node;
 pub use node::NodeContent;

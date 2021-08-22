@@ -11,7 +11,6 @@ use crate::{
     exts::names::ExtNameAtom,
     last::type_names::TypeNameAtom,
     parser::{self, SyntaxKind},
-    util::{Located, PointOrRange},
 };
 
 use super::{
@@ -21,7 +20,7 @@ use super::{
 
 pub use crate::parser::{SyntaxNode, SyntaxToken};
 
-pub type ProcessingError = Located<ProcessingErrorKind>;
+pub type ProcessingError = lang_util::located::Located<ProcessingErrorKind>;
 
 #[derive(Debug, PartialEq, Eq, From)]
 pub enum ProcessingErrorKind {
@@ -186,7 +185,7 @@ impl std::fmt::Display for ProcessingErrorKind {
     }
 }
 
-pub type Error = Located<ErrorKind>;
+pub type Error = lang_util::located::Located<ErrorKind>;
 
 #[derive(Debug, PartialEq, Eq, Error)]
 pub enum ErrorKind {
@@ -432,7 +431,7 @@ impl Event {
 
     pub fn error<T: Into<ErrorKind>>(
         e: T,
-        pos: impl Into<PointOrRange>,
+        pos: impl Into<lang_util::located::PointOrRange>,
         location: &ExpandLocation,
         masked: bool,
     ) -> Self {
@@ -445,7 +444,7 @@ impl Event {
         }
     }
 
-    pub fn map_error<T: Into<ErrorKind>>(e: Located<T>, masked: bool) -> Self {
+    pub fn map_error<T: Into<ErrorKind>>(e: lang_util::located::Located<T>, masked: bool) -> Self {
         Self::Error {
             error: e.map(Into::into),
             masked,

@@ -89,7 +89,7 @@ impl<'i> LangLexer for Lexer<'i> {
     fn new(source: Self::Input, opts: ParseContext) -> Self {
         Self {
             inner: processor::str::process(source, ProcessorState::default())
-                .tokenize(opts.opts.target_vulkan, &DEFAULT_REGISTRY),
+                .tokenize(100, opts.opts.target_vulkan, &DEFAULT_REGISTRY),
             core: LexerCore::new(opts),
             handle_token: Default::default(),
         }

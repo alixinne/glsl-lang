@@ -41,10 +41,11 @@ pub struct ExpandStr {
 impl ExpandStr {
     pub fn tokenize(
         self,
+        current_version: u16,
         target_vulkan: bool,
         registry: &crate::exts::Registry,
     ) -> crate::last::Tokenizer<'_, Self> {
-        crate::last::Tokenizer::new(self, target_vulkan, registry)
+        crate::last::Tokenizer::new(self, current_version, target_vulkan, registry)
     }
 
     pub fn into_state(mut self) -> Option<ProcessorState> {

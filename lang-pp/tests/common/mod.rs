@@ -88,7 +88,7 @@ pub fn test_file(path: impl AsRef<Path>) {
     let mut error_count = 0;
     let mut critical_error_count = 0;
 
-    for result in parsed.into_iter().tokenize(false, &DEFAULT_REGISTRY) {
+    for result in parsed.into_iter().tokenize(100, false, &DEFAULT_REGISTRY) {
         writeln!(eventsf, "{:?}", result).unwrap();
 
         match result {

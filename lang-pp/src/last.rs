@@ -86,6 +86,7 @@ struct TypeTable<'r> {
     extensions: HashMap<ExtNameAtom, ExtensionBehavior>,
     registry: &'r Registry,
     target_vulkan: bool,
+    current_version: u16,
 }
 
 #[derive(Debug, Clone)]
@@ -102,12 +103,13 @@ impl TypeNameState {
 }
 
 impl<'r> TypeTable<'r> {
-    fn new(registry: &'r Registry, target_vulkan: bool) -> Self {
+    fn new(registry: &'r Registry, current_version: u16, target_vulkan: bool) -> Self {
         Self {
             type_names: Default::default(),
             extensions: Default::default(),
             registry,
             target_vulkan,
+            current_version,
         }
     }
 
@@ -178,7 +180,9 @@ impl<'r> TypeTable<'r> {
         location: &ExpandLocation,
     ) -> (Token, Option<TypeNameState>, Option<Error>) {
         let (token_kind, state) =
-            Token::from_token(token, self.target_vulkan, |tn| self.is_type_name(tn));
+            Token::from_token(token, self.current_version, self.target_vulkan, |tn| {
+                self.is_type_name(tn)
+            });
 
         let error = if let Some(TypeNameState::WarnType(extension)) = &state {
             Some(
@@ -239,12 +243,13 @@ pub struct Tokenizer<'r, I> {
 impl<'r, I: LocatedIterator> Tokenizer<'r, I> {
     pub fn new(
         inner: impl IntoIterator<IntoIter = I>,
+        current_version: u16,
         target_vulkan: bool,
         registry: &'r Registry,
     ) -> Self {
         Self {
             inner: inner.into_iter(),
-            type_table: TypeTable::new(registry, target_vulkan),
+            type_table: TypeTable::new(registry, current_version, target_vulkan),
             pending_error: None,
         }
     }
@@ -311,19 +316,25 @@ impl<'r, E, I: Iterator<Item = Result<event::Event, E>> + LocatedIterator> Itera
                     errors,
                 } => {
                     if !masked {
-                        if let DirectiveKind::Extension(extension) = &kind {
-                            if !self.type_table.handle_extension(extension) {
-                                self.pending_error = Some(
-                                    Error::builder()
-                                        .pos(node.text_range())
-                                        .resolve_file(self.inner.location())
-                                        .finish(ErrorKind::unsupported_ext(
-                                            extension.name.clone(),
-                                            node.text_range(),
-                                            self.inner.location(),
-                                        )),
-                                );
+                        match &kind {
+                            DirectiveKind::Version(version) => {
+                                self.type_table.current_version = version.number;
                             }
+                            DirectiveKind::Extension(extension) => {
+                                if !self.type_table.handle_extension(extension) {
+                                    self.pending_error = Some(
+                                        Error::builder()
+                                            .pos(node.text_range())
+                                            .resolve_file(self.inner.location())
+                                            .finish(ErrorKind::unsupported_ext(
+                                                extension.name.clone(),
+                                                node.text_range(),
+                                                self.inner.location(),
+                                            )),
+                                    );
+                                }
+                            }
+                            _ => {}
                         }
                     }
 
@@ -375,7 +386,7 @@ mod tests {
             "#(ident) = hello",
             crate::processor::ProcessorState::default(),
         )
-        .tokenize(false, &crate::exts::DEFAULT_REGISTRY);
+        .tokenize(100, false, &crate::exts::DEFAULT_REGISTRY);
 
         #[allow(clippy::while_let_on_iterator)]
         while let Some(result) = tokenizer.next() {

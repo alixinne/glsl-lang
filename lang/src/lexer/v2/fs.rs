@@ -29,7 +29,7 @@ pub struct Lexer<'r, 'p, F: FileSystem> {
 impl<'r, 'p, F: FileSystem> Lexer<'r, 'p, F> {
     fn new(inner: ExpandStack<'p, F>, registry: &'r Registry, opts: ParseContext) -> Self {
         Self {
-            inner: inner.tokenize(opts.opts.target_vulkan, registry),
+            inner: inner.tokenize(100, opts.opts.target_vulkan, registry),
             core: LexerCore::new(opts),
             current_file: Default::default(),
             handle_token: Default::default(),

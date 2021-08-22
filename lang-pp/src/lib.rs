@@ -1,8 +1,8 @@
 #[macro_use]
-pub mod exts;
+pub mod last;
 
 #[macro_use]
-pub mod last;
+pub mod exts;
 
 mod lexer;
 mod parser;

@@ -49,7 +49,10 @@ impl Paths {
 }
 
 fn inspect_extension(name: &str, critical_error_count: &mut usize) {
-    if name.starts_with("GL_") && DEFAULT_REGISTRY.get(&ExtNameAtom::from(name)).is_none() {
+    if name.starts_with("GL_")
+        && !["GL_ES", "GL_SPIRV"].contains(&name)
+        && DEFAULT_REGISTRY.get(&ExtNameAtom::from(name)).is_none()
+    {
         eprintln!("unsupported extension: {}", name);
         *critical_error_count += 1;
     }

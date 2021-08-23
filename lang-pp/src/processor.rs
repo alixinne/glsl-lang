@@ -263,6 +263,12 @@ impl<'r> ProcessorStateBuilder<'r> {
     }
 }
 
+impl From<ProcessorStateBuilder<'_>> for ProcessorState {
+    fn from(builder: ProcessorStateBuilder<'_>) -> Self {
+        builder.finish()
+    }
+}
+
 impl Default for ProcessorStateBuilder<'static> {
     fn default() -> Self {
         Self {

@@ -24,6 +24,24 @@ pub struct Lexer<'i> {
     handle_token: HandleTokenResult<ProcessStrError>,
 }
 
+impl<'i> Lexer<'i> {
+    pub(crate) fn new_with_state(
+        source: &'i str,
+        opts: ParseContext,
+        state: ProcessorState,
+    ) -> Self {
+        Self {
+            inner: processor::str::process(source, state).tokenize(
+                opts.opts.default_version,
+                opts.opts.target_vulkan,
+                &DEFAULT_REGISTRY,
+            ),
+            core: LexerCore::new(opts),
+            handle_token: Default::default(),
+        }
+    }
+}
+
 impl<'i> Iterator for Lexer<'i> {
     type Item = core::Item<ProcessStrError>;
 
@@ -87,15 +105,7 @@ impl<'i> LangLexer for Lexer<'i> {
     type Error = LexicalError<ProcessStrError>;
 
     fn new(source: Self::Input, opts: ParseContext) -> Self {
-        Self {
-            inner: processor::str::process(source, ProcessorState::default()).tokenize(
-                opts.opts.default_version,
-                opts.opts.target_vulkan,
-                &DEFAULT_REGISTRY,
-            ),
-            core: LexerCore::new(opts),
-            handle_token: Default::default(),
-        }
+        Self::new_with_state(source, opts, ProcessorState::default())
     }
 
     fn chain<P: crate::parse::LangParser<Self>>(

@@ -106,7 +106,7 @@ impl<'r, 'p, F: FileSystem> LangLexer for Lexer<'r, 'p, F> {
 
     fn new(source: Self::Input, opts: ParseContext) -> Self {
         Lexer::new(
-            source.inner.process(ProcessorState::default()),
+            source.inner.process(source.state.unwrap_or_default()),
             &DEFAULT_REGISTRY,
             opts,
         )
@@ -150,14 +150,27 @@ impl<F: FileSystem> PreprocessorExt<F> for Processor<F> {
         path: impl AsRef<Path>,
         encoding: Option<&'static encoding_rs::Encoding>,
     ) -> Result<File<'_, F>, F::Error> {
-        self.parse(path.as_ref(), encoding)
-            .map(|parsed_file| File { inner: parsed_file })
+        self.parse(path.as_ref(), encoding).map(|parsed_file| File {
+            inner: parsed_file,
+            state: None,
+        })
     }
 }
 
 /// A preprocessor parsed file ready for lexing
 pub struct File<'p, F: FileSystem> {
     inner: ParsedFile<'p, F>,
+    state: Option<ProcessorState>,
+}
+
+impl<'p, F: FileSystem> File<'p, F> {
+    /// Set the default processor state for processing this file
+    pub fn with_state(self, state: impl Into<ProcessorState>) -> Self {
+        Self {
+            state: Some(state.into()),
+            ..self
+        }
+    }
 }
 
 impl<'p, F: FileSystem> IntoLexer for File<'p, F> {

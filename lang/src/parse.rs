@@ -40,6 +40,15 @@ impl<'i> IntoLexer for &'i str {
     }
 }
 
+#[cfg(feature = "lexer-v2")]
+impl<'i> IntoLexer for (&'i str, glsl_lang_pp::processor::ProcessorState) {
+    type Lexer = Lexer<'i>;
+
+    fn into_lexer(self, source: &'i str, opts: ParseContext) -> Self::Lexer {
+        Lexer::new(source, opts)
+    }
+}
+
 /// GLSL lexer builder extensions
 pub trait IntoLexerExt: IntoLexer {
     /// Create a parse builder for this lexer template

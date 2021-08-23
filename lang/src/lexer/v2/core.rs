@@ -107,8 +107,7 @@ impl LexerCore {
                 last::Token::IDENT(ident) => {
                     if self.ctx.is_type_name(&ident) {
                         // It was promoted to a type name downstream
-                        tokenizer
-                            .promote_type_name(TypeNameAtom::from(ident.as_str()));
+                        tokenizer.promote_type_name(TypeNameAtom::from(ident.as_str()));
                         Token::TypeName(ident)
                     } else {
                         // It is an identifier

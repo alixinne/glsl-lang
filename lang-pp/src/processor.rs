@@ -18,7 +18,10 @@ pub mod fs;
 pub mod nodes;
 use nodes::{Define, DefineObject, Version};
 
-use crate::processor::nodes::ExtensionBehavior;
+use crate::{
+    exts::Registry,
+    processor::nodes::{ExtensionBehavior, ExtensionName},
+};
 
 pub mod str;
 
@@ -58,10 +61,12 @@ pub struct ProcessorState {
     cpp_style_line: bool,
 }
 
-// TODO: Add builder/constructor
-
 impl ProcessorState {
-    pub fn get_definition(&self, name: &str) -> Option<&Definition> {
+    pub fn builder() -> ProcessorStateBuilder<'static> {
+        ProcessorStateBuilder::default()
+    }
+
+    fn get_definition(&self, name: &str) -> Option<&Definition> {
         self.definitions.get(name)
     }
 
@@ -85,23 +90,22 @@ impl ProcessorState {
         }
     }
 
-    pub fn extension(&mut self, extension: &nodes::Extension) {
+    fn add_extension(&mut self, name: &ExtensionName, behavior: ExtensionBehavior) {
         // Process include extensions
-        let target_include_mode = if extension.name == ext_name!("GL_ARB_shading_language_include")
-        {
+        let target_include_mode = if *name == ext_name!("GL_ARB_shading_language_include") {
             Some(IncludeMode::ArbInclude {
-                warn: extension.behavior == ExtensionBehavior::Warn,
+                warn: behavior == ExtensionBehavior::Warn,
             })
-        } else if extension.name == ext_name!("GL_GOOGLE_include_directive") {
+        } else if *name == ext_name!("GL_GOOGLE_include_directive") {
             Some(IncludeMode::GoogleInclude {
-                warn: extension.behavior == ExtensionBehavior::Warn,
+                warn: behavior == ExtensionBehavior::Warn,
             })
         } else {
             None
         };
 
         if let Some(target) = target_include_mode {
-            if extension.behavior.is_active() {
+            if behavior.is_active() {
                 self.include_mode = target;
 
                 // GL_GOOGLE_include_directive enable GL_GOOGLE_cpp_style_line
@@ -115,8 +119,8 @@ impl ProcessorState {
         }
 
         // Process others
-        if extension.name == ext_name!("GL_GOOGLE_cpp_style_line_directive") {
-            if extension.behavior.is_active() {
+        if *name == ext_name!("GL_GOOGLE_cpp_style_line_directive") {
+            if behavior.is_active() {
                 self.cpp_style_line = true;
             } else {
                 // TODO: Notify instead of silently ignoring?
@@ -127,44 +131,147 @@ impl ProcessorState {
         }
     }
 
-    pub fn cpp_style_line(&self) -> bool {
+    fn extension(&mut self, extension: &nodes::Extension) {
+        self.add_extension(&extension.name, extension.behavior);
+    }
+
+    fn cpp_style_line(&self) -> bool {
         self.cpp_style_line
     }
 }
 
 impl Default for ProcessorState {
     fn default() -> Self {
+        ProcessorStateBuilder::default().finish()
+    }
+}
+
+#[derive(Clone)]
+pub struct ProcessorStateBuilder<'r> {
+    core_profile: bool,
+    compatibility_profile: bool,
+    es_profile: bool,
+    extensions: Vec<(ExtensionName, ExtensionBehavior)>,
+    definitions: Vec<Define>,
+    registry: &'r Registry,
+}
+
+impl<'r> ProcessorStateBuilder<'r> {
+    pub fn new(registry: &'r Registry) -> Self {
+        let default = ProcessorStateBuilder::default();
+        Self {
+            registry,
+            ..default
+        }
+    }
+
+    pub fn registry<'s>(self, registry: &'s Registry) -> ProcessorStateBuilder<'s> {
+        ProcessorStateBuilder::<'s> {
+            registry,
+            core_profile: self.core_profile,
+            compatibility_profile: self.compatibility_profile,
+            es_profile: self.es_profile,
+            extensions: self.extensions,
+            definitions: self.definitions,
+        }
+    }
+
+    pub fn core_profile(self, core_profile: bool) -> Self {
+        Self {
+            core_profile,
+            ..self
+        }
+    }
+
+    pub fn compatibility_profile(self, compatibility_profile: bool) -> Self {
+        Self {
+            compatibility_profile,
+            ..self
+        }
+    }
+
+    pub fn es_profile(self, es_profile: bool) -> Self {
+        Self { es_profile, ..self }
+    }
+
+    pub fn extension(
+        mut self,
+        name: impl Into<ExtensionName>,
+        behavior: impl Into<ExtensionBehavior>,
+    ) -> Self {
+        self.extensions.push((name.into(), behavior.into()));
+        self
+    }
+
+    pub fn definition(mut self, definition: impl Into<Define>) -> Self {
+        self.definitions.push(definition.into());
+        self
+    }
+
+    pub fn finish(self) -> ProcessorState {
         let one = DefineObject::one();
 
-        Self {
+        let mut state = ProcessorState {
             // No #include extensions enabled
             include_mode: IncludeMode::None,
             // Spec 3.3, "There is a built-in macro definition for each profile the implementation
             // supports. All implementations provide the following macro:
             // `#define GL_core_profile 1`
-            definitions: IntoIter::new([
-                Definition::Regular(
-                    Rc::new(Define::object("GL_core_profile".into(), one.clone(), true)),
-                    FileId::default(),
-                ),
-                Definition::Line,
-                Definition::File,
-                Definition::Version,
-            ])
-            .chain(crate::exts::DEFAULT_REGISTRY.all().map(|spec| {
-                Definition::Regular(
-                    Rc::new(Define::object(
-                        spec.name().as_ref().into(),
-                        one.clone(),
-                        true,
-                    )),
-                    FileId::default(),
+            definitions: self
+                .core_profile
+                .then(|| Define::object("GL_core_profile".into(), one.clone(), true))
+                .into_iter()
+                .chain(
+                    self.compatibility_profile
+                        .then(|| {
+                            Define::object("GL_compatibility_profile".into(), one.clone(), true)
+                        })
+                        .into_iter(),
                 )
-            }))
-            .map(|definition| (definition.name().into(), definition))
-            .collect(),
+                .chain(
+                    self.es_profile
+                        .then(|| Define::object("GL_es_profile".into(), one.clone(), true))
+                        .into_iter(),
+                )
+                .chain(self.definitions.into_iter())
+                .map(|definition| Definition::Regular(Rc::new(definition), FileId::default()))
+                .chain(
+                    IntoIter::new([Definition::Line, Definition::File, Definition::Version])
+                        .into_iter(),
+                )
+                .chain(self.registry.all().map(|spec| {
+                    Definition::Regular(
+                        Rc::new(Define::object(
+                            spec.name().as_ref().into(),
+                            one.clone(),
+                            true,
+                        )),
+                        FileId::default(),
+                    )
+                }))
+                .map(|definition| (definition.name().into(), definition))
+                .collect(),
             version: Version::default(),
             cpp_style_line: false,
+        };
+
+        for (name, behavior) in self.extensions {
+            state.add_extension(&name, behavior);
+        }
+
+        state
+    }
+}
+
+impl Default for ProcessorStateBuilder<'static> {
+    fn default() -> Self {
+        Self {
+            core_profile: true,
+            compatibility_profile: false,
+            es_profile: false,
+            extensions: Default::default(),
+            definitions: Default::default(),
+            registry: &*crate::exts::DEFAULT_REGISTRY,
         }
     }
 }

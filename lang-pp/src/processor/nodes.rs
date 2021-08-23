@@ -272,11 +272,7 @@ pub enum ExtensionName {
 
 impl ExtensionName {
     pub fn new(name: Cow<'_, str>) -> Self {
-        if name == "all" {
-            Self::All
-        } else {
-            Self::Specific(ExtNameAtom::from(name))
-        }
+        Self::from(name.as_ref())
     }
 }
 
@@ -294,6 +290,16 @@ impl std::fmt::Display for ExtensionName {
         match self {
             ExtensionName::All => write!(f, "all"),
             ExtensionName::Specific(name) => write!(f, "{}", name),
+        }
+    }
+}
+
+impl From<&str> for ExtensionName {
+    fn from(name: &str) -> Self {
+        if name == "all" {
+            Self::All
+        } else {
+            Self::Specific(ExtNameAtom::from(name))
         }
     }
 }

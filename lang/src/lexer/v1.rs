@@ -199,6 +199,14 @@ impl<'i> Iterator for Lexer<'i> {
                     let new_lexer = src.clone().morph();
                     self.inner =
                         LexerStage::Preprocessor(new_lexer, token.1.clone(), false, consumed_rest);
+                } else {
+                    // Update nesting scopes for type name declarations
+                    let ctx = &src.extras;
+                    if token.1 == Token::LeftBrace {
+                        ctx.push_scope();
+                    } else if token.1 == Token::RightBrace {
+                        ctx.pop_scope();
+                    }
                 }
 
                 Some(token)

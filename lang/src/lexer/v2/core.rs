@@ -1,7 +1,7 @@
 use std::collections::VecDeque;
 
 use glsl_lang_pp::{
-    last::{self, type_names::TypeNameAtom, LocatedIterator, MaybeToken, TokenState, Tokenizer},
+    last::{self, LocatedIterator, MaybeToken, TokenState, Tokenizer},
     processor::event::{self, DirectiveKind, Error, OutputToken, SyntaxNode, TokenLike},
 };
 use lang_util::located::Located;
@@ -89,15 +89,11 @@ impl LexerCore {
         Self { ctx, file_id }
     }
 
-    fn lang_token<'r, I, T, E>(
+    fn lang_token(
         &self,
         source_token: &OutputToken,
         token_kind: last::Token,
-        tokenizer: &mut Tokenizer<'r, I>,
-    ) -> Result<(LexerPosition, Token, LexerPosition), Option<last::token::ErrorKind>>
-    where
-        I: Iterator<Item = Result<T, E>> + LocatedIterator,
-    {
+    ) -> Result<(LexerPosition, Token, LexerPosition), Option<last::token::ErrorKind>> {
         let start = self.position(source_token.text_range().start());
         let end = self.position(source_token.text_range().end());
 
@@ -106,8 +102,6 @@ impl LexerCore {
             match token_kind {
                 last::Token::IDENT(ident) => {
                     if self.ctx.is_type_name(&ident) {
-                        // It was promoted to a type name downstream
-                        tokenizer.promote_type_name(TypeNameAtom::from(ident.as_str()));
                         Token::TypeName(ident)
                     } else {
                         // It is an identifier
@@ -457,7 +451,7 @@ impl LexerCore {
         <Tokenizer<'r, I> as Iterator>::Item: MaybeToken,
     {
         if state.active() {
-            match self.lang_token(&source_token, token_kind, tokenizer) {
+            match self.lang_token(&source_token, token_kind) {
                 Ok(token) => {
                     // Try to get the next token when we encounter trivia
                     match token.1 {
@@ -487,6 +481,12 @@ impl LexerCore {
                             }
                         }
                         _ => {
+                            if token.1 == Token::LeftBrace {
+                                self.ctx.push_scope();
+                            } else if token.1 == Token::RightBrace {
+                                self.ctx.pop_scope();
+                            }
+
                             token_state.push_item(Ok(token));
                         }
                     }

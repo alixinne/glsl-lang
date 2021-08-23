@@ -3,6 +3,7 @@ use std::collections::{BTreeMap, HashSet};
 use std::rc::Rc;
 
 use lang_util::FileId;
+use smol_str::SmolStr;
 
 use crate::ast;
 
@@ -137,7 +138,7 @@ impl From<ParseOptions> for ParseContext {
 #[derive(Debug, Clone)]
 pub struct ParseContextData {
     /// List of known type names
-    pub names: HashSet<String>,
+    names: Vec<HashSet<SmolStr>>,
     /// List of parsed comments (or `None` to disable comment parsing)
     pub comments: Option<CommentList>,
 
@@ -188,7 +189,7 @@ impl ParseContextData {
 impl Default for ParseContextData {
     fn default() -> Self {
         Self {
-            names: Default::default(),
+            names: vec![HashSet::new()],
             comments: Default::default(),
             policy: Rc::new(GlslTypeTablePolicy),
         }
@@ -238,6 +239,16 @@ impl ParseContext {
         self.data.borrow_mut().add_type_name(name)
     }
 
+    /// Enter a new nesting level for declarations
+    pub fn push_scope(&self) {
+        self.data.borrow_mut().push_scope();
+    }
+
+    /// Leave the current nesting level
+    pub fn pop_scope(&self) {
+        self.data.borrow_mut().pop_scope();
+    }
+
     /// Update the context data with a new identifier in a given context
     pub fn new_identifier(&self, name: &ast::Identifier, ctx: IdentifierContext) {
         self.data.borrow_mut().new_identifier(name, ctx)
@@ -247,14 +258,26 @@ impl ParseContext {
 impl ParseContextData {
     /// Return `true` if the given name is a type name
     pub fn is_type_name(&self, name: &str) -> bool {
-        self.names.contains(name)
+        self.names.iter().any(|level| level.contains(name))
     }
 
     /// Register `name` as a new type name
     pub fn add_type_name(&mut self, name: ast::Identifier) -> ast::TypeName {
-        let name_string = name.0.to_string();
-        self.names.insert(name_string);
+        let name_string = name.0.as_str();
+        self.names.last_mut().unwrap().insert(name_string.into());
         name.map(ast::TypeNameData::from)
+    }
+
+    /// Enter a new nesting level for declarations
+    pub fn push_scope(&mut self) {
+        self.names.push(HashSet::new());
+    }
+
+    /// Leave the current nesting level
+    pub fn pop_scope(&mut self) {
+        if self.names.len() > 1 {
+            self.names.pop();
+        }
     }
 
     /// Update the context data with a new identifier in a given context

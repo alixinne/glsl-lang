@@ -17,31 +17,31 @@
 
 use std::io::prelude::*;
 
-use anyhow::bail;
 use argh::FromArgs;
 
 use glsl_lang::ast::{NodeDisplay, TranslationUnit};
 use glsl_lang::parse::Parse;
 
-fn output_text(output: &mut dyn std::io::Write, tu: TranslationUnit) -> anyhow::Result<()> {
+fn output_text(output: &mut dyn std::io::Write, tu: TranslationUnit) -> std::io::Result<()> {
     writeln!(output, "{}", tu.display())?;
     Ok(())
 }
 
 #[cfg(feature = "json")]
-fn output_json(output: &mut dyn std::io::Write, tu: TranslationUnit) -> anyhow::Result<()> {
+fn output_json(output: &mut dyn std::io::Write, tu: TranslationUnit) -> std::io::Result<()> {
     serde_json::to_writer(output, &tu)?;
     Ok(())
 }
 
-fn output_glsl(output: &mut dyn std::io::Write, tu: TranslationUnit) -> anyhow::Result<()> {
+fn output_glsl(output: &mut dyn std::io::Write, tu: TranslationUnit) -> std::io::Result<()> {
     let mut s = String::new();
 
     glsl_lang::transpiler::glsl::show_translation_unit(
         &mut s,
         &tu,
         glsl_lang::transpiler::glsl::FormattingState::default(),
-    )?;
+    )
+    .unwrap();
 
     write!(output, "{}", s)?;
 
@@ -61,7 +61,7 @@ struct Opts {
 }
 
 /// CLI entry point
-fn main() -> anyhow::Result<()> {
+fn main() -> Result<(), std::io::Error> {
     let args: Opts = argh::from_env();
 
     // Figure out output format
@@ -70,7 +70,7 @@ fn main() -> anyhow::Result<()> {
         #[cfg(feature = "json")]
         "json" => output_json,
         "glsl" => output_glsl,
-        other => bail!("unknown output format: {}", other),
+        other => panic!("unknown output format: {}", other),
     };
 
     let mut s = String::new();

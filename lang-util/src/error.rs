@@ -110,6 +110,15 @@ pub enum ParseErrorKind<E: LexicalError> {
     },
 }
 
+impl<E: std::error::Error + LexicalError + 'static> std::error::Error for ParseErrorKind<E> {
+    fn source(&self) -> Option<&(dyn Error + 'static)> {
+        match self {
+            ParseErrorKind::LexicalError { ref error } => Some(error),
+            _ => None,
+        }
+    }
+}
+
 impl<T: Token, E: LexicalError> From<lalrpop_util::ParseError<LexerPosition, T, E>>
     for ParseErrorKind<E>
 {

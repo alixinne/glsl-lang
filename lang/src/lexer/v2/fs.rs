@@ -142,6 +142,14 @@ pub trait PreprocessorExt<F: FileSystem> {
         path: impl AsRef<Path>,
         encoding: Option<&'static encoding_rs::Encoding>,
     ) -> Result<File<'_, F>, F::Error>;
+
+    /// Open the given source block for lexing
+    ///
+    /// # Parameters
+    ///
+    /// * `source`: source string to parse
+    /// * `path`: path to the directory that contains this source
+    fn open_source(&mut self, source: &str, path: impl AsRef<Path>) -> File<'_, F>;
 }
 
 impl<F: FileSystem> PreprocessorExt<F> for Processor<F> {
@@ -154,6 +162,13 @@ impl<F: FileSystem> PreprocessorExt<F> for Processor<F> {
             inner: parsed_file,
             state: None,
         })
+    }
+
+    fn open_source(&mut self, source: &str, path: impl AsRef<Path>) -> File<'_, F> {
+        File {
+            inner: self.parse_source(source, path.as_ref()),
+            state: None,
+        }
     }
 }
 

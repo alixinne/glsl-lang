@@ -99,14 +99,22 @@ impl<'p, F: FileSystem> Iterator for ExpandStack<'p, F> {
 
                             return Some(match event {
                                 Event::EnterFile { file_id, .. } => {
-                                    let (canonical_path, input_path) =
-                                        self.processor.get_paths(file_id).unwrap();
-
-                                    Ok(Event::EnterFile {
-                                        file_id,
-                                        path: input_path.to_owned(),
-                                        canonical_path: canonical_path.to_owned(),
-                                    })
+                                    if let Some((canonical_path, input_path)) =
+                                        self.processor.get_paths(file_id)
+                                    {
+                                        Ok(Event::EnterFile {
+                                            file_id,
+                                            path: input_path.to_owned(),
+                                            canonical_path: canonical_path.to_owned(),
+                                        })
+                                    } else {
+                                        // Source block, no file path available
+                                        Ok(Event::EnterFile {
+                                            file_id,
+                                            path: Default::default(),
+                                            canonical_path: Default::default(),
+                                        })
+                                    }
                                 }
                                 other => Ok(other),
                             });
@@ -223,13 +231,28 @@ impl<'p, F: FileSystem> IntoIterator for ParsedFile<'p, F> {
     }
 }
 
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, derive_more::From)]
+enum PathOrSource {
+    Source(usize, PathBuf),
+    Path(PathBuf),
+}
+
+impl PathOrSource {
+    fn as_path(&self) -> Option<&PathBuf> {
+        match self {
+            PathOrSource::Source(_, _) => None,
+            PathOrSource::Path(path) => Some(path),
+        }
+    }
+}
+
 /// Preprocessor based on a filesystem
 #[derive(Debug)]
 pub struct Processor<F: FileSystem> {
     /// Cache of parsed files (preprocessor token sequences)
     file_cache: HashMap<FileId, Ast>,
     /// Mapping from canonical paths to FileIds
-    file_ids: BiHashMap<PathBuf, FileId>,
+    file_ids: BiHashMap<PathOrSource, FileId>,
     /// Mapping from #include/input paths to canonical paths
     canonical_paths: BiHashMap<PathBuf, PathBuf>,
     /// List of include paths in resolution order
@@ -249,9 +272,16 @@ impl<F: FileSystem> Processor<F> {
         }
     }
 
-    pub fn get_paths(&self, file_id: FileId) -> Option<(&PathBuf, &PathBuf)> {
+    fn get_paths(&self, file_id: FileId) -> Option<(&PathBuf, &PathBuf)> {
         // Find the canonical path for the current file identifier
         let canonical_path = self.file_ids.get_by_right(&file_id)?;
+
+        let canonical_path = match canonical_path {
+            PathOrSource::Source(_, _) => {
+                return None;
+            }
+            PathOrSource::Path(path) => path,
+        };
 
         // Transform that back into a non-canonical path
         let input_path = self.canonical_paths.get_by_right(canonical_path)?;
@@ -267,15 +297,21 @@ impl<F: FileSystem> Processor<F> {
         &mut self.system_paths
     }
 
-    pub fn resolve(&self, relative_to: FileId, path: &ParsedPath) -> Option<PathBuf> {
-        let (_, input_path) = self.get_paths(relative_to)?;
+    fn resolve(&self, relative_to: FileId, path: &ParsedPath) -> Option<PathBuf> {
+        let parent = self
+            .file_ids
+            .get_by_right(&relative_to)
+            .and_then(|key| match key {
+                PathOrSource::Source(_, dir) => Some(dir),
+                PathOrSource::Path(path) => self.canonical_paths.get_by_right(path),
+            })?;
 
         match path.ty {
             PathType::Angle => self.system_paths.iter().find_map(|system_path| {
                 let full_path = system_path.join(&path.path);
                 self.fs.exists(&full_path).then(|| full_path)
             }),
-            PathType::Quote => Some(input_path.parent()?.join(&path.path)),
+            PathType::Quote => Some(parent.join(&path.path)),
         }
     }
 
@@ -294,11 +330,12 @@ impl<F: FileSystem> Processor<F> {
         };
 
         // Allocate a file id. Not using the entry API because cloning a path is expensive.
-        let file_id = if let Some(file_id) = self.file_ids.get_by_left(canonical_path.as_path()) {
+        let key: PathOrSource = canonical_path.to_owned().into();
+        let file_id = if let Some(file_id) = self.file_ids.get_by_left(&key) {
             *file_id
         } else {
             let file_id = FileId::new(self.file_ids.len() as _);
-            self.file_ids.insert(canonical_path.to_owned(), file_id);
+            self.file_ids.insert(key, file_id);
             file_id
         };
 
@@ -324,6 +361,33 @@ impl<F: FileSystem> Processor<F> {
             }
         }
     }
+
+    /// Parse a given source block as if it belonged in a specific directory
+    ///
+    /// # Parameters
+    ///
+    /// * `source`: GLSL source block to parse
+    /// * `path`: path to the directory that (virtually) contains this GLSL source block
+    pub fn parse_source(&mut self, source: &str, path: &Path) -> ParsedFile<F> {
+        // Create key for this source block
+        let key = PathOrSource::Source(self.file_ids.len(), path.to_owned());
+
+        // Register file id
+        let file_id = FileId::new(self.file_ids.len() as _);
+        self.file_ids.insert(key, file_id);
+
+        // Parse the source
+        let ast = Parser::new(source).parse();
+        // Check that the root node covers the entire range
+        debug_assert_eq!(u32::from(ast.green_node().text_len()), source.len() as u32);
+        // Insert into the cache
+        self.file_cache.insert(file_id, ast);
+
+        ParsedFile {
+            processor: self,
+            file_id,
+        }
+    }
 }
 
 impl<F: FileSystem + Default> Processor<F> {
@@ -342,6 +406,7 @@ impl<F: FileSystem> FileIdResolver for Processor<F> {
     fn resolve(&self, file_id: FileId) -> Option<&Path> {
         self.file_ids
             .get_by_right(&file_id)
+            .and_then(PathOrSource::as_path)
             .and_then(|canonical_path| self.canonical_paths.get_by_right(canonical_path))
             .map(|pathbuf| pathbuf.as_path())
     }

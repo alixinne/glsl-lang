@@ -488,33 +488,40 @@ pub enum TypeName {
     /// "usubpassInputMS"
     #[display(fmt = "usubpassInputMS")]
     USUBPASSINPUTMS,
-    // Reserved for future use
-    /// "hvec2"
-    #[display(fmt = "hvec2")]
-    HVEC2,
-    /// "hvec3"
-    #[display(fmt = "hvec3")]
-    HVEC3,
-    /// "hvec4"
-    #[display(fmt = "hvec4")]
-    HVEC4,
-    /// "fvec2"
-    #[display(fmt = "fvec2")]
-    FVEC2,
-    /// "fvec3"
-    #[display(fmt = "fvec3")]
-    FVEC3,
-    /// "fvec4"
-    #[display(fmt = "fvec4")]
-    FVEC4,
-    /// "sampler3DRect"
-    #[display(fmt = "sampler3DRect")]
-    SAMPLER3DRECT,
+    /// Reserved for future use
+    RESERVED(TypeNameAtom),
     /// Generic type name
     OTHER(TypeNameAtom),
 }
 
 impl TypeName {
+    fn gate(
+        self,
+        version_gate: bool,
+        reserved_gate: bool,
+        atom: TypeNameAtom,
+        is_type_name: impl Fn(&TypeNameAtom) -> TypeNameState,
+    ) -> Option<(Self, Option<TypeNameState>)> {
+        // Check if the version gate allows this
+        if version_gate {
+            return Some((self, None));
+        }
+
+        // Check if an extension enabled this
+        let result = is_type_name(&atom);
+        if result.is_type_name() {
+            return Some((self, Some(result)));
+        }
+
+        // Check if it's reserved
+        if reserved_gate {
+            return Some((Self::RESERVED(atom), None));
+        }
+
+        // Else it's unknown
+        None
+    }
+
     fn parse(
         name: &str,
         version: u16,
@@ -528,377 +535,613 @@ impl TypeName {
         let type_name_atom = TypeNameAtom::from(name);
 
         if type_name_atom == type_name!("void") {
-            return Some((VOID, None));
+            return VOID.gate(version >= 100, false, type_name_atom, is_type_name);
         } else if type_name_atom == type_name!("int") {
-            return Some((INT, None));
+            return INT.gate(version >= 100, false, type_name_atom, is_type_name);
         } else if type_name_atom == type_name!("bool") {
-            return Some((BOOL, None));
+            return BOOL.gate(version >= 100, false, type_name_atom, is_type_name);
         } else if type_name_atom == type_name!("float") {
-            return Some((FLOAT, None));
+            return FLOAT.gate(version >= 100, false, type_name_atom, is_type_name);
         } else if type_name_atom == type_name!("vec2") {
-            return Some((VEC2, None));
+            return VEC2.gate(version >= 100, false, type_name_atom, is_type_name);
         } else if type_name_atom == type_name!("vec3") {
-            return Some((VEC3, None));
+            return VEC3.gate(version >= 100, false, type_name_atom, is_type_name);
         } else if type_name_atom == type_name!("vec4") {
-            return Some((VEC4, None));
+            return VEC4.gate(version >= 100, false, type_name_atom, is_type_name);
         } else if type_name_atom == type_name!("ivec2") {
-            return Some((IVEC2, None));
+            return IVEC2.gate(version >= 100, false, type_name_atom, is_type_name);
         } else if type_name_atom == type_name!("ivec3") {
-            return Some((IVEC3, None));
+            return IVEC3.gate(version >= 100, false, type_name_atom, is_type_name);
         } else if type_name_atom == type_name!("ivec4") {
-            return Some((IVEC4, None));
+            return IVEC4.gate(version >= 100, false, type_name_atom, is_type_name);
         } else if type_name_atom == type_name!("bvec2") {
-            return Some((BVEC2, None));
+            return BVEC2.gate(version >= 100, false, type_name_atom, is_type_name);
         } else if type_name_atom == type_name!("bvec3") {
-            return Some((BVEC3, None));
+            return BVEC3.gate(version >= 100, false, type_name_atom, is_type_name);
         } else if type_name_atom == type_name!("bvec4") {
-            return Some((BVEC4, None));
+            return BVEC4.gate(version >= 100, false, type_name_atom, is_type_name);
         } else if type_name_atom == type_name!("mat2") {
-            return Some((MAT2, None));
+            return MAT2.gate(version >= 100, false, type_name_atom, is_type_name);
         } else if type_name_atom == type_name!("mat3") {
-            return Some((MAT3, None));
+            return MAT3.gate(version >= 100, false, type_name_atom, is_type_name);
         } else if type_name_atom == type_name!("mat4") {
-            return Some((MAT4, None));
+            return MAT4.gate(version >= 100, false, type_name_atom, is_type_name);
         } else if type_name_atom == type_name!("sampler1D") {
-            return Some((SAMPLER1D, None));
+            return SAMPLER1D.gate(version >= 100, false, type_name_atom, is_type_name);
         } else if type_name_atom == type_name!("sampler1DShadow") {
-            return Some((SAMPLER1DSHADOW, None));
+            return SAMPLER1DSHADOW.gate(version >= 100, false, type_name_atom, is_type_name);
         } else if type_name_atom == type_name!("sampler2D") {
-            return Some((SAMPLER2D, None));
+            return SAMPLER2D.gate(version >= 100, false, type_name_atom, is_type_name);
         } else if type_name_atom == type_name!("sampler2DShadow") {
-            return Some((SAMPLER2DSHADOW, None));
+            return SAMPLER2DSHADOW.gate(version >= 100, false, type_name_atom, is_type_name);
         } else if type_name_atom == type_name!("sampler3D") {
-            return Some((SAMPLER3D, None));
+            return SAMPLER3D.gate(version >= 100, false, type_name_atom, is_type_name);
         } else if type_name_atom == type_name!("samplerCube") {
-            return Some((SAMPLERCUBE, None));
+            return SAMPLERCUBE.gate(version >= 100, false, type_name_atom, is_type_name);
         }
 
         // 120 type names
-        if version >= 120 {
-            if type_name_atom == type_name!("mat2x2") {
-                return Some((MAT2X2, None));
-            } else if type_name_atom == type_name!("mat2x3") {
-                return Some((MAT2X3, None));
-            } else if type_name_atom == type_name!("mat2x4") {
-                return Some((MAT2X4, None));
-            } else if type_name_atom == type_name!("mat3x2") {
-                return Some((MAT3X2, None));
-            } else if type_name_atom == type_name!("mat3x3") {
-                return Some((MAT3X3, None));
-            } else if type_name_atom == type_name!("mat3x4") {
-                return Some((MAT3X4, None));
-            } else if type_name_atom == type_name!("mat4x2") {
-                return Some((MAT4X2, None));
-            } else if type_name_atom == type_name!("mat4x3") {
-                return Some((MAT4X3, None));
-            } else if type_name_atom == type_name!("mat4x4") {
-                return Some((MAT4X4, None));
-            }
+        if type_name_atom == type_name!("mat2x2") {
+            return MAT2X2.gate(version >= 120, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("mat2x3") {
+            return MAT2X3.gate(version >= 120, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("mat2x4") {
+            return MAT2X4.gate(version >= 120, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("mat3x2") {
+            return MAT3X2.gate(version >= 120, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("mat3x3") {
+            return MAT3X3.gate(version >= 120, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("mat3x4") {
+            return MAT3X4.gate(version >= 120, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("mat4x2") {
+            return MAT4X2.gate(version >= 120, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("mat4x3") {
+            return MAT4X3.gate(version >= 120, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("mat4x4") {
+            return MAT4X4.gate(version >= 120, false, type_name_atom, is_type_name);
         }
 
         // 130 type names
-        if version >= 130 {
-            if type_name_atom == type_name!("uint") {
-                return Some((UINT, None));
-            } else if type_name_atom == type_name!("uvec2") {
-                return Some((UVEC2, None));
-            } else if type_name_atom == type_name!("uvec3") {
-                return Some((UVEC3, None));
-            } else if type_name_atom == type_name!("uvec4") {
-                return Some((UVEC4, None));
-            } else if type_name_atom == type_name!("isampler1D") {
-                return Some((ISAMPLER1D, None));
-            } else if type_name_atom == type_name!("isampler1DArray") {
-                return Some((ISAMPLER1DARRAY, None));
-            } else if type_name_atom == type_name!("isampler2D") {
-                return Some((ISAMPLER2D, None));
-            } else if type_name_atom == type_name!("isampler2DArray") {
-                return Some((ISAMPLER2DARRAY, None));
-            } else if type_name_atom == type_name!("isampler3D") {
-                return Some((ISAMPLER3D, None));
-            } else if type_name_atom == type_name!("isamplerCube") {
-                return Some((ISAMPLERCUBE, None));
-            } else if type_name_atom == type_name!("sampler1DArray") {
-                return Some((SAMPLER1DARRAY, None));
-            } else if type_name_atom == type_name!("sampler1DArrayShadow") {
-                return Some((SAMPLER1DARRAYSHADOW, None));
-            } else if type_name_atom == type_name!("sampler2DArray") {
-                return Some((SAMPLER2DARRAY, None));
-            } else if type_name_atom == type_name!("sampler2DArrayShadow") {
-                return Some((SAMPLER2DARRAYSHADOW, None));
-            } else if type_name_atom == type_name!("samplerCubeShadow") {
-                return Some((SAMPLERCUBESHADOW, None));
-            } else if type_name_atom == type_name!("usampler1D") {
-                return Some((USAMPLER1D, None));
-            } else if type_name_atom == type_name!("usampler1DArray") {
-                return Some((USAMPLER1DARRAY, None));
-            } else if type_name_atom == type_name!("usampler2D") {
-                return Some((USAMPLER2D, None));
-            } else if type_name_atom == type_name!("usampler2DArray") {
-                return Some((USAMPLER2DARRAY, None));
-            } else if type_name_atom == type_name!("usampler3D") {
-                return Some((USAMPLER3D, None));
-            } else if type_name_atom == type_name!("usamplerCube") {
-                return Some((USAMPLERCUBE, None));
-            }
+        if type_name_atom == type_name!("uint") {
+            return UINT.gate(version >= 130, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("uvec2") {
+            return UVEC2.gate(version >= 130, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("uvec3") {
+            return UVEC3.gate(version >= 130, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("uvec4") {
+            return UVEC4.gate(version >= 130, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("isampler1D") {
+            return ISAMPLER1D.gate(version >= 130, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("isampler1DArray") {
+            return ISAMPLER1DARRAY.gate(version >= 130, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("isampler2D") {
+            return ISAMPLER2D.gate(version >= 130, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("isampler2DArray") {
+            return ISAMPLER2DARRAY.gate(version >= 130, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("isampler3D") {
+            return ISAMPLER3D.gate(version >= 130, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("isamplerCube") {
+            return ISAMPLERCUBE.gate(version >= 130, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("sampler1DArray") {
+            return SAMPLER1DARRAY.gate(version >= 130, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("sampler1DArrayShadow") {
+            return SAMPLER1DARRAYSHADOW.gate(version >= 130, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("sampler2DArray") {
+            return SAMPLER2DARRAY.gate(version >= 130, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("sampler2DArrayShadow") {
+            return SAMPLER2DARRAYSHADOW.gate(version >= 130, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("samplerCubeShadow") {
+            return SAMPLERCUBESHADOW.gate(version >= 130, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("usampler1D") {
+            return USAMPLER1D.gate(version >= 130, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("usampler1DArray") {
+            return USAMPLER1DARRAY.gate(version >= 130, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("usampler2D") {
+            return USAMPLER2D.gate(version >= 130, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("usampler2DArray") {
+            return USAMPLER2DARRAY.gate(version >= 130, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("usampler3D") {
+            return USAMPLER3D.gate(version >= 130, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("usamplerCube") {
+            return USAMPLERCUBE.gate(version >= 130, false, type_name_atom, is_type_name);
         }
 
         // 140 type names
-        if version >= 140 {
-            if type_name_atom == type_name!("sampler2DRect") {
-                return Some((SAMPLER2DRECT, None));
-            } else if type_name_atom == type_name!("sampler2DRectShadow") {
-                return Some((SAMPLER2DRECTSHADOW, None));
-            } else if type_name_atom == type_name!("isampler2DRect") {
-                return Some((ISAMPLER2DRECT, None));
-            } else if type_name_atom == type_name!("usampler2DRect") {
-                return Some((USAMPLER2DRECT, None));
-            } else if type_name_atom == type_name!("samplerBuffer") {
-                return Some((SAMPLERBUFFER, None));
-            } else if type_name_atom == type_name!("isamplerBuffer") {
-                return Some((ISAMPLERBUFFER, None));
-            } else if type_name_atom == type_name!("usamplerBuffer") {
-                return Some((USAMPLERBUFFER, None));
-            }
+        if type_name_atom == type_name!("sampler2DRect") {
+            return SAMPLER2DRECT.gate(
+                version >= 140,
+                version >= 110,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("sampler2DRectShadow") {
+            return SAMPLER2DRECTSHADOW.gate(
+                version >= 140,
+                version >= 110,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("isampler2DRect") {
+            return ISAMPLER2DRECT.gate(version >= 140, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("usampler2DRect") {
+            return USAMPLER2DRECT.gate(version >= 140, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("samplerBuffer") {
+            return SAMPLERBUFFER.gate(version >= 140, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("isamplerBuffer") {
+            return ISAMPLERBUFFER.gate(version >= 140, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("usamplerBuffer") {
+            return USAMPLERBUFFER.gate(version >= 140, false, type_name_atom, is_type_name);
         }
 
         // 150 type names
-        if version >= 150 {
-            if type_name_atom == type_name!("sampler2DMS") {
-                return Some((SAMPLER2DMS, None));
-            } else if type_name_atom == type_name!("isampler2DMS") {
-                return Some((ISAMPLER2DMS, None));
-            } else if type_name_atom == type_name!("usampler2DMS") {
-                return Some((USAMPLER2DMS, None));
-            } else if type_name_atom == type_name!("sampler2DMSArray") {
-                return Some((SAMPLER2DMSARRAY, None));
-            } else if type_name_atom == type_name!("isampler2DMSArray") {
-                return Some((ISAMPLER2DMSARRAY, None));
-            } else if type_name_atom == type_name!("usampler2DMSArray") {
-                return Some((USAMPLER2DMSARRAY, None));
-            }
+        if type_name_atom == type_name!("sampler2DMS") {
+            return SAMPLER2DMS.gate(version >= 150, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("isampler2DMS") {
+            return ISAMPLER2DMS.gate(version >= 150, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("usampler2DMS") {
+            return USAMPLER2DMS.gate(version >= 150, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("sampler2DMSArray") {
+            return SAMPLER2DMSARRAY.gate(version >= 150, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("isampler2DMSArray") {
+            return ISAMPLER2DMSARRAY.gate(version >= 150, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("usampler2DMSArray") {
+            return USAMPLER2DMSARRAY.gate(version >= 150, false, type_name_atom, is_type_name);
         }
 
         // 400 type names
-        if version >= 400 {
-            if type_name_atom == type_name!("double") {
-                return Some((DOUBLE, None));
-            } else if type_name_atom == type_name!("dvec2") {
-                return Some((DVEC2, None));
-            } else if type_name_atom == type_name!("dvec3") {
-                return Some((DVEC3, None));
-            } else if type_name_atom == type_name!("dvec4") {
-                return Some((DVEC4, None));
-            } else if type_name_atom == type_name!("dmat2") {
-                return Some((DMAT2, None));
-            } else if type_name_atom == type_name!("dmat3") {
-                return Some((DMAT3, None));
-            } else if type_name_atom == type_name!("dmat4") {
-                return Some((DMAT4, None));
-            } else if type_name_atom == type_name!("dmat2x2") {
-                return Some((DMAT2X2, None));
-            } else if type_name_atom == type_name!("dmat2x3") {
-                return Some((DMAT2X3, None));
-            } else if type_name_atom == type_name!("dmat2x4") {
-                return Some((DMAT2X4, None));
-            } else if type_name_atom == type_name!("dmat3x2") {
-                return Some((DMAT3X2, None));
-            } else if type_name_atom == type_name!("dmat3x3") {
-                return Some((DMAT3X3, None));
-            } else if type_name_atom == type_name!("dmat3x4") {
-                return Some((DMAT3X4, None));
-            } else if type_name_atom == type_name!("dmat4x2") {
-                return Some((DMAT4X2, None));
-            } else if type_name_atom == type_name!("dmat4x3") {
-                return Some((DMAT4X3, None));
-            } else if type_name_atom == type_name!("dmat4x4") {
-                return Some((DMAT4X4, None));
-            } else if type_name_atom == type_name!("samplerCubeArray") {
-                return Some((SAMPLERCUBEARRAY, None));
-            } else if type_name_atom == type_name!("samplerCubeArrayShadow") {
-                return Some((SAMPLERCUBEARRAYSHADOW, None));
-            } else if type_name_atom == type_name!("isamplerCubeArray") {
-                return Some((ISAMPLERCUBEARRAY, None));
-            } else if type_name_atom == type_name!("usamplerCubeArray") {
-                return Some((USAMPLERCUBEARRAY, None));
-            }
+        if type_name_atom == type_name!("double") {
+            return DOUBLE.gate(version >= 400, version >= 110, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("dvec2") {
+            return DVEC2.gate(version >= 400, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("dvec3") {
+            return DVEC3.gate(version >= 400, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("dvec4") {
+            return DVEC4.gate(version >= 400, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("dmat2") {
+            return DMAT2.gate(version >= 400, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("dmat3") {
+            return DMAT3.gate(version >= 400, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("dmat4") {
+            return DMAT4.gate(version >= 400, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("dmat2x2") {
+            return DMAT2X2.gate(version >= 400, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("dmat2x3") {
+            return DMAT2X3.gate(version >= 400, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("dmat2x4") {
+            return DMAT2X4.gate(version >= 400, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("dmat3x2") {
+            return DMAT3X2.gate(version >= 400, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("dmat3x3") {
+            return DMAT3X3.gate(version >= 400, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("dmat3x4") {
+            return DMAT3X4.gate(version >= 400, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("dmat4x2") {
+            return DMAT4X2.gate(version >= 400, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("dmat4x3") {
+            return DMAT4X3.gate(version >= 400, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("dmat4x4") {
+            return DMAT4X4.gate(version >= 400, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("samplerCubeArray") {
+            return SAMPLERCUBEARRAY.gate(version >= 400, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("samplerCubeArrayShadow") {
+            return SAMPLERCUBEARRAYSHADOW.gate(
+                version >= 400,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("isamplerCubeArray") {
+            return ISAMPLERCUBEARRAY.gate(version >= 400, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("usamplerCubeArray") {
+            return USAMPLERCUBEARRAY.gate(version >= 400, false, type_name_atom, is_type_name);
         }
 
         // 420 type names
-        if version >= 420 {
-            if type_name_atom == type_name!("atomic_uint") {
-                return Some((ATOMIC_UINT, None));
-            } else if type_name_atom == type_name!("image1D") {
-                return Some((IMAGE1D, None));
-            } else if type_name_atom == type_name!("iimage1D") {
-                return Some((IIMAGE1D, None));
-            } else if type_name_atom == type_name!("uimage1D") {
-                return Some((UIMAGE1D, None));
-            } else if type_name_atom == type_name!("image1DArray") {
-                return Some((IMAGE1DARRAY, None));
-            } else if type_name_atom == type_name!("iimage1DArray") {
-                return Some((IIMAGE1DARRAY, None));
-            } else if type_name_atom == type_name!("uimage1DArray") {
-                return Some((UIMAGE1DARRAY, None));
-            } else if type_name_atom == type_name!("image2D") {
-                return Some((IMAGE2D, None));
-            } else if type_name_atom == type_name!("iimage2D") {
-                return Some((IIMAGE2D, None));
-            } else if type_name_atom == type_name!("uimage2D") {
-                return Some((UIMAGE2D, None));
-            } else if type_name_atom == type_name!("image2DArray") {
-                return Some((IMAGE2DARRAY, None));
-            } else if type_name_atom == type_name!("iimage2DArray") {
-                return Some((IIMAGE2DARRAY, None));
-            } else if type_name_atom == type_name!("uimage2DArray") {
-                return Some((UIMAGE2DARRAY, None));
-            } else if type_name_atom == type_name!("image2DRect") {
-                return Some((IMAGE2DRECT, None));
-            } else if type_name_atom == type_name!("iimage2DRect") {
-                return Some((IIMAGE2DRECT, None));
-            } else if type_name_atom == type_name!("uimage2DRect") {
-                return Some((UIMAGE2DRECT, None));
-            } else if type_name_atom == type_name!("image2DMS") {
-                return Some((IMAGE2DMS, None));
-            } else if type_name_atom == type_name!("iimage2DMS") {
-                return Some((IIMAGE2DMS, None));
-            } else if type_name_atom == type_name!("uimage2DMS") {
-                return Some((UIMAGE2DMS, None));
-            } else if type_name_atom == type_name!("image2DMSArray") {
-                return Some((IMAGE2DMSARRAY, None));
-            } else if type_name_atom == type_name!("iimage2DMSArray") {
-                return Some((IIMAGE2DMSARRAY, None));
-            } else if type_name_atom == type_name!("uimage2DMSArray") {
-                return Some((UIMAGE2DMSARRAY, None));
-            } else if type_name_atom == type_name!("image3D") {
-                return Some((IMAGE3D, None));
-            } else if type_name_atom == type_name!("iimage3D") {
-                return Some((IIMAGE3D, None));
-            } else if type_name_atom == type_name!("uimage3D") {
-                return Some((UIMAGE3D, None));
-            } else if type_name_atom == type_name!("imageCube") {
-                return Some((IMAGECUBE, None));
-            } else if type_name_atom == type_name!("iimageCube") {
-                return Some((IIMAGECUBE, None));
-            } else if type_name_atom == type_name!("uimageCube") {
-                return Some((UIMAGECUBE, None));
-            } else if type_name_atom == type_name!("imageCubeArray") {
-                return Some((IMAGECUBEARRAY, None));
-            } else if type_name_atom == type_name!("iimageCubeArray") {
-                return Some((IIMAGECUBEARRAY, None));
-            } else if type_name_atom == type_name!("uimageCubeArray") {
-                return Some((UIMAGECUBEARRAY, None));
-            } else if type_name_atom == type_name!("imageBuffer") {
-                return Some((IMAGEBUFFER, None));
-            } else if type_name_atom == type_name!("iimageBuffer") {
-                return Some((IIMAGEBUFFER, None));
-            } else if type_name_atom == type_name!("uimageBuffer") {
-                return Some((UIMAGEBUFFER, None));
-            }
+        if type_name_atom == type_name!("atomic_uint") {
+            return ATOMIC_UINT.gate(version >= 420, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("image1D") {
+            return IMAGE1D.gate(version >= 420, version >= 130, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("iimage1D") {
+            return IIMAGE1D.gate(version >= 420, version >= 130, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("uimage1D") {
+            return UIMAGE1D.gate(version >= 420, version >= 130, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("image1DArray") {
+            return IMAGE1DARRAY.gate(version >= 420, version >= 130, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("iimage1DArray") {
+            return IIMAGE1DARRAY.gate(
+                version >= 420,
+                version >= 130,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("uimage1DArray") {
+            return UIMAGE1DARRAY.gate(
+                version >= 420,
+                version >= 130,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("image2D") {
+            return IMAGE2D.gate(version >= 420, version >= 130, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("iimage2D") {
+            return IIMAGE2D.gate(version >= 420, version >= 130, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("uimage2D") {
+            return UIMAGE2D.gate(version >= 420, version >= 130, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("image2DArray") {
+            return IMAGE2DARRAY.gate(version >= 420, version >= 130, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("iimage2DArray") {
+            return IIMAGE2DARRAY.gate(
+                version >= 420,
+                version >= 130,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("uimage2DArray") {
+            return UIMAGE2DARRAY.gate(
+                version >= 420,
+                version >= 130,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("image2DRect") {
+            return IMAGE2DRECT.gate(version >= 420, version >= 130, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("iimage2DRect") {
+            return IIMAGE2DRECT.gate(version >= 420, version >= 130, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("uimage2DRect") {
+            return UIMAGE2DRECT.gate(version >= 420, version >= 130, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("image2DMS") {
+            return IMAGE2DMS.gate(version >= 420, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("iimage2DMS") {
+            return IIMAGE2DMS.gate(version >= 420, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("uimage2DMS") {
+            return UIMAGE2DMS.gate(version >= 420, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("image2DMSArray") {
+            return IMAGE2DMSARRAY.gate(version >= 420, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("iimage2DMSArray") {
+            return IIMAGE2DMSARRAY.gate(version >= 420, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("uimage2DMSArray") {
+            return UIMAGE2DMSARRAY.gate(version >= 420, false, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("image3D") {
+            return IMAGE3D.gate(version >= 420, version >= 130, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("iimage3D") {
+            return IIMAGE3D.gate(version >= 420, version >= 130, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("uimage3D") {
+            return UIMAGE3D.gate(version >= 420, version >= 130, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("imageCube") {
+            return IMAGECUBE.gate(version >= 420, version >= 130, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("iimageCube") {
+            return IIMAGECUBE.gate(version >= 420, version >= 130, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("uimageCube") {
+            return UIMAGECUBE.gate(version >= 420, version >= 130, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("imageCubeArray") {
+            return IMAGECUBEARRAY.gate(
+                version >= 420,
+                version >= 130,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("iimageCubeArray") {
+            return IIMAGECUBEARRAY.gate(
+                version >= 420,
+                version >= 130,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("uimageCubeArray") {
+            return UIMAGECUBEARRAY.gate(
+                version >= 420,
+                version >= 130,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("imageBuffer") {
+            return IMAGEBUFFER.gate(version >= 420, version >= 130, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("iimageBuffer") {
+            return IIMAGEBUFFER.gate(version >= 420, version >= 130, type_name_atom, is_type_name);
+        } else if type_name_atom == type_name!("uimageBuffer") {
+            return UIMAGEBUFFER.gate(version >= 420, version >= 130, type_name_atom, is_type_name);
         }
 
         // Vulkan type names
-        if version >= 460 && target_vulkan {
-            if type_name_atom == type_name!("texture1D") {
-                return Some((TEXTURE1D, None));
-            } else if type_name_atom == type_name!("texture1DArray") {
-                return Some((TEXTURE1DARRAY, None));
-            } else if type_name_atom == type_name!("itexture1D") {
-                return Some((ITEXTURE1D, None));
-            } else if type_name_atom == type_name!("itexture1DArray") {
-                return Some((ITEXTURE1DARRAY, None));
-            } else if type_name_atom == type_name!("utexture1D") {
-                return Some((UTEXTURE1D, None));
-            } else if type_name_atom == type_name!("utexture1DArray") {
-                return Some((UTEXTURE1DARRAY, None));
-            } else if type_name_atom == type_name!("texture2D") {
-                return Some((TEXTURE2D, None));
-            } else if type_name_atom == type_name!("texture2DArray") {
-                return Some((TEXTURE2DARRAY, None));
-            } else if type_name_atom == type_name!("itexture2D") {
-                return Some((ITEXTURE2D, None));
-            } else if type_name_atom == type_name!("itexture2DArray") {
-                return Some((ITEXTURE2DARRAY, None));
-            } else if type_name_atom == type_name!("utexture2D") {
-                return Some((UTEXTURE2D, None));
-            } else if type_name_atom == type_name!("utexture2DArray") {
-                return Some((UTEXTURE2DARRAY, None));
-            } else if type_name_atom == type_name!("texture2DRect") {
-                return Some((TEXTURE2DRECT, None));
-            } else if type_name_atom == type_name!("itexture2DRect") {
-                return Some((ITEXTURE2DRECT, None));
-            } else if type_name_atom == type_name!("utexture2DRect") {
-                return Some((UTEXTURE2DRECT, None));
-            } else if type_name_atom == type_name!("texture2DMS") {
-                return Some((TEXTURE2DMS, None));
-            } else if type_name_atom == type_name!("itexture2DMS") {
-                return Some((ITEXTURE2DMS, None));
-            } else if type_name_atom == type_name!("utexture2DMS") {
-                return Some((UTEXTURE2DMS, None));
-            } else if type_name_atom == type_name!("texture2DMSArray") {
-                return Some((TEXTURE2DMSARRAY, None));
-            } else if type_name_atom == type_name!("itexture2DMSArray") {
-                return Some((ITEXTURE2DMSARRAY, None));
-            } else if type_name_atom == type_name!("utexture2DMSArray") {
-                return Some((UTEXTURE2DMSARRAY, None));
-            } else if type_name_atom == type_name!("texture3D") {
-                return Some((TEXTURE3D, None));
-            } else if type_name_atom == type_name!("itexture3D") {
-                return Some((ITEXTURE3D, None));
-            } else if type_name_atom == type_name!("utexture3D") {
-                return Some((UTEXTURE3D, None));
-            } else if type_name_atom == type_name!("textureCube") {
-                return Some((TEXTURECUBE, None));
-            } else if type_name_atom == type_name!("itextureCube") {
-                return Some((ITEXTURECUBE, None));
-            } else if type_name_atom == type_name!("utextureCube") {
-                return Some((UTEXTURECUBE, None));
-            } else if type_name_atom == type_name!("textureCubeArray") {
-                return Some((TEXTURECUBEARRAY, None));
-            } else if type_name_atom == type_name!("itextureCubeArray") {
-                return Some((ITEXTURECUBEARRAY, None));
-            } else if type_name_atom == type_name!("utextureCubeArray") {
-                return Some((UTEXTURECUBEARRAY, None));
-            } else if type_name_atom == type_name!("textureBuffer") {
-                return Some((TEXTUREBUFFER, None));
-            } else if type_name_atom == type_name!("itextureBuffer") {
-                return Some((ITEXTUREBUFFER, None));
-            } else if type_name_atom == type_name!("utextureBuffer") {
-                return Some((UTEXTUREBUFFER, None));
-            } else if type_name_atom == type_name!("sampler") {
-                return Some((SAMPLER, None));
-            } else if type_name_atom == type_name!("samplerShadow") {
-                return Some((SAMPLERSHADOW, None));
-            } else if type_name_atom == type_name!("subpassInput") {
-                return Some((SUBPASSINPUT, None));
-            } else if type_name_atom == type_name!("isubpassInput") {
-                return Some((ISUBPASSINPUT, None));
-            } else if type_name_atom == type_name!("usubpassInput") {
-                return Some((USUBPASSINPUT, None));
-            } else if type_name_atom == type_name!("subpassInputMS") {
-                return Some((SUBPASSINPUTMS, None));
-            } else if type_name_atom == type_name!("isubpassInputMS") {
-                return Some((ISUBPASSINPUTMS, None));
-            } else if type_name_atom == type_name!("usubpassInputMS") {
-                return Some((USUBPASSINPUTMS, None));
-            }
+        if type_name_atom == type_name!("texture1D") {
+            return TEXTURE1D.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("texture1DArray") {
+            return TEXTURE1DARRAY.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("itexture1D") {
+            return ITEXTURE1D.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("itexture1DArray") {
+            return ITEXTURE1DARRAY.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("utexture1D") {
+            return UTEXTURE1D.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("utexture1DArray") {
+            return UTEXTURE1DARRAY.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("texture2D") {
+            return TEXTURE2D.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("texture2DArray") {
+            return TEXTURE2DARRAY.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("itexture2D") {
+            return ITEXTURE2D.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("itexture2DArray") {
+            return ITEXTURE2DARRAY.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("utexture2D") {
+            return UTEXTURE2D.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("utexture2DArray") {
+            return UTEXTURE2DARRAY.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("texture2DRect") {
+            return TEXTURE2DRECT.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("itexture2DRect") {
+            return ITEXTURE2DRECT.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("utexture2DRect") {
+            return UTEXTURE2DRECT.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("texture2DMS") {
+            return TEXTURE2DMS.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("itexture2DMS") {
+            return ITEXTURE2DMS.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("utexture2DMS") {
+            return UTEXTURE2DMS.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("texture2DMSArray") {
+            return TEXTURE2DMSARRAY.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("itexture2DMSArray") {
+            return ITEXTURE2DMSARRAY.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("utexture2DMSArray") {
+            return UTEXTURE2DMSARRAY.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("texture3D") {
+            return TEXTURE3D.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("itexture3D") {
+            return ITEXTURE3D.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("utexture3D") {
+            return UTEXTURE3D.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("textureCube") {
+            return TEXTURECUBE.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("itextureCube") {
+            return ITEXTURECUBE.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("utextureCube") {
+            return UTEXTURECUBE.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("textureCubeArray") {
+            return TEXTURECUBEARRAY.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("itextureCubeArray") {
+            return ITEXTURECUBEARRAY.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("utextureCubeArray") {
+            return UTEXTURECUBEARRAY.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("textureBuffer") {
+            return TEXTUREBUFFER.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("itextureBuffer") {
+            return ITEXTUREBUFFER.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("utextureBuffer") {
+            return UTEXTUREBUFFER.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("sampler") {
+            return SAMPLER.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("samplerShadow") {
+            return SAMPLERSHADOW.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("subpassInput") {
+            return SUBPASSINPUT.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("isubpassInput") {
+            return ISUBPASSINPUT.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("usubpassInput") {
+            return USUBPASSINPUT.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("subpassInputMS") {
+            return SUBPASSINPUTMS.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("isubpassInputMS") {
+            return ISUBPASSINPUTMS.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
+        } else if type_name_atom == type_name!("usubpassInputMS") {
+            return USUBPASSINPUTMS.gate(
+                version >= 460 && target_vulkan,
+                false,
+                type_name_atom,
+                is_type_name,
+            );
         }
 
         // Reserved for future use
-        if type_name_atom == type_name!("hvec2") {
-            return Some((HVEC2, None));
-        } else if type_name_atom == type_name!("hvec3") {
-            return Some((HVEC3, None));
-        } else if type_name_atom == type_name!("hvec4") {
-            return Some((HVEC4, None));
-        } else if type_name_atom == type_name!("fvec2") {
-            return Some((FVEC2, None));
-        } else if type_name_atom == type_name!("fvec3") {
-            return Some((FVEC3, None));
-        } else if type_name_atom == type_name!("fvec4") {
-            return Some((FVEC4, None));
-        } else if type_name_atom == type_name!("sampler3DRect") {
-            return Some((SAMPLER3DRECT, None));
+        if type_name_atom == type_name!("hvec2")
+            || type_name_atom == type_name!("hvec3")
+            || type_name_atom == type_name!("hvec4")
+            || type_name_atom == type_name!("fvec2")
+            || type_name_atom == type_name!("fvec3")
+            || type_name_atom == type_name!("fvec4")
+            || type_name_atom == type_name!("sampler3DRect")
+        {
+            return Some((RESERVED(type_name_atom), None));
         }
 
         let result = is_type_name(&type_name_atom);

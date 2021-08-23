@@ -235,7 +235,6 @@ type_qualifier_spec_data: ast::TypeQualifierSpecData = {
     <layout_qualifier>        => ast::TypeQualifierSpecData::Layout(<>),
     <precision_qualifier>     => ast::TypeQualifierSpecData::Precision(<>),
     <interpolation_qualifier> => ast::TypeQualifierSpecData::Interpolation(<>),
-    "invariant"               => ast::TypeQualifierSpecData::Invariant,
     "precise"                 => ast::TypeQualifierSpecData::Precise,
 };
 
@@ -243,8 +242,18 @@ type_qualifier_spec: ast::TypeQualifierSpec = {
     <l:@L> <s:type_qualifier_spec_data> <r:@R> => s.spanned(l, r)
 };
 
+tq_invariant_data: ast::TypeQualifierSpecData = {
+    "invariant"               => ast::TypeQualifierSpecData::Invariant,
+};
+
+tq_invariant: ast::TypeQualifierSpec = {
+    <l:@L> <s:tq_invariant_data> <r:@R> => s.spanned(l, r)
+};
+
 type_qualifier: ast::TypeQualifier = {
-    <l:@L> <t:type_qualifier_spec+> <r:@R> => ast::TypeQualifierData { qualifiers: t }.spanned(l, r)
+    <l:@L> <q1:tq_invariant?> <q2:type_qualifier_spec+> <r:@R> => ast::TypeQualifierData {
+        qualifiers: q1.into_iter().chain(q2.into_iter()).collect()
+    }.spanned(l, r)
 };
 
 fully_specified_type: ast::FullySpecifiedType = {
@@ -653,6 +662,7 @@ declaration: ast::Declaration = {
     <l:@L> <i:init_declarator_list> ";"  <r:@R> => ast::DeclarationData::InitDeclaratorList(i).spanned(l, r),
     <l:@L> <p:precision_declaration> ";" <r:@R> => p.spanned(l, r),
     <l:@L> <b:block_declaration> ";"     <r:@R> => ast::DeclarationData::Block(b).spanned(l, r),
+    <l:@L> "invariant" <i:identifier> ";" <r:@R> => ast::DeclarationData::Invariant(i.0).spanned(l, r),
 };
 
 function_definition: ast::FunctionDefinition = {

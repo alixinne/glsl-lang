@@ -954,7 +954,7 @@ pub enum Token {
     #[lang_util(token = "?", kind = "operator")]
     Question,
     #[cfg_attr(feature = "lexer-v1", token("invariant"))]
-    #[lang_util(token = "invariant", kind = "type qualifier")]
+    #[lang_util(token = "invariant")]
     Invariant,
     #[cfg_attr(feature = "lexer-v1", token("precise"))]
     #[lang_util(token = "precise", kind = "type qualifier")]

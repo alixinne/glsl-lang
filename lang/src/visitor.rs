@@ -738,6 +738,8 @@ macro_rules! make_host_trait {
             }
 
             ast::DeclarationData::Block(block) => block.$mthd_name(visitor),
+
+            ast::DeclarationData::Invariant(ident) => ident.$mthd_name(visitor),
           }
         }
       }

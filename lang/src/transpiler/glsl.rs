@@ -1238,6 +1238,12 @@ where
             show_block(f, block, state)?;
             state.write_declaration_terminator(f)
         }
+        ast::DeclarationData::Invariant(ref ident) => {
+            f.write_str("invariant")?;
+            f.write_str(" ")?;
+            show_identifier(f, ident, state)?;
+            state.write_declaration_terminator(f)
+        }
     }
 }
 

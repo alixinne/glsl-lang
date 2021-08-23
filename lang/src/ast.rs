@@ -794,6 +794,8 @@ pub enum DeclarationData {
     Precision(PrecisionQualifier, TypeSpecifier),
     /// Block declaration
     Block(Block),
+    /// Invariant declaration
+    Invariant(Identifier),
 }
 
 /// A general purpose block, containing fields and possibly a list of declared identifiers. Semantic

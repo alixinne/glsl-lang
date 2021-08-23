@@ -188,8 +188,14 @@ impl<'s> Token<'s> {
                 }
             }
         } else {
-            let value = &self.variant.kinds;
-            quote_spanned! { self.variant.ident.span() => &[#(#value),*] }
+            let kinds = &self.variant.kinds;
+
+            if let Some((Ok(token), _)) = &self.token {
+                let value = &token.token;
+                quote_spanned! { self.variant.ident.span() => &[#(#kinds),*, #value] }
+            } else {
+                quote_spanned! { self.variant.ident.span() => &[#(#kinds),*] }
+            }
         }
     }
 

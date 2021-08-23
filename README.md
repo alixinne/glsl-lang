@@ -5,9 +5,9 @@
 [![docs.rs](https://img.shields.io/docsrs/glsl-lang)](https://docs.rs/glsl-lang/)
 [![License](https://img.shields.io/github/license/vtavernier/glsl-lang)](LICENSE)
 
-`glsl-lang` is a crate implementing a LALR parser for the GLSL 4.x language,
-with partial support for preprocessor directives. Its AST and features are
-modeled after [Dimitri Sabadie's `glsl` crate](https://github.com/phaazon/glsl).
+`glsl-lang` is a crate implementing a LALR parser for the GLSL language, with
+full support for preprocessor directives. Its AST and features are modeled
+after [Dimitri Sabadie's `glsl` crate](https://github.com/phaazon/glsl).
 
 ## Table of contents
 
@@ -172,7 +172,6 @@ would require some changes to your code:
 * `FunIdentifier::Identifier` was replaced with `FunIdentifier::TypeSpecifier`:
   this reflects the fact that a type specifier as a function identifier is a
   constructor, and array specifiers are only allowed in this position.
-* Support for the `attribute` and `varying` qualifiers was removed
 * The `NonEmpty` wrapper was removed
 * `Declaration::Global` was removed since it's parsed as an `InitDeclaratorList`
 
@@ -185,14 +184,18 @@ currently missing some usage examples. These will come soon enough, promise!
 
 Aside from the limitations mentioned in the paragraph above:
 
-* Only GLSL 3.x/4.x is supported. GLSL 1.x is not
-* As for the `glsl` crate, preprocessor parsing is mostly handled at the syntax
-  level, so GLSL sources which are syntactically invalid without actual
-  preprocessing will fail to parse.
+* Starting with the 0.2 release of `glsl-lang`, the `glsl-lang-pp` (also part
+  of this project) is used to preprocess the input before running the parser.
+  This means we can now parse shaders that are invalid without macro expansion,
+  but as a result we lose some preprocessing directives in the AST. Also, since
+  preprocessing directives can be inserted at any point in the token stream, we
+  may only recover those which are at the top-level, just like the `glsl` crate
+  does.
 * Currently, no semantic analysis
 
 ## License
 
 This work is licensed under the BSD 3-clause license. Lexer and LALR parser by
 Vincent Tavernier <vince.tavernier@gmail.com>. Original AST, test suite and
-quoting code by Dimitri Sabadie <dimitri.sabadie@gmail.com>.
+quoting code by Dimitri Sabadie <dimitri.sabadie@gmail.com>. glslangValidator
+test suite from the Khronos group.

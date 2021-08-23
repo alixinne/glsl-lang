@@ -119,7 +119,9 @@ impl<'p, F: FileSystem> Iterator for ExpandStack<'p, F> {
                                 other => Ok(other),
                             });
                         }
-                        ExpandEvent::EnterFile(current_state, node, path) => {
+                        ExpandEvent::EnterFile(node, path) => {
+                            let state = expand.state().unwrap().clone();
+
                             // Put it back on the stack
                             self.stack.push(expand);
 
@@ -134,7 +136,7 @@ impl<'p, F: FileSystem> Iterator for ExpandStack<'p, F> {
                                 // TODO: Allow passing an encoding from somewhere
                                 match self.processor.parse(&resolved_path, None) {
                                     Ok(parsed) => {
-                                        self.stack.push(parsed.expand_one(current_state));
+                                        self.stack.push(parsed.expand_one(state));
                                     }
                                     Err(error) => {
                                         // Just return the error, we'll keep iterating on the lower

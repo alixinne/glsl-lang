@@ -17,7 +17,7 @@ use crate::{
 
 use super::{
     definition::{trim_ws, MacroInvocation},
-    event::{Event, OutputToken},
+    event::{Event, SendEvalResult, SendEvent, SendToken},
     expand::ExpandLocation,
     ProcessorState,
 };
@@ -706,7 +706,7 @@ impl Include {
         // Make sure they are all tokens
         if !subs_events.iter().all(Event::is_token) {
             return Err(IncludeError::MalformedPath {
-                tokens: subs_events,
+                tokens: subs_events.into_iter().map(Into::into).collect(),
             });
         }
 
@@ -724,7 +724,7 @@ impl Include {
             return Err(IncludeError::MissingPath);
         } else if subs_tokens.len() > 1 {
             return Err(IncludeError::ExtraTokens {
-                tokens: subs_tokens.to_vec(),
+                tokens: subs_tokens.iter().map(Into::into).collect(),
             });
         }
 
@@ -735,7 +735,7 @@ impl Include {
             QUOTE_STRING => PathType::Quote,
             _ => {
                 return Err(IncludeError::InvalidPathLiteral {
-                    token: first_token.clone(),
+                    token: first_token.into(),
                 });
             }
         };
@@ -755,11 +755,11 @@ pub enum IncludeError {
     #[error("missing path for #include directive")]
     MissingPath,
     #[error("malformed path")]
-    MalformedPath { tokens: Vec<Event> },
+    MalformedPath { tokens: Vec<SendEvent> },
     #[error("extra tokens in #include path")]
-    ExtraTokens { tokens: Vec<OutputToken> },
+    ExtraTokens { tokens: Vec<SendToken> },
     #[error("invalid path literal")]
-    InvalidPathLiteral { token: OutputToken },
+    InvalidPathLiteral { token: SendToken },
 }
 
 impl TryFrom<SyntaxNode> for Include {
@@ -824,7 +824,7 @@ impl Line {
         // Make sure they are all tokens
         if !subs_events.iter().all(Event::is_token) {
             return Err(LineError::MalformedLine {
-                tokens: subs_events,
+                tokens: subs_events.into_iter().map(Into::into).collect(),
             });
         }
 
@@ -850,7 +850,7 @@ impl Line {
                 None
             }
             .ok_or_else(|| LineError::InvalidLineNumber {
-                token: token.clone(),
+                token: token.into(),
             })?;
 
             if eval_results.len() > 1 {
@@ -864,7 +864,7 @@ impl Line {
                             Ok(value)
                         } else {
                             Err(LineError::InvalidPath {
-                                token: token.clone(),
+                                token: token.into(),
                             })
                         }?,
                     )),
@@ -877,7 +877,7 @@ impl Line {
                             ))
                         } else {
                             Err(LineError::InvalidPath {
-                                token: EvalResult::Token(token.clone()),
+                                token: SendEvalResult::Token(token.into()),
                             })
                         }
                     }
@@ -889,7 +889,7 @@ impl Line {
             Err(LineError::MissingLineNumber)
         } else {
             Err(LineError::ExtraTokens {
-                tokens: eval_results,
+                tokens: eval_results.iter().map(Into::into).collect(),
             })
         }
     }
@@ -900,15 +900,15 @@ pub enum LineError {
     #[error("missing body for #line directive")]
     MissingBody,
     #[error("malformed line")]
-    MalformedLine { tokens: Vec<Event> },
+    MalformedLine { tokens: Vec<SendEvent> },
     #[error("missing line number")]
     MissingLineNumber,
     #[error("extra tokens in #line path")]
-    ExtraTokens { tokens: Vec<EvalResult> },
+    ExtraTokens { tokens: Vec<SendEvalResult> },
     #[error("invalid line number")]
-    InvalidLineNumber { token: EvalResult },
+    InvalidLineNumber { token: SendEvalResult },
     #[error("invalid path")]
-    InvalidPath { token: EvalResult },
+    InvalidPath { token: SendEvalResult },
 }
 
 impl TryFrom<SyntaxNode> for Line {
@@ -927,13 +927,13 @@ impl TryFrom<SyntaxNode> for Line {
 #[derive(Debug, PartialEq, Eq, Error)]
 pub enum IfEvalError {
     #[error("malformed expression")]
-    MalformedExpr { tokens: Vec<Event> },
+    MalformedExpr { tokens: Vec<SendEvent> },
     #[error("missing expression")]
     MissingExpr,
     #[error("extra tokens at end of expression")]
-    ExtraTokens { tokens: Vec<EvalResult> },
+    ExtraTokens { tokens: Vec<SendEvalResult> },
     #[error("invalid constant expression")]
-    InvalidExpr { token: EvalResult },
+    InvalidExpr { token: SendEvalResult },
 }
 
 fn eval_inner(
@@ -953,7 +953,7 @@ fn eval_inner(
         return (
             true,
             Some(IfEvalError::MalformedExpr {
-                tokens: subs_events,
+                tokens: subs_events.into_iter().map(Into::into).collect(),
             }),
         );
     }
@@ -979,7 +979,9 @@ fn eval_inner(
 
     // Do we have extra tokens?
     let error = if !rest.is_empty() {
-        Some(IfEvalError::ExtraTokens { tokens: rest })
+        Some(IfEvalError::ExtraTokens {
+            tokens: rest.iter().map(Into::into).collect(),
+        })
     } else {
         None
     };
@@ -987,7 +989,12 @@ fn eval_inner(
     // Is the result an int?
     match first {
         EvalResult::Constant(Ok(value)) => (value != 0, error),
-        other => (true, Some(IfEvalError::InvalidExpr { token: other })),
+        other => (
+            true,
+            Some(IfEvalError::InvalidExpr {
+                token: (&other).into(),
+            }),
+        ),
     }
 }
 

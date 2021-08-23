@@ -18,6 +18,9 @@ use super::{
     nodes::{self, Directive, ExtensionName, ParsedPath},
 };
 
+mod send;
+pub use send::*;
+
 pub use crate::parser::{SyntaxNode, SyntaxToken};
 
 pub type ProcessingError = lang_util::located::Located<ProcessingErrorKind>;
@@ -39,7 +42,7 @@ pub enum ProcessingErrorKind {
     },
     UnexpectedDirective {
         ident: SmolStr,
-        node: SyntaxNode,
+        node: SendNode,
     },
     MismatchedArguments {
         ident: SmolStr,
@@ -478,5 +481,16 @@ impl From<OutputToken> for Event {
             token,
             masked: false,
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    fn assert_send<T: Send>() {}
+
+    #[test]
+    fn test_error_send() {
+        assert_send::<super::SendEvent>();
+        assert_send::<super::Error>();
     }
 }

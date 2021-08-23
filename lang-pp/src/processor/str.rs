@@ -21,7 +21,7 @@ pub fn parse(input: &str) -> parser::Ast {
 #[derive(Debug, PartialEq, Eq, Error)]
 pub enum ProcessStrError {
     #[error("an include was requested without a filesystem context")]
-    IncludeRequested(ProcessorState, ParsedPath),
+    IncludeRequested(ParsedPath),
 }
 
 pub fn process(input: &str, state: ProcessorState) -> ExpandStr {
@@ -60,10 +60,10 @@ impl Iterator for ExpandStr {
         let event = self.inner.next()?;
         match event {
             ExpandEvent::Event(event) => Some(Ok(event)),
-            ExpandEvent::EnterFile(state, node, path) => Some(Err(LocatedBuilder::new()
+            ExpandEvent::EnterFile(node, path) => Some(Err(LocatedBuilder::new()
                 .pos(node.text_range())
                 .resolve_file(self.inner.location())
-                .finish(ProcessStrError::IncludeRequested(state, path)))),
+                .finish(ProcessStrError::IncludeRequested(path)))),
             ExpandEvent::Completed(state) => {
                 self.final_state = Some(state);
                 None
@@ -75,5 +75,15 @@ impl Iterator for ExpandStr {
 impl LocatedIterator for ExpandStr {
     fn location(&self) -> &crate::processor::expand::ExpandLocation {
         self.inner.location()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    fn assert_send<T: Send>() {}
+
+    #[test]
+    fn test_error_send() {
+        assert_send::<super::ProcessStrError>();
     }
 }

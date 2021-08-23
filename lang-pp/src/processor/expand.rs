@@ -2,7 +2,6 @@ use std::{
     collections::{hash_map::Entry, VecDeque},
     convert::TryInto,
     iter::FusedIterator,
-    rc::Rc,
 };
 
 use arrayvec::ArrayVec;
@@ -206,6 +205,18 @@ impl ExpandOne {
         }
     }
 
+    pub fn state(&self) -> Option<&ProcessorState> {
+        match &self.state {
+            ExpandState::Init { current_state, .. }
+            | ExpandState::Iterate { current_state, .. }
+            | ExpandState::EnterNewFile { current_state, .. }
+            | ExpandState::PendingOne { current_state, .. }
+            | ExpandState::PendingEvents { current_state, .. }
+            | ExpandState::ExpandedTokens { current_state, .. } => Some(current_state),
+            ExpandState::Complete => None,
+        }
+    }
+
     pub fn set_state(&mut self, new_state: ProcessorState) {
         match &mut self.state {
             ExpandState::Init { current_state, .. }
@@ -278,7 +289,7 @@ impl ExpandOne {
                                 })
                             } else {
                                 let definition = Definition::Regular(
-                                    Rc::new((*define).clone()),
+                                    (*define).clone().into(),
                                     self.location.current_file(),
                                 );
 
@@ -780,7 +791,7 @@ impl ExpandOne {
 
 pub(crate) enum ExpandEvent {
     Event(Event),
-    EnterFile(ProcessorState, SyntaxNode, ParsedPath),
+    EnterFile(SyntaxNode, ParsedPath),
     Completed(ProcessorState),
 }
 
@@ -864,10 +875,10 @@ impl Iterator for ExpandOne {
                     self.state = ExpandState::Iterate {
                         iterator,
                         errors,
-                        current_state: current_state.clone(),
+                        current_state,
                     };
 
-                    return Some(ExpandEvent::EnterFile(current_state, node, path));
+                    return Some(ExpandEvent::EnterFile(node, path));
                 }
 
                 ExpandState::PendingOne {

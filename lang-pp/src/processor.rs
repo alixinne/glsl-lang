@@ -1,4 +1,4 @@
-use std::{array::IntoIter, collections::HashMap, rc::Rc};
+use std::{array::IntoIter, collections::HashMap};
 
 use smol_str::SmolStr;
 
@@ -55,7 +55,6 @@ impl Default for IncludeMode {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ProcessorState {
     include_mode: IncludeMode,
-    // use Rc to make cloning the whole struct cheaper
     definitions: HashMap<SmolStr, Definition>,
     version: Version,
     cpp_style_line: bool,
@@ -79,12 +78,12 @@ impl ProcessorState {
                 if occupied.get().protected() {
                     false
                 } else {
-                    occupied.insert(Definition::Regular(Rc::new(definition), file_id));
+                    occupied.insert(Definition::Regular(definition.into(), file_id));
                     true
                 }
             }
             std::collections::hash_map::Entry::Vacant(vacant) => {
-                vacant.insert(Definition::Regular(Rc::new(definition), file_id));
+                vacant.insert(Definition::Regular(definition.into(), file_id));
                 true
             }
         }
@@ -234,18 +233,14 @@ impl<'r> ProcessorStateBuilder<'r> {
                         .into_iter(),
                 )
                 .chain(self.definitions.into_iter())
-                .map(|definition| Definition::Regular(Rc::new(definition), FileId::default()))
+                .map(|definition| Definition::Regular(definition.into(), FileId::default()))
                 .chain(
                     IntoIter::new([Definition::Line, Definition::File, Definition::Version])
                         .into_iter(),
                 )
                 .chain(self.registry.all().map(|spec| {
                     Definition::Regular(
-                        Rc::new(Define::object(
-                            spec.name().as_ref().into(),
-                            one.clone(),
-                            true,
-                        )),
+                        Define::object(spec.name().as_ref().into(), one.clone(), true).into(),
                         FileId::default(),
                     )
                 }))

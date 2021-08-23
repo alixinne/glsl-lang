@@ -528,7 +528,7 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
                                 .resolve_file(location)
                                 .finish(ProcessingErrorKind::UnexpectedDirective {
                                     ident: definition.name().into(),
-                                    node,
+                                    node: (&node).into(),
                                 }));
                         }
                         NodeOrToken::Token(inner_token) => {

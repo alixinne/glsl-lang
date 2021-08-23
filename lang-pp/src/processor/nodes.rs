@@ -304,6 +304,16 @@ impl From<&str> for ExtensionName {
     }
 }
 
+impl From<ExtNameAtom> for ExtensionName {
+    fn from(name: ExtNameAtom) -> Self {
+        if name.as_ref() == "all" {
+            Self::All
+        } else {
+            Self::Specific(name)
+        }
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Extension {
     pub name: ExtensionName,

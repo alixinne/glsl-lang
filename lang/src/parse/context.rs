@@ -10,6 +10,8 @@ use crate::ast;
 /// Parsing options
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct ParseOptions {
+    /// Default GLSL version number to parse source as
+    pub default_version: u16,
     /// `true` if the GLSL target should be Vulkan instead of OpenGL
     pub target_vulkan: bool,
     /// Unique source identifier for token positions
@@ -21,6 +23,7 @@ pub struct ParseOptions {
 impl Default for ParseOptions {
     fn default() -> Self {
         Self {
+            default_version: 460,
             target_vulkan: false,
             source_id: FileId::new(0),
             allow_rs_ident: false,

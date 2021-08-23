@@ -53,13 +53,22 @@ fn parse_tu(
     ast::TranslationUnit,
     ParseError<glsl_lang::lexer::v2::fs::Lexer<glsl_lang_pp::processor::fs::Std>>,
 > {
-    use glsl_lang::{lexer::v2::fs::PreprocessorExt, parse::IntoLexerExt};
+    use glsl_lang::{
+        lexer::v2::fs::PreprocessorExt,
+        parse::{IntoLexerExt, ParseOptions},
+    };
+
+    let mut opts = ParseOptions::new();
+    opts.default_version = 100;
+
+    let ctx = opts.into();
 
     let mut processor = glsl_lang_pp::processor::fs::StdProcessor::new();
     processor
         .open(path, None)
         .expect("failed to open file")
         .builder()
+        .opts(&ctx)
         .parse()
         .map(|(tu, _, _)| tu)
 }

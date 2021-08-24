@@ -14,9 +14,12 @@ categories = ["command-line-interface", "parser-implementations", "rendering"]
 
 [dependencies]
 glsl-lang = "0.2.0"
+lang-util = "0.2.0"
 argh = "0.1"
 
 serde_json = { version = "1.0", optional = true }
+miette = "1.0"
+thiserror = "1.0"
 
 [features]
 default = ["json"]

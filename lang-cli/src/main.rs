@@ -60,6 +60,73 @@ struct Opts {
     path: Option<String>,
 }
 
+use miette::{Diagnostic, SourceSpan};
+
+#[derive(Debug, Diagnostic)]
+#[diagnostic(code(glsl_lang::parse::error))]
+struct ParseError<I: std::error::Error + 'static> {
+    inner: lang_util::located::Located<I>,
+    src: NamedSource,
+    #[snippet(src, message("In this source file"))]
+    snip: SourceSpan,
+    #[highlight(snip, label("Error occurred here."))]
+    bad_bit: SourceSpan,
+}
+
+impl<I: std::error::Error + 'static> std::error::Error for ParseError<I> {
+    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+        self.inner.inner().source()
+    }
+}
+
+impl<I: std::error::Error> std::fmt::Display for ParseError<I> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "Failed to parse input GLSL at line {} column {}.",
+            self.inner.line() + 1,
+            self.inner.col() + 1
+        )
+    }
+}
+
+use miette::{DiagnosticResult, NamedSource};
+fn parse_tu(source: &str, path: &str) -> DiagnosticResult<glsl_lang::ast::TranslationUnit> {
+    match glsl_lang::ast::TranslationUnit::parse(source) {
+        Ok(tu) => Ok(tu),
+        Err(err) => {
+            let pos = err.pos();
+
+            // Find 2 lines before and after
+            let start = usize::from(pos.start());
+            let end = usize::from(pos.end());
+
+            // TODO: '\n' isn't what GLSL calls a line
+            let before = source
+                .rmatch_indices('\n')
+                .filter(|(i, _ch)| *i < start)
+                .map(|(i, _ch)| i + 1)
+                .nth(2)
+                .unwrap_or(0);
+
+            let after = source
+                .match_indices('\n')
+                .filter(|(i, _ch)| *i > end)
+                .map(|(i, _ch)| i)
+                .nth(2)
+                .unwrap_or(source.len());
+
+            Err(ParseError {
+                inner: err,
+                src: NamedSource::new(path, source.to_string()),
+                snip: (before, after.saturating_sub(before)).into(),
+                bad_bit: (usize::from(pos.start()), usize::from(pos.len())).into(),
+            }
+            .into())
+        }
+    }
+}
+
 /// CLI entry point
 fn main() -> Result<(), std::io::Error> {
     let args: Opts = argh::from_env();
@@ -82,12 +149,19 @@ fn main() -> Result<(), std::io::Error> {
         std::io::stdin().read_to_string(&mut s)?;
     }
 
-    match glsl_lang::ast::TranslationUnit::parse(s.as_str()) {
+    match parse_tu(
+        s.as_str(),
+        &args
+            .path
+            .as_ref()
+            .map(String::to_owned)
+            .unwrap_or_else(|| "standard input".to_owned()),
+    ) {
         Ok(tu) => {
             output_fn(&mut std::io::stdout(), tu)?;
         }
-        Err(error) => {
-            eprintln!("{}", error);
+        Err(diag) => {
+            eprintln!("{:?}", diag);
             std::process::exit(1);
         }
     }

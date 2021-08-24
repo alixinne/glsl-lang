@@ -190,25 +190,36 @@ impl std::fmt::Display for ProcessingErrorKind {
 
 pub type Error = lang_util::located::Located<ErrorKind>;
 
-#[derive(Debug, PartialEq, Eq, Error)]
+#[derive(Debug, PartialEq, Eq, derive_more::From)]
 pub enum ErrorKind {
-    #[error(transparent)]
-    Parse(#[from] parser::ErrorKind),
-    #[error(transparent)]
-    Processing(#[from] ProcessingErrorKind),
-    #[error("warning use of '{extension}'")]
+    Parse(parser::ErrorKind),
+    Processing(ProcessingErrorKind),
     WarnExtUse {
         extension: ExtNameAtom,
         name: Option<TypeNameAtom>,
         raw_line: u32,
         pos: TextRange,
     },
-    #[error("extension not supported: {extension}")]
     UnsupportedExt {
         extension: ExtensionName,
         raw_line: u32,
         pos: TextRange,
     },
+}
+
+impl std::error::Error for ErrorKind {}
+
+impl std::fmt::Display for ErrorKind {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            ErrorKind::Parse(parse) => write!(f, "{}", parse),
+            ErrorKind::Processing(processing) => write!(f, "{}", processing),
+            ErrorKind::WarnExtUse { extension, .. } => write!(f, "warning use of '{}'", extension),
+            ErrorKind::UnsupportedExt { extension, .. } => {
+                write!(f, "extension not supported: {}", extension)
+            }
+        }
+    }
 }
 
 impl ErrorKind {
@@ -434,7 +445,7 @@ impl Event {
 
     pub fn error<T: Into<ErrorKind>>(
         e: T,
-        pos: impl Into<lang_util::located::PointOrRange>,
+        pos: impl Into<TextRange>,
         location: &ExpandLocation,
         masked: bool,
     ) -> Self {

@@ -114,7 +114,7 @@ impl<'i> LangLexer for Lexer<'i> {
     ) -> Result<P::Item, crate::parse::ParseError<Self>> {
         parser.parse(self).map_err(|err| {
             let location = self.inner.location();
-            let lexer = lang_util::error::error_location(&err);
+            let (_, lexer) = lang_util::error::error_location(&err);
 
             lang_util::error::ParseError::<Self::Error>::builder()
                 .pos(lexer)

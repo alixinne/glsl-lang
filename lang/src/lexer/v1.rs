@@ -1,6 +1,7 @@
 //! Logos-based lexer definition
 
 use logos::Logos;
+use text_size::TextSize;
 use thiserror::Error;
 
 use lang_util::position::LexerPosition;
@@ -334,7 +335,7 @@ impl<'i> LangLexer for Lexer<'i> {
     ) -> Result<P::Item, crate::parse::ParseError<Self>> {
         parser.parse(self).map_err(|err| {
             lang_util::error::ParseError::<Self::Error>::builder()
-                .pos(lang_util::error::error_location(&err))
+                .pos(lang_util::error::error_location(&err).1)
                 .resolve(&self.source)
                 .finish(err.into())
         })
@@ -351,6 +352,8 @@ pub enum LexicalError {
         source: std::num::ParseIntError,
         /// Location for the error
         location: LexerPosition,
+        /// Length of the token
+        length: TextSize,
     },
     /// Invalid float literal
     #[error("invalid float literal: {source}")]
@@ -359,21 +362,29 @@ pub enum LexicalError {
         source: std::num::ParseFloatError,
         /// Location for the error
         location: LexerPosition,
+        /// Length of the token
+        length: TextSize,
     },
     /// Unexpected Rust identifier
     #[error("encountered forbidden #(ident) quote syntax")]
     ForbiddenRsQuote {
         /// Location for the error
         location: LexerPosition,
+        /// Length of the token
+        length: TextSize,
     },
 }
 
 impl lang_util::error::LexicalError for LexicalError {
-    fn location(&self) -> LexerPosition {
+    fn location(&self) -> (LexerPosition, TextSize) {
         match self {
-            LexicalError::InvalidIntLiteral { location, .. } => *location,
-            LexicalError::InvalidFloatLiteral { location, .. } => *location,
-            LexicalError::ForbiddenRsQuote { location } => *location,
+            LexicalError::InvalidIntLiteral {
+                location, length, ..
+            } => (*location, *length),
+            LexicalError::InvalidFloatLiteral {
+                location, length, ..
+            } => (*location, *length),
+            LexicalError::ForbiddenRsQuote { location, length } => (*location, *length),
         }
     }
 }

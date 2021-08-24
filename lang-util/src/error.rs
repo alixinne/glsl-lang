@@ -5,8 +5,9 @@ use std::collections::{HashMap, HashSet};
 use std::error::Error;
 use std::fmt;
 
-use crate::located::Located;
-use crate::{position::LexerPosition, token::Token};
+use text_size::{TextRange, TextSize};
+
+use crate::{located::Located, position::LexerPosition, token::Token, FileId};
 
 /// Information about a lexed token
 #[derive(Debug, Clone, PartialEq, PartialOrd, Hash)]
@@ -60,8 +61,9 @@ pub trait LexicalError: Error {
     ///
     /// # Returns
     ///
-    /// [LexerPosition] structure that indicates at which offset in the input the error occurred.
-    fn location(&self) -> LexerPosition;
+    /// [LexerPosition] structure that indicates at which offset in the input the error occurred,
+    /// and length of the range.
+    fn location(&self) -> (LexerPosition, TextSize);
 }
 
 /// A parsing error wrapped from lalrpop_util's error type
@@ -70,14 +72,26 @@ pub type ParseError<E> = Located<ParseErrorKind<E>>;
 /// Return the LexerLocation of a lalrpop_util::ParseError
 pub fn error_location<T, E: LexicalError>(
     error: &lalrpop_util::ParseError<LexerPosition, T, E>,
-) -> LexerPosition {
-    match error {
-        lalrpop_util::ParseError::InvalidToken { location } => *location,
-        lalrpop_util::ParseError::UnrecognizedEOF { location, .. } => *location,
-        lalrpop_util::ParseError::UnrecognizedToken { token, .. } => token.0,
-        lalrpop_util::ParseError::ExtraToken { token } => token.0,
+) -> (FileId, TextRange) {
+    let (location, len) = match error {
+        // TODO: Find out invalid token length
+        lalrpop_util::ParseError::InvalidToken { location } => (*location, TextSize::default()),
+        lalrpop_util::ParseError::UnrecognizedEOF { location, .. } => {
+            (*location, TextSize::default())
+        }
+        lalrpop_util::ParseError::UnrecognizedToken { token, .. } => {
+            (token.0, token.2.offset - token.0.offset)
+        }
+        lalrpop_util::ParseError::ExtraToken { token } => {
+            (token.0, token.2.offset - token.0.offset)
+        }
         lalrpop_util::ParseError::User { error } => error.location(),
-    }
+    };
+
+    (
+        location.source_id,
+        TextRange::new(location.offset, location.offset + len),
+    )
 }
 
 // We represent tokens as formatted string since we only want to display them

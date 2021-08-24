@@ -2,6 +2,7 @@
 
 use glsl_lang_pp::{last, processor};
 use lang_util::located::Located;
+use text_size::TextSize;
 
 use super::{LexerPosition, Token};
 
@@ -19,6 +20,8 @@ pub enum LexicalError<E: std::error::Error + 'static> {
         kind: last::token::ErrorKind,
         /// Location of the error
         pos: LexerPosition,
+        /// Length of the token
+        length: TextSize,
     },
     /// Preprocessor error
     Processor(processor::event::Error),
@@ -29,11 +32,12 @@ pub enum LexicalError<E: std::error::Error + 'static> {
 impl<E: std::error::Error + 'static> std::cmp::PartialEq for LexicalError<E> {
     fn eq(&self, other: &Self) -> bool {
         match self {
-            LexicalError::Token { kind, pos } => match other {
+            LexicalError::Token { kind, pos, length } => match other {
                 LexicalError::Token {
                     kind: other_kind,
                     pos: other_pos,
-                } => kind == other_kind && pos == other_pos,
+                    length: other_length,
+                } => kind == other_kind && pos == other_pos && length == other_length,
                 _ => false,
             },
             LexicalError::Processor(p) => match other {
@@ -58,13 +62,17 @@ impl<E: std::error::Error + 'static> std::fmt::Display for LexicalError<E> {
 impl<E: std::error::Error + 'static> std::error::Error for LexicalError<E> {}
 
 impl<E: std::error::Error + 'static> lang_util::error::LexicalError for LexicalError<E> {
-    fn location(&self) -> LexerPosition {
+    fn location(&self) -> (LexerPosition, TextSize) {
         match self {
-            LexicalError::Token { pos, .. } => *pos,
-            LexicalError::Processor(err) => {
-                LexerPosition::new(err.current_file().unwrap(), err.pos())
-            }
-            LexicalError::Io(io) => LexerPosition::new(io.current_file().unwrap(), io.pos()),
+            LexicalError::Token { pos, length, .. } => (*pos, *length),
+            LexicalError::Processor(err) => (
+                LexerPosition::new(err.current_file().unwrap(), err.pos().start()),
+                err.pos().len(),
+            ),
+            LexicalError::Io(io) => (
+                LexerPosition::new(io.current_file().unwrap(), io.pos().start()),
+                io.pos().len(),
+            ),
         }
     }
 }

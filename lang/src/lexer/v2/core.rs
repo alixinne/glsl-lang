@@ -7,7 +7,7 @@ use glsl_lang_pp::{
 use lang_util::located::Located;
 
 use lang_util::{FileId, NodeContent};
-use text_size::TextSize;
+use text_size::{TextRange, TextSize};
 
 use crate::parse::ParseContext;
 
@@ -497,6 +497,7 @@ impl LexerCore {
                         token_state.push_item(Err(LexicalError::Token {
                             kind: error.unwrap_or(last::token::ErrorKind::InvalidToken),
                             pos: self.position(source_token.text_range().start()),
+                            length: source_token.text_range().len(),
                         }));
                     } else {
                         // Try to detect #(...)
@@ -509,6 +510,7 @@ impl LexerCore {
                         pending_items.push_back(Err(LexicalError::Token {
                             kind: last::token::ErrorKind::InvalidToken,
                             pos: start,
+                            length: TextRange::new(start.offset, end.offset).len(),
                         }));
 
                         while let Some(maybe_lparen_result) = tokenizer.next() {

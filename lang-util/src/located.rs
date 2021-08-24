@@ -9,31 +9,6 @@ use text_size::{TextRange, TextSize};
 
 use super::FileId;
 
-/// A point or range in a string
-#[derive(Debug, Clone, Copy, PartialEq, Eq, derive_more::From)]
-pub enum PointOrRange {
-    /// Offset into the source string
-    Point(TextSize),
-    /// Range of the source string
-    Range(TextRange),
-}
-
-impl PointOrRange {
-    /// Return the start point of this point or range
-    pub fn start(&self) -> TextSize {
-        match self {
-            PointOrRange::Point(point) => *point,
-            PointOrRange::Range(range) => range.start(),
-        }
-    }
-}
-
-impl Default for PointOrRange {
-    fn default() -> Self {
-        Self::Point(TextSize::default())
-    }
-}
-
 /// Represents a file location override
 #[derive(Debug, Clone, PartialEq, Eq, derive_more::From)]
 pub enum FileOverride {
@@ -120,7 +95,7 @@ pub trait FileIdResolver {
 #[derive(Default)]
 pub struct LocatedBuilder {
     /// Position at which the error occurred
-    pos: PointOrRange,
+    pos: TextRange,
     /// File identifier for the error
     current_file: Option<FileId>,
     /// Path corresponding to the file identifier
@@ -140,7 +115,7 @@ impl LocatedBuilder {
     }
 
     /// Set the raw position
-    pub fn pos(self, pos: impl Into<PointOrRange>) -> Self {
+    pub fn pos(self, pos: impl Into<TextRange>) -> Self {
         Self {
             pos: pos.into(),
             ..self
@@ -230,7 +205,7 @@ pub struct Located<E> {
     /// Inner error, without location information
     inner: E,
     /// Position at which the error occurred
-    pos: PointOrRange,
+    pos: TextRange,
     /// File identifier for the error
     current_file: Option<FileId>,
     /// Path corresponding to the file identifier
@@ -287,8 +262,8 @@ impl<E> Located<E> {
     }
 
     /// Get the raw position into the source
-    pub fn pos(&self) -> TextSize {
-        self.pos.start()
+    pub fn pos(&self) -> TextRange {
+        self.pos
     }
 
     /// Get the line number for this location
@@ -330,11 +305,7 @@ impl<E: PartialEq> PartialEq for Located<E> {
 
 impl<E: Eq> Eq for Located<E> {}
 
-impl<E: std::error::Error> std::error::Error for Located<E> {
-    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
-        self.inner.source()
-    }
-}
+impl<E: std::error::Error> std::error::Error for Located<E> {}
 
 impl<E: std::fmt::Display> std::fmt::Display for Located<E> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {

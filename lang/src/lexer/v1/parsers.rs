@@ -1,6 +1,7 @@
 use std::str::FromStr;
 
 use smol_str::SmolStr;
+use text_size::TextSize;
 
 use super::{LexerContext, LexerPosition, LexicalError, PreprocessorToken, Token};
 
@@ -28,6 +29,7 @@ pub fn parse_int(lex: &mut logos::Lexer<Token>, radix: u32) -> Result<i32, Lexic
         .map_err(|source| LexicalError::InvalidIntLiteral {
             location: LexerPosition::new_raw(lex.extras.opts.source_id, lex.span().start),
             source,
+            length: TextSize::of(slice),
         })?,
     ) as i32)
 }
@@ -56,6 +58,7 @@ pub fn parse_uint(lex: &mut logos::Lexer<Token>, radix: u32) -> Result<u32, Lexi
         .map_err(|source| LexicalError::InvalidIntLiteral {
             location: LexerPosition::new_raw(lex.extras.opts.source_id, lex.span().start),
             source,
+            length: TextSize::of(slice),
         })?,
     ))
 }
@@ -66,6 +69,7 @@ pub fn parse_f32(lex: &mut logos::Lexer<Token>) -> Result<f32, LexicalError> {
         LexicalError::InvalidFloatLiteral {
             location: LexerPosition::new_raw(lex.extras.opts.source_id, lex.span().start),
             source,
+            length: TextSize::of(s),
         }
     })
 }
@@ -80,15 +84,18 @@ pub fn parse_f64(lex: &mut logos::Lexer<Token>) -> Result<f64, LexicalError> {
     .map_err(|source| LexicalError::InvalidFloatLiteral {
         location: LexerPosition::new_raw(lex.extras.opts.source_id, lex.span().start),
         source,
+        length: TextSize::of(s),
     })
 }
 
 pub fn parse_pp_int<'i>(
     lex: &mut logos::Lexer<'i, PreprocessorToken<'i>>,
 ) -> Result<i32, LexicalError> {
-    i32::from_str(lex.slice()).map_err(|source| LexicalError::InvalidIntLiteral {
+    let s = lex.slice();
+    i32::from_str(s).map_err(|source| LexicalError::InvalidIntLiteral {
         location: LexerPosition::new_raw(lex.extras.opts.source_id, lex.span().start),
         source,
+        length: TextSize::of(s),
     })
 }
 
@@ -109,11 +116,13 @@ pub fn parse_ident(lex: &mut logos::Lexer<Token>) -> Result<(SmolStr, LexerConte
 pub fn parse_rs_ident(
     lex: &mut logos::Lexer<Token>,
 ) -> Result<(SmolStr, LexerContext), LexicalError> {
+    let s = lex.slice();
     if lex.extras.opts.allow_rs_ident {
-        Ok((lex.slice().into(), lex.extras.clone()))
+        Ok((s.into(), lex.extras.clone()))
     } else {
         Err(LexicalError::ForbiddenRsQuote {
             location: LexerPosition::new_raw(lex.extras.opts.source_id, lex.span().start),
+            length: TextSize::of(s),
         })
     }
 }

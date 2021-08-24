@@ -7,7 +7,7 @@ use std::{
 
 use text_size::{TextRange, TextSize};
 
-use crate::{located::PointOrRange, FileId};
+use crate::FileId;
 
 /// A position in the lexer's input
 #[derive(Default, Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -65,12 +65,6 @@ impl From<LexerPosition> for FileId {
 impl From<LexerPosition> for TextSize {
     fn from(value: LexerPosition) -> Self {
         value.offset
-    }
-}
-
-impl From<LexerPosition> for PointOrRange {
-    fn from(value: LexerPosition) -> Self {
-        Self::Point(value.into())
     }
 }
 

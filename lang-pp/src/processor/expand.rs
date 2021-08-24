@@ -721,12 +721,8 @@ impl ExpandOne {
                 }
                 Err(err) => {
                     let mut events = ArrayVec::new();
-                    events.push(Event::error(
-                        err.into_inner(),
-                        token.text_range(),
-                        &self.location,
-                        false,
-                    ));
+                    let pos = err.pos();
+                    events.push(Event::error(err.into_inner(), pos, &self.location, false));
                     events.push(Event::token(token, false));
 
                     self.state = ExpandState::PendingEvents {
@@ -828,7 +824,7 @@ impl Iterator for ExpandOne {
                 } => {
                     if let Some(node_or_token) = iterator.next() {
                         if let Some(first) = errors.first() {
-                            if node_or_token.text_range().end() >= first.pos() {
+                            if node_or_token.text_range().end() >= first.pos().start() {
                                 let error = errors.pop().unwrap();
                                 let pos = node_or_token.text_range();
 

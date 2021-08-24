@@ -3,7 +3,6 @@ use std::path::PathBuf;
 use derive_more::From;
 use rowan::TextRange;
 use smol_str::SmolStr;
-use thiserror::Error;
 
 use lang_util::FileId;
 

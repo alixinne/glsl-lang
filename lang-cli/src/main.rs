@@ -75,7 +75,7 @@ struct ParseError<I: std::error::Error + 'static> {
 
 impl<I: std::error::Error + 'static> std::error::Error for ParseError<I> {
     fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
-        self.inner.inner().source()
+        Some(self.inner.inner())
     }
 }
 

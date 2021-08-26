@@ -105,13 +105,13 @@ impl<'r, 'p, F: FileSystem> Iterator for Lexer<'r, 'p, F> {
 }
 
 impl<'r, 'p, F: FileSystem> LangLexer for Lexer<'r, 'p, F> {
-    type Input = File<'p, F>;
+    type Input = File<'r, 'p, F>;
     type Error = LexicalError<F::Error>;
 
     fn new(source: Self::Input, opts: ParseContext) -> Self {
         Lexer::new(
             source.inner.process(source.state.unwrap_or_default()),
-            &DEFAULT_REGISTRY,
+            source.registry.unwrap_or(&DEFAULT_REGISTRY),
             opts,
         )
     }
@@ -141,7 +141,7 @@ pub trait PreprocessorExt<F: FileSystem> {
     /// # Parameters
     ///
     /// * `path`: path to the file to open
-    fn open(&mut self, path: impl AsRef<Path>) -> Result<File<'_, F>, F::Error>;
+    fn open(&mut self, path: impl AsRef<Path>) -> Result<File<'_, '_, F>, F::Error>;
 
     /// Open the given source block for lexing
     ///
@@ -149,32 +149,35 @@ pub trait PreprocessorExt<F: FileSystem> {
     ///
     /// * `source`: source string to parse
     /// * `path`: path to the directory that contains this source
-    fn open_source(&mut self, source: &str, path: impl AsRef<Path>) -> File<'_, F>;
+    fn open_source(&mut self, source: &str, path: impl AsRef<Path>) -> File<'_, '_, F>;
 }
 
 impl<F: FileSystem> PreprocessorExt<F> for Processor<F> {
-    fn open(&mut self, path: impl AsRef<Path>) -> Result<File<'_, F>, F::Error> {
+    fn open(&mut self, path: impl AsRef<Path>) -> Result<File<'_, '_, F>, F::Error> {
         self.parse(path.as_ref()).map(|parsed_file| File {
             inner: parsed_file,
             state: None,
+            registry: None,
         })
     }
 
-    fn open_source(&mut self, source: &str, path: impl AsRef<Path>) -> File<'_, F> {
+    fn open_source(&mut self, source: &str, path: impl AsRef<Path>) -> File<'_, '_, F> {
         File {
             inner: self.parse_source(source, path.as_ref()),
             state: None,
+            registry: None,
         }
     }
 }
 
 /// A preprocessor parsed file ready for lexing
-pub struct File<'p, F: FileSystem> {
+pub struct File<'r, 'p, F: FileSystem> {
     inner: ParsedFile<'p, F>,
     state: Option<ProcessorState>,
+    registry: Option<&'r Registry>,
 }
 
-impl<'p, F: FileSystem> File<'p, F> {
+impl<'r, 'p, F: FileSystem> File<'r, 'p, F> {
     /// Set the default processor state for processing this file
     pub fn with_state(self, state: impl Into<ProcessorState>) -> Self {
         Self {
@@ -182,10 +185,18 @@ impl<'p, F: FileSystem> File<'p, F> {
             ..self
         }
     }
+
+    /// Set the extension registry to use for this file
+    pub fn with_registry(self, registry: impl Into<&'r Registry>) -> Self {
+        Self {
+            registry: Some(registry.into()),
+            ..self
+        }
+    }
 }
 
-impl<'p, F: FileSystem> IntoLexer for File<'p, F> {
-    type Lexer = Lexer<'static, 'p, F>;
+impl<'r, 'p, F: FileSystem> IntoLexer for File<'r, 'p, F> {
+    type Lexer = Lexer<'r, 'p, F>;
 
     fn into_lexer(
         self,

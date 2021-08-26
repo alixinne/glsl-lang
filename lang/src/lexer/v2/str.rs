@@ -1,7 +1,7 @@
 //! Memory based glsl-lang-pp preprocessing lexer
 
 use glsl_lang_pp::{
-    exts::DEFAULT_REGISTRY,
+    exts::{Registry, DEFAULT_REGISTRY},
     last::{self, Event},
     processor::{
         self,
@@ -29,6 +29,7 @@ pub struct Lexer<'i> {
 impl<'i> Lexer<'i> {
     pub(crate) fn new_with_state(
         source: &'i str,
+        registry: &'i Registry,
         opts: ParseContext,
         state: ProcessorState,
     ) -> Self {
@@ -38,7 +39,7 @@ impl<'i> Lexer<'i> {
             inner: processor::str::process(source, state).tokenize(
                 opts.opts.default_version,
                 opts.opts.target_vulkan,
-                &DEFAULT_REGISTRY,
+                registry,
             ),
             core: LexerCore::new(opts),
             handle_token: Default::default(),
@@ -115,7 +116,7 @@ impl<'i> LangLexer for Lexer<'i> {
     type Error = LexicalError<ProcessStrError>;
 
     fn new(source: Self::Input, opts: ParseContext) -> Self {
-        Self::new_with_state(source, opts, ProcessorState::default())
+        Self::new_with_state(source, &DEFAULT_REGISTRY, opts, ProcessorState::default())
     }
 
     fn chain<P: crate::parse::LangParser<Self>>(

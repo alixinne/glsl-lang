@@ -45,7 +45,22 @@ impl<'i> IntoLexer for (&'i str, glsl_lang_pp::processor::ProcessorState) {
     type Lexer = Lexer<'i>;
 
     fn into_lexer(self, source: &'i str, opts: ParseContext) -> Self::Lexer {
-        Lexer::new(source, opts)
+        Lexer::new_with_state(source, &glsl_lang_pp::exts::DEFAULT_REGISTRY, opts, self.1)
+    }
+}
+
+#[cfg(feature = "lexer-v2")]
+impl<'i, 'r> IntoLexer
+    for (
+        &'i str,
+        glsl_lang_pp::processor::ProcessorState,
+        &'i glsl_lang_pp::exts::Registry,
+    )
+{
+    type Lexer = Lexer<'i>;
+
+    fn into_lexer(self, source: &'i str, opts: ParseContext) -> Self::Lexer {
+        Lexer::new_with_state(source, self.2, opts, self.1)
     }
 }
 

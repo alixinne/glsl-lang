@@ -28,8 +28,11 @@ pub trait FileSystem {
 
     fn canonicalize(&self, path: &Path) -> Result<PathBuf, Self::Error>;
     fn exists(&self, path: &Path) -> bool;
-    fn read(&self, path: &Path, encoding: Option<&'static Encoding>)
-        -> Result<String, Self::Error>;
+    fn read(
+        &self,
+        path: &Path,
+        encoding: Option<&'static Encoding>,
+    ) -> Result<std::borrow::Cow<'_, str>, Self::Error>;
 }
 
 #[derive(Default, Debug, Clone, Copy)]
@@ -50,12 +53,12 @@ impl FileSystem for Std {
         &self,
         path: &Path,
         encoding: Option<&'static Encoding>,
-    ) -> Result<String, Self::Error> {
+    ) -> Result<std::borrow::Cow<'_, str>, Self::Error> {
         if let Some(encoding) = encoding {
             let bytes = std::fs::read(path)?;
-            Ok(encoding.decode(&bytes).0.to_string())
+            Ok(encoding.decode(&bytes).0.to_string().into())
         } else {
-            std::fs::read_to_string(path)
+            std::fs::read_to_string(path).map(Into::into)
         }
     }
 }

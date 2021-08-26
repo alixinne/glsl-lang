@@ -2015,7 +2015,7 @@ where
     Ok(())
 }
 
-#[cfg(test)]
+#[cfg(all(test, feature = "lexer"))]
 mod tests {
     use super::*;
     use crate::parse::Parsable;

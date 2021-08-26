@@ -62,5 +62,5 @@ pub mod parse;
 pub mod transpiler;
 pub mod visitor;
 
-#[cfg(test)]
+#[cfg(all(test, feature = "lexer"))]
 mod parse_tests;

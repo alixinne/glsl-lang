@@ -368,7 +368,25 @@ mod tests {
 
     use crate::processor::event::DirectiveKind;
 
-    use super::Event;
+    use super::{Event, MaybeToken};
+
+    #[test]
+    fn test_float_constant() {
+        use super::Token::*;
+
+        fn parse(src: &str) -> Vec<super::Token> {
+            crate::processor::str::process(src, crate::processor::ProcessorState::default())
+                .tokenize(100, false, &crate::exts::DEFAULT_REGISTRY)
+                .filter_map(|evt| evt.as_token().map(|(_, kind, _)| kind.clone()))
+                .collect()
+        }
+
+        assert_eq!(parse("1e-34"), &[FLOAT_CONST(1E-34)]);
+        assert_eq!(parse("1e-34f"), &[FLOAT_CONST(1E-34)]);
+        assert_eq!(parse("1E-34f"), &[FLOAT_CONST(1E-34)]);
+        assert_eq!(parse("1e-34F"), &[FLOAT_CONST(1E-34)]);
+        assert_eq!(parse("1E-34F"), &[FLOAT_CONST(1E-34)]);
+    }
 
     #[test]
     /// Ensure that we can extract #(...) for glsl-lang-quote. This is not part of the spec so this

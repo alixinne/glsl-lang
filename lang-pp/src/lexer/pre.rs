@@ -23,7 +23,7 @@ enum State {
     /// Building an identifier
     Ident,
     /// Building a digit sequence
-    Digits,
+    Digits { seen_e: bool },
     /// Single-line comment
     SingleComment,
     /// Multi-line comment
@@ -141,7 +141,7 @@ impl<'i> Iterator for PreLexer<'i> {
                             ..
                         }) => {
                             // Start a digit sequence
-                            State::Digits
+                            State::Digits { seen_e: false }
                         }
                         Some(NewlineToken {
                             token: NewlineTokenKind::PUNCT,
@@ -298,7 +298,7 @@ impl<'i> Iterator for PreLexer<'i> {
                     }
                 }
 
-                State::Digits => {
+                State::Digits { seen_e } => {
                     match self.peek_token() {
                         Some((
                             NewlineToken {
@@ -306,30 +306,35 @@ impl<'i> Iterator for PreLexer<'i> {
                                 ..
                             },
                             _,
-                        ))
-                        | Some((
+                        )) => {
+                            self.next_token();
+                            State::Digits { seen_e: false }
+                        }
+                        Some((
                             NewlineToken {
                                 token: NewlineTokenKind::PUNCT,
                                 ..
                             },
-                            ".",
-                        )) => {
+                            punct,
+                        )) if punct == "." || seen_e && (punct == "+" || punct == "-") => {
                             self.next_token();
-                            State::Digits
+                            State::Digits { seen_e: false }
                         }
                         Some((
                             NewlineToken {
                                 token: NewlineTokenKind::LETTER,
                                 ..
                             },
-                            _,
+                            ch,
                         )) => {
                             self.next_token();
-                            State::Digits
+                            State::Digits {
+                                seen_e: ch == "e" || ch == "E",
+                            }
                         }
                         Some((_, "\\")) => {
                             self.next_token();
-                            self.return_to = State::Digits;
+                            self.return_to = State::Digits { seen_e };
                             State::Backslash
                         }
                         _ => {

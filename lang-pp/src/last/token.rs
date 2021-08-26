@@ -1992,85 +1992,173 @@ impl Token {
             // Nothing matched, it's actually an ident
             (IDENT(text.into()), None)
         } else if kind == SyntaxKind::DIGITS {
-            let result = if text.ends_with('f') || text.ends_with('F') || text.contains('.') {
-                // Floating-point constant
-
-                if let Some(double) = text.strip_suffix("lf").or_else(|| text.strip_suffix("LF")) {
-                    lexical::parse(double)
-                        .map(DOUBLE_CONST)
-                        .map_err(|_| ErrorKind::InvalidDoubleLiteral)
-                } else if let Some(float) = text
-                    .strip_suffix('f')
-                    .or_else(|| text.strip_suffix('F').or_else(|| Some(text.as_ref())))
-                {
-                    lexical::parse(float)
-                        .map(FLOAT_CONST)
-                        .map_err(|_| ErrorKind::InvalidFloatLiteral)
-                } else {
-                    Err(ErrorKind::InvalidFloatLiteral)
-                }
-            } else {
-                let (unsigned, text) = {
-                    if let Some(stripped) =
-                        text.strip_suffix('u').or_else(|| text.strip_suffix('U'))
-                    {
-                        (true, stripped)
-                    } else {
-                        (false, text.as_ref())
-                    }
-                };
-
-                // Integer constant
-                if let Some(text) = text.strip_prefix("0x").or_else(|| text.strip_prefix("0X")) {
-                    // Hexadecimal constant
-                    if unsigned {
-                        u32::from_str_radix(text, 16)
-                            .map(UINT_CONST)
-                            .map_err(|_| ErrorKind::InvalidUIntLiteral)
-                    } else {
-                        i32::from_str_radix(text, 16)
-                            .map(INT_CONST)
-                            .map_err(|_| ErrorKind::InvalidIntLiteral)
-                    }
-                } else if let Some(text) = text.strip_prefix('0') {
-                    if text.is_empty() {
-                        if unsigned {
-                            Ok(UINT_CONST(0))
-                        } else {
-                            Ok(INT_CONST(0))
-                        }
-                    } else {
-                        // Octal constant
-                        if unsigned {
-                            u32::from_str_radix(text, 8)
-                                .map(UINT_CONST)
-                                .map_err(|_| ErrorKind::InvalidUIntLiteral)
-                        } else {
-                            i32::from_str_radix(text, 8)
-                                .map(INT_CONST)
-                                .map_err(|_| ErrorKind::InvalidIntLiteral)
-                        }
-                    }
-                } else {
-                    // Decimal constant
-                    if unsigned {
-                        text.parse()
-                            .map(UINT_CONST)
-                            .map_err(|_| ErrorKind::InvalidUIntLiteral)
-                    } else {
-                        text.parse()
-                            .map(INT_CONST)
-                            .map_err(|_| ErrorKind::InvalidIntLiteral)
-                    }
-                }
-            };
-
-            match result {
-                Ok(res) => (res, None),
-                Err(err) => (ERROR(err), None),
-            }
+            (Self::parse_digits(&text), None)
         } else {
             unreachable!()
         }
+    }
+
+    fn strip_suffix(text: &str) -> (bool, &str) {
+        if let Some(stripped) = text.strip_suffix('u').or_else(|| text.strip_suffix('U')) {
+            (true, stripped)
+        } else {
+            (false, text)
+        }
+    }
+
+    fn parse_int(text: &str, radix: u32) -> Result<Self, ErrorKind> {
+        use Token::*;
+
+        let (unsigned, text) = Self::strip_suffix(text);
+
+        // Hexadecimal constant
+        if unsigned {
+            u32::from_str_radix(text, radix)
+                .map(UINT_CONST)
+                .map_err(|_| ErrorKind::InvalidUIntLiteral)
+        } else {
+            i32::from_str_radix(text, radix)
+                .map(INT_CONST)
+                .map_err(|_| ErrorKind::InvalidIntLiteral)
+        }
+    }
+
+    fn parse_digits(text: &str) -> Self {
+        use Token::*;
+
+        let hex_prefix = text.strip_prefix("0x").or_else(|| text.strip_prefix("0X"));
+
+        let result = if (text.ends_with('f')
+            || text.ends_with('F')
+            || text.contains('.')
+            || (text.contains(|ch| ch == 'e' || ch == 'E')))
+            && hex_prefix.is_none()
+        {
+            // Floating-point constant
+
+            if let Some(double) = text.strip_suffix("lf").or_else(|| text.strip_suffix("LF")) {
+                lexical::parse(double)
+                    .map(DOUBLE_CONST)
+                    .map_err(|_| ErrorKind::InvalidDoubleLiteral)
+            } else if let Some(float) = text
+                .strip_suffix('f')
+                .or_else(|| text.strip_suffix('F').or(Some(text)))
+            {
+                lexical::parse(float)
+                    .map(FLOAT_CONST)
+                    .map_err(|_| ErrorKind::InvalidFloatLiteral)
+            } else {
+                Err(ErrorKind::InvalidFloatLiteral)
+            }
+        } else {
+            // Integer constant
+            if let Some(text) = hex_prefix {
+                // Hexadecimal constant
+                Self::parse_int(text, 16)
+            } else if let Some(text) = text.strip_prefix('0') {
+                if text.is_empty() {
+                    if Self::strip_suffix(text).0 {
+                        Ok(UINT_CONST(0))
+                    } else {
+                        Ok(INT_CONST(0))
+                    }
+                } else {
+                    // Octal constant
+                    Self::parse_int(text, 8)
+                }
+            } else {
+                // Decimal constant
+                Self::parse_int(text, 10)
+            }
+        };
+
+        match result {
+            Ok(res) => res,
+            Err(err) => ERROR(err),
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::Token::{self, *};
+
+    #[test]
+    fn test_parse_float_constant() {
+        assert_eq!(Token::parse_digits("0."), FLOAT_CONST(0.));
+        assert_eq!(Token::parse_digits(".0"), FLOAT_CONST(0.));
+        assert_eq!(Token::parse_digits(".035"), FLOAT_CONST(0.035));
+        assert_eq!(Token::parse_digits("0."), FLOAT_CONST(0.));
+        assert_eq!(Token::parse_digits("0.035"), FLOAT_CONST(0.035));
+        assert_eq!(Token::parse_digits(".035f"), FLOAT_CONST(0.035));
+        assert_eq!(Token::parse_digits("0.f"), FLOAT_CONST(0.));
+        assert_eq!(Token::parse_digits("314.f"), FLOAT_CONST(314.));
+        assert_eq!(Token::parse_digits("0.035f"), FLOAT_CONST(0.035));
+        assert_eq!(Token::parse_digits(".035F"), FLOAT_CONST(0.035));
+        assert_eq!(Token::parse_digits("0.F"), FLOAT_CONST(0.));
+        assert_eq!(Token::parse_digits("0.035F"), FLOAT_CONST(0.035));
+        assert_eq!(Token::parse_digits("1.03e+34"), FLOAT_CONST(1.03e+34));
+        assert_eq!(Token::parse_digits("1.03E+34"), FLOAT_CONST(1.03E+34));
+        assert_eq!(Token::parse_digits("1.03e-34"), FLOAT_CONST(1.03e-34));
+        assert_eq!(Token::parse_digits("1.03E-34"), FLOAT_CONST(1.03E-34));
+        assert_eq!(Token::parse_digits("1.03e+34f"), FLOAT_CONST(1.03e+34));
+        assert_eq!(Token::parse_digits("1.03E+34f"), FLOAT_CONST(1.03E+34));
+        assert_eq!(Token::parse_digits("1.03e-34f"), FLOAT_CONST(1.03e-34));
+        assert_eq!(Token::parse_digits("1.03E-34f"), FLOAT_CONST(1.03E-34));
+        assert_eq!(Token::parse_digits("1.03e+34F"), FLOAT_CONST(1.03e+34));
+        assert_eq!(Token::parse_digits("1.03E+34F"), FLOAT_CONST(1.03E+34));
+        assert_eq!(Token::parse_digits("1.03e-34F"), FLOAT_CONST(1.03e-34));
+        assert_eq!(Token::parse_digits("1.03E-34F"), FLOAT_CONST(1.03E-34));
+
+        assert_eq!(Token::parse_digits("1e-34"), FLOAT_CONST(1E-34));
+        assert_eq!(Token::parse_digits("1e-34f"), FLOAT_CONST(1E-34));
+        assert_eq!(Token::parse_digits("1E-34f"), FLOAT_CONST(1E-34));
+        assert_eq!(Token::parse_digits("1e-34F"), FLOAT_CONST(1E-34));
+        assert_eq!(Token::parse_digits("1E-34F"), FLOAT_CONST(1E-34));
+    }
+
+    #[test]
+    fn test_parse_double_constant() {
+        assert_eq!(Token::parse_digits("0.lf"), DOUBLE_CONST(0.));
+        assert_eq!(Token::parse_digits("0.035lf"), DOUBLE_CONST(0.035));
+        assert_eq!(Token::parse_digits(".035lf"), DOUBLE_CONST(0.035));
+        assert_eq!(Token::parse_digits(".035LF"), DOUBLE_CONST(0.035));
+        assert_eq!(Token::parse_digits("0.LF"), DOUBLE_CONST(0.));
+        assert_eq!(Token::parse_digits("0.035LF"), DOUBLE_CONST(0.035));
+        assert_eq!(Token::parse_digits("1.03e+34lf"), DOUBLE_CONST(1.03e+34));
+        assert_eq!(Token::parse_digits("1.03E+34lf"), DOUBLE_CONST(1.03E+34));
+        assert_eq!(Token::parse_digits("1.03e-34lf"), DOUBLE_CONST(1.03e-34));
+        assert_eq!(Token::parse_digits("1.03E-34lf"), DOUBLE_CONST(1.03E-34));
+        assert_eq!(Token::parse_digits("1.03e+34LF"), DOUBLE_CONST(1.03e+34));
+        assert_eq!(Token::parse_digits("1.03E+34LF"), DOUBLE_CONST(1.03E+34));
+        assert_eq!(Token::parse_digits("1.03e-34LF"), DOUBLE_CONST(1.03e-34));
+        assert_eq!(Token::parse_digits("1.03E-34LF"), DOUBLE_CONST(1.03E-34));
+    }
+
+    #[test]
+    fn test_parse_int_constant() {
+        assert_eq!(Token::parse_digits("0"), INT_CONST(0));
+        assert_eq!(Token::parse_digits("012"), INT_CONST(0o12));
+        assert_eq!(Token::parse_digits("03"), INT_CONST(0o3));
+        assert_eq!(Token::parse_digits("07654321"), INT_CONST(0o7654321));
+        assert_eq!(Token::parse_digits("076556"), INT_CONST(0o76556));
+        assert_eq!(Token::parse_digits("0x0123789"), INT_CONST(0x0123789));
+        assert_eq!(Token::parse_digits("0x3"), INT_CONST(0x3));
+        assert_eq!(Token::parse_digits("0x9ABCDEF"), INT_CONST(0x9ABCDEF));
+        assert_eq!(Token::parse_digits("0x9abcdef"), INT_CONST(0x9abcdef));
+        assert_eq!(Token::parse_digits("0xABCDEF"), INT_CONST(0xabcdef));
+        assert_eq!(Token::parse_digits("0xabcdef"), INT_CONST(0xabcdef));
+        assert_eq!(Token::parse_digits("123456"), INT_CONST(123456));
+        assert_eq!(Token::parse_digits("13"), INT_CONST(13));
+        assert_eq!(Token::parse_digits("3"), INT_CONST(3));
+        assert_eq!(Token::parse_digits("42"), INT_CONST(42));
+    }
+
+    #[test]
+    fn test_parse_uint_constant() {
+        assert_eq!(
+            Token::parse_digits("0xffffffffU"),
+            UINT_CONST(0xffffffffu32)
+        );
     }
 }

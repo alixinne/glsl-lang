@@ -307,8 +307,11 @@ impl<F: FileSystem> Processor<F> {
             .file_ids
             .get_by_right(&relative_to)
             .and_then(|key| match key {
-                PathOrSource::Source(_, dir) => Some(dir),
-                PathOrSource::Path(path) => self.canonical_paths.get_by_right(path),
+                PathOrSource::Source(_, dir) => Some(dir.as_path()),
+                PathOrSource::Path(path) => self
+                    .canonical_paths
+                    .get_by_right(path)
+                    .and_then(|path| path.parent()),
             })?;
 
         match path.ty {

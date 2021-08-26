@@ -75,6 +75,26 @@ impl<E: std::error::Error + 'static> HandleTokenResult<E> {
             }
         }
     }
+
+    pub fn push_errors(&mut self, errors: impl IntoIterator<Item = Error>) {
+        let items = errors.into_iter().map(|error| Err(error.into()));
+
+        match std::mem::take(self) {
+            HandleTokenResult::None => {
+                *self = HandleTokenResult::Pending(items.collect(), Default::default());
+            }
+            HandleTokenResult::Item(old_item) => {
+                let mut pending_items = VecDeque::with_capacity(items.size_hint().0 + 1);
+                pending_items.push_back(old_item);
+                pending_items.extend(items);
+                *self = HandleTokenResult::Pending(pending_items, Default::default());
+            }
+            HandleTokenResult::Pending(mut old_items, events) => {
+                old_items.extend(items);
+                *self = HandleTokenResult::Pending(old_items, events);
+            }
+        }
+    }
 }
 
 impl<E: std::error::Error + 'static> Default for HandleTokenResult<E> {
@@ -419,21 +439,6 @@ impl LexerCore {
         ))
     }
 
-    pub fn handle_error<E: std::error::Error + 'static>(
-        &self,
-        mut error: Error,
-        masked: bool,
-    ) -> Option<Item<E>> {
-        if !masked {
-            // Replace source id
-            error.set_current_file(self.file_id);
-            // Return errorr
-            Some(Err(LexicalError::Processor(error)))
-        } else {
-            None
-        }
-    }
-
     pub fn handle_file_id(&mut self, file_id: FileId) {
         self.file_id = file_id;
     }
@@ -583,13 +588,21 @@ impl LexerCore {
     }
 
     pub fn handle_directive(
-        &self,
+        &mut self,
         _node: SyntaxNode,
         _kind: DirectiveKind,
-        _masked: bool,
-        _errors: Vec<Error>,
-    ) {
-        // TODO: Store directive information
+        masked: bool,
+        errors: Vec<Error>,
+    ) -> Result<(), Vec<Error>> {
+        if masked {
+            return Ok(());
+        }
+
+        if errors.is_empty() {
+            Ok(())
+        } else {
+            Err(errors)
+        }
     }
 
     pub fn position(&self, offset: impl Into<TextSize>) -> LexerPosition {

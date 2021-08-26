@@ -51,8 +51,8 @@ impl<'r, 'p, F: FileSystem> Iterator for Lexer<'r, 'p, F> {
                 match result {
                     Ok(event) => match event {
                         Event::Error { error, masked } => {
-                            if let Some(result) = self.core.handle_error(error, masked) {
-                                return Some(result);
+                            if !masked {
+                                return Some(Err(error.into()));
                             }
                         }
 
@@ -76,7 +76,11 @@ impl<'r, 'p, F: FileSystem> Iterator for Lexer<'r, 'p, F> {
                             masked,
                             errors,
                         } => {
-                            self.core.handle_directive(node, kind, masked, errors);
+                            if let Err(errors) =
+                                self.core.handle_directive(node, kind, masked, errors)
+                            {
+                                self.handle_token.push_errors(errors);
+                            }
                         }
 
                         Event::EnterFile {
@@ -118,11 +122,12 @@ impl<'r, 'p, F: FileSystem> LangLexer for Lexer<'r, 'p, F> {
     ) -> Result<P::Item, crate::parse::ParseError<Self>> {
         parser.parse(self).map_err(|err| {
             let location = self.inner.location();
-            let (_, lexer) = lang_util::error::error_location(&err);
+            let (file_id, lexer) = lang_util::error::error_location(&err);
 
             lang_util::error::ParseError::<Self::Error>::builder()
                 .pos(lexer)
-                .resolve_file(location)
+                .current_file(file_id)
+                .resolve(location)
                 .resolve_path(&self.inner)
                 .finish(err.into())
         })

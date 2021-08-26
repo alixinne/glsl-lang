@@ -76,3 +76,9 @@ impl<E: std::error::Error + 'static> lang_util::error::LexicalError for LexicalE
         }
     }
 }
+
+impl<E: std::error::Error + 'static> From<processor::event::Error> for LexicalError<E> {
+    fn from(error: processor::event::Error) -> Self {
+        Self::Processor(error)
+    }
+}

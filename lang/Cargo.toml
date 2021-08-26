@@ -33,6 +33,11 @@ lalrpop = "0.19"
 criterion = "0.3"
 expect-test = "1.1"
 glsl = "6"
+glsl-lang-pp = "0.2.0"
+
+[[test]]
+name = "pos_error"
+required-features = ["lexer-v2"]
 
 [[bench]]
 name = "glsl"

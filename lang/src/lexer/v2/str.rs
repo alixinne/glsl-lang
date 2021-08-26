@@ -9,6 +9,7 @@ use glsl_lang_pp::{
         ProcessorState,
     },
 };
+use lang_util::FileId;
 
 use crate::parse::{LangLexer, ParseContext};
 
@@ -22,6 +23,7 @@ pub struct Lexer<'i> {
     inner: last::Tokenizer<'i, ExpandStr>,
     core: LexerCore,
     handle_token: HandleTokenResult<ProcessStrError>,
+    source_id: FileId,
 }
 
 impl<'i> Lexer<'i> {
@@ -30,6 +32,8 @@ impl<'i> Lexer<'i> {
         opts: ParseContext,
         state: ProcessorState,
     ) -> Self {
+        let source_id = opts.opts.source_id;
+
         Self {
             inner: processor::str::process(source, state).tokenize(
                 opts.opts.default_version,
@@ -38,6 +42,7 @@ impl<'i> Lexer<'i> {
             ),
             core: LexerCore::new(opts),
             handle_token: Default::default(),
+            source_id,
         }
     }
 }
@@ -55,9 +60,10 @@ impl<'i> Iterator for Lexer<'i> {
             if let Some(result) = self.handle_token.pop_event().or_else(|| self.inner.next()) {
                 match result {
                     Ok(event) => match event {
-                        Event::Error { error, masked } => {
-                            if let Some(result) = self.core.handle_error(error, masked) {
-                                return Some(result);
+                        Event::Error { mut error, masked } => {
+                            if !masked {
+                                error.set_current_file(self.source_id);
+                                return Some(Err(error.into()));
                             }
                         }
 
@@ -85,7 +91,11 @@ impl<'i> Iterator for Lexer<'i> {
                             masked,
                             errors,
                         } => {
-                            self.core.handle_directive(node, kind, masked, errors);
+                            if let Err(errors) =
+                                self.core.handle_directive(node, kind, masked, errors)
+                            {
+                                self.handle_token.push_errors(errors);
+                            }
                         }
                     },
 
@@ -114,11 +124,12 @@ impl<'i> LangLexer for Lexer<'i> {
     ) -> Result<P::Item, crate::parse::ParseError<Self>> {
         parser.parse(self).map_err(|err| {
             let location = self.inner.location();
-            let (_, lexer) = lang_util::error::error_location(&err);
+            let (_file_id, lexer) = lang_util::error::error_location(&err);
 
             lang_util::error::ParseError::<Self::Error>::builder()
                 .pos(lexer)
-                .resolve_file(location)
+                .current_file(self.source_id)
+                .resolve(location)
                 .finish(err.into())
         })
     }

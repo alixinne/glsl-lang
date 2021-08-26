@@ -4,7 +4,6 @@ use std::{
 };
 
 use bimap::BiHashMap;
-use encoding_rs::Encoding;
 
 use lang_util::{
     located::{FileIdResolver, Located, LocatedBuilder},
@@ -28,11 +27,7 @@ pub trait FileSystem {
 
     fn canonicalize(&self, path: &Path) -> Result<PathBuf, Self::Error>;
     fn exists(&self, path: &Path) -> bool;
-    fn read(
-        &self,
-        path: &Path,
-        encoding: Option<&'static Encoding>,
-    ) -> Result<std::borrow::Cow<'_, str>, Self::Error>;
+    fn read(&self, path: &Path) -> Result<std::borrow::Cow<'_, str>, Self::Error>;
 }
 
 #[derive(Default, Debug, Clone, Copy)]
@@ -49,17 +44,8 @@ impl FileSystem for Std {
         path.exists()
     }
 
-    fn read(
-        &self,
-        path: &Path,
-        encoding: Option<&'static Encoding>,
-    ) -> Result<std::borrow::Cow<'_, str>, Self::Error> {
-        if let Some(encoding) = encoding {
-            let bytes = std::fs::read(path)?;
-            Ok(encoding.decode(&bytes).0.to_string().into())
-        } else {
-            std::fs::read_to_string(path).map(Into::into)
-        }
+    fn read(&self, path: &Path) -> Result<std::borrow::Cow<'_, str>, Self::Error> {
+        std::fs::read_to_string(path).map(Into::into)
     }
 }
 
@@ -137,7 +123,7 @@ impl<'p, F: FileSystem> Iterator for ExpandStack<'p, F> {
                                 self.processor.resolve(location.current_file(), &path)
                             {
                                 // TODO: Allow passing an encoding from somewhere
-                                match self.processor.parse(&resolved_path, None) {
+                                match self.processor.parse(&resolved_path) {
                                     Ok(parsed) => {
                                         self.stack.push(parsed.expand_one(state));
                                     }
@@ -323,11 +309,7 @@ impl<F: FileSystem> Processor<F> {
         }
     }
 
-    pub fn parse(
-        &mut self,
-        path: &Path,
-        encoding: Option<&'static Encoding>,
-    ) -> Result<ParsedFile<F>, F::Error> {
+    pub fn parse(&mut self, path: &Path) -> Result<ParsedFile<F>, F::Error> {
         // Find the canonical path. Not using the entry API because cloning a path is expensive.
         let canonical_path = if let Some(canonical_path) = self.canonical_paths.get_by_left(path) {
             canonical_path
@@ -354,7 +336,7 @@ impl<F: FileSystem> Processor<F> {
             }),
             Entry::Vacant(entry) => {
                 // Read the file
-                let input = self.fs.read(canonical_path, encoding)?;
+                let input = self.fs.read(canonical_path)?;
                 // Parse it
                 let ast = Parser::new(&input).parse();
                 // Check that the root node covers the entire range

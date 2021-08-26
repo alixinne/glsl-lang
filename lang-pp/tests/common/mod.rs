@@ -63,11 +63,16 @@ pub fn test_file(path: impl AsRef<Path>) {
     let mut pp = glsl_lang_pp::processor::fs::StdProcessor::default();
 
     let paths = Paths::new(path);
-    let parsed = match pp.parse(path, None) {
+    let parsed = match pp.parse(path) {
         Ok(inner) => Ok(inner),
         Err(err) => {
             if err.kind() == std::io::ErrorKind::InvalidData {
-                pp.parse(path, Some(encoding_rs::WINDOWS_1252))
+                std::fs::read(path).map(|value| {
+                    pp.parse_source(
+                        encoding_rs::WINDOWS_1252.decode(&value).0.as_ref(),
+                        path.parent().unwrap(),
+                    )
+                })
             } else {
                 Err(err)
             }

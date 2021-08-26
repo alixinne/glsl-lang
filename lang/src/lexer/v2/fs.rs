@@ -141,12 +141,7 @@ pub trait PreprocessorExt<F: FileSystem> {
     /// # Parameters
     ///
     /// * `path`: path to the file to open
-    /// * `encoding`: encoding to use for decoding the file
-    fn open(
-        &mut self,
-        path: impl AsRef<Path>,
-        encoding: Option<&'static encoding_rs::Encoding>,
-    ) -> Result<File<'_, F>, F::Error>;
+    fn open(&mut self, path: impl AsRef<Path>) -> Result<File<'_, F>, F::Error>;
 
     /// Open the given source block for lexing
     ///
@@ -158,12 +153,8 @@ pub trait PreprocessorExt<F: FileSystem> {
 }
 
 impl<F: FileSystem> PreprocessorExt<F> for Processor<F> {
-    fn open(
-        &mut self,
-        path: impl AsRef<Path>,
-        encoding: Option<&'static encoding_rs::Encoding>,
-    ) -> Result<File<'_, F>, F::Error> {
-        self.parse(path.as_ref(), encoding).map(|parsed_file| File {
+    fn open(&mut self, path: impl AsRef<Path>) -> Result<File<'_, F>, F::Error> {
+        self.parse(path.as_ref()).map(|parsed_file| File {
             inner: parsed_file,
             state: None,
         })

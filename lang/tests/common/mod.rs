@@ -65,7 +65,7 @@ fn parse_tu(
 
     let mut processor = glsl_lang_pp::processor::fs::StdProcessor::new();
     processor
-        .open(path, None)
+        .open(path)
         .expect("failed to open file")
         .builder()
         .opts(&ctx)

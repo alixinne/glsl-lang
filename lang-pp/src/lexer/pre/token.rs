@@ -3,77 +3,77 @@
 #[repr(u16)]
 pub enum Token {
     /// Identifier or keyword
-    IDENT_KW,
+    IDENT_KW = 1,
     /// defined preprocessor keyword
-    DEFINED,
+    DEFINED = 2,
     /// Digit sequence
-    DIGITS,
+    DIGITS = 3,
     /// .
-    PERIOD,
+    PERIOD = 4,
     /// +
-    PLUS,
+    PLUS = 5,
     /// -
-    DASH,
+    DASH = 6,
     /// /
-    SLASH,
+    SLASH = 7,
     /// *
-    ASTERISK,
+    ASTERISK = 8,
     /// %
-    PERCENT,
+    PERCENT = 9,
     /// <
-    LANGLE,
+    LANGLE = 10,
     /// >
-    RANGLE,
+    RANGLE = 11,
     /// [
-    LBRACKET,
+    LBRACKET = 12,
     /// ]
-    RBRACKET,
+    RBRACKET = 13,
     /// (
-    LPAREN,
+    LPAREN = 14,
     /// )
-    RPAREN,
+    RPAREN = 15,
     /// {
-    LBRACE,
+    LBRACE = 16,
     /// }
-    RBRACE,
+    RBRACE = 17,
     /// ^
-    CARET,
+    CARET = 18,
     /// |
-    BAR,
+    BAR = 19,
     /// &
-    AMPERSAND,
+    AMPERSAND = 20,
     /// ~
-    TILDE,
+    TILDE = 21,
     /// =
-    EQUAL,
+    EQUAL = 22,
     /// !
-    BANG,
+    BANG = 23,
     /// :
-    COLON,
+    COLON = 24,
     /// ;
-    SEMICOLON,
+    SEMICOLON = 25,
     /// ,
-    COMMA,
+    COMMA = 26,
     /// ?
-    QUESTION,
+    QUESTION = 27,
     /// #
-    HASH,
+    HASH = 28,
     /// "string"
-    QUOTE_STRING,
+    QUOTE_STRING = 29,
     /// <string>
-    ANGLE_STRING,
+    ANGLE_STRING = 30,
     /// \
-    BACKSLASH,
+    BACKSLASH = 31,
     /// Whitespace
-    WS,
+    WS = 32,
     /// Newline
-    NEWLINE,
+    NEWLINE = 33,
     /// Comment (single-line or multi-line)
-    COMMENT,
+    COMMENT = 34,
     /// Line continuation (required for tracking exact offsets)
-    LINECONT,
+    LINECONT = 35,
     /// Invalid token
-    ERROR,
+    ERROR = 36,
 }
 
 impl Token {

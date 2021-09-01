@@ -3,124 +3,124 @@
 #[repr(u16)]
 pub enum Token {
     /// Identifier or keyword
-    IDENT_KW,
+    IDENT_KW = 1,
     /// defined preprocessor keyword
-    DEFINED,
+    DEFINED = 2,
     /// Digit sequence
-    DIGITS,
-    // Multi-char tokens
-    /// <<
-    LEFT_OP,
-    /// >>
-    RIGHT_OP,
-    /// ++
-    INC_OP,
-    /// --
-    DEC_OP,
-    /// <=
-    LE_OP,
-    /// >=
-    GE_OP,
-    /// ==
-    EQ_OP,
-    /// !=
-    NE_OP,
-    /// &&
-    AND_OP,
-    /// ||
-    OR_OP,
-    /// ^^
-    XOR_OP,
-    /// *=
-    MUL_ASSIGN,
-    /// /=
-    DIV_ASSIGN,
-    /// +=
-    ADD_ASSIGN,
-    /// %=
-    MOD_ASSIGN,
-    /// <<=
-    LEFT_ASSIGN,
-    /// >>=
-    RIGHT_ASSIGN,
-    /// &=
-    AND_ASSIGN,
-    /// ^=
-    XOR_ASSIGN,
-    /// |=
-    OR_ASSIGN,
-    /// -=
-    SUB_ASSIGN,
-    /// ##
-    PP_CONCAT,
+    DIGITS = 3,
     // Single-char tokens
-    /// (
-    LPAREN,
-    /// )
-    RPAREN,
-    /// [
-    LBRACKET,
-    /// ]
-    RBRACKET,
-    /// {
-    LBRACE,
-    /// }
-    RBRACE,
     /// .
-    PERIOD,
-    /// ,
-    COMMA,
-    /// :
-    COLON,
-    /// =
-    EQUAL,
-    /// ;
-    SEMICOLON,
-    /// !
-    BANG,
-    /// -
-    DASH,
-    /// ~
-    TILDE,
+    PERIOD = 4,
     /// +
-    PLUS,
-    /// *
-    ASTERISK,
+    PLUS = 5,
+    /// -
+    DASH = 6,
     /// /
-    SLASH,
+    SLASH = 7,
+    /// *
+    ASTERISK = 8,
     /// %
-    PERCENT,
+    PERCENT = 9,
     /// <
-    LANGLE,
+    LANGLE = 10,
     /// >
-    RANGLE,
-    /// |
-    BAR,
+    RANGLE = 11,
+    /// [
+    LBRACKET = 12,
+    /// ]
+    RBRACKET = 13,
+    /// (
+    LPAREN = 14,
+    /// )
+    RPAREN = 15,
+    /// {
+    LBRACE = 16,
+    /// }
+    RBRACE = 17,
     /// ^
-    CARET,
+    CARET = 18,
+    /// |
+    BAR = 19,
     /// &
-    AMPERSAND,
+    AMPERSAND = 20,
+    /// ~
+    TILDE = 21,
+    /// =
+    EQUAL = 22,
+    /// !
+    BANG = 23,
+    /// :
+    COLON = 24,
+    /// ;
+    SEMICOLON = 25,
+    /// ,
+    COMMA = 26,
     /// ?
-    QUESTION,
+    QUESTION = 27,
     /// #
-    HASH,
+    HASH = 28,
     // Other
     /// "string"
-    QUOTE_STRING,
+    QUOTE_STRING = 29,
     /// <string>
-    ANGLE_STRING,
+    ANGLE_STRING = 30,
     /// \
-    BACKSLASH,
-    /// Whitespaace
-    WS,
+    BACKSLASH = 31,
+    /// Whitespace
+    WS = 32,
     /// Newline
-    NEWLINE,
+    NEWLINE = 33,
     /// Comment (single-line or multi-line)
-    COMMENT,
+    COMMENT = 34,
     /// Line continuation (required for tracking exact offsets)
-    LINECONT,
+    LINECONT = 35,
     /// Invalid token
-    ERROR,
+    ERROR = 36,
+    // Multi-char tokens
+    /// <<
+    LEFT_OP = 37,
+    /// >>
+    RIGHT_OP = 38,
+    /// ++
+    INC_OP = 39,
+    /// --
+    DEC_OP = 40,
+    /// <=
+    LE_OP = 41,
+    /// >=
+    GE_OP = 42,
+    /// ==
+    EQ_OP = 43,
+    /// !=
+    NE_OP = 44,
+    /// &&
+    AND_OP = 45,
+    /// ||
+    OR_OP = 46,
+    /// ^^
+    XOR_OP = 47,
+    /// *=
+    MUL_ASSIGN = 48,
+    /// /=
+    DIV_ASSIGN = 49,
+    /// +=
+    ADD_ASSIGN = 50,
+    /// %=
+    MOD_ASSIGN = 51,
+    /// <<=
+    LEFT_ASSIGN = 52,
+    /// >>=
+    RIGHT_ASSIGN = 53,
+    /// &=
+    AND_ASSIGN = 54,
+    /// ^=
+    XOR_ASSIGN = 55,
+    /// |=
+    OR_ASSIGN = 56,
+    /// -=
+    SUB_ASSIGN = 57,
+    /// ##
+    PP_CONCAT = 58,
 }
 
 impl Token {
@@ -131,45 +131,7 @@ impl Token {
 
 impl From<crate::lexer::PreToken> for Token {
     fn from(pre: crate::lexer::PreToken) -> Self {
-        use Token::*;
-
-        match pre {
-            crate::lexer::PreToken::IDENT_KW => IDENT_KW,
-            crate::lexer::PreToken::DEFINED => DEFINED,
-            crate::lexer::PreToken::DIGITS => DIGITS,
-            crate::lexer::PreToken::PERIOD => PERIOD,
-            crate::lexer::PreToken::PLUS => PLUS,
-            crate::lexer::PreToken::DASH => DASH,
-            crate::lexer::PreToken::SLASH => SLASH,
-            crate::lexer::PreToken::ASTERISK => ASTERISK,
-            crate::lexer::PreToken::PERCENT => PERCENT,
-            crate::lexer::PreToken::LANGLE => LANGLE,
-            crate::lexer::PreToken::RANGLE => RANGLE,
-            crate::lexer::PreToken::LBRACKET => LBRACKET,
-            crate::lexer::PreToken::RBRACKET => RBRACKET,
-            crate::lexer::PreToken::LPAREN => LPAREN,
-            crate::lexer::PreToken::RPAREN => RPAREN,
-            crate::lexer::PreToken::LBRACE => LBRACE,
-            crate::lexer::PreToken::RBRACE => RBRACE,
-            crate::lexer::PreToken::CARET => CARET,
-            crate::lexer::PreToken::BAR => BAR,
-            crate::lexer::PreToken::AMPERSAND => AMPERSAND,
-            crate::lexer::PreToken::TILDE => TILDE,
-            crate::lexer::PreToken::EQUAL => EQUAL,
-            crate::lexer::PreToken::BANG => BANG,
-            crate::lexer::PreToken::COLON => COLON,
-            crate::lexer::PreToken::SEMICOLON => SEMICOLON,
-            crate::lexer::PreToken::COMMA => COMMA,
-            crate::lexer::PreToken::QUESTION => QUESTION,
-            crate::lexer::PreToken::HASH => HASH,
-            crate::lexer::PreToken::QUOTE_STRING => QUOTE_STRING,
-            crate::lexer::PreToken::ANGLE_STRING => ANGLE_STRING,
-            crate::lexer::PreToken::BACKSLASH => BACKSLASH,
-            crate::lexer::PreToken::WS => WS,
-            crate::lexer::PreToken::NEWLINE => NEWLINE,
-            crate::lexer::PreToken::COMMENT => COMMENT,
-            crate::lexer::PreToken::LINECONT => LINECONT,
-            crate::lexer::PreToken::ERROR => ERROR,
-        }
+        // SAFETY: Token is a superset of PreToken
+        unsafe { std::mem::transmute(std::mem::transmute::<_, u16>(pre)) }
     }
 }

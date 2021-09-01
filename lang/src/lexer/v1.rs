@@ -23,6 +23,15 @@ enum LexerStage<'i> {
     Preprocessor(logos::Lexer<'i, PreprocessorToken<'i>>, Token, bool, bool),
 }
 
+impl LexerStage<'_> {
+    fn context(&self) -> &LexerContext {
+        match self {
+            LexerStage::Source(src) => &src.extras,
+            LexerStage::Preprocessor(pp, _, _, _) => &pp.extras,
+        }
+    }
+}
+
 /// Logos lexer for GLSL
 pub struct Lexer<'i> {
     inner: LexerStage<'i>,
@@ -177,7 +186,7 @@ impl<'i> Iterator for Lexer<'i> {
                             | TextureBuffer | ITextureBuffer | UTextureBuffer | Sampler
                             | SamplerShadow | SubpassInput | ISubpassInput | USubpassInput
                             | SubpassInputMs | ISubpassInputMs | USubpassInputMs => {
-                                Identifier((src.slice().into(), src.extras.clone()))
+                                Identifier(src.slice().into())
                             }
                             other => other,
                         },
@@ -186,8 +195,8 @@ impl<'i> Iterator for Lexer<'i> {
                 };
 
                 // Transform the ident into a type name if needed
-                if let Token::Identifier((ref ident, ref ctx)) = token.1 {
-                    if ctx.is_type_name(ident) {
+                if let Token::Identifier(ref ident) = token.1 {
+                    if src.extras.is_type_name(ident) {
                         token.1 = Token::TypeName(ident.clone());
                     }
                 }
@@ -255,7 +264,7 @@ impl<'i> Iterator for Lexer<'i> {
                             Some(Self::consume_pp(pp).map(|(start, token, end)| {
                                 (
                                     start,
-                                    if let PreprocessorToken::Identifier((name, tn)) = token {
+                                    if let PreprocessorToken::Identifier(name) = token {
                                         if name == "core" {
                                             PreprocessorToken::PpCore
                                         } else if name == "compatibility" {
@@ -263,7 +272,7 @@ impl<'i> Iterator for Lexer<'i> {
                                         } else if name == "es" {
                                             PreprocessorToken::PpEs
                                         } else {
-                                            PreprocessorToken::Identifier((name, tn))
+                                            PreprocessorToken::Identifier(name)
                                         }
                                     } else {
                                         token
@@ -276,7 +285,7 @@ impl<'i> Iterator for Lexer<'i> {
                             Some(Self::consume_pp(pp).map(|(start, token, end)| {
                                 (
                                     start,
-                                    if let PreprocessorToken::Identifier((name, tn)) = token {
+                                    if let PreprocessorToken::Identifier(name) = token {
                                         if name == "require" {
                                             PreprocessorToken::PpExtRequire
                                         } else if name == "enable" {
@@ -286,7 +295,7 @@ impl<'i> Iterator for Lexer<'i> {
                                         } else if name == "disable" {
                                             PreprocessorToken::PpExtDisable
                                         } else {
-                                            PreprocessorToken::Identifier((name, tn))
+                                            PreprocessorToken::Identifier(name)
                                         }
                                     } else {
                                         token
@@ -333,12 +342,14 @@ impl<'i> LangLexer for Lexer<'i> {
         &mut self,
         parser: &P,
     ) -> Result<P::Item, crate::parse::ParseError<Self>> {
-        parser.parse(self).map_err(|err| {
-            lang_util::error::ParseError::<Self::Error>::builder()
-                .pos(lang_util::error::error_location(&err).1)
-                .resolve(&self.source)
-                .finish(err.into())
-        })
+        parser
+            .parse(self.inner.context().clone(), self)
+            .map_err(|err| {
+                lang_util::error::ParseError::<Self::Error>::builder()
+                    .pos(lang_util::error::error_location(&err).1)
+                    .resolve(&self.source)
+                    .finish(err.into())
+            })
     }
 }
 

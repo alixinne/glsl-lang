@@ -1,15 +1,15 @@
 use logos::Logos;
 
 use super::{
-    parsers::{parse_pp_cmt, parse_pp_ident, parse_pp_int, parse_pp_path},
+    parsers::{parse_pp_cmt, parse_pp_int, parse_pp_path},
     LexerContext, Token,
 };
 
 #[derive(Debug, Clone, PartialEq, Logos)]
 #[logos(extras = LexerContext)]
 pub enum PreprocessorToken<'i> {
-    #[regex("[a-zA-Z_][a-zA-Z_0-9]*", parse_pp_ident)]
-    Identifier((&'i str, LexerContext)),
+    #[regex("[a-zA-Z_][a-zA-Z_0-9]*")]
+    Identifier(&'i str),
 
     #[token("(")]
     LeftParen,
@@ -56,7 +56,7 @@ pub enum PreprocessorToken<'i> {
 impl<'i> From<PreprocessorToken<'i>> for Token {
     fn from(pp: PreprocessorToken<'i>) -> Self {
         match pp {
-            PreprocessorToken::Identifier((s, ctx)) => Self::Identifier((s.into(), ctx)),
+            PreprocessorToken::Identifier(s) => Self::Identifier(s.into()),
             PreprocessorToken::Error => Self::Error,
             PreprocessorToken::LeftParen => Self::LeftParen,
             PreprocessorToken::RightParen => Self::RightParen,

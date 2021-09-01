@@ -2,7 +2,7 @@
 
 use crate::{
     ast,
-    lexer::{self, LexerPosition},
+    lexer::{self, LexerContext, LexerPosition},
     parser,
 };
 
@@ -120,6 +120,7 @@ pub trait LangParser<L: LangLexer>: Sized {
     /// Parse the input
     fn parse(
         &self,
+        ctx: LexerContext,
         input: &mut L,
     ) -> Result<Self::Item, lalrpop_util::ParseError<LexerPosition, lexer::Token, L::Error>>;
 }
@@ -264,10 +265,11 @@ macro_rules! impl_parse {
 
             fn parse(
                 &self,
+                ctx: LexerContext,
                 input: &mut L,
             ) -> Result<Self::Item, lalrpop_util::ParseError<LexerPosition, lexer::Token, L::Error>>
             {
-                self.parse::<L, _, _>(input)
+                self.parse::<L, _, _>(&ctx, input)
             }
         }
 

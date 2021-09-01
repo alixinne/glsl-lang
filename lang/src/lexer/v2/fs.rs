@@ -120,17 +120,19 @@ impl<'r, 'p, F: FileSystem> LangLexer for Lexer<'r, 'p, F> {
         &mut self,
         parser: &P,
     ) -> Result<P::Item, crate::parse::ParseError<Self>> {
-        parser.parse(self).map_err(|err| {
-            let location = self.inner.location();
-            let (file_id, lexer) = lang_util::error::error_location(&err);
+        parser
+            .parse(self.core.context().clone(), self)
+            .map_err(|err| {
+                let location = self.inner.location();
+                let (file_id, lexer) = lang_util::error::error_location(&err);
 
-            lang_util::error::ParseError::<Self::Error>::builder()
-                .pos(lexer)
-                .current_file(file_id)
-                .resolve(location)
-                .resolve_path(&self.inner)
-                .finish(err.into())
-        })
+                lang_util::error::ParseError::<Self::Error>::builder()
+                    .pos(lexer)
+                    .current_file(file_id)
+                    .resolve(location)
+                    .resolve_path(&self.inner)
+                    .finish(err.into())
+            })
     }
 }
 

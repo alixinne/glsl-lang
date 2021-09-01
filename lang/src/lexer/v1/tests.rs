@@ -15,7 +15,7 @@ fn check_ident(input: &str) {
         lexer
             .next()
             .and_then(|result| result.ok().map(|(_, n, _)| n)),
-        Some(Token::Identifier((input.into(), context)))
+        Some(Token::Identifier(input.into()))
     );
 }
 

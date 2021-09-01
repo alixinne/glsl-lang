@@ -3,7 +3,7 @@ use std::str::FromStr;
 use smol_str::SmolStr;
 use text_size::TextSize;
 
-use super::{LexerContext, LexerPosition, LexicalError, PreprocessorToken, Token};
+use super::{LexerPosition, LexicalError, PreprocessorToken, Token};
 
 pub fn parse_int(lex: &mut logos::Lexer<Token>, radix: u32) -> Result<i32, LexicalError> {
     let mut slice = lex.slice();
@@ -103,22 +103,14 @@ pub fn parse_pp_path<'i>(lex: &mut logos::Lexer<'i, PreprocessorToken<'i>>) -> &
     &lex.slice()[1..lex.slice().len() - 1]
 }
 
-pub fn parse_pp_ident<'i>(
-    lex: &mut logos::Lexer<'i, PreprocessorToken<'i>>,
-) -> Result<(&'i str, LexerContext), LexicalError> {
-    Ok((lex.slice(), lex.extras.clone()))
+pub fn parse_ident(lex: &mut logos::Lexer<Token>) -> Result<SmolStr, LexicalError> {
+    Ok(lex.slice().into())
 }
 
-pub fn parse_ident(lex: &mut logos::Lexer<Token>) -> Result<(SmolStr, LexerContext), LexicalError> {
-    Ok((lex.slice().into(), lex.extras.clone()))
-}
-
-pub fn parse_rs_ident(
-    lex: &mut logos::Lexer<Token>,
-) -> Result<(SmolStr, LexerContext), LexicalError> {
+pub fn parse_rs_ident(lex: &mut logos::Lexer<Token>) -> Result<SmolStr, LexicalError> {
     let s = lex.slice();
     if lex.extras.opts.allow_rs_ident {
-        Ok((s.into(), lex.extras.clone()))
+        Ok(s.into())
     } else {
         Err(LexicalError::ForbiddenRsQuote {
             location: LexerPosition::new_raw(lex.extras.opts.source_id, lex.span().start),

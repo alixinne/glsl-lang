@@ -4,7 +4,7 @@ use crate::{
     parse::{IdentifierContext, LangLexer},
 };
 
-grammar<L> where L: LangLexer;
+grammar<L>(ctx: &LexerContext) where L: LangLexer;
 
 comma<T>: Vec<T> = {
     <e:T?> <v:("," <T>)*> => match e {
@@ -28,8 +28,8 @@ comma_trailing<T>: Vec<T> = {
     }
 };
 
-identifier: (ast::Identifier, LexerContext) = {
-    <l:@L> <i:ident> <r:@R> => (ast::IdentifierData::from(i.as_str()).spanned(l, r), i.context()),
+identifier: ast::Identifier = {
+    <l:@L> <i:ident> <r:@R> => ast::IdentifierData::from(i.as_str()).spanned(l, r),
 };
 
 type_name: ast::TypeName = {
@@ -37,7 +37,7 @@ type_name: ast::TypeName = {
 };
 
 primary_expression: ast::Expr = {
-    <l:@L> <e:identifier>      <r:@R> => ast::ExprData::Variable(e.0).spanned(l, r),
+    <l:@L> <e:identifier>      <r:@R> => ast::ExprData::Variable(e).spanned(l, r),
     <l:@L> <e:double_constant> <r:@R> => ast::ExprData::DoubleConst(e.into()).spanned(l, r),
     <l:@L> <e:float_constant>  <r:@R> => ast::ExprData::FloatConst(e.into()).spanned(l, r),
     <l:@L> <e:uint_constant>   <r:@R> => ast::ExprData::UIntConst(e.into()).spanned(l, r),
@@ -51,7 +51,7 @@ postfix_expression: ast::Expr = {
     <a:@L> <l:postfix_expression> "[" <e:expr> "]" <b:@R> =>
         ast::ExprData::Bracket(Box::new(l), Box::new(e)).spanned(a, b),
     function_call,
-    <a:@L> <l:postfix_expression> "." <r:identifier> <b:@R> => ast::ExprData::Dot(Box::new(l), r.0).spanned(a, b),
+    <a:@L> <l:postfix_expression> "." <r:identifier> <b:@R> => ast::ExprData::Dot(Box::new(l), r).spanned(a, b),
     <a:@L> <e:postfix_expression> "++"               <b:@R> => ast::ExprData::PostInc(Box::new(e)).spanned(a, b),
     <a:@L> <e:postfix_expression> "--"               <b:@R> => ast::ExprData::PostDec(Box::new(e)).spanned(a, b),
 };
@@ -92,7 +92,7 @@ struct_field_specifier: ast::StructFieldSpecifier = {
 
 struct_specifier: ast::StructSpecifier = {
     <l:@L> "struct" <i:identifier?> "{" <s:struct_field_specifier*> "}" <r:@R> => ast::StructSpecifierData {
-        name: i.map(|(ident, names)| names.add_type_name(ident)),
+        name: i.map(|ident| ctx.add_type_name(ident)),
         fields: s,
     }.spanned(l, r),
 };
@@ -290,7 +290,7 @@ unary_op: ast::UnaryOp = {
 
 arrayed_identifier: ast::ArrayedIdentifier = {
     <l:@L> <i:identifier> <a:array_specifier?> <r:@R> =>
-        ast::ArrayedIdentifierData { ident: i.0, array_spec: a }.spanned(l, r),
+        ast::ArrayedIdentifierData { ident: i, array_spec: a }.spanned(l, r),
 };
 
 multiplicative_expression: ast::Expr = {
@@ -457,7 +457,7 @@ initializer: ast::Initializer = {
 
 condition_data: ast::ConditionData = {
     <expr> => ast::ConditionData::Expr(<>),
-    <t:fully_specified_type> <i:identifier> "=" <e:initializer> => ast::ConditionData::Assignment(Box::new(t), i.0, e),
+    <t:fully_specified_type> <i:identifier> "=" <e:initializer> => ast::ConditionData::Assignment(Box::new(t), i, e),
 };
 
 condition: ast::Condition = {
@@ -570,8 +570,8 @@ storage_qualifier: ast::StorageQualifier = {
 
 layout_qualifier_spec_data: ast::LayoutQualifierSpecData = {
     "shared" => ast::LayoutQualifierSpecData::Shared,
-    <i:identifier> "=" <c:conditional_expression> => ast::LayoutQualifierSpecData::Identifier(i.0, Some(Box::new(c))),
-    <identifier> => ast::LayoutQualifierSpecData::Identifier(<>.0, None),
+    <i:identifier> "=" <c:conditional_expression> => ast::LayoutQualifierSpecData::Identifier(i, Some(Box::new(c))),
+    <identifier> => ast::LayoutQualifierSpecData::Identifier(<>, None),
 };
 
 layout_qualifier_spec: ast::LayoutQualifierSpec = {
@@ -601,16 +601,13 @@ function_parameter_declaration: ast::FunctionParameterDeclaration = {
         ast::FunctionParameterDeclarationData::Named(q, d).spanned(l, r),
 }
 
-function_prototype: (ast::FunctionPrototype, LexerContext) = {
+function_prototype: ast::FunctionPrototype = {
     <l:@L> <rt:fully_specified_type> <n:identifier> "(" <p:comma<function_parameter_declaration>> ")" <r:@R> =>
-        (
-            ast::FunctionPrototypeData {
-                ty: rt,
-                name: n.0,
-                parameters: p,
-            }.spanned(l, r),
-            n.1,
-        )
+        ast::FunctionPrototypeData {
+            ty: rt,
+            name: n,
+            parameters: p,
+        }.spanned(l, r),
 };
 
 single_declaration_data: ast::SingleDeclarationData = {
@@ -651,38 +648,38 @@ init_declarator_list: ast::InitDeclaratorList = {
 
 block_declaration: ast::Block = {
     <l:@L> <q:type_qualifier> <n:identifier> "{" <f:struct_field_specifier*> "}" <a:arrayed_identifier?> <r:@R> =>
-        ast::BlockData { qualifier: q, name: n.0, fields: f, identifier: a }.spanned(l, r)
+        ast::BlockData { qualifier: q, name: n, fields: f, identifier: a }.spanned(l, r)
 };
 
 declaration: ast::Declaration = {
     <l:@L> <p:function_prototype> ";"    <r:@R> => {
-        p.1.new_identifier(&p.0.name, IdentifierContext::FunctionPrototype);
-        ast::DeclarationData::FunctionPrototype(p.0).spanned(l, r)
+        ctx.new_identifier(&p.name, IdentifierContext::FunctionPrototype);
+        ast::DeclarationData::FunctionPrototype(p).spanned(l, r)
     },
     <l:@L> <i:init_declarator_list> ";"  <r:@R> => ast::DeclarationData::InitDeclaratorList(i).spanned(l, r),
     <l:@L> <p:precision_declaration> ";" <r:@R> => p.spanned(l, r),
     <l:@L> <b:block_declaration> ";"     <r:@R> => ast::DeclarationData::Block(b).spanned(l, r),
-    <l:@L> "invariant" <i:identifier> ";" <r:@R> => ast::DeclarationData::Invariant(i.0).spanned(l, r),
+    <l:@L> "invariant" <i:identifier> ";" <r:@R> => ast::DeclarationData::Invariant(i).spanned(l, r),
 };
 
 function_definition: ast::FunctionDefinition = {
     <l:@L> <p:function_prototype> <s:compound_statement> <r:@R> => ast::FunctionDefinitionData {
-        prototype: p.0,
+        prototype: p,
         statement: s,
     }.spanned(l, r)
 };
 
 pp_define_object_like: ast::PreprocessorDefineData = {
     <i:identifier> <r:pp_rest> => ast::PreprocessorDefineData::ObjectLike {
-        ident: i.0,
+        ident: i,
         value: r.into(),
     }
 }
 
 pp_define_function_like: ast::PreprocessorDefineData = {
     <i:identifier> "(" <p:comma<identifier>> ")" <r:pp_rest> => ast::PreprocessorDefineData::FunctionLike {
-        ident: i.0,
-        args: p.into_iter().map(|n| n.0).collect(),
+        ident: i,
+        args: p,
         value: r.into(),
     }
 }
@@ -709,11 +706,11 @@ preprocessor_if: ast::PreprocessorIf = {
 };
 
 preprocessor_if_def: ast::PreprocessorIfDef = {
-    <l:@L> <i:identifier> <r:@R> => ast::PreprocessorIfDefData { ident: i.0 }.spanned(l, r)
+    <l:@L> <i:identifier> <r:@R> => ast::PreprocessorIfDefData { ident: i }.spanned(l, r)
 };
 
 preprocessor_if_n_def: ast::PreprocessorIfNDef = {
-    <l:@L> <i:identifier> <r:@R> => ast::PreprocessorIfNDefData { ident: i.0 }.spanned(l, r)
+    <l:@L> <i:identifier> <r:@R> => ast::PreprocessorIfNDefData { ident: i }.spanned(l, r)
 };
 
 preprocessor_include: ast::PreprocessorInclude = {
@@ -739,7 +736,7 @@ preprocessor_pragma: ast::PreprocessorPragma = {
 };
 
 preprocessor_undef: ast::PreprocessorUndef = {
-    <l:@L> <n:identifier> <r:@R> => ast::PreprocessorUndefData { name: n.0 }.spanned(l, r)
+    <l:@L> <n:identifier> <r:@R> => ast::PreprocessorUndefData { name: n }.spanned(l, r)
 };
 
 preprocessor_version_profile_data: ast::PreprocessorVersionProfileData = {
@@ -820,7 +817,7 @@ extern {
     type Error = L::Error;
 
     enum Token {
-        ident                    => Token::Identifier((_, _)),
+        ident                    => Token::Identifier(_),
         ty_name                  => Token::TypeName(_),
         int_constant             => Token::IntConstant(_),
         uint_constant            => Token::UIntConstant(_),

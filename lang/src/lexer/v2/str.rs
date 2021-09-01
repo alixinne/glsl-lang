@@ -123,15 +123,17 @@ impl<'i> LangLexer for Lexer<'i> {
         &mut self,
         parser: &P,
     ) -> Result<P::Item, crate::parse::ParseError<Self>> {
-        parser.parse(self).map_err(|err| {
-            let location = self.inner.location();
-            let (_file_id, lexer) = lang_util::error::error_location(&err);
+        parser
+            .parse(self.core.context().clone(), self)
+            .map_err(|err| {
+                let location = self.inner.location();
+                let (_file_id, lexer) = lang_util::error::error_location(&err);
 
-            lang_util::error::ParseError::<Self::Error>::builder()
-                .pos(lexer)
-                .current_file(self.source_id)
-                .resolve(location)
-                .finish(err.into())
-        })
+                lang_util::error::ParseError::<Self::Error>::builder()
+                    .pos(lexer)
+                    .current_file(self.source_id)
+                    .resolve(location)
+                    .finish(err.into())
+            })
     }
 }

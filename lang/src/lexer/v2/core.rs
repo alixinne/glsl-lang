@@ -9,7 +9,7 @@ use lang_util::located::Located;
 use lang_util::{FileId, NodeContent};
 use text_size::{TextRange, TextSize};
 
-use crate::parse::ParseContext;
+use crate::{lexer::LexerContext, parse::ParseContext};
 
 use super::{LexerPosition, LexicalError, Token};
 
@@ -109,6 +109,10 @@ impl LexerCore {
         Self { ctx, file_id }
     }
 
+    pub fn context(&self) -> &LexerContext {
+        &self.ctx
+    }
+
     fn lang_token(
         &self,
         source_token: &OutputToken,
@@ -125,7 +129,7 @@ impl LexerCore {
                         Token::TypeName(ident)
                     } else {
                         // It is an identifier
-                        Token::Identifier((ident, self.ctx.clone()))
+                        Token::Identifier(ident)
                     }
                 }
                 last::Token::TYPE_NAME(type_name) => match type_name {
@@ -570,7 +574,7 @@ impl LexerCore {
                                 quoted.push(')');
                                 token_state.push_item(Ok((
                                     start,
-                                    Token::Identifier((quoted.into(), self.ctx.clone())),
+                                    Token::Identifier(quoted.into()),
                                     end,
                                 )));
                                 return;

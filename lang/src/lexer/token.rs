@@ -767,8 +767,8 @@ pub enum Token {
         feature = "lexer-v1",
         regex("#\\s*\\(\\s*[a-zA-Z_][a-zA-Z_0-9]*\\s*\\)", parse_rs_ident)
     )]
-    #[lang_util(display("{}", "_0.0"), as = "ident", kind = "identifier")]
-    Identifier((SmolStr, LexerContext)),
+    #[lang_util(as = "ident", kind = "identifier")]
+    Identifier(SmolStr),
     #[lang_util(as = "ty_name", kind = "type name")]
     TypeName(SmolStr), // Cast from Identifier depending on known type names
     #[cfg_attr(
@@ -1089,19 +1089,11 @@ impl Token {
     /// Return this token's inner text as a string slice
     pub fn as_str(&self) -> &str {
         match self {
-            Self::Identifier((s, _)) => s,
+            Self::Identifier(s) => s,
             Self::TypeName(s) => s,
             Self::PpPathRelative(s) => s,
             Self::PpPathAbsolute(s) => s,
             _ => panic!("cannot convert token {:?}, to str", self),
-        }
-    }
-
-    /// Return this token's lexer context
-    pub fn context(&self) -> LexerContext {
-        match self {
-            Self::Identifier((_, c)) => c.clone(),
-            _ => panic!("cannot get type_names for token {:?}", self),
         }
     }
 }

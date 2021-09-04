@@ -125,9 +125,14 @@ impl NodeSpan {
         self.range
     }
 
+    /// Return true if this range is empty
+    pub fn is_empty(&self) -> bool {
+        self.range.is_empty()
+    }
+
     /// Return the length of this span
-    pub fn length(&self) -> usize {
-        self.range.len().into()
+    pub fn len(&self) -> TextSize {
+        self.range.len()
     }
 
     /// Return the start of this span as a LexerPosition
@@ -153,5 +158,17 @@ impl Ord for NodeSpan {
             .cmp(&other.source_id)
             .then(self.range.start().cmp(&other.range.start()))
             .then(self.range.len().cmp(&other.range.len()))
+    }
+}
+
+impl From<NodeSpan> for FileId {
+    fn from(value: NodeSpan) -> Self {
+        value.source_id
+    }
+}
+
+impl From<NodeSpan> for TextRange {
+    fn from(value: NodeSpan) -> Self {
+        value.range
     }
 }

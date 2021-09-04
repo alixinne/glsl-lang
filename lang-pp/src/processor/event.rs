@@ -2,12 +2,13 @@ use std::path::PathBuf;
 
 use derive_more::From;
 
-use lang_util::{FileId, SmolStr, TextRange};
+use lang_util::{position::NodeSpan, FileId, SmolStr, TextRange};
 
 use crate::{
     exts::names::ExtNameAtom,
     last::type_names::TypeNameAtom,
     parser::{self, SyntaxKind},
+    util::Unescaped,
 };
 
 use super::{
@@ -17,8 +18,6 @@ use super::{
 
 mod send;
 pub use send::*;
-
-pub use crate::parser::{SyntaxNode, SyntaxToken};
 
 pub type ProcessingError = lang_util::located::Located<ProcessingErrorKind>;
 
@@ -195,12 +194,12 @@ pub enum ErrorKind {
         extension: ExtNameAtom,
         name: Option<TypeNameAtom>,
         raw_line: u32,
-        pos: TextRange,
+        pos: NodeSpan,
     },
     UnsupportedExt {
         extension: ExtensionName,
         raw_line: u32,
-        pos: TextRange,
+        pos: NodeSpan,
     },
 }
 
@@ -222,10 +221,10 @@ impl std::fmt::Display for ErrorKind {
 impl ErrorKind {
     pub fn unsupported_ext(
         extension: ExtensionName,
-        pos: TextRange,
+        pos: NodeSpan,
         location: &ExpandLocation,
     ) -> Self {
-        let raw_line = location.offset_to_raw_line_and_col(pos.start()).0;
+        let raw_line = location.offset_to_raw_line_and_col(pos.start().offset).0;
         Self::UnsupportedExt {
             extension,
             raw_line,
@@ -236,10 +235,10 @@ impl ErrorKind {
     pub fn warn_ext_use(
         extension: ExtNameAtom,
         name: Option<TypeNameAtom>,
-        pos: TextRange,
+        pos: NodeSpan,
         location: &ExpandLocation,
     ) -> Self {
-        let raw_line = location.offset_to_raw_line_and_col(pos.start()).0;
+        let raw_line = location.offset_to_raw_line_and_col(pos.start().offset).0;
         Self::WarnExtUse {
             extension,
             name,
@@ -269,83 +268,123 @@ pub enum DirectiveKind {
     Invalid(nodes::Invalid),
 }
 
-pub trait TokenLike {
+pub trait TokenLike: Clone {
     fn kind(&self) -> SyntaxKind;
     fn text(&self) -> &str;
-    fn text_range(&self) -> TextRange;
+    fn text_range(&self) -> NodeSpan;
 }
 
-impl TokenLike for SyntaxToken {
+impl TokenLike for (parser::SyntaxToken, FileId) {
     fn kind(&self) -> SyntaxKind {
-        self.kind()
+        self.0.kind()
     }
 
     fn text(&self) -> &str {
-        self.text()
+        self.0.text()
     }
 
-    fn text_range(&self) -> TextRange {
-        self.text_range()
+    fn text_range(&self) -> NodeSpan {
+        NodeSpan::new(self.1, self.0.text_range())
+    }
+}
+
+impl TokenLike for (&parser::SyntaxToken, FileId) {
+    fn kind(&self) -> SyntaxKind {
+        self.0.kind()
+    }
+
+    fn text(&self) -> &str {
+        self.0.text()
+    }
+
+    fn text_range(&self) -> NodeSpan {
+        NodeSpan::new(self.1, self.0.text_range())
     }
 }
 
 #[derive(Clone, PartialEq, Eq)]
 pub struct OutputToken {
-    inner: SyntaxToken,
-    source_range: Option<TextRange>,
+    kind: SyntaxKind,
+    text: SmolStr,
+    source_range: NodeSpan,
 }
 
 impl OutputToken {
-    pub fn new(token: SyntaxToken, source_range: TextRange) -> Self {
+    pub fn new(kind: SyntaxKind, text: impl Into<SmolStr>, source_range: NodeSpan) -> Self {
         Self {
-            inner: token,
-            source_range: Some(source_range),
+            kind,
+            text: text.into(),
+            source_range,
         }
     }
 
-    pub fn source_range(&self) -> TextRange {
-        if let Some(range) = self.source_range {
-            range
-        } else {
-            self.inner.text_range()
+    pub fn new_error(source_range: NodeSpan) -> Self {
+        Self {
+            kind: SyntaxKind::ERROR,
+            text: SmolStr::default(),
+            source_range,
         }
     }
 
-    pub fn generated(&self) -> bool {
-        self.source_range.is_some()
+    pub fn from_token(value: &impl TokenLike) -> Self {
+        Self::new(value.kind(), value.text(), value.text_range())
+    }
+
+    pub fn kind(&self) -> SyntaxKind {
+        self.kind
+    }
+
+    pub fn unescaped_text(&self) -> &str {
+        self.text.as_str()
+    }
+
+    pub fn source_range(&self) -> NodeSpan {
+        self.source_range
+    }
+}
+
+impl From<(parser::SyntaxToken, FileId)> for OutputToken {
+    fn from((token, file_id): (parser::SyntaxToken, FileId)) -> Self {
+        Self::new(
+            token.kind(),
+            Unescaped::new(token.text()),
+            NodeSpan::new(file_id, token.text_range()),
+        )
+    }
+}
+
+impl From<(&parser::SyntaxToken, FileId)> for OutputToken {
+    fn from((token, file_id): (&parser::SyntaxToken, FileId)) -> Self {
+        Self::new(
+            token.kind(),
+            Unescaped::new(token.text()),
+            NodeSpan::new(file_id, token.text_range()),
+        )
     }
 }
 
 impl TokenLike for OutputToken {
     fn kind(&self) -> SyntaxKind {
-        self.inner.kind()
+        self.kind
     }
 
     fn text(&self) -> &str {
-        self.inner.text()
+        self.text.as_str()
     }
 
-    fn text_range(&self) -> TextRange {
+    fn text_range(&self) -> NodeSpan {
         self.source_range()
-    }
-}
-
-impl From<SyntaxToken> for OutputToken {
-    fn from(token: SyntaxToken) -> Self {
-        Self {
-            inner: token,
-            source_range: None,
-        }
     }
 }
 
 impl std::fmt::Debug for OutputToken {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{:?}@{:?}", self.inner.kind(), self.source_range())?;
+        write!(f, "{:?}@{:?}", self.kind, self.source_range)?;
 
-        if self.text().len() < 25 {
-            return write!(f, " {:?}", self.text());
+        if self.text.len() < 25 {
+            return write!(f, " {:?}", self.text);
         }
+
         let text = self.text();
         for idx in 21..25 {
             if text.is_char_boundary(idx) {
@@ -355,6 +394,39 @@ impl std::fmt::Debug for OutputToken {
         }
 
         unreachable!()
+    }
+}
+
+#[derive(Debug, PartialEq, Eq)]
+pub struct EventDirective {
+    // TODO: Remove this pub(crate)
+    pub(crate) node: parser::SyntaxNode,
+    kind: DirectiveKind,
+    errors: Vec<Error>,
+    source_id: FileId,
+}
+
+impl EventDirective {
+    pub fn kind(&self) -> &DirectiveKind {
+        &self.kind
+    }
+
+    pub fn errors(&self) -> &[Error] {
+        &self.errors
+    }
+
+    pub fn text_range(&self) -> NodeSpan {
+        NodeSpan::new(self.source_id, self.node.text_range())
+    }
+
+    pub fn into_errors(self) -> Vec<Error> {
+        self.errors
+    }
+}
+
+impl std::fmt::Display for EventDirective {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.node.text())
     }
 }
 
@@ -374,10 +446,8 @@ pub enum Event {
         masked: bool,
     },
     Directive {
-        node: SyntaxNode,
-        kind: DirectiveKind,
+        directive: EventDirective,
         masked: bool,
-        errors: Vec<Error>,
     },
 }
 
@@ -390,20 +460,23 @@ impl Event {
         }
     }
 
-    pub fn token<T: Into<OutputToken>>(token: T, masked: bool) -> Self {
+    pub fn token<T: TokenLike>(token: T, masked: bool) -> Self {
         Self::Token {
-            token: token.into(),
+            token: OutputToken::from_token(&token),
             masked,
         }
     }
 
     pub fn directive<D: Into<DirectiveKind>>(d: Directive<D>, masked: bool) -> Self {
-        let (inner, node) = d.into_inner();
+        let (source_id, inner, node) = d.into_inner();
         Self::Directive {
-            node,
-            kind: inner.into(),
+            directive: EventDirective {
+                node,
+                kind: inner.into(),
+                errors: vec![],
+                source_id,
+            },
             masked,
-            errors: vec![],
         }
     }
 
@@ -413,27 +486,30 @@ impl Event {
         errors: impl IntoIterator<Item = impl Into<ErrorKind>>,
         location: &ExpandLocation,
     ) -> Self {
-        let (inner, node) = d.into_inner();
+        let (source_id, inner, node) = d.into_inner();
         let pos = node.text_range();
 
         Self::Directive {
-            node,
-            kind: inner.into(),
+            directive: EventDirective {
+                node,
+                kind: inner.into(),
+                errors: errors
+                    .into_iter()
+                    .map(|error| {
+                        Error::builder()
+                            .pos(pos)
+                            .resolve_file(location)
+                            .finish(error.into())
+                    })
+                    .collect(),
+                source_id,
+            },
             masked,
-            errors: errors
-                .into_iter()
-                .map(|error| {
-                    Error::builder()
-                        .pos(pos)
-                        .resolve_file(location)
-                        .finish(error.into())
-                })
-                .collect(),
         }
     }
 
     pub fn directive_error<E: Into<ProcessingErrorKind>>(
-        (error, node): (E, SyntaxNode),
+        (error, node): (E, parser::SyntaxNode),
         location: &ExpandLocation,
         masked: bool,
     ) -> Self {

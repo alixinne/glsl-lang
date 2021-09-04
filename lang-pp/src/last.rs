@@ -15,9 +15,8 @@ pub use token::{Token, TypeName};
 
 use crate::{
     exts::{names::ExtNameAtom, ExtensionSpec, Registry},
-    parser::SyntaxNode,
     processor::{
-        event::{self, DirectiveKind, Error, ErrorKind, OutputToken, TokenLike},
+        event::{self, DirectiveKind, Error, ErrorKind, EventDirective, OutputToken, TokenLike},
         expand::ExpandLocation,
         nodes::{Extension, ExtensionBehavior, ExtensionName},
     },
@@ -40,10 +39,8 @@ pub enum Event {
         state: TokenState,
     },
     Directive {
-        node: SyntaxNode,
-        kind: DirectiveKind,
+        directive: EventDirective,
         masked: bool,
-        errors: Vec<Error>,
     },
 }
 
@@ -309,14 +306,9 @@ impl<'r, E, I: Iterator<Item = Result<event::Event, E>> + LocatedIterator> Itera
                         state: TokenState::new(state, masked),
                     }
                 }
-                event::Event::Directive {
-                    node,
-                    kind,
-                    masked,
-                    errors,
-                } => {
+                event::Event::Directive { directive, masked } => {
                     if !masked {
-                        match &kind {
+                        match directive.kind() {
                             DirectiveKind::Version(version) => {
                                 self.type_table.current_version = version.number;
                             }
@@ -324,11 +316,11 @@ impl<'r, E, I: Iterator<Item = Result<event::Event, E>> + LocatedIterator> Itera
                                 if !self.type_table.handle_extension(extension) {
                                     self.pending_error = Some(
                                         Error::builder()
-                                            .pos(node.text_range())
+                                            .pos(directive.text_range())
                                             .resolve_file(self.inner.location())
                                             .finish(ErrorKind::unsupported_ext(
                                                 extension.name.clone(),
-                                                node.text_range(),
+                                                directive.text_range(),
                                                 self.inner.location(),
                                             )),
                                     );
@@ -338,12 +330,7 @@ impl<'r, E, I: Iterator<Item = Result<event::Event, E>> + LocatedIterator> Itera
                         }
                     }
 
-                    Event::Directive {
-                        node,
-                        kind,
-                        masked,
-                        errors,
-                    }
+                    Event::Directive { directive, masked }
                 }
             }),
             Err(err) => Err(err),
@@ -364,6 +351,7 @@ impl<'r, I: FileIdResolver> FileIdResolver for Tokenizer<'r, I> {
 
 #[cfg(test)]
 mod tests {
+    use lang_util::FileId;
     use rowan::NodeOrToken;
 
     use crate::processor::event::DirectiveKind;
@@ -413,16 +401,18 @@ mod tests {
                     Event::Token { token_kind, .. } => {
                         tokens.push(token_kind);
                     }
-                    Event::Directive {
-                        node,
-                        kind: DirectiveKind::Invalid(_),
-                        ..
-                    } => {
+                    Event::Directive { directive, .. }
+                        if matches!(directive.kind(), DirectiveKind::Invalid(_)) =>
+                    {
                         // Extract the tokens from the directive parse tree
                         tokens.extend(
-                            node.descendants_with_tokens()
+                            directive
+                                .node
+                                .descendants_with_tokens()
                                 .filter_map(NodeOrToken::into_token)
-                                .map(|token| tokenizer.tokenize_single(&token).0),
+                                .map(|token| {
+                                    tokenizer.tokenize_single(&(&token, FileId::default())).0
+                                }),
                         );
                     }
                     _ => {}

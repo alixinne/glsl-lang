@@ -10,6 +10,7 @@ use rowan::{NodeOrToken, SyntaxElementChildren, TextSize};
 
 use lang_util::{
     located::{HasFileNumber, Resolver},
+    position::NodeSpan,
     FileId,
 };
 
@@ -243,10 +244,14 @@ impl ExpandOne {
         node: SyntaxNode,
     ) -> HandleNodeResult {
         match node.kind() {
-            PP_EMPTY => Event::directive(Directive::new(node, Empty), !self.if_stack.active()),
+            PP_EMPTY => Event::directive(
+                Directive::new(self.location.current_file(), node, Empty),
+                !self.if_stack.active(),
+            ),
             PP_VERSION => {
                 let active = self.if_stack.active();
-                let directive: DirectiveResult<Version> = node.try_into();
+                let directive: DirectiveResult<Version> =
+                    (self.location.current_file(), node).try_into();
 
                 match directive {
                     Ok(directive) => {
@@ -262,7 +267,8 @@ impl ExpandOne {
             }
             PP_EXTENSION => {
                 let active = self.if_stack.active();
-                let directive: DirectiveResult<Extension> = node.try_into();
+                let directive: DirectiveResult<Extension> =
+                    (self.location.current_file(), node).try_into();
 
                 match directive {
                     Ok(directive) => {
@@ -277,7 +283,8 @@ impl ExpandOne {
             }
             PP_DEFINE => {
                 let active = self.if_stack.active();
-                let directive: DirectiveResult<Define> = node.try_into();
+                let directive: DirectiveResult<Define> =
+                    (self.location.current_file(), node).try_into();
 
                 match directive {
                     Ok(define) => {
@@ -324,7 +331,8 @@ impl ExpandOne {
             }
             PP_IFDEF => {
                 let active = self.if_stack.active();
-                let directive: DirectiveResult<IfDef> = node.try_into();
+                let directive: DirectiveResult<IfDef> =
+                    (self.location.current_file(), node).try_into();
 
                 let (result, ret) = match directive {
                     Ok(ifdef) => {
@@ -339,7 +347,8 @@ impl ExpandOne {
             }
             PP_IFNDEF => {
                 let active = self.if_stack.active();
-                let directive: DirectiveResult<IfNDef> = node.try_into();
+                let directive: DirectiveResult<IfNDef> =
+                    (self.location.current_file(), node).try_into();
 
                 let (result, ret) = match directive {
                     Ok(ifndef) => {
@@ -362,7 +371,8 @@ impl ExpandOne {
             }
             PP_IF => {
                 let active = self.if_stack.active();
-                let directive: DirectiveResult<If> = node.try_into();
+                let directive: DirectiveResult<If> =
+                    (self.location.current_file(), node).try_into();
 
                 let (result, ret) = match directive {
                     Ok(if_) => {
@@ -390,7 +400,8 @@ impl ExpandOne {
             }
             PP_ELIF => {
                 let active = self.if_stack.if_group_active();
-                let directive: DirectiveResult<Elif> = node.try_into();
+                let directive: DirectiveResult<Elif> =
+                    (self.location.current_file(), node).try_into();
                 let mut errors: ArrayVec<_, 2> = ArrayVec::new();
 
                 let expr = match &directive {
@@ -427,7 +438,8 @@ impl ExpandOne {
             }
             PP_ELSE => {
                 let active = self.if_stack.if_group_active();
-                let directive: DirectiveResult<Else> = node.try_into();
+                let directive: DirectiveResult<Else> =
+                    (self.location.current_file(), node).try_into();
 
                 // Update the if stack, which may fail
                 let error = self.if_stack.on_else().err().map(ProcessingErrorKind::from);
@@ -439,7 +451,8 @@ impl ExpandOne {
             }
             PP_ENDIF => {
                 let active = self.if_stack.if_group_active();
-                let directive: DirectiveResult<EndIf> = node.try_into();
+                let directive: DirectiveResult<EndIf> =
+                    (self.location.current_file(), node).try_into();
 
                 // Update the if stack, which may fail
                 let error = self
@@ -455,7 +468,8 @@ impl ExpandOne {
             }
             PP_UNDEF => {
                 let active = self.if_stack.active();
-                let directive: DirectiveResult<Undef> = node.try_into();
+                let directive: DirectiveResult<Undef> =
+                    (self.location.current_file(), node).try_into();
 
                 match directive {
                     Ok(undef) => {
@@ -495,7 +509,8 @@ impl ExpandOne {
             }
             PP_ERROR => {
                 let active = self.if_stack.active();
-                let directive: DirectiveResult<ErrorDirective> = node.try_into();
+                let directive: DirectiveResult<ErrorDirective> =
+                    (self.location.current_file(), node).try_into();
 
                 match directive {
                     Ok(error) => {
@@ -516,7 +531,8 @@ impl ExpandOne {
             PP_INCLUDE => {
                 let active = self.if_stack.active();
                 // Parse the directive itself
-                let directive: DirectiveResult<Include> = node.clone().try_into();
+                let directive: DirectiveResult<Include> =
+                    (self.location.current_file(), node.clone()).try_into();
 
                 // Perform macro substitution to get the path. If this fails, the directive is
                 // malformed and shouldn't be processed.
@@ -549,7 +565,10 @@ impl ExpandOne {
                                             Some(ErrorKind::warn_ext_use(
                                                 ext_name!("GL_GOOGLE_include_directive"),
                                                 None,
-                                                node.text_range(),
+                                                NodeSpan::new(
+                                                    self.location.current_file(),
+                                                    node.text_range(),
+                                                ),
                                                 &self.location,
                                             ))
                                         } else {
@@ -568,14 +587,20 @@ impl ExpandOne {
                                         Some(ErrorKind::warn_ext_use(
                                             ext_name!("GL_GOOGLE_include_directive"),
                                             None,
-                                            node.text_range(),
+                                            NodeSpan::new(
+                                                self.location.current_file(),
+                                                node.text_range(),
+                                            ),
                                             &self.location,
                                         ))
                                     } else if matches!(other, IncludeMode::ArbInclude { .. }) {
                                         Some(ErrorKind::warn_ext_use(
                                             ext_name!("GL_ARB_shading_language_include"),
                                             None,
-                                            node.text_range(),
+                                            NodeSpan::new(
+                                                self.location.current_file(),
+                                                node.text_range(),
+                                            ),
                                             &self.location,
                                         ))
                                     } else {
@@ -608,7 +633,8 @@ impl ExpandOne {
             PP_LINE => {
                 let active = self.if_stack.active();
                 // Parse the directive itself
-                let directive: DirectiveResult<Line> = node.try_into();
+                let directive: DirectiveResult<Line> =
+                    (self.location.current_file(), node).try_into();
 
                 // Perform macro substitution to get the path. If this fails, the directive is
                 // malformed and shouldn't be processed.
@@ -657,7 +683,8 @@ impl ExpandOne {
             }
             PP_PRAGMA => {
                 let active = self.if_stack.active();
-                let directive: DirectiveResult<Pragma> = node.try_into();
+                let directive: DirectiveResult<Pragma> =
+                    (self.location.current_file(), node).try_into();
 
                 match directive {
                     Ok(pragma) => Event::directive(pragma, !active),
@@ -666,7 +693,10 @@ impl ExpandOne {
             }
             ERROR => {
                 // Unknown preprocessor directive, these are already reported as parse errors
-                Event::directive(Directive::new(node, Invalid), !self.if_stack.active())
+                Event::directive(
+                    Directive::new(self.location.current_file(), node, Invalid),
+                    !self.if_stack.active(),
+                )
             }
             _ => {
                 // Should never happen if all preprocessor directives are implemented
@@ -693,7 +723,7 @@ impl ExpandOne {
         {
             // We matched a defined identifier
 
-            match MacroInvocation::parse(
+            match MacroInvocation::parse_raw(
                 definition,
                 token.clone(),
                 iterator.clone(),
@@ -717,13 +747,13 @@ impl ExpandOne {
                         current_state,
                     };
 
-                    return Some(Event::token(token, false));
+                    return Some(Event::token((token, self.location.current_file()), false));
                 }
                 Err(err) => {
                     let mut events = ArrayVec::new();
                     let pos = err.pos();
                     events.push(Event::error(err.into_inner(), pos, &self.location, false));
-                    events.push(Event::token(token, false));
+                    events.push(Event::token((token, self.location.current_file()), false));
 
                     self.state = ExpandState::PendingEvents {
                         iterator,
@@ -743,7 +773,10 @@ impl ExpandOne {
                 current_state,
             };
 
-            Some(Event::token(token, !self.if_stack.active()))
+            Some(Event::token(
+                (token, self.location.current_file()),
+                !self.if_stack.active(),
+            ))
         }
     }
 

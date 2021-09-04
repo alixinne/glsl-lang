@@ -443,7 +443,7 @@ mod tests {
     use crate::{
         parser::SyntaxKind,
         processor::{
-            event::{Event, TokenLike},
+            event::Event,
             nodes::{Define, DefineObject},
             ProcessorState,
         },

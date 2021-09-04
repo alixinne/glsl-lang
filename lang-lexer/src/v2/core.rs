@@ -2,12 +2,12 @@ use std::collections::VecDeque;
 
 use glsl_lang_pp::{
     last::{self, LocatedIterator, MaybeToken, TokenState, Tokenizer},
-    processor::event::{self, DirectiveKind, Error, OutputToken, SyntaxNode, TokenLike},
+    processor::event::{self, Error, EventDirective, OutputToken, TokenLike},
 };
 
 use glsl_lang_types::ast;
 
-use lang_util::{located::Located, FileId, NodeContent, TextRange, TextSize};
+use lang_util::{located::Located, position::NodeSpan, FileId, NodeContent, TextRange, TextSize};
 
 use crate::{ParseContext, ParseOptions};
 
@@ -504,8 +504,7 @@ impl LexerCore {
                     if !self.opts.allow_rs_ident || error.is_some() {
                         token_state.push_item(Err(LexicalError::Token {
                             kind: error.unwrap_or(last::token::ErrorKind::InvalidToken),
-                            pos: self.position(source_token.text_range().start()),
-                            length: source_token.text_range().len(),
+                            pos: source_token.text_range(),
                         }));
                     } else {
                         // Try to detect #(...)
@@ -517,8 +516,10 @@ impl LexerCore {
 
                         pending_items.push_back(Err(LexicalError::Token {
                             kind: last::token::ErrorKind::InvalidToken,
-                            pos: start,
-                            length: TextRange::new(start.offset, end.offset).len(),
+                            pos: NodeSpan::new(
+                                start.source_id,
+                                TextRange::new(start.offset, end.offset),
+                            ),
                         }));
 
                         while let Some(maybe_lparen_result) = tokenizer.next() {
@@ -550,10 +551,7 @@ impl LexerCore {
                                                 if level > 0 {
                                                     quoted.push_str(source_token.text());
                                                 } else {
-                                                    end = LexerPosition::new(
-                                                        self.file_id,
-                                                        source_token.text_range().start(),
-                                                    );
+                                                    end = source_token.text_range().start();
                                                 }
                                             }
                                         }
@@ -592,19 +590,17 @@ impl LexerCore {
 
     pub fn handle_directive(
         &mut self,
-        _node: SyntaxNode,
-        _kind: DirectiveKind,
+        directive: EventDirective,
         masked: bool,
-        errors: Vec<Error>,
     ) -> Result<(), Vec<Error>> {
         if masked {
             return Ok(());
         }
 
-        if errors.is_empty() {
+        if directive.errors().is_empty() {
             Ok(())
         } else {
-            Err(errors)
+            Err(directive.into_errors())
         }
     }
 

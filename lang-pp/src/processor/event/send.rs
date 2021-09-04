@@ -4,9 +4,7 @@ use rowan::TextRange;
 
 use lang_util::FileId;
 
-use crate::processor::expr::EvalResult;
-
-use super::{Error, Event, OutputToken, SyntaxNode, TokenLike};
+use super::{parser::SyntaxNode, Error, Event, OutputToken};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SendNode {
@@ -45,44 +43,6 @@ impl From<SendNode> for SyntaxNode {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct SendToken {
-    root: rowan::GreenNode,
-    range: TextRange,
-    source_range: Option<TextRange>,
-}
-
-impl SendToken {
-    pub fn text(&self) -> String {
-        OutputToken::from(self.clone()).text().to_string()
-    }
-}
-
-impl From<&OutputToken> for SendToken {
-    fn from(node: &OutputToken) -> Self {
-        Self {
-            root: node.inner.ancestors().last().unwrap().green().to_owned(),
-            range: node.text_range(),
-            source_range: node.source_range,
-        }
-    }
-}
-
-impl From<SendToken> for OutputToken {
-    fn from(node: SendToken) -> Self {
-        let range = node.range;
-        let inner = SyntaxNode::new_root(node.root)
-            .descendants_with_tokens()
-            .filter_map(rowan::NodeOrToken::into_token)
-            .find(|descendant| descendant.text_range() == range)
-            .unwrap();
-        Self {
-            inner,
-            source_range: node.source_range,
-        }
-    }
-}
-
 #[derive(Debug, PartialEq, Eq)]
 pub enum SendEvent {
     Error {
@@ -95,7 +55,7 @@ pub enum SendEvent {
         canonical_path: PathBuf,
     },
     Token {
-        token: SendToken,
+        token: OutputToken,
         masked: bool,
     },
     Directive {
@@ -118,35 +78,12 @@ impl From<Event> for SendEvent {
                 path,
                 canonical_path,
             },
-            Event::Token { token, masked } => Self::Token {
-                token: (&token).into(),
+            Event::Token { token, masked } => Self::Token { token, masked },
+            Event::Directive { directive, masked } => Self::Directive {
+                node: (&directive.node).into(),
                 masked,
+                errors: directive.errors,
             },
-            Event::Directive {
-                node,
-                masked,
-                errors,
-                ..
-            } => Self::Directive {
-                node: (&node).into(),
-                masked,
-                errors,
-            },
-        }
-    }
-}
-
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum SendEvalResult {
-    Constant(Result<i32, ()>),
-    Token(SendToken),
-}
-
-impl From<&EvalResult> for SendEvalResult {
-    fn from(value: &EvalResult) -> Self {
-        match value {
-            EvalResult::Constant(constant) => Self::Constant(*constant),
-            EvalResult::Token(token) => Self::Token(token.into()),
         }
     }
 }

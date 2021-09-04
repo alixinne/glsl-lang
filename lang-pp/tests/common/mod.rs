@@ -117,24 +117,19 @@ pub fn test_file(path: impl AsRef<Path>) {
                     }
                 }
 
-                Event::Directive {
-                    node,
-                    kind,
-                    masked,
-                    errors,
-                } => {
+                Event::Directive { directive, masked } => {
                     if !masked {
-                        for error in errors {
+                        for error in directive.errors() {
                             error_count += 1;
                             writeln!(errorsf, "{}", error).unwrap();
                         }
 
-                        match kind {
+                        match directive.kind() {
                             DirectiveKind::Version(_) | DirectiveKind::Pragma(_) => {
-                                write!(ppf, "{}", node).unwrap();
+                                write!(ppf, "{}", directive).unwrap();
                             }
                             DirectiveKind::Extension(ext) => {
-                                write!(ppf, "{}", node).unwrap();
+                                write!(ppf, "{}", directive).unwrap();
 
                                 if let ExtensionName::Specific(name) = &ext.name {
                                     inspect_extension(name, &mut critical_error_count);

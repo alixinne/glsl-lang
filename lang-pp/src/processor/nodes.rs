@@ -4,7 +4,7 @@ use arrayvec::ArrayVec;
 use rowan::NodeOrToken;
 use thiserror::Error;
 
-use lang_util::SmolStr;
+use lang_util::{FileId, SmolStr};
 
 use crate::{
     exts::names::ExtNameAtom,
@@ -18,37 +18,52 @@ use crate::{
 
 use super::{
     definition::{trim_ws, MacroInvocation},
-    event::{Event, SendEvalResult, SendEvent, SendToken},
+    event::{Event, OutputToken, SendEvent},
     expand::ExpandLocation,
     ProcessorState,
 };
 
 #[derive(Debug, Clone)]
 pub struct Directive<I> {
+    file_id: FileId,
     node: SyntaxNode,
     inner: I,
 }
 
 impl<I> Directive<I> {
-    pub fn new(node: SyntaxNode, inner: I) -> Self {
-        Self { node, inner }
+    pub fn new(file_id: FileId, node: SyntaxNode, inner: I) -> Self {
+        Self {
+            file_id,
+            node,
+            inner,
+        }
+    }
+
+    pub fn file_id(&self) -> FileId {
+        self.file_id
     }
 
     pub fn node(&self) -> &SyntaxNode {
         &self.node
     }
 
-    pub fn into_inner(self) -> (I, SyntaxNode) {
-        (self.inner, self.node)
+    pub fn into_inner(self) -> (FileId, I, SyntaxNode) {
+        (self.file_id, self.inner, self.node)
     }
 }
 
-impl<I: TryFrom<SyntaxNode> + std::fmt::Debug + Clone> TryFrom<SyntaxNode> for Directive<I> {
+impl<I: TryFrom<(FileId, SyntaxNode)> + std::fmt::Debug + Clone> TryFrom<(FileId, SyntaxNode)>
+    for Directive<I>
+{
     type Error = (I::Error, SyntaxNode);
 
-    fn try_from(value: SyntaxNode) -> Result<Self, Self::Error> {
-        match I::try_from(value.clone()) {
-            Ok(inner) => Ok(Self { inner, node: value }),
+    fn try_from((file_id, value): (FileId, SyntaxNode)) -> Result<Self, Self::Error> {
+        match I::try_from((file_id, value.clone())) {
+            Ok(inner) => Ok(Self {
+                file_id,
+                inner,
+                node: value,
+            }),
             Err(err) => Err((err, value)),
         }
     }
@@ -62,16 +77,19 @@ impl<I> std::ops::Deref for Directive<I> {
     }
 }
 
-pub type DirectiveResult<I> = Result<Directive<I>, <Directive<I> as TryFrom<SyntaxNode>>::Error>;
+pub type DirectiveResult<I> =
+    Result<Directive<I>, <Directive<I> as TryFrom<(FileId, SyntaxNode)>>::Error>;
 
 pub trait DirectiveExt: Sized {
     fn into_node(self) -> SyntaxNode;
 }
 
-impl<I: TryFrom<SyntaxNode> + std::fmt::Debug + Clone> DirectiveExt for DirectiveResult<I> {
+impl<I: TryFrom<(FileId, SyntaxNode)> + std::fmt::Debug + Clone> DirectiveExt
+    for DirectiveResult<I>
+{
     fn into_node(self) -> SyntaxNode {
         match self {
-            Ok(directive) => directive.into_inner().1,
+            Ok(directive) => directive.into_inner().2,
             Err(error) => error.1,
         }
     }
@@ -120,10 +138,10 @@ const VALID_VERSION_NUMBERS: [u16; 17] = [
     100, 110, 120, 130, 140, 150, 300, 310, 320, 330, 400, 410, 420, 430, 440, 450, 460,
 ];
 
-impl TryFrom<SyntaxNode> for Version {
+impl TryFrom<(FileId, SyntaxNode)> for Version {
     type Error = VersionError;
 
-    fn try_from(value: SyntaxNode) -> Result<Self, Self::Error> {
+    fn try_from((_file_id, value): (FileId, SyntaxNode)) -> Result<Self, Self::Error> {
         // Parse version number
         // TODO: Replace use of lexical with glsl parser
         let version_number: u16 = value
@@ -363,10 +381,10 @@ pub enum ExtensionError {
     InvalidAllBehavior { behavior: ExtensionBehavior },
 }
 
-impl TryFrom<SyntaxNode> for Extension {
+impl TryFrom<(FileId, SyntaxNode)> for Extension {
     type Error = ExtensionError;
 
-    fn try_from(value: SyntaxNode) -> Result<Self, Self::Error> {
+    fn try_from((_file_id, value): (FileId, SyntaxNode)) -> Result<Self, Self::Error> {
         // Collect identifiers
         let idents: ArrayVec<_, 2> = value
             .children_with_tokens()
@@ -515,10 +533,10 @@ pub enum DefineError {
     MissingBody { name: SmolStr },
 }
 
-impl TryFrom<SyntaxNode> for Define {
+impl TryFrom<(FileId, SyntaxNode)> for Define {
     type Error = DefineError;
 
-    fn try_from(value: SyntaxNode) -> Result<Self, Self::Error> {
+    fn try_from((_file_id, value): (FileId, SyntaxNode)) -> Result<Self, Self::Error> {
         // Find out define name
         let name = value
             .children_with_tokens()
@@ -580,10 +598,10 @@ pub enum IfDefError {
     MissingIdentifier,
 }
 
-impl TryFrom<SyntaxNode> for IfDef {
+impl TryFrom<(FileId, SyntaxNode)> for IfDef {
     type Error = IfDefError;
 
-    fn try_from(value: SyntaxNode) -> Result<Self, Self::Error> {
+    fn try_from((_file_id, value): (FileId, SyntaxNode)) -> Result<Self, Self::Error> {
         let pp_ident = value
             .children()
             .find_map(|node| {
@@ -607,10 +625,10 @@ pub struct IfNDef {
     pub ident: SmolStr,
 }
 
-impl TryFrom<SyntaxNode> for IfNDef {
-    type Error = <IfDef as TryFrom<SyntaxNode>>::Error;
+impl TryFrom<(FileId, SyntaxNode)> for IfNDef {
+    type Error = <IfDef as TryFrom<(FileId, SyntaxNode)>>::Error;
 
-    fn try_from(value: SyntaxNode) -> Result<Self, Self::Error> {
+    fn try_from(value: (FileId, SyntaxNode)) -> Result<Self, Self::Error> {
         Ok(Self {
             ident: IfDef::try_from(value)?.ident,
         })
@@ -622,10 +640,10 @@ pub struct Undef {
     pub ident: SmolStr,
 }
 
-impl TryFrom<SyntaxNode> for Undef {
-    type Error = <IfDef as TryFrom<SyntaxNode>>::Error;
+impl TryFrom<(FileId, SyntaxNode)> for Undef {
+    type Error = <IfDef as TryFrom<(FileId, SyntaxNode)>>::Error;
 
-    fn try_from(value: SyntaxNode) -> Result<Self, Self::Error> {
+    fn try_from(value: (FileId, SyntaxNode)) -> Result<Self, Self::Error> {
         Ok(Self {
             ident: IfDef::try_from(value)?.ident,
         })
@@ -643,10 +661,10 @@ pub enum ErrorError {
     MissingBody,
 }
 
-impl TryFrom<SyntaxNode> for Error {
+impl TryFrom<(FileId, SyntaxNode)> for Error {
     type Error = ErrorError;
 
-    fn try_from(value: SyntaxNode) -> Result<Self, Self::Error> {
+    fn try_from((_file_id, value): (FileId, SyntaxNode)) -> Result<Self, Self::Error> {
         let body = value
             .children()
             .find(|node| node.kind() == PP_ERROR_BODY)
@@ -666,6 +684,7 @@ impl TryFrom<SyntaxNode> for Error {
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Include {
+    file_id: FileId,
     path: SyntaxNode,
 }
 
@@ -701,6 +720,7 @@ impl Include {
             .path
             .children_with_tokens()
             .filter_map(NodeOrToken::into_token)
+            .map(|token| (token, self.file_id))
             .collect();
         let subs_events = MacroInvocation::substitute_vec(current_state, tokens, location);
 
@@ -725,7 +745,7 @@ impl Include {
             return Err(IncludeError::MissingPath);
         } else if subs_tokens.len() > 1 {
             return Err(IncludeError::ExtraTokens {
-                tokens: subs_tokens.iter().map(Into::into).collect(),
+                tokens: subs_tokens.to_vec(),
             });
         }
 
@@ -736,7 +756,7 @@ impl Include {
             QUOTE_STRING => PathType::Quote,
             _ => {
                 return Err(IncludeError::InvalidPathLiteral {
-                    token: first_token.into(),
+                    token: first_token.clone(),
                 });
             }
         };
@@ -758,16 +778,17 @@ pub enum IncludeError {
     #[error("malformed path")]
     MalformedPath { tokens: Vec<SendEvent> },
     #[error("extra tokens in #include path")]
-    ExtraTokens { tokens: Vec<SendToken> },
+    ExtraTokens { tokens: Vec<OutputToken> },
     #[error("invalid path literal")]
-    InvalidPathLiteral { token: SendToken },
+    InvalidPathLiteral { token: OutputToken },
 }
 
-impl TryFrom<SyntaxNode> for Include {
+impl TryFrom<(FileId, SyntaxNode)> for Include {
     type Error = IncludeError;
 
-    fn try_from(value: SyntaxNode) -> Result<Self, Self::Error> {
+    fn try_from((file_id, value): (FileId, SyntaxNode)) -> Result<Self, Self::Error> {
         Ok(Self {
+            file_id,
             path: value
                 .children()
                 .find(|node| node.kind() == PP_INCLUDE_PATH)
@@ -778,6 +799,7 @@ impl TryFrom<SyntaxNode> for Include {
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Line {
+    file_id: FileId,
     body: SyntaxNode,
 }
 
@@ -819,6 +841,7 @@ impl Line {
             .body
             .children_with_tokens()
             .filter_map(NodeOrToken::into_token)
+            .map(|token| (token, self.file_id))
             .collect();
         let subs_events = MacroInvocation::substitute_vec(current_state, tokens, location);
 
@@ -851,7 +874,7 @@ impl Line {
                 None
             }
             .ok_or_else(|| LineError::InvalidLineNumber {
-                token: token.into(),
+                token: token.clone(),
             })?;
 
             if eval_results.len() > 1 {
@@ -865,7 +888,7 @@ impl Line {
                             Ok(value)
                         } else {
                             Err(LineError::InvalidPath {
-                                token: token.into(),
+                                token: token.clone(),
                             })
                         }?,
                     )),
@@ -878,7 +901,7 @@ impl Line {
                             ))
                         } else {
                             Err(LineError::InvalidPath {
-                                token: SendEvalResult::Token(token.into()),
+                                token: EvalResult::Token(token.clone()),
                             })
                         }
                     }
@@ -890,7 +913,7 @@ impl Line {
             Err(LineError::MissingLineNumber)
         } else {
             Err(LineError::ExtraTokens {
-                tokens: eval_results.iter().map(Into::into).collect(),
+                tokens: eval_results,
             })
         }
     }
@@ -905,18 +928,19 @@ pub enum LineError {
     #[error("missing line number")]
     MissingLineNumber,
     #[error("extra tokens in #line path")]
-    ExtraTokens { tokens: Vec<SendEvalResult> },
+    ExtraTokens { tokens: Vec<EvalResult> },
     #[error("invalid line number")]
-    InvalidLineNumber { token: SendEvalResult },
+    InvalidLineNumber { token: EvalResult },
     #[error("invalid path")]
-    InvalidPath { token: SendEvalResult },
+    InvalidPath { token: EvalResult },
 }
 
-impl TryFrom<SyntaxNode> for Line {
+impl TryFrom<(FileId, SyntaxNode)> for Line {
     type Error = LineError;
 
-    fn try_from(value: SyntaxNode) -> Result<Self, Self::Error> {
+    fn try_from((file_id, value): (FileId, SyntaxNode)) -> Result<Self, Self::Error> {
         Ok(Self {
+            file_id,
             body: value
                 .children()
                 .find(|node| node.kind() == PP_LINE_BODY)
@@ -932,12 +956,13 @@ pub enum IfEvalError {
     #[error("missing expression")]
     MissingExpr,
     #[error("extra tokens at end of expression")]
-    ExtraTokens { tokens: Vec<SendEvalResult> },
+    ExtraTokens { tokens: Vec<EvalResult> },
     #[error("invalid constant expression")]
-    InvalidExpr { token: SendEvalResult },
+    InvalidExpr { token: EvalResult },
 }
 
 fn eval_inner(
+    definition_file_id: FileId,
     body: &SyntaxNode,
     current_state: &ProcessorState,
     location: &ExpandLocation,
@@ -946,6 +971,7 @@ fn eval_inner(
     let tokens = body
         .children_with_tokens()
         .filter_map(NodeOrToken::into_token)
+        .map(|token| (token, definition_file_id))
         .collect();
     let subs_events = MacroInvocation::substitute_vec(current_state, tokens, location);
 
@@ -980,9 +1006,7 @@ fn eval_inner(
 
     // Do we have extra tokens?
     let error = if !rest.is_empty() {
-        Some(IfEvalError::ExtraTokens {
-            tokens: rest.iter().map(Into::into).collect(),
-        })
+        Some(IfEvalError::ExtraTokens { tokens: rest })
     } else {
         None
     };
@@ -990,21 +1014,17 @@ fn eval_inner(
     // Is the result an int?
     match first {
         EvalResult::Constant(Ok(value)) => (value != 0, error),
-        other => (
-            true,
-            Some(IfEvalError::InvalidExpr {
-                token: (&other).into(),
-            }),
-        ),
+        other => (true, Some(IfEvalError::InvalidExpr { token: other })),
     }
 }
 
 fn eval_if<E: From<IfEvalError>>(
+    definition_file_id: FileId,
     body: &SyntaxNode,
     current_state: &ProcessorState,
     location: &ExpandLocation,
 ) -> (bool, Option<E>) {
-    let (result, e) = eval_inner(body, current_state, location);
+    let (result, e) = eval_inner(definition_file_id, body, current_state, location);
     (result, e.map(E::from))
 }
 
@@ -1018,6 +1038,7 @@ pub enum IfError {
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct If {
+    file_id: FileId,
     body: SyntaxNode,
 }
 
@@ -1027,15 +1048,16 @@ impl If {
         current_state: &ProcessorState,
         location: &ExpandLocation,
     ) -> (bool, Option<IfError>) {
-        eval_if(&self.body, current_state, location)
+        eval_if(self.file_id, &self.body, current_state, location)
     }
 }
 
-impl TryFrom<SyntaxNode> for If {
+impl TryFrom<(FileId, SyntaxNode)> for If {
     type Error = IfError;
 
-    fn try_from(value: SyntaxNode) -> Result<Self, Self::Error> {
+    fn try_from((file_id, value): (FileId, SyntaxNode)) -> Result<Self, Self::Error> {
         Ok(Self {
+            file_id,
             body: value
                 .children()
                 .find(|node| node.kind() == PP_IF_EXPR)
@@ -1046,6 +1068,7 @@ impl TryFrom<SyntaxNode> for If {
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Elif {
+    file_id: FileId,
     body: SyntaxNode,
 }
 
@@ -1055,7 +1078,7 @@ impl Elif {
         current_state: &ProcessorState,
         location: &ExpandLocation,
     ) -> (bool, Option<ElifError>) {
-        eval_if(&self.body, current_state, location)
+        eval_if(self.file_id, &self.body, current_state, location)
     }
 }
 
@@ -1067,11 +1090,12 @@ pub enum ElifError {
     Eval(#[from] IfEvalError),
 }
 
-impl TryFrom<SyntaxNode> for Elif {
+impl TryFrom<(FileId, SyntaxNode)> for Elif {
     type Error = ElifError;
 
-    fn try_from(value: SyntaxNode) -> Result<Self, Self::Error> {
+    fn try_from((file_id, value): (FileId, SyntaxNode)) -> Result<Self, Self::Error> {
         Ok(Self {
+            file_id,
             body: value
                 .children()
                 .find(|node| node.kind() == PP_IF_EXPR)
@@ -1086,10 +1110,10 @@ pub struct Else;
 #[derive(Debug, PartialEq, Eq, Error)]
 pub enum ElseError {}
 
-impl TryFrom<SyntaxNode> for Else {
+impl TryFrom<(FileId, SyntaxNode)> for Else {
     type Error = ElseError;
 
-    fn try_from(_: SyntaxNode) -> Result<Self, Self::Error> {
+    fn try_from(_: (FileId, SyntaxNode)) -> Result<Self, Self::Error> {
         Ok(Self)
     }
 }
@@ -1100,10 +1124,10 @@ pub struct EndIf;
 #[derive(Debug, PartialEq, Eq, Error)]
 pub enum EndIfError {}
 
-impl TryFrom<SyntaxNode> for EndIf {
+impl TryFrom<(FileId, SyntaxNode)> for EndIf {
     type Error = EndIfError;
 
-    fn try_from(_: SyntaxNode) -> Result<Self, Self::Error> {
+    fn try_from(_: (FileId, SyntaxNode)) -> Result<Self, Self::Error> {
         Ok(Self)
     }
 }
@@ -1151,10 +1175,10 @@ pub enum PragmaError {
     IncorrectSyntax { name: SmolStr },
 }
 
-impl TryFrom<SyntaxNode> for Pragma {
+impl TryFrom<(FileId, SyntaxNode)> for Pragma {
     type Error = PragmaError;
 
-    fn try_from(value: SyntaxNode) -> Result<Self, Self::Error> {
+    fn try_from((_file_id, value): (FileId, SyntaxNode)) -> Result<Self, Self::Error> {
         let body = value
             .children()
             .find(|node| node.kind() == PP_PRAGMA_BODY)

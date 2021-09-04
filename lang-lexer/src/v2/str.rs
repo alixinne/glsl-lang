@@ -100,15 +100,8 @@ impl<'i> Iterator for LexerIterator<'i> {
                             );
                         }
 
-                        Event::Directive {
-                            node,
-                            kind,
-                            masked,
-                            errors,
-                        } => {
-                            if let Err(errors) =
-                                self.core.handle_directive(node, kind, masked, errors)
-                            {
+                        Event::Directive { directive, masked } => {
+                            if let Err(errors) = self.core.handle_directive(directive, masked) {
                                 self.handle_token.push_errors(errors);
                             }
                         }

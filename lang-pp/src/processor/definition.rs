@@ -4,9 +4,9 @@ use std::{
 };
 
 use itertools::Itertools;
-use rowan::{GreenNodeBuilder, NodeOrToken};
+use rowan::NodeOrToken;
 
-use lang_util::{FileId, SmolStr, TextRange};
+use lang_util::{position::NodeSpan, FileId, SmolStr, TextRange};
 
 use crate::{
     parser::{
@@ -32,6 +32,13 @@ pub enum Definition {
 }
 
 impl Definition {
+    pub fn file_id(&self) -> FileId {
+        match self {
+            Definition::Regular(_, file_id) => *file_id,
+            _ => FileId::builtin(0),
+        }
+    }
+
     pub fn name(&self) -> &str {
         match self {
             Definition::Regular(d, _) => d.name(),
@@ -69,36 +76,20 @@ impl Definition {
         }
     }
 
-    fn substitute_string(src: &str, kind: SyntaxKind) -> impl Iterator<Item = SyntaxToken> {
-        let replaced = {
-            // TODO: Reuse node cache
-            let mut builder = GreenNodeBuilder::new();
-            builder.start_node(ROOT.into());
-            builder.token(kind.into(), src);
-            builder.finish_node();
-            builder.finish()
-        };
-
-        Self::tokens(replaced)
-    }
-
-    fn tokens(replaced: rowan::GreenNode) -> impl Iterator<Item = SyntaxToken> {
-        SyntaxNode::new_root(replaced)
-            .children_with_tokens()
-            .filter_map(|node_or_token| {
-                if let NodeOrToken::Token(token) = node_or_token {
-                    Some(token)
-                } else {
-                    None
-                }
-            })
+    fn substitute_string(
+        src: &str,
+        kind: SyntaxKind,
+        range: NodeSpan,
+    ) -> impl IntoIterator<Item = OutputToken> {
+        Some(OutputToken::new(kind, src, range))
     }
 
     fn concat_node_to_tokens<T: TokenLike>(
+        definition_file_id: FileId,
         node: SyntaxNode,
-        builder: &mut GreenNodeBuilder,
         args: Option<&HashMap<&str, &[T]>>,
-    ) {
+        entire_range: NodeSpan,
+    ) -> impl IntoIterator<Item = OutputToken> {
         // Find the first non-trivial token
         #[derive(Debug)]
         enum State {
@@ -106,12 +97,14 @@ impl Definition {
             Lhs {
                 kind: SyntaxKind,
                 text: String,
-                trivia_buffer: VecDeque<(SyntaxKind, SmolStr)>,
+                pos: NodeSpan,
+                trivia_buffer: VecDeque<(SyntaxKind, SmolStr, NodeSpan)>,
             },
             ExpectRhs {
                 kind: SyntaxKind,
                 text: String,
-                trivia_buffer: VecDeque<(SyntaxKind, SmolStr)>,
+                pos: NodeSpan,
+                trivia_buffer: VecDeque<(SyntaxKind, SmolStr, NodeSpan)>,
             },
         }
 
@@ -127,13 +120,15 @@ impl Definition {
             .descendants_with_tokens()
             .filter_map(NodeOrToken::into_token);
 
+        let mut output_tokens = Vec::new();
+
         let mut current_arg: Option<std::slice::Iter<'_, T>> = None;
 
         loop {
             let input_token;
-            let (current_kind, current_text) = if let Some(iter) = &mut current_arg {
+            let (current_kind, current_text, current_span) = if let Some(iter) = &mut current_arg {
                 if let Some(token) = iter.next() {
-                    (token.kind(), token.text())
+                    (token.kind(), token.text(), token.text_range())
                 } else {
                     current_arg.take();
                     continue;
@@ -149,7 +144,11 @@ impl Definition {
                 }
 
                 input_token = token;
-                (input_token.kind(), input_token.text())
+                (
+                    input_token.kind(),
+                    input_token.text(),
+                    NodeSpan::new(definition_file_id, input_token.text_range()),
+                )
             } else {
                 // No more input tokens
                 break;
@@ -159,18 +158,23 @@ impl Definition {
                 State::Init => {
                     // Initial state, we should start with a token that can be pasted
                     if current_kind == PP_CONCAT_OP {
-                        builder.token(ERROR.into(), "");
-                        return;
+                        output_tokens.push(OutputToken::new_error(entire_range));
+                        return output_tokens;
                     }
 
                     if current_kind.is_trivia() {
                         // Forward leading trivia
-                        builder.token(current_kind.into(), current_text);
+                        output_tokens.push(OutputToken::new(
+                            current_kind,
+                            current_text,
+                            current_span,
+                        ));
                     } else {
                         // Non-trivia is the LHS
                         state = State::Lhs {
                             kind: current_kind,
                             text: current_text.to_owned(),
+                            pos: current_span,
                             trivia_buffer: VecDeque::with_capacity(1),
                         };
                     }
@@ -178,6 +182,7 @@ impl Definition {
                 State::Lhs {
                     kind,
                     text,
+                    pos,
                     mut trivia_buffer,
                 } => {
                     // We saw the LHS of a concat
@@ -186,6 +191,7 @@ impl Definition {
                         state = State::ExpectRhs {
                             kind,
                             text,
+                            pos,
                             trivia_buffer: {
                                 trivia_buffer.clear();
                                 trivia_buffer
@@ -196,25 +202,31 @@ impl Definition {
                         state = State::Lhs {
                             kind,
                             text,
+                            pos,
                             trivia_buffer: {
-                                trivia_buffer.push_back((current_kind, current_text.into()));
+                                trivia_buffer.push_back((
+                                    current_kind,
+                                    current_text.into(),
+                                    current_span,
+                                ));
                                 trivia_buffer
                             },
                         };
                     } else {
                         // Non-trivia instead of ##, so just bump the LHS and restart
 
-                        builder.token(kind.into(), &text);
+                        output_tokens.push(OutputToken::new(kind, text, pos));
 
                         // Bump trivia
-                        while let Some((kind, text)) = trivia_buffer.pop_front() {
-                            builder.token(kind.into(), text.as_str());
+                        while let Some((kind, text, pos)) = trivia_buffer.pop_front() {
+                            output_tokens.push(OutputToken::new(kind, text, pos));
                         }
 
                         // Restart with the new token as LHS
                         state = State::Lhs {
                             kind: current_kind,
                             text: current_text.to_owned(),
+                            pos: current_span,
                             trivia_buffer,
                         };
                     }
@@ -223,20 +235,26 @@ impl Definition {
                 State::ExpectRhs {
                     kind,
                     mut text,
+                    pos,
                     mut trivia_buffer,
                 } => {
                     // We are expecting the RHS
                     if current_kind == PP_CONCAT_OP {
                         // Can't concat with a ##
-                        builder.token(ERROR.into(), "");
-                        return;
+                        output_tokens.push(OutputToken::new_error(pos));
+                        return output_tokens;
                     } else if current_kind.is_trivia() {
                         // Just buffer trivia between ## and RHS
                         state = State::ExpectRhs {
                             kind,
                             text,
+                            pos,
                             trivia_buffer: {
-                                trivia_buffer.push_back((current_kind, current_text.into()));
+                                trivia_buffer.push_back((
+                                    current_kind,
+                                    current_text.into(),
+                                    current_span,
+                                ));
                                 trivia_buffer
                             },
                         };
@@ -248,6 +266,7 @@ impl Definition {
                                 text.push_str(current_text);
                                 text
                             },
+                            pos,
                             trivia_buffer: {
                                 // Discard trivia
                                 trivia_buffer.clear();
@@ -264,48 +283,123 @@ impl Definition {
             State::Lhs {
                 kind,
                 text,
+                pos,
                 trivia_buffer: _,
             } => {
-                builder.token(kind.into(), &text);
+                output_tokens.push(OutputToken::new(kind, text, pos));
             }
             State::ExpectRhs {
                 kind: _,
                 mut text,
+                pos,
                 trivia_buffer: _,
             } => {
                 // We were expecting a RHS
                 text.push_str(" ##");
-                builder.token(ERROR.into(), &text);
+                output_tokens.push(OutputToken::new(ERROR, text, pos));
             }
         }
+
+        output_tokens
     }
 
     fn substitute_define_object(
+        definition_file_id: FileId,
         object: &DefineObject,
-        entire_range: TextRange,
+        entire_range: NodeSpan,
         location: &ExpandLocation,
     ) -> Vec<Event> {
-        let replaced = {
-            let mut builder = GreenNodeBuilder::new();
-            builder.start_node(ROOT.into());
-
-            for node_or_token in object.body().children_with_tokens() {
-                match node_or_token {
-                    NodeOrToken::Node(node) => {
-                        debug_assert!(node.kind() == PP_CONCAT);
-                        Self::concat_node_to_tokens::<OutputToken>(node, &mut builder, None);
-                    }
-                    NodeOrToken::Token(token) => {
-                        builder.token(token.kind().into(), token.text());
-                    }
+        let mut tokens = Vec::new();
+        for node_or_token in object.body().children_with_tokens() {
+            match node_or_token {
+                NodeOrToken::Node(node) => {
+                    debug_assert!(node.kind() == PP_CONCAT);
+                    tokens.extend(Self::concat_node_to_tokens::<OutputToken>(
+                        definition_file_id,
+                        node,
+                        None,
+                        entire_range,
+                    ));
+                }
+                NodeOrToken::Token(token) => {
+                    tokens.push(OutputToken::new(
+                        token.kind(),
+                        token.text(),
+                        NodeSpan::new(definition_file_id, token.text_range()),
+                    ));
                 }
             }
+        }
+        Self::subs_tokens(tokens, entire_range, location)
+    }
 
-            builder.finish_node();
-            builder.finish()
-        };
+    fn substitute_define_function(
+        definition_file_id: FileId,
+        function: &DefineFunction,
+        args: &[Vec<impl TokenLike>],
+        entire_range: NodeSpan,
+        location: &ExpandLocation,
+    ) -> Vec<Event> {
+        // Put the arguments into a hashmap
+        let args: HashMap<_, _> = args
+            .iter()
+            .zip(function.arg_names())
+            .map(|(tokens, arg_name)| {
+                (
+                    arg_name.as_str(),
+                    // TODO: Should we trim whitespace out of macro arguments?
+                    trim_ws(tokens),
+                )
+            })
+            .collect();
 
-        Self::tokens(replaced)
+        let mut tokens = Vec::new();
+        for node_or_token in function.body().children_with_tokens() {
+            match node_or_token {
+                NodeOrToken::Node(node) => {
+                    debug_assert!(node.kind() == PP_CONCAT);
+                    tokens.extend(Self::concat_node_to_tokens(
+                        definition_file_id,
+                        node,
+                        Some(&args),
+                        entire_range,
+                    ));
+                }
+                NodeOrToken::Token(token) => {
+                    let kind = token.kind();
+
+                    if kind == IDENT_KW {
+                        if let Some(value) =
+                            args.get(Unescaped::new(token.text()).to_string().as_ref())
+                        {
+                            // There is an argument with those tokens
+                            for subs_token in value.iter() {
+                                tokens.push(OutputToken::from_token(subs_token));
+                            }
+
+                            continue;
+                        }
+                    }
+
+                    tokens.push(OutputToken::new(
+                        kind,
+                        token.text(),
+                        NodeSpan::new(definition_file_id, token.text_range()),
+                    ));
+                }
+            }
+        }
+
+        Self::subs_tokens(tokens, entire_range, location)
+    }
+
+    fn subs_tokens(
+        tokens: impl IntoIterator<Item = OutputToken>,
+        entire_range: NodeSpan,
+        location: &ExpandLocation,
+    ) -> Vec<Event> {
+        tokens
+            .into_iter()
             .map(|token| {
                 if token.kind() == ERROR {
                     Event::error(
@@ -324,85 +418,29 @@ impl Definition {
                         false,
                     )
                 } else {
-                    OutputToken::new(token, entire_range).into()
+                    token.into()
                 }
             })
-            .collect()
-    }
-
-    fn substitute_define_function(
-        function: &DefineFunction,
-        args: &[Vec<impl TokenLike>],
-        entire_range: TextRange,
-    ) -> Vec<Event> {
-        // Put the arguments into a hashmap
-        let args: HashMap<_, _> = args
-            .iter()
-            .zip(function.arg_names())
-            .map(|(tokens, arg_name)| {
-                (
-                    arg_name.as_str(),
-                    // TODO: Should we trim whitespace out of macro arguments?
-                    trim_ws(tokens),
-                )
-            })
-            .collect();
-
-        let replaced = {
-            let mut builder = GreenNodeBuilder::new();
-            builder.start_node(ROOT.into());
-
-            for node_or_token in function.body().children_with_tokens() {
-                match node_or_token {
-                    NodeOrToken::Node(node) => {
-                        debug_assert!(node.kind() == PP_CONCAT);
-                        Self::concat_node_to_tokens(node, &mut builder, Some(&args));
-                    }
-                    NodeOrToken::Token(token) => {
-                        let kind = token.kind();
-
-                        if kind == IDENT_KW {
-                            if let Some(value) =
-                                args.get(Unescaped::new(token.text()).to_string().as_ref())
-                            {
-                                // There is an argument with those tokens
-                                for subs_token in value.iter() {
-                                    builder.token(subs_token.kind().into(), subs_token.text());
-                                }
-
-                                continue;
-                            }
-                        }
-
-                        builder.token(kind.into(), token.text());
-                    }
-                }
-            }
-
-            builder.finish_node();
-            builder.finish()
-        };
-
-        Self::tokens(replaced)
-            .map(|token| OutputToken::new(token, entire_range).into())
             .collect()
     }
 
     fn substitute_object(
         &self,
-        entire_range: TextRange,
+        entire_range: NodeSpan,
         current_state: &ProcessorState,
         location: &ExpandLocation,
     ) -> Vec<Event> {
         match self {
             Definition::Line => Self::substitute_string(
                 &location
-                    .offset_to_line_and_col(entire_range.start())
+                    .offset_to_line_and_col(entire_range.start().offset)
                     .0
                     .to_string(),
                 DIGITS,
+                entire_range,
             )
-            .map(|token| OutputToken::new(token, entire_range).into())
+            .into_iter()
+            .map(Into::into)
             .collect(),
 
             Definition::File => {
@@ -413,19 +451,23 @@ impl Definition {
                     (format!("\"{}\"", string), QUOTE_STRING)
                 };
 
-                Self::substitute_string(&string, kind)
-                    .map(|token| OutputToken::new(token, entire_range).into())
+                Self::substitute_string(&string, kind, entire_range)
+                    .into_iter()
+                    .map(Into::into)
                     .collect()
             }
-            Definition::Version => {
-                Self::substitute_string(&format!("{}", current_state.version.number), DIGITS)
-                    .map(|token| OutputToken::new(token, entire_range).into())
-                    .collect()
-            }
+            Definition::Version => Self::substitute_string(
+                &format!("{}", current_state.version.number),
+                DIGITS,
+                entire_range,
+            )
+            .into_iter()
+            .map(Into::into)
+            .collect(),
 
             Definition::Regular(define, _) => {
                 if let DefineKind::Object(object) = define.kind() {
-                    Self::substitute_define_object(object, entire_range, location)
+                    Self::substitute_define_object(self.file_id(), object, entire_range, location)
                 } else {
                     panic!("expected object define")
                 }
@@ -436,12 +478,19 @@ impl Definition {
     fn substitute_function(
         &self,
         args: &[Vec<impl TokenLike>],
-        entire_range: TextRange,
+        entire_range: NodeSpan,
+        location: &ExpandLocation,
     ) -> Vec<Event> {
         match self {
             Definition::Regular(define, _) => {
                 if let DefineKind::Function(function) = define.kind() {
-                    Self::substitute_define_function(function, args, entire_range)
+                    Self::substitute_define_function(
+                        self.file_id(),
+                        function,
+                        args,
+                        entire_range,
+                        location,
+                    )
                 } else {
                     panic!("expected function define");
                 }
@@ -473,40 +522,46 @@ pub(crate) fn trim_ws<T: TokenLike>(tokens: &[T]) -> &[T] {
     }
 }
 
-pub struct MacroInvocation<'d, T> {
+pub struct MacroInvocation<'d> {
     definition: &'d Definition,
-    tokens: MacroCall<T>,
-    range: TextRange,
+    tokens: MacroCall,
+    range: NodeSpan,
 }
 
-enum MacroCall<T> {
+enum MacroCall {
     Object,
-    Function(Vec<Vec<T>>),
+    Function(Vec<Vec<OutputToken>>),
 }
 
-impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
-    pub fn parse<I>(
+impl<'d> MacroInvocation<'d> {
+    pub fn parse_raw<I>(
         definition: &'d Definition,
-        first_token: T,
+        first_token: SyntaxToken,
         iterator: I,
         location: &ExpandLocation,
-    ) -> Result<Option<(Self, I)>, ProcessingError>
+    ) -> Result<Option<(MacroInvocation<'d>, I)>, ProcessingError>
     where
-        I: Iterator<Item = NodeOrToken<SyntaxNode, T>>,
+        I: Iterator<Item = NodeOrToken<SyntaxNode, SyntaxToken>>,
     {
-        Self::parse_nested(definition, first_token, iterator, location, None)
+        Self::parse_nested(definition, first_token, iterator, location, None, |token| {
+            (token, location.current_file())
+        })
     }
 
-    fn parse_nested<I>(
+    fn parse_nested<I, Q, P>(
         definition: &'d Definition,
-        first_token: T,
+        first_token: Q,
         mut iterator: I,
         location: &ExpandLocation,
-        text_range: Option<TextRange>,
+        text_range: Option<NodeSpan>,
+        token_fn: impl Fn(Q) -> P,
     ) -> Result<Option<(Self, I)>, ProcessingError>
     where
-        I: Iterator<Item = NodeOrToken<SyntaxNode, T>>,
+        I: Iterator<Item = NodeOrToken<SyntaxNode, Q>>,
+        P: TokenLike,
     {
+        let first_token = token_fn(first_token);
+
         let (tokens, computed_range) = if definition.object_like() {
             (MacroCall::Object, first_token.text_range())
         } else {
@@ -531,6 +586,8 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
                                 }));
                         }
                         NodeOrToken::Token(inner_token) => {
+                            let inner_token = token_fn(inner_token);
+
                             // A token
                             let kind = inner_token.kind();
                             let end = inner_token.text_range().end();
@@ -562,7 +619,9 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
                                 }
 
                                 if nesting_level > 0 {
-                                    args.last_mut().unwrap().push(inner_token);
+                                    args.last_mut()
+                                        .unwrap()
+                                        .push(OutputToken::from_token(&inner_token));
                                 }
                             }
 
@@ -575,9 +634,12 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
                         // End-of-file. Not that we haven't consumed any nodes yet
                         // so we just need to return the events via the state
                         return Err(ProcessingError::builder()
-                            .pos(
-                                text_range.unwrap_or_else(|| TextRange::new(token_start, last_end)),
-                            )
+                            .pos(text_range.unwrap_or_else(|| {
+                                NodeSpan::new(
+                                    token_start.source_id,
+                                    TextRange::new(token_start.offset, last_end.offset),
+                                )
+                            }))
                             .resolve_file(location)
                             .finish(ProcessingErrorKind::UnterminatedMacroInvocation {
                                 ident: definition.name().into(),
@@ -614,7 +676,10 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
 
             (
                 MacroCall::Function(args),
-                TextRange::new(token_start, token_end),
+                NodeSpan::new(
+                    token_start.source_id,
+                    TextRange::new(token_start.offset, token_end.offset),
+                ),
             )
         };
 
@@ -630,7 +695,7 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
 
     pub fn substitute_vec(
         current_state: &ProcessorState,
-        tokens: Vec<T>,
+        tokens: Vec<impl TokenLike>,
         location: &ExpandLocation,
     ) -> Vec<Event> {
         let mut subs_stack = HashSet::new();
@@ -639,10 +704,10 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
 
     fn substitute_vec_inner(
         current_state: &ProcessorState,
-        tokens: Vec<T>,
+        tokens: Vec<impl TokenLike>,
         location: &ExpandLocation,
         subs_stack: &mut HashSet<SmolStr>,
-        range: Option<TextRange>,
+        range: Option<NodeSpan>,
     ) -> Vec<Event> {
         // Macros are recursive, so we need to scan again for further substitutions
         let mut result = Vec::with_capacity(tokens.len());
@@ -676,6 +741,7 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
                             iterator.clone(),
                             location,
                             range,
+                            |token| token,
                         ) {
                             Ok(Some((invocation, new_iterator))) => {
                                 result.extend(invocation.substitute_inner(
@@ -736,9 +802,9 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
                 self.definition
                     .substitute_object(self.range, current_state, location)
             }
-            MacroCall::Function(function) => {
-                self.definition.substitute_function(&function, self.range)
-            }
+            MacroCall::Function(function) => self
+                .definition
+                .substitute_function(&function, self.range, location),
         };
 
         // Disable recursion for the current name
@@ -758,7 +824,7 @@ impl<'d, T: TokenLike + Clone + Into<OutputToken>> MacroInvocation<'d, T> {
                 if is_token {
                     // A token sequence
                     // TODO: Prevent re-allocation
-                    MacroInvocation::substitute_vec_inner(
+                    Self::substitute_vec_inner(
                         current_state,
                         events
                             .into_iter()

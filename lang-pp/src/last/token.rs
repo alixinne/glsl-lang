@@ -2013,9 +2013,13 @@ impl Token {
 
         // Hexadecimal constant
         if unsigned {
-            u32::from_str_radix(text, radix)
-                .map(UINT_CONST)
-                .map_err(|_| ErrorKind::InvalidUIntLiteral)
+            if radix == 8 && text.is_empty() {
+                Ok(UINT_CONST(0))
+            } else {
+                u32::from_str_radix(text, radix)
+                    .map(UINT_CONST)
+                    .map_err(|_| ErrorKind::InvalidUIntLiteral)
+            }
         } else {
             i32::from_str_radix(text, radix)
                 .map(INT_CONST)
@@ -2156,6 +2160,8 @@ mod tests {
 
     #[test]
     fn test_parse_uint_constant() {
+        assert_eq!(Token::parse_digits("0u"), UINT_CONST(0));
+        assert_eq!(Token::parse_digits("1u"), UINT_CONST(1));
         assert_eq!(
             Token::parse_digits("0xffffffffU"),
             UINT_CONST(0xffffffffu32)

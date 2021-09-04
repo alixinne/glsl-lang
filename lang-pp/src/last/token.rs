@@ -1,4 +1,4 @@
-use smol_str::SmolStr;
+use lang_util::SmolStr;
 
 use crate::{parser::SyntaxKind, processor::event::TokenLike, util::Unescaped};
 

@@ -1,10 +1,13 @@
+use lang_util::position::LexerPosition;
+
+use glsl_lang_lexer::{IdentifierContext, Token, HasLexerError};
+
 use crate::{
     ast::{self, NodeContent},
-    lexer::{LexerContext, LexerPosition, Token},
-    parse::{IdentifierContext, LangLexer},
+    parse::ParseContext,
 };
 
-grammar<L>(ctx: &LexerContext) where L: LangLexer;
+grammar<'i, L>(ctx: &ParseContext) where L: HasLexerError;
 
 comma<T>: Vec<T> = {
     <e:T?> <v:("," <T>)*> => match e {

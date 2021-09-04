@@ -17,18 +17,14 @@ proc-macro = true
 path = "src/lib.rs"
 
 [dependencies]
-glsl-lang = { version = "0.2.0", default-features = false }
+glsl-lang = { version = "0.2.0", default-features = false, features = ["lexer-v2"] }
+
 proc-macro2 = "1"
 quote = "1"
-smol_str = "0.1"
 
 [features]
 # Default: only translation units can be quoted
-default = ["quote-parsable", "lexer-v1"]
-
-# Lexer features for glsl-lang
-lexer-v1 = ["glsl-lang/lexer-v1"]
-lexer-v2 = ["glsl-lang/lexer-v2"]
+default = ["quote-parsable"]
 
 # Additional sub-quotes. Increases compilation time.
 quote-expr = ["glsl-lang/parser-expr"]

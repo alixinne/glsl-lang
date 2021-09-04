@@ -30,17 +30,22 @@ jobs:
           toolchain: stable
           override: true
           target: ${{ matrix.target }}
+
+      - name: Run lib tests
+        run: |
+          set -e
+          cargo test --lib
+
       - name: Run lib tests with serde
         run: |
           set -e
-          cargo test -p lang-util --lib --features serde
-          cargo test -p glsl-lang --lib --features serde
+          cargo test --workspace --lib --features serde
 
       - name: Run lib tests with the two lexers
         run: |
           set -e
-          cargo test -p glsl-lang --lib --no-default-features --features lexer-v1
-          cargo test -p glsl-lang --lib --no-default-features --features lexer-v2
+          cargo test -p glsl-lang --lib --features lexer-v1
+          cargo test -p glsl-lang --lib --features lexer-v2
 
       - name: Generate test driver
         run: cargo xtask gen-tests

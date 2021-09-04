@@ -1,5 +1,8 @@
 use std::fmt;
 
+#[cfg(feature = "serde")]
+use rserde as serde;
+
 use crate::position::{LexerPosition, NodeSpan};
 
 /// Trait for AST node contents.

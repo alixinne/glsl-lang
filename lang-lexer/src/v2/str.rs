@@ -1,5 +1,7 @@
 //! Memory based glsl-lang-pp preprocessing lexer
 
+use lang_util::{position::LexerPosition, FileId};
+
 use glsl_lang_pp::{
     exts::{Registry, DEFAULT_REGISTRY},
     last::{self, Event},
@@ -9,9 +11,8 @@ use glsl_lang_pp::{
         ProcessorState,
     },
 };
-use lang_util::FileId;
 
-use crate::parse::{LangLexer, ParseContext};
+use crate::{HasLexerError, LangLexer, LangLexerIterator, ParseContext, ParseOptions, Token};
 
 use super::{
     core::{self, HandleTokenResult, LexerCore},
@@ -21,34 +22,47 @@ use super::{
 /// glsl-lang-pp memory lexer
 pub struct Lexer<'i> {
     inner: last::Tokenizer<'i, ExpandStr>,
-    core: LexerCore,
     handle_token: HandleTokenResult<ProcessStrError>,
-    source_id: FileId,
+    opts: ParseOptions,
 }
 
 impl<'i> Lexer<'i> {
     pub(crate) fn new_with_state(
         source: &'i str,
         registry: &'i Registry,
-        opts: ParseContext,
+        opts: &ParseOptions,
         state: ProcessorState,
     ) -> Self {
-        let source_id = opts.opts.source_id;
-
         Self {
             inner: processor::str::process(source, state).tokenize(
-                opts.opts.default_version,
-                opts.opts.target_vulkan,
+                opts.default_version,
+                opts.target_vulkan,
                 registry,
             ),
-            core: LexerCore::new(opts),
             handle_token: Default::default(),
-            source_id,
+            opts: *opts,
+        }
+    }
+
+    fn with_context(self, ctx: ParseContext) -> LexerIterator<'i> {
+        LexerIterator {
+            inner: self.inner,
+            core: LexerCore::new(&self.opts, ctx),
+            handle_token: self.handle_token,
+            source_id: self.opts.source_id,
         }
     }
 }
 
-impl<'i> Iterator for Lexer<'i> {
+/// glsl-lang-pp memory lexer iterator
+pub struct LexerIterator<'i> {
+    inner: last::Tokenizer<'i, ExpandStr>,
+    core: LexerCore,
+    handle_token: HandleTokenResult<ProcessStrError>,
+    source_id: FileId,
+}
+
+impl<'i> Iterator for LexerIterator<'i> {
     type Item = core::Item<ProcessStrError>;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -111,29 +125,40 @@ impl<'i> Iterator for Lexer<'i> {
     }
 }
 
-impl<'i> LangLexer for Lexer<'i> {
-    type Input = &'i str;
+impl HasLexerError for Lexer<'_> {
     type Error = LexicalError<ProcessStrError>;
+}
 
-    fn new(source: Self::Input, opts: ParseContext) -> Self {
+impl<'i> LangLexer<'i> for Lexer<'i> {
+    type Input = &'i str;
+    type Iter = LexerIterator<'i>;
+
+    fn new(source: Self::Input, opts: &ParseOptions) -> Self {
         Self::new_with_state(source, &DEFAULT_REGISTRY, opts, ProcessorState::default())
     }
 
-    fn chain<P: crate::parse::LangParser<Self>>(
-        &mut self,
-        parser: &P,
-    ) -> Result<P::Item, crate::parse::ParseError<Self>> {
-        parser
-            .parse(self.core.context().clone(), self)
-            .map_err(|err| {
-                let location = self.inner.location();
-                let (_file_id, lexer) = lang_util::error::error_location(&err);
+    fn run(self, ctx: ParseContext) -> Self::Iter {
+        self.with_context(ctx)
+    }
+}
 
-                lang_util::error::ParseError::<Self::Error>::builder()
-                    .pos(lexer)
-                    .current_file(self.source_id)
-                    .resolve(location)
-                    .finish(err.into())
-            })
+impl HasLexerError for LexerIterator<'_> {
+    type Error = LexicalError<ProcessStrError>;
+}
+
+impl<'i> LangLexerIterator for LexerIterator<'i> {
+    #[cfg(feature = "lalrpop")]
+    fn resolve_err(
+        &self,
+        err: lalrpop_util::ParseError<LexerPosition, Token, Self::Error>,
+    ) -> lang_util::error::ParseError<Self::Error> {
+        let location = self.inner.location();
+        let (_file_id, lexer) = lang_util::error::error_location(&err);
+
+        lang_util::error::ParseError::<Self::Error>::builder()
+            .pos(lexer)
+            .current_file(self.source_id)
+            .resolve(location)
+            .finish(err.into())
     }
 }

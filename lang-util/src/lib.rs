@@ -28,3 +28,7 @@ pub mod position;
 
 pub mod token;
 pub use token::Token;
+
+// Re-exports
+pub use smol_str::SmolStr;
+pub use text_size::{TextRange, TextSize};

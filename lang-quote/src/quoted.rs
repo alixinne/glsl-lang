@@ -15,7 +15,7 @@ impl Quoted for String {
     }
 }
 
-impl Quoted for smol_str::SmolStr {
+impl Quoted for glsl_lang::ast::SmolStr {
     fn quote(&self) -> TokenStream {
         let s = self.as_str();
         quote! { #s.into() }

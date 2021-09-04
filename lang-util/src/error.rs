@@ -11,7 +11,8 @@ use crate::{located::Located, position::LexerPosition, token::Token, FileId};
 
 /// Information about a lexed token
 #[derive(Debug, Clone, PartialEq, PartialOrd, Hash)]
-#[cfg_attr(feature = "serde", derive(serde::Serialize))]
+#[cfg_attr(feature = "serde", derive(rserde::Serialize))]
+#[cfg_attr(feature = "serde", serde(crate = "rserde"))]
 pub struct TokenDescription {
     /// String representation of the lexed token
     pub formatted: String,

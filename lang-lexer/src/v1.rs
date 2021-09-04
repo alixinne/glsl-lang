@@ -1,14 +1,13 @@
 //! Logos-based lexer definition
 
 use logos::Logos;
-use text_size::TextSize;
 use thiserror::Error;
 
-use lang_util::position::LexerPosition;
+use lang_util::{position::LexerPosition, TextSize};
 
-use crate::parse::LangLexer;
+use crate::HasLexerError;
 
-use super::{LexerContext, Token};
+use super::{LangLexer, LangLexerIterator, ParseContext, ParseOptions, Token};
 
 pub(super) mod parsers;
 
@@ -18,34 +17,41 @@ use preprocessor_token::*;
 #[cfg(test)]
 mod tests;
 
+/// Logos lexer for GLSL
+pub struct Lexer<'i> {
+    opts: ParseOptions,
+    source: &'i str,
+}
+
+impl<'i> Lexer<'i> {
+    fn with_context(self, ctx: ParseContext) -> LexerIterator<'i> {
+        LexerIterator {
+            inner: LexerStage::Source(Token::lexer_with_extras(self.source, (ctx, self.opts))),
+            source: self.source,
+            last_token: None,
+        }
+    }
+}
+
 enum LexerStage<'i> {
     Source(logos::Lexer<'i, Token>),
     Preprocessor(logos::Lexer<'i, PreprocessorToken<'i>>, Token, bool, bool),
 }
 
-impl LexerStage<'_> {
-    fn context(&self) -> &LexerContext {
-        match self {
-            LexerStage::Source(src) => &src.extras,
-            LexerStage::Preprocessor(pp, _, _, _) => &pp.extras,
-        }
-    }
-}
-
 /// Logos lexer for GLSL
-pub struct Lexer<'i> {
+pub struct LexerIterator<'i> {
     inner: LexerStage<'i>,
     source: &'i str,
     last_token: Option<Token>,
 }
 
-impl<'i> Lexer<'i> {
+impl<'i> LexerIterator<'i> {
     fn consume_pp(
         pp: &mut logos::Lexer<'i, PreprocessorToken<'i>>,
     ) -> Option<(LexerPosition, PreprocessorToken<'i>, LexerPosition)> {
         let token = pp.next()?;
         let span = pp.span();
-        let source_id = pp.extras.opts.source_id;
+        let source_id = pp.extras.1.source_id;
 
         Some((
             LexerPosition::new_raw(source_id, span.start),
@@ -140,7 +146,7 @@ impl<'i> Lexer<'i> {
 
         pp.bump(consumed_chars);
 
-        let source_id = pp.extras.opts.source_id;
+        let source_id = pp.extras.1.source_id;
         (
             LexerPosition::new_raw(source_id, start),
             PreprocessorToken::Rest(std::borrow::Cow::Owned(
@@ -151,7 +157,7 @@ impl<'i> Lexer<'i> {
     }
 }
 
-impl<'i> Iterator for Lexer<'i> {
+impl<'i> Iterator for LexerIterator<'i> {
     type Item = Result<(LexerPosition, Token, LexerPosition), LexicalError>;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -159,9 +165,9 @@ impl<'i> Iterator for Lexer<'i> {
             LexerStage::Source(src) => {
                 let token = src.next()?;
                 let span = src.span();
-                let source_id = src.extras.opts.source_id;
+                let source_id = src.extras.1.source_id;
 
-                let mut token = if src.extras.opts.target_vulkan {
+                let mut token = if src.extras.1.target_vulkan {
                     // Targetting Vulkan, nothing to change
                     (
                         LexerPosition::new_raw(source_id, span.start),
@@ -196,7 +202,7 @@ impl<'i> Iterator for Lexer<'i> {
 
                 // Transform the ident into a type name if needed
                 if let Token::Identifier(ref ident) = token.1 {
-                    if src.extras.is_type_name(ident) {
+                    if src.extras.0.is_type_name(ident) {
                         token.1 = Token::TypeName(ident.clone());
                     }
                 }
@@ -211,7 +217,7 @@ impl<'i> Iterator for Lexer<'i> {
                         LexerStage::Preprocessor(new_lexer, token.1.clone(), false, consumed_rest);
                 } else {
                     // Update nesting scopes for type name declarations
-                    let ctx = &src.extras;
+                    let ctx = &src.extras.0;
                     if token.1 == Token::LeftBrace {
                         ctx.push_scope();
                     } else if token.1 == Token::RightBrace {
@@ -326,30 +332,40 @@ impl<'i> Iterator for Lexer<'i> {
     }
 }
 
-impl<'i> LangLexer for Lexer<'i> {
-    type Input = &'i str;
+impl<'i> HasLexerError for Lexer<'i> {
     type Error = LexicalError;
+}
 
-    fn new(input: Self::Input, context: LexerContext) -> Self {
+impl<'i> LangLexer<'i> for Lexer<'i> {
+    type Input = &'i str;
+    type Iter = LexerIterator<'i>;
+
+    fn new(input: Self::Input, opts: &ParseOptions) -> Self {
         Self {
-            inner: LexerStage::Source(Token::lexer_with_extras(input, context)),
+            opts: *opts,
             source: input,
-            last_token: None,
         }
     }
 
-    fn chain<P: crate::parse::LangParser<Self>>(
-        &mut self,
-        parser: &P,
-    ) -> Result<P::Item, crate::parse::ParseError<Self>> {
-        parser
-            .parse(self.inner.context().clone(), self)
-            .map_err(|err| {
-                lang_util::error::ParseError::<Self::Error>::builder()
-                    .pos(lang_util::error::error_location(&err).1)
-                    .resolve(&self.source)
-                    .finish(err.into())
-            })
+    fn run(self, ctx: ParseContext) -> Self::Iter {
+        self.with_context(ctx)
+    }
+}
+
+impl<'i> HasLexerError for LexerIterator<'i> {
+    type Error = LexicalError;
+}
+
+impl<'i> LangLexerIterator for LexerIterator<'i> {
+    #[cfg(feature = "lalrpop")]
+    fn resolve_err(
+        &self,
+        err: lalrpop_util::ParseError<LexerPosition, Token, Self::Error>,
+    ) -> lang_util::error::ParseError<Self::Error> {
+        lang_util::error::ParseError::<Self::Error>::builder()
+            .pos(lang_util::error::error_location(&err).1)
+            .resolve(&self.source)
+            .finish(err.into())
     }
 }
 

@@ -4,12 +4,12 @@ use glsl_lang_pp::{
     last::{self, LocatedIterator, MaybeToken, TokenState, Tokenizer},
     processor::event::{self, DirectiveKind, Error, OutputToken, SyntaxNode, TokenLike},
 };
-use lang_util::located::Located;
 
-use lang_util::{FileId, NodeContent};
-use text_size::{TextRange, TextSize};
+use glsl_lang_types::ast;
 
-use crate::{lexer::LexerContext, parse::ParseContext};
+use lang_util::{located::Located, FileId, NodeContent, TextRange, TextSize};
+
+use crate::{ParseContext, ParseOptions};
 
 use super::{LexerPosition, LexicalError, Token};
 
@@ -18,6 +18,7 @@ pub type Item<E> = Result<(LexerPosition, Token, LexerPosition), LexicalError<E>
 pub struct LexerCore {
     pub ctx: ParseContext,
     file_id: FileId,
+    opts: ParseOptions,
 }
 
 pub enum HandleTokenResult<E: std::error::Error + 'static> {
@@ -104,13 +105,13 @@ impl<E: std::error::Error + 'static> Default for HandleTokenResult<E> {
 }
 
 impl LexerCore {
-    pub fn new(ctx: ParseContext) -> Self {
-        let file_id = ctx.opts.source_id;
-        Self { ctx, file_id }
-    }
-
-    pub fn context(&self) -> &LexerContext {
-        &self.ctx
+    pub fn new(opts: &ParseOptions, ctx: ParseContext) -> Self {
+        let file_id = opts.source_id;
+        Self {
+            ctx,
+            file_id,
+            opts: *opts,
+        }
     }
 
     fn lang_token(
@@ -474,13 +475,11 @@ impl LexerCore {
                                         .collect();
 
                                 let comment = match token.1 {
-                                    Token::SingleLineComment => {
-                                        crate::ast::CommentData::Single(text)
-                                    }
+                                    Token::SingleLineComment => ast::CommentData::Single(text),
                                     Token::MultiLineComment => {
                                         text.pop();
                                         text.pop();
-                                        crate::ast::CommentData::Multi(text)
+                                        ast::CommentData::Multi(text)
                                     }
                                     _ => unreachable!(),
                                 }
@@ -502,7 +501,7 @@ impl LexerCore {
                 }
 
                 Err(error) => {
-                    if !self.ctx.opts.allow_rs_ident || error.is_some() {
+                    if !self.opts.allow_rs_ident || error.is_some() {
                         token_state.push_item(Err(LexicalError::Token {
                             kind: error.unwrap_or(last::token::ErrorKind::InvalidToken),
                             pos: self.position(source_token.text_range().start()),

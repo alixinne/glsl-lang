@@ -37,8 +37,10 @@ after [Dimitri Sabadie's `glsl` crate](https://github.com/phaazon/glsl).
 
 | crates.io                                                                                                   | Path                                   | Description                                                       |
 | ---                                                                                                         | ---                                    | ---                                                               |
-| [![Crates.io](https://img.shields.io/crates/v/glsl-lang)](https://crates.io/crates/glsl-lang)               | [`lang`](lang)                         | AST, parser, visitor, transpiler for GLSL language                |
+| [![Crates.io](https://img.shields.io/crates/v/glsl-lang)](https://crates.io/crates/glsl-lang)               | [`lang`](lang)                         | Parser, visitor, transpiler for GLSL language                     |
 | [![Crates.io](https://img.shields.io/crates/v/glsl-lang-pp)](https://crates.io/crates/glsl-lang-pp)         | [`lang-pp`](lang-pp)                   | standalone preprocessor for the GLSL language                     |
+| [![Crates.io](https://img.shields.io/crates/v/glsl-lang-lexer)](https://crates.io/crates/glsl-lang-lexer)   | [`lang-lexer`](lang-lexer)             | Lexers for the GLSL language                                      |
+| [![Crates.io](https://img.shields.io/crates/v/glsl-lang-types)](https://crates.io/crates/glsl-lang-types)   | [`lang-types`](lang-types)             | AST and shared type definitions for the GLSL language             |
 | [![Crates.io](https://img.shields.io/crates/v/glsl-lang-quote)](https://crates.io/crates/glsl-lang-quote)   | [`lang-quote`](lang-quote)             | proc-macro crate to parse GLSL at compile-time                    |
 | [![Crates.io](https://img.shields.io/crates/v/glsl-lang-cli)](https://crates.io/crates/glsl-lang-cli)       | [`lang-cli`](lang-cli)                 | simple CLI tool to show GLSL syntax trees                         |
 | [![Crates.io](https://img.shields.io/crates/v/lang-util)](https://crates.io/crates/lang-util)               | [`lang-util`](lang-util)               | utilities for implementing syntax trees                           |

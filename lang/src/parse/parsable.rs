@@ -2,11 +2,8 @@ use std::borrow::Cow;
 
 use crate::ast;
 
-#[cfg(feature = "lexer")]
-use super::ParseContext;
-
-#[cfg(feature = "lexer")]
-pub type ParseError<'i> = super::ParseError<super::Lexer<'i>>;
+#[cfg(any(feature = "lexer-v1", feature = "lexer-v2"))]
+use super::{DefaultLexer, HasLexerError, ParseContext, ParseError, ParseOptions};
 
 /// A parsable is something we can parse either directly, or embedded in some other syntax
 /// structure.
@@ -15,38 +12,55 @@ pub type ParseError<'i> = super::ParseError<super::Lexer<'i>>;
 /// Due to the way it is currently implemented, we have to generate extra code around the input,
 /// thus, if you are matching on span positions, you will get a different result than if using the
 /// parser directly.
-#[cfg(feature = "lexer")]
-pub trait Parsable<'i>: Sized {
+#[cfg(any(feature = "lexer-v1", feature = "lexer-v2"))]
+pub trait Parsable: Sized {
     /// Parse the input source
-    fn parse(source: &'i str) -> Result<Self, ParseError<'i>> {
+    fn parse(source: &str) -> Result<Self, ParseError<<DefaultLexer as HasLexerError>::Error>> {
         <Self as Parsable>::parse_with_options(source, &Default::default())
             .map(|(parsed, _names)| parsed)
     }
 
     /// Parse the input source with the given options
-    fn parse_with_options(
+    fn parse_with_options<'i>(
         source: &'i str,
-        opts: &ParseContext,
-    ) -> Result<(Self, ParseContext), ParseError<'i>>;
+        opts: &ParseOptions,
+    ) -> Result<(Self, ParseContext), ParseError<<DefaultLexer<'i> as HasLexerError>::Error>>;
+
+    /// Parse the input source with the given context
+    fn parse_with_context<'i>(
+        source: &'i str,
+        ctx: &ParseContext,
+    ) -> Result<(Self, ParseContext), ParseError<<DefaultLexer<'i> as HasLexerError>::Error>>;
 }
 
-#[cfg(feature = "lexer")]
-impl<'i, T: Extractable> Parsable<'i> for T {
-    fn parse_with_options(
+#[cfg(any(feature = "lexer-v1", feature = "lexer-v2"))]
+impl<T: Extractable<ast::TranslationUnit>> Parsable for T {
+    fn parse_with_options<'i>(
         source: &'i str,
-        opts: &ParseContext,
-    ) -> Result<(Self, ParseContext), ParseError<'i>> {
-        <ast::TranslationUnit as super::Parse>::parse_with_options(&Self::wrap(source), opts)
+        opts: &ParseOptions,
+    ) -> Result<(Self, ParseContext), ParseError<<DefaultLexer<'i> as HasLexerError>::Error>> {
+        <ast::TranslationUnit as super::DefaultParse>::parse_with_options(&Self::wrap(source), opts)
+            .map(|(tu, oo, _lexer)| (Self::extract(tu).expect("invalid parse result"), oo))
+    }
+
+    fn parse_with_context<'i>(
+        source: &'i str,
+        ctx: &ParseContext,
+    ) -> Result<(Self, ParseContext), ParseError<<DefaultLexer<'i> as HasLexerError>::Error>> {
+        <ast::TranslationUnit as super::DefaultParse>::parse_with_context(&Self::wrap(source), ctx)
             .map(|(tu, oo, _lexer)| (Self::extract(tu).expect("invalid parse result"), oo))
     }
 }
 
-pub trait Extractable: Sized {
+/// Part of the syntax tree that can be extracted from a parent tree
+pub trait Extractable<R>: Sized {
+    /// Wrap the given source which parses as Self into something that parses as R
     fn wrap(source: &str) -> Cow<str>;
-    fn extract(tu: ast::TranslationUnit) -> Option<Self>;
+    /// Extract the subtree for Self from a parent tree R
+    fn extract(tu: R) -> Option<Self>;
 }
 
-impl Extractable for ast::TranslationUnit {
+impl Extractable<ast::TranslationUnit> for ast::TranslationUnit {
     fn wrap(source: &str) -> Cow<str> {
         source.into()
     }
@@ -56,7 +70,7 @@ impl Extractable for ast::TranslationUnit {
     }
 }
 
-impl Extractable for ast::FunctionDefinition {
+impl Extractable<ast::TranslationUnit> for ast::FunctionDefinition {
     fn wrap(source: &str) -> Cow<str> {
         source.into()
     }
@@ -74,7 +88,7 @@ impl Extractable for ast::FunctionDefinition {
     }
 }
 
-impl Extractable for ast::UnaryOp {
+impl Extractable<ast::TranslationUnit> for ast::UnaryOp {
     fn wrap(source: &str) -> Cow<str> {
         format!("void main() {{ {}x; }}", source).into()
     }
@@ -114,7 +128,7 @@ impl Extractable for ast::UnaryOp {
     }
 }
 
-impl Extractable for ast::AssignmentOp {
+impl Extractable<ast::TranslationUnit> for ast::AssignmentOp {
     fn wrap(source: &str) -> Cow<str> {
         format!("void main() {{ x {} 2; }}", source).into()
     }
@@ -156,7 +170,7 @@ impl Extractable for ast::AssignmentOp {
 
 macro_rules! impl_parsable_statement {
     ($i:ident => $t:ty) => {
-        impl Extractable for $t {
+        impl Extractable<ast::TranslationUnit> for $t {
             fn wrap(source: &str) -> Cow<str> {
                 format!("void main() {{ {} }}", source).into()
             }
@@ -201,7 +215,7 @@ impl_parsable_statement!(Iteration => ast::IterationStatement);
 impl_parsable_statement!(Jump => ast::JumpStatement);
 impl_parsable_statement!(Compound => ast::CompoundStatement);
 
-impl Extractable for ast::ArraySpecifierDimension {
+impl Extractable<ast::TranslationUnit> for ast::ArraySpecifierDimension {
     fn wrap(source: &str) -> Cow<str> {
         format!("void main() {{ vec2{}(); }}", source).into()
     }
@@ -258,7 +272,7 @@ impl Extractable for ast::ArraySpecifierDimension {
     }
 }
 
-impl Extractable for ast::ArraySpecifier {
+impl Extractable<ast::TranslationUnit> for ast::ArraySpecifier {
     fn wrap(source: &str) -> Cow<str> {
         format!("void main() {{ vec2{}(); }}", source).into()
     }
@@ -315,7 +329,7 @@ impl Extractable for ast::ArraySpecifier {
     }
 }
 
-impl Extractable for ast::FunIdentifier {
+impl Extractable<ast::TranslationUnit> for ast::FunIdentifier {
     fn wrap(source: &str) -> Cow<str> {
         format!("void main() {{ {}(); }}", source).into()
     }
@@ -355,7 +369,7 @@ impl Extractable for ast::FunIdentifier {
     }
 }
 
-impl Extractable for ast::InterpolationQualifier {
+impl Extractable<ast::TranslationUnit> for ast::InterpolationQualifier {
     fn wrap(source: &str) -> Cow<str> {
         format!("{} float x;", source).into()
     }
@@ -412,7 +426,7 @@ impl Extractable for ast::InterpolationQualifier {
     }
 }
 
-impl Extractable for ast::ArrayedIdentifier {
+impl Extractable<ast::TranslationUnit> for ast::ArrayedIdentifier {
     fn wrap(source: &str) -> Cow<str> {
         format!("uniform Block {{ float x; }} {};", source).into()
     }
@@ -442,7 +456,7 @@ impl Extractable for ast::ArrayedIdentifier {
     }
 }
 
-impl Extractable for ast::PrecisionQualifier {
+impl Extractable<ast::TranslationUnit> for ast::PrecisionQualifier {
     fn wrap(source: &str) -> Cow<str> {
         format!("{} float x;", source).into()
     }
@@ -499,7 +513,7 @@ impl Extractable for ast::PrecisionQualifier {
     }
 }
 
-impl Extractable for ast::StorageQualifier {
+impl Extractable<ast::TranslationUnit> for ast::StorageQualifier {
     fn wrap(source: &str) -> Cow<str> {
         format!("{} float x;", source).into()
     }
@@ -556,7 +570,7 @@ impl Extractable for ast::StorageQualifier {
     }
 }
 
-impl Extractable for ast::LayoutQualifier {
+impl Extractable<ast::TranslationUnit> for ast::LayoutQualifier {
     fn wrap(source: &str) -> Cow<str> {
         format!("{} float x;", source).into()
     }
@@ -613,7 +627,7 @@ impl Extractable for ast::LayoutQualifier {
     }
 }
 
-impl Extractable for ast::TypeQualifier {
+impl Extractable<ast::TranslationUnit> for ast::TypeQualifier {
     fn wrap(source: &str) -> Cow<str> {
         format!("{} float x;", source).into()
     }
@@ -659,7 +673,7 @@ impl Extractable for ast::TypeQualifier {
     }
 }
 
-impl Extractable for ast::TypeSpecifier {
+impl Extractable<ast::TranslationUnit> for ast::TypeSpecifier {
     fn wrap(source: &str) -> Cow<str> {
         format!("{} x;", source).into()
     }
@@ -704,7 +718,7 @@ impl Extractable for ast::TypeSpecifier {
     }
 }
 
-impl Extractable for ast::TypeSpecifierNonArray {
+impl Extractable<ast::TranslationUnit> for ast::TypeSpecifierNonArray {
     fn wrap(source: &str) -> Cow<str> {
         format!("{} x;", source).into()
     }
@@ -758,7 +772,7 @@ impl Extractable for ast::TypeSpecifierNonArray {
     }
 }
 
-impl Extractable for ast::FullySpecifiedType {
+impl Extractable<ast::TranslationUnit> for ast::FullySpecifiedType {
     fn wrap(source: &str) -> Cow<str> {
         format!("{} x;", source).into()
     }
@@ -792,7 +806,7 @@ impl Extractable for ast::FullySpecifiedType {
     }
 }
 
-impl Extractable for ast::Declaration {
+impl Extractable<ast::TranslationUnit> for ast::Declaration {
     fn wrap(source: &str) -> Cow<str> {
         format!("{};", source).into()
     }
@@ -810,7 +824,7 @@ impl Extractable for ast::Declaration {
     }
 }
 
-impl Extractable for ast::StructFieldSpecifier {
+impl Extractable<ast::TranslationUnit> for ast::StructFieldSpecifier {
     fn wrap(source: &str) -> Cow<str> {
         format!("struct A {{ {} }};", source).into()
     }
@@ -871,7 +885,7 @@ impl Extractable for ast::StructFieldSpecifier {
     }
 }
 
-impl Extractable for ast::StructSpecifier {
+impl Extractable<ast::TranslationUnit> for ast::StructSpecifier {
     fn wrap(source: &str) -> Cow<str> {
         format!("{};", source).into()
     }
@@ -924,7 +938,7 @@ impl Extractable for ast::StructSpecifier {
     }
 }
 
-impl Extractable for ast::Expr {
+impl Extractable<ast::TranslationUnit> for ast::Expr {
     fn wrap(source: &str) -> Cow<str> {
         format!("void main() {{ {}; }}", source).into()
     }
@@ -960,7 +974,7 @@ impl Extractable for ast::Expr {
     }
 }
 
-impl Extractable for ast::Preprocessor {
+impl Extractable<ast::TranslationUnit> for ast::Preprocessor {
     fn wrap(source: &str) -> Cow<str> {
         source.into()
     }
@@ -978,7 +992,7 @@ impl Extractable for ast::Preprocessor {
     }
 }
 
-impl Extractable for ast::Statement {
+impl Extractable<ast::TranslationUnit> for ast::Statement {
     fn wrap(source: &str) -> Cow<str> {
         format!("void main() {{ {} }}", source).into()
     }

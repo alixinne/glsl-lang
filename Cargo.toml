@@ -2,6 +2,8 @@
 default-members = [
 	"lang",
 	"lang-pp",
+	"lang-lexer",
+	"lang-types",
 	"lang-util",
 	"lang-util-derive",
 	"lang-quote",
@@ -12,6 +14,8 @@ members = [
 	"fuzz",
 	"lang",
 	"lang-pp",
+	"lang-lexer",
+	"lang-types",
 	"lang-util",
 	"lang-util-derive",
 	"lang-quote",
@@ -22,6 +26,8 @@ members = [
 [patch.crates-io]
 glsl-lang       = { path = "lang" }
 glsl-lang-pp    = { path = "lang-pp" }
+glsl-lang-lexer = { path = "lang-lexer" }
+glsl-lang-types = { path = "lang-types" }
 glsl-lang-quote = { path = "lang-quote" }
 glsl-lang-cli   = { path = "lang-cli" }
 

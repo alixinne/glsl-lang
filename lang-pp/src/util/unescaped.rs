@@ -6,7 +6,8 @@ use std::{
 };
 
 use arrayvec::ArrayVec;
-use smol_str::SmolStr;
+
+use lang_util::SmolStr;
 
 #[derive(Debug, Clone, Copy)]
 pub struct Unescaped<'s> {

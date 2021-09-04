@@ -4,10 +4,9 @@ use std::{
 };
 
 use itertools::Itertools;
-use rowan::{GreenNodeBuilder, NodeOrToken, TextRange};
-use smol_str::SmolStr;
+use rowan::{GreenNodeBuilder, NodeOrToken};
 
-use lang_util::FileId;
+use lang_util::{FileId, SmolStr, TextRange};
 
 use crate::{
     parser::{

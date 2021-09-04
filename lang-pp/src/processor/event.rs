@@ -1,10 +1,8 @@
 use std::path::PathBuf;
 
 use derive_more::From;
-use rowan::TextRange;
-use smol_str::SmolStr;
 
-use lang_util::FileId;
+use lang_util::{FileId, SmolStr, TextRange};
 
 use crate::{
     exts::names::ExtNameAtom,

@@ -17,7 +17,6 @@ build = "build.rs"
 lang-util = "0.2.0"
 
 rowan = "0.12"
-smol_str = "0.1"
 cbitset = "0.2"
 static_assertions = "1.1"
 string_cache = "0.8"

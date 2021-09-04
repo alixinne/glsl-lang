@@ -18,8 +18,7 @@
 //! [`Expr`]: crate::ast::Expr
 //! [`FunctionDefinition`]: crate::ast::FunctionDefinition
 
-use std::fmt;
-use std::iter::FromIterator;
+use std::{fmt, iter::FromIterator};
 
 #[cfg(feature = "serde")]
 use rserde::{Deserialize, Serialize};
@@ -27,23 +26,8 @@ use rserde::{Deserialize, Serialize};
 pub use lang_util::{
     node::{Node, NodeDisplay},
     position::NodeSpan,
-    NodeContent,
+    NodeContent, SmolStr, TextRange, TextSize,
 };
-
-pub use smol_str::SmolStr;
-
-pub use text_size::{TextRange, TextSize};
-
-/// A path literal.
-#[derive(Clone, Debug, PartialEq, NodeContent)]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[cfg_attr(feature = "serde", serde(crate = "rserde"))]
-pub enum PathData {
-    /// Specified with angle brackets.
-    Absolute(String),
-    /// Specified with double quotes.
-    Relative(String),
-}
 
 /// A generic identifier.
 #[derive(Clone, Debug, PartialEq, PartialOrd, Hash, NodeContent)]
@@ -118,6 +102,17 @@ impl fmt::Display for TypeNameData {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
         self.0.fmt(f)
     }
+}
+
+/// A path literal.
+#[derive(Clone, Debug, PartialEq, NodeContent)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(crate = "rserde"))]
+pub enum PathData {
+    /// Specified with angle brackets.
+    Absolute(String),
+    /// Specified with double quotes.
+    Relative(String),
 }
 
 /// Type specifier (non-array).

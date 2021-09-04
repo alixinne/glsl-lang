@@ -1,18 +1,19 @@
 use super::*;
 
-use crate::parse::ParseOptions;
+use crate::ParseOptions;
 
 fn check_ident(input: &str) {
-    let context: LexerContext = ParseOptions {
-        target_vulkan: false,
-        ..Default::default()
-    }
-    .into();
-
-    let mut lexer = Lexer::new(input, context.clone());
+    let lexer = Lexer::new(
+        input,
+        &ParseOptions {
+            target_vulkan: false,
+            ..Default::default()
+        },
+    );
 
     assert_eq!(
         lexer
+            .run(Default::default())
             .next()
             .and_then(|result| result.ok().map(|(_, n, _)| n)),
         Some(Token::Identifier(input.into()))
@@ -20,16 +21,17 @@ fn check_ident(input: &str) {
 }
 
 fn check(input: &str, token: Token) {
-    let mut lexer = Lexer::new(
+    let lexer = Lexer::new(
         input,
-        ParseOptions {
+        &ParseOptions {
             target_vulkan: false,
             ..Default::default()
-        }
-        .into(),
+        },
     );
+
     assert_eq!(
         lexer
+            .run(Default::default())
             .next()
             .and_then(|result| result.ok().map(|(_, n, _)| n)),
         Some(token)
@@ -37,16 +39,17 @@ fn check(input: &str, token: Token) {
 }
 
 fn check_vulkan(input: &str, token: Token) {
-    let mut lexer = Lexer::new(
+    let lexer = Lexer::new(
         input,
-        ParseOptions {
+        &ParseOptions {
             target_vulkan: true,
             ..Default::default()
-        }
-        .into(),
+        },
     );
+
     assert_eq!(
         lexer
+            .run(Default::default())
             .next()
             .and_then(|result| result.ok().map(|(_, n, _)| n)),
         Some(token)

@@ -2,11 +2,11 @@ use logos::Logos;
 
 use super::{
     parsers::{parse_pp_cmt, parse_pp_int, parse_pp_path},
-    LexerContext, Token,
+    ParseContext, ParseOptions, Token,
 };
 
 #[derive(Debug, Clone, PartialEq, Logos)]
-#[logos(extras = LexerContext)]
+#[logos(extras = (ParseContext, ParseOptions))]
 pub enum PreprocessorToken<'i> {
     #[regex("[a-zA-Z_][a-zA-Z_0-9]*")]
     Identifier(&'i str),

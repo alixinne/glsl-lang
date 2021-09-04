@@ -3,19 +3,26 @@ use criterion::{
     Throughput,
 };
 
+use glsl_lang::parse::IntoParseBuilderExt;
+
 fn parse_impl_glsl_lang<T, M>(group: &mut BenchmarkGroup<'_, M>, input: &str)
 where
-    T: for<'i> glsl_lang::parse::Parse<'i>,
+    T: glsl_lang::parse::Parse,
     M: Measurement,
 {
     group.bench_with_input("glsl_lang", input, |b, input| {
         use glsl_lang::parse::LangParser;
 
         let parser = T::Parser::new();
-        let opts = glsl_lang::parse::ParseOptions::new().build();
+        let opts = glsl_lang::parse::ParseOptions::new();
 
         b.iter(|| {
-            T::parse_with_parser(input, &opts, &parser).ok();
+            input
+                .builder::<T>()
+                .opts(&opts)
+                .parser(&parser)
+                .parse()
+                .ok();
         })
     });
 }
@@ -34,7 +41,7 @@ where
 
 fn parse_impl<L, G>(c: &mut Criterion, input: &str, name: &str)
 where
-    L: for<'i> glsl_lang::parse::Parse<'i>,
+    L: glsl_lang::parse::Parse,
     G: glsl::parser::Parse,
 {
     let mut group = c.benchmark_group(name);

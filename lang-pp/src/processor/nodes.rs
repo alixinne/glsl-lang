@@ -2,8 +2,9 @@ use std::{borrow::Cow, convert::TryFrom, str::FromStr};
 
 use arrayvec::ArrayVec;
 use rowan::NodeOrToken;
-use smol_str::SmolStr;
 use thiserror::Error;
+
+use lang_util::SmolStr;
 
 use crate::{
     exts::names::ExtNameAtom,

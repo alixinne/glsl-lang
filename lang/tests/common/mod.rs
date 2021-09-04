@@ -5,10 +5,7 @@ use std::{
     path::PathBuf,
 };
 
-use glsl_lang::{
-    ast::{self, NodeDisplay},
-    parse::ParseError,
-};
+use glsl_lang::ast::{self, NodeDisplay};
 
 struct Paths {
     ast: PathBuf,
@@ -39,7 +36,9 @@ impl Paths {
 }
 
 #[cfg(all(feature = "lexer-v1", not(feature = "lexer-v2")))]
-fn parse_tu(path: &Path) -> Result<ast::TranslationUnit, ParseError<glsl_lang::lexer::v1::Lexer>> {
+fn parse_tu(
+    path: &Path,
+) -> Result<ast::TranslationUnit, glsl_lang::parse::ParseError<glsl_lang::lexer::v1::Lexer>> {
     use glsl_lang::parse::Parse;
 
     let source = std::fs::read_to_string(&path).expect("failed to parse file");
@@ -51,30 +50,28 @@ fn parse_tu(
     path: &Path,
 ) -> Result<
     ast::TranslationUnit,
-    ParseError<glsl_lang::lexer::v2::fs::Lexer<glsl_lang_pp::processor::fs::Std>>,
-> {
+    glsl_lang::parse::ParseError<<glsl_lang::lexer::v2::fs::Lexer<glsl_lang_pp::processor::fs::Std> as glsl_lang::lexer::HasLexerError>::Error>,
+>{
     use glsl_lang::{
         lexer::v2::fs::PreprocessorExt,
-        parse::{IntoLexerExt, ParseOptions},
+        parse::{IntoParseBuilderExt, ParseOptions},
     };
-
-    let mut opts = ParseOptions::new();
-    opts.default_version = 100;
-
-    let ctx = opts.into();
 
     let mut processor = glsl_lang_pp::processor::fs::StdProcessor::new();
     processor
         .open(path)
         .expect("failed to open file")
         .builder()
-        .opts(&ctx)
+        .opts(&ParseOptions {
+            default_version: 100,
+            ..Default::default()
+        })
         .parse()
         .map(|(tu, _, _)| tu)
 }
 
 #[cfg(not(any(feature = "lexer-v1", feature = "lexer-v2")))]
-fn parse_tu(path: &Path) -> Result<ast::TranslationUnit, &'static str> {
+fn parse_tu(_path: &Path) -> Result<ast::TranslationUnit, &'static str> {
     panic!("no lexer selected")
 }
 

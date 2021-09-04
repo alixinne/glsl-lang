@@ -2,42 +2,63 @@
 
 use std::path::{Path, PathBuf};
 
+use lang_util::position::LexerPosition;
+
 use glsl_lang_pp::{
     exts::{Registry, DEFAULT_REGISTRY},
     last::{self, Event},
     processor::{
-        fs::{ExpandStack, FileSystem, ParsedFile, Processor},
+        fs::{ExpandStack, ParsedFile, Processor},
         ProcessorState,
     },
 };
 
-use crate::parse::{IntoLexer, LangLexer, ParseContext};
+use crate::{HasLexerError, LangLexer, LangLexerIterator, ParseContext, ParseOptions, Token};
 
 use super::{
     core::{self, HandleTokenResult, LexerCore},
     LexicalError,
 };
 
+pub use glsl_lang_pp::processor::fs::FileSystem;
+
 /// glsl-lang-pp filesystem lexer
 pub struct Lexer<'r, 'p, F: FileSystem> {
+    inner: last::Tokenizer<'r, ExpandStack<'p, F>>,
+    current_file: PathBuf,
+    handle_token: HandleTokenResult<F::Error>,
+    opts: ParseOptions,
+}
+
+impl<'r, 'p, F: FileSystem> Lexer<'r, 'p, F> {
+    fn new(inner: ExpandStack<'p, F>, registry: &'r Registry, opts: &ParseOptions) -> Self {
+        Self {
+            inner: inner.tokenize(opts.default_version, opts.target_vulkan, registry),
+            current_file: Default::default(),
+            handle_token: Default::default(),
+            opts: *opts,
+        }
+    }
+
+    fn with_context(self, ctx: ParseContext) -> LexerIterator<'r, 'p, F> {
+        LexerIterator {
+            inner: self.inner,
+            core: LexerCore::new(&self.opts, ctx),
+            current_file: self.current_file,
+            handle_token: self.handle_token,
+        }
+    }
+}
+
+/// glsl-lang-pp filesystem lexer iterator
+pub struct LexerIterator<'r, 'p, F: FileSystem> {
     inner: last::Tokenizer<'r, ExpandStack<'p, F>>,
     core: LexerCore,
     current_file: PathBuf,
     handle_token: HandleTokenResult<F::Error>,
 }
 
-impl<'r, 'p, F: FileSystem> Lexer<'r, 'p, F> {
-    fn new(inner: ExpandStack<'p, F>, registry: &'r Registry, opts: ParseContext) -> Self {
-        Self {
-            inner: inner.tokenize(opts.opts.default_version, opts.opts.target_vulkan, registry),
-            core: LexerCore::new(opts),
-            current_file: Default::default(),
-            handle_token: Default::default(),
-        }
-    }
-}
-
-impl<'r, 'p, F: FileSystem> Iterator for Lexer<'r, 'p, F> {
+impl<'r, 'p, F: FileSystem> Iterator for LexerIterator<'r, 'p, F> {
     type Item = core::Item<F::Error>;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -104,11 +125,18 @@ impl<'r, 'p, F: FileSystem> Iterator for Lexer<'r, 'p, F> {
     }
 }
 
-impl<'r, 'p, F: FileSystem> LangLexer for Lexer<'r, 'p, F> {
-    type Input = File<'r, 'p, F>;
+impl<F: FileSystem> HasLexerError for Lexer<'_, '_, F> {
     type Error = LexicalError<F::Error>;
+}
 
-    fn new(source: Self::Input, opts: ParseContext) -> Self {
+impl<'r, 'p, F: FileSystem> LangLexer<'p> for Lexer<'r, 'p, F>
+where
+    File<'r, 'p, F>: 'p,
+{
+    type Input = File<'r, 'p, F>;
+    type Iter = LexerIterator<'r, 'p, F>;
+
+    fn new(source: Self::Input, opts: &ParseOptions) -> Self {
         Lexer::new(
             source.inner.process(source.state.unwrap_or_default()),
             source.registry.unwrap_or(&DEFAULT_REGISTRY),
@@ -116,23 +144,29 @@ impl<'r, 'p, F: FileSystem> LangLexer for Lexer<'r, 'p, F> {
         )
     }
 
-    fn chain<'i, P: crate::parse::LangParser<Self>>(
-        &mut self,
-        parser: &P,
-    ) -> Result<P::Item, crate::parse::ParseError<Self>> {
-        parser
-            .parse(self.core.context().clone(), self)
-            .map_err(|err| {
-                let location = self.inner.location();
-                let (file_id, lexer) = lang_util::error::error_location(&err);
+    fn run(self, ctx: ParseContext) -> Self::Iter {
+        self.with_context(ctx)
+    }
+}
 
-                lang_util::error::ParseError::<Self::Error>::builder()
-                    .pos(lexer)
-                    .current_file(file_id)
-                    .resolve(location)
-                    .resolve_path(&self.inner)
-                    .finish(err.into())
-            })
+impl<F: FileSystem> HasLexerError for LexerIterator<'_, '_, F> {
+    type Error = LexicalError<F::Error>;
+}
+
+impl<'r, 'p, F: FileSystem> LangLexerIterator for LexerIterator<'r, 'p, F> {
+    fn resolve_err(
+        &self,
+        err: lalrpop_util::ParseError<LexerPosition, Token, Self::Error>,
+    ) -> lang_util::error::ParseError<Self::Error> {
+        let location = self.inner.location();
+        let (file_id, lexer) = lang_util::error::error_location(&err);
+
+        lang_util::error::ParseError::<Self::Error>::builder()
+            .pos(lexer)
+            .current_file(file_id)
+            .resolve(location)
+            .resolve_path(&self.inner)
+            .finish(err.into())
     }
 }
 
@@ -194,17 +228,5 @@ impl<'r, 'p, F: FileSystem> File<'r, 'p, F> {
             registry: Some(registry.into()),
             ..self
         }
-    }
-}
-
-impl<'r, 'p, F: FileSystem> IntoLexer for File<'r, 'p, F> {
-    type Lexer = Lexer<'r, 'p, F>;
-
-    fn into_lexer(
-        self,
-        source: <Self::Lexer as LangLexer>::Input,
-        opts: ParseContext,
-    ) -> Self::Lexer {
-        <Self::Lexer as LangLexer>::new(source, opts)
     }
 }

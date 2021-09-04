@@ -1,5 +1,6 @@
-use rowan::{Checkpoint, TextRange};
-use smol_str::SmolStr;
+use rowan::Checkpoint;
+
+use lang_util::{SmolStr, TextRange};
 
 use crate::lexer;
 

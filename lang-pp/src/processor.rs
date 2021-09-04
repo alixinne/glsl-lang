@@ -1,8 +1,6 @@
 use std::{array::IntoIter, collections::HashMap};
 
-use smol_str::SmolStr;
-
-use lang_util::FileId;
+use lang_util::{FileId, SmolStr};
 
 mod definition;
 use definition::Definition;

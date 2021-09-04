@@ -1,0 +1,25 @@
+[package]
+name = "glsl-lang-types"
+version = "0.2.0"
+authors = ["Vincent Tavernier <vince.tavernier@gmail.com>"]
+edition = "2018"
+license = "BSD-3-Clause"
+description = "GLSL language AST"
+homepage = "https://github.com/vtavernier/glsl-lang"
+documentation = "https://docs.rs/glsl-lang-lexer/"
+repository = "https://github.com/vtavernier/glsl-lang"
+readme = "README.md"
+keywords = ["glsl", "language", "parser"]
+categories = ["rendering"]
+
+[dependencies]
+lang-util = "0.2.0"
+thiserror = "1.0"
+
+rserde = { version = "1.0", optional = true, features = ["derive"], package = "serde" }
+
+[features]
+default = []
+
+# AST Serialization
+serde = ["rserde", "lang-util/serde"]

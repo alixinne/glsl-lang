@@ -19,8 +19,10 @@ use std::io::prelude::*;
 
 use argh::FromArgs;
 
-use glsl_lang::ast::{NodeDisplay, TranslationUnit};
-use glsl_lang::parse::Parse;
+use glsl_lang::{
+    ast::{NodeDisplay, TranslationUnit},
+    parse::DefaultParse,
+};
 
 fn output_text(output: &mut dyn std::io::Write, tu: TranslationUnit) -> std::io::Result<()> {
     writeln!(output, "{}", tu.display())?;

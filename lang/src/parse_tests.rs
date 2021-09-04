@@ -2,40 +2,44 @@ use lang_util::node::NodeContent;
 
 use crate::{
     ast,
-    parse::{Parsable, ParseContext, ParseOptions},
+    parse::{IntoParseBuilderExt, Parsable, ParseContext},
 };
 
 #[test]
 fn parse_comments() {
-    let opts = ParseOptions::new().with_comments();
+    let ctx = ParseContext::new_with_comments();
 
     assert_eq!(
-        ast::TranslationUnit::parse_with_options("// lol", &opts).map(|(_, opts)| opts
-            .into_data()
-            .unwrap()
-            .comments
-            .unwrap()
-            .into_iter()
-            .next()
-            .unwrap()
-            .1
-            .content),
-        Ok(ast::CommentData::Single(" lol".to_owned())),
-    );
-
-    assert_eq!(
-        ast::TranslationUnit::parse_with_options("/* Something */\nvoid main() {}", &opts).map(
-            |(_, opts)| opts
-                .into_data()
+        "// lol".builder().context(&ctx).parse().map(
+            |(_, ctx, _): (ast::TranslationUnit, _, _)| ctx
+                .data()
+                .comments()
                 .unwrap()
-                .comments
-                .unwrap()
-                .into_iter()
+                .iter()
                 .next()
                 .unwrap()
                 .1
                 .content
+                .clone()
         ),
+        Ok(ast::CommentData::Single(" lol".to_owned())),
+    );
+
+    assert_eq!(
+        "/* Something */\nvoid main() {}"
+            .builder()
+            .context(&ctx)
+            .parse()
+            .map(|(_, ctx, _): (ast::TranslationUnit, _, _)| ctx
+                .data()
+                .comments()
+                .unwrap()
+                .iter()
+                .next()
+                .unwrap()
+                .1
+                .content
+                .clone()),
         Ok(ast::CommentData::Multi(" Something ".to_owned())),
     );
 }
@@ -362,13 +366,13 @@ fn parse_struct_field_specifier_type_name() {
     }
     .into();
 
-    let opts = get_s0238_3_opts();
+    let ctx = get_s0238_3_ctx();
     assert_eq!(
-        ast::StructFieldSpecifier::parse_with_options("S0238_3 x;", &opts).map(|(p, _)| p),
+        ast::StructFieldSpecifier::parse_with_context("S0238_3 x;", &ctx).map(|(p, _)| p),
         Ok(expected.clone())
     );
     assert_eq!(
-        ast::StructFieldSpecifier::parse_with_options("S0238_3     x ;", &opts).map(|(p, _)| p),
+        ast::StructFieldSpecifier::parse_with_context("S0238_3     x ;", &ctx).map(|(p, _)| p),
         Ok(expected)
     );
 }
@@ -423,10 +427,10 @@ fn parse_struct_specifier_one_field() {
     );
 }
 
-fn get_s0238_3_opts() -> ParseContext {
-    let opts = ParseOptions::default().build();
-    opts.add_type_name(ast::IdentifierData::from("S0238_3").into());
-    opts
+fn get_s0238_3_ctx() -> ParseContext {
+    let ctx = ParseContext::new();
+    ctx.add_type_name(ast::IdentifierData::from("S0238_3").into());
+    ctx
 }
 
 #[test]
@@ -488,25 +492,25 @@ fn parse_struct_specifier_multi_fields() {
     }
     .into();
 
-    let opts = get_s0238_3_opts();
+    let ctx = get_s0238_3_ctx();
     assert_eq!(
-      ast::StructSpecifier::parse_with_options(
+      ast::StructSpecifier::parse_with_context(
         "struct _TestStruct_934i { vec4 foo; float bar; uint zoo; bvec3 foo_BAR_zoo3497_34; S0238_3 x; }",
-        &opts,
+        &ctx,
       ).map(|(p, _)| p),
       Ok(expected.clone()),
     );
     assert_eq!(
-      ast::StructSpecifier::parse_with_options(
+      ast::StructSpecifier::parse_with_context(
         "struct _TestStruct_934i{vec4 foo;float bar;uint zoo;bvec3 foo_BAR_zoo3497_34;S0238_3 x;}",
-        &opts,
+        &ctx,
       ).map(|(p, _)| p),
       Ok(expected.clone()),
     );
     assert_eq!(
-      ast::StructSpecifier::parse_with_options(
+      ast::StructSpecifier::parse_with_context(
         "struct _TestStruct_934i\n   {  vec4\nfoo ;   \n\t float\n\t\t  bar  ;   \nuint   zoo;    \n bvec3   foo_BAR_zoo3497_34\n\n\t\n\t\n  ; S0238_3 x;}",
-        &opts,
+        &ctx,
       ).map(|(p, _)| p),
       Ok(expected),
     );
@@ -987,10 +991,10 @@ fn parse_type_specifier_non_array() {
         Ok(ast::TypeSpecifierNonArrayData::UImageCubeArray.into())
     );
 
-    let opts = ParseOptions::default().build();
-    opts.add_type_name(ast::IdentifierData::from("ReturnType").into());
+    let ctx = ParseContext::new();
+    ctx.add_type_name(ast::IdentifierData::from("ReturnType").into());
     assert_eq!(
-        ast::TypeSpecifierNonArray::parse_with_options("ReturnType", &opts).map(|(p, _)| p),
+        ast::TypeSpecifierNonArray::parse_with_context("ReturnType", &ctx).map(|(p, _)| p),
         Ok(
             ast::TypeSpecifierNonArrayData::TypeName(ast::TypeNameData::from("ReturnType").into())
                 .into()
@@ -1045,8 +1049,8 @@ fn parse_fully_specified_type() {
 
 #[test]
 fn parse_fully_specified_type_with_qualifier() {
-    let opts = ParseOptions::new().build();
-    let tn = opts.add_type_name(ast::IdentifierData::from("S032_29k").into());
+    let ctx = ParseContext::new();
+    let tn = ctx.add_type_name(ast::IdentifierData::from("S032_29k").into());
 
     let qual_spec = ast::TypeQualifierSpecData::Storage(
         ast::StorageQualifierData::Subroutine(vec![
@@ -1070,25 +1074,25 @@ fn parse_fully_specified_type_with_qualifier() {
     .into();
 
     assert_eq!(
-        ast::FullySpecifiedType::parse_with_options(
+        ast::FullySpecifiedType::parse_with_context(
             "subroutine (vec2, S032_29k) iimage2DMSArray",
-            &opts,
+            &ctx,
         )
         .map(|(p, _)| p),
         Ok(expected.clone()),
     );
     assert_eq!(
-        ast::FullySpecifiedType::parse_with_options(
+        ast::FullySpecifiedType::parse_with_context(
             "subroutine (  vec2\t\n \t , \n S032_29k   )\n iimage2DMSArray ",
-            &opts,
+            &ctx,
         )
         .map(|(p, _)| p),
         Ok(expected.clone()),
     );
     assert_eq!(
-        ast::FullySpecifiedType::parse_with_options(
+        ast::FullySpecifiedType::parse_with_context(
             "subroutine(vec2,S032_29k)iimage2DMSArray",
-            &opts,
+            &ctx,
         )
         .map(|(p, _)| p),
         Ok(expected),
@@ -1787,8 +1791,8 @@ fn parse_declaration_precision_high() {
 
 #[test]
 fn parse_declaration_uniform_block() {
-    let opts = ParseOptions::new().build();
-    let foo_var = opts.add_type_name(ast::IdentifierData::from("foo").into());
+    let ctx = ParseContext::new();
+    let foo_var = ctx.add_type_name(ast::IdentifierData::from("foo").into());
 
     let qual_spec = ast::TypeQualifierSpecData::Storage(ast::StorageQualifierData::Uniform.into());
     let qual = ast::TypeQualifierData {
@@ -1834,18 +1838,18 @@ fn parse_declaration_uniform_block() {
     .into();
 
     assert_eq!(
-        ast::Declaration::parse_with_options(
+        ast::Declaration::parse_with_context(
             "uniform UniformBlockTest { float a; vec3 b; foo c, d; };",
-            &opts
+            &ctx
         )
         .map(|(p, _)| p),
         Ok(expected.clone()),
     );
 
     assert_eq!(
-        ast::Declaration::parse_with_options(
+        ast::Declaration::parse_with_context(
             "uniform   \nUniformBlockTest\n {\n \t float   a  \n; \nvec3 b\n; foo \nc\n, \nd\n;\n }\n\t\n\t\t \t;",
-            &opts,
+            &ctx,
         ).map(|(p, _)| p),
         Ok(expected)
     );
@@ -1853,8 +1857,8 @@ fn parse_declaration_uniform_block() {
 
 #[test]
 fn parse_declaration_buffer_block() {
-    let opts = ParseOptions::new().build();
-    let foo_var = opts.add_type_name(ast::IdentifierData::from("foo").into());
+    let ctx = ParseContext::new();
+    let foo_var = ctx.add_type_name(ast::IdentifierData::from("foo").into());
 
     let qual_spec = ast::TypeQualifierSpecData::Storage(ast::StorageQualifierData::Buffer.into());
     let qual = ast::TypeQualifierData {
@@ -1909,18 +1913,18 @@ fn parse_declaration_buffer_block() {
     .into();
 
     assert_eq!(
-        ast::Declaration::parse_with_options(
+        ast::Declaration::parse_with_context(
             "buffer UniformBlockTest { float a; vec3 b[]; foo c, d; };",
-            &opts,
+            &ctx,
         )
         .map(|(p, _)| p),
         Ok(expected.clone()),
     );
 
     assert_eq!(
-        ast::Declaration::parse_with_options(
+        ast::Declaration::parse_with_context(
             "buffer   \nUniformBlockTest\n {\n \t float   a  \n; \nvec3 b   [   ]\n; foo \nc\n, \nd\n;\n }\n\t\n\t\t \t;",
-            &opts,
+            &ctx,
         ).map(|(p, _)| p),
         Ok(expected),
     );

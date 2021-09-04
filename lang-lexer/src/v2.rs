@@ -1,10 +1,10 @@
 //! glsl-lang-pp based lexer
 
 use glsl_lang_pp::{last, processor};
-use lang_util::located::Located;
-use text_size::TextSize;
 
-use super::{LexerPosition, Token};
+use lang_util::{located::Located, position::LexerPosition, TextSize};
+
+use super::Token;
 
 mod core;
 

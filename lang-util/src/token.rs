@@ -2,7 +2,8 @@
 
 /// Information about a known token
 #[derive(Debug, Clone, PartialEq, PartialOrd, Hash)]
-#[cfg_attr(feature = "serde", derive(serde::Serialize))]
+#[cfg_attr(feature = "serde", derive(rserde::Serialize))]
+#[cfg_attr(feature = "serde", serde(crate = "rserde"))]
 pub struct TokenDescriptor {
     /// Variant name
     pub variant_name: &'static str,

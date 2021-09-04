@@ -2,10 +2,9 @@ use std::cell::RefCell;
 use std::collections::{BTreeMap, HashSet};
 use std::rc::Rc;
 
-use lang_util::FileId;
-use smol_str::SmolStr;
+use lang_util::{FileId, SmolStr};
 
-use crate::ast;
+use glsl_lang_types::ast;
 
 /// Parsing options
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -36,36 +35,39 @@ impl ParseOptions {
     pub fn new() -> Self {
         Self::default()
     }
+}
 
+/// Parsing context
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ParseContext {
+    /// Parsing data
+    data: Rc<RefCell<ParseContextData>>,
+}
+
+impl ParseContext {
     /// Create a new parsing context from this options object
-    pub fn build(self) -> ParseContext {
-        ParseContext {
-            opts: self,
-            ..Default::default()
-        }
+    pub fn new() -> ParseContext {
+        Default::default()
     }
 
     /// Create a new parsing context from this options object, with comment parsing enabled
-    pub fn with_comments(self) -> ParseContext {
-        ParseContext {
-            opts: self,
+    pub fn new_with_comments() -> Self {
+        Self {
             data: Rc::new(RefCell::new(ParseContextData::with_comments())),
         }
     }
 
     /// Create a new parsing context from this options object, with a custom type table policy
-    pub fn with_policy(self, policy: impl TypeTablePolicy + 'static) -> ParseContext {
-        ParseContext {
-            opts: self,
+    pub fn new_with_policy(policy: impl TypeTablePolicy + 'static) -> Self {
+        Self {
             data: Rc::new(RefCell::new(ParseContextData::with_policy(policy))),
         }
     }
 
     /// Create a new parsing context from this options object, with a custom type table policy and
     /// comment parsing enabled
-    pub fn with_comments_and_policy(self, policy: impl TypeTablePolicy + 'static) -> ParseContext {
-        ParseContext {
-            opts: self,
+    pub fn new_with_comments_and_policy(policy: impl TypeTablePolicy + 'static) -> Self {
+        Self {
             data: Rc::new(RefCell::new(ParseContextData::with_comments_and_policy(
                 policy,
             ))),
@@ -73,28 +75,15 @@ impl ParseOptions {
     }
 
     /// Create a new parsing context from this options object and pre-existing context data
-    pub fn with_context(self, context: ParseContextData) -> ParseContext {
-        ParseContext {
-            opts: self,
+    pub fn new_with_context(context: ParseContextData) -> Self {
+        Self {
             data: Rc::new(RefCell::new(context)),
         }
     }
-}
 
-/// Parsing context
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ParseContext {
-    /// Parsing options
-    pub opts: ParseOptions,
-    /// Parsing data
-    pub data: Rc<RefCell<ParseContextData>>,
-}
-
-impl ParseContext {
     /// Clone the parsing data and return the cloned context
     pub fn clone_inner(&self) -> Self {
         Self {
-            opts: self.opts,
             data: Rc::new(RefCell::new(self.data.borrow().clone())),
         }
     }
@@ -118,21 +107,11 @@ impl ParseContext {
     /// Create a new parse context cloning the given one's data, but applies the given policy
     pub fn with_policy(&self, policy: impl TypeTablePolicy + 'static) -> ParseContext {
         Self {
-            opts: self.opts,
             data: {
                 let mut data = self.data().clone();
                 data.policy = Rc::new(policy);
                 Rc::new(RefCell::new(data))
             },
-        }
-    }
-}
-
-impl From<ParseOptions> for ParseContext {
-    fn from(opts: ParseOptions) -> Self {
-        Self {
-            opts,
-            data: Default::default(),
         }
     }
 }
@@ -143,7 +122,7 @@ pub struct ParseContextData {
     /// List of known type names
     names: Vec<HashSet<SmolStr>>,
     /// List of parsed comments (or `None` to disable comment parsing)
-    pub comments: Option<CommentList>,
+    comments: Option<CommentList>,
 
     policy: Rc<dyn TypeTablePolicy>,
 }
@@ -186,6 +165,11 @@ impl ParseContextData {
             policy: Rc::new(policy),
             ..Default::default()
         }
+    }
+
+    /// Get the list of comments stored in this parse context
+    pub fn comments(&self) -> Option<&CommentList> {
+        self.comments.as_ref()
     }
 }
 
@@ -296,7 +280,7 @@ impl ParseContextData {
 // Begin comment stuff
 
 /// A list of comments indexed by their position
-pub type CommentList = BTreeMap<ast::NodeSpan, ast::Comment>;
+pub type CommentList = BTreeMap<lang_util::position::NodeSpan, ast::Comment>;
 
 impl ParseContext {
     /// Return `true` if this parsing context supports comments

@@ -1,6 +1,6 @@
 use argh::FromArgs;
 
-use glsl_lang::parse::Parse;
+use glsl_lang::parse::DefaultParse;
 use glsl_lang_pp::processor::ProcessorState;
 
 #[derive(FromArgs)]

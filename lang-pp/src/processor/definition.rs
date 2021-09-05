@@ -690,10 +690,15 @@ impl<'d> MacroInvocation<'d> {
 
             (
                 MacroCall::Function(args),
-                NodeSpan::new(
-                    token_start.source_id,
-                    TextRange::new(token_start.offset, token_end.offset),
-                ),
+                // Do not build the NodeSpan if we have an existing range, since the tokens have
+                // been generated and may not be in order, thus TextRange::new will panic because
+                // start > end
+                text_range.unwrap_or_else(|| {
+                    NodeSpan::new(
+                        token_start.source_id,
+                        TextRange::new(token_start.offset, token_end.offset),
+                    )
+                }),
             )
         };
 

@@ -35,7 +35,10 @@ impl Paths {
     }
 }
 
-#[cfg(all(feature = "lexer-v1", not(feature = "lexer-v2-full")))]
+#[cfg(all(
+    any(feature = "lexer-v1", feature = "lexer-v2-min"),
+    not(feature = "lexer-v2-full")
+))]
 fn parse_tu(
     path: &Path,
 ) -> Result<ast::TranslationUnit, glsl_lang::parse::ParseError<glsl_lang::lexer::v1::Lexer>> {
@@ -50,10 +53,10 @@ fn parse_tu(
     path: &Path,
 ) -> Result<
     ast::TranslationUnit,
-    glsl_lang::parse::ParseError<<glsl_lang::lexer::v2::fs::Lexer<glsl_lang_pp::processor::fs::Std> as glsl_lang::lexer::HasLexerError>::Error>,
+    glsl_lang::parse::ParseError<<glsl_lang::lexer::v2_full::fs::Lexer<glsl_lang_pp::processor::fs::Std> as glsl_lang::lexer::HasLexerError>::Error>,
 >{
     use glsl_lang::{
-        lexer::v2::fs::PreprocessorExt,
+        lexer::v2_full::fs::PreprocessorExt,
         parse::{IntoParseBuilderExt, ParseOptions},
     };
 
@@ -70,7 +73,11 @@ fn parse_tu(
         .map(|(tu, _, _)| tu)
 }
 
-#[cfg(not(any(feature = "lexer-v1", feature = "lexer-v2-full")))]
+#[cfg(not(any(
+    feature = "lexer-v1",
+    feature = "lexer-v2-min",
+    feature = "lexer-v2-full"
+)))]
 fn parse_tu(_path: &Path) -> Result<ast::TranslationUnit, &'static str> {
     panic!("no lexer selected")
 }

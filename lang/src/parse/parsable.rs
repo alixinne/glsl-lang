@@ -2,7 +2,11 @@ use std::borrow::Cow;
 
 use crate::ast;
 
-#[cfg(any(feature = "lexer-v1", feature = "lexer-v2-full"))]
+#[cfg(any(
+    feature = "lexer-v1",
+    feature = "lexer-v2-min",
+    feature = "lexer-v2-full"
+))]
 use super::{DefaultLexer, HasLexerError, ParseContext, ParseError, ParseOptions};
 
 /// A parsable is something we can parse either directly, or embedded in some other syntax
@@ -12,7 +16,11 @@ use super::{DefaultLexer, HasLexerError, ParseContext, ParseError, ParseOptions}
 /// Due to the way it is currently implemented, we have to generate extra code around the input,
 /// thus, if you are matching on span positions, you will get a different result than if using the
 /// parser directly.
-#[cfg(any(feature = "lexer-v1", feature = "lexer-v2-full"))]
+#[cfg(any(
+    feature = "lexer-v1",
+    feature = "lexer-v2-min",
+    feature = "lexer-v2-full"
+))]
 pub trait Parsable: Sized {
     /// Parse the input source
     fn parse(source: &str) -> Result<Self, ParseError<<DefaultLexer as HasLexerError>::Error>> {
@@ -33,7 +41,11 @@ pub trait Parsable: Sized {
     ) -> Result<(Self, ParseContext), ParseError<<DefaultLexer<'i> as HasLexerError>::Error>>;
 }
 
-#[cfg(any(feature = "lexer-v1", feature = "lexer-v2-full"))]
+#[cfg(any(
+    feature = "lexer-v1",
+    feature = "lexer-v2-min",
+    feature = "lexer-v2-full"
+))]
 impl<T: Extractable<ast::TranslationUnit>> Parsable for T {
     fn parse_with_options<'i>(
         source: &'i str,

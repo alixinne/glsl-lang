@@ -47,6 +47,7 @@ default = []
 
 # Provide interface to lexers through the lexers module
 lexer-v1 = ["glsl-lang-lexer/v1"]
+lexer-v2-min = ["glsl-lang-lexer/v2-min"]
 lexer-v2-full = ["glsl-lang-lexer/v2-full"]
 
 # Additional sub-parsers. Increases compilation time.

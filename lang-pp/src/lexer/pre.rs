@@ -76,6 +76,10 @@ impl<'i> PreLexer<'i> {
         }
     }
 
+    pub fn input(&self) -> &'i str {
+        self.source
+    }
+
     pub fn line_map(&self) -> &LineMap {
         self.input.line_map()
     }

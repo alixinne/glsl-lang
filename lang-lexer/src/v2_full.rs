@@ -1,4 +1,4 @@
-//! glsl-lang-pp based lexer
+//! glsl-lang-pp/full based lexer
 
 use glsl_lang_pp::{processor, types};
 

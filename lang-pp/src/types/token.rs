@@ -1611,7 +1611,7 @@ pub enum Token {
     ERROR(ErrorKind),
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, derive_more::Display)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, derive_more::Display)]
 pub enum ErrorKind {
     #[display(fmt = "invalid token")]
     InvalidToken,

@@ -1,4 +1,4 @@
-mod lexer;
+pub mod lexer;
 mod util;
 #[macro_use]
 pub mod types;

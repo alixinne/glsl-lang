@@ -2,6 +2,8 @@ use std::ops::{Deref, DerefMut};
 
 use lang_util::TextRange;
 
+use super::TokenText;
+
 // A token somewhere in a source file
 #[derive(Debug, Clone, Copy)]
 pub struct TextToken<T> {
@@ -16,6 +18,10 @@ impl<T> TextToken<T> {
 
     pub fn raw<'s>(&self, input: &'s str) -> &'s str {
         &input[self.range]
+    }
+
+    pub fn text<'s>(&self, input: &'s str) -> TokenText<'s> {
+        TokenText::raw(&input[self.range])
     }
 
     pub fn map<U>(self, f: impl FnOnce(T) -> U) -> TextToken<U> {

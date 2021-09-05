@@ -34,6 +34,11 @@ impl<'i> Lexer<'i> {
         }
     }
 
+    /// Get a reference to the input slice
+    pub fn input(&self) -> &'i str {
+        self.input.input()
+    }
+
     /// Get a reference to the line map
     pub fn line_map(&self) -> &LineMap {
         self.input.line_map()

@@ -8,6 +8,12 @@ pub use token::*;
 #[cfg(feature = "v1")]
 pub mod v1;
 
+#[cfg(any(feature = "v2-min", feature = "v2-full"))]
+mod v2;
+
+#[cfg(feature = "v2-min")]
+pub mod v2_min;
+
 #[cfg(feature = "v2-full")]
 pub mod v2_full;
 

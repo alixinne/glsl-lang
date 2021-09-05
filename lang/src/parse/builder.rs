@@ -118,7 +118,11 @@ impl<'i, 'o, 'c, 'p, L: LangLexer<'i>, T: HasParser> ParseBuilder<'i, 'o, 'c, 'p
     }
 }
 
-#[cfg(any(feature = "lexer-v1", feature = "lexer-v2-full"))]
+#[cfg(any(
+    feature = "lexer-v1",
+    feature = "lexer-v2-min",
+    feature = "lexer-v2-full"
+))]
 impl<'i, 'o, 'c, 'p, T: HasParser> ParseBuilder<'i, 'o, 'c, 'p, super::DefaultLexer<'i>, T> {
     /// Create a new parse builder from the given input string
     pub fn default(source: <super::DefaultLexer<'i> as LangLexer<'i>>::Input) -> Self {
@@ -143,7 +147,11 @@ pub trait IntoParseBuilderExt<'i> {
         T: HasParser;
 }
 
-#[cfg(any(feature = "lexer-v1", feature = "lexer-v2-full"))]
+#[cfg(any(
+    feature = "lexer-v1",
+    feature = "lexer-v2-min",
+    feature = "lexer-v2-full"
+))]
 impl<'i> IntoParseBuilderExt<'i> for &'i str {
     type Lexer = super::DefaultLexer<'i>;
 

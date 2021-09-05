@@ -2015,7 +2015,14 @@ where
     Ok(())
 }
 
-#[cfg(all(test, any(feature = "lexer-v1", feature = "lexer-v2")))]
+#[cfg(all(
+    test,
+    any(
+        feature = "lexer-v1",
+        feature = "lexer-v2-min",
+        feature = "lexer-v2-full"
+    )
+))]
 mod tests {
     use super::*;
     use crate::parse::Parsable;

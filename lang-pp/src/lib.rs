@@ -1,10 +1,15 @@
+mod lexer;
+mod util;
 #[macro_use]
-pub mod last;
+pub mod types;
 
+#[cfg(feature = "exts")]
 #[macro_use]
 pub mod exts;
 
-mod lexer;
+#[cfg(feature = "full")]
+pub mod last;
+#[cfg(feature = "full")]
 mod parser;
+#[cfg(feature = "full")]
 pub mod processor;
-pub mod util;

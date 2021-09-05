@@ -14,7 +14,7 @@ fn main() {
         .write_to_file(&out_dir.join("ext_names.rs"))
         .expect("failed to generate atoms");
 
-    string_cache_codegen::AtomType::new("last::type_names::TypeNameAtom", "type_name!")
+    string_cache_codegen::AtomType::new("types::type_names::TypeNameAtom", "type_name!")
         .atoms(&[
             "void",
             "int",
@@ -189,7 +189,7 @@ fn main() {
         .write_to_file(&out_dir.join("type_names.rs"))
         .expect("failed to generate atoms");
 
-    string_cache_codegen::AtomType::new("last::keywords::KeywordAtom", "keyword!")
+    string_cache_codegen::AtomType::new("types::keywords::KeywordAtom", "keyword!")
         .atoms(&[
             "const",
             "uniform",

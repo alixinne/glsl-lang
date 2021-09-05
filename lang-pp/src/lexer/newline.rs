@@ -2,7 +2,7 @@
 
 use std::{iter::Peekable, str::CharIndices};
 
-use rowan::{TextRange, TextSize};
+use lang_util::{TextRange, TextSize};
 
 use crate::util::LineMap;
 

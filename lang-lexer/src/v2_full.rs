@@ -1,6 +1,6 @@
 //! glsl-lang-pp based lexer
 
-use glsl_lang_pp::{last, processor};
+use glsl_lang_pp::{processor, types};
 
 use lang_util::{
     located::Located,
@@ -21,7 +21,7 @@ pub enum LexicalError<E: std::error::Error + 'static> {
     /// Invalid token in lexical analysis
     Token {
         /// Type of invalid token error
-        kind: last::token::ErrorKind,
+        kind: types::token::ErrorKind,
         /// Location of the error
         pos: NodeSpan,
     },

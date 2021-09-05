@@ -5,10 +5,7 @@ use crate::{
     util::Unescaped,
 };
 
-use super::{
-    event::{OutputToken, TokenLike},
-    ProcessorState,
-};
+use super::{event::OutputToken, ProcessorState};
 
 #[derive(Debug, Clone)]
 pub struct ExprEvaluator<'i, I: Iterator<Item = &'i OutputToken>> {

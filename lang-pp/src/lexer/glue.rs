@@ -8,7 +8,7 @@ use crate::{
 };
 
 mod token;
-use rowan::TextRange;
+use lang_util::TextRange;
 pub use token::Token;
 
 pub type TextToken = crate::util::TextToken<token::Token>;

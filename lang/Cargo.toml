@@ -35,7 +35,7 @@ glsl-lang-pp = "0.2.0"
 
 [[test]]
 name = "pos_error"
-required-features = ["lexer-v2"]
+required-features = ["lexer-v2-full"]
 
 [[bench]]
 name = "glsl"
@@ -47,7 +47,7 @@ default = []
 
 # Provide interface to lexers through the lexers module
 lexer-v1 = ["glsl-lang-lexer/v1"]
-lexer-v2 = ["glsl-lang-lexer/v2"]
+lexer-v2-full = ["glsl-lang-lexer/v2-full"]
 
 # Additional sub-parsers. Increases compilation time.
 parser-expr = []

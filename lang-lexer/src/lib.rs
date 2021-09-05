@@ -8,8 +8,8 @@ pub use token::*;
 #[cfg(feature = "v1")]
 pub mod v1;
 
-#[cfg(feature = "v2")]
-pub mod v2;
+#[cfg(feature = "v2-full")]
+pub mod v2_full;
 
 /// Language lexer error definition
 pub trait HasLexerError {

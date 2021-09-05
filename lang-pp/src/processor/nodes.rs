@@ -9,10 +9,7 @@ use lang_util::{FileId, SmolStr};
 use crate::{
     exts::names::ExtNameAtom,
     parser::{SyntaxKind::*, SyntaxNode, SyntaxToken},
-    processor::{
-        event::TokenLike,
-        expr::{EvalResult, ExprEvaluator},
-    },
+    processor::expr::{EvalResult, ExprEvaluator},
     util::Unescaped,
 };
 

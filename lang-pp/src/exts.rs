@@ -1,6 +1,6 @@
 use std::{array::IntoIter, collections::HashMap};
 
-use crate::last::type_names::TypeNameAtom;
+use crate::types::type_names::TypeNameAtom;
 
 #[macro_use]
 pub mod names;

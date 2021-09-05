@@ -39,6 +39,12 @@ impl<'s> Unescaped<'s> {
     }
 }
 
+impl<'s> From<&'s str> for Unescaped<'s> {
+    fn from(value: &'s str) -> Self {
+        Self::new(value)
+    }
+}
+
 impl<'s> From<Unescaped<'s>> for SmolStr {
     fn from(src: Unescaped<'s>) -> Self {
         src.chars().collect()
@@ -114,6 +120,92 @@ impl<'s> Iterator for UnescapeIter<'s> {
                 // No continuation, i.e. happy path
                 return self.chars.next().map(|(_, ch)| ch);
             }
+        }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct TokenText<'s>(TokenTextRepr<'s>);
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+enum TokenTextRepr<'s> {
+    Raw(&'s str),
+    Unescaped(&'s str),
+    JustUnescaped(Cow<'s, str>),
+}
+
+impl<'s> TokenText<'s> {
+    pub fn push_str(&mut self, rest: TokenText<'_>) {
+        let mut self_text = self.to_owned_string();
+        self_text.push_str(rest.to_string().as_ref());
+        self.0 = TokenTextRepr::JustUnescaped(self_text.into());
+    }
+
+    pub fn raw(s: &'s str) -> Self {
+        Self(TokenTextRepr::Raw(s))
+    }
+
+    pub fn to_owned(&self) -> TokenText<'static> {
+        TokenText(TokenTextRepr::JustUnescaped(Cow::Owned(
+            self.to_owned_string(),
+        )))
+    }
+
+    fn to_owned_string(&self) -> String {
+        match &self.0 {
+            TokenTextRepr::Raw(s) => Unescaped::from(*s).chars().collect(),
+            TokenTextRepr::Unescaped(s) => s.to_owned().into(),
+            TokenTextRepr::JustUnescaped(s) => (**s).to_owned(),
+        }
+    }
+
+    pub fn to_string(&self) -> Cow<'s, str> {
+        match &self.0 {
+            TokenTextRepr::Raw(s) => Cow::Owned(Unescaped::from(*s).chars().collect()),
+            TokenTextRepr::Unescaped(s) => (*s).into(),
+            TokenTextRepr::JustUnescaped(s) => s.clone(),
+        }
+    }
+
+    pub fn into_unescaped(self) -> Self {
+        Self(match self.0 {
+            TokenTextRepr::Raw(s) => {
+                TokenTextRepr::JustUnescaped(Cow::Owned(Unescaped::from(s).chars().collect()))
+            }
+            TokenTextRepr::Unescaped(s) => TokenTextRepr::JustUnescaped(s.into()),
+            TokenTextRepr::JustUnescaped(s) => TokenTextRepr::JustUnescaped(s),
+        })
+    }
+
+    pub fn try_as_str(&'s self) -> Option<&'s str> {
+        match &self.0 {
+            TokenTextRepr::Raw(_) => None,
+            TokenTextRepr::Unescaped(s) => Some(*s),
+            TokenTextRepr::JustUnescaped(s) => Some((*s).as_ref()),
+        }
+    }
+
+    pub unsafe fn unescaped(s: &'s str) -> Self {
+        Self(TokenTextRepr::Unescaped(s))
+    }
+}
+
+impl<'s> std::fmt::Display for TokenText<'s> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match &self.0 {
+            TokenTextRepr::Raw(s) => write!(f, "{}", Unescaped::from(*s)),
+            TokenTextRepr::Unescaped(s) => write!(f, "{}", s),
+            TokenTextRepr::JustUnescaped(s) => write!(f, "{}", s),
+        }
+    }
+}
+
+impl<'s> From<TokenText<'s>> for SmolStr {
+    fn from(value: TokenText<'s>) -> Self {
+        match value.0 {
+            TokenTextRepr::Raw(raw) => Unescaped::from(raw).into(),
+            TokenTextRepr::Unescaped(unescaped) => unescaped.into(),
+            TokenTextRepr::JustUnescaped(unescaped) => unescaped.into(),
         }
     }
 }

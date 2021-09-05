@@ -1,6 +1,6 @@
 //! Second stage lexer declaration
 
-use rowan::TextRange;
+use lang_util::TextRange;
 
 use crate::util::{LineMap, Unescaped};
 

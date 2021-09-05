@@ -6,9 +6,9 @@ use lang_util::{position::NodeSpan, FileId, SmolStr, TextRange};
 
 use crate::{
     exts::names::ExtNameAtom,
-    last::type_names::TypeNameAtom,
     parser::{self, SyntaxKind},
-    util::Unescaped,
+    types::type_names::TypeNameAtom,
+    util::TokenText,
 };
 
 use super::{
@@ -270,7 +270,7 @@ pub enum DirectiveKind {
 
 pub trait TokenLike: Clone {
     fn kind(&self) -> SyntaxKind;
-    fn text(&self) -> &str;
+    fn text(&self) -> TokenText;
     fn text_range(&self) -> NodeSpan;
 }
 
@@ -279,8 +279,8 @@ impl TokenLike for (parser::SyntaxToken, FileId) {
         self.0.kind()
     }
 
-    fn text(&self) -> &str {
-        self.0.text()
+    fn text(&self) -> TokenText {
+        TokenText::raw(self.0.text())
     }
 
     fn text_range(&self) -> NodeSpan {
@@ -293,8 +293,8 @@ impl TokenLike for (&parser::SyntaxToken, FileId) {
         self.0.kind()
     }
 
-    fn text(&self) -> &str {
-        self.0.text()
+    fn text(&self) -> TokenText {
+        TokenText::raw(self.0.text())
     }
 
     fn text_range(&self) -> NodeSpan {
@@ -310,7 +310,7 @@ pub struct OutputToken {
 }
 
 impl OutputToken {
-    pub fn new(kind: SyntaxKind, text: impl Into<SmolStr>, source_range: NodeSpan) -> Self {
+    pub fn new(kind: SyntaxKind, text: TokenText, source_range: NodeSpan) -> Self {
         Self {
             kind,
             text: text.into(),
@@ -334,32 +334,24 @@ impl OutputToken {
         self.kind
     }
 
-    pub fn unescaped_text(&self) -> &str {
+    pub fn text(&self) -> &str {
         self.text.as_str()
     }
 
-    pub fn source_range(&self) -> NodeSpan {
+    pub fn text_range(&self) -> NodeSpan {
         self.source_range
     }
 }
 
 impl From<(parser::SyntaxToken, FileId)> for OutputToken {
-    fn from((token, file_id): (parser::SyntaxToken, FileId)) -> Self {
-        Self::new(
-            token.kind(),
-            Unescaped::new(token.text()),
-            NodeSpan::new(file_id, token.text_range()),
-        )
+    fn from(value: (parser::SyntaxToken, FileId)) -> Self {
+        Self::from_token(&value)
     }
 }
 
 impl From<(&parser::SyntaxToken, FileId)> for OutputToken {
-    fn from((token, file_id): (&parser::SyntaxToken, FileId)) -> Self {
-        Self::new(
-            token.kind(),
-            Unescaped::new(token.text()),
-            NodeSpan::new(file_id, token.text_range()),
-        )
+    fn from(value: (&parser::SyntaxToken, FileId)) -> Self {
+        Self::from_token(&value)
     }
 }
 
@@ -368,12 +360,13 @@ impl TokenLike for OutputToken {
         self.kind
     }
 
-    fn text(&self) -> &str {
-        self.text.as_str()
+    fn text(&self) -> TokenText {
+        // SAFETY: OutputToken are always constructed from unescaped text
+        unsafe { TokenText::unescaped(self.text.as_str()) }
     }
 
     fn text_range(&self) -> NodeSpan {
-        self.source_range()
+        self.source_range
     }
 }
 

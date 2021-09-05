@@ -13,7 +13,7 @@ keywords = ["glsl", "language", "parser", "ast", "cli"]
 categories = ["command-line-interface", "parser-implementations", "rendering"]
 
 [dependencies]
-glsl-lang = { version = "0.2.0", features = ["lexer-v2"] }
+glsl-lang = { version = "0.2.0", features = ["lexer-v2-full"] }
 lang-util = "0.2.0"
 argh = "0.1"
 

@@ -8,10 +8,7 @@ use std::{
 use glsl_lang_pp::{
     exts::{names::ExtNameAtom, DEFAULT_REGISTRY},
     last::Event,
-    processor::{
-        event::{DirectiveKind, TokenLike},
-        nodes::ExtensionName,
-    },
+    processor::{event::DirectiveKind, nodes::ExtensionName},
 };
 
 struct Paths {

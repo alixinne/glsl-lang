@@ -1,6 +1,6 @@
 use std::ops::{Deref, DerefMut};
 
-use rowan::TextRange;
+use lang_util::TextRange;
 
 // A token somewhere in a source file
 #[derive(Debug, Clone, Copy)]

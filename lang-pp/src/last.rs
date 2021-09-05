@@ -2,16 +2,7 @@
 
 use std::{collections::HashMap, iter::FusedIterator, path::PathBuf};
 
-#[macro_use]
-pub mod keywords;
-#[macro_use]
-pub mod type_names;
-use type_names::TypeNameAtom;
-
 use lang_util::{located::FileIdResolver, FileId};
-
-pub mod token;
-pub use token::{Token, TypeName};
 
 use crate::{
     exts::{names::ExtNameAtom, ExtensionSpec, Registry},
@@ -20,7 +11,13 @@ use crate::{
         expand::ExpandLocation,
         nodes::{Extension, ExtensionBehavior, ExtensionName},
     },
+    types::{
+        type_names::{TypeNameAtom, TypeNameState},
+        Token, TypeName,
+    },
 };
+
+mod token;
 
 #[derive(Debug, PartialEq)]
 pub enum Event {
@@ -84,19 +81,6 @@ struct TypeTable<'r> {
     registry: &'r Registry,
     target_vulkan: bool,
     current_version: u16,
-}
-
-#[derive(Debug, Clone)]
-pub enum TypeNameState {
-    Ident,
-    Type,
-    WarnType(ExtNameAtom),
-}
-
-impl TypeNameState {
-    pub fn is_type_name(&self) -> bool {
-        matches!(self, Self::Type | Self::WarnType(_))
-    }
 }
 
 impl<'r> TypeTable<'r> {
@@ -177,7 +161,7 @@ impl<'r> TypeTable<'r> {
         location: &ExpandLocation,
     ) -> (Token, Option<TypeNameState>, Option<Error>) {
         let (token_kind, state) =
-            Token::from_token(token, self.current_version, self.target_vulkan, |tn| {
+            token::token_from_syntax_kind(token, self.current_version, self.target_vulkan, |tn| {
                 self.is_type_name(tn)
             });
 

@@ -14,7 +14,7 @@ categories = ["parser-implementations", "rendering"]
 
 [dependencies]
 glsl-lang-types = "0.2.0"
-lang-util = "0.2.0"
+lang-util = { version = "0.2.0", features = ["lalrpop"] }
 
 thiserror = "1.0"
 
@@ -30,8 +30,9 @@ lalrpop-util = { version = "0.19.6", default-features = false, optional = true }
 [features]
 default = []
 v1 = ["logos", "lalrpop"]
-v2 = ["glsl-lang-pp", "lalrpop"]
-lalrpop = ["lang-util/lalrpop", "lalrpop-util"]
+v2-min = ["glsl-lang-pp", "lalrpop"]
+v2-full = ["glsl-lang-pp/full", "lalrpop"]
+lalrpop = ["lalrpop-util"]
 
 # AST Serialization
-serde = ["rserde", "glsl-lang-types/serde"]
+serde = ["rserde", "glsl-lang-types/serde", "lang-util/serde"]

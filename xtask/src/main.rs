@@ -40,8 +40,11 @@ fn generate_tests(_opts: &Opts, _gen_test_opts: &GenerateTestsOpts) -> anyhow::R
 
     let tests = glslang::discover_tests(base_dir);
 
-    tests.write_entry(&base_dir.join("lang-pp/tests/glslang.rs"))?;
-    tests.write_entry(&base_dir.join("lang/tests/glslang.rs"))?;
+    tests.write_entry(
+        &base_dir.join("lang-pp/tests/glslang.rs"),
+        "#![cfg(feature = \"full\")]\n",
+    )?;
+    tests.write_entry(&base_dir.join("lang/tests/glslang.rs"), "")?;
 
     Ok(())
 }

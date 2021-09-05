@@ -15,9 +15,10 @@ const SHADER_EXTS: &[&str] = &[
 pub struct DiscoveredTests(Vec<PathBuf>);
 
 impl DiscoveredTests {
-    pub fn write_entry(&self, target: &Path) -> anyhow::Result<()> {
+    pub fn write_entry(&self, target: &Path, header: &str) -> anyhow::Result<()> {
         let mut f = fs::File::create(target)?;
 
+        write!(f, "{}", header)?;
         writeln!(f, "mod common;")?;
 
         for test_case in &self.0 {

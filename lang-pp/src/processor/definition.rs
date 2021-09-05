@@ -432,7 +432,13 @@ impl Definition {
                         false,
                     )
                 } else {
-                    token.into()
+                    // Replace the range of substitued tokens with the macro call range
+                    OutputToken::new(
+                        token.kind(),
+                        <OutputToken as TokenLike>::text(&token),
+                        entire_range,
+                    )
+                    .into()
                 }
             })
             .collect()

@@ -182,9 +182,9 @@ impl LexerCore {
                 }
 
                 Err((token_kind, error)) => {
-                    if !self.opts.allow_rs_ident
-                        || (error != types::token::ErrorKind::InvalidToken
-                            || token_kind == types::Token::HASH)
+                    if !(self.opts.allow_rs_ident
+                        && error == types::token::ErrorKind::InvalidToken
+                        && token_kind == types::Token::HASH)
                     {
                         token_state.push_item(Err(LexicalError::Token {
                             kind: error,

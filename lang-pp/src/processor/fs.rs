@@ -119,8 +119,9 @@ impl<'p, F: FileSystem> Iterator for ExpandStack<'p, F> {
 
                             // We are supposed to enter a new file
                             // First, parse it using the preprocessor
-                            if let Some(resolved_path) =
-                                self.processor.resolve(location.current_file(), &path)
+                            if let Some(resolved_path) = self
+                                .processor
+                                .resolve_relative_to_id(location.current_file(), &path)
                             {
                                 // TODO: Allow passing an encoding from somewhere
                                 match self.processor.parse(&resolved_path) {
@@ -288,7 +289,7 @@ impl<F: FileSystem> Processor<F> {
         &mut self.system_paths
     }
 
-    fn resolve(&self, relative_to: FileId, path: &ParsedPath) -> Option<PathBuf> {
+    fn resolve_relative_to_id(&self, relative_to: FileId, path: &ParsedPath) -> Option<PathBuf> {
         let parent = self
             .file_ids
             .get_by_right(&relative_to)
@@ -300,12 +301,20 @@ impl<F: FileSystem> Processor<F> {
                     .and_then(|path| path.parent()),
             })?;
 
+        self.resolve_relative_to_path(parent, path)
+    }
+
+    pub fn resolve_relative_to_path(
+        &self,
+        parent: impl AsRef<Path>,
+        path: &ParsedPath,
+    ) -> Option<PathBuf> {
         match path.ty {
             PathType::Angle => self.system_paths.iter().find_map(|system_path| {
                 let full_path = system_path.join(&path.path);
                 self.fs.exists(&full_path).then(|| full_path)
             }),
-            PathType::Quote => Some(parent.join(&path.path)),
+            PathType::Quote => Some(parent.as_ref().join(&path.path)),
         }
     }
 

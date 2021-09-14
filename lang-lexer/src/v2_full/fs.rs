@@ -8,6 +8,7 @@ use glsl_lang_pp::{
     exts::{Registry, DEFAULT_REGISTRY},
     last::{self, Event},
     processor::{
+        event::EventDirective,
         fs::{ExpandStack, ParsedFile, Processor},
         ProcessorState,
     },
@@ -56,6 +57,12 @@ pub struct LexerIterator<'r, 'p, F: FileSystem> {
     core: LexerCore,
     current_file: PathBuf,
     handle_token: HandleTokenResult<F::Error>,
+}
+
+impl<F: FileSystem> LexerIterator<'_, '_, F> {
+    pub fn into_directives(self) -> Vec<EventDirective> {
+        self.core.into_directives()
+    }
 }
 
 impl<'r, 'p, F: FileSystem> Iterator for LexerIterator<'r, 'p, F> {

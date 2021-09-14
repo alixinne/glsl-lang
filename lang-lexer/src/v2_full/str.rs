@@ -7,6 +7,7 @@ use glsl_lang_pp::{
     last::{self, Event},
     processor::{
         self,
+        event::EventDirective,
         str::{ExpandStr, ProcessStrError},
         ProcessorState,
     },
@@ -60,6 +61,12 @@ pub struct LexerIterator<'i> {
     core: LexerCore,
     handle_token: HandleTokenResult<ProcessStrError>,
     source_id: FileId,
+}
+
+impl LexerIterator<'_> {
+    pub fn into_directives(self) -> Vec<EventDirective> {
+        self.core.into_directives()
+    }
 }
 
 impl<'i> Iterator for LexerIterator<'i> {

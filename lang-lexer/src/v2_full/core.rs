@@ -20,6 +20,7 @@ pub struct LexerCore {
     pub ctx: ParseContext,
     file_id: FileId,
     opts: ParseOptions,
+    directives: Vec<EventDirective>,
 }
 
 pub enum HandleTokenResult<E: std::error::Error + 'static> {
@@ -112,6 +113,7 @@ impl LexerCore {
             ctx,
             file_id,
             opts: *opts,
+            directives: Vec::with_capacity(2),
         }
     }
 
@@ -273,6 +275,10 @@ impl LexerCore {
         }
     }
 
+    pub fn into_directives(self) -> Vec<EventDirective> {
+        self.directives
+    }
+
     pub fn handle_directive(
         &mut self,
         directive: EventDirective,
@@ -282,10 +288,14 @@ impl LexerCore {
             return Ok(());
         }
 
-        if directive.errors().is_empty() {
+        let errors = directive.errors().to_vec();
+
+        self.directives.push(directive);
+
+        if errors.is_empty() {
             Ok(())
         } else {
-            Err(directive.into_errors())
+            Err(errors)
         }
     }
 }

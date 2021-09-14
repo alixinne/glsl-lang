@@ -21,7 +21,7 @@ pub use send::*;
 
 pub type ProcessingError = lang_util::located::Located<ProcessingErrorKind>;
 
-#[derive(Debug, PartialEq, Eq, From)]
+#[derive(Debug, Clone, PartialEq, Eq, From)]
 pub enum ProcessingErrorKind {
     ExtraEndIf,
     ExtraElse,
@@ -186,7 +186,7 @@ impl std::fmt::Display for ProcessingErrorKind {
 
 pub type Error = lang_util::located::Located<ErrorKind>;
 
-#[derive(Debug, PartialEq, Eq, derive_more::From)]
+#[derive(Debug, Clone, PartialEq, Eq, derive_more::From)]
 pub enum ErrorKind {
     Parse(parser::ErrorKind),
     Processing(ProcessingErrorKind),

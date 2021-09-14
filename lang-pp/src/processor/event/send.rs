@@ -43,7 +43,7 @@ impl From<SendNode> for SyntaxNode {
     }
 }
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum SendEvent {
     Error {
         error: Error,

@@ -34,19 +34,19 @@ jobs:
       - name: Run lib tests
         run: |
           set -e
-          cargo test --lib
+          cargo test --workspace -q --lib
 
       - name: Run lib tests with serde
         run: |
           set -e
-          cargo test --workspace --lib --features serde
+          cargo test --workspace -q --lib --features serde
 
       - name: Run lib tests with the three lexers
         run: |
           set -e
-          cargo test -p glsl-lang --lib --features lexer-v1
-          cargo test -p glsl-lang --lib --features lexer-v2-min
-          cargo test -p glsl-lang --lib --features lexer-v2-full
+          cargo test -p glsl-lang -q --lib --features lexer-v1
+          cargo test -p glsl-lang -q --lib --features lexer-v2-min
+          cargo test -p glsl-lang -q --lib --features lexer-v2-full
 
       - name: Generate test driver
         run: cargo xtask gen-tests
@@ -59,9 +59,9 @@ jobs:
         continue-on-error: true
         run: |
           set +e
-          cargo test -p glsl-lang --test glslang --no-default-features --features lexer-v1
-          cargo test -p glsl-lang --test glslang --no-default-features --features lexer-v2-min
-          cargo test -p glsl-lang --test glslang --no-default-features --features lexer-v2-full
+          cargo test -p glsl-lang -q --test glslang --no-default-features --features lexer-v1
+          cargo test -p glsl-lang -q --test glslang --no-default-features --features lexer-v2-min
+          cargo test -p glsl-lang -q --test glslang --no-default-features --features lexer-v2-full
 
       - name: Run glsl-lang-quote tests
         run: |

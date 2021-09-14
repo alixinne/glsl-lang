@@ -7,7 +7,6 @@ use glsl_lang_pp::{
     last::{self, Event},
     processor::{
         self,
-        event::EventDirective,
         str::{ExpandStr, ProcessStrError},
         ProcessorState,
     },
@@ -17,7 +16,7 @@ use crate::{HasLexerError, LangLexer, LangLexerIterator, ParseContext, ParseOpti
 
 use super::{
     core::{self, HandleTokenResult, LexerCore},
-    LexicalError,
+    Directives, LexicalError,
 };
 
 /// glsl-lang-pp memory lexer
@@ -64,7 +63,7 @@ pub struct LexerIterator<'i> {
 }
 
 impl LexerIterator<'_> {
-    pub fn into_directives(self) -> Vec<EventDirective> {
+    pub fn into_directives(self) -> Directives {
         self.core.into_directives()
     }
 }

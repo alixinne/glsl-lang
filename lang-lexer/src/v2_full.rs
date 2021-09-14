@@ -12,6 +12,9 @@ use super::Token;
 
 mod core;
 
+mod directives;
+pub use directives::*;
+
 pub mod fs;
 pub mod str;
 

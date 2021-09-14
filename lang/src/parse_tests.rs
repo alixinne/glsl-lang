@@ -1,8 +1,9 @@
+use glsl_lang_lexer::HasLexerError;
 use lang_util::node::NodeContent;
 
 use crate::{
     ast,
-    parse::{IntoParseBuilderExt, Parsable, ParseContext},
+    parse::{self, IntoParseBuilderExt, Parsable, ParseContext},
 };
 
 #[test]
@@ -2498,45 +2499,31 @@ fn parse_layout_buffer_block_0() {
     assert_eq!(ast::TranslationUnit::parse(src), Ok(expected));
 }
 
-#[test]
-#[cfg_attr(
-    feature = "lexer-v2-full",
-    ignore = "no preprocessor directives in ast with lexer-v2-full"
-)]
-fn parse_pp_version() {
-    assert_eq!(
-        ast::Preprocessor::parse("#version 450\n"),
-        Ok(ast::PreprocessorData::Version(
-            ast::PreprocessorVersionData {
-                version: 450,
-                profile: None,
-            }
-            .into()
-        )
-        .into())
-    );
+#[cfg(not(feature = "lexer-v2-full"))]
+fn parse_pp(
+    source: &str,
+) -> Result<ast::Preprocessor, parse::ParseError<<parse::DefaultLexer as HasLexerError>::Error>> {
+    ast::Preprocessor::parse(source)
+}
 
-    assert_eq!(
-        ast::Preprocessor::parse("#version 450 core\n"),
-        Ok(ast::PreprocessorData::Version(
-            ast::PreprocessorVersionData {
-                version: 450,
-                profile: Some(ast::PreprocessorVersionProfileData::Core.into())
+#[cfg(feature = "lexer-v2-full")]
+fn parse_pp(
+    source: &str,
+) -> Result<ast::Preprocessor, parse::ParseError<<parse::DefaultLexer as HasLexerError>::Error>> {
+    <ast::TranslationUnit as parse::DefaultParse>::parse_with_options(source, &Default::default())
+        .map(|(mut tu, _parse, iter)| {
+            iter.into_directives().inject(&mut tu);
+            match tu.0.into_iter().next().unwrap().content {
+                ast::ExternalDeclarationData::Preprocessor(pp) => pp,
+                _ => panic!("unsupported external declaration"),
             }
-            .into()
-        )
-        .into())
-    );
+        })
 }
 
 #[test]
-#[cfg_attr(
-    feature = "lexer-v2-full",
-    ignore = "no preprocessor directives in ast with lexer-v2-full"
-)]
-fn parse_pp_version_newline() {
+fn parse_pp_version() {
     assert_eq!(
-        ast::Preprocessor::parse("#version 450\n"),
+        parse_pp("#version 450\n"),
         Ok(ast::PreprocessorData::Version(
             ast::PreprocessorVersionData {
                 version: 450,
@@ -2548,7 +2535,7 @@ fn parse_pp_version_newline() {
     );
 
     assert_eq!(
-        ast::Preprocessor::parse("#version 450 core\n"),
+        parse_pp("#version 450 core\n"),
         Ok(ast::PreprocessorData::Version(
             ast::PreprocessorVersionData {
                 version: 450,
@@ -2864,13 +2851,9 @@ fn parse_pp_line() {
 }
 
 #[test]
-#[cfg_attr(
-    feature = "lexer-v2-full",
-    ignore = "no preprocessor directives in ast with lexer-v2-full"
-)]
 fn parse_pp_pragma() {
     assert_eq!(
-        ast::Preprocessor::parse("#\\\npragma  some   flag"),
+        parse_pp("#\\\npragma  some   flag"),
         Ok(ast::PreprocessorData::Pragma(
             ast::PreprocessorPragmaData {
                 command: "some   flag".to_owned()
@@ -2900,17 +2883,13 @@ fn parse_pp_undef() {
 }
 
 #[test]
-#[cfg_attr(
-    feature = "lexer-v2-full",
-    ignore = "no preprocessor directives in ast with lexer-v2-full"
-)]
 fn parse_pp_extension() {
     assert_eq!(
-        ast::Preprocessor::parse("#extension all: require\n"),
+        parse_pp("#extension all: disable\n"),
         Ok(ast::PreprocessorData::Extension(
             ast::PreprocessorExtensionData {
                 name: ast::PreprocessorExtensionNameData::All.into(),
-                behavior: Some(ast::PreprocessorExtensionBehaviorData::Require.into())
+                behavior: Some(ast::PreprocessorExtensionBehaviorData::Disable.into())
             }
             .into()
         )
@@ -2918,10 +2897,13 @@ fn parse_pp_extension() {
     );
 
     assert_eq!(
-        ast::Preprocessor::parse("#extension GL_foobar: warn\n"),
+        parse_pp("#extension GL_ARB_shading_language_include: warn\n"),
         Ok(ast::PreprocessorData::Extension(
             ast::PreprocessorExtensionData {
-                name: ast::PreprocessorExtensionNameData::Specific("GL_foobar".into()).into(),
+                name: ast::PreprocessorExtensionNameData::Specific(
+                    "GL_ARB_shading_language_include".into()
+                )
+                .into(),
                 behavior: Some(ast::PreprocessorExtensionBehaviorData::Warn.into())
             }
             .into()

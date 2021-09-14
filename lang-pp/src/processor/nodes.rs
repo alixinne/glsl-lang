@@ -103,6 +103,7 @@ pub struct Empty;
 pub struct Version {
     pub number: u16,
     pub profile: VersionProfile,
+    pub parsed_profile: Option<VersionProfile>,
 }
 
 impl Default for Version {
@@ -112,6 +113,7 @@ impl Default for Version {
         Self {
             number: 110,
             profile: VersionProfile::None,
+            parsed_profile: None,
         }
     }
 }
@@ -199,6 +201,7 @@ impl TryFrom<(FileId, SyntaxNode)> for Version {
             Ok(Self {
                 number: version_number,
                 profile: VersionProfile::Es,
+                parsed_profile: Some(profile),
             })
         } else if version_number >= 150 {
             // If no profile argument is provided and the version is 150 or greater, the default is
@@ -211,11 +214,13 @@ impl TryFrom<(FileId, SyntaxNode)> for Version {
                 } else {
                     profile
                 },
+                parsed_profile: Some(profile),
             })
         } else {
             Ok(Self {
                 number: version_number,
                 profile,
+                parsed_profile: Some(profile),
             })
         }
     }
@@ -1112,11 +1117,16 @@ impl TryFrom<(FileId, SyntaxNode)> for EndIf {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Pragma {
     value: ParsedPragma,
+    raw: String,
 }
 
 impl Pragma {
     pub fn value(&self) -> &ParsedPragma {
         &self.value
+    }
+
+    pub fn raw(&self) -> &str {
+        self.raw.as_str()
     }
 
     fn parse_function_pragma(tokens: &[SyntaxToken]) -> Option<bool> {
@@ -1161,6 +1171,8 @@ impl TryFrom<(FileId, SyntaxNode)> for Pragma {
             .find(|node| node.kind() == PP_PRAGMA_BODY)
             .ok_or(Self::Error::MissingBody)?;
 
+        let raw = body.text().to_string();
+
         // Collect non-trivial tokens
         let tokens: Vec<_> = body
             .children_with_tokens()
@@ -1175,12 +1187,14 @@ impl TryFrom<(FileId, SyntaxNode)> for Pragma {
                     "STDGL" => {
                         return Ok(Self {
                             value: ParsedPragma::StdGl(body),
+                            raw,
                         });
                     }
                     "optimize" => {
                         return if let Some(value) = Self::parse_function_pragma(&tokens) {
                             Ok(Self {
                                 value: ParsedPragma::Optimize(value),
+                                raw,
                             })
                         } else {
                             Err(Self::Error::IncorrectSyntax { name })
@@ -1190,6 +1204,7 @@ impl TryFrom<(FileId, SyntaxNode)> for Pragma {
                         return if let Some(value) = Self::parse_function_pragma(&tokens) {
                             Ok(Self {
                                 value: ParsedPragma::Debug(value),
+                                raw,
                             })
                         } else {
                             Err(Self::Error::IncorrectSyntax { name })
@@ -1202,6 +1217,7 @@ impl TryFrom<(FileId, SyntaxNode)> for Pragma {
 
         Ok(Self {
             value: ParsedPragma::Unknown(body),
+            raw,
         })
     }
 }

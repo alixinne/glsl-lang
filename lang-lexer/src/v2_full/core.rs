@@ -12,7 +12,7 @@ use lang_util::{located::Located, position::NodeSpan, FileId, NodeContent, TextR
 
 use crate::{ParseContext, ParseOptions};
 
-use super::{LexerPosition, LexicalError, Token};
+use super::{Directives, LexerPosition, LexicalError, Token};
 
 pub type Item<E> = Result<(LexerPosition, Token, LexerPosition), LexicalError<E>>;
 
@@ -275,8 +275,8 @@ impl LexerCore {
         }
     }
 
-    pub fn into_directives(self) -> Vec<EventDirective> {
-        self.directives
+    pub fn into_directives(self) -> Directives {
+        self.directives.into()
     }
 
     pub fn handle_directive(

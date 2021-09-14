@@ -248,7 +248,7 @@ impl ErrorKind {
     }
 }
 
-#[derive(Debug, PartialEq, Eq, From)]
+#[derive(Debug, Clone, PartialEq, Eq, From)]
 pub enum DirectiveKind {
     Empty(nodes::Empty),
     Version(nodes::Version),
@@ -390,7 +390,7 @@ impl std::fmt::Debug for OutputToken {
     }
 }
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct EventDirective {
     // TODO: Remove this pub(crate)
     pub(crate) node: parser::SyntaxNode,

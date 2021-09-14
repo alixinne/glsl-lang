@@ -6,7 +6,19 @@ use lang_util_dev::test_util::PathKey;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, lang_util_dev::Display)]
 enum Output {
-    #[display(fmt = "ast")]
+    #[cfg_attr(
+        all(
+            feature = "lexer-v1",
+            not(feature = "lexer-v2-min"),
+            not(feature = "lexer-v2-full")
+        ),
+        display(fmt = "ast-v1")
+    )]
+    #[cfg_attr(
+        all(feature = "lexer-v2-min", not(feature = "lexer-v2-full")),
+        display(fmt = "ast-v1")
+    )]
+    #[cfg_attr(feature = "lexer-v2-full", display(fmt = "ast-v2-full"))]
     Ast,
 }
 
@@ -24,10 +36,15 @@ type Paths = lang_util_dev::test_util::Paths<Output>;
     any(feature = "lexer-v1", feature = "lexer-v2-min"),
     not(feature = "lexer-v2-full")
 ))]
-fn parse_tu(
+fn parse_tu<'i>(
     path: &Path,
-) -> Result<ast::TranslationUnit, glsl_lang::parse::ParseError<glsl_lang::lexer::v1::Lexer>> {
-    use glsl_lang::parse::Parse;
+) -> Result<
+    ast::TranslationUnit,
+    glsl_lang::parse::ParseError<
+        <glsl_lang::parse::DefaultLexer<'i> as glsl_lang::lexer::HasLexerError>::Error,
+    >,
+> {
+    use glsl_lang::parse::DefaultParse;
 
     let source = std::fs::read_to_string(&path).expect("failed to parse file");
     glsl_lang::ast::TranslationUnit::parse(&source)

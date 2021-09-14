@@ -13,12 +13,12 @@ use lang_util::{
 use crate::{
     last::LocatedIterator,
     parser::{Ast, Parser},
+    types::path::{ParsedPath, PathType},
 };
 
 use super::{
     event::{Event, ProcessingErrorKind},
     expand::{ExpandEvent, ExpandOne},
-    nodes::{ParsedPath, PathType},
     ProcessorState,
 };
 

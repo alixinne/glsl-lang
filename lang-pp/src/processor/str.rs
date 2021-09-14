@@ -5,12 +5,11 @@ use lang_util::{
     FileId,
 };
 
-use crate::{last::LocatedIterator, parser};
+use crate::{last::LocatedIterator, parser, types::path::ParsedPath};
 
 use super::{
     event::Event,
     expand::{ExpandEvent, ExpandOne},
-    nodes::ParsedPath,
     ProcessorState,
 };
 

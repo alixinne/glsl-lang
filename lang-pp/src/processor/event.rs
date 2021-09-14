@@ -7,13 +7,13 @@ use lang_util::{position::NodeSpan, FileId, SmolStr, TextRange};
 use crate::{
     exts::names::ExtNameAtom,
     parser::{self, SyntaxKind},
-    types::type_names::TypeNameAtom,
+    types::{path::ParsedPath, type_names::TypeNameAtom},
     util::TokenText,
 };
 
 use super::{
     expand::ExpandLocation,
-    nodes::{self, Directive, ExtensionName, ParsedPath},
+    nodes::{self, Directive, ExtensionName},
 };
 
 mod send;

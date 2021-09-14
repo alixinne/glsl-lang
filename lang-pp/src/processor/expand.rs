@@ -16,6 +16,7 @@ use lang_util::{
 
 use crate::{
     parser::{self, Ast, PreprocessorLang, SyntaxKind::*, SyntaxNode, SyntaxToken},
+    types::path::ParsedPath,
     util::{LineMap, Unescaped},
 };
 
@@ -24,8 +25,7 @@ use super::{
     event::{ErrorKind, Event, ProcessingErrorKind},
     nodes::{
         Define, Directive, DirectiveResult, Elif, Else, Empty, EndIf, Error as ErrorDirective,
-        Extension, If, IfDef, IfNDef, Include, Invalid, Line, ParsedLine, ParsedPath, Pragma,
-        Undef, Version,
+        Extension, If, IfDef, IfNDef, Include, Invalid, Line, ParsedLine, Pragma, Undef, Version,
     },
     IncludeMode, ProcessorState,
 };

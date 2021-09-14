@@ -6,6 +6,7 @@ default-members = [
 	"lang-types",
 	"lang-util",
 	"lang-util-derive",
+	"lang-util-dev",
 	"lang-quote",
 	"lang-cli",
 ]
@@ -18,6 +19,7 @@ members = [
 	"lang-types",
 	"lang-util",
 	"lang-util-derive",
+	"lang-util-dev",
 	"lang-quote",
 	"lang-cli",
 	"xtask",
@@ -33,6 +35,7 @@ glsl-lang-cli   = { path = "lang-cli" }
 
 lang-util        = { path = "lang-util" }
 lang-util-derive = { path = "lang-util-derive" }
+lang-util-dev    = { path = "lang-util-dev" }
 
 lalrpop      = { git = "https://github.com/vtavernier/lalrpop", branch = "fix/573" }
 lalrpop-util = { git = "https://github.com/vtavernier/lalrpop", branch = "fix/573" }

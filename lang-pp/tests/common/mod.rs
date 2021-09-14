@@ -2,7 +2,6 @@ use std::path::Path;
 use std::{
     fs::{self, File},
     io::prelude::*,
-    path::PathBuf,
 };
 
 use glsl_lang_pp::{
@@ -10,40 +9,34 @@ use glsl_lang_pp::{
     last::Event,
     processor::{event::DirectiveKind, nodes::ExtensionName},
 };
+use lang_util_dev::test_util::PathKey;
 
-struct Paths {
-    parsed: PathBuf,
-    events: PathBuf,
-    pp: PathBuf,
-    errors: PathBuf,
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, lang_util_dev::Display)]
+enum Output {
+    #[display(fmt = "parsed")]
+    Parsed,
+    #[display(fmt = "events")]
+    Events,
+    #[display(fmt = "pp")]
+    Preprocessed,
+    #[display(fmt = "errors")]
+    Errors,
 }
 
-impl Paths {
-    fn path(base: &Path, file_name: &str, ext: &str) -> PathBuf {
-        let mut base = base.to_owned();
-        let mut file_name = file_name.to_owned();
-        file_name.push_str(ext);
-        base.push(file_name);
-        base
-    }
+const ALL_OUTPUTS: &[Output] = &[
+    Output::Parsed,
+    Output::Events,
+    Output::Preprocessed,
+    Output::Errors,
+];
 
-    pub fn new(path: &Path) -> Self {
-        let dir_name = path.parent().unwrap();
-        let mut result = dir_name.to_owned();
-        result.push("localRsResults");
-
-        fs::create_dir_all(&result).unwrap();
-
-        let file_name = path.file_name().unwrap().to_string_lossy().to_string();
-
-        Self {
-            parsed: Self::path(&result, &file_name, ".parsed"),
-            events: Self::path(&result, &file_name, ".events"),
-            pp: Self::path(&result, &file_name, ".pp"),
-            errors: Self::path(&result, &file_name, ".errors"),
-        }
+impl PathKey for Output {
+    fn all() -> &'static [Self] {
+        ALL_OUTPUTS
     }
 }
+
+type Paths = lang_util_dev::test_util::Paths<Output>;
 
 fn inspect_extension(name: &str, critical_error_count: &mut usize) {
     if name.starts_with("GL_")
@@ -59,7 +52,8 @@ pub fn test_file(path: impl AsRef<Path>) {
     let path = path.as_ref();
     let mut pp = glsl_lang_pp::processor::fs::StdProcessor::default();
 
-    let paths = Paths::new(path);
+    let paths = Paths::new(path).unwrap();
+
     let parsed = match pp.parse(path) {
         Ok(inner) => Ok(inner),
         Err(err) => {
@@ -79,15 +73,14 @@ pub fn test_file(path: impl AsRef<Path>) {
 
     // Write the resulting tree, even if there are errors
     {
-        let mut f = File::create(&paths.parsed).unwrap();
+        let mut f = File::create(paths.path(Output::Parsed)).unwrap();
         write!(f, "{:#?}", parsed.ast().into_inner().0).unwrap();
     }
 
-    let mut eventsf = File::create(&paths.events).unwrap();
-    let mut ppf = File::create(&paths.pp).unwrap();
-    let mut errorsf = File::create(&paths.errors).unwrap();
+    let mut eventsf = File::create(paths.path(Output::Events)).unwrap();
+    let mut ppf = File::create(paths.path(Output::Preprocessed)).unwrap();
+    let mut errorsf = File::create(paths.path(Output::Errors)).unwrap();
 
-    let mut error_count = 0;
     let mut critical_error_count = 0;
 
     for result in parsed.into_iter().tokenize(100, false, &DEFAULT_REGISTRY) {
@@ -97,7 +90,6 @@ pub fn test_file(path: impl AsRef<Path>) {
             Ok(event) => match event {
                 Event::Error { error, masked } => {
                     if !masked {
-                        error_count += 1;
                         writeln!(errorsf, "{}", error).unwrap();
                     }
                 }
@@ -117,7 +109,6 @@ pub fn test_file(path: impl AsRef<Path>) {
                 Event::Directive { directive, masked } => {
                     if !masked {
                         for error in directive.errors() {
-                            error_count += 1;
                             writeln!(errorsf, "{}", error).unwrap();
                         }
 
@@ -143,16 +134,19 @@ pub fn test_file(path: impl AsRef<Path>) {
             },
 
             Err(err) => {
-                error_count += 1;
                 writeln!(errorsf, "{}", err).unwrap();
             }
         }
     }
 
-    if error_count == 0 {
-        drop(errorsf);
-        fs::remove_file(&paths.errors).unwrap();
-    }
+    // Drop everything to flush output to disk
+    drop(eventsf);
+    drop(ppf);
+    drop(errorsf);
 
+    // Check there are no critical preprocessor errors
     assert_eq!(critical_error_count, 0);
+
+    // Check outputs
+    paths.finish();
 }

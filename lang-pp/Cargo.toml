@@ -33,6 +33,8 @@ itertools = { version = "0.10", optional = true }
 lazy_static = { version = "1.4", optional = true }
 
 [dev-dependencies]
+lang-util-dev = "0.2.0"
+
 expect-test = "1.1"
 encoding_rs = "0.8"
 

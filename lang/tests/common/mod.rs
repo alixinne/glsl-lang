@@ -1,39 +1,24 @@
 use std::path::Path;
-use std::{
-    fs::{self, File},
-    io::prelude::*,
-    path::PathBuf,
-};
+use std::{fs::File, io::prelude::*};
 
 use glsl_lang::ast::{self, NodeDisplay};
+use lang_util_dev::test_util::PathKey;
 
-struct Paths {
-    ast: PathBuf,
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, lang_util_dev::Display)]
+enum Output {
+    #[display(fmt = "ast")]
+    Ast,
 }
 
-impl Paths {
-    fn path(base: &Path, file_name: &str, ext: &str) -> PathBuf {
-        let mut base = base.to_owned();
-        let mut file_name = file_name.to_owned();
-        file_name.push_str(ext);
-        base.push(file_name);
-        base
-    }
+const ALL_OUTPUTS: &[Output] = &[Output::Ast];
 
-    pub fn new(path: &Path) -> Self {
-        let dir_name = path.parent().unwrap();
-        let mut result = dir_name.to_owned();
-        result.push("localRsResults");
-
-        fs::create_dir_all(&result).unwrap();
-
-        let file_name = path.file_name().unwrap().to_string_lossy().to_string();
-
-        Self {
-            ast: Self::path(&result, &file_name, ".ast"),
-        }
+impl PathKey for Output {
+    fn all() -> &'static [Self] {
+        ALL_OUTPUTS
     }
 }
+
+type Paths = lang_util_dev::test_util::Paths<Output>;
 
 #[cfg(all(
     any(feature = "lexer-v1", feature = "lexer-v2-min"),
@@ -84,13 +69,13 @@ fn parse_tu(_path: &Path) -> Result<ast::TranslationUnit, &'static str> {
 
 pub fn test_file(path: impl AsRef<Path>) {
     let path = path.as_ref();
-    let paths = Paths::new(path);
+    let paths = Paths::new(path).unwrap();
 
     let result = parse_tu(path);
 
     // Write .ast file
     {
-        let mut f = File::create(&paths.ast).unwrap();
+        let mut f = File::create(paths.path(Output::Ast)).unwrap();
         match &result {
             Ok(result) => {
                 write!(f, "{}", result.0.display()).unwrap();
@@ -103,4 +88,6 @@ pub fn test_file(path: impl AsRef<Path>) {
     }
 
     assert!(result.is_ok());
+
+    paths.finish();
 }

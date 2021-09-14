@@ -28,10 +28,12 @@ rserde = { version = "1.0", optional = true, features = ["derive"], package = "s
 lalrpop = "0.19"
 
 [dev-dependencies]
+lang-util-dev = "0.2.0"
+glsl-lang-pp = "0.2.0"
+
 criterion = "0.3"
 expect-test = "1.1"
 glsl = "6"
-glsl-lang-pp = "0.2.0"
 
 [[test]]
 name = "pos_error"

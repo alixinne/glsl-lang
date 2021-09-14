@@ -1,0 +1,17 @@
+[package]
+name = "lang-util-dev"
+version = "0.2.0"
+authors = ["Vincent Tavernier <vince.tavernier@gmail.com>"]
+edition = "2018"
+license = "BSD-3-Clause"
+description = "Development utilities for parsers implemented using lang-util"
+homepage = "https://github.com/vtavernier/glsl-lang"
+documentation = "https://docs.rs/lang-util-test/"
+repository = "https://github.com/vtavernier/glsl-lang"
+readme = "README.md"
+keywords = ["language", "parser", "ast"]
+categories = ["parsing"]
+
+[dependencies]
+derive_more = "0.99"
+similar-asserts = "1.1.0"

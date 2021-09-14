@@ -32,14 +32,10 @@ jobs:
           target: ${{ matrix.target }}
 
       - name: Run lib tests
-        run: |
-          set -e
-          cargo test --workspace -q --lib
+        run: cargo test --workspace -q --lib --exclude fuzz
 
       - name: Run lib tests with serde
-        run: |
-          set -e
-          cargo test --workspace -q --lib --features serde
+        run: cargo test --workspace -q --lib --exclude fuzz --features serde
 
       - name: Run lib tests with the three lexers
         run: |

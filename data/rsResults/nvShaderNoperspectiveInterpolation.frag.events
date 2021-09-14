@@ -1,5 +1,5 @@
 Ok(EnterFile { file_id: FileId(0), path: "../data/nvShaderNoperspectiveInterpolation.frag", canonical_path: "/data/nvShaderNoperspectiveInterpolation.frag" })
-Ok(Directive { directive: EventDirective { node: PP_VERSION@0..16, kind: Version(Version { number: 300, profile: Es }), errors: [], source_id: FileId(0) }, masked: false })
+Ok(Directive { directive: EventDirective { node: PP_VERSION@0..16, kind: Version(Version { number: 300, profile: Es, parsed_profile: Some(Es) }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 16..17 } "\n", token_kind: WS, state: Active })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 17..26 } "precision", token_kind: PRECISION, state: Active })
 Ok(Token { source_token: WS@NodeSpan { source_id: FileId(0), range: 26..27 } " ", token_kind: WS, state: Active })

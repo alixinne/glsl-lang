@@ -1,5 +1,5 @@
 Ok(EnterFile { file_id: FileId(0), path: "../data/glsl.es320.subgroupPartitioned.comp", canonical_path: "/data/glsl.es320.subgroupPartitioned.comp" })
-Ok(Directive { directive: EventDirective { node: PP_VERSION@0..17, kind: Version(Version { number: 320, profile: Es }), errors: [], source_id: FileId(0) }, masked: false })
+Ok(Directive { directive: EventDirective { node: PP_VERSION@0..17, kind: Version(Version { number: 320, profile: Es, parsed_profile: Some(Es) }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 17..19 } "\r\n", token_kind: WS, state: Active })
 Ok(Directive { directive: EventDirective { node: PP_EXTENSION@19..73, kind: Extension(Extension { name: Specific(Atom('GL_NV_shader_subgroup_partitioned' type=dynamic)), behavior: Enable }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 73..75 } "\r\n", token_kind: WS, state: Active })

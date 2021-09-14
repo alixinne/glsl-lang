@@ -1,5 +1,5 @@
 Ok(EnterFile { file_id: FileId(0), path: "../data/cppNest.vert", canonical_path: "/data/cppNest.vert" })
-Ok(Directive { directive: EventDirective { node: PP_VERSION@0..13, kind: Version(Version { number: 110, profile: None }), errors: [], source_id: FileId(0) }, masked: false })
+Ok(Directive { directive: EventDirective { node: PP_VERSION@0..13, kind: Version(Version { number: 110, profile: None, parsed_profile: Some(None) }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 13..14 } "\n", token_kind: WS, state: Active })
 Ok(Directive { directive: EventDirective { node: PP_DEFINE@14..25, kind: Define(Define { name: "ON", kind: Object(DefineObject { tokens: PP_DEFINE_BODY@24..24 }), protected: false }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 25..26 } "\n", token_kind: WS, state: Active })

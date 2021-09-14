@@ -1,5 +1,5 @@
 Ok(EnterFile { file_id: FileId(0), path: "../data/nonSquare.vert", canonical_path: "/data/nonSquare.vert" })
-Ok(Directive { directive: EventDirective { node: PP_VERSION@0..13, kind: Version(Version { number: 120, profile: None }), errors: [], source_id: FileId(0) }, masked: false })
+Ok(Directive { directive: EventDirective { node: PP_VERSION@0..13, kind: Version(Version { number: 120, profile: None, parsed_profile: Some(None) }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 13..14 } "\n", token_kind: WS, state: Active })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 14..23 } "attribute", token_kind: ATTRIBUTE, state: Active })
 Ok(Token { source_token: WS@NodeSpan { source_id: FileId(0), range: 23..24 } " ", token_kind: WS, state: Active })

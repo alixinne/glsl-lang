@@ -1,5 +1,5 @@
 Ok(EnterFile { file_id: FileId(0), path: "../data/glspv.version.vert", canonical_path: "/data/glspv.version.vert" })
-Ok(Directive { directive: EventDirective { node: PP_VERSION@0..14, kind: Version(Version { number: 150, profile: Core }), errors: [], source_id: FileId(0) }, masked: false })
+Ok(Directive { directive: EventDirective { node: PP_VERSION@0..14, kind: Version(Version { number: 150, profile: Core, parsed_profile: Some(None) }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 14..16 } "\r\n", token_kind: WS, state: Active })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 16..20 } "void", token_kind: TYPE_NAME(VOID), state: Active })
 Ok(Token { source_token: WS@NodeSpan { source_id: FileId(0), range: 20..21 } " ", token_kind: WS, state: Active })

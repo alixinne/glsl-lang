@@ -1,5 +1,5 @@
 Ok(EnterFile { file_id: FileId(0), path: "../data/rayQuery-global.rgen", canonical_path: "/data/rayQuery-global.rgen" })
-Ok(Directive { directive: EventDirective { node: PP_VERSION@0..13, kind: Version(Version { number: 460, profile: Core }), errors: [], source_id: FileId(0) }, masked: false })
+Ok(Directive { directive: EventDirective { node: PP_VERSION@0..13, kind: Version(Version { number: 460, profile: Core, parsed_profile: Some(None) }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Directive { directive: EventDirective { node: PP_EXTENSION@13..50, kind: Extension(Extension { name: Specific(Atom('GL_EXT_ray_query' type=dynamic)), behavior: Enable }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Directive { directive: EventDirective { node: PP_EXTENSION@50..105, kind: Extension(Extension { name: Specific(Atom('GL_EXT_ray_flags_primitive_culling' type=dynamic)), behavior: Enable }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 105..106 } "\n", token_kind: WS, state: Active })

@@ -1,5 +1,5 @@
 Ok(EnterFile { file_id: FileId(0), path: "../data/glsl.450.subgroupBallot.comp", canonical_path: "/data/glsl.450.subgroupBallot.comp" })
-Ok(Directive { directive: EventDirective { node: PP_VERSION@0..14, kind: Version(Version { number: 450, profile: Core }), errors: [], source_id: FileId(0) }, masked: false })
+Ok(Directive { directive: EventDirective { node: PP_VERSION@0..14, kind: Version(Version { number: 450, profile: Core, parsed_profile: Some(None) }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 14..16 } "\r\n", token_kind: WS, state: Active })
 Ok(Directive { directive: EventDirective { node: PP_EXTENSION@16..66, kind: Extension(Extension { name: Specific(Atom('GL_KHR_shader_subgroup_ballot' type=dynamic)), behavior: Enable }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 66..68 } "\r\n", token_kind: WS, state: Active })

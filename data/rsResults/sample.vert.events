@@ -65,7 +65,7 @@ Ok(Token { source_token: COMMENT@NodeSpan { source_id: FileId(0), range: 1582..1
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 1611..1613 } "\r\n", token_kind: WS, state: Active })
 Ok(Token { source_token: COMMENT@NodeSpan { source_id: FileId(0), range: 1613..1615 } "//", token_kind: COMMENT, state: Active })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 1615..1617 } "\r\n", token_kind: WS, state: Active })
-Ok(Directive { directive: EventDirective { node: PP_VERSION@1617..1631, kind: Version(Version { number: 110, profile: None }), errors: [], source_id: FileId(0) }, masked: false })
+Ok(Directive { directive: EventDirective { node: PP_VERSION@1617..1631, kind: Version(Version { number: 110, profile: None, parsed_profile: Some(None) }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 1631..1633 } "\r\n", token_kind: WS, state: Active })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 1633..1640 } "varying", token_kind: VARYING, state: Active })
 Ok(Token { source_token: WS@NodeSpan { source_id: FileId(0), range: 1640..1641 } " ", token_kind: WS, state: Active })

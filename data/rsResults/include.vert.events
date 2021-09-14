@@ -1,5 +1,5 @@
 Ok(EnterFile { file_id: FileId(0), path: "../data/include.vert", canonical_path: "/data/include.vert" })
-Ok(Directive { directive: EventDirective { node: PP_VERSION@0..13, kind: Version(Version { number: 450, profile: Core }), errors: [], source_id: FileId(0) }, masked: false })
+Ok(Directive { directive: EventDirective { node: PP_VERSION@0..13, kind: Version(Version { number: 450, profile: Core, parsed_profile: Some(None) }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 13..14 } "\n", token_kind: WS, state: Active })
 Ok(Directive { directive: EventDirective { node: PP_EXTENSION@14..62, kind: Extension(Extension { name: Specific(Atom('GL_GOOGLE_include_directive' type=static)), behavior: Enable }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 62..63 } "\n", token_kind: WS, state: Active })

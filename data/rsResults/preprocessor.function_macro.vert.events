@@ -1,5 +1,5 @@
 Ok(EnterFile { file_id: FileId(0), path: "../data/preprocessor.function_macro.vert", canonical_path: "/data/preprocessor.function_macro.vert" })
-Ok(Directive { directive: EventDirective { node: PP_VERSION@0..17, kind: Version(Version { number: 310, profile: Es }), errors: [], source_id: FileId(0) }, masked: false })
+Ok(Directive { directive: EventDirective { node: PP_VERSION@0..17, kind: Version(Version { number: 310, profile: Es, parsed_profile: Some(Es) }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 17..19 } "\r\n", token_kind: WS, state: Active })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 19..21 } "\r\n", token_kind: WS, state: Active })
 Ok(Directive { directive: EventDirective { node: PP_DEFINE@21..41, kind: Define(Define { name: "X", kind: Function(DefineFunction { args: ["n"], tokens: PP_DEFINE_BODY@34..39 }), protected: false }), errors: [], source_id: FileId(0) }, masked: false })

@@ -1,5 +1,5 @@
 Ok(EnterFile { file_id: FileId(0), path: "../data/recurse2.frag", canonical_path: "/data/recurse2.frag" })
-Ok(Directive { directive: EventDirective { node: PP_VERSION@0..19, kind: Version(Version { number: 330, profile: Core }), errors: [], source_id: FileId(0) }, masked: false })
+Ok(Directive { directive: EventDirective { node: PP_VERSION@0..19, kind: Version(Version { number: 330, profile: Core, parsed_profile: Some(Core) }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 19..21 } "\r\n", token_kind: WS, state: Active })
 Ok(Token { source_token: COMMENT@NodeSpan { source_id: FileId(0), range: 21..44 } "// cross-unit recursion", token_kind: COMMENT, state: Active })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 44..46 } "\r\n", token_kind: WS, state: Active })

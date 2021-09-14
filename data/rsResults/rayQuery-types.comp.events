@@ -1,5 +1,5 @@
 Ok(EnterFile { file_id: FileId(0), path: "../data/rayQuery-types.comp", canonical_path: "/data/rayQuery-types.comp" })
-Ok(Directive { directive: EventDirective { node: PP_VERSION@0..13, kind: Version(Version { number: 460, profile: Core }), errors: [], source_id: FileId(0) }, masked: false })
+Ok(Directive { directive: EventDirective { node: PP_VERSION@0..13, kind: Version(Version { number: 460, profile: Core, parsed_profile: Some(None) }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Directive { directive: EventDirective { node: PP_EXTENSION@13..51, kind: Extension(Extension { name: Specific(Atom('GL_EXT_ray_query' type=dynamic)), behavior: Require }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 51..52 } "\n", token_kind: WS, state: Active })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 52..58 } "layout", token_kind: LAYOUT, state: Active })

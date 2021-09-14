@@ -1,6 +1,6 @@
 Ok(EnterFile { file_id: FileId(0), path: "../data/420.vert", canonical_path: "/data/420.vert" })
-Ok(Directive { directive: EventDirective { node: PP_VERSION@0..18, kind: Version(Version { number: 420, profile: Core }), errors: [], source_id: FileId(0) }, masked: false })
-Ok(Directive { directive: EventDirective { node: PP_VERSION@18..36, kind: Version(Version { number: 420, profile: Core }), errors: [], source_id: FileId(0) }, masked: false })
+Ok(Directive { directive: EventDirective { node: PP_VERSION@0..18, kind: Version(Version { number: 420, profile: Core, parsed_profile: Some(Core) }), errors: [], source_id: FileId(0) }, masked: false })
+Ok(Directive { directive: EventDirective { node: PP_VERSION@18..36, kind: Version(Version { number: 420, profile: Core, parsed_profile: Some(Core) }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 36..43 } "varying", token_kind: VARYING, state: Active })
 Ok(Token { source_token: WS@NodeSpan { source_id: FileId(0), range: 43..44 } " ", token_kind: WS, state: Active })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 44..48 } "vec2", token_kind: TYPE_NAME(VEC2), state: Active })

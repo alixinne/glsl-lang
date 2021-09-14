@@ -1,5 +1,5 @@
 Ok(EnterFile { file_id: FileId(0), path: "../data/410.tesc", canonical_path: "/data/410.tesc" })
-Ok(Directive { directive: EventDirective { node: PP_VERSION@0..19, kind: Version(Version { number: 400, profile: Core }), errors: [], source_id: FileId(0) }, masked: false })
+Ok(Directive { directive: EventDirective { node: PP_VERSION@0..19, kind: Version(Version { number: 400, profile: Core, parsed_profile: Some(Core) }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 19..21 } "\r\n", token_kind: WS, state: Active })
 Ok(Token { source_token: COMMENT@NodeSpan { source_id: FileId(0), range: 21..54 } "// no layout(vertices ...", token_kind: COMMENT, state: Active })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 54..56 } "\r\n", token_kind: WS, state: Active })

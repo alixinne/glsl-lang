@@ -1,5 +1,5 @@
 Ok(EnterFile { file_id: FileId(0), path: "../data/preprocessor.simple.vert", canonical_path: "/data/preprocessor.simple.vert" })
-Ok(Directive { directive: EventDirective { node: PP_VERSION@0..17, kind: Version(Version { number: 310, profile: Es }), errors: [], source_id: FileId(0) }, masked: false })
+Ok(Directive { directive: EventDirective { node: PP_VERSION@0..17, kind: Version(Version { number: 310, profile: Es, parsed_profile: Some(Es) }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Directive { directive: EventDirective { node: PP_DEFINE@17..30, kind: Define(Define { name: "X", kind: Object(DefineObject { tokens: PP_DEFINE_BODY@27..28 }), protected: false }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Directive { directive: EventDirective { node: PP_DEFINE@30..47, kind: Define(Define { name: "Y", kind: Object(DefineObject { tokens: PP_DEFINE_BODY@40..45 }), protected: false }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Directive { directive: EventDirective { node: PP_DEFINE@47..60, kind: Define(Define { name: "Z", kind: Object(DefineObject { tokens: PP_DEFINE_BODY@57..58 }), protected: false }), errors: [], source_id: FileId(0) }, masked: false })

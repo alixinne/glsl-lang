@@ -18,7 +18,7 @@ Ok(Token { source_token: COMMENT@NodeSpan { source_id: FileId(0), range: 163..18
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 183..184 } "\n", token_kind: WS, state: Active })
 Ok(Token { source_token: COMMENT@NodeSpan { source_id: FileId(0), range: 184..206 } "// a different comment", token_kind: COMMENT, state: Active })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 206..207 } "\n", token_kind: WS, state: Active })
-Ok(Directive { directive: EventDirective { node: PP_VERSION@207..225, kind: Version(Version { number: 430, profile: Core }), errors: [], source_id: FileId(0) }, masked: false })
+Ok(Directive { directive: EventDirective { node: PP_VERSION@207..225, kind: Version(Version { number: 430, profile: Core, parsed_profile: Some(Core) }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 225..227 } "in", token_kind: IN, state: Active })
 Ok(Token { source_token: WS@NodeSpan { source_id: FileId(0), range: 227..228 } " ", token_kind: WS, state: Active })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 228..232 } "vec4", token_kind: TYPE_NAME(VEC4), state: Active })

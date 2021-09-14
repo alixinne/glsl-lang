@@ -1,5 +1,5 @@
 Ok(EnterFile { file_id: FileId(0), path: "../data/460.vert", canonical_path: "/data/460.vert" })
-Ok(Directive { directive: EventDirective { node: PP_VERSION@0..19, kind: Version(Version { number: 460, profile: Core }), errors: [], source_id: FileId(0) }, masked: false })
+Ok(Directive { directive: EventDirective { node: PP_VERSION@0..19, kind: Version(Version { number: 460, profile: Core, parsed_profile: Some(Core) }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 19..21 } "\r\n", token_kind: WS, state: Active })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 21..24 } "int", token_kind: TYPE_NAME(INT), state: Active })
 Ok(Token { source_token: WS@NodeSpan { source_id: FileId(0), range: 24..25 } " ", token_kind: WS, state: Active })

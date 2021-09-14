@@ -1,2 +1,2 @@
 Ok(EnterFile { file_id: FileId(0), path: "../data/empty3.frag", canonical_path: "/data/empty3.frag" })
-Ok(Directive { directive: EventDirective { node: PP_VERSION@0..13, kind: Version(Version { number: 110, profile: None }), errors: [], source_id: FileId(0) }, masked: false })
+Ok(Directive { directive: EventDirective { node: PP_VERSION@0..13, kind: Version(Version { number: 110, profile: None, parsed_profile: Some(None) }), errors: [], source_id: FileId(0) }, masked: false })

@@ -1,0 +1,6 @@
+0:38:1: '##' : invalid use of paste operator
+0:40:1: '##' : invalid use of paste operator
+0:81:16: '##' : invalid pasted token : >!
+0:94:1: '##' : invalid use of paste operator
+0:98:1: 'macro expansion' : end of input in macro bax
+0:98:1: '##' : invalid pasted token : /)

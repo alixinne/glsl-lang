@@ -1,0 +1,608 @@
+ExternalDeclaration@0:89..164 `Declaration`
+  Declaration@0:89..164 `InitDeclaratorList`
+    InitDeclaratorList@0:89..163
+      SingleDeclaration@0:89..163
+        FullySpecifiedType@0:89..163
+          TypeSpecifier@0:89..163
+            TypeSpecifierNonArray@0:89..163 `struct`
+              StructSpecifier@0:89..163
+                StructFieldSpecifier@0:106..115
+                  TypeSpecifier@0:106..110
+                    TypeSpecifierNonArray@0:106..110 `vec3`
+                      Vec3
+                  ArrayedIdentifier@0:111..114
+                    Identifier@0:111..114 `pos`
+                StructFieldSpecifier@0:120..131
+                  TypeSpecifier@0:120..125
+                    TypeSpecifierNonArray@0:120..125 `float`
+                      Float
+                  ArrayedIdentifier@0:126..130
+                    Identifier@0:126..130 `tmin`
+                StructFieldSpecifier@0:136..145
+                  TypeSpecifier@0:136..140
+                    TypeSpecifierNonArray@0:136..140 `vec3`
+                      Vec3
+                  ArrayedIdentifier@0:141..144
+                    Identifier@0:141..144 `dir`
+                StructFieldSpecifier@0:150..161
+                  TypeSpecifier@0:150..155
+                    TypeSpecifierNonArray@0:150..155 `float`
+                      Float
+                  ArrayedIdentifier@0:156..160
+                    Identifier@0:156..160 `tmax`
+ExternalDeclaration@0:166..242 `Declaration`
+  Declaration@0:166..242 `Block`
+    Block@0:166..241
+      TypeQualifier@0:166..209
+        TypeQualifierSpec@0:166..202 `Layout`
+          LayoutQualifier@0:166..202
+            LayoutQualifierSpec@0:173..179 `Identifier`
+              Identifier@0:173..179 `std430`
+            LayoutQualifierSpec@0:181..188 `Identifier`
+              Identifier@0:181..184 `set`
+              IntConst `0`
+            LayoutQualifierSpec@0:190..201 `Identifier`
+              Identifier@0:190..197 `binding`
+              IntConst `0`
+        TypeQualifierSpec@0:203..209 `Storage`
+          StorageQualifier@0:203..209 `buffer`
+            Buffer
+      Identifier@0:210..213 `Log`
+      StructFieldSpecifier@0:220..227
+        TypeSpecifier@0:220..224
+          TypeSpecifierNonArray@0:220..224 `uint`
+            UInt
+        ArrayedIdentifier@0:225..226
+          Identifier@0:225..226 `x`
+      StructFieldSpecifier@0:232..239
+        TypeSpecifier@0:232..236
+          TypeSpecifierNonArray@0:232..236 `uint`
+            UInt
+        ArrayedIdentifier@0:237..238
+          Identifier@0:237..238 `y`
+ExternalDeclaration@0:244..311 `Declaration`
+  Declaration@0:244..311 `InitDeclaratorList`
+    InitDeclaratorList@0:244..310
+      SingleDeclaration@0:244..310
+        FullySpecifiedType@0:244..305
+          TypeQualifierSpec@0:244..272 `Layout`
+            LayoutQualifier@0:244..272
+              LayoutQualifierSpec@0:251..262 `Identifier`
+                Identifier@0:251..258 `binding`
+                IntConst `1`
+              LayoutQualifierSpec@0:264..271 `Identifier`
+                Identifier@0:264..267 `set`
+                IntConst `0`
+          TypeQualifierSpec@0:273..280 `Storage`
+            StorageQualifier@0:273..280 `uniform`
+              Uniform
+          TypeSpecifier@0:281..305
+            TypeSpecifierNonArray@0:281..305 `TypeName`
+              TypeName@0:281..305
+ExternalDeclaration@0:312..377 `Declaration`
+  Declaration@0:312..377 `Block`
+    Block@0:312..376
+      TypeQualifier@0:312..355
+        TypeQualifierSpec@0:312..348 `Layout`
+          LayoutQualifier@0:312..348
+            LayoutQualifierSpec@0:319..325 `Identifier`
+              Identifier@0:319..325 `std430`
+            LayoutQualifierSpec@0:327..334 `Identifier`
+              Identifier@0:327..330 `set`
+              IntConst `0`
+            LayoutQualifierSpec@0:336..347 `Identifier`
+              Identifier@0:336..343 `binding`
+              IntConst `2`
+        TypeQualifierSpec@0:349..355 `Storage`
+          StorageQualifier@0:349..355 `buffer`
+            Buffer
+      Identifier@0:356..360 `Rays`
+      StructFieldSpecifier@0:363..374
+        TypeSpecifier@0:363..366
+          TypeSpecifierNonArray@0:363..366 `TypeName`
+            TypeName@0:363..366
+        ArrayedIdentifier@0:367..373
+          Identifier@0:367..371 `rays`
+          ArraySpecifierDimension@0:371..373 `Unsized`
+            Unsized
+ExternalDeclaration@0:379..423 `FunctionDefinition`
+  FunctionDefinition@0:379..423
+    FunctionPrototype@0:379..397
+      FullySpecifiedType@0:379..383
+        TypeSpecifier@0:379..383
+          TypeSpecifierNonArray@0:379..383 `void`
+            Void
+      Identifier@0:384..395 `doSomething`
+    CompoundStatement@0:398..423
+      Statement@0:404..410 `Expression`
+        ExprStatement@0:404..410
+          Expr `Variable`
+            Identifier@0:404..405 `x`
+          AssignmentOp@0:406..407 `=`
+          Expr `IntConst`
+            IntConst `0`
+      Statement@0:415..421 `Expression`
+        ExprStatement@0:415..421
+          Expr `Variable`
+            Identifier@0:415..416 `y`
+          AssignmentOp@0:417..418 `=`
+          Expr `IntConst`
+            IntConst `0`
+ExternalDeclaration@0:425..565 `FunctionDefinition`
+  FunctionDefinition@0:425..565
+    FunctionPrototype@0:425..443
+      FullySpecifiedType@0:425..429
+        TypeSpecifier@0:425..429
+          TypeSpecifierNonArray@0:425..429 `uint`
+            UInt
+      Identifier@0:430..441 `launchIndex`
+    CompoundStatement@0:444..565
+      Statement@0:450..563 `Jump`
+        JumpStatement@0:450..563 `return`
+          BinaryOp@0:545..546 `+`
+          Expr `Binary`
+            BinaryOp@0:509..510 `+`
+            Expr `Binary`
+              BinaryOp@0:490..491 `*`
+              Expr `Binary`
+                BinaryOp@0:472..473 `*`
+                Expr `Dot`
+                  Expr `Variable`
+                    Identifier@0:457..470 `gl_LaunchIDNV`
+                  Identifier@0:471..472 `z`
+                Expr `Dot`
+                  Expr `Variable`
+                    Identifier@0:473..488 `gl_LaunchSizeNV`
+                  Identifier@0:489..490 `x`
+              Expr `Dot`
+                Expr `Variable`
+                  Identifier@0:491..506 `gl_LaunchSizeNV`
+                Identifier@0:507..508 `y`
+            Expr `Binary`
+              BinaryOp@0:526..527 `*`
+              Expr `Dot`
+                Expr `Variable`
+                  Identifier@0:511..524 `gl_LaunchIDNV`
+                Identifier@0:525..526 `y`
+              Expr `Dot`
+                Expr `Variable`
+                  Identifier@0:527..542 `gl_LaunchSizeNV`
+                Identifier@0:543..544 `x`
+          Expr `Dot`
+            Expr `Variable`
+              Identifier@0:547..560 `gl_LaunchIDNV`
+            Identifier@0:561..562 `x`
+ExternalDeclaration@0:567..3081 `FunctionDefinition`
+  FunctionDefinition@0:567..3081
+    FunctionPrototype@0:567..578
+      FullySpecifiedType@0:567..571
+        TypeSpecifier@0:567..571
+          TypeSpecifierNonArray@0:567..571 `void`
+            Void
+      Identifier@0:572..576 `main`
+    CompoundStatement@0:579..3081
+      Statement@0:585..612 `Declaration`
+        Declaration@0:585..612 `InitDeclaratorList`
+          InitDeclaratorList@0:585..611
+            SingleDeclaration@0:585..611
+              FullySpecifiedType@0:585..589
+                TypeSpecifier@0:585..589
+                  TypeSpecifierNonArray@0:585..589 `uint`
+                    UInt
+              Expr `FunCall`
+                FunIdentifier@0:598..609 `Expr`
+                  Expr `Variable`
+                    Identifier@0:598..609 `launchIndex`
+      Statement@0:617..639 `Declaration`
+        Declaration@0:617..639 `InitDeclaratorList`
+          InitDeclaratorList@0:617..638
+            SingleDeclaration@0:617..638
+              FullySpecifiedType@0:617..620
+                TypeSpecifier@0:617..620
+                  TypeSpecifierNonArray@0:617..620 `TypeName`
+                    TypeName@0:617..620
+              Expr `Bracket`
+                Expr `Variable`
+                  Identifier@0:627..631 `rays`
+                Expr `Variable`
+                  Identifier@0:632..637 `index`
+      Statement@0:644..665 `Declaration`
+        Declaration@0:644..665 `InitDeclaratorList`
+          InitDeclaratorList@0:644..664
+            SingleDeclaration@0:644..664
+              FullySpecifiedType@0:644..655
+                TypeSpecifier@0:644..655
+                  TypeSpecifierNonArray@0:644..655 `TypeName`
+                    TypeName@0:644..655
+      Statement@0:671..698 `Declaration`
+        Declaration@0:671..698 `InitDeclaratorList`
+          InitDeclaratorList@0:671..697
+            SingleDeclaration@0:671..697
+              FullySpecifiedType@0:671..675
+                TypeSpecifier@0:671..675
+                  TypeSpecifierNonArray@0:671..675 `bool`
+                    Bool
+              Expr `BoolConst`
+                BoolConst `true`
+      Statement@0:703..732 `Declaration`
+        Declaration@0:703..732 `InitDeclaratorList`
+          InitDeclaratorList@0:703..731
+            SingleDeclaration@0:703..731
+              FullySpecifiedType@0:703..707
+                TypeSpecifier@0:703..707
+                  TypeSpecifierNonArray@0:703..707 `bool`
+                    Bool
+              Expr `BoolConst`
+                BoolConst `false`
+      Statement@0:738..875 `Expression`
+        ExprStatement@0:738..875
+          FunIdentifier@0:738..759 `Expr`
+            Expr `Variable`
+              Identifier@0:738..759 `rayQueryInitializeEXT`
+          Expr@0:760..768 `Variable`
+            Identifier@0:760..768 `rayQuery`
+          Expr@0:770..774 `Variable`
+            Identifier@0:770..774 `rtas`
+          Expr@0:776..796 `Variable`
+            Identifier@0:776..796 `gl_RayFlagsOpaqueEXT`
+          Expr@0:798..835 `Variable`
+            Identifier@0:798..835 `gl_RayFlagsCullBackFacingTrianglesEXT`
+          Expr@0:837..844 `Dot`
+            Expr `Variable`
+              Identifier@0:837..840 `ray`
+            Identifier@0:841..844 `pos`
+          Expr@0:846..854 `Dot`
+            Expr `Variable`
+              Identifier@0:846..849 `ray`
+            Identifier@0:850..854 `tmin`
+          Expr@0:856..863 `Dot`
+            Expr `Variable`
+              Identifier@0:856..859 `ray`
+            Identifier@0:860..863 `dir`
+          Expr@0:865..873 `Dot`
+            Expr `Variable`
+              Identifier@0:865..868 `ray`
+            Identifier@0:869..873 `tmax`
+      Statement@0:880..2778 `Iteration`
+        IterationStatement@0:880..2778 `while`
+          Condition@0:887..915 `Expr`
+            Expr@0:887..915 `FunCall`
+              FunIdentifier@0:887..905 `Expr`
+                Expr `Variable`
+                  Identifier@0:887..905 `rayQueryProceedEXT`
+              Expr@0:906..914 `Variable`
+                Identifier@0:906..914 `rayQuery`
+          Statement `Compound`
+            CompoundStatement@0:921..2778
+              Statement@0:931..946 `Declaration`
+                Declaration@0:931..946 `InitDeclaratorList`
+                  InitDeclaratorList@0:931..945
+                    SingleDeclaration@0:931..945
+                      FullySpecifiedType@0:931..937
+                        TypeSpecifier@0:931..937
+                          TypeSpecifierNonArray@0:931..937 `mat4x3`
+                            Mat43
+              Statement@0:955..970 `Declaration`
+                Declaration@0:955..970 `InitDeclaratorList`
+                  InitDeclaratorList@0:955..969
+                    SingleDeclaration@0:955..969
+                      FullySpecifiedType@0:955..961
+                        TypeSpecifier@0:955..961
+                          TypeSpecifierNonArray@0:955..961 `mat4x3`
+                            Mat43
+              Statement@0:980..1059 `Declaration`
+                Declaration@0:980..1059 `InitDeclaratorList`
+                  InitDeclaratorList@0:980..1058
+                    SingleDeclaration@0:980..1058
+                      FullySpecifiedType@0:980..984
+                        TypeSpecifier@0:980..984
+                          TypeSpecifierNonArray@0:980..984 `uint`
+                            UInt
+                      Expr `FunCall`
+                        FunIdentifier@0:1001..1031 `Expr`
+                          Expr `Variable`
+                            Identifier@0:1001..1031 `rayQueryGetIntersectionTypeEXT`
+                        Expr@0:1032..1040 `Variable`
+                          Identifier@0:1032..1040 `rayQuery`
+                        Expr@0:1042..1057 `Variable`
+                          Identifier@0:1042..1057 `committed_false`
+              Statement@0:1068..2772 `Selection`
+                SelectionStatement@0:1068..2772
+                  Expr `Binary`
+                    BinaryOp@0:1086..1088 `==`
+                    Expr `Variable`
+                      Identifier@0:1072..1085 `candidateType`
+                    Expr `Variable`
+                      Identifier@0:1089..1132 `gl_RayQueryCandidateIntersectionTriangleEXT`
+                  SelectionRestStatement@0:1142..2772 `Statement`
+                    Statement `Compound`
+                      CompoundStatement@0:1142..2772
+                        Statement@0:1156..1187 `Expression`
+                          ExprStatement@0:1156..1187
+                            FunIdentifier@0:1156..1176 `Expr`
+                              Expr `Variable`
+                                Identifier@0:1156..1176 `rayQueryTerminateEXT`
+                            Expr@0:1177..1185 `Variable`
+                              Identifier@0:1177..1185 `rayQuery`
+                        Statement@0:1201..1278 `Expression`
+                          ExprStatement@0:1201..1278
+                            Expr `Variable`
+                              Identifier@0:1201..1208 `mat_o2w`
+                            AssignmentOp@0:1209..1210 `=`
+                            Expr `FunCall`
+                              FunIdentifier@0:1211..1250 `Expr`
+                                Expr `Variable`
+                                  Identifier@0:1211..1250 `rayQueryGetIntersectionObjectToWorldEXT`
+                              Expr@0:1251..1259 `Variable`
+                                Identifier@0:1251..1259 `rayQuery`
+                              Expr@0:1261..1276 `Variable`
+                                Identifier@0:1261..1276 `committed_false`
+                        Statement@0:1291..1368 `Expression`
+                          ExprStatement@0:1291..1368
+                            Expr `Variable`
+                              Identifier@0:1291..1298 `mat_w2o`
+                            AssignmentOp@0:1299..1300 `=`
+                            Expr `FunCall`
+                              FunIdentifier@0:1301..1340 `Expr`
+                                Expr `Variable`
+                                  Identifier@0:1301..1340 `rayQueryGetIntersectionWorldToObjectEXT`
+                              Expr@0:1341..1349 `Variable`
+                                Identifier@0:1341..1349 `rayQuery`
+                              Expr@0:1351..1366 `Variable`
+                                Identifier@0:1351..1366 `committed_false`
+                        Statement@0:1382..1423 `Expression`
+                          ExprStatement@0:1382..1423
+                            FunIdentifier@0:1382..1412 `Expr`
+                              Expr `Variable`
+                                Identifier@0:1382..1412 `rayQueryConfirmIntersectionEXT`
+                            Expr@0:1413..1421 `Variable`
+                              Identifier@0:1413..1421 `rayQuery`
+                        Statement@0:1437..1562 `Selection`
+                          SelectionStatement@0:1437..1562
+                            Expr `FunCall`
+                              FunIdentifier@0:1441..1476 `Expr`
+                                Expr `Variable`
+                                  Identifier@0:1441..1476 `rayQueryGetIntersectionFrontFaceEXT`
+                              Expr@0:1477..1485 `Variable`
+                                Identifier@0:1477..1485 `rayQuery`
+                              Expr@0:1487..1501 `Variable`
+                                Identifier@0:1487..1501 `committed_true`
+                            SelectionRestStatement@0:1516..1562 `Statement`
+                              Statement `Compound`
+                                CompoundStatement@0:1516..1562
+                                  Statement@0:1534..1548 `Expression`
+                                    ExprStatement@0:1534..1548
+                                      FunIdentifier@0:1534..1545 `Expr`
+                                        Expr `Variable`
+                                          Identifier@0:1534..1545 `doSomething`
+                        Statement@0:1575..1710 `Selection`
+                          SelectionStatement@0:1575..1710
+                            Expr `Binary`
+                              BinaryOp@0:1646..1648 `==`
+                              Expr `Dot`
+                                Expr `FunCall`
+                                  FunIdentifier@0:1579..1617 `Expr`
+                                    Expr `Variable`
+                                      Identifier@0:1579..1617 `rayQueryGetIntersectionBarycentricsEXT`
+                                  Expr@0:1618..1626 `Variable`
+                                    Identifier@0:1618..1626 `rayQuery`
+                                  Expr@0:1628..1642 `Variable`
+                                    Identifier@0:1628..1642 `committed_true`
+                                Identifier@0:1644..1645 `x`
+                              Expr `IntConst`
+                                IntConst `0`
+                            SelectionRestStatement@0:1664..1710 `Statement`
+                              Statement `Compound`
+                                CompoundStatement@0:1664..1710
+                                  Statement@0:1682..1696 `Expression`
+                                    ExprStatement@0:1682..1696
+                                      FunIdentifier@0:1682..1693 `Expr`
+                                        Expr `Variable`
+                                          Identifier@0:1682..1693 `doSomething`
+                        Statement@0:1723..1862 `Selection`
+                          SelectionStatement@0:1723..1862
+                            Expr `Binary`
+                              BinaryOp@0:1799..1800 `>`
+                              Expr `FunCall`
+                                FunIdentifier@0:1727..1772 `Expr`
+                                  Expr `Variable`
+                                    Identifier@0:1727..1772 `rayQueryGetIntersectionInstanceCustomIndexEXT`
+                                Expr@0:1773..1781 `Variable`
+                                  Identifier@0:1773..1781 `rayQuery`
+                                Expr@0:1783..1797 `Variable`
+                                  Identifier@0:1783..1797 `committed_true`
+                              Expr `IntConst`
+                                IntConst `0`
+                            SelectionRestStatement@0:1816..1862 `Statement`
+                              Statement `Compound`
+                                CompoundStatement@0:1816..1862
+                                  Statement@0:1834..1848 `Expression`
+                                    ExprStatement@0:1834..1848
+                                      FunIdentifier@0:1834..1845 `Expr`
+                                        Expr `Variable`
+                                          Identifier@0:1834..1845 `doSomething`
+                        Statement@0:1875..2005 `Selection`
+                          SelectionStatement@0:1875..2005
+                            Expr `Binary`
+                              BinaryOp@0:1942..1943 `>`
+                              Expr `FunCall`
+                                FunIdentifier@0:1879..1915 `Expr`
+                                  Expr `Variable`
+                                    Identifier@0:1879..1915 `rayQueryGetIntersectionInstanceIdEXT`
+                                Expr@0:1916..1924 `Variable`
+                                  Identifier@0:1916..1924 `rayQuery`
+                                Expr@0:1926..1940 `Variable`
+                                  Identifier@0:1926..1940 `committed_true`
+                              Expr `IntConst`
+                                IntConst `0`
+                            SelectionRestStatement@0:1959..2005 `Statement`
+                              Statement `Compound`
+                                CompoundStatement@0:1959..2005
+                                  Statement@0:1977..1991 `Expression`
+                                    ExprStatement@0:1977..1991
+                                      FunIdentifier@0:1977..1988 `Expr`
+                                        Expr `Variable`
+                                          Identifier@0:1977..1988 `doSomething`
+                        Statement@0:2018..2158 `Selection`
+                          SelectionStatement@0:2018..2158
+                            Expr `Binary`
+                              BinaryOp@0:2095..2096 `>`
+                              Expr `Dot`
+                                Expr `FunCall`
+                                  FunIdentifier@0:2022..2066 `Expr`
+                                    Expr `Variable`
+                                      Identifier@0:2022..2066 `rayQueryGetIntersectionObjectRayDirectionEXT`
+                                  Expr@0:2067..2075 `Variable`
+                                    Identifier@0:2067..2075 `rayQuery`
+                                  Expr@0:2077..2091 `Variable`
+                                    Identifier@0:2077..2091 `committed_true`
+                                Identifier@0:2093..2094 `x`
+                              Expr `IntConst`
+                                IntConst `0`
+                            SelectionRestStatement@0:2112..2158 `Statement`
+                              Statement `Compound`
+                                CompoundStatement@0:2112..2158
+                                  Statement@0:2130..2144 `Expression`
+                                    ExprStatement@0:2130..2144
+                                      FunIdentifier@0:2130..2141 `Expr`
+                                        Expr `Variable`
+                                          Identifier@0:2130..2141 `doSomething`
+                        Statement@0:2171..2308 `Selection`
+                          SelectionStatement@0:2171..2308
+                            Expr `Binary`
+                              BinaryOp@0:2245..2246 `>`
+                              Expr `Dot`
+                                Expr `FunCall`
+                                  FunIdentifier@0:2175..2216 `Expr`
+                                    Expr `Variable`
+                                      Identifier@0:2175..2216 `rayQueryGetIntersectionObjectRayOriginEXT`
+                                  Expr@0:2217..2225 `Variable`
+                                    Identifier@0:2217..2225 `rayQuery`
+                                  Expr@0:2227..2241 `Variable`
+                                    Identifier@0:2227..2241 `committed_true`
+                                Identifier@0:2243..2244 `x`
+                              Expr `IntConst`
+                                IntConst `0`
+                            SelectionRestStatement@0:2262..2308 `Statement`
+                              Statement `Compound`
+                                CompoundStatement@0:2262..2308
+                                  Statement@0:2280..2294 `Expression`
+                                    ExprStatement@0:2280..2294
+                                      FunIdentifier@0:2280..2291 `Expr`
+                                        Expr `Variable`
+                                          Identifier@0:2280..2291 `doSomething`
+                        Statement@0:2321..2455 `Selection`
+                          SelectionStatement@0:2321..2455
+                            Expr `Binary`
+                              BinaryOp@0:2392..2393 `>`
+                              Expr `FunCall`
+                                FunIdentifier@0:2325..2365 `Expr`
+                                  Expr `Variable`
+                                    Identifier@0:2325..2365 `rayQueryGetIntersectionPrimitiveIndexEXT`
+                                Expr@0:2366..2374 `Variable`
+                                  Identifier@0:2366..2374 `rayQuery`
+                                Expr@0:2376..2390 `Variable`
+                                  Identifier@0:2376..2390 `committed_true`
+                              Expr `IntConst`
+                                IntConst `0`
+                            SelectionRestStatement@0:2409..2455 `Statement`
+                              Statement `Compound`
+                                CompoundStatement@0:2409..2455
+                                  Statement@0:2427..2441 `Expression`
+                                    ExprStatement@0:2427..2441
+                                      FunIdentifier@0:2427..2438 `Expr`
+                                        Expr `Variable`
+                                          Identifier@0:2427..2438 `doSomething`
+                        Statement@0:2468..2591 `Selection`
+                          SelectionStatement@0:2468..2591
+                            Expr `Binary`
+                              BinaryOp@0:2526..2527 `>`
+                              Expr `FunCall`
+                                FunIdentifier@0:2472..2499 `Expr`
+                                  Expr `Variable`
+                                    Identifier@0:2472..2499 `rayQueryGetIntersectionTEXT`
+                                Expr@0:2500..2508 `Variable`
+                                  Identifier@0:2500..2508 `rayQuery`
+                                Expr@0:2510..2524 `Variable`
+                                  Identifier@0:2510..2524 `committed_true`
+                              Expr `FloatConst`
+                                FloatConst `0`
+                            SelectionRestStatement@0:2545..2591 `Statement`
+                              Statement `Compound`
+                                CompoundStatement@0:2545..2591
+                                  Statement@0:2563..2577 `Expression`
+                                    ExprStatement@0:2563..2577
+                                      FunIdentifier@0:2563..2574 `Expr`
+                                        Expr `Variable`
+                                          Identifier@0:2563..2574 `doSomething`
+                        Statement@0:2604..2762 `Selection`
+                          SelectionStatement@0:2604..2762
+                            Expr `Binary`
+                              BinaryOp@0:2699..2700 `>`
+                              Expr `FunCall`
+                                FunIdentifier@0:2608..2672 `Expr`
+                                  Expr `Variable`
+                                    Identifier@0:2608..2672 `rayQueryGetIntersectionInstanceShaderBindingTableRecordOffsetEXT`
+                                Expr@0:2673..2681 `Variable`
+                                  Identifier@0:2673..2681 `rayQuery`
+                                Expr@0:2683..2697 `Variable`
+                                  Identifier@0:2683..2697 `committed_true`
+                              Expr `IntConst`
+                                IntConst `0`
+                            SelectionRestStatement@0:2716..2762 `Statement`
+                              Statement `Compound`
+                                CompoundStatement@0:2716..2762
+                                  Statement@0:2734..2748 `Expression`
+                                    ExprStatement@0:2734..2748
+                                      FunIdentifier@0:2734..2745 `Expr`
+                                        Expr `Variable`
+                                          Identifier@0:2734..2745 `doSomething`
+      Statement@0:2784..2864 `Declaration`
+        Declaration@0:2784..2864 `InitDeclaratorList`
+          InitDeclaratorList@0:2784..2863
+            SingleDeclaration@0:2784..2863
+              FullySpecifiedType@0:2784..2788
+                TypeSpecifier@0:2784..2788
+                  TypeSpecifierNonArray@0:2784..2788 `uint`
+                    UInt
+              Expr `FunCall`
+                FunIdentifier@0:2807..2837 `Expr`
+                  Expr `Variable`
+                    Identifier@0:2807..2837 `rayQueryGetIntersectionTypeEXT`
+                Expr@0:2838..2846 `Variable`
+                  Identifier@0:2838..2846 `rayQuery`
+                Expr@0:2848..2862 `Variable`
+                  Identifier@0:2848..2862 `committed_true`
+      Statement@0:2869..3079 `Selection`
+        SelectionStatement@0:2869..3079
+          Expr `Binary`
+            BinaryOp@0:2889..2891 `==`
+            Expr `Variable`
+              Identifier@0:2873..2888 `committedStatus`
+            Expr `Variable`
+              Identifier@0:2892..2936 `gl_RayQueryCommittedIntersectionGeneratedEXT`
+          SelectionRestStatement@0:2942..3079 `Statement`
+            Statement `Compound`
+              CompoundStatement@0:2942..3079
+                Statement@0:2952..3073 `Selection`
+                  SelectionStatement@0:2952..3073
+                    Expr `Binary`
+                      BinaryOp@0:3022..3023 `>`
+                      Expr `FunCall`
+                        FunIdentifier@0:2956..2995 `Expr`
+                          Expr `Variable`
+                            Identifier@0:2956..2995 `rayQueryGetIntersectionGeometryIndexEXT`
+                        Expr@0:2996..3004 `Variable`
+                          Identifier@0:2996..3004 `rayQuery`
+                        Expr@0:3006..3020 `Variable`
+                          Identifier@0:3006..3020 `committed_true`
+                      Expr `IntConst`
+                        IntConst `0`
+                    SelectionRestStatement@0:3035..3073 `Statement`
+                      Statement `Compound`
+                        CompoundStatement@0:3035..3073
+                          Statement@0:3049..3063 `Expression`
+                            ExprStatement@0:3049..3063
+                              FunIdentifier@0:3049..3060 `Expr`
+                                Expr `Variable`
+                                  Identifier@0:3049..3060 `doSomething`

@@ -1,0 +1,167 @@
+ExternalDeclaration@0:21..100 `Declaration`
+  Declaration@0:21..100 `Block`
+    Block@0:21..99
+      TypeQualifier@0:21..23
+        TypeQualifierSpec@0:21..23 `Storage`
+          StorageQualifier@0:21..23 `in`
+            In
+      Identifier@0:24..36 `gl_PerVertex`
+      StructFieldSpecifier@0:44..69
+        TypeSpecifier@0:44..49
+          TypeSpecifierNonArray@0:44..49 `float`
+            Float
+        ArrayedIdentifier@0:50..68
+          Identifier@0:50..65 `gl_CullDistance`
+          ArraySpecifierDimension@0:65..68 `ExplicitlySized`
+            Expr `IntConst`
+              IntConst `3`
+      Identifier@0:73..78 `gl_in`
+      ArraySpecifierDimension@0:78..99 `ExplicitlySized`
+        Expr `Variable`
+          Identifier@0:79..98 `gl_MaxPatchVertices`
+ExternalDeclaration@0:104..157 `Declaration`
+  Declaration@0:104..157 `Block`
+    Block@0:104..156
+      TypeQualifier@0:104..107
+        TypeQualifierSpec@0:104..107 `Storage`
+          StorageQualifier@0:104..107 `out`
+            Out
+      Identifier@0:108..120 `gl_PerVertex`
+      StructFieldSpecifier@0:128..153
+        TypeSpecifier@0:128..133
+          TypeSpecifierNonArray@0:128..133 `float`
+            Float
+        ArrayedIdentifier@0:134..152
+          Identifier@0:134..149 `gl_CullDistance`
+          ArraySpecifierDimension@0:149..152 `ExplicitlySized`
+            Expr `IntConst`
+              IntConst `3`
+ExternalDeclaration@0:161..233 `FunctionDefinition`
+  FunctionDefinition@0:161..233
+    FunctionPrototype@0:161..172
+      FullySpecifiedType@0:161..165
+        TypeSpecifier@0:161..165
+          TypeSpecifierNonArray@0:161..165 `void`
+            Void
+      Identifier@0:166..170 `main`
+    CompoundStatement@0:174..233
+      Statement@0:181..230 `Expression`
+        ExprStatement@0:181..230
+          Expr `Bracket`
+            Expr `Variable`
+              Identifier@0:181..196 `gl_CullDistance`
+            Expr `IntConst`
+              IntConst `2`
+          AssignmentOp@0:200..201 `=`
+          Expr `Bracket`
+            Expr `Dot`
+              Expr `Bracket`
+                Expr `Variable`
+                  Identifier@0:202..207 `gl_in`
+                Expr `IntConst`
+                  IntConst `1`
+              Identifier@0:211..226 `gl_CullDistance`
+            Expr `IntConst`
+              IntConst `2`
+ExternalDeclaration@0:237..283 `Declaration`
+  Declaration@0:237..283 `InitDeclaratorList`
+    InitDeclaratorList@0:237..282
+      SingleDeclaration@0:237..282
+        FullySpecifiedType@0:237..277
+          TypeQualifierSpec@0:237..258 `Layout`
+            LayoutQualifier@0:237..258
+              LayoutQualifierSpec@0:244..257 `Identifier`
+                Identifier@0:244..257 `equal_spacing`
+          TypeQualifierSpec@0:269..271 `Storage`
+            StorageQualifier@0:269..271 `in`
+              In
+          TypeSpecifier@0:272..277
+            TypeSpecifierNonArray@0:272..277 `float`
+              Float
+        ArraySpecifierDimension@0:280..282 `Unsized`
+          Unsized
+ExternalDeclaration@0:315..361 `Declaration`
+  Declaration@0:315..361 `InitDeclaratorList`
+    InitDeclaratorList@0:315..360
+      SingleDeclaration@0:315..360
+        FullySpecifiedType@0:315..355
+          TypeQualifierSpec@0:315..346 `Layout`
+            LayoutQualifier@0:315..346
+              LayoutQualifierSpec@0:322..345 `Identifier`
+                Identifier@0:322..345 `fractional_even_spacing`
+          TypeQualifierSpec@0:347..349 `Storage`
+            StorageQualifier@0:347..349 `in`
+              In
+          TypeSpecifier@0:350..355
+            TypeSpecifierNonArray@0:350..355 `float`
+              Float
+        ArraySpecifierDimension@0:358..360 `Unsized`
+          Unsized
+ExternalDeclaration@0:393..439 `Declaration`
+  Declaration@0:393..439 `InitDeclaratorList`
+    InitDeclaratorList@0:393..438
+      SingleDeclaration@0:393..438
+        FullySpecifiedType@0:393..433
+          TypeQualifierSpec@0:393..423 `Layout`
+            LayoutQualifier@0:393..423
+              LayoutQualifierSpec@0:400..422 `Identifier`
+                Identifier@0:400..422 `fractional_odd_spacing`
+          TypeQualifierSpec@0:425..427 `Storage`
+            StorageQualifier@0:425..427 `in`
+              In
+          TypeSpecifier@0:428..433
+            TypeSpecifierNonArray@0:428..433 `float`
+              Float
+        ArraySpecifierDimension@0:436..438 `Unsized`
+          Unsized
+ExternalDeclaration@0:471..517 `Declaration`
+  Declaration@0:471..517 `InitDeclaratorList`
+    InitDeclaratorList@0:471..516
+      SingleDeclaration@0:471..516
+        FullySpecifiedType@0:471..511
+          TypeQualifierSpec@0:471..481 `Layout`
+            LayoutQualifier@0:471..481
+              LayoutQualifierSpec@0:478..480 `Identifier`
+                Identifier@0:478..480 `cw`
+          TypeQualifierSpec@0:503..505 `Storage`
+            StorageQualifier@0:503..505 `in`
+              In
+          TypeSpecifier@0:506..511
+            TypeSpecifierNonArray@0:506..511 `float`
+              Float
+        ArraySpecifierDimension@0:514..516 `Unsized`
+          Unsized
+ExternalDeclaration@0:549..595 `Declaration`
+  Declaration@0:549..595 `InitDeclaratorList`
+    InitDeclaratorList@0:549..594
+      SingleDeclaration@0:549..594
+        FullySpecifiedType@0:549..589
+          TypeQualifierSpec@0:549..560 `Layout`
+            LayoutQualifier@0:549..560
+              LayoutQualifierSpec@0:556..559 `Identifier`
+                Identifier@0:556..559 `ccw`
+          TypeQualifierSpec@0:581..583 `Storage`
+            StorageQualifier@0:581..583 `in`
+              In
+          TypeSpecifier@0:584..589
+            TypeSpecifierNonArray@0:584..589 `float`
+              Float
+        ArraySpecifierDimension@0:592..594 `Unsized`
+          Unsized
+ExternalDeclaration@0:627..673 `Declaration`
+  Declaration@0:627..673 `InitDeclaratorList`
+    InitDeclaratorList@0:627..672
+      SingleDeclaration@0:627..672
+        FullySpecifiedType@0:627..667
+          TypeQualifierSpec@0:627..645 `Layout`
+            LayoutQualifier@0:627..645
+              LayoutQualifierSpec@0:634..644 `Identifier`
+                Identifier@0:634..644 `point_mode`
+          TypeQualifierSpec@0:659..661 `Storage`
+            StorageQualifier@0:659..661 `in`
+              In
+          TypeSpecifier@0:662..667
+            TypeSpecifierNonArray@0:662..667 `float`
+              Float
+        ArraySpecifierDimension@0:670..672 `Unsized`
+          Unsized

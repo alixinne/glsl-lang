@@ -1,0 +1,63 @@
+ExternalDeclaration@0:17..77 `Declaration`
+  Declaration@0:17..77 `Block`
+    Block@0:17..76
+      TypeQualifier@0:17..43
+        TypeQualifierSpec@0:17..35 `Layout`
+          LayoutQualifier@0:17..35
+            LayoutQualifierSpec@0:25..34 `Identifier`
+              Identifier@0:25..32 `binding`
+              IntConst `0`
+        TypeQualifierSpec@0:36..43 `Storage`
+          StorageQualifier@0:36..43 `uniform`
+            Uniform
+      Identifier@0:44..49 `Block`
+      StructFieldSpecifier@0:55..69
+        TypeQualifierSpec@0:55..60 `Precision`
+          PrecisionQualifier@0:55..60 `high`
+        TypeSpecifier@0:61..64
+          TypeSpecifierNonArray@0:61..64 `int`
+            Int
+        ArrayedIdentifier@0:65..68
+          Identifier@0:65..66 `a`
+          ArraySpecifierDimension@0:66..68 `Unsized`
+            Unsized
+      Identifier@0:73..76 `uni`
+ExternalDeclaration@0:79..115 `Declaration`
+  Declaration@0:79..115 `InitDeclaratorList`
+    InitDeclaratorList@0:79..114
+      SingleDeclaration@0:79..114
+        FullySpecifiedType@0:79..112
+          TypeQualifierSpec@0:79..98 `Layout`
+            LayoutQualifier@0:79..98
+              LayoutQualifierSpec@0:87..97 `Identifier`
+                Identifier@0:87..95 `location`
+                IntConst `0`
+          TypeQualifierSpec@0:99..102 `Storage`
+            StorageQualifier@0:99..102 `out`
+              Out
+          TypeQualifierSpec@0:103..108 `Precision`
+            PrecisionQualifier@0:103..108 `high`
+          TypeSpecifier@0:109..112
+            TypeSpecifierNonArray@0:109..112 `int`
+              Int
+ExternalDeclaration@0:117..150 `FunctionDefinition`
+  FunctionDefinition@0:117..150
+    FunctionPrototype@0:117..128
+      FullySpecifiedType@0:117..121
+        TypeSpecifier@0:117..121
+          TypeSpecifierNonArray@0:117..121 `void`
+            Void
+      Identifier@0:122..126 `main`
+    CompoundStatement@0:129..150
+      Statement@0:134..147 `Expression`
+        ExprStatement@0:134..147
+          Expr `Variable`
+            Identifier@0:134..135 `o`
+          AssignmentOp@0:136..137 `=`
+          Expr `Bracket`
+            Expr `Dot`
+              Expr `Variable`
+                Identifier@0:138..141 `uni`
+              Identifier@0:142..143 `a`
+            Expr `IntConst`
+              IntConst `2`

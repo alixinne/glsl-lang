@@ -1,0 +1,489 @@
+ExternalDeclaration@0:16..35 `Declaration`
+  Declaration@0:16..35 `InitDeclaratorList`
+    InitDeclaratorList@0:16..34
+      SingleDeclaration@0:16..34
+        FullySpecifiedType@0:16..28
+          TypeQualifierSpec@0:16..23 `Storage`
+            StorageQualifier@0:16..23 `varying`
+              Varying
+          TypeSpecifier@0:24..28
+            TypeSpecifierNonArray@0:24..28 `vec3`
+              Vec3
+ExternalDeclaration@0:96..174 `FunctionDefinition`
+  FunctionDefinition@0:96..174
+    FunctionPrototype@0:96..127
+      FullySpecifiedType@0:96..105
+        TypeQualifierSpec@0:96..100 `Precision`
+          PrecisionQualifier@0:96..100 `low`
+        TypeSpecifier@0:101..105
+          TypeSpecifierNonArray@0:101..105 `vec2`
+            Vec2
+      Identifier@0:106..109 `foo`
+      FunctionParameterDeclaration@0:110..126 `Named`
+        TypeQualifierSpec@0:110..117 `Precision`
+          PrecisionQualifier@0:110..117 `medium`
+        FunctionParameterDeclarator@0:118..126
+          TypeSpecifier@0:118..122
+            TypeSpecifierNonArray@0:118..122 `vec3`
+              Vec3
+          ArrayedIdentifier@0:123..126
+            Identifier@0:123..126 `mv3`
+    CompoundStatement@0:129..174
+      Statement@0:136..151 `Declaration`
+        Declaration@0:136..151 `InitDeclaratorList`
+          InitDeclaratorList@0:136..150
+            SingleDeclaration@0:136..150
+              FullySpecifiedType@0:136..146
+                TypeQualifierSpec@0:136..141 `Precision`
+                  PrecisionQualifier@0:136..141 `high`
+                TypeSpecifier@0:142..146
+                  TypeSpecifierNonArray@0:142..146 `vec4`
+                    Vec4
+      Statement@0:157..171 `Jump`
+        JumpStatement@0:157..171 `return`
+          Expr `Variable`
+            Identifier@0:164..167 `hv4`
+          Identifier@0:168..170 `xy`
+ExternalDeclaration@0:178..196 `Declaration`
+  Declaration@0:178..196 `InitDeclaratorList`
+    InitDeclaratorList@0:178..195
+      SingleDeclaration@0:178..195
+        FullySpecifiedType@0:178..181
+          TypeSpecifier@0:178..181
+            TypeSpecifierNonArray@0:178..181 `int`
+              Int
+ExternalDeclaration@0:200..234 `Declaration`
+  Declaration@0:200..234 `InitDeclaratorList`
+    InitDeclaratorList@0:200..233
+      SingleDeclaration@0:200..233
+        FullySpecifiedType@0:200..222
+          TypeQualifierSpec@0:200..207 `Storage`
+            StorageQualifier@0:200..207 `uniform`
+              Uniform
+          TypeQualifierSpec@0:208..212 `Precision`
+            PrecisionQualifier@0:208..212 `low`
+          TypeSpecifier@0:213..222
+            TypeSpecifierNonArray@0:213..222 `sampler2D`
+              Sampler2D
+ExternalDeclaration@0:236..273 `Declaration`
+  Declaration@0:236..273 `InitDeclaratorList`
+    InitDeclaratorList@0:236..272
+      SingleDeclaration@0:236..272
+        FullySpecifiedType@0:236..261
+          TypeQualifierSpec@0:236..243 `Storage`
+            StorageQualifier@0:236..243 `uniform`
+              Uniform
+          TypeQualifierSpec@0:244..251 `Precision`
+            PrecisionQualifier@0:244..251 `medium`
+          TypeSpecifier@0:252..261
+            TypeSpecifierNonArray@0:252..261 `sampler2D`
+              Sampler2D
+ExternalDeclaration@0:275..311 `Declaration`
+  Declaration@0:275..311 `InitDeclaratorList`
+    InitDeclaratorList@0:275..310
+      SingleDeclaration@0:275..310
+        FullySpecifiedType@0:275..298
+          TypeQualifierSpec@0:275..282 `Storage`
+            StorageQualifier@0:275..282 `uniform`
+              Uniform
+          TypeQualifierSpec@0:283..288 `Precision`
+            PrecisionQualifier@0:283..288 `high`
+          TypeSpecifier@0:289..298
+            TypeSpecifierNonArray@0:289..298 `sampler2D`
+              Sampler2D
+ExternalDeclaration@0:315..335 `Declaration`
+  Declaration@0:315..335 `Precision`
+    PrecisionQualifier@0:325..330 `high`
+    TypeSpecifier@0:331..334
+      TypeSpecifierNonArray@0:331..334 `int`
+        Int
+ExternalDeclaration@0:338..360 `Declaration`
+  Declaration@0:338..360 `Precision`
+    PrecisionQualifier@0:348..353 `high`
+    TypeSpecifier@0:354..359
+      TypeSpecifierNonArray@0:354..359 `ivec2`
+        IVec2
+ExternalDeclaration@0:375..400 `Declaration`
+  Declaration@0:375..400 `Precision`
+    PrecisionQualifier@0:385..392 `medium`
+    TypeSpecifier@0:393..399
+      TypeSpecifierNonArray@0:393..396 `int`
+        Int
+      ArraySpecifierDimension@0:396..399 `ExplicitlySized`
+        Expr `IntConst`
+          IntConst `2`
+ExternalDeclaration@0:412..422 `Declaration`
+  Declaration@0:412..422 `InitDeclaratorList`
+    InitDeclaratorList@0:412..421
+      SingleDeclaration@0:412..421
+        FullySpecifiedType@0:412..416
+          TypeSpecifier@0:412..416
+            TypeSpecifierNonArray@0:412..416 `vec4`
+              Vec4
+ExternalDeclaration@0:448..471 `Declaration`
+  Declaration@0:448..471 `Precision`
+    PrecisionQualifier@0:458..465 `medium`
+    TypeSpecifier@0:466..470
+      TypeSpecifierNonArray@0:466..470 `vec4`
+        Vec4
+ExternalDeclaration@0:487..503 `Declaration`
+  Declaration@0:487..503 `InitDeclaratorList`
+    InitDeclaratorList@0:487..502
+      SingleDeclaration@0:487..502
+        FullySpecifiedType@0:487..490
+          TypeSpecifier@0:487..490
+            TypeSpecifierNonArray@0:487..490 `int`
+              Int
+ExternalDeclaration@0:507..1682 `FunctionDefinition`
+  FunctionDefinition@0:507..1682
+    FunctionPrototype@0:507..518
+      FullySpecifiedType@0:507..511
+        TypeSpecifier@0:507..511
+          TypeSpecifierNonArray@0:507..511 `void`
+            Void
+      Identifier@0:512..516 `main`
+    CompoundStatement@0:520..1682
+      Statement@0:527..570 `Declaration`
+        Declaration@0:527..570 `InitDeclaratorList`
+          InitDeclaratorList@0:527..569
+            SingleDeclaration@0:527..569
+              FullySpecifiedType@0:527..535
+                TypeQualifierSpec@0:527..531 `Precision`
+                  PrecisionQualifier@0:527..531 `low`
+                TypeSpecifier@0:532..535
+                  TypeSpecifierNonArray@0:532..535 `int`
+                    Int
+              Expr `Binary`
+                BinaryOp@0:556..557 `+`
+                Expr `Variable`
+                  Identifier@0:542..555 `global_medium`
+                Expr `Variable`
+                  Identifier@0:558..569 `global_high`
+      Statement@0:578..610 `Expression`
+        ExprStatement@0:578..610
+          Expr `Variable`
+            Identifier@0:578..590 `gl_FragColor`
+          AssignmentOp@0:591..592 `=`
+          Expr `FunCall`
+            FunIdentifier@0:593..597 `TypeSpecifier`
+              TypeSpecifier
+                TypeSpecifierNonArray@0:593..597 `vec4`
+                  Vec4
+            Expr@0:598..603 `Variable`
+              Identifier@0:598..603 `color`
+            Expr@0:605..608 `FloatConst`
+              FloatConst `1`
+      Statement@0:618..634 `Declaration`
+        Declaration@0:618..634 `InitDeclaratorList`
+          InitDeclaratorList@0:618..633
+            SingleDeclaration@0:618..633
+              FullySpecifiedType@0:618..621
+                TypeSpecifier@0:618..621
+                  TypeSpecifierNonArray@0:618..621 `int`
+                    Int
+      Statement@0:640..659 `Expression`
+        ExprStatement@0:640..659
+          Expr `Variable`
+            Identifier@0:640..643 `sum`
+          AssignmentOp@0:644..646 `+=`
+          Expr `Variable`
+            Identifier@0:647..658 `level1_high`
+      Statement@0:667..686 `Declaration`
+        Declaration@0:667..686 `Precision`
+          PrecisionQualifier@0:677..681 `low`
+          TypeSpecifier@0:682..685
+            TypeSpecifierNonArray@0:682..685 `int`
+              Int
+      Statement@0:692..707 `Declaration`
+        Declaration@0:692..707 `InitDeclaratorList`
+          InitDeclaratorList@0:692..706
+            SingleDeclaration@0:692..706
+              FullySpecifiedType@0:692..695
+                TypeSpecifier@0:692..695
+                  TypeSpecifierNonArray@0:692..695 `int`
+                    Int
+      Statement@0:713..731 `Expression`
+        ExprStatement@0:713..731
+          Expr `Variable`
+            Identifier@0:713..716 `sum`
+          AssignmentOp@0:717..719 `+=`
+          Expr `Variable`
+            Identifier@0:720..730 `level1_low`
+      Statement@0:810..826 `Declaration`
+        Declaration@0:810..826 `InitDeclaratorList`
+          InitDeclaratorList@0:810..825
+            SingleDeclaration@0:810..825
+              FullySpecifiedType@0:810..820
+                TypeQualifierSpec@0:810..814 `Precision`
+                  PrecisionQualifier@0:810..814 `low`
+                TypeSpecifier@0:815..820
+                  TypeSpecifierNonArray@0:815..820 `float`
+                    Float
+      Statement@0:832..851 `Declaration`
+        Declaration@0:832..851 `InitDeclaratorList`
+          InitDeclaratorList@0:832..850
+            SingleDeclaration@0:832..850
+              FullySpecifiedType@0:832..845
+                TypeQualifierSpec@0:832..839 `Precision`
+                  PrecisionQualifier@0:832..839 `medium`
+                TypeSpecifier@0:840..845
+                  TypeSpecifierNonArray@0:840..845 `float`
+                    Float
+      Statement@0:857..893 `Declaration`
+        Declaration@0:857..893 `InitDeclaratorList`
+          InitDeclaratorList@0:857..892
+            SingleDeclaration@0:857..892
+              FullySpecifiedType@0:857..867
+                TypeQualifierSpec@0:857..861 `Precision`
+                  PrecisionQualifier@0:857..861 `low`
+                TypeSpecifier@0:862..867
+                  TypeSpecifierNonArray@0:862..867 `float`
+                    Float
+              Expr `FunCall`
+                FunIdentifier@0:872..880 `Expr`
+                  Expr `Variable`
+                    Identifier@0:872..880 `distance`
+                Expr@0:881..885 `Variable`
+                  Identifier@0:881..885 `arg1`
+                Expr@0:887..891 `Variable`
+                  Identifier@0:887..891 `arg2`
+      Statement@0:901..1372 `Compound`
+        CompoundStatement@0:901..1372
+          Statement@0:912..927 `Declaration`
+            Declaration@0:912..927 `InitDeclaratorList`
+              InitDeclaratorList@0:912..926
+                SingleDeclaration@0:912..926
+                  FullySpecifiedType@0:912..915
+                    TypeSpecifier@0:912..915
+                      TypeSpecifierNonArray@0:912..915 `int`
+                        Int
+          Statement@0:937..955 `Expression`
+            ExprStatement@0:937..955
+              Expr `Variable`
+                Identifier@0:937..940 `sum`
+              AssignmentOp@0:941..943 `+=`
+              Expr `Variable`
+                Identifier@0:944..954 `level2_low`
+          Statement@0:975..995 `Declaration`
+            Declaration@0:975..995 `Precision`
+              PrecisionQualifier@0:985..990 `high`
+              TypeSpecifier@0:991..994
+                TypeSpecifierNonArray@0:991..994 `int`
+                  Int
+          Statement@0:1005..1021 `Declaration`
+            Declaration@0:1005..1021 `InitDeclaratorList`
+              InitDeclaratorList@0:1005..1020
+                SingleDeclaration@0:1005..1020
+                  FullySpecifiedType@0:1005..1008
+                    TypeSpecifier@0:1005..1008
+                      TypeSpecifierNonArray@0:1005..1008 `int`
+                        Int
+          Statement@0:1031..1050 `Expression`
+            ExprStatement@0:1031..1050
+              Expr `Variable`
+                Identifier@0:1031..1034 `sum`
+              AssignmentOp@0:1035..1037 `+=`
+              Expr `Variable`
+                Identifier@0:1038..1049 `level2_high`
+          Statement@0:1060..1307 `Iteration`
+            IterationStatement@0:1060..1307 `do`
+              Statement `Compound`
+                CompoundStatement@0:1063..1293
+                  Statement@0:1078..1219 `Selection`
+                    SelectionStatement@0:1078..1219
+                      Expr `BoolConst`
+                        BoolConst `true`
+                      SelectionRestStatement@0:1088..1219 `Statement`
+                        Statement `Compound`
+                          CompoundStatement@0:1088..1219
+                            Statement@0:1107..1129 `Declaration`
+                              Declaration@0:1107..1129 `Precision`
+                                PrecisionQualifier@0:1117..1124 `medium`
+                                TypeSpecifier@0:1125..1128
+                                  TypeSpecifierNonArray@0:1125..1128 `int`
+                                    Int
+                            Statement@0:1147..1165 `Declaration`
+                              Declaration@0:1147..1165 `InitDeclaratorList`
+                                InitDeclaratorList@0:1147..1164
+                                  SingleDeclaration@0:1147..1164
+                                    FullySpecifiedType@0:1147..1150
+                                      TypeSpecifier@0:1147..1150
+                                        TypeSpecifierNonArray@0:1147..1150 `int`
+                                          Int
+                            Statement@0:1183..1204 `Expression`
+                              ExprStatement@0:1183..1204
+                                Expr `Variable`
+                                  Identifier@0:1183..1186 `sum`
+                                AssignmentOp@0:1187..1189 `+=`
+                                Expr `Variable`
+                                  Identifier@0:1190..1203 `level4_medium`
+                  Statement@0:1233..1249 `Declaration`
+                    Declaration@0:1233..1249 `InitDeclaratorList`
+                      InitDeclaratorList@0:1233..1248
+                        SingleDeclaration@0:1233..1248
+                          FullySpecifiedType@0:1233..1236
+                            TypeSpecifier@0:1233..1236
+                              TypeSpecifierNonArray@0:1233..1236 `int`
+                                Int
+                  Statement@0:1263..1282 `Expression`
+                    ExprStatement@0:1263..1282
+                      Expr `Variable`
+                        Identifier@0:1263..1266 `sum`
+                      AssignmentOp@0:1267..1269 `+=`
+                      Expr `Variable`
+                        Identifier@0:1270..1281 `level3_high`
+              Expr `BoolConst`
+                BoolConst `true`
+          Statement@0:1318..1335 `Declaration`
+            Declaration@0:1318..1335 `InitDeclaratorList`
+              InitDeclaratorList@0:1318..1334
+                SingleDeclaration@0:1318..1334
+                  FullySpecifiedType@0:1318..1321
+                    TypeSpecifier@0:1318..1321
+                      TypeSpecifierNonArray@0:1318..1321 `int`
+                        Int
+          Statement@0:1345..1365 `Expression`
+            ExprStatement@0:1345..1365
+              Expr `Variable`
+                Identifier@0:1345..1348 `sum`
+              AssignmentOp@0:1349..1351 `+=`
+              Expr `Variable`
+                Identifier@0:1352..1364 `level2_high2`
+      Statement@0:1378..1394 `Declaration`
+        Declaration@0:1378..1394 `InitDeclaratorList`
+          InitDeclaratorList@0:1378..1393
+            SingleDeclaration@0:1378..1393
+              FullySpecifiedType@0:1378..1381
+                TypeSpecifier@0:1378..1381
+                  TypeSpecifierNonArray@0:1378..1381 `int`
+                    Int
+      Statement@0:1400..1419 `Expression`
+        ExprStatement@0:1400..1419
+          Expr `Variable`
+            Identifier@0:1400..1403 `sum`
+          AssignmentOp@0:1404..1406 `+=`
+          Expr `Variable`
+            Identifier@0:1407..1418 `level1_low3`
+      Statement@0:1427..1540 `Expression`
+        ExprStatement@0:1427..1540
+          Expr `Variable`
+            Identifier@0:1427..1430 `sum`
+          AssignmentOp@0:1431..1433 `+=`
+          Expr `Binary`
+            BinaryOp@0:1436..1437 `+`
+            Expr `IntConst`
+              IntConst `4`
+            Expr `Dot`
+              Expr `Binary`
+                BinaryOp@0:1480..1481 `+`
+                Expr `Binary`
+                  BinaryOp@0:1459..1460 `*`
+                  Expr `FunCall`
+                    FunIdentifier@0:1440..1445 `TypeSpecifier`
+                      TypeSpecifier
+                        TypeSpecifierNonArray@0:1440..1445 `ivec2`
+                          IVec2
+                    Expr@0:1446..1457 `Variable`
+                      Identifier@0:1446..1457 `level1_low3`
+                  Expr `FunCall`
+                    FunIdentifier@0:1461..1466 `TypeSpecifier`
+                      TypeSpecifier
+                        TypeSpecifierNonArray@0:1461..1466 `ivec2`
+                          IVec2
+                    Expr@0:1467..1478 `Variable`
+                      Identifier@0:1467..1478 `level1_high`
+                Expr `FunCall`
+                  FunIdentifier@0:1482..1487 `TypeSpecifier`
+                    TypeSpecifier
+                      TypeSpecifierNonArray@0:1482..1487 `ivec2`
+                        IVec2
+                  Expr@0:1509..1533 `Comma`
+                    Expr `Variable`
+                      Identifier@0:1509..1520 `level1_low3`
+                    Expr `Variable`
+                      Identifier@0:1522..1533 `level1_high`
+              Identifier@0:1538..1539 `x`
+      Statement@0:1552..1590 `Expression`
+        ExprStatement@0:1552..1590
+          FunIdentifier@0:1552..1561 `Expr`
+            Expr `Variable`
+              Identifier@0:1552..1561 `texture2D`
+          Expr@0:1562..1572 `Variable`
+            Identifier@0:1562..1572 `samplerLow`
+          Expr@0:1574..1588 `FunCall`
+            FunIdentifier@0:1574..1578 `TypeSpecifier`
+              TypeSpecifier
+                TypeSpecifierNonArray@0:1574..1578 `vec2`
+                  Vec2
+            Expr@0:1579..1582 `FloatConst`
+              FloatConst `0.1`
+            Expr@0:1584..1587 `FloatConst`
+              FloatConst `0.2`
+      Statement@0:1596..1634 `Expression`
+        ExprStatement@0:1596..1634
+          FunIdentifier@0:1596..1605 `Expr`
+            Expr `Variable`
+              Identifier@0:1596..1605 `texture2D`
+          Expr@0:1606..1616 `Variable`
+            Identifier@0:1606..1616 `samplerMed`
+          Expr@0:1618..1632 `FunCall`
+            FunIdentifier@0:1618..1622 `TypeSpecifier`
+              TypeSpecifier
+                TypeSpecifierNonArray@0:1618..1622 `vec2`
+                  Vec2
+            Expr@0:1623..1626 `FloatConst`
+              FloatConst `0.1`
+            Expr@0:1628..1631 `FloatConst`
+              FloatConst `0.2`
+      Statement@0:1640..1679 `Expression`
+        ExprStatement@0:1640..1679
+          FunIdentifier@0:1640..1649 `Expr`
+            Expr `Variable`
+              Identifier@0:1640..1649 `texture2D`
+          Expr@0:1650..1661 `Variable`
+            Identifier@0:1650..1661 `samplerHigh`
+          Expr@0:1663..1677 `FunCall`
+            FunIdentifier@0:1663..1667 `TypeSpecifier`
+              TypeSpecifier
+                TypeSpecifierNonArray@0:1663..1667 `vec2`
+                  Vec2
+            Expr@0:1668..1671 `FloatConst`
+              FloatConst `0.1`
+            Expr@0:1673..1676 `FloatConst`
+              FloatConst `0.2`
+ExternalDeclaration@0:1686..1709 `Declaration`
+  Declaration@0:1686..1709 `Precision`
+    PrecisionQualifier@0:1696..1703 `medium`
+    TypeSpecifier@0:1704..1708
+      TypeSpecifierNonArray@0:1704..1708 `bool`
+        Bool
+ExternalDeclaration@0:1788..1806 `Declaration`
+  Declaration@0:1788..1806 `InitDeclaratorList`
+    InitDeclaratorList@0:1788..1805
+      SingleDeclaration@0:1788..1805
+        FullySpecifiedType@0:1788..1805
+          TypeSpecifier@0:1788..1805
+            TypeSpecifierNonArray@0:1788..1805 `struct`
+              StructSpecifier@0:1788..1805
+                StructFieldSpecifier@0:1798..1804
+                  TypeSpecifier@0:1798..1801
+                    TypeSpecifierNonArray@0:1798..1801 `int`
+                      Int
+                  ArrayedIdentifier@0:1802..1803
+                    Identifier@0:1802..1803 `a`
+ExternalDeclaration@0:1808..1828 `Declaration`
+  Declaration@0:1808..1828 `Precision`
+    PrecisionQualifier@0:1818..1825 `medium`
+    TypeSpecifier@0:1826..1827
+      TypeSpecifierNonArray@0:1826..1827 `TypeName`
+        TypeName@0:1826..1827
+ExternalDeclaration@0:1858..1875 `Declaration`
+  Declaration@0:1858..1875 `InitDeclaratorList`
+    InitDeclaratorList@0:1858..1874
+      SingleDeclaration@0:1858..1874
+        FullySpecifiedType@0:1858..1871
+          TypeQualifierSpec@0:1858..1865 `Precision`
+            PrecisionQualifier@0:1858..1865 `medium`
+          TypeSpecifier@0:1866..1871
+            TypeSpecifierNonArray@0:1866..1871 `bvec2`
+              BVec2

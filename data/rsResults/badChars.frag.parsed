@@ -1,0 +1,43 @@
+ROOT@0..58
+  PP_IF@0..6
+    HASH@0..1 "#"
+    IDENT_KW@1..3 "if"
+    PP_IF_EXPR@3..5
+      ERROR@3..5 "þ"
+    NEWLINE@5..6 "\n"
+  PP_ENDIF@6..13
+    HASH@6..7 "#"
+    IDENT_KW@7..12 "endif"
+    NEWLINE@12..13 "\n"
+  PP_ERROR@13..25
+    HASH@13..14 "#"
+    IDENT_KW@14..19 "error"
+    WS@19..20 " "
+    PP_ERROR_BODY@20..24
+      IDENT_KW@20..21 "A"
+      ERROR@21..23 "ÿ"
+      IDENT_KW@23..24 "B"
+    NEWLINE@24..25 "\n"
+  PP_IF@25..30
+    HASH@25..26 "#"
+    IDENT_KW@26..28 "if"
+    PP_IF_EXPR@28..29
+      ERROR@28..29 "\u{1}"
+    NEWLINE@29..30 "\n"
+  PP_ENDIF@30..37
+    HASH@30..31 "#"
+    IDENT_KW@31..36 "endif"
+    NEWLINE@36..37 "\n"
+  IDENT_KW@37..40 "int"
+  WS@40..41 " "
+  IDENT_KW@41..42 "a"
+  ERROR@42..44 "ÿ"
+  NEWLINE@44..45 "\n"
+  PP_DEFINE@45..58
+    HASH@45..46 "#"
+    IDENT_KW@46..52 "define"
+    WS@52..53 " "
+    IDENT_KW@53..54 "A"
+    WS@54..55 " "
+    PP_DEFINE_BODY@55..58
+      ERROR@55..58 "\"ÿ"

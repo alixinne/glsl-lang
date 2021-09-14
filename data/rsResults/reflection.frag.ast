@@ -1,0 +1,30 @@
+ExternalDeclaration@0:21..36 `Declaration`
+  Declaration@0:21..36 `InitDeclaratorList`
+    InitDeclaratorList@0:21..35
+      SingleDeclaration@0:21..35
+        FullySpecifiedType@0:21..29
+          TypeQualifierSpec@0:21..23 `Storage`
+            StorageQualifier@0:21..23 `in`
+              In
+          TypeSpecifier@0:24..29
+            TypeSpecifierNonArray@0:24..29 `float`
+              Float
+ExternalDeclaration@0:40..79 `FunctionDefinition`
+  FunctionDefinition@0:40..79
+    FunctionPrototype@0:40..51
+      FullySpecifiedType@0:40..44
+        TypeSpecifier@0:40..44
+          TypeSpecifierNonArray@0:40..44 `void`
+            Void
+      Identifier@0:45..49 `main`
+    CompoundStatement@0:53..79
+      Statement@0:60..76 `Declaration`
+        Declaration@0:60..76 `InitDeclaratorList`
+          InitDeclaratorList@0:60..75
+            SingleDeclaration@0:60..75
+              FullySpecifiedType@0:60..65
+                TypeSpecifier@0:60..65
+                  TypeSpecifierNonArray@0:60..65 `float`
+                    Float
+              Expr `Variable`
+                Identifier@0:70..75 `inval`

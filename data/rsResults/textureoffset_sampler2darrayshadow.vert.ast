@@ -1,0 +1,78 @@
+ExternalDeclaration@0:17..41 `Declaration`
+  Declaration@0:17..41 `Precision`
+    PrecisionQualifier@0:27..34 `medium`
+    TypeSpecifier@0:35..40
+      TypeSpecifierNonArray@0:35..40 `float`
+        Float
+ExternalDeclaration@0:43..71 `Declaration`
+  Declaration@0:43..71 `InitDeclaratorList`
+    InitDeclaratorList@0:43..70
+      SingleDeclaration@0:43..70
+        FullySpecifiedType@0:43..56
+          TypeQualifierSpec@0:43..45 `Storage`
+            StorageQualifier@0:43..45 `in`
+              In
+          TypeQualifierSpec@0:46..51 `Precision`
+            PrecisionQualifier@0:46..51 `high`
+          TypeSpecifier@0:52..56
+            TypeSpecifierNonArray@0:52..56 `vec4`
+              Vec4
+ExternalDeclaration@0:75..114 `Declaration`
+  Declaration@0:75..114 `InitDeclaratorList`
+    InitDeclaratorList@0:75..113
+      SingleDeclaration@0:75..113
+        FullySpecifiedType@0:75..111
+          TypeQualifierSpec@0:75..82 `Storage`
+            StorageQualifier@0:75..82 `uniform`
+              Uniform
+          TypeQualifierSpec@0:83..90 `Precision`
+            PrecisionQualifier@0:83..90 `medium`
+          TypeSpecifier@0:91..111
+            TypeSpecifierNonArray@0:91..111 `sampler2DArrayShadow`
+              Sampler2DArrayShadow
+ExternalDeclaration@0:118..225 `FunctionDefinition`
+  FunctionDefinition@0:118..225
+    FunctionPrototype@0:118..129
+      FullySpecifiedType@0:118..122
+        TypeSpecifier@0:118..122
+          TypeSpecifierNonArray@0:118..122 `void`
+            Void
+      Identifier@0:123..127 `main`
+    CompoundStatement@0:131..225
+      Statement@0:135..191 `Expression`
+        ExprStatement@0:135..191
+          Expr `Variable`
+            Identifier@0:135..146 `gl_Position`
+          AssignmentOp@0:147..148 `=`
+          Expr `FunCall`
+            FunIdentifier@0:149..153 `TypeSpecifier`
+              TypeSpecifier
+                TypeSpecifierNonArray@0:149..153 `vec4`
+                  Vec4
+            Expr@0:154..189 `FunCall`
+              FunIdentifier@0:154..167 `Expr`
+                Expr `Variable`
+                  Identifier@0:154..167 `textureOffset`
+              Expr@0:168..169 `Variable`
+                Identifier@0:168..169 `s`
+              Expr@0:171..178 `FunCall`
+                FunIdentifier@0:171..175 `TypeSpecifier`
+                  TypeSpecifier
+                    TypeSpecifierNonArray@0:171..175 `vec4`
+                      Vec4
+                Expr@0:176..177 `IntConst`
+                  IntConst `0`
+              Expr@0:180..188 `FunCall`
+                FunIdentifier@0:180..185 `TypeSpecifier`
+                  TypeSpecifier
+                    TypeSpecifierNonArray@0:180..185 `ivec2`
+                      IVec2
+                Expr@0:186..187 `IntConst`
+                  IntConst `0`
+      Statement@0:194..222 `Expression`
+        ExprStatement@0:194..222
+          Expr `Variable`
+            Identifier@0:194..205 `gl_Position`
+          AssignmentOp@0:206..207 `=`
+          Expr `Variable`
+            Identifier@0:208..221 `dEQP_Position`

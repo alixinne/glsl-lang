@@ -1,0 +1,27 @@
+ExternalDeclaration@0:56..123 `FunctionDefinition`
+  FunctionDefinition@0:56..123
+    FunctionPrototype@0:56..68
+      FullySpecifiedType@0:56..60
+        TypeSpecifier@0:56..60
+          TypeSpecifierNonArray@0:56..60 `void`
+            Void
+      Identifier@0:61..65 `main`
+    CompoundStatement@0:69..123
+      Statement@0:76..92 `Declaration`
+        Declaration@0:76..92 `InitDeclaratorList`
+          InitDeclaratorList@0:76..91
+            SingleDeclaration@0:76..91
+              FullySpecifiedType@0:76..87
+                TypeSpecifier@0:76..87
+                  TypeSpecifierNonArray@0:76..87 `TypeName`
+                    TypeName@0:76..87
+      Statement@0:98..120 `Declaration`
+        Declaration@0:98..120 `InitDeclaratorList`
+          InitDeclaratorList@0:98..119
+            SingleDeclaration@0:98..119
+              FullySpecifiedType@0:98..109
+                TypeSpecifier@0:98..109
+                  TypeSpecifierNonArray@0:98..109 `TypeName`
+                    TypeName@0:98..109
+              Expr `Variable`
+                Identifier@0:116..119 `foo`

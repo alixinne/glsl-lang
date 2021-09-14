@@ -1,0 +1,50 @@
+ExternalDeclaration@0:16..66 `Declaration`
+  Declaration@0:16..66 `InitDeclaratorList`
+    InitDeclaratorList@0:16..65
+      SingleDeclaration@0:16..65
+        FullySpecifiedType@0:16..50
+          TypeQualifierSpec@0:16..40 `Layout`
+            LayoutQualifier@0:16..40
+              LayoutQualifierSpec@0:23..39 `Identifier`
+                Identifier@0:23..34 `constant_id`
+                IntConst `17`
+          TypeQualifierSpec@0:41..46 `Storage`
+            StorageQualifier@0:41..46 `const`
+              Const
+          TypeSpecifier@0:47..50
+            TypeSpecifierNonArray@0:47..50 `int`
+              Int
+        Expr `IntConst`
+          IntConst `12`
+ExternalDeclaration@0:88..131 `Declaration`
+  Declaration@0:88..131 `InitDeclaratorList`
+    InitDeclaratorList@0:88..130
+      SingleDeclaration@0:88..130
+        FullySpecifiedType@0:88..126
+          TypeQualifierSpec@0:88..122 `Layout`
+            LayoutQualifier@0:88..122
+              LayoutQualifierSpec@0:95..121 `Identifier`
+                Identifier@0:95..117 `input_attachment_index`
+                IntConst `1`
+          TypeSpecifier@0:123..126
+            TypeSpecifierNonArray@0:123..126 `int`
+              Int
+ExternalDeclaration@0:160..209 `Declaration`
+  Declaration@0:160..209 `Block`
+    Block@0:160..208
+      TypeQualifier@0:160..189
+        TypeQualifierSpec@0:160..181 `Layout`
+          LayoutQualifier@0:160..181
+            LayoutQualifierSpec@0:167..180 `Identifier`
+              Identifier@0:167..180 `push_constant`
+        TypeQualifierSpec@0:182..189 `Storage`
+          StorageQualifier@0:182..189 `uniform`
+            Uniform
+      Identifier@0:190..193 `ubn`
+      StructFieldSpecifier@0:196..202
+        TypeSpecifier@0:196..199
+          TypeSpecifierNonArray@0:196..199 `int`
+            Int
+        ArrayedIdentifier@0:200..201
+          Identifier@0:200..201 `a`
+      Identifier@0:205..208 `ubi`

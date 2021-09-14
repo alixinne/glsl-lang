@@ -1,0 +1,47 @@
+ROOT@0..63
+  PP_DEFINE@0..14
+    HASH@0..1 "#"
+    IDENT_KW@1..7 "define"
+    WS@7..8 " "
+    IDENT_KW@8..9 "n"
+    PP_DEFINE_BODY@9..12
+      HASH@9..10 "#"
+      DIGITS@10..11 "0"
+      HASH@11..12 "#"
+    NEWLINE@12..14 "\r\n"
+  PP_DEFINE@14..29
+    HASH@14..15 "#"
+    IDENT_KW@15..21 "define"
+    WS@21..22 " "
+    IDENT_KW@22..23 "m"
+    WS@23..24 " "
+    PP_DEFINE_BODY@24..27
+      HASH@24..25 "#"
+      DIGITS@25..26 "0"
+      HASH@26..27 "#"
+    NEWLINE@27..29 "\r\n"
+  PP_IF@29..36
+    HASH@29..30 "#"
+    IDENT_KW@30..32 "if"
+    WS@32..33 " "
+    PP_IF_EXPR@33..34
+      IDENT_KW@33..34 "m"
+    NEWLINE@34..36 "\r\n"
+  PP_ENDIF@36..44
+    HASH@36..37 "#"
+    IDENT_KW@37..42 "endif"
+    NEWLINE@42..44 "\r\n"
+  PP_DEFINE@44..57
+    HASH@44..45 "#"
+    IDENT_KW@45..51 "define"
+    WS@51..52 " "
+    IDENT_KW@52..53 "n"
+    PP_DEFINE_ARGS@53..55
+      LPAREN@53..54 "("
+      RPAREN@54..55 ")"
+    PP_DEFINE_BODY@55..55
+    NEWLINE@55..57 "\r\n"
+  IDENT_KW@57..60 "int"
+  WS@60..61 " "
+  IDENT_KW@61..62 "n"
+  ERROR@62..63 "\""

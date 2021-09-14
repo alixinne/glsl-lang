@@ -1,0 +1,23 @@
+0:81:1: '#if' : invalid constant expression
+0:82:1: '#error' : good macro
+0:87:1: '#if' : malformed expression
+0:92:1: '#if' : malformed expression
+0:99:1: '#if' : malformed expression
+0:101:1: '#if' : malformed expression
+0:111:1: '#error' : good 0
+0:115:1: '#error' : good 1
+0:129:1: '#error' : good 1
+0:133:1: '#error' : good 3
+0:139:1: '#error' : good 4
+0:3000:1: '#error' : line of this error should be 3000
+0:3002:1: '#define' : predefined names can't be (un)defined: __LINE__
+0:3003:1: '#define' : predefined names can't be (un)defined: __FILE__
+0:3004:1: '#define' : predefined names can't be (un)defined: __VERSION__
+0:3005:1: '#define' : names beginning with "GL_" can't be (un)defined: GL_SOME_EXTENSION
+0:3006:1: '#undef' : predefined names can't be (un)defined: __LINE__
+0:3007:1: '#undef' : predefined names can't be (un)defined: __FILE__
+0:3008:1: '#undef' : predefined names can't be (un)defined: __VERSION__
+0:3009:1: '#undef' : names beginning with "GL_" can't be (un)defined: GL_SOME_EXTENSION
+0:4000:1: '#line' : invalid line number
+0:4001:1: '#if' : invalid constant expression
+0:4004:1: '#if' : missing expression

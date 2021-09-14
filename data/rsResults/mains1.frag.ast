@@ -1,0 +1,9 @@
+ExternalDeclaration@0:16..33 `FunctionDefinition`
+  FunctionDefinition@0:16..33
+    FunctionPrototype@0:16..27
+      FullySpecifiedType@0:16..20
+        TypeSpecifier@0:16..20
+          TypeSpecifierNonArray@0:16..20 `void`
+            Void
+      Identifier@0:21..25 `main`
+    CompoundStatement@0:29..33

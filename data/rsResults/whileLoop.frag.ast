@@ -1,0 +1,79 @@
+ExternalDeclaration@0:16..38 `Declaration`
+  Declaration@0:16..38 `InitDeclaratorList`
+    InitDeclaratorList@0:16..37
+      SingleDeclaration@0:16..37
+        FullySpecifiedType@0:16..28
+          TypeQualifierSpec@0:16..23 `Storage`
+            StorageQualifier@0:16..23 `uniform`
+              Uniform
+          TypeSpecifier@0:24..28
+            TypeSpecifierNonArray@0:24..28 `vec4`
+              Vec4
+ExternalDeclaration@0:40..63 `Declaration`
+  Declaration@0:40..63 `InitDeclaratorList`
+    InitDeclaratorList@0:40..62
+      SingleDeclaration@0:40..62
+        FullySpecifiedType@0:40..52
+          TypeQualifierSpec@0:40..47 `Storage`
+            StorageQualifier@0:40..47 `varying`
+              Varying
+          TypeSpecifier@0:48..52
+            TypeSpecifierNonArray@0:48..52 `vec4`
+              Vec4
+ExternalDeclaration@0:65..81 `Declaration`
+  Declaration@0:65..81 `InitDeclaratorList`
+    InitDeclaratorList@0:65..80
+      SingleDeclaration@0:65..80
+        FullySpecifiedType@0:65..78
+          TypeQualifierSpec@0:65..72 `Storage`
+            StorageQualifier@0:65..72 `uniform`
+              Uniform
+          TypeSpecifier@0:73..78
+            TypeSpecifierNonArray@0:73..78 `float`
+              Float
+ExternalDeclaration@0:85..224 `FunctionDefinition`
+  FunctionDefinition@0:85..224
+    FunctionPrototype@0:85..96
+      FullySpecifiedType@0:85..89
+        TypeSpecifier@0:85..89
+          TypeSpecifierNonArray@0:85..89 `void`
+            Void
+      Identifier@0:90..94 `main`
+    CompoundStatement@0:98..224
+      Statement@0:105..128 `Declaration`
+        Declaration@0:105..128 `InitDeclaratorList`
+          InitDeclaratorList@0:105..127
+            SingleDeclaration@0:105..127
+              FullySpecifiedType@0:105..109
+                TypeSpecifier@0:105..109
+                  TypeSpecifierNonArray@0:105..109 `vec4`
+                    Vec4
+              Expr `Variable`
+                Identifier@0:118..127 `BaseColor`
+      Statement@0:136..192 `Iteration`
+        IterationStatement@0:136..192 `while`
+          Condition@0:143..154 `Expr`
+            Expr@0:143..154 `Binary`
+              BinaryOp@0:151..152 `<`
+              Expr `Dot`
+                Expr `Variable`
+                  Identifier@0:143..148 `color`
+                Identifier@0:149..150 `x`
+              Expr `Variable`
+                Identifier@0:153..154 `d`
+          Statement `Compound`
+            CompoundStatement@0:156..192
+              Statement@0:167..185 `Expression`
+                ExprStatement@0:167..185
+                  Expr `Variable`
+                    Identifier@0:167..172 `color`
+                  AssignmentOp@0:173..175 `+=`
+                  Expr `Variable`
+                    Identifier@0:176..184 `bigColor`
+      Statement@0:200..221 `Expression`
+        ExprStatement@0:200..221
+          Expr `Variable`
+            Identifier@0:200..212 `gl_FragColor`
+          AssignmentOp@0:213..214 `=`
+          Expr `Variable`
+            Identifier@0:215..220 `color`

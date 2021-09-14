@@ -1,0 +1,19 @@
+ExternalDeclaration@0:0..35 `FunctionDefinition`
+  FunctionDefinition@0:0..35
+    FunctionPrototype@0:0..17
+      FullySpecifiedType@0:0..3
+        TypeSpecifier@0:0..3
+          TypeSpecifierNonArray@0:0..3 `int`
+            Int
+      Identifier@0:4..8 `main`
+      FunctionParameterDeclaration@0:9..16 `Named`
+        FunctionParameterDeclarator@0:9..16
+          TypeSpecifier@0:9..12
+            TypeSpecifierNonArray@0:9..12 `int`
+              Int
+          ArrayedIdentifier@0:13..16
+            Identifier@0:13..16 `foo`
+    CompoundStatement@0:18..35
+      Statement@0:24..33 `Jump`
+        JumpStatement@0:24..33 `return`
+          IntConst `1`

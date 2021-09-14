@@ -1,0 +1,333 @@
+ExternalDeclaration@0:16..36 `Declaration`
+  Declaration@0:16..36 `InitDeclaratorList`
+    InitDeclaratorList@0:16..35
+      SingleDeclaration@0:16..35
+        FullySpecifiedType@0:16..29
+          TypeQualifierSpec@0:16..23 `Storage`
+            StorageQualifier@0:16..23 `uniform`
+              Uniform
+          TypeSpecifier@0:24..29
+            TypeSpecifierNonArray@0:24..29 `float`
+              Float
+ExternalDeclaration@0:38..53 `Declaration`
+  Declaration@0:38..53 `InitDeclaratorList`
+    InitDeclaratorList@0:38..52
+      SingleDeclaration@0:38..52
+        FullySpecifiedType@0:38..50
+          TypeQualifierSpec@0:38..45 `Storage`
+            StorageQualifier@0:38..45 `uniform`
+              Uniform
+          TypeSpecifier@0:46..50
+            TypeSpecifierNonArray@0:46..50 `vec4`
+              Vec4
+ExternalDeclaration@0:55..70 `Declaration`
+  Declaration@0:55..70 `InitDeclaratorList`
+    InitDeclaratorList@0:55..69
+      SingleDeclaration@0:55..69
+        FullySpecifiedType@0:55..67
+          TypeQualifierSpec@0:55..62 `Storage`
+            StorageQualifier@0:55..62 `uniform`
+              Uniform
+          TypeSpecifier@0:63..67
+            TypeSpecifierNonArray@0:63..67 `bool`
+              Bool
+ExternalDeclaration@0:74..89 `Declaration`
+  Declaration@0:74..89 `InitDeclaratorList`
+    InitDeclaratorList@0:74..88
+      SingleDeclaration@0:74..88
+        FullySpecifiedType@0:74..86
+          TypeQualifierSpec@0:74..81 `Storage`
+            StorageQualifier@0:74..81 `varying`
+              Varying
+          TypeSpecifier@0:82..86
+            TypeSpecifierNonArray@0:82..86 `vec2`
+              Vec2
+ExternalDeclaration@0:93..893 `FunctionDefinition`
+  FunctionDefinition@0:93..893
+    FunctionPrototype@0:93..104
+      FullySpecifiedType@0:93..97
+        TypeSpecifier@0:93..97
+          TypeSpecifierNonArray@0:93..97 `void`
+            Void
+      Identifier@0:98..102 `main`
+    CompoundStatement@0:106..893
+      Statement@0:113..138 `Declaration`
+        Declaration@0:113..138 `InitDeclaratorList`
+          InitDeclaratorList@0:113..137
+            SingleDeclaration@0:113..137
+              FullySpecifiedType@0:113..118
+                TypeSpecifier@0:113..118
+                  TypeSpecifierNonArray@0:113..118 `float`
+                    Float
+              Expr `FloatConst`
+                FloatConst `1.789`
+      Statement@0:146..157 `Declaration`
+        Declaration@0:146..157 `InitDeclaratorList`
+          InitDeclaratorList@0:146..156
+            SingleDeclaration@0:146..156
+              FullySpecifiedType@0:146..150
+                TypeSpecifier@0:146..150
+                  TypeSpecifierNonArray@0:146..150 `vec4`
+                    Vec4
+              Expr `Variable`
+                Identifier@0:155..156 `u`
+      Statement@0:163..176 `Declaration`
+        Declaration@0:163..176 `InitDeclaratorList`
+          InitDeclaratorList@0:163..175
+            SingleDeclaration@0:163..175
+              FullySpecifiedType@0:163..167
+                TypeSpecifier@0:163..167
+                  TypeSpecifierNonArray@0:163..167 `vec4`
+                    Vec4
+      Statement@0:202..217 `Declaration`
+        Declaration@0:202..217 `InitDeclaratorList`
+          InitDeclaratorList@0:202..216
+            SingleDeclaration@0:202..216
+              FullySpecifiedType@0:202..206
+                TypeSpecifier@0:202..206
+                  TypeSpecifierNonArray@0:202..206 `vec4`
+                    Vec4
+              Expr `Variable`
+                Identifier@0:215..216 `u`
+      Statement@0:254..273 `Declaration`
+        Declaration@0:254..273 `InitDeclaratorList`
+          InitDeclaratorList@0:254..272
+            SingleDeclaration@0:254..272
+              FullySpecifiedType@0:254..258
+                TypeSpecifier@0:254..258
+                  TypeSpecifierNonArray@0:254..258 `vec4`
+                    Vec4
+              Expr `Variable`
+                Identifier@0:271..272 `u`
+      Statement@0:298..310 `Declaration`
+        Declaration@0:298..310 `InitDeclaratorList`
+          InitDeclaratorList@0:298..309
+            SingleDeclaration@0:298..309
+              FullySpecifiedType@0:298..302
+                TypeSpecifier@0:298..302
+                  TypeSpecifierNonArray@0:298..302 `vec4`
+                    Vec4
+              Expr `Variable`
+                Identifier@0:308..309 `u`
+      Statement@0:316..332 `Declaration`
+        Declaration@0:316..332 `InitDeclaratorList`
+          InitDeclaratorList@0:316..331
+            SingleDeclaration@0:316..331
+              FullySpecifiedType@0:316..320
+                TypeSpecifier@0:316..320
+                  TypeSpecifierNonArray@0:316..320 `vec4`
+                    Vec4
+              Expr `Variable`
+                Identifier@0:330..331 `u`
+      Statement@0:363..388 `Expression`
+        ExprStatement@0:363..388
+          Expr `Dot`
+            Expr `Variable`
+              Identifier@0:363..372 `w_reorder`
+            Identifier@0:373..374 `z`
+          AssignmentOp@0:375..376 `=`
+          Expr `Variable`
+            Identifier@0:377..387 `blendscale`
+      Statement@0:396..405 `Expression`
+        ExprStatement@0:396..405
+          Expr `Dot`
+            Expr `Variable`
+              Identifier@0:396..397 `w`
+            Identifier@0:398..400 `wy`
+          AssignmentOp@0:401..402 `=`
+          Expr `Variable`
+            Identifier@0:403..404 `t`
+      Statement@0:413..438 `Expression`
+        ExprStatement@0:413..438
+          Expr `Dot`
+            Expr `Variable`
+              Identifier@0:413..422 `w_reorder`
+            Identifier@0:423..424 `x`
+          AssignmentOp@0:425..426 `=`
+          Expr `Variable`
+            Identifier@0:427..437 `blendscale`
+      Statement@0:446..463 `Expression`
+        ExprStatement@0:446..463
+          Expr `Dot`
+            Expr `Variable`
+              Identifier@0:446..448 `w2`
+            Identifier@0:449..453 `xyzw`
+          AssignmentOp@0:454..455 `=`
+          Expr `Dot`
+            Expr `Variable`
+              Identifier@0:456..457 `u`
+            Identifier@0:458..462 `zwxy`
+      Statement@0:471..496 `Expression`
+        ExprStatement@0:471..496
+          Expr `Dot`
+            Expr `Variable`
+              Identifier@0:471..480 `w_reorder`
+            Identifier@0:481..482 `y`
+          AssignmentOp@0:483..484 `=`
+          Expr `Variable`
+            Identifier@0:485..495 `blendscale`
+      Statement@0:504..521 `Expression`
+        ExprStatement@0:504..521
+          Expr `Dot`
+            Expr `Variable`
+              Identifier@0:504..509 `w_dep`
+            Identifier@0:510..512 `xy`
+          AssignmentOp@0:513..514 `=`
+          Expr `Dot`
+            Expr `Variable`
+              Identifier@0:515..517 `w2`
+            Identifier@0:518..520 `xz`
+      Statement@0:527..540 `Expression`
+        ExprStatement@0:527..540
+          Expr `Dot`
+            Expr `Variable`
+              Identifier@0:527..532 `w_dep`
+            Identifier@0:533..535 `zw`
+          AssignmentOp@0:536..537 `=`
+          Expr `Variable`
+            Identifier@0:538..539 `t`
+      Statement@0:548..566 `Expression`
+        ExprStatement@0:548..566
+          Expr `Dot`
+            Expr `Variable`
+              Identifier@0:548..555 `w_undef`
+            Identifier@0:556..558 `xy`
+          AssignmentOp@0:559..560 `=`
+          Expr `Dot`
+            Expr `Variable`
+              Identifier@0:561..562 `u`
+            Identifier@0:563..565 `zw`
+      Statement@0:574..640 `Selection`
+        SelectionStatement@0:574..640
+          Expr `Variable`
+            Identifier@0:578..579 `p`
+          SelectionRestStatement@0:590..640 `Else`
+            Statement `Expression`
+              ExprStatement@0:590..605
+                Expr `Dot`
+                  Expr `Variable`
+                    Identifier@0:590..596 `w_flow`
+                  Identifier@0:597..598 `x`
+                AssignmentOp@0:599..600 `=`
+                Expr `Dot`
+                  Expr `Variable`
+                    Identifier@0:601..602 `t`
+                  Identifier@0:603..604 `x`
+            Statement `Expression`
+              ExprStatement@0:625..640
+                Expr `Dot`
+                  Expr `Variable`
+                    Identifier@0:625..631 `w_flow`
+                  Identifier@0:632..633 `x`
+                AssignmentOp@0:634..635 `=`
+                Expr `Dot`
+                  Expr `Variable`
+                    Identifier@0:636..637 `t`
+                  Identifier@0:638..639 `y`
+      Statement@0:648..712 `Expression`
+        ExprStatement@0:648..712
+          Expr `Variable`
+            Identifier@0:648..660 `gl_FragColor`
+          AssignmentOp@0:661..662 `=`
+          Expr `FunCall`
+            FunIdentifier@0:663..666 `Expr`
+              Expr `Variable`
+                Identifier@0:663..666 `mix`
+            Expr@0:667..676 `Variable`
+              Identifier@0:667..676 `w_reorder`
+            Expr@0:678..685 `Variable`
+              Identifier@0:678..685 `w_undef`
+            Expr@0:687..710 `Binary`
+              BinaryOp@0:702..703 `*`
+              Expr `Binary`
+                BinaryOp@0:694..695 `*`
+                Expr `Binary`
+                  BinaryOp@0:689..690 `*`
+                  Expr `Variable`
+                    Identifier@0:687..688 `w`
+                  Expr `Variable`
+                    Identifier@0:691..693 `w2`
+                Expr `Variable`
+                  Identifier@0:696..701 `w_dep`
+              Expr `Variable`
+                Identifier@0:704..710 `w_flow`
+      Statement@0:720..731 `Declaration`
+        Declaration@0:720..731 `InitDeclaratorList`
+          InitDeclaratorList@0:720..730
+            SingleDeclaration@0:720..730
+              FullySpecifiedType@0:720..724
+                TypeSpecifier@0:720..724
+                  TypeSpecifierNonArray@0:720..724 `vec2`
+                    Vec2
+              Expr `Variable`
+                Identifier@0:729..730 `t`
+      Statement@0:737..773 `Declaration`
+        Declaration@0:737..773 `InitDeclaratorList`
+          InitDeclaratorList@0:737..772
+            SingleDeclaration@0:737..772
+              FullySpecifiedType@0:737..741
+                TypeSpecifier@0:737..741
+                  TypeSpecifierNonArray@0:737..741 `vec4`
+                    Vec4
+              Expr `FunCall`
+                FunIdentifier@0:748..752 `TypeSpecifier`
+                  TypeSpecifier
+                    TypeSpecifierNonArray@0:748..752 `vec4`
+                      Vec4
+                Expr@0:753..756 `FloatConst`
+                  FloatConst `0`
+                Expr@0:758..761 `FloatConst`
+                  FloatConst `0`
+                Expr@0:763..766 `FloatConst`
+                  FloatConst `0`
+                Expr@0:768..771 `FloatConst`
+                  FloatConst `1`
+      Statement@0:781..817 `Selection`
+        SelectionStatement@0:781..817
+          Expr `Binary`
+            BinaryOp@0:789..790 `<`
+            Expr `Dot`
+              Expr `Variable`
+                Identifier@0:785..786 `c`
+              Identifier@0:787..788 `x`
+            Expr `FloatConst`
+              FloatConst `0`
+          SelectionRestStatement@0:805..817 `Statement`
+            Statement `Expression`
+              ExprStatement@0:805..817
+                Expr `Dot`
+                  Expr `Variable`
+                    Identifier@0:805..806 `c`
+                  Identifier@0:807..808 `x`
+                AssignmentOp@0:809..811 `*`
+                Expr `Unary`
+                  UnaryOp@0:812..813 `-`
+                  Expr `FloatConst`
+                    FloatConst `1`
+      Statement@0:825..862 `Selection`
+        SelectionStatement@0:825..862
+          Expr `Binary`
+            BinaryOp@0:833..835 `<=`
+            Expr `Dot`
+              Expr `Variable`
+                Identifier@0:829..830 `c`
+              Identifier@0:831..832 `x`
+            Expr `FloatConst`
+              FloatConst `1`
+          SelectionRestStatement@0:850..862 `Statement`
+            Statement `Expression`
+              ExprStatement@0:850..862
+                Expr `Dot`
+                  Expr `Variable`
+                    Identifier@0:850..853 `rep`
+                  Identifier@0:854..855 `x`
+                AssignmentOp@0:856..857 `=`
+                Expr `FloatConst`
+                  FloatConst `3.4`
+      Statement@0:870..890 `Expression`
+        ExprStatement@0:870..890
+          Expr `Variable`
+            Identifier@0:870..882 `gl_FragColor`
+          AssignmentOp@0:883..885 `+=`
+          Expr `Variable`
+            Identifier@0:886..889 `rep`

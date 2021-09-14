@@ -1,0 +1,9 @@
+ExternalDeclaration@0:155..170 `FunctionDefinition`
+  FunctionDefinition@0:155..170
+    FunctionPrototype@0:155..165
+      FullySpecifiedType@0:155..158
+        TypeSpecifier@0:155..158
+          TypeSpecifierNonArray@0:155..158 `int`
+            Int
+      Identifier@0:159..163 `main`
+    CompoundStatement@0:166..170

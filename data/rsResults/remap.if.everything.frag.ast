@@ -1,0 +1,70 @@
+ExternalDeclaration@0:14..28 `Declaration`
+  Declaration@0:14..28 `InitDeclaratorList`
+    InitDeclaratorList@0:14..27
+      SingleDeclaration@0:14..27
+        FullySpecifiedType@0:14..22
+          TypeQualifierSpec@0:14..16 `Storage`
+            StorageQualifier@0:14..16 `in`
+              In
+          TypeSpecifier@0:17..22
+            TypeSpecifierNonArray@0:17..22 `float`
+              Float
+ExternalDeclaration@0:29..45 `Declaration`
+  Declaration@0:29..45 `InitDeclaratorList`
+    InitDeclaratorList@0:29..44
+      SingleDeclaration@0:29..44
+        FullySpecifiedType@0:29..37
+          TypeQualifierSpec@0:29..32 `Storage`
+            StorageQualifier@0:29..32 `out`
+              Out
+          TypeSpecifier@0:33..37
+            TypeSpecifierNonArray@0:33..37 `vec4`
+              Vec4
+ExternalDeclaration@0:47..150 `FunctionDefinition`
+  FunctionDefinition@0:47..150
+    FunctionPrototype@0:47..58
+      FullySpecifiedType@0:47..51
+        TypeSpecifier@0:47..51
+          TypeSpecifierNonArray@0:47..51 `void`
+            Void
+      Identifier@0:52..56 `main`
+    CompoundStatement@0:59..150
+      Statement@0:65..148 `Selection`
+        SelectionStatement@0:65..148
+          Expr `Binary`
+            BinaryOp@0:73..74 `>`
+            Expr `Variable`
+              Identifier@0:69..72 `inf`
+            Expr `FloatConst`
+              FloatConst `2`
+          SelectionRestStatement@0:88..148 `Else`
+            Statement `Expression`
+              ExprStatement@0:88..106
+                Expr `Variable`
+                  Identifier@0:88..93 `outf4`
+                AssignmentOp@0:94..95 `=`
+                Expr `FunCall`
+                  FunIdentifier@0:96..100 `TypeSpecifier`
+                    TypeSpecifier
+                      TypeSpecifierNonArray@0:96..100 `vec4`
+                        Vec4
+                  Expr@0:101..104 `Variable`
+                    Identifier@0:101..104 `inf`
+            Statement `Expression`
+              ExprStatement@0:124..148
+                Expr `Variable`
+                  Identifier@0:124..129 `outf4`
+                AssignmentOp@0:130..131 `=`
+                Expr `FunCall`
+                  FunIdentifier@0:132..136 `TypeSpecifier`
+                    TypeSpecifier
+                      TypeSpecifierNonArray@0:132..136 `vec4`
+                        Vec4
+                  Expr@0:137..146 `Binary`
+                    BinaryOp@0:141..142 `+`
+                    Expr `Variable`
+                      Identifier@0:137..140 `inf`
+                    Expr `Unary`
+                      UnaryOp@0:143..144 `-`
+                      Expr `FloatConst`
+                        FloatConst `0.5`

@@ -1,0 +1,60 @@
+ExternalDeclaration@0:66..142 `Declaration`
+  Declaration@0:66..142 `Block`
+    Block@0:66..141
+      TypeQualifier@0:66..109
+        TypeQualifierSpec@0:66..102 `Layout`
+          LayoutQualifier@0:66..102
+            LayoutQualifierSpec@0:73..80 `Identifier`
+              Identifier@0:73..76 `set`
+              IntConst `0`
+            LayoutQualifierSpec@0:82..93 `Identifier`
+              Identifier@0:82..89 `binding`
+              IntConst `0`
+            LayoutQualifierSpec@0:95..101 `Identifier`
+              Identifier@0:95..101 `std430`
+        TypeQualifierSpec@0:103..109 `Storage`
+          StorageQualifier@0:103..109 `buffer`
+            Buffer
+      Identifier@0:110..116 `Output`
+      StructFieldSpecifier@0:123..138
+        TypeSpecifier@0:123..128
+          TypeSpecifierNonArray@0:123..128 `uvec4`
+            UVec4
+        ArrayedIdentifier@0:129..137
+          Identifier@0:129..135 `result`
+          ArraySpecifierDimension@0:135..137 `Unsized`
+            Unsized
+ExternalDeclaration@0:146..248 `FunctionDefinition`
+  FunctionDefinition@0:146..248
+    FunctionPrototype@0:146..162
+      FullySpecifiedType@0:146..150
+        TypeSpecifier@0:146..150
+          TypeSpecifierNonArray@0:146..150 `void`
+            Void
+      Identifier@0:151..155 `main`
+      FunctionParameterDeclaration@0:157..161 `Unnamed`
+        TypeSpecifier@0:157..161
+          TypeSpecifierNonArray@0:157..161 `void`
+            Void
+    CompoundStatement@0:164..248
+      Statement@0:169..245 `Expression`
+        ExprStatement@0:169..245
+          Expr `Bracket`
+            Expr `Variable`
+              Identifier@0:169..175 `result`
+            Expr `Variable`
+              Identifier@0:176..187 `gl_VertexID`
+          AssignmentOp@0:189..190 `=`
+          Expr `FunCall`
+            FunIdentifier@0:191..196 `TypeSpecifier`
+              TypeSpecifier
+                TypeSpecifierNonArray@0:191..196 `uvec4`
+                  UVec4
+            Expr@0:197..212 `Variable`
+              Identifier@0:197..212 `gl_SubgroupSize`
+            Expr@0:214..237 `Variable`
+              Identifier@0:214..237 `gl_SubgroupInvocationID`
+            Expr@0:239..240 `IntConst`
+              IntConst `0`
+            Expr@0:242..243 `IntConst`
+              IntConst `0`

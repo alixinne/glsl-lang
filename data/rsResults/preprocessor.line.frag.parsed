@@ -1,0 +1,36 @@
+ROOT@0..59
+  PP_VERSION@0..16
+    HASH@0..1 "#"
+    IDENT_KW@1..8 "version"
+    WS@8..9 " "
+    PP_VERSION_NUMBER@9..12
+      DIGITS@9..12 "310"
+    WS@12..13 " "
+    PP_VERSION_PROFILE@13..15
+      IDENT_KW@13..15 "es"
+    NEWLINE@15..16 "\n"
+  PP_LINE@16..26
+    HASH@16..17 "#"
+    IDENT_KW@17..21 "line"
+    WS@21..22 " "
+    PP_LINE_BODY@22..25
+      DIGITS@22..23 "1"
+      WS@23..24 " "
+      DIGITS@24..25 "2"
+    NEWLINE@25..26 "\n"
+  PP_PRAGMA@26..44
+    HASH@26..27 "#"
+    IDENT_KW@27..33 "pragma"
+    WS@33..34 " "
+    PP_PRAGMA_BODY@34..43
+      IDENT_KW@34..43 "something"
+    NEWLINE@43..44 "\n"
+  IDENT_KW@44..48 "void"
+  WS@48..49 " "
+  IDENT_KW@49..53 "main"
+  LPAREN@53..54 "("
+  RPAREN@54..55 ")"
+  WS@55..56 " "
+  LBRACE@56..57 "{"
+  RBRACE@57..58 "}"
+  NEWLINE@58..59 "\n"

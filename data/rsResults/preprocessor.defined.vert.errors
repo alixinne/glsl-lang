@@ -1,0 +1,2 @@
+0:2:1: unexpected DEFINED, expected [IDENT_KW]
+0:2:1: '#define' : missing name for #define

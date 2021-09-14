@@ -1,0 +1,166 @@
+ExternalDeclaration@0:14..45 `Declaration`
+  Declaration@0:14..45 `InitDeclaratorList`
+    InitDeclaratorList@0:14..44
+      SingleDeclaration@0:14..44
+        FullySpecifiedType@0:14..31
+          TypeQualifierSpec@0:14..21 `Storage`
+            StorageQualifier@0:14..21 `uniform`
+              Uniform
+          TypeSpecifier@0:22..31
+            TypeSpecifierNonArray@0:22..31 `sampler2D`
+              Sampler2D
+ExternalDeclaration@0:47..66 `Declaration`
+  Declaration@0:47..66 `InitDeclaratorList`
+    InitDeclaratorList@0:47..65
+      SingleDeclaration@0:47..65
+        FullySpecifiedType@0:47..59
+          TypeQualifierSpec@0:47..54 `Storage`
+            StorageQualifier@0:47..54 `varying`
+              Varying
+          TypeSpecifier@0:55..59
+            TypeSpecifierNonArray@0:55..59 `vec4`
+              Vec4
+ExternalDeclaration@0:68..88 `Declaration`
+  Declaration@0:68..88 `InitDeclaratorList`
+    InitDeclaratorList@0:68..87
+      SingleDeclaration@0:68..87
+        FullySpecifiedType@0:68..81
+          TypeQualifierSpec@0:68..75 `Storage`
+            StorageQualifier@0:68..75 `varying`
+              Varying
+          TypeSpecifier@0:76..81
+            TypeSpecifierNonArray@0:76..81 `float`
+              Float
+ExternalDeclaration@0:92..120 `Declaration`
+  Declaration@0:92..120 `InitDeclaratorList`
+    InitDeclaratorList@0:92..119
+      SingleDeclaration@0:92..119
+        FullySpecifiedType@0:92..104
+          TypeQualifierSpec@0:92..99 `Storage`
+            StorageQualifier@0:92..99 `varying`
+              Varying
+          TypeSpecifier@0:100..104
+            TypeSpecifierNonArray@0:100..104 `vec4`
+              Vec4
+        ArraySpecifierDimension@0:116..119 `ExplicitlySized`
+          Expr `IntConst`
+            IntConst `6`
+ExternalDeclaration@0:124..148 `Declaration`
+  Declaration@0:124..148 `InitDeclaratorList`
+    InitDeclaratorList@0:124..147
+      SingleDeclaration@0:124..147
+        FullySpecifiedType@0:124..137
+          TypeQualifierSpec@0:124..131 `Storage`
+            StorageQualifier@0:124..131 `varying`
+              Varying
+          TypeSpecifier@0:133..137
+            TypeSpecifierNonArray@0:133..137 `vec4`
+              Vec4
+        ArraySpecifierDimension@0:144..147 `ExplicitlySized`
+          Expr `IntConst`
+            IntConst `2`
+ExternalDeclaration@0:152..169 `Declaration`
+  Declaration@0:152..169 `InitDeclaratorList`
+    InitDeclaratorList@0:152..168
+      SingleDeclaration@0:152..165
+        FullySpecifiedType@0:152..163
+          TypeQualifierSpec@0:152..159 `Storage`
+            StorageQualifier@0:152..159 `uniform`
+              Uniform
+          TypeSpecifier@0:160..163
+            TypeSpecifierNonArray@0:160..163 `int`
+              Int
+      SingleDeclarationNoType@0:167..168
+        ArrayedIdentifier@0:167..168
+          Identifier@0:167..168 `b`
+ExternalDeclaration@0:173..409 `FunctionDefinition`
+  FunctionDefinition@0:173..409
+    FunctionPrototype@0:173..184
+      FullySpecifiedType@0:173..177
+        TypeSpecifier@0:173..177
+          TypeSpecifierNonArray@0:173..177 `void`
+            Void
+      Identifier@0:178..182 `main`
+    CompoundStatement@0:186..409
+      Statement@0:190..281 `Declaration`
+        Declaration@0:190..281 `InitDeclaratorList`
+          InitDeclaratorList@0:190..280
+            SingleDeclaration@0:190..280
+              FullySpecifiedType@0:190..194
+                TypeSpecifier@0:190..194
+                  TypeSpecifierNonArray@0:190..194 `vec4`
+                    Vec4
+              Expr `FunCall`
+                FunIdentifier@0:206..215 `Expr`
+                  Expr `Variable`
+                    Identifier@0:206..215 `texture2D`
+                Expr@0:216..228 `Variable`
+                  Identifier@0:216..228 `texSampler2D`
+                Expr@0:230..279 `FunCall`
+                  FunIdentifier@0:230..234 `TypeSpecifier`
+                    TypeSpecifier
+                      TypeSpecifierNonArray@0:230..234 `vec2`
+                        Vec2
+                  Expr@0:235..278 `Binary`
+                    BinaryOp@0:262..263 `+`
+                    Expr `Binary`
+                      BinaryOp@0:245..246 `+`
+                      Expr `Bracket`
+                        Expr `Variable`
+                          Identifier@0:235..241 `userIn`
+                        Expr `Variable`
+                          Identifier@0:242..243 `b`
+                      Expr `Bracket`
+                        Expr `Variable`
+                          Identifier@0:247..258 `gl_TexCoord`
+                        Expr `Variable`
+                          Identifier@0:259..260 `a`
+                    Expr `Bracket`
+                      Expr `Variable`
+                        Identifier@0:264..275 `gl_TexCoord`
+                      Expr `IntConst`
+                        IntConst `5`
+      Statement@0:286..304 `Expression`
+        ExprStatement@0:286..304
+          Expr `Variable`
+            Identifier@0:286..294 `texColor`
+          AssignmentOp@0:295..297 `+=`
+          Expr `Variable`
+            Identifier@0:298..303 `color`
+      Statement@0:309..328 `Expression`
+        ExprStatement@0:309..328
+          Expr `Dot`
+            Expr `Variable`
+              Identifier@0:309..317 `texColor`
+            Identifier@0:318..319 `a`
+          AssignmentOp@0:320..321 `=`
+          Expr `Variable`
+            Identifier@0:322..327 `alpha`
+      Statement@0:336..406 `Expression`
+        ExprStatement@0:336..406
+          Expr `Variable`
+            Identifier@0:336..348 `gl_FragColor`
+          AssignmentOp@0:349..350 `=`
+          Expr `Binary`
+            BinaryOp@0:394..395 `+`
+            Expr `Binary`
+              BinaryOp@0:383..384 `+`
+              Expr `Binary`
+                BinaryOp@0:366..367 `+`
+                Expr `Bracket`
+                  Expr `Variable`
+                    Identifier@0:351..362 `gl_TexCoord`
+                  Expr `IntConst`
+                    IntConst `0`
+                Expr `Bracket`
+                  Expr `Variable`
+                    Identifier@0:368..379 `gl_TexCoord`
+                  Expr `Variable`
+                    Identifier@0:380..381 `b`
+              Expr `Variable`
+                Identifier@0:385..393 `texColor`
+            Expr `Bracket`
+              Expr `Variable`
+                Identifier@0:396..402 `userIn`
+              Expr `Variable`
+                Identifier@0:403..404 `a`

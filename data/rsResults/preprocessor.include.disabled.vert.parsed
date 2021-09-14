@@ -1,0 +1,42 @@
+ROOT@0..88
+  PP_LINE@0..11
+    HASH@0..1 "#"
+    IDENT_KW@1..5 "line"
+    WS@5..6 " "
+    PP_LINE_BODY@6..10
+      DIGITS@6..10 "8000"
+    NEWLINE@10..11 "\n"
+  PP_INCLUDE@11..20
+    HASH@11..12 "#"
+    IDENT_KW@12..19 "include"
+    PP_INCLUDE_PATH@19..19
+    NEWLINE@19..20 "\n"
+  PP_INCLUDE@20..33
+    HASH@20..21 "#"
+    IDENT_KW@21..28 "include"
+    WS@28..29 " "
+    PP_INCLUDE_PATH@29..32
+      DIGITS@29..32 "123"
+    NEWLINE@32..33 "\n"
+  PP_INCLUDE@33..48
+    HASH@33..34 "#"
+    IDENT_KW@34..41 "include"
+    WS@41..42 " "
+    PP_INCLUDE_PATH@42..47
+      QUOTE_STRING@42..47 "\"foo\""
+    NEWLINE@47..48 "\n"
+  PP_INCLUDE@48..71
+    HASH@48..49 "#"
+    IDENT_KW@49..56 "include"
+    WS@56..57 " "
+    PP_INCLUDE_PATH@57..70
+      QUOTE_STRING@57..62 "\"foo\""
+      WS@62..63 " "
+      IDENT_KW@63..70 "garbage"
+    NEWLINE@70..71 "\n"
+  PP_INCLUDE@71..88
+    HASH@71..72 "#"
+    IDENT_KW@72..79 "include"
+    WS@79..80 " "
+    PP_INCLUDE_PATH@80..88
+      QUOTE_STRING@80..88 "\"no-eol\""

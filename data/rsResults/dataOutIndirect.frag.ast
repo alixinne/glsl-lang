@@ -1,0 +1,41 @@
+ExternalDeclaration@0:17..36 `Declaration`
+  Declaration@0:17..36 `InitDeclaratorList`
+    InitDeclaratorList@0:17..35
+      SingleDeclaration@0:17..35
+        FullySpecifiedType@0:17..29
+          TypeQualifierSpec@0:17..24 `Storage`
+            StorageQualifier@0:17..24 `varying`
+              Varying
+          TypeSpecifier@0:25..29
+            TypeSpecifierNonArray@0:25..29 `vec4`
+              Vec4
+ExternalDeclaration@0:40..54 `Declaration`
+  Declaration@0:40..54 `InitDeclaratorList`
+    InitDeclaratorList@0:40..53
+      SingleDeclaration@0:40..53
+        FullySpecifiedType@0:40..51
+          TypeQualifierSpec@0:40..47 `Storage`
+            StorageQualifier@0:40..47 `uniform`
+              Uniform
+          TypeSpecifier@0:48..51
+            TypeSpecifierNonArray@0:48..51 `int`
+              Int
+ExternalDeclaration@0:58..104 `FunctionDefinition`
+  FunctionDefinition@0:58..104
+    FunctionPrototype@0:58..69
+      FullySpecifiedType@0:58..62
+        TypeSpecifier@0:58..62
+          TypeSpecifierNonArray@0:58..62 `void`
+            Void
+      Identifier@0:63..67 `main`
+    CompoundStatement@0:71..104
+      Statement@0:78..101 `Expression`
+        ExprStatement@0:78..101
+          Expr `Bracket`
+            Expr `Variable`
+              Identifier@0:78..89 `gl_FragData`
+            Expr `Variable`
+              Identifier@0:90..91 `i`
+          AssignmentOp@0:93..94 `=`
+          Expr `Variable`
+            Identifier@0:95..100 `Color`

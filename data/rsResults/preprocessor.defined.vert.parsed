@@ -1,0 +1,18 @@
+ROOT@0..85
+  PP_DEFINE@0..27
+    HASH@0..1 "#"
+    IDENT_KW@1..7 "define"
+    WS@7..8 " "
+    IDENT_KW@8..26 "defined_not_really"
+    PP_DEFINE_BODY@26..26
+    NEWLINE@26..27 "\n"
+  PP_DEFINE@27..85
+    HASH@27..28 "#"
+    IDENT_KW@28..34 "define"
+    WS@34..35 " "
+    ERROR@35..42
+      DEFINED@35..42 "defined"
+    WS@42..43 " "
+    COMMENT@43..84 "// ERROR: \"defined\" c ..."
+    PP_DEFINE_BODY@84..84
+    NEWLINE@84..85 "\n"

@@ -1,0 +1,45 @@
+ExternalDeclaration@0:1632..1653 `Declaration`
+  Declaration@0:1632..1653 `InitDeclaratorList`
+    InitDeclaratorList@0:1632..1652
+      SingleDeclaration@0:1632..1652
+        FullySpecifiedType@0:1632..1646
+          TypeQualifierSpec@0:1632..1641 `Storage`
+            StorageQualifier@0:1632..1641 `attribute`
+              Attribute
+          TypeSpecifier@0:1642..1646
+            TypeSpecifierNonArray@0:1642..1646 `vec3`
+              Vec3
+ExternalDeclaration@0:1657..1683 `Declaration`
+  Declaration@0:1657..1683 `InitDeclaratorList`
+    InitDeclaratorList@0:1657..1682
+      SingleDeclaration@0:1657..1682
+        FullySpecifiedType@0:1657..1678
+          TypeQualifierSpec@0:1657..1664 `Storage`
+            StorageQualifier@0:1657..1664 `uniform`
+              Uniform
+          TypeSpecifier@0:1665..1678
+            TypeSpecifierNonArray@0:1665..1678 `sampler2DRect`
+              Sampler2DRect
+ExternalDeclaration@0:1687..1744 `FunctionDefinition`
+  FunctionDefinition@0:1687..1744
+    FunctionPrototype@0:1687..1698
+      FullySpecifiedType@0:1687..1691
+        TypeSpecifier@0:1687..1691
+          TypeSpecifierNonArray@0:1687..1691 `void`
+            Void
+      Identifier@0:1692..1696 `main`
+    CompoundStatement@0:1700..1744
+      Statement@0:1707..1741 `Expression`
+        ExprStatement@0:1707..1741
+          Expr `Variable`
+            Identifier@0:1707..1718 `gl_Position`
+          AssignmentOp@0:1719..1720 `=`
+          Expr `FunCall`
+            FunIdentifier@0:1721..1725 `TypeSpecifier`
+              TypeSpecifier
+                TypeSpecifierNonArray@0:1721..1725 `vec4`
+                  Vec4
+            Expr@0:1726..1731 `Variable`
+              Identifier@0:1726..1731 `color`
+            Expr@0:1733..1739 `FloatConst`
+              FloatConst `142`

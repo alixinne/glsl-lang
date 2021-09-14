@@ -1,0 +1,21 @@
+ExternalDeclaration@0:187..236 `FunctionDefinition`
+  FunctionDefinition@0:187..236
+    FunctionPrototype@0:187..198
+      FullySpecifiedType@0:187..191
+        TypeSpecifier@0:187..191
+          TypeSpecifierNonArray@0:187..191 `void`
+            Void
+      Identifier@0:192..196 `main`
+    CompoundStatement@0:199..236
+      Statement@0:204..233 `Expression`
+        ExprStatement@0:204..233
+          Expr `Variable`
+            Identifier@0:204..215 `gl_Position`
+          AssignmentOp@0:216..217 `=`
+          Expr `FunCall`
+            FunIdentifier@0:218..222 `TypeSpecifier`
+              TypeSpecifier
+                TypeSpecifierNonArray@0:218..222 `vec4`
+                  Vec4
+            Expr@0:223..231 `IntConst`
+              IntConst `9`

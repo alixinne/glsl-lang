@@ -1,0 +1,93 @@
+ExternalDeclaration@0:16..50 `Declaration`
+  Declaration@0:16..50 `InitDeclaratorList`
+    InitDeclaratorList@0:16..49
+      SingleDeclaration@0:16..49
+        FullySpecifiedType@0:16..43
+          TypeQualifierSpec@0:16..34 `Layout`
+            LayoutQualifier@0:16..34
+              LayoutQualifierSpec@0:23..33 `Identifier`
+                Identifier@0:23..31 `location`
+                IntConst `0`
+          TypeQualifierSpec@0:35..38 `Storage`
+            StorageQualifier@0:35..38 `out`
+              Out
+          TypeSpecifier@0:39..43
+            TypeSpecifierNonArray@0:39..43 `vec4`
+              Vec4
+ExternalDeclaration@0:54..157 `Declaration`
+  Declaration@0:54..157 `Block`
+    Block@0:54..156
+      TypeQualifier@0:54..84
+        TypeQualifierSpec@0:54..76 `Layout`
+          LayoutQualifier@0:54..76
+            LayoutQualifierSpec@0:62..75 `Identifier`
+              Identifier@0:62..75 `push_constant`
+        TypeQualifierSpec@0:77..84 `Storage`
+          StorageQualifier@0:77..84 `uniform`
+            Uniform
+      Identifier@0:85..102 `PushConstantBlock`
+      StructFieldSpecifier@0:108..119
+        TypeSpecifier@0:108..112
+          TypeSpecifierNonArray@0:108..112 `vec4`
+            Vec4
+        ArrayedIdentifier@0:113..118
+          Identifier@0:113..118 `color`
+      StructFieldSpecifier@0:122..134
+        TypeSpecifier@0:122..126
+          TypeSpecifierNonArray@0:122..126 `vec4`
+            Vec4
+        ArrayedIdentifier@0:127..133
+          Identifier@0:127..133 `color2`
+      StructFieldSpecifier@0:137..149
+        TypeSpecifier@0:137..142
+          TypeSpecifierNonArray@0:137..142 `float`
+            Float
+        ArrayedIdentifier@0:143..148
+          Identifier@0:143..148 `scale`
+      Identifier@0:153..156 `uPC`
+ExternalDeclaration@0:161..178 `Declaration`
+  Declaration@0:161..178 `FunctionPrototype`
+    FunctionPrototype@0:161..177
+      FullySpecifiedType@0:161..165
+        TypeSpecifier@0:161..165
+          TypeSpecifierNonArray@0:161..165 `vec4`
+            Vec4
+      Identifier@0:166..175 `getColor2`
+ExternalDeclaration@0:180..197 `Declaration`
+  Declaration@0:180..197 `FunctionPrototype`
+    FunctionPrototype@0:180..196
+      FullySpecifiedType@0:180..185
+        TypeSpecifier@0:180..185
+          TypeSpecifierNonArray@0:180..185 `float`
+            Float
+      Identifier@0:186..194 `getScale`
+ExternalDeclaration@0:201..269 `FunctionDefinition`
+  FunctionDefinition@0:201..269
+    FunctionPrototype@0:201..212
+      FullySpecifiedType@0:201..205
+        TypeSpecifier@0:201..205
+          TypeSpecifierNonArray@0:201..205 `void`
+            Void
+      Identifier@0:206..210 `main`
+    CompoundStatement@0:214..269
+      Statement@0:221..266 `Expression`
+        ExprStatement@0:221..266
+          Expr `Variable`
+            Identifier@0:221..226 `color`
+          AssignmentOp@0:227..228 `=`
+          Expr `Binary`
+            BinaryOp@0:239..240 `+`
+            Expr `Dot`
+              Expr `Variable`
+                Identifier@0:229..232 `uPC`
+              Identifier@0:233..238 `color`
+            Expr `Binary`
+              BinaryOp@0:253..254 `*`
+              Expr `FunCall`
+                FunIdentifier@0:241..250 `Expr`
+                  Expr `Variable`
+                    Identifier@0:241..250 `getColor2`
+              Expr `FunCall`
+                FunIdentifier@0:255..263 `Expr`
+                  Expr `Variable`
+                    Identifier@0:255..263 `getScale`

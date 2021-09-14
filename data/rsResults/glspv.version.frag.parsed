@@ -1,0 +1,22 @@
+ROOT@0..49
+  PP_VERSION@0..28
+    HASH@0..1 "#"
+    IDENT_KW@1..8 "version"
+    WS@8..9 " "
+    PP_VERSION_NUMBER@9..12
+      DIGITS@9..12 "330"
+    WS@12..13 " "
+    PP_VERSION_PROFILE@13..26
+      IDENT_KW@13..26 "compatibility"
+    NEWLINE@26..28 "\r\n"
+  NEWLINE@28..30 "\r\n"
+  IDENT_KW@30..34 "void"
+  WS@34..35 " "
+  IDENT_KW@35..39 "main"
+  LPAREN@39..40 "("
+  RPAREN@40..41 ")"
+  NEWLINE@41..43 "\r\n"
+  LBRACE@43..44 "{"
+  NEWLINE@44..46 "\r\n"
+  RBRACE@46..47 "}"
+  NEWLINE@47..49 "\r\n"

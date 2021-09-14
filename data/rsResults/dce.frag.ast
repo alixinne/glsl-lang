@@ -1,0 +1,221 @@
+ExternalDeclaration@0:16..40 `Declaration`
+  Declaration@0:16..40 `InitDeclaratorList`
+    InitDeclaratorList@0:16..39
+      SingleDeclaration@0:16..39
+        FullySpecifiedType@0:16..26
+          TypeQualifierSpec@0:16..21 `Storage`
+            StorageQualifier@0:16..21 `const`
+              Const
+          TypeSpecifier@0:22..26
+            TypeSpecifierNonArray@0:22..26 `bool`
+              Bool
+        Expr `BoolConst`
+          BoolConst `false`
+ExternalDeclaration@0:44..54 `Declaration`
+  Declaration@0:44..54 `InitDeclaratorList`
+    InitDeclaratorList@0:44..53
+      SingleDeclaration@0:44..53
+        FullySpecifiedType@0:44..47
+          TypeSpecifier@0:44..47
+            TypeSpecifierNonArray@0:44..47 `int`
+              Int
+        Expr `IntConst`
+          IntConst `0`
+ExternalDeclaration@0:58..830 `FunctionDefinition`
+  FunctionDefinition@0:58..830
+    FunctionPrototype@0:58..68
+      FullySpecifiedType@0:58..62
+        TypeSpecifier@0:58..62
+          TypeSpecifierNonArray@0:58..62 `void`
+            Void
+      Identifier@0:63..66 `bar`
+    CompoundStatement@0:70..830
+      Statement@0:77..156 `Selection`
+        SelectionStatement@0:77..156
+          Expr `Variable`
+            Identifier@0:81..85 `flag`
+          SelectionRestStatement@0:96..156 `Else`
+            Statement `Expression`
+              ExprStatement@0:96..100
+                UnaryOp@0:96..98 `++`
+                Expr `Variable`
+                  Identifier@0:98..99 `c`
+            Statement `Expression`
+              ExprStatement@0:152..156
+                UnaryOp@0:152..154 `++`
+                Expr `Variable`
+                  Identifier@0:154..155 `c`
+      Statement@0:164..181 `Expression`
+        ExprStatement@0:164..181
+          Expr `Variable`
+            Identifier@0:164..168 `flag`
+          Expr `Unary`
+            UnaryOp@0:171..173 `++`
+            Expr `Variable`
+              Identifier@0:173..174 `c`
+          Expr `Unary`
+            UnaryOp@0:177..179 `++`
+            Expr `Variable`
+              Identifier@0:179..180 `c`
+      Statement@0:226..439 `Switch`
+        SwitchStatement@0:226..439
+          Expr `Variable`
+            Identifier@0:234..235 `c`
+          Statement@0:244..251 `CaseLabel`
+            CaseLabel@0:244..251 `Case`
+              Expr `IntConst`
+                IntConst `1`
+          Statement@0:261..265 `Expression`
+            ExprStatement@0:261..265
+              UnaryOp@0:261..263 `++`
+              Expr `Variable`
+                Identifier@0:263..264 `c`
+          Statement@0:275..281 `Jump`
+            JumpStatement@0:275..281 `break`
+              Break
+          Statement@0:291..295 `Expression`
+            ExprStatement@0:291..295
+              UnaryOp@0:291..293 `++`
+              Expr `Variable`
+                Identifier@0:293..294 `c`
+          Statement@0:333..340 `CaseLabel`
+            CaseLabel@0:333..340 `Case`
+              Expr `IntConst`
+                IntConst `2`
+          Statement@0:350..356 `Jump`
+            JumpStatement@0:350..356 `break`
+              Break
+          Statement@0:366..370 `Expression`
+            ExprStatement@0:366..370
+              UnaryOp@0:366..368 `++`
+              Expr `Variable`
+                Identifier@0:368..369 `c`
+          Statement@0:408..416 `CaseLabel`
+            CaseLabel@0:408..416 `Def`
+              Def
+          Statement@0:426..432 `Jump`
+            JumpStatement@0:426..432 `break`
+              Break
+      Statement@0:447..488 `Iteration`
+        IterationStatement@0:447..488 `for`
+          ForInitStatement@0:452..462 `Declaration`
+            Declaration `InitDeclaratorList`
+              InitDeclaratorList@0:452..461
+                SingleDeclaration@0:452..461
+                  FullySpecifiedType@0:452..455
+                    TypeSpecifier@0:452..455
+                      TypeSpecifierNonArray@0:452..455 `int`
+                        Int
+                  Expr `IntConst`
+                    IntConst `0`
+          ForRestStatement@0:463..473
+            Expr@0:463..468 `Binary`
+              BinaryOp@0:465..466 `<`
+              Expr `Variable`
+                Identifier@0:463..464 `i`
+              Expr `IntConst`
+                IntConst `0`
+            UnaryOp@0:470..472 `++`
+            Expr `Variable`
+              Identifier@0:472..473 `i`
+          Statement `Expression`
+            ExprStatement@0:484..488
+              UnaryOp@0:484..486 `++`
+              Expr `Variable`
+                Identifier@0:486..487 `c`
+      Statement@0:528..764 `Iteration`
+        IterationStatement@0:528..764 `for`
+          ForInitStatement@0:533..543 `Declaration`
+            Declaration `InitDeclaratorList`
+              InitDeclaratorList@0:533..542
+                SingleDeclaration@0:533..542
+                  FullySpecifiedType@0:533..536
+                    TypeSpecifier@0:533..536
+                      TypeSpecifierNonArray@0:533..536 `int`
+                        Int
+                  Expr `IntConst`
+                    IntConst `0`
+          ForRestStatement@0:544..555
+            Expr@0:544..550 `Binary`
+              BinaryOp@0:546..547 `<`
+              Expr `Variable`
+                Identifier@0:544..545 `i`
+              Expr `IntConst`
+                IntConst `10`
+            UnaryOp@0:552..554 `++`
+            Expr `Variable`
+              Identifier@0:554..555 `i`
+          Statement `Compound`
+            CompoundStatement@0:557..764
+              Statement@0:568..757 `Selection`
+                SelectionStatement@0:568..757
+                  Expr `Binary`
+                    BinaryOp@0:574..575 `<`
+                    Expr `Variable`
+                      Identifier@0:572..573 `c`
+                    Expr `IntConst`
+                      IntConst `3`
+                  SelectionRestStatement@0:579..757 `Else`
+                    Statement `Compound`
+                      CompoundStatement@0:579..664
+                        Statement@0:594..600 `Jump`
+                          JumpStatement@0:594..600 `break`
+                            Break
+                        Statement@0:615..619 `Expression`
+                          ExprStatement@0:615..619
+                            UnaryOp@0:615..617 `++`
+                            Expr `Variable`
+                              Identifier@0:617..618 `c`
+                    Statement `Compound`
+                      CompoundStatement@0:670..757
+                        Statement@0:685..694 `Jump`
+                          JumpStatement@0:685..694 `continue`
+                            Continue
+                        Statement@0:708..712 `Expression`
+                          ExprStatement@0:708..712
+                            UnaryOp@0:708..710 `++`
+                            Expr `Variable`
+                              Identifier@0:710..711 `c`
+      Statement@0:772..779 `Jump`
+        JumpStatement@0:772..779 `return`
+      Statement@0:787..791 `Expression`
+        ExprStatement@0:787..791
+          UnaryOp@0:787..789 `++`
+          Expr `Variable`
+            Identifier@0:789..790 `c`
+ExternalDeclaration@0:834..1057 `FunctionDefinition`
+  FunctionDefinition@0:834..1057
+    FunctionPrototype@0:834..843
+      FullySpecifiedType@0:834..837
+        TypeSpecifier@0:834..837
+          TypeSpecifierNonArray@0:834..837 `int`
+            Int
+      Identifier@0:838..841 `foo`
+    CompoundStatement@0:896..1057
+      Statement@0:903..988 `Selection`
+        SelectionStatement@0:903..988
+          Expr `Binary`
+            BinaryOp@0:909..910 `>`
+            Expr `Variable`
+              Identifier@0:907..908 `c`
+            Expr `IntConst`
+              IntConst `4`
+          SelectionRestStatement@0:914..988 `Statement`
+            Statement `Compound`
+              CompoundStatement@0:914..988
+                Statement@0:925..934 `Jump`
+                  JumpStatement@0:925..934 `return`
+                    IntConst `4`
+                Statement@0:944..948 `Expression`
+                  ExprStatement@0:944..948
+                    UnaryOp@0:944..946 `++`
+                    Expr `Variable`
+                      Identifier@0:946..947 `c`
+      Statement@0:996..1005 `Jump`
+        JumpStatement@0:996..1005 `return`
+          IntConst `5`
+      Statement@0:1013..1017 `Expression`
+        ExprStatement@0:1013..1017
+          UnaryOp@0:1013..1015 `++`
+          Expr `Variable`
+            Identifier@0:1015..1016 `c`

@@ -1,0 +1,39 @@
+ROOT@0..60
+  PP_ENDIF@0..7
+    HASH@0..1 "#"
+    IDENT_KW@1..6 "endif"
+    NEWLINE@6..7 "\n"
+  PP_ENDIF@7..14
+    HASH@7..8 "#"
+    IDENT_KW@8..13 "endif"
+    NEWLINE@13..14 "\n"
+  PP_ENDIF@14..21
+    HASH@14..15 "#"
+    IDENT_KW@15..20 "endif"
+    NEWLINE@20..21 "\n"
+  PP_ENDIF@21..28
+    HASH@21..22 "#"
+    IDENT_KW@22..27 "endif"
+    NEWLINE@27..28 "\n"
+  PP_ENDIF@28..35
+    HASH@28..29 "#"
+    IDENT_KW@29..34 "endif"
+    NEWLINE@34..35 "\n"
+  PP_ENDIF@35..42
+    HASH@35..36 "#"
+    IDENT_KW@36..41 "endif"
+    NEWLINE@41..42 "\n"
+  PP_ENDIF@42..49
+    HASH@42..43 "#"
+    IDENT_KW@43..48 "endif"
+    NEWLINE@48..49 "\n"
+  NEWLINE@49..50 "\n"
+  PP_IF@50..54
+    HASH@50..51 "#"
+    IDENT_KW@51..53 "if"
+    PP_IF_EXPR@53..53
+    NEWLINE@53..54 "\n"
+  PP_ELSE@54..60
+    HASH@54..55 "#"
+    IDENT_KW@55..59 "else"
+    NEWLINE@59..60 "\n"

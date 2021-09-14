@@ -1,0 +1,63 @@
+ExternalDeclaration@0:28..42 `Declaration`
+  Declaration@0:28..42 `InitDeclaratorList`
+    InitDeclaratorList@0:28..41
+      SingleDeclaration@0:28..41
+        FullySpecifiedType@0:28..35
+          TypeQualifierSpec@0:28..30 `Storage`
+            StorageQualifier@0:28..30 `in`
+              In
+          TypeSpecifier@0:31..35
+            TypeSpecifierNonArray@0:31..35 `vec4`
+              Vec4
+ExternalDeclaration@0:43..59 `Declaration`
+  Declaration@0:43..59 `InitDeclaratorList`
+    InitDeclaratorList@0:43..58
+      SingleDeclaration@0:43..58
+        FullySpecifiedType@0:43..51
+          TypeQualifierSpec@0:43..46 `Storage`
+            StorageQualifier@0:43..46 `out`
+              Out
+          TypeSpecifier@0:47..51
+            TypeSpecifierNonArray@0:47..51 `vec4`
+              Vec4
+ExternalDeclaration@0:61..85 `Declaration`
+  Declaration@0:61..85 `InitDeclaratorList`
+    InitDeclaratorList@0:61..84
+      SingleDeclaration@0:61..84
+        FullySpecifiedType@0:61..73
+          TypeQualifierSpec@0:61..68 `Storage`
+            StorageQualifier@0:61..68 `varying`
+              Varying
+          TypeSpecifier@0:69..73
+            TypeSpecifierNonArray@0:69..73 `vec4`
+              Vec4
+ExternalDeclaration@0:87..182 `FunctionDefinition`
+  FunctionDefinition@0:87..182
+    FunctionPrototype@0:87..98
+      FullySpecifiedType@0:87..91
+        TypeSpecifier@0:87..91
+          TypeSpecifierNonArray@0:87..91 `void`
+            Void
+      Identifier@0:92..96 `main`
+    CompoundStatement@0:99..182
+      Statement@0:105..131 `Expression`
+        ExprStatement@0:105..131
+          Expr `Variable`
+            Identifier@0:105..117 `gl_FragColor`
+          AssignmentOp@0:118..119 `=`
+          Expr `Variable`
+            Identifier@0:120..130 `varyingVar`
+      Statement@0:136..180 `Expression`
+        ExprStatement@0:136..180
+          Expr `Bracket`
+            Expr `Variable`
+              Identifier@0:136..147 `gl_FragData`
+            Expr `IntConst`
+              IntConst `1`
+          AssignmentOp@0:151..152 `=`
+          Expr `Binary`
+            BinaryOp@0:159..160 `*`
+            Expr `Variable`
+              Identifier@0:153..158 `inVar`
+            Expr `Variable`
+              Identifier@0:161..179 `gl_ModelViewMatrix`

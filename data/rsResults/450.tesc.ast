@@ -1,0 +1,145 @@
+ExternalDeclaration@0:21..100 `Declaration`
+  Declaration@0:21..100 `Block`
+    Block@0:21..99
+      TypeQualifier@0:21..23
+        TypeQualifierSpec@0:21..23 `Storage`
+          StorageQualifier@0:21..23 `in`
+            In
+      Identifier@0:24..36 `gl_PerVertex`
+      StructFieldSpecifier@0:44..69
+        TypeSpecifier@0:44..49
+          TypeSpecifierNonArray@0:44..49 `float`
+            Float
+        ArrayedIdentifier@0:50..68
+          Identifier@0:50..65 `gl_CullDistance`
+          ArraySpecifierDimension@0:65..68 `ExplicitlySized`
+            Expr `IntConst`
+              IntConst `3`
+      Identifier@0:73..78 `gl_in`
+      ArraySpecifierDimension@0:78..99 `ExplicitlySized`
+        Expr `Variable`
+          Identifier@0:79..98 `gl_MaxPatchVertices`
+ExternalDeclaration@0:104..167 `Declaration`
+  Declaration@0:104..167 `Block`
+    Block@0:104..166
+      TypeQualifier@0:104..107
+        TypeQualifierSpec@0:104..107 `Storage`
+          StorageQualifier@0:104..107 `out`
+            Out
+      Identifier@0:108..120 `gl_PerVertex`
+      StructFieldSpecifier@0:128..153
+        TypeSpecifier@0:128..133
+          TypeSpecifierNonArray@0:128..133 `float`
+            Float
+        ArrayedIdentifier@0:134..152
+          Identifier@0:134..149 `gl_CullDistance`
+          ArraySpecifierDimension@0:149..152 `ExplicitlySized`
+            Expr `IntConst`
+              IntConst `3`
+      Identifier@0:157..163 `gl_out`
+      ArraySpecifierDimension@0:163..166 `ExplicitlySized`
+        Expr `IntConst`
+          IntConst `4`
+ExternalDeclaration@0:171..267 `FunctionDefinition`
+  FunctionDefinition@0:171..267
+    FunctionPrototype@0:171..182
+      FullySpecifiedType@0:171..175
+        TypeSpecifier@0:171..175
+          TypeSpecifierNonArray@0:171..175 `void`
+            Void
+      Identifier@0:176..180 `main`
+    CompoundStatement@0:184..267
+      Statement@0:191..264 `Expression`
+        ExprStatement@0:191..264
+          Expr `Bracket`
+            Expr `Dot`
+              Expr `Bracket`
+                Expr `Variable`
+                  Identifier@0:191..197 `gl_out`
+                Expr `Variable`
+                  Identifier@0:198..213 `gl_InvocationID`
+              Identifier@0:215..230 `gl_CullDistance`
+            Expr `IntConst`
+              IntConst `2`
+          AssignmentOp@0:234..235 `=`
+          Expr `Bracket`
+            Expr `Dot`
+              Expr `Bracket`
+                Expr `Variable`
+                  Identifier@0:236..241 `gl_in`
+                Expr `IntConst`
+                  IntConst `1`
+              Identifier@0:245..260 `gl_CullDistance`
+            Expr `IntConst`
+              IntConst `2`
+ExternalDeclaration@0:271..367 `Declaration`
+  Declaration@0:271..367 `Block`
+    Block@0:271..366
+      TypeQualifier@0:271..295
+        TypeQualifierSpec@0:271..291 `Layout`
+          LayoutQualifier@0:271..291
+            LayoutQualifierSpec@0:278..290 `Identifier`
+              Identifier@0:278..286 `location`
+              IntConst `4`
+        TypeQualifierSpec@0:292..295 `Storage`
+          StorageQualifier@0:292..295 `out`
+            Out
+      Identifier@0:296..302 `bName1`
+      StructFieldSpecifier@0:310..318
+        TypeSpecifier@0:310..315
+          TypeSpecifierNonArray@0:310..315 `float`
+            Float
+        ArrayedIdentifier@0:316..317
+          Identifier@0:316..317 `f`
+      StructFieldSpecifier@0:324..353
+        TypeQualifierSpec@0:324..344 `Layout`
+          LayoutQualifier@0:324..344
+            LayoutQualifierSpec@0:331..343 `Identifier`
+              Identifier@0:331..339 `location`
+              IntConst `5`
+        TypeSpecifier@0:345..350
+          TypeSpecifierNonArray@0:345..350 `float`
+            Float
+        ArrayedIdentifier@0:351..352
+          Identifier@0:351..352 `g`
+      Identifier@0:357..363 `bInst1`
+      ArraySpecifierDimension@0:363..366 `ExplicitlySized`
+        Expr `IntConst`
+          IntConst `2`
+ExternalDeclaration@0:369..497 `Declaration`
+  Declaration@0:369..497 `Block`
+    Block@0:369..496
+      TypeQualifier@0:369..393
+        TypeQualifierSpec@0:369..389 `Layout`
+          LayoutQualifier@0:369..389
+            LayoutQualifierSpec@0:376..388 `Identifier`
+              Identifier@0:376..384 `location`
+              IntConst `6`
+        TypeQualifierSpec@0:390..393 `Storage`
+          StorageQualifier@0:390..393 `out`
+            Out
+      Identifier@0:394..400 `bName2`
+      StructFieldSpecifier@0:408..416
+        TypeSpecifier@0:408..413
+          TypeSpecifierNonArray@0:408..413 `float`
+            Float
+        ArrayedIdentifier@0:414..415
+          Identifier@0:414..415 `f`
+      StructFieldSpecifier@0:422..451
+        TypeQualifierSpec@0:422..442 `Layout`
+          LayoutQualifier@0:422..442
+            LayoutQualifierSpec@0:429..441 `Identifier`
+              Identifier@0:429..437 `location`
+              IntConst `7`
+        TypeSpecifier@0:443..448
+          TypeSpecifierNonArray@0:443..448 `float`
+            Float
+        ArrayedIdentifier@0:449..450
+          Identifier@0:449..450 `g`
+      Identifier@0:484..490 `bInst2`
+      ArraySpecifierDimension@0:490..493 `ExplicitlySized`
+        Expr `IntConst`
+          IntConst `2`
+      ArraySpecifierDimension@0:493..496 `ExplicitlySized`
+        Expr `IntConst`
+          IntConst `3`

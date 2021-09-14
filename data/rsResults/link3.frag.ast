@@ -1,0 +1,17 @@
+ExternalDeclaration@0:19..41 `Declaration`
+  Declaration@0:19..41 `Precision`
+    PrecisionQualifier@0:29..34 `high`
+    TypeSpecifier@0:35..40
+      TypeSpecifierNonArray@0:35..40 `float`
+        Float
+ExternalDeclaration@0:45..57 `Declaration`
+  Declaration@0:45..57 `InitDeclaratorList`
+    InitDeclaratorList@0:45..56
+      SingleDeclaration@0:45..56
+        FullySpecifiedType@0:45..52
+          TypeQualifierSpec@0:45..47 `Storage`
+            StorageQualifier@0:45..47 `in`
+              In
+          TypeSpecifier@0:48..52
+            TypeSpecifierNonArray@0:48..52 `vec2`
+              Vec2

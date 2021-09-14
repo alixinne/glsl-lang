@@ -1,0 +1,27 @@
+ROOT@0..32
+  PP_DEFINE@0..14
+    HASH@0..1 "#"
+    IDENT_KW@1..7 "define"
+    WS@7..8 " "
+    IDENT_KW@8..9 "a"
+    WS@9..10 " "
+    PP_DEFINE_BODY@10..12
+      IDENT_KW@10..11 "b"
+      LPAREN@11..12 "("
+    NEWLINE@12..14 "\r\n"
+  PP_DEFINE@14..28
+    HASH@14..15 "#"
+    IDENT_KW@15..21 "define"
+    WS@21..22 " "
+    IDENT_KW@22..23 "b"
+    PP_DEFINE_ARGS@23..26
+      LPAREN@23..24 "("
+      PP_DEFINE_ARG@24..25
+        IDENT_KW@24..25 "x"
+      RPAREN@25..26 ")"
+    PP_DEFINE_BODY@26..26
+    NEWLINE@26..28 "\r\n"
+  IDENT_KW@28..29 "b"
+  LPAREN@29..30 "("
+  IDENT_KW@30..31 "a"
+  RPAREN@31..32 ")"

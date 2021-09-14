@@ -1,0 +1,59 @@
+ExternalDeclaration@0:16..50 `Declaration`
+  Declaration@0:16..50 `InitDeclaratorList`
+    InitDeclaratorList@0:16..49
+      SingleDeclaration@0:16..49
+        FullySpecifiedType@0:16..46
+          TypeQualifierSpec@0:16..37 `Layout`
+            LayoutQualifier@0:16..37
+              LayoutQualifierSpec@0:24..36 `Identifier`
+                Identifier@0:24..32 `location`
+                IntConst `0`
+          TypeQualifierSpec@0:38..41 `Storage`
+            StorageQualifier@0:38..41 `out`
+              Out
+          TypeSpecifier@0:42..46
+            TypeSpecifierNonArray@0:42..46 `vec4`
+              Vec4
+ExternalDeclaration@0:178..193 `Declaration`
+  Declaration@0:178..193 `InitDeclaratorList`
+    InitDeclaratorList@0:178..192
+      SingleDeclaration@0:178..192
+        FullySpecifiedType@0:178..190
+          TypeQualifierSpec@0:178..185 `Storage`
+            StorageQualifier@0:178..185 `uniform`
+              Uniform
+          TypeSpecifier@0:186..190
+            TypeSpecifierNonArray@0:186..190 `vec2`
+              Vec2
+ExternalDeclaration@0:248..283 `FunctionDefinition`
+  FunctionDefinition@0:248..283
+    FunctionPrototype@0:248..258
+      FullySpecifiedType@0:248..252
+        TypeSpecifier@0:248..252
+          TypeSpecifierNonArray@0:248..252 `vec4`
+            Vec4
+      Identifier@0:253..256 `foo`
+    CompoundStatement@0:259..283
+      Statement@0:266..280 `Jump`
+        JumpStatement@0:266..280 `return`
+          Expr `Variable`
+            Identifier@0:273..274 `a`
+          Identifier@0:275..279 `xyxy`
+ExternalDeclaration@0:287..320 `FunctionDefinition`
+  FunctionDefinition@0:287..320
+    FunctionPrototype@0:287..298
+      FullySpecifiedType@0:287..291
+        TypeSpecifier@0:287..291
+          TypeSpecifierNonArray@0:287..291 `void`
+            Void
+      Identifier@0:292..296 `main`
+    CompoundStatement@0:299..320
+      Statement@0:306..317 `Expression`
+        ExprStatement@0:306..317
+          Expr `Variable`
+            Identifier@0:306..308 `io`
+          AssignmentOp@0:309..310 `=`
+          Expr `FunCall`
+            FunIdentifier@0:311..314 `Expr`
+              Expr `Variable`
+                Identifier@0:311..314 `foo`

@@ -1,0 +1,791 @@
+ExternalDeclaration@0:16..53 `Declaration`
+  Declaration@0:16..53 `InitDeclaratorList`
+    InitDeclaratorList@0:16..52
+      SingleDeclaration@0:16..52
+        FullySpecifiedType@0:16..33
+          TypeQualifierSpec@0:16..23 `Storage`
+            StorageQualifier@0:16..23 `uniform`
+              Uniform
+          TypeSpecifier@0:24..33
+            TypeSpecifierNonArray@0:24..33 `sampler1D`
+              Sampler1D
+ExternalDeclaration@0:55..92 `Declaration`
+  Declaration@0:55..92 `InitDeclaratorList`
+    InitDeclaratorList@0:55..91
+      SingleDeclaration@0:55..91
+        FullySpecifiedType@0:55..72
+          TypeQualifierSpec@0:55..62 `Storage`
+            StorageQualifier@0:55..62 `uniform`
+              Uniform
+          TypeSpecifier@0:63..72
+            TypeSpecifierNonArray@0:63..72 `sampler2D`
+              Sampler2D
+ExternalDeclaration@0:94..131 `Declaration`
+  Declaration@0:94..131 `InitDeclaratorList`
+    InitDeclaratorList@0:94..130
+      SingleDeclaration@0:94..130
+        FullySpecifiedType@0:94..111
+          TypeQualifierSpec@0:94..101 `Storage`
+            StorageQualifier@0:94..101 `uniform`
+              Uniform
+          TypeSpecifier@0:102..111
+            TypeSpecifierNonArray@0:102..111 `sampler3D`
+              Sampler3D
+ExternalDeclaration@0:133..172 `Declaration`
+  Declaration@0:133..172 `InitDeclaratorList`
+    InitDeclaratorList@0:133..171
+      SingleDeclaration@0:133..171
+        FullySpecifiedType@0:133..152
+          TypeQualifierSpec@0:133..140 `Storage`
+            StorageQualifier@0:133..140 `uniform`
+              Uniform
+          TypeSpecifier@0:141..152
+            TypeSpecifierNonArray@0:141..152 `samplerCube`
+              SamplerCube
+ExternalDeclaration@0:174..214 `Declaration`
+  Declaration@0:174..214 `InitDeclaratorList`
+    InitDeclaratorList@0:174..213
+      SingleDeclaration@0:174..213
+        FullySpecifiedType@0:174..197
+          TypeQualifierSpec@0:174..181 `Storage`
+            StorageQualifier@0:174..181 `uniform`
+              Uniform
+          TypeSpecifier@0:182..197
+            TypeSpecifierNonArray@0:182..197 `sampler1DShadow`
+              Sampler1DShadow
+ExternalDeclaration@0:216..256 `Declaration`
+  Declaration@0:216..256 `InitDeclaratorList`
+    InitDeclaratorList@0:216..255
+      SingleDeclaration@0:216..255
+        FullySpecifiedType@0:216..239
+          TypeQualifierSpec@0:216..223 `Storage`
+            StorageQualifier@0:216..223 `uniform`
+              Uniform
+          TypeSpecifier@0:224..239
+            TypeSpecifierNonArray@0:224..239 `sampler2DShadow`
+              Sampler2DShadow
+ExternalDeclaration@0:260..280 `Declaration`
+  Declaration@0:260..280 `InitDeclaratorList`
+    InitDeclaratorList@0:260..279
+      SingleDeclaration@0:260..279
+        FullySpecifiedType@0:260..273
+          TypeQualifierSpec@0:260..267 `Storage`
+            StorageQualifier@0:260..267 `uniform`
+              Uniform
+          TypeSpecifier@0:268..273
+            TypeSpecifierNonArray@0:268..273 `float`
+              Float
+ExternalDeclaration@0:282..301 `Declaration`
+  Declaration@0:282..301 `InitDeclaratorList`
+    InitDeclaratorList@0:282..300
+      SingleDeclaration@0:282..300
+        FullySpecifiedType@0:282..294
+          TypeQualifierSpec@0:282..289 `Storage`
+            StorageQualifier@0:282..289 `uniform`
+              Uniform
+          TypeSpecifier@0:290..294
+            TypeSpecifierNonArray@0:290..294 `vec2`
+              Vec2
+ExternalDeclaration@0:303..318 `Declaration`
+  Declaration@0:303..318 `InitDeclaratorList`
+    InitDeclaratorList@0:303..317
+      SingleDeclaration@0:303..317
+        FullySpecifiedType@0:303..315
+          TypeQualifierSpec@0:303..310 `Storage`
+            StorageQualifier@0:303..310 `uniform`
+              Uniform
+          TypeSpecifier@0:311..315
+            TypeSpecifierNonArray@0:311..315 `vec4`
+              Vec4
+ExternalDeclaration@0:322..337 `Declaration`
+  Declaration@0:322..337 `InitDeclaratorList`
+    InitDeclaratorList@0:322..336
+      SingleDeclaration@0:322..336
+        FullySpecifiedType@0:322..334
+          TypeQualifierSpec@0:322..329 `Storage`
+            StorageQualifier@0:322..329 `varying`
+              Varying
+          TypeSpecifier@0:330..334
+            TypeSpecifierNonArray@0:330..334 `vec2`
+              Vec2
+ExternalDeclaration@0:339..361 `Declaration`
+  Declaration@0:339..361 `InitDeclaratorList`
+    InitDeclaratorList@0:339..360
+      SingleDeclaration@0:339..360
+        FullySpecifiedType@0:339..351
+          TypeQualifierSpec@0:339..346 `Storage`
+            StorageQualifier@0:339..346 `varying`
+              Varying
+          TypeSpecifier@0:347..351
+            TypeSpecifierNonArray@0:347..351 `vec2`
+              Vec2
+ExternalDeclaration@0:365..2803 `FunctionDefinition`
+  FunctionDefinition@0:365..2803
+    FunctionPrototype@0:365..376
+      FullySpecifiedType@0:365..369
+        TypeSpecifier@0:365..369
+          TypeSpecifierNonArray@0:365..369 `void`
+            Void
+      Identifier@0:370..374 `main`
+    CompoundStatement@0:378..2803
+      Statement@0:387..412 `Declaration`
+        Declaration@0:387..412 `InitDeclaratorList`
+          InitDeclaratorList@0:387..411
+            SingleDeclaration@0:387..411
+              FullySpecifiedType@0:387..392
+                TypeSpecifier@0:387..392
+                  TypeSpecifierNonArray@0:387..392 `float`
+                    Float
+              Expr `FloatConst`
+                FloatConst `1.789`
+      Statement@0:418..441 `Declaration`
+        Declaration@0:418..441 `InitDeclaratorList`
+          InitDeclaratorList@0:418..440
+            SingleDeclaration@0:418..440
+              FullySpecifiedType@0:418..423
+                TypeSpecifier@0:418..423
+                  TypeSpecifierNonArray@0:418..423 `float`
+                    Float
+              Expr `FloatConst`
+                FloatConst `2`
+      Statement@0:447..465 `Declaration`
+        Declaration@0:447..465 `InitDeclaratorList`
+          InitDeclaratorList@0:447..464
+            SingleDeclaration@0:447..464
+              FullySpecifiedType@0:447..452
+                TypeSpecifier@0:447..452
+                  TypeSpecifierNonArray@0:447..452 `float`
+                    Float
+              Expr `FloatConst`
+                FloatConst `3`
+      Statement@0:471..494 `Declaration`
+        Declaration@0:471..494 `InitDeclaratorList`
+          InitDeclaratorList@0:471..493
+            SingleDeclaration@0:471..493
+              FullySpecifiedType@0:471..476
+                TypeSpecifier@0:471..476
+                  TypeSpecifierNonArray@0:471..476 `float`
+                    Float
+              Expr `FloatConst`
+                FloatConst `2`
+      Statement@0:500..525 `Declaration`
+        Declaration@0:500..525 `InitDeclaratorList`
+          InitDeclaratorList@0:500..524
+            SingleDeclaration@0:500..524
+              FullySpecifiedType@0:500..505
+                TypeSpecifier@0:500..505
+                  TypeSpecifierNonArray@0:500..505 `float`
+                    Float
+              Expr `FloatConst`
+                FloatConst `1.789`
+      Statement@0:531..576 `Declaration`
+        Declaration@0:531..576 `InitDeclaratorList`
+          InitDeclaratorList@0:531..575
+            SingleDeclaration@0:531..575
+              FullySpecifiedType@0:531..535
+                TypeSpecifier@0:531..535
+                  TypeSpecifierNonArray@0:531..535 `vec3`
+                    Vec3
+              Expr `FunCall`
+                FunIdentifier@0:550..554 `TypeSpecifier`
+                  TypeSpecifier
+                    TypeSpecifierNonArray@0:550..554 `vec3`
+                      Vec3
+                Expr@0:555..560 `FloatConst`
+                  FloatConst `1.789`
+                Expr@0:562..567 `FloatConst`
+                  FloatConst `2.718`
+                Expr@0:569..574 `FloatConst`
+                  FloatConst `3.453`
+      Statement@0:582..632 `Declaration`
+        Declaration@0:582..632 `InitDeclaratorList`
+          InitDeclaratorList@0:582..631
+            SingleDeclaration@0:582..631
+              FullySpecifiedType@0:582..586
+                TypeSpecifier@0:582..586
+                  TypeSpecifierNonArray@0:582..586 `vec4`
+                    Vec4
+              Expr `FunCall`
+                FunIdentifier@0:601..605 `TypeSpecifier`
+                  TypeSpecifier
+                    TypeSpecifierNonArray@0:601..605 `vec4`
+                      Vec4
+                Expr@0:606..611 `FloatConst`
+                  FloatConst `1.789`
+                Expr@0:613..618 `FloatConst`
+                  FloatConst `2.718`
+                Expr@0:620..625 `FloatConst`
+                  FloatConst `3.453`
+                Expr@0:627..630 `FloatConst`
+                  FloatConst `2`
+      Statement@0:638..682 `Declaration`
+        Declaration@0:638..682 `InitDeclaratorList`
+          InitDeclaratorList@0:638..681
+            SingleDeclaration@0:638..681
+              FullySpecifiedType@0:638..642
+                TypeSpecifier@0:638..642
+                  TypeSpecifierNonArray@0:638..642 `vec4`
+                    Vec4
+              Expr `FunCall`
+                FunIdentifier@0:657..661 `TypeSpecifier`
+                  TypeSpecifier
+                    TypeSpecifierNonArray@0:657..661 `vec4`
+                      Vec4
+                Expr@0:662..665 `FloatConst`
+                  FloatConst `0`
+                Expr@0:667..670 `FloatConst`
+                  FloatConst `0`
+                Expr@0:672..675 `FloatConst`
+                  FloatConst `0`
+                Expr@0:677..680 `FloatConst`
+                  FloatConst `0`
+      Statement@0:690..737 `Expression`
+        ExprStatement@0:690..737
+          Expr `Variable`
+            Identifier@0:690..695 `color`
+          AssignmentOp@0:696..698 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:699..708 `Expr`
+              Expr `Variable`
+                Identifier@0:699..708 `texture1D`
+            Expr@0:713..725 `Variable`
+              Identifier@0:713..725 `texSampler1D`
+            Expr@0:727..735 `Variable`
+              Identifier@0:727..735 `coords1D`
+      Statement@0:743..796 `Expression`
+        ExprStatement@0:743..796
+          Expr `Variable`
+            Identifier@0:743..748 `color`
+          AssignmentOp@0:749..751 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:752..761 `Expr`
+              Expr `Variable`
+                Identifier@0:752..761 `texture1D`
+            Expr@0:766..778 `Variable`
+              Identifier@0:766..778 `texSampler1D`
+            Expr@0:780..788 `Variable`
+              Identifier@0:780..788 `coords1D`
+            Expr@0:790..794 `Variable`
+              Identifier@0:790..794 `bias`
+      Statement@0:802..849 `Expression`
+        ExprStatement@0:802..849
+          Expr `Variable`
+            Identifier@0:802..807 `color`
+          AssignmentOp@0:808..810 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:811..824 `Expr`
+              Expr `Variable`
+                Identifier@0:811..824 `texture1DProj`
+            Expr@0:825..837 `Variable`
+              Identifier@0:825..837 `texSampler1D`
+            Expr@0:839..847 `Variable`
+              Identifier@0:839..847 `coords2D`
+      Statement@0:855..902 `Expression`
+        ExprStatement@0:855..902
+          Expr `Variable`
+            Identifier@0:855..860 `color`
+          AssignmentOp@0:861..863 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:864..877 `Expr`
+              Expr `Variable`
+                Identifier@0:864..877 `texture1DProj`
+            Expr@0:878..890 `Variable`
+              Identifier@0:878..890 `texSampler1D`
+            Expr@0:892..900 `Variable`
+              Identifier@0:892..900 `coords4D`
+      Statement@0:908..961 `Expression`
+        ExprStatement@0:908..961
+          Expr `Variable`
+            Identifier@0:908..913 `color`
+          AssignmentOp@0:914..916 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:917..930 `Expr`
+              Expr `Variable`
+                Identifier@0:917..930 `texture1DProj`
+            Expr@0:931..943 `Variable`
+              Identifier@0:931..943 `texSampler1D`
+            Expr@0:945..953 `Variable`
+              Identifier@0:945..953 `coords2D`
+            Expr@0:955..959 `Variable`
+              Identifier@0:955..959 `bias`
+      Statement@0:967..1020 `Expression`
+        ExprStatement@0:967..1020
+          Expr `Variable`
+            Identifier@0:967..972 `color`
+          AssignmentOp@0:973..975 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:976..989 `Expr`
+              Expr `Variable`
+                Identifier@0:976..989 `texture1DProj`
+            Expr@0:990..1002 `Variable`
+              Identifier@0:990..1002 `texSampler1D`
+            Expr@0:1004..1012 `Variable`
+              Identifier@0:1004..1012 `coords4D`
+            Expr@0:1014..1018 `Variable`
+              Identifier@0:1014..1018 `bias`
+      Statement@0:1032..1083 `Expression`
+        ExprStatement@0:1032..1083
+          Expr `Variable`
+            Identifier@0:1032..1037 `color`
+          AssignmentOp@0:1038..1040 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1041..1050 `Expr`
+              Expr `Variable`
+                Identifier@0:1041..1050 `texture2D`
+            Expr@0:1059..1071 `Variable`
+              Identifier@0:1059..1071 `texSampler2D`
+            Expr@0:1073..1081 `Variable`
+              Identifier@0:1073..1081 `coords2D`
+      Statement@0:1089..1146 `Expression`
+        ExprStatement@0:1089..1146
+          Expr `Variable`
+            Identifier@0:1089..1094 `color`
+          AssignmentOp@0:1095..1097 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1098..1107 `Expr`
+              Expr `Variable`
+                Identifier@0:1098..1107 `texture2D`
+            Expr@0:1116..1128 `Variable`
+              Identifier@0:1116..1128 `texSampler2D`
+            Expr@0:1130..1138 `Variable`
+              Identifier@0:1130..1138 `coords2D`
+            Expr@0:1140..1144 `Variable`
+              Identifier@0:1140..1144 `bias`
+      Statement@0:1152..1203 `Expression`
+        ExprStatement@0:1152..1203
+          Expr `Variable`
+            Identifier@0:1152..1157 `color`
+          AssignmentOp@0:1158..1160 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1161..1174 `Expr`
+              Expr `Variable`
+                Identifier@0:1161..1174 `texture2DProj`
+            Expr@0:1179..1191 `Variable`
+              Identifier@0:1179..1191 `texSampler2D`
+            Expr@0:1193..1201 `Variable`
+              Identifier@0:1193..1201 `coords3D`
+      Statement@0:1209..1266 `Expression`
+        ExprStatement@0:1209..1266
+          Expr `Variable`
+            Identifier@0:1209..1214 `color`
+          AssignmentOp@0:1215..1217 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1218..1231 `Expr`
+              Expr `Variable`
+                Identifier@0:1218..1231 `texture2DProj`
+            Expr@0:1236..1248 `Variable`
+              Identifier@0:1236..1248 `texSampler2D`
+            Expr@0:1250..1258 `Variable`
+              Identifier@0:1250..1258 `coords4D`
+            Expr@0:1260..1264 `Variable`
+              Identifier@0:1260..1264 `bias`
+      Statement@0:1274..1325 `Expression`
+        ExprStatement@0:1274..1325
+          Expr `Variable`
+            Identifier@0:1274..1279 `color`
+          AssignmentOp@0:1280..1282 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1283..1292 `Expr`
+              Expr `Variable`
+                Identifier@0:1283..1292 `texture3D`
+            Expr@0:1301..1313 `Variable`
+              Identifier@0:1301..1313 `texSampler3D`
+            Expr@0:1315..1323 `Variable`
+              Identifier@0:1315..1323 `coords3D`
+      Statement@0:1331..1388 `Expression`
+        ExprStatement@0:1331..1388
+          Expr `Variable`
+            Identifier@0:1331..1336 `color`
+          AssignmentOp@0:1337..1339 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1340..1349 `Expr`
+              Expr `Variable`
+                Identifier@0:1340..1349 `texture3D`
+            Expr@0:1358..1370 `Variable`
+              Identifier@0:1358..1370 `texSampler3D`
+            Expr@0:1372..1380 `Variable`
+              Identifier@0:1372..1380 `coords3D`
+            Expr@0:1382..1386 `Variable`
+              Identifier@0:1382..1386 `bias`
+      Statement@0:1394..1445 `Expression`
+        ExprStatement@0:1394..1445
+          Expr `Variable`
+            Identifier@0:1394..1399 `color`
+          AssignmentOp@0:1400..1402 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1403..1416 `Expr`
+              Expr `Variable`
+                Identifier@0:1403..1416 `texture3DProj`
+            Expr@0:1421..1433 `Variable`
+              Identifier@0:1421..1433 `texSampler3D`
+            Expr@0:1435..1443 `Variable`
+              Identifier@0:1435..1443 `coords4D`
+      Statement@0:1451..1508 `Expression`
+        ExprStatement@0:1451..1508
+          Expr `Variable`
+            Identifier@0:1451..1456 `color`
+          AssignmentOp@0:1457..1459 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1460..1473 `Expr`
+              Expr `Variable`
+                Identifier@0:1460..1473 `texture3DProj`
+            Expr@0:1478..1490 `Variable`
+              Identifier@0:1478..1490 `texSampler3D`
+            Expr@0:1492..1500 `Variable`
+              Identifier@0:1492..1500 `coords4D`
+            Expr@0:1502..1506 `Variable`
+              Identifier@0:1502..1506 `bias`
+      Statement@0:1516..1567 `Expression`
+        ExprStatement@0:1516..1567
+          Expr `Variable`
+            Identifier@0:1516..1521 `color`
+          AssignmentOp@0:1522..1524 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1525..1536 `Expr`
+              Expr `Variable`
+                Identifier@0:1525..1536 `textureCube`
+            Expr@0:1541..1555 `Variable`
+              Identifier@0:1541..1555 `texSamplerCube`
+            Expr@0:1557..1565 `Variable`
+              Identifier@0:1557..1565 `coords3D`
+      Statement@0:1573..1630 `Expression`
+        ExprStatement@0:1573..1630
+          Expr `Variable`
+            Identifier@0:1573..1578 `color`
+          AssignmentOp@0:1579..1581 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1582..1593 `Expr`
+              Expr `Variable`
+                Identifier@0:1582..1593 `textureCube`
+            Expr@0:1598..1612 `Variable`
+              Identifier@0:1598..1612 `texSamplerCube`
+            Expr@0:1614..1622 `Variable`
+              Identifier@0:1614..1622 `coords3D`
+            Expr@0:1624..1628 `Variable`
+              Identifier@0:1624..1628 `bias`
+      Statement@0:1642..1694 `Expression`
+        ExprStatement@0:1642..1694
+          Expr `Variable`
+            Identifier@0:1642..1647 `color`
+          AssignmentOp@0:1648..1650 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1651..1659 `Expr`
+              Expr `Variable`
+                Identifier@0:1651..1659 `shadow1D`
+            Expr@0:1667..1682 `Variable`
+              Identifier@0:1667..1682 `shadowSampler1D`
+            Expr@0:1684..1692 `Variable`
+              Identifier@0:1684..1692 `coords3D`
+      Statement@0:1700..1758 `Expression`
+        ExprStatement@0:1700..1758
+          Expr `Variable`
+            Identifier@0:1700..1705 `color`
+          AssignmentOp@0:1706..1708 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1709..1717 `Expr`
+              Expr `Variable`
+                Identifier@0:1709..1717 `shadow1D`
+            Expr@0:1725..1740 `Variable`
+              Identifier@0:1725..1740 `shadowSampler1D`
+            Expr@0:1742..1750 `Variable`
+              Identifier@0:1742..1750 `coords3D`
+            Expr@0:1752..1756 `Variable`
+              Identifier@0:1752..1756 `bias`
+      Statement@0:1764..1816 `Expression`
+        ExprStatement@0:1764..1816
+          Expr `Variable`
+            Identifier@0:1764..1769 `color`
+          AssignmentOp@0:1770..1772 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1773..1781 `Expr`
+              Expr `Variable`
+                Identifier@0:1773..1781 `shadow2D`
+            Expr@0:1789..1804 `Variable`
+              Identifier@0:1789..1804 `shadowSampler2D`
+            Expr@0:1806..1814 `Variable`
+              Identifier@0:1806..1814 `coords3D`
+      Statement@0:1822..1880 `Expression`
+        ExprStatement@0:1822..1880
+          Expr `Variable`
+            Identifier@0:1822..1827 `color`
+          AssignmentOp@0:1828..1830 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1831..1839 `Expr`
+              Expr `Variable`
+                Identifier@0:1831..1839 `shadow2D`
+            Expr@0:1847..1862 `Variable`
+              Identifier@0:1847..1862 `shadowSampler2D`
+            Expr@0:1864..1872 `Variable`
+              Identifier@0:1864..1872 `coords3D`
+            Expr@0:1874..1878 `Variable`
+              Identifier@0:1874..1878 `bias`
+      Statement@0:1886..1938 `Expression`
+        ExprStatement@0:1886..1938
+          Expr `Variable`
+            Identifier@0:1886..1891 `color`
+          AssignmentOp@0:1892..1894 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1895..1907 `Expr`
+              Expr `Variable`
+                Identifier@0:1895..1907 `shadow1DProj`
+            Expr@0:1911..1926 `Variable`
+              Identifier@0:1911..1926 `shadowSampler1D`
+            Expr@0:1928..1936 `Variable`
+              Identifier@0:1928..1936 `coords4D`
+      Statement@0:1944..2002 `Expression`
+        ExprStatement@0:1944..2002
+          Expr `Variable`
+            Identifier@0:1944..1949 `color`
+          AssignmentOp@0:1950..1952 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1953..1965 `Expr`
+              Expr `Variable`
+                Identifier@0:1953..1965 `shadow1DProj`
+            Expr@0:1969..1984 `Variable`
+              Identifier@0:1969..1984 `shadowSampler1D`
+            Expr@0:1986..1994 `Variable`
+              Identifier@0:1986..1994 `coords4D`
+            Expr@0:1996..2000 `Variable`
+              Identifier@0:1996..2000 `bias`
+      Statement@0:2008..2060 `Expression`
+        ExprStatement@0:2008..2060
+          Expr `Variable`
+            Identifier@0:2008..2013 `color`
+          AssignmentOp@0:2014..2016 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:2017..2029 `Expr`
+              Expr `Variable`
+                Identifier@0:2017..2029 `shadow2DProj`
+            Expr@0:2033..2048 `Variable`
+              Identifier@0:2033..2048 `shadowSampler2D`
+            Expr@0:2050..2058 `Variable`
+              Identifier@0:2050..2058 `coords4D`
+      Statement@0:2066..2124 `Expression`
+        ExprStatement@0:2066..2124
+          Expr `Variable`
+            Identifier@0:2066..2071 `color`
+          AssignmentOp@0:2072..2074 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:2075..2087 `Expr`
+              Expr `Variable`
+                Identifier@0:2075..2087 `shadow2DProj`
+            Expr@0:2091..2106 `Variable`
+              Identifier@0:2091..2106 `shadowSampler2D`
+            Expr@0:2108..2116 `Variable`
+              Identifier@0:2108..2116 `coords4D`
+            Expr@0:2118..2122 `Variable`
+              Identifier@0:2118..2122 `bias`
+      Statement@0:2132..2162 `Declaration`
+        Declaration@0:2132..2162 `InitDeclaratorList`
+          InitDeclaratorList@0:2132..2161
+            SingleDeclaration@0:2132..2161
+              FullySpecifiedType@0:2132..2137
+                TypeSpecifier@0:2132..2137
+                  TypeSpecifierNonArray@0:2132..2137 `ivec2`
+                    IVec2
+              Expr `FunCall`
+                FunIdentifier@0:2150..2155 `TypeSpecifier`
+                  TypeSpecifier
+                    TypeSpecifierNonArray@0:2150..2155 `ivec2`
+                      IVec2
+                Expr@0:2156..2157 `IntConst`
+                  IntConst `0`
+                Expr@0:2159..2160 `IntConst`
+                  IntConst `5`
+      Statement@0:2168..2181 `Declaration`
+        Declaration@0:2168..2181 `InitDeclaratorList`
+          InitDeclaratorList@0:2168..2180
+            SingleDeclaration@0:2168..2180
+              FullySpecifiedType@0:2168..2171
+                TypeSpecifier@0:2168..2171
+                  TypeSpecifierNonArray@0:2168..2171 `int`
+                    Int
+              Expr `IntConst`
+                IntConst `1`
+      Statement@0:2189..2240 `Expression`
+        ExprStatement@0:2189..2240
+          Expr `Variable`
+            Identifier@0:2189..2194 `color`
+          AssignmentOp@0:2195..2197 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:2198..2208 `Expr`
+              Expr `Variable`
+                Identifier@0:2198..2208 `texelFetch`
+            Expr@0:2209..2221 `Variable`
+              Identifier@0:2209..2221 `texSampler2D`
+            Expr@0:2223..2232 `Variable`
+              Identifier@0:2223..2232 `iCoords2D`
+            Expr@0:2234..2238 `Variable`
+              Identifier@0:2234..2238 `iLod`
+      Statement@0:2248..2276 `Declaration`
+        Declaration@0:2248..2276 `InitDeclaratorList`
+          InitDeclaratorList@0:2248..2275
+            SingleDeclaration@0:2248..2275
+              FullySpecifiedType@0:2248..2252
+                TypeSpecifier@0:2248..2252
+                  TypeSpecifierNonArray@0:2248..2252 `vec2`
+                    Vec2
+              Expr `FunCall`
+                FunIdentifier@0:2261..2265 `Expr`
+                  Expr `Variable`
+                    Identifier@0:2261..2265 `dFdx`
+                Expr@0:2266..2274 `Variable`
+                  Identifier@0:2266..2274 `coords2D`
+      Statement@0:2282..2310 `Declaration`
+        Declaration@0:2282..2310 `InitDeclaratorList`
+          InitDeclaratorList@0:2282..2309
+            SingleDeclaration@0:2282..2309
+              FullySpecifiedType@0:2282..2286
+                TypeSpecifier@0:2282..2286
+                  TypeSpecifierNonArray@0:2282..2286 `vec2`
+                    Vec2
+              Expr `FunCall`
+                FunIdentifier@0:2295..2299 `Expr`
+                  Expr `Variable`
+                    Identifier@0:2295..2299 `dFdy`
+                Expr@0:2300..2308 `Variable`
+                  Identifier@0:2300..2308 `coords2D`
+      Statement@0:2316..2350 `Declaration`
+        Declaration@0:2316..2350 `InitDeclaratorList`
+          InitDeclaratorList@0:2316..2349
+            SingleDeclaration@0:2316..2349
+              FullySpecifiedType@0:2316..2327
+                TypeQualifierSpec@0:2316..2321 `Storage`
+                  StorageQualifier@0:2316..2321 `const`
+                    Const
+                TypeSpecifier@0:2322..2327
+                  TypeSpecifierNonArray@0:2322..2327 `ivec2`
+                    IVec2
+              Expr `FunCall`
+                FunIdentifier@0:2337..2342 `TypeSpecifier`
+                  TypeSpecifier
+                    TypeSpecifierNonArray@0:2337..2342 `ivec2`
+                      IVec2
+                Expr@0:2343..2344 `IntConst`
+                  IntConst `3`
+                Expr@0:2346..2348 `Unary`
+                  UnaryOp@0:2346..2347 `-`
+                  Expr `IntConst`
+                    IntConst `7`
+      Statement@0:2358..2417 `Expression`
+        ExprStatement@0:2358..2417
+          Expr `Variable`
+            Identifier@0:2358..2363 `color`
+          AssignmentOp@0:2364..2366 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:2367..2378 `Expr`
+              Expr `Variable`
+                Identifier@0:2367..2378 `textureGrad`
+            Expr@0:2379..2391 `Variable`
+              Identifier@0:2379..2391 `texSampler2D`
+            Expr@0:2393..2401 `Variable`
+              Identifier@0:2393..2401 `coords2D`
+            Expr@0:2403..2408 `Variable`
+              Identifier@0:2403..2408 `gradX`
+            Expr@0:2410..2415 `Variable`
+              Identifier@0:2410..2415 `gradY`
+      Statement@0:2423..2498 `Expression`
+        ExprStatement@0:2423..2498
+          Expr `Variable`
+            Identifier@0:2423..2428 `color`
+          AssignmentOp@0:2429..2431 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:2432..2447 `Expr`
+              Expr `Variable`
+                Identifier@0:2432..2447 `textureProjGrad`
+            Expr@0:2448..2460 `Variable`
+              Identifier@0:2448..2460 `texSampler2D`
+            Expr@0:2462..2482 `FunCall`
+              FunIdentifier@0:2462..2466 `TypeSpecifier`
+                TypeSpecifier
+                  TypeSpecifierNonArray@0:2462..2466 `vec3`
+                    Vec3
+              Expr@0:2467..2475 `Variable`
+                Identifier@0:2467..2475 `coords2D`
+              Expr@0:2477..2481 `Variable`
+                Identifier@0:2477..2481 `proj`
+            Expr@0:2484..2489 `Variable`
+              Identifier@0:2484..2489 `gradX`
+            Expr@0:2491..2496 `Variable`
+              Identifier@0:2491..2496 `gradY`
+      Statement@0:2504..2577 `Expression`
+        ExprStatement@0:2504..2577
+          Expr `Variable`
+            Identifier@0:2504..2509 `color`
+          AssignmentOp@0:2510..2512 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:2513..2530 `Expr`
+              Expr `Variable`
+                Identifier@0:2513..2530 `textureGradOffset`
+            Expr@0:2531..2543 `Variable`
+              Identifier@0:2531..2543 `texSampler2D`
+            Expr@0:2545..2553 `Variable`
+              Identifier@0:2545..2553 `coords2D`
+            Expr@0:2555..2560 `Variable`
+              Identifier@0:2555..2560 `gradX`
+            Expr@0:2562..2567 `Variable`
+              Identifier@0:2562..2567 `gradY`
+            Expr@0:2569..2575 `Variable`
+              Identifier@0:2569..2575 `offset`
+      Statement@0:2583..2660 `Expression`
+        ExprStatement@0:2583..2660
+          Expr `Variable`
+            Identifier@0:2583..2588 `color`
+          AssignmentOp@0:2589..2591 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:2592..2613 `Expr`
+              Expr `Variable`
+                Identifier@0:2592..2613 `textureProjGradOffset`
+            Expr@0:2614..2626 `Variable`
+              Identifier@0:2614..2626 `texSampler2D`
+            Expr@0:2628..2636 `Variable`
+              Identifier@0:2628..2636 `coords3D`
+            Expr@0:2638..2643 `Variable`
+              Identifier@0:2638..2643 `gradX`
+            Expr@0:2645..2650 `Variable`
+              Identifier@0:2645..2650 `gradY`
+            Expr@0:2652..2658 `Variable`
+              Identifier@0:2652..2658 `offset`
+      Statement@0:2666..2739 `Expression`
+        ExprStatement@0:2666..2739
+          Expr `Variable`
+            Identifier@0:2666..2671 `color`
+          AssignmentOp@0:2672..2674 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:2675..2686 `Expr`
+              Expr `Variable`
+                Identifier@0:2675..2686 `textureGrad`
+            Expr@0:2687..2702 `Variable`
+              Identifier@0:2687..2702 `shadowSampler2D`
+            Expr@0:2704..2723 `FunCall`
+              FunIdentifier@0:2704..2708 `TypeSpecifier`
+                TypeSpecifier
+                  TypeSpecifierNonArray@0:2704..2708 `vec3`
+                    Vec3
+              Expr@0:2709..2717 `Variable`
+                Identifier@0:2709..2717 `coords2D`
+              Expr@0:2719..2722 `Variable`
+                Identifier@0:2719..2722 `lod`
+            Expr@0:2725..2730 `Variable`
+              Identifier@0:2725..2730 `gradX`
+            Expr@0:2732..2737 `Variable`
+              Identifier@0:2732..2737 `gradY`
+      Statement@0:2751..2800 `Expression`
+        ExprStatement@0:2751..2800
+          Expr `Variable`
+            Identifier@0:2751..2763 `gl_FragColor`
+          AssignmentOp@0:2764..2765 `=`
+          Expr `FunCall`
+            FunIdentifier@0:2766..2769 `Expr`
+              Expr `Variable`
+                Identifier@0:2766..2769 `mix`
+            Expr@0:2770..2775 `Variable`
+              Identifier@0:2770..2775 `color`
+            Expr@0:2777..2778 `Variable`
+              Identifier@0:2777..2778 `u`
+            Expr@0:2780..2798 `Binary`
+              BinaryOp@0:2786..2787 `*`
+              Expr `Variable`
+                Identifier@0:2780..2785 `blend`
+              Expr `Variable`
+                Identifier@0:2788..2798 `blendscale`

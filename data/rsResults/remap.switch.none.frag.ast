@@ -1,0 +1,152 @@
+ExternalDeclaration@0:14..36 `Declaration`
+  Declaration@0:14..36 `Precision`
+    PrecisionQualifier@0:24..29 `high`
+    TypeSpecifier@0:30..35
+      TypeSpecifierNonArray@0:30..35 `float`
+        Float
+ExternalDeclaration@0:38..86 `Declaration`
+  Declaration@0:38..86 `InitDeclaratorList`
+    InitDeclaratorList@0:38..85
+      SingleDeclaration@0:38..85
+        FullySpecifiedType@0:38..75
+          TypeQualifierSpec@0:38..58 `Layout`
+            LayoutQualifier@0:38..58
+              LayoutQualifierSpec@0:45..57 `Identifier`
+                Identifier@0:45..53 `location`
+                IntConst `0`
+          TypeQualifierSpec@0:59..62 `Storage`
+            StorageQualifier@0:59..62 `out`
+              Out
+          TypeQualifierSpec@0:63..70 `Precision`
+            PrecisionQualifier@0:63..70 `medium`
+          TypeSpecifier@0:71..75
+            TypeSpecifierNonArray@0:71..75 `vec4`
+              Vec4
+ExternalDeclaration@0:87..120 `Declaration`
+  Declaration@0:87..120 `InitDeclaratorList`
+    InitDeclaratorList@0:87..119
+      SingleDeclaration@0:87..119
+        FullySpecifiedType@0:87..115
+          TypeQualifierSpec@0:87..107 `Layout`
+            LayoutQualifier@0:87..107
+              LayoutQualifierSpec@0:94..106 `Identifier`
+                Identifier@0:94..102 `location`
+                IntConst `0`
+          TypeQualifierSpec@0:108..110 `Storage`
+            StorageQualifier@0:108..110 `in`
+              In
+          TypeSpecifier@0:111..115
+            TypeSpecifierNonArray@0:111..115 `vec4`
+              Vec4
+ExternalDeclaration@0:122..347 `FunctionDefinition`
+  FunctionDefinition@0:122..347
+    FunctionPrototype@0:122..133
+      FullySpecifiedType@0:122..126
+        TypeSpecifier@0:122..126
+          TypeSpecifierNonArray@0:122..126 `void`
+            Void
+      Identifier@0:127..131 `main`
+    CompoundStatement@0:134..347
+      Statement@0:140..345 `Switch`
+        SwitchStatement@0:140..345
+          Expr `FunCall`
+            FunIdentifier@0:147..150 `TypeSpecifier`
+              TypeSpecifier
+                TypeSpecifierNonArray@0:147..150 `int`
+                  Int
+            Expr@0:151..156 `Dot`
+              Expr `Variable`
+                Identifier@0:151..154 `in0`
+              Identifier@0:155..156 `w`
+          Statement@0:165..172 `CaseLabel`
+            CaseLabel@0:165..172 `Case`
+              Expr `IntConst`
+                IntConst `0`
+          Statement@0:173..201 `Expression`
+            ExprStatement@0:173..201
+              Expr `Variable`
+                Identifier@0:173..182 `FragColor`
+              AssignmentOp@0:183..184 `=`
+              Expr `FunCall`
+                FunIdentifier@0:185..189 `TypeSpecifier`
+                  TypeSpecifier
+                    TypeSpecifierNonArray@0:185..189 `vec4`
+                      Vec4
+                Expr@0:190..199 `Binary`
+                  BinaryOp@0:196..197 `+`
+                  Expr `Dot`
+                    Expr `Variable`
+                      Identifier@0:190..193 `in0`
+                    Identifier@0:194..195 `x`
+                  Expr `IntConst`
+                    IntConst `0`
+          Statement@0:202..208 `Jump`
+            JumpStatement@0:202..208 `break`
+              Break
+          Statement@0:213..220 `CaseLabel`
+            CaseLabel@0:213..220 `Case`
+              Expr `IntConst`
+                IntConst `1`
+          Statement@0:221..249 `Expression`
+            ExprStatement@0:221..249
+              Expr `Variable`
+                Identifier@0:221..230 `FragColor`
+              AssignmentOp@0:231..232 `=`
+              Expr `FunCall`
+                FunIdentifier@0:233..237 `TypeSpecifier`
+                  TypeSpecifier
+                    TypeSpecifierNonArray@0:233..237 `vec4`
+                      Vec4
+                Expr@0:238..247 `Binary`
+                  BinaryOp@0:244..245 `+`
+                  Expr `Dot`
+                    Expr `Variable`
+                      Identifier@0:238..241 `in0`
+                    Identifier@0:242..243 `y`
+                  Expr `IntConst`
+                    IntConst `1`
+          Statement@0:250..256 `Jump`
+            JumpStatement@0:250..256 `break`
+              Break
+          Statement@0:261..268 `CaseLabel`
+            CaseLabel@0:261..268 `Case`
+              Expr `IntConst`
+                IntConst `2`
+          Statement@0:269..297 `Expression`
+            ExprStatement@0:269..297
+              Expr `Variable`
+                Identifier@0:269..278 `FragColor`
+              AssignmentOp@0:279..280 `=`
+              Expr `FunCall`
+                FunIdentifier@0:281..285 `TypeSpecifier`
+                  TypeSpecifier
+                    TypeSpecifierNonArray@0:281..285 `vec4`
+                      Vec4
+                Expr@0:286..295 `Binary`
+                  BinaryOp@0:292..293 `+`
+                  Expr `Dot`
+                    Expr `Variable`
+                      Identifier@0:286..289 `in0`
+                    Identifier@0:290..291 `z`
+                  Expr `IntConst`
+                    IntConst `2`
+          Statement@0:298..304 `Jump`
+            JumpStatement@0:298..304 `break`
+              Break
+          Statement@0:309..317 `CaseLabel`
+            CaseLabel@0:309..317 `Def`
+              Def
+          Statement@0:318..339 `Expression`
+            ExprStatement@0:318..339
+              Expr `Variable`
+                Identifier@0:318..327 `FragColor`
+              AssignmentOp@0:328..329 `=`
+              Expr `FunCall`
+                FunIdentifier@0:330..334 `TypeSpecifier`
+                  TypeSpecifier
+                    TypeSpecifierNonArray@0:330..334 `vec4`
+                      Vec4
+                Expr@0:335..337 `Unary`
+                  UnaryOp@0:335..336 `-`
+                  Expr `IntConst`
+                    IntConst `1`

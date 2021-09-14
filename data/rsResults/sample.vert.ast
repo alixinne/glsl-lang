@@ -1,0 +1,47 @@
+ExternalDeclaration@0:1633..1652 `Declaration`
+  Declaration@0:1633..1652 `InitDeclaratorList`
+    InitDeclaratorList@0:1633..1651
+      SingleDeclaration@0:1633..1651
+        FullySpecifiedType@0:1633..1645
+          TypeQualifierSpec@0:1633..1640 `Storage`
+            StorageQualifier@0:1633..1640 `varying`
+              Varying
+          TypeSpecifier@0:1641..1645
+            TypeSpecifierNonArray@0:1641..1645 `vec3`
+              Vec3
+ExternalDeclaration@0:1656..1770 `FunctionDefinition`
+  FunctionDefinition@0:1656..1770
+    FunctionPrototype@0:1656..1667
+      FullySpecifiedType@0:1656..1660
+        TypeSpecifier@0:1656..1660
+          TypeSpecifierNonArray@0:1656..1660 `void`
+            Void
+      Identifier@0:1661..1665 `main`
+    CompoundStatement@0:1669..1770
+      Statement@0:1676..1704 `Expression`
+        ExprStatement@0:1676..1704
+          Expr `Variable`
+            Identifier@0:1676..1681 `color`
+          AssignmentOp@0:1682..1683 `=`
+          Expr `FunCall`
+            FunIdentifier@0:1684..1688 `TypeSpecifier`
+              TypeSpecifier
+                TypeSpecifierNonArray@0:1684..1688 `vec3`
+                  Vec3
+            Expr@0:1689..1692 `FloatConst`
+              FloatConst `1`
+            Expr@0:1694..1697 `FloatConst`
+              FloatConst `1`
+            Expr@0:1699..1702 `FloatConst`
+              FloatConst `1`
+      Statement@0:1712..1767 `Expression`
+        ExprStatement@0:1712..1767
+          Expr `Variable`
+            Identifier@0:1712..1723 `gl_Position`
+          AssignmentOp@0:1724..1725 `=`
+          Expr `Binary`
+            BinaryOp@0:1755..1756 `*`
+            Expr `Variable`
+              Identifier@0:1726..1754 `gl_ModelViewProjectionMatrix`
+            Expr `Variable`
+              Identifier@0:1757..1766 `gl_Vertex`

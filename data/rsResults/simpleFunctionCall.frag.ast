@@ -1,0 +1,63 @@
+ExternalDeclaration@0:16..38 `Declaration`
+  Declaration@0:16..38 `InitDeclaratorList`
+    InitDeclaratorList@0:16..37
+      SingleDeclaration@0:16..37
+        FullySpecifiedType@0:16..28
+          TypeQualifierSpec@0:16..23 `Storage`
+            StorageQualifier@0:16..23 `uniform`
+              Uniform
+          TypeSpecifier@0:24..28
+            TypeSpecifierNonArray@0:24..28 `vec4`
+              Vec4
+ExternalDeclaration@0:40..63 `Declaration`
+  Declaration@0:40..63 `InitDeclaratorList`
+    InitDeclaratorList@0:40..62
+      SingleDeclaration@0:40..62
+        FullySpecifiedType@0:40..52
+          TypeQualifierSpec@0:40..47 `Storage`
+            StorageQualifier@0:40..47 `varying`
+              Varying
+          TypeSpecifier@0:48..52
+            TypeSpecifierNonArray@0:48..52 `vec4`
+              Vec4
+ExternalDeclaration@0:65..81 `Declaration`
+  Declaration@0:65..81 `InitDeclaratorList`
+    InitDeclaratorList@0:65..80
+      SingleDeclaration@0:65..80
+        FullySpecifiedType@0:65..78
+          TypeQualifierSpec@0:65..72 `Storage`
+            StorageQualifier@0:65..72 `uniform`
+              Uniform
+          TypeSpecifier@0:73..78
+            TypeSpecifierNonArray@0:73..78 `float`
+              Float
+ExternalDeclaration@0:85..124 `FunctionDefinition`
+  FunctionDefinition@0:85..124
+    FunctionPrototype@0:85..95
+      FullySpecifiedType@0:85..89
+        TypeSpecifier@0:85..89
+          TypeSpecifierNonArray@0:85..89 `vec4`
+            Vec4
+      Identifier@0:90..93 `foo`
+    CompoundStatement@0:97..124
+      Statement@0:104..121 `Jump`
+        JumpStatement@0:104..121 `return`
+          Identifier@0:111..120 `BaseColor`
+ExternalDeclaration@0:128..172 `FunctionDefinition`
+  FunctionDefinition@0:128..172
+    FunctionPrototype@0:128..139
+      FullySpecifiedType@0:128..132
+        TypeSpecifier@0:128..132
+          TypeSpecifierNonArray@0:128..132 `void`
+            Void
+      Identifier@0:133..137 `main`
+    CompoundStatement@0:141..172
+      Statement@0:148..169 `Expression`
+        ExprStatement@0:148..169
+          Expr `Variable`
+            Identifier@0:148..160 `gl_FragColor`
+          AssignmentOp@0:161..162 `=`
+          Expr `FunCall`
+            FunIdentifier@0:163..166 `Expr`
+              Expr `Variable`
+                Identifier@0:163..166 `foo`

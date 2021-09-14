@@ -1,0 +1,135 @@
+ExternalDeclaration@0:88..155 `Declaration`
+  Declaration@0:88..155 `InitDeclaratorList`
+    InitDeclaratorList@0:88..154
+      SingleDeclaration@0:88..154
+        FullySpecifiedType@0:88..149
+          TypeQualifierSpec@0:88..116 `Layout`
+            LayoutQualifier@0:88..116
+              LayoutQualifierSpec@0:95..106 `Identifier`
+                Identifier@0:95..102 `binding`
+                IntConst `0`
+              LayoutQualifierSpec@0:108..115 `Identifier`
+                Identifier@0:108..111 `set`
+                IntConst `0`
+          TypeQualifierSpec@0:117..124 `Storage`
+            StorageQualifier@0:117..124 `uniform`
+              Uniform
+          TypeSpecifier@0:125..149
+            TypeSpecifierNonArray@0:125..149 `TypeName`
+              TypeName@0:125..149
+ExternalDeclaration@0:157..222 `Declaration`
+  Declaration@0:157..222 `Block`
+    Block@0:157..221
+      TypeQualifier@0:157..186
+        TypeQualifierSpec@0:157..179 `Layout`
+          LayoutQualifier@0:157..179
+            LayoutQualifierSpec@0:164..178 `Identifier`
+              Identifier@0:164..178 `shaderRecordNV`
+        TypeQualifierSpec@0:180..186 `Storage`
+          StorageQualifier@0:180..186 `buffer`
+            Buffer
+      Identifier@0:187..192 `block`
+      StructFieldSpecifier@0:196..205
+        TypeSpecifier@0:196..200
+          TypeSpecifierNonArray@0:196..200 `vec3`
+            Vec3
+        ArrayedIdentifier@0:201..204
+          Identifier@0:201..204 `dir`
+      StructFieldSpecifier@0:207..219
+        TypeSpecifier@0:207..211
+          TypeSpecifierNonArray@0:207..211 `vec3`
+            Vec3
+        ArrayedIdentifier@0:212..218
+          Identifier@0:212..218 `origin`
+ExternalDeclaration@0:224..587 `FunctionDefinition`
+  FunctionDefinition@0:224..587
+    FunctionPrototype@0:224..235
+      FullySpecifiedType@0:224..228
+        TypeSpecifier@0:224..228
+          TypeSpecifierNonArray@0:224..228 `void`
+            Void
+      Identifier@0:229..233 `main`
+    CompoundStatement@0:236..587
+      Statement@0:242..268 `Declaration`
+        Declaration@0:242..268 `InitDeclaratorList`
+          InitDeclaratorList@0:242..267
+            SingleDeclaration@0:242..267
+              FullySpecifiedType@0:242..253
+                TypeSpecifier@0:242..253
+                  TypeSpecifierNonArray@0:242..253 `TypeName`
+                    TypeName@0:242..253
+      Statement@0:273..347 `Declaration`
+        Declaration@0:273..347 `InitDeclaratorList`
+          InitDeclaratorList@0:273..346
+            SingleDeclaration@0:273..346
+              FullySpecifiedType@0:273..277
+                TypeSpecifier@0:273..277
+                  TypeSpecifierNonArray@0:273..277 `uint`
+                    UInt
+              Expr `Binary`
+                BinaryOp@0:310..311 `|`
+                Expr `Variable`
+                  Identifier@0:289..309 `gl_RayFlagsOpaqueEXT`
+                Expr `Variable`
+                  Identifier@0:312..346 `gl_RayFlagsSkipClosestHitShaderEXT`
+      Statement@0:352..369 `Declaration`
+        Declaration@0:352..369 `InitDeclaratorList`
+          InitDeclaratorList@0:352..368
+            SingleDeclaration@0:352..368
+              FullySpecifiedType@0:352..357
+                TypeSpecifier@0:352..357
+                  TypeSpecifierNonArray@0:352..357 `float`
+                    Float
+              Expr `FloatConst`
+                FloatConst `0`
+      Statement@0:374..394 `Declaration`
+        Declaration@0:374..394 `InitDeclaratorList`
+          InitDeclaratorList@0:374..393
+            SingleDeclaration@0:374..393
+              FullySpecifiedType@0:374..379
+                TypeSpecifier@0:374..379
+                  TypeSpecifierNonArray@0:374..379 `float`
+                    Float
+              Expr `FloatConst`
+                FloatConst `1000`
+      Statement@0:399..484 `Expression`
+        ExprStatement@0:399..484
+          FunIdentifier@0:399..420 `Expr`
+            Expr `Variable`
+              Identifier@0:399..420 `rayQueryInitializeEXT`
+          Expr@0:421..434 `Variable`
+            Identifier@0:421..434 `localRayQuery`
+          Expr@0:436..440 `Variable`
+            Identifier@0:436..440 `acc0`
+          Expr@0:442..450 `Variable`
+            Identifier@0:442..450 `rayFlags`
+          Expr@0:452..456 `IntConst`
+            IntConst `255`
+          Expr@0:459..465 `Variable`
+            Identifier@0:459..465 `origin`
+          Expr@0:467..471 `Variable`
+            Identifier@0:467..471 `tMin`
+          Expr@0:473..476 `Variable`
+            Identifier@0:473..476 `dir`
+          Expr@0:478..482 `Variable`
+            Identifier@0:478..482 `tMax`
+      Statement@0:489..585 `Selection`
+        SelectionStatement@0:489..585
+          Expr `Unary`
+            UnaryOp@0:493..494 `!`
+            Expr `FunCall`
+              FunIdentifier@0:494..512 `Expr`
+                Expr `Variable`
+                  Identifier@0:494..512 `rayQueryProceedEXT`
+              Expr@0:513..526 `Variable`
+                Identifier@0:513..526 `localRayQuery`
+          SelectionRestStatement@0:533..585 `Statement`
+            Statement `Compound`
+              CompoundStatement@0:533..585
+                Statement@0:543..579 `Expression`
+                  ExprStatement@0:543..579
+                    FunIdentifier@0:543..563 `Expr`
+                      Expr `Variable`
+                        Identifier@0:543..563 `rayQueryTerminateEXT`
+                    Expr@0:564..577 `Variable`
+                      Identifier@0:564..577 `localRayQuery`

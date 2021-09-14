@@ -1,0 +1,4 @@
+0:1:1: '#if' : invalid constant expression
+0:2:1: '#error' : INT_MIN / -1 should yield 0, something went wrong.
+0:4:1: '#if' : invalid constant expression
+0:5:1: '#error' : INT_MIN % -1 should yield 0, something went wrong.

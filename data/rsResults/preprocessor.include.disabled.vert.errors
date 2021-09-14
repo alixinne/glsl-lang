@@ -1,0 +1,5 @@
+0:8000:1: '#include' : required extension not requested: GL_GOOGLE_include_directive or GL_ARB_shading_language_include
+0:8001:1: '#include' : required extension not requested: GL_GOOGLE_include_directive or GL_ARB_shading_language_include
+0:8002:1: '#include' : required extension not requested: GL_GOOGLE_include_directive or GL_ARB_shading_language_include
+0:8003:1: '#include' : required extension not requested: GL_GOOGLE_include_directive or GL_ARB_shading_language_include
+0:8004:1: '#include' : required extension not requested: GL_GOOGLE_include_directive or GL_ARB_shading_language_include

@@ -1,0 +1,222 @@
+ROOT@0..513
+  PP_EXTENSION@0..55
+    HASH@0..1 "#"
+    IDENT_KW@1..10 "extension"
+    WS@10..11 " "
+    IDENT_KW@11..45 "GL_GOOGLE_cpp_style_l ..."
+    WS@45..46 " "
+    COLON@46..47 ":"
+    WS@47..48 " "
+    IDENT_KW@48..54 "enable"
+    NEWLINE@54..55 "\n"
+  NEWLINE@55..56 "\n"
+  PP_ERROR@56..72
+    HASH@56..57 "#"
+    IDENT_KW@57..62 "error"
+    WS@62..63 " "
+    PP_ERROR_BODY@63..71
+      IDENT_KW@63..65 "at"
+      WS@65..66 " "
+      QUOTE_STRING@66..71 "\"0:3\""
+    NEWLINE@71..72 "\n"
+  NEWLINE@72..73 "\n"
+  PP_LINE@73..89
+    HASH@73..74 "#"
+    IDENT_KW@74..78 "line"
+    WS@78..79 " "
+    PP_LINE_BODY@79..88
+      DIGITS@79..82 "150"
+      WS@82..83 " "
+      QUOTE_STRING@83..88 "\"a.h\""
+    NEWLINE@88..89 "\n"
+  PP_ERROR@89..109
+    HASH@89..90 "#"
+    IDENT_KW@90..95 "error"
+    WS@95..96 " "
+    PP_ERROR_BODY@96..108
+      IDENT_KW@96..98 "at"
+      WS@98..99 " "
+      QUOTE_STRING@99..108 "\"a.h:150\""
+    NEWLINE@108..109 "\n"
+  NEWLINE@109..110 "\n"
+  PP_LINE@110..119
+    HASH@110..111 "#"
+    IDENT_KW@111..115 "line"
+    WS@115..116 " "
+    PP_LINE_BODY@116..118
+      DIGITS@116..118 "24"
+    NEWLINE@118..119 "\n"
+  PP_ERROR@119..138
+    HASH@119..120 "#"
+    IDENT_KW@120..125 "error"
+    WS@125..126 " "
+    PP_ERROR_BODY@126..137
+      IDENT_KW@126..128 "at"
+      WS@128..129 " "
+      QUOTE_STRING@129..137 "\"a.h:24\""
+    NEWLINE@137..138 "\n"
+  NEWLINE@138..139 "\n"
+  PP_LINE@139..148
+    HASH@139..140 "#"
+    IDENT_KW@140..144 "line"
+    WS@144..145 " "
+    PP_LINE_BODY@145..147
+      DIGITS@145..147 "42"
+    NEWLINE@147..148 "\n"
+  PP_ERROR@148..167
+    HASH@148..149 "#"
+    IDENT_KW@149..154 "error"
+    WS@154..155 " "
+    PP_ERROR_BODY@155..166
+      IDENT_KW@155..157 "at"
+      WS@157..158 " "
+      QUOTE_STRING@158..166 "\"a.h:42\""
+    NEWLINE@166..167 "\n"
+  NEWLINE@167..168 "\n"
+  PP_LINE@168..184
+    HASH@168..169 "#"
+    IDENT_KW@169..173 "line"
+    WS@173..174 " "
+    PP_LINE_BODY@174..183
+      DIGITS@174..176 "30"
+      WS@176..177 " "
+      QUOTE_STRING@177..183 "\"b.cc\""
+    NEWLINE@183..184 "\n"
+  PP_ERROR@184..204
+    HASH@184..185 "#"
+    IDENT_KW@185..190 "error"
+    WS@190..191 " "
+    PP_ERROR_BODY@191..203
+      IDENT_KW@191..193 "at"
+      WS@193..194 " "
+      QUOTE_STRING@194..203 "\"b.cc:30\""
+    NEWLINE@203..204 "\n"
+  NEWLINE@204..205 "\n"
+  PP_LINE@205..216
+    HASH@205..206 "#"
+    IDENT_KW@206..210 "line"
+    WS@210..211 " "
+    PP_LINE_BODY@211..215
+      DIGITS@211..213 "10"
+      WS@213..214 " "
+      DIGITS@214..215 "3"
+    NEWLINE@215..216 "\n"
+  PP_ERROR@216..233
+    HASH@216..217 "#"
+    IDENT_KW@217..222 "error"
+    WS@222..223 " "
+    PP_ERROR_BODY@223..232
+      IDENT_KW@223..225 "at"
+      WS@225..226 " "
+      QUOTE_STRING@226..232 "\"3:10\""
+    NEWLINE@232..233 "\n"
+  NEWLINE@233..234 "\n"
+  PP_LINE@234..243
+    HASH@234..235 "#"
+    IDENT_KW@235..239 "line"
+    WS@239..240 " "
+    PP_LINE_BODY@240..242
+      DIGITS@240..242 "48"
+    NEWLINE@242..243 "\n"
+  PP_ERROR@243..260
+    HASH@243..244 "#"
+    IDENT_KW@244..249 "error"
+    WS@249..250 " "
+    PP_ERROR_BODY@250..259
+      IDENT_KW@250..252 "at"
+      WS@252..253 " "
+      QUOTE_STRING@253..259 "\"3:48\""
+    NEWLINE@259..260 "\n"
+  NEWLINE@260..261 "\n"
+  PP_LINE@261..269
+    HASH@261..262 "#"
+    IDENT_KW@262..266 "line"
+    WS@266..267 " "
+    PP_LINE_BODY@267..268
+      DIGITS@267..268 "4"
+    NEWLINE@268..269 "\n"
+  PP_ERROR@269..285
+    HASH@269..270 "#"
+    IDENT_KW@270..275 "error"
+    WS@275..276 " "
+    PP_ERROR_BODY@276..284
+      IDENT_KW@276..278 "at"
+      WS@278..279 " "
+      QUOTE_STRING@279..284 "\"3:4\""
+    NEWLINE@284..285 "\n"
+  NEWLINE@285..286 "\n"
+  PP_LINE@286..299
+    HASH@286..287 "#"
+    IDENT_KW@287..291 "line"
+    WS@291..292 " "
+    PP_LINE_BODY@292..298
+      DIGITS@292..294 "55"
+      WS@294..295 " "
+      DIGITS@295..298 "100"
+    NEWLINE@298..299 "\n"
+  PP_ERROR@299..318
+    HASH@299..300 "#"
+    IDENT_KW@300..305 "error"
+    WS@305..306 " "
+    PP_ERROR_BODY@306..317
+      IDENT_KW@306..308 "at"
+      WS@308..309 " "
+      QUOTE_STRING@309..317 "\"100:55\""
+    NEWLINE@317..318 "\n"
+  NEWLINE@318..319 "\n"
+  PP_LINE@319..334
+    HASH@319..320 "#"
+    IDENT_KW@320..324 "line"
+    WS@324..325 " "
+    PP_LINE_BODY@325..333
+      DIGITS@325..329 "1000"
+      WS@329..330 " "
+      QUOTE_STRING@330..333 "\"c\""
+    NEWLINE@333..334 "\n"
+  PP_ERROR@334..353
+    HASH@334..335 "#"
+    IDENT_KW@335..340 "error"
+    WS@340..341 " "
+    PP_ERROR_BODY@341..352
+      IDENT_KW@341..343 "at"
+      WS@343..344 " "
+      QUOTE_STRING@344..352 "\"c:1000\""
+    NEWLINE@352..353 "\n"
+  NEWLINE@353..354 "\n"
+  PP_LINE@354..365
+    HASH@354..355 "#"
+    IDENT_KW@355..359 "line"
+    WS@359..360 " "
+    PP_LINE_BODY@360..364
+      DIGITS@360..362 "42"
+      WS@362..363 " "
+      DIGITS@363..364 "1"
+    NEWLINE@364..365 "\n"
+  PP_ERROR@365..382
+    HASH@365..366 "#"
+    IDENT_KW@366..371 "error"
+    WS@371..372 " "
+    PP_ERROR_BODY@372..381
+      IDENT_KW@372..374 "at"
+      WS@374..375 " "
+      QUOTE_STRING@375..381 "\"1:42\""
+    NEWLINE@381..382 "\n"
+  NEWLINE@382..383 "\n"
+  PP_LINE@383..446
+    HASH@383..384 "#"
+    IDENT_KW@384..388 "line"
+    WS@388..389 " "
+    PP_LINE_BODY@389..445
+      DIGITS@389..391 "42"
+      WS@391..392 " "
+      QUOTE_STRING@392..445 "\"this-is-a-quite-long ..."
+    NEWLINE@445..446 "\n"
+  PP_ERROR@446..513
+    HASH@446..447 "#"
+    IDENT_KW@447..452 "error"
+    WS@452..453 " "
+    PP_ERROR_BODY@453..512
+      IDENT_KW@453..455 "at"
+      WS@455..456 " "
+      QUOTE_STRING@456..512 "\"this-is-a-quite-long ..."
+    NEWLINE@512..513 "\n"

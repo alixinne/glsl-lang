@@ -1,0 +1,96 @@
+ExternalDeclaration@0:21..172 `Declaration`
+  Declaration@0:21..172 `Block`
+    Block@0:21..171
+      TypeQualifier@0:21..56
+        TypeQualifierSpec@0:21..48 `Layout`
+          LayoutQualifier@0:21..48
+            LayoutQualifierSpec@0:28..39 `Identifier`
+              Identifier@0:28..35 `binding`
+              IntConst `0`
+            LayoutQualifierSpec@0:41..47 `Identifier`
+              Identifier@0:41..47 `std140`
+        TypeQualifierSpec@0:49..56 `Storage`
+          StorageQualifier@0:49..56 `uniform`
+            Uniform
+      Identifier@0:57..66 `ubo_block`
+      StructFieldSpecifier@0:71..92
+        TypeSpecifier@0:71..76
+          TypeSpecifierNonArray@0:71..76 `float`
+            Float
+        ArrayedIdentifier@0:77..91
+          Identifier@0:77..91 `unused_uniform`
+      StructFieldSpecifier@0:95..116
+        TypeSpecifier@0:95..100
+          TypeSpecifierNonArray@0:95..100 `float`
+            Float
+        ArrayedIdentifier@0:101..115
+          Identifier@0:101..115 `shared_uniform`
+      StructFieldSpecifier@0:119..140
+        TypeSpecifier@0:119..124
+          TypeSpecifierNonArray@0:119..124 `float`
+            Float
+        ArrayedIdentifier@0:125..139
+          Identifier@0:125..139 `vsonly_uniform`
+      StructFieldSpecifier@0:143..164
+        TypeSpecifier@0:143..148
+          TypeSpecifierNonArray@0:143..148 `float`
+            Float
+        ArrayedIdentifier@0:149..163
+          Identifier@0:149..163 `fsonly_uniform`
+      Identifier@0:168..171 `ubo`
+ExternalDeclaration@0:176..193 `Declaration`
+  Declaration@0:176..193 `InitDeclaratorList`
+    InitDeclaratorList@0:176..192
+      SingleDeclaration@0:176..192
+        FullySpecifiedType@0:176..184
+          TypeQualifierSpec@0:176..178 `Storage`
+            StorageQualifier@0:176..178 `in`
+              In
+          TypeSpecifier@0:179..184
+            TypeSpecifierNonArray@0:179..184 `float`
+              Float
+ExternalDeclaration@0:197..215 `Declaration`
+  Declaration@0:197..215 `InitDeclaratorList`
+    InitDeclaratorList@0:197..214
+      SingleDeclaration@0:197..214
+        FullySpecifiedType@0:197..206
+          TypeQualifierSpec@0:197..200 `Storage`
+            StorageQualifier@0:197..200 `out`
+              Out
+          TypeSpecifier@0:201..206
+            TypeSpecifierNonArray@0:201..206 `float`
+              Float
+ExternalDeclaration@0:219..332 `FunctionDefinition`
+  FunctionDefinition@0:219..332
+    FunctionPrototype@0:219..230
+      FullySpecifiedType@0:219..223
+        TypeSpecifier@0:219..223
+          TypeSpecifierNonArray@0:219..223 `void`
+            Void
+      Identifier@0:224..228 `main`
+    CompoundStatement@0:232..332
+      Statement@0:239..257 `Expression`
+        ExprStatement@0:239..257
+          Expr `Variable`
+            Identifier@0:239..246 `fragout`
+          AssignmentOp@0:247..248 `=`
+          Expr `Variable`
+            Identifier@0:249..256 `vertout`
+      Statement@0:263..293 `Expression`
+        ExprStatement@0:263..293
+          Expr `Variable`
+            Identifier@0:263..270 `fragout`
+          AssignmentOp@0:271..273 `+=`
+          Expr `Dot`
+            Expr `Variable`
+              Identifier@0:274..277 `ubo`
+            Identifier@0:278..292 `shared_uniform`
+      Statement@0:299..329 `Expression`
+        ExprStatement@0:299..329
+          Expr `Variable`
+            Identifier@0:299..306 `fragout`
+          AssignmentOp@0:307..309 `+=`
+          Expr `Dot`
+            Expr `Variable`
+              Identifier@0:310..313 `ubo`
+            Identifier@0:314..328 `fsonly_uniform`

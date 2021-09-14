@@ -1,0 +1,2 @@
+0:12:1: '#error' : expected FOO 200
+0:30:1: '#error' : bad MUL

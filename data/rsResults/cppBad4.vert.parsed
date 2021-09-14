@@ -1,0 +1,37 @@
+ROOT@0..42
+  IDENT_KW@0..3 "int"
+  COMMA@3..4 ","
+  IDENT_KW@4..5 "i"
+  EQUAL@5..6 "="
+  NEWLINE@6..7 "\n"
+  PP_DEFINE@7..24
+    HASH@7..8 "#"
+    IDENT_KW@8..14 "define"
+    WS@14..15 " "
+    IDENT_KW@15..16 "f"
+    WS@16..17 " "
+    PP_DEFINE_BODY@17..23
+      IDENT_KW@17..18 "g"
+      LPAREN@18..19 "("
+      HASH@19..20 "#"
+      IDENT_KW@20..21 "g"
+      LPAREN@21..22 "("
+      IDENT_KW@22..23 "y"
+    NEWLINE@23..24 "\n"
+  PP_DEFINE@24..37
+    HASH@24..25 "#"
+    IDENT_KW@25..31 "define"
+    WS@31..32 " "
+    IDENT_KW@32..33 "g"
+    PP_DEFINE_ARGS@33..36
+      LPAREN@33..34 "("
+      PP_DEFINE_ARG@34..35
+        IDENT_KW@34..35 "m"
+      RPAREN@35..36 ")"
+    PP_DEFINE_BODY@36..36
+    NEWLINE@36..37 "\n"
+  IDENT_KW@37..38 "g"
+  LPAREN@38..39 "("
+  IDENT_KW@39..40 "f"
+  RPAREN@40..41 ")"
+  NEWLINE@41..42 "\n"

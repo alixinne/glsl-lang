@@ -1,0 +1,63 @@
+0:77:1: '#error' : good1
+0:81:1: '#error' : good2
+0:85:1: '#error' : good3
+0:89:1: '#error' : good4
+0:93:1: '#error' : good5
+0:97:1: '#error' : good6
+0:100:1: '#if' : missing expression
+0:101:1: '#error' : bad1
+0:104:1: '#if' : extra tokens at end of expression
+0:105:1: '#error' : bad2
+0:108:1: '#if' : missing expression
+0:109:1: '#error' : bad3
+0:112:1: '#if' : extra tokens at end of expression
+0:113:1: '#error' : bad4
+0:116:1: '#if' : missing expression
+0:117:1: '#error' : bad5
+0:120:1: '#if' : extra tokens at end of expression
+0:121:1: '#error' : bad6
+0:122:1: unknown preprocessor directive `#error\`
+0:123:1: unknown preprocessor directive `#if\`
+0:124:1: unknown preprocessor directive `#directive`
+0:124:4: unknown preprocessor directive `#flizbit`
+0:124:5: unknown preprocessor directive `#0x25`
+0:124:15: unknown preprocessor directive `##`
+0:124:16: '#endif' : extra tokens in preprocessor directive
+0:124:17: '#else' : extra tokens in preprocessor directive
+0:124:18: '#else' : extra tokens in preprocessor directive
+0:124:26: '#endif' : extra tokens in preprocessor directive
+0:141:1: '#define' : names beginning with "GL_" can't be (un)defined: GL_
+0:142:1: '#define' : names beginning with "GL_" can't be (un)defined: GL_Macro
+0:149:1: '#elif' : missing expression
+0:149:1: unmatched #elif
+0:204:1: '#undef' : predefined names can't be (un)defined: __VERSION__
+0:205:1: '#undef' : names beginning with "GL_" can't be (un)defined: GL_ARB_texture_rectangle
+0:224:1: '#pragma' : optimize pragma syntax is incorrect
+0:225:1: '#pragma' : optimize pragma syntax is incorrect
+0:226:1: '#pragma' : debug pragma syntax is incorrect
+0:227:1: '#pragma' : debug pragma syntax is incorrect
+0:229:1: '#pragma' : optimize pragma syntax is incorrect
+0:230:1: '#pragma' : debug pragma syntax is incorrect
+0:235:1: '#error' : good continuation
+0:12000:1: '#error' : line should be 12000
+0:13000:1: '#error' : line should be 13000, string 7
+0:14013:1: '#error' : line should be 14013, string 7
+0:14013:1: '#error' : line should be 14013, string 12
+0:14025:1: '#error' : line should be 14025, string 12
+0:14026:1: '#line' : extra tokens in #line path
+0:1236:1: '#line' : extra tokens in #line path
+0:20000:1: '#error' : line should be 20000
+0:20010:1: '#error' : line should be 20010
+0:20020:1: '#error' : line should be 20020
+0:20051:1: '#error' : good evaluation 1
+0:20055:1: '#error' : good evaluation 2
+0:9000:1: '#if' : missing expression
+0:9002:1: '#if' : extra tokens at end of expression
+0:9015:1: '#if' : malformed expression
+0:9501:1: unmatched #endif
+0:9502:1: '#if' : invalid constant expression
+0:9504:1: '#if' : invalid constant expression
+0:9507:1: '#error' : \ 376
+0:9508:1: '#error' : \377
+0:9602:1: '#if' : missing expression
+0:9603:1: '#error' : DEF_DEFINED then

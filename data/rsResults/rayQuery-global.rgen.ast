@@ -1,0 +1,239 @@
+ExternalDeclaration@0:106..173 `Declaration`
+  Declaration@0:106..173 `InitDeclaratorList`
+    InitDeclaratorList@0:106..172
+      SingleDeclaration@0:106..172
+        FullySpecifiedType@0:106..167
+          TypeQualifierSpec@0:106..134 `Layout`
+            LayoutQualifier@0:106..134
+              LayoutQualifierSpec@0:113..124 `Identifier`
+                Identifier@0:113..120 `binding`
+                IntConst `1`
+              LayoutQualifierSpec@0:126..133 `Identifier`
+                Identifier@0:126..129 `set`
+                IntConst `0`
+          TypeQualifierSpec@0:135..142 `Storage`
+            StorageQualifier@0:135..142 `uniform`
+              Uniform
+          TypeSpecifier@0:143..167
+            TypeSpecifierNonArray@0:143..167 `TypeName`
+              TypeName@0:143..167
+ExternalDeclaration@0:175..196 `Declaration`
+  Declaration@0:175..196 `InitDeclaratorList`
+    InitDeclaratorList@0:175..195
+      SingleDeclaration@0:175..195
+        FullySpecifiedType@0:175..186
+          TypeSpecifier@0:175..186
+            TypeSpecifierNonArray@0:175..186 `TypeName`
+              TypeName@0:175..186
+ExternalDeclaration@0:198..297 `FunctionDefinition`
+  FunctionDefinition@0:198..297
+    FunctionPrototype@0:198..231
+      FullySpecifiedType@0:198..202
+        TypeSpecifier@0:198..202
+          TypeSpecifierNonArray@0:198..202 `void`
+            Void
+      Identifier@0:203..215 `otherWrapper`
+      FunctionParameterDeclaration@0:216..230 `Named`
+        FunctionParameterDeclarator@0:216..230
+          TypeSpecifier@0:216..227
+            TypeSpecifierNonArray@0:216..227 `TypeName`
+              TypeName@0:216..227
+          ArrayedIdentifier@0:228..230
+            Identifier@0:228..230 `rq`
+    CompoundStatement@0:232..297
+      Statement@0:238..261 `Expression`
+        ExprStatement@0:238..261
+          FunIdentifier@0:238..256 `Expr`
+            Expr `Variable`
+              Identifier@0:238..256 `rayQueryProceedEXT`
+          Expr@0:257..259 `Variable`
+            Identifier@0:257..259 `rq`
+      Statement@0:266..295 `Expression`
+        ExprStatement@0:266..295
+          FunIdentifier@0:266..284 `Expr`
+            Expr `Variable`
+              Identifier@0:266..284 `rayQueryProceedEXT`
+          Expr@0:285..293 `Variable`
+            Identifier@0:285..293 `rqGlobal`
+ExternalDeclaration@0:299..487 `FunctionDefinition`
+  FunctionDefinition@0:299..487
+    FunctionPrototype@0:299..327
+      FullySpecifiedType@0:299..303
+        TypeSpecifier@0:299..303
+          TypeSpecifierNonArray@0:299..303 `void`
+            Void
+      Identifier@0:304..311 `wrapper`
+      FunctionParameterDeclaration@0:312..326 `Named`
+        FunctionParameterDeclarator@0:312..326
+          TypeSpecifier@0:312..323
+            TypeSpecifierNonArray@0:312..323 `TypeName`
+              TypeName@0:312..323
+          ArrayedIdentifier@0:324..326
+            Identifier@0:324..326 `rq`
+    CompoundStatement@0:328..487
+      Statement@0:334..350 `Declaration`
+        Declaration@0:334..350 `InitDeclaratorList`
+          InitDeclaratorList@0:334..349
+            SingleDeclaration@0:334..349
+              FullySpecifiedType@0:334..345
+                TypeSpecifier@0:334..345
+                  TypeSpecifierNonArray@0:334..345 `TypeName`
+                    TypeName@0:334..345
+      Statement@0:355..378 `Expression`
+        ExprStatement@0:355..378
+          FunIdentifier@0:355..373 `Expr`
+            Expr `Variable`
+              Identifier@0:355..373 `rayQueryProceedEXT`
+          Expr@0:374..376 `Variable`
+            Identifier@0:374..376 `rq`
+      Statement@0:383..412 `Expression`
+        ExprStatement@0:383..412
+          FunIdentifier@0:383..401 `Expr`
+            Expr `Variable`
+              Identifier@0:383..401 `rayQueryProceedEXT`
+          Expr@0:402..410 `Variable`
+            Identifier@0:402..410 `rqGlobal`
+      Statement@0:417..434 `Expression`
+        ExprStatement@0:417..434
+          FunIdentifier@0:417..429 `Expr`
+            Expr `Variable`
+              Identifier@0:417..429 `otherWrapper`
+          Expr@0:430..432 `Variable`
+            Identifier@0:430..432 `rq`
+      Statement@0:439..457 `Expression`
+        ExprStatement@0:439..457
+          FunIdentifier@0:439..451 `Expr`
+            Expr `Variable`
+              Identifier@0:439..451 `otherWrapper`
+          Expr@0:452..455 `Variable`
+            Identifier@0:452..455 `rq2`
+      Statement@0:462..485 `Expression`
+        ExprStatement@0:462..485
+          FunIdentifier@0:462..474 `Expr`
+            Expr `Variable`
+              Identifier@0:462..474 `otherWrapper`
+          Expr@0:475..483 `Variable`
+            Identifier@0:475..483 `rqGlobal`
+ExternalDeclaration@0:489..822 `FunctionDefinition`
+  FunctionDefinition@0:489..822
+    FunctionPrototype@0:489..500
+      FullySpecifiedType@0:489..493
+        TypeSpecifier@0:489..493
+          TypeSpecifierNonArray@0:489..493 `void`
+            Void
+      Identifier@0:494..498 `main`
+    CompoundStatement@0:501..822
+      Statement@0:507..607 `Expression`
+        ExprStatement@0:507..607
+          FunIdentifier@0:507..528 `Expr`
+            Expr `Variable`
+              Identifier@0:507..528 `rayQueryInitializeEXT`
+          Expr@0:529..537 `Variable`
+            Identifier@0:529..537 `rqGlobal`
+          Expr@0:539..543 `Variable`
+            Identifier@0:539..543 `rtas`
+          Expr@0:545..563 `Variable`
+            Identifier@0:545..563 `gl_RayFlagsNoneEXT`
+          Expr@0:565..569 `IntConst`
+            IntConst `255`
+          Expr@0:571..582 `FunCall`
+            FunIdentifier@0:571..575 `TypeSpecifier`
+              TypeSpecifier
+                TypeSpecifierNonArray@0:571..575 `vec3`
+                  Vec3
+            Expr@0:576..577 `IntConst`
+              IntConst `0`
+            Expr@0:578..579 `IntConst`
+              IntConst `0`
+            Expr@0:580..581 `IntConst`
+              IntConst `0`
+          Expr@0:584..587 `FloatConst`
+            FloatConst `0`
+          Expr@0:589..600 `FunCall`
+            FunIdentifier@0:589..593 `TypeSpecifier`
+              TypeSpecifier
+                TypeSpecifierNonArray@0:589..593 `vec3`
+                  Vec3
+            Expr@0:594..595 `IntConst`
+              IntConst `1`
+            Expr@0:596..597 `IntConst`
+              IntConst `0`
+            Expr@0:598..599 `IntConst`
+              IntConst `0`
+          Expr@0:602..605 `FloatConst`
+            FloatConst `1`
+      Statement@0:612..630 `Expression`
+        ExprStatement@0:612..630
+          FunIdentifier@0:612..619 `Expr`
+            Expr `Variable`
+              Identifier@0:612..619 `wrapper`
+          Expr@0:620..628 `Variable`
+            Identifier@0:620..628 `rqGlobal`
+      Statement@0:635..658 `Expression`
+        ExprStatement@0:635..658
+          FunIdentifier@0:635..647 `Expr`
+            Expr `Variable`
+              Identifier@0:635..647 `otherWrapper`
+          Expr@0:648..656 `Variable`
+            Identifier@0:648..656 `rqGlobal`
+      Statement@0:663..679 `Declaration`
+        Declaration@0:663..679 `InitDeclaratorList`
+          InitDeclaratorList@0:663..678
+            SingleDeclaration@0:663..678
+              FullySpecifiedType@0:663..674
+                TypeSpecifier@0:663..674
+                  TypeSpecifierNonArray@0:663..674 `TypeName`
+                    TypeName@0:663..674
+      Statement@0:684..779 `Expression`
+        ExprStatement@0:684..779
+          FunIdentifier@0:684..705 `Expr`
+            Expr `Variable`
+              Identifier@0:684..705 `rayQueryInitializeEXT`
+          Expr@0:706..709 `Variable`
+            Identifier@0:706..709 `rq2`
+          Expr@0:711..715 `Variable`
+            Identifier@0:711..715 `rtas`
+          Expr@0:717..735 `Variable`
+            Identifier@0:717..735 `gl_RayFlagsNoneEXT`
+          Expr@0:737..741 `IntConst`
+            IntConst `255`
+          Expr@0:743..754 `FunCall`
+            FunIdentifier@0:743..747 `TypeSpecifier`
+              TypeSpecifier
+                TypeSpecifierNonArray@0:743..747 `vec3`
+                  Vec3
+            Expr@0:748..749 `IntConst`
+              IntConst `0`
+            Expr@0:750..751 `IntConst`
+              IntConst `0`
+            Expr@0:752..753 `IntConst`
+              IntConst `0`
+          Expr@0:756..759 `FloatConst`
+            FloatConst `0`
+          Expr@0:761..772 `FunCall`
+            FunIdentifier@0:761..765 `TypeSpecifier`
+              TypeSpecifier
+                TypeSpecifierNonArray@0:761..765 `vec3`
+                  Vec3
+            Expr@0:766..767 `IntConst`
+              IntConst `1`
+            Expr@0:768..769 `IntConst`
+              IntConst `0`
+            Expr@0:770..771 `IntConst`
+              IntConst `0`
+          Expr@0:774..777 `FloatConst`
+            FloatConst `1`
+      Statement@0:784..797 `Expression`
+        ExprStatement@0:784..797
+          FunIdentifier@0:784..791 `Expr`
+            Expr `Variable`
+              Identifier@0:784..791 `wrapper`
+          Expr@0:792..795 `Variable`
+            Identifier@0:792..795 `rq2`
+      Statement@0:802..820 `Expression`
+        ExprStatement@0:802..820
+          FunIdentifier@0:802..814 `Expr`
+            Expr `Variable`
+              Identifier@0:802..814 `otherWrapper`
+          Expr@0:815..818 `Variable`
+            Identifier@0:815..818 `rq2`

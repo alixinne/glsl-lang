@@ -1,0 +1,112 @@
+ExternalDeclaration@0:19..53 `Declaration`
+  Declaration@0:19..53 `InitDeclaratorList`
+    InitDeclaratorList@0:19..52
+      SingleDeclaration@0:19..52
+        FullySpecifiedType@0:19..47
+          TypeQualifierSpec@0:19..39 `Layout`
+            LayoutQualifier@0:19..39
+              LayoutQualifierSpec@0:26..38 `Identifier`
+                Identifier@0:26..34 `location`
+                IntConst `2`
+          TypeQualifierSpec@0:40..42 `Storage`
+            StorageQualifier@0:40..42 `in`
+              In
+          TypeSpecifier@0:43..47
+            TypeSpecifierNonArray@0:43..47 `vec4`
+              Vec4
+ExternalDeclaration@0:55..91 `Declaration`
+  Declaration@0:55..91 `InitDeclaratorList`
+    InitDeclaratorList@0:55..90
+      SingleDeclaration@0:55..90
+        FullySpecifiedType@0:55..84
+          TypeQualifierSpec@0:55..75 `Layout`
+            LayoutQualifier@0:55..75
+              LayoutQualifierSpec@0:62..74 `Identifier`
+                Identifier@0:62..70 `location`
+                IntConst `1`
+          TypeQualifierSpec@0:76..79 `Storage`
+            StorageQualifier@0:76..79 `out`
+              Out
+          TypeSpecifier@0:80..84
+            TypeSpecifierNonArray@0:80..84 `vec4`
+              Vec4
+ExternalDeclaration@0:95..182 `Declaration`
+  Declaration@0:95..182 `Block`
+    Block@0:95..181
+      TypeQualifier@0:95..122
+        TypeQualifierSpec@0:95..114 `Layout`
+          LayoutQualifier@0:95..114
+            LayoutQualifierSpec@0:102..113 `Identifier`
+              Identifier@0:102..109 `binding`
+              IntConst `3`
+        TypeQualifierSpec@0:115..122 `Storage`
+          StorageQualifier@0:115..122 `uniform`
+            Uniform
+      Identifier@0:123..129 `uBlock`
+      StructFieldSpecifier@0:137..144
+        TypeSpecifier@0:137..141
+          TypeSpecifierNonArray@0:137..141 `vec4`
+            Vec4
+        ArrayedIdentifier@0:142..143
+          Identifier@0:142..143 `a`
+      StructFieldSpecifier@0:150..158
+        TypeSpecifier@0:150..155
+          TypeSpecifierNonArray@0:150..155 `ivec4`
+            IVec4
+        ArrayedIdentifier@0:156..157
+          Identifier@0:156..157 `b`
+      StructFieldSpecifier@0:164..172
+        TypeSpecifier@0:164..169
+          TypeSpecifierNonArray@0:164..169 `uvec4`
+            UVec4
+        ArrayedIdentifier@0:170..171
+          Identifier@0:170..171 `c`
+      Identifier@0:176..181 `uInst`
+ExternalDeclaration@0:186..275 `FunctionDefinition`
+  FunctionDefinition@0:186..275
+    FunctionPrototype@0:186..197
+      FullySpecifiedType@0:186..190
+        TypeSpecifier@0:186..190
+          TypeSpecifierNonArray@0:186..190 `void`
+            Void
+      Identifier@0:191..195 `main`
+    CompoundStatement@0:199..275
+      Statement@0:206..272 `Expression`
+        ExprStatement@0:206..272
+          Expr `Variable`
+            Identifier@0:206..211 `outv4`
+          AssignmentOp@0:212..213 `=`
+          Expr `Binary`
+            BinaryOp@0:256..257 `*`
+            Expr `Binary`
+              BinaryOp@0:240..241 `*`
+              Expr `Binary`
+                BinaryOp@0:230..231 `*`
+                Expr `FunCall`
+                  FunIdentifier@0:214..223 `Expr`
+                    Expr `Variable`
+                      Identifier@0:214..223 `normalize`
+                  Expr@0:224..228 `Variable`
+                    Identifier@0:224..228 `inv4`
+                Expr `Dot`
+                  Expr `Variable`
+                    Identifier@0:232..237 `uInst`
+                  Identifier@0:238..239 `a`
+              Expr `FunCall`
+                FunIdentifier@0:242..246 `TypeSpecifier`
+                  TypeSpecifier
+                    TypeSpecifierNonArray@0:242..246 `vec4`
+                      Vec4
+                Expr@0:247..254 `Dot`
+                  Expr `Variable`
+                    Identifier@0:247..252 `uInst`
+                  Identifier@0:253..254 `b`
+            Expr `FunCall`
+              FunIdentifier@0:258..262 `TypeSpecifier`
+                TypeSpecifier
+                  TypeSpecifierNonArray@0:258..262 `vec4`
+                    Vec4
+              Expr@0:263..270 `Dot`
+                Expr `Variable`
+                  Identifier@0:263..268 `uInst`
+                Identifier@0:269..270 `c`

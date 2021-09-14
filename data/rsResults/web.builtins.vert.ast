@@ -1,0 +1,81 @@
+ExternalDeclaration@0:19..60 `Declaration`
+  Declaration@0:19..60 `InitDeclaratorList`
+    InitDeclaratorList@0:19..59
+      SingleDeclaration@0:19..59
+        FullySpecifiedType@0:19..56
+          TypeQualifierSpec@0:19..39 `Layout`
+            LayoutQualifier@0:19..39
+              LayoutQualifierSpec@0:26..38 `Identifier`
+                Identifier@0:26..34 `location`
+                IntConst `0`
+          TypeQualifierSpec@0:40..42 `Storage`
+            StorageQualifier@0:40..42 `in`
+              In
+          TypeQualifierSpec@0:43..50 `Precision`
+            PrecisionQualifier@0:43..50 `medium`
+          TypeSpecifier@0:51..56
+            TypeSpecifierNonArray@0:51..56 `float`
+              Float
+ExternalDeclaration@0:64..86 `Declaration`
+  Declaration@0:64..86 `Invariant`
+    Identifier@0:74..85 `gl_Position`
+ExternalDeclaration@0:90..260 `FunctionDefinition`
+  FunctionDefinition@0:90..260
+    FunctionPrototype@0:90..101
+      FullySpecifiedType@0:90..94
+        TypeSpecifier@0:90..94
+          TypeSpecifierNonArray@0:90..94 `void`
+            Void
+      Identifier@0:95..99 `main`
+    CompoundStatement@0:103..260
+      Statement@0:110..133 `Expression`
+        ExprStatement@0:110..133
+          Expr `Variable`
+            Identifier@0:110..121 `gl_Position`
+          AssignmentOp@0:122..123 `=`
+          Expr `FunCall`
+            FunIdentifier@0:124..128 `TypeSpecifier`
+              TypeSpecifier
+                TypeSpecifierNonArray@0:124..128 `vec4`
+                  Vec4
+            Expr@0:129..131 `Variable`
+              Identifier@0:129..131 `ps`
+      Statement@0:139..180 `Expression`
+        ExprStatement@0:139..180
+          Expr `Variable`
+            Identifier@0:139..150 `gl_Position`
+          AssignmentOp@0:151..153 `*`
+          Expr `FunCall`
+            FunIdentifier@0:154..159 `TypeSpecifier`
+              TypeSpecifier
+                TypeSpecifierNonArray@0:154..159 `float`
+                  Float
+            Expr@0:160..178 `Binary`
+              BinaryOp@0:162..163 `-`
+              Expr `IntConst`
+                IntConst `4`
+              Expr `Variable`
+                Identifier@0:164..178 `gl_VertexIndex`
+      Statement@0:188..206 `Expression`
+        ExprStatement@0:188..206
+          Expr `Variable`
+            Identifier@0:188..200 `gl_PointSize`
+          AssignmentOp@0:201..202 `=`
+          Expr `Variable`
+            Identifier@0:203..205 `ps`
+      Statement@0:213..257 `Expression`
+        ExprStatement@0:213..257
+          Expr `Variable`
+            Identifier@0:213..225 `gl_PointSize`
+          AssignmentOp@0:226..228 `*`
+          Expr `FunCall`
+            FunIdentifier@0:229..234 `TypeSpecifier`
+              TypeSpecifier
+                TypeSpecifierNonArray@0:229..234 `float`
+                  Float
+            Expr@0:235..255 `Binary`
+              BinaryOp@0:237..238 `-`
+              Expr `IntConst`
+                IntConst `5`
+              Expr `Variable`
+                Identifier@0:239..255 `gl_InstanceIndex`

@@ -1,0 +1,126 @@
+ExternalDeclaration@0:16..32 `Declaration`
+  Declaration@0:16..32 `InitDeclaratorList`
+    InitDeclaratorList@0:16..31
+      SingleDeclaration@0:16..31
+        FullySpecifiedType@0:16..29
+          TypeQualifierSpec@0:16..23 `Storage`
+            StorageQualifier@0:16..23 `uniform`
+              Uniform
+          TypeSpecifier@0:24..29
+            TypeSpecifierNonArray@0:24..29 `float`
+              Float
+ExternalDeclaration@0:34..68 `Declaration`
+  Declaration@0:34..68 `InitDeclaratorList`
+    InitDeclaratorList@0:34..67
+      SingleDeclaration@0:34..55
+        FullySpecifiedType@0:34..46
+          TypeQualifierSpec@0:34..41 `Storage`
+            StorageQualifier@0:34..41 `uniform`
+              Uniform
+          TypeSpecifier@0:42..46
+            TypeSpecifierNonArray@0:42..46 `vec4`
+              Vec4
+      SingleDeclarationNoType@0:57..67
+        ArrayedIdentifier@0:57..67
+          Identifier@0:57..67 `smallColor`
+ExternalDeclaration@0:70..94 `Declaration`
+  Declaration@0:70..94 `InitDeclaratorList`
+    InitDeclaratorList@0:70..93
+      SingleDeclaration@0:70..93
+        FullySpecifiedType@0:70..82
+          TypeQualifierSpec@0:70..77 `Storage`
+            StorageQualifier@0:70..77 `uniform`
+              Uniform
+          TypeSpecifier@0:78..82
+            TypeSpecifierNonArray@0:78..82 `vec4`
+              Vec4
+ExternalDeclaration@0:98..114 `Declaration`
+  Declaration@0:98..114 `InitDeclaratorList`
+    InitDeclaratorList@0:98..113
+      SingleDeclaration@0:98..113
+        FullySpecifiedType@0:98..111
+          TypeQualifierSpec@0:98..105 `Storage`
+            StorageQualifier@0:98..105 `varying`
+              Varying
+          TypeSpecifier@0:106..111
+            TypeSpecifierNonArray@0:106..111 `float`
+              Float
+ExternalDeclaration@0:116..139 `Declaration`
+  Declaration@0:116..139 `InitDeclaratorList`
+    InitDeclaratorList@0:116..138
+      SingleDeclaration@0:116..138
+        FullySpecifiedType@0:116..128
+          TypeQualifierSpec@0:116..123 `Storage`
+            StorageQualifier@0:116..123 `varying`
+              Varying
+          TypeSpecifier@0:124..128
+            TypeSpecifierNonArray@0:124..128 `vec4`
+              Vec4
+ExternalDeclaration@0:143..359 `FunctionDefinition`
+  FunctionDefinition@0:143..359
+    FunctionPrototype@0:143..154
+      FullySpecifiedType@0:143..147
+        TypeSpecifier@0:143..147
+          TypeSpecifierNonArray@0:143..147 `void`
+            Void
+      Identifier@0:148..152 `main`
+    CompoundStatement@0:156..359
+      Statement@0:163..186 `Declaration`
+        Declaration@0:163..186 `InitDeclaratorList`
+          InitDeclaratorList@0:163..185
+            SingleDeclaration@0:163..185
+              FullySpecifiedType@0:163..167
+                TypeSpecifier@0:163..167
+                  TypeSpecifierNonArray@0:163..167 `vec4`
+                    Vec4
+              Expr `Variable`
+                Identifier@0:176..185 `BaseColor`
+      Statement@0:192..204 `Declaration`
+        Declaration@0:192..204 `InitDeclaratorList`
+          InitDeclaratorList@0:192..203
+            SingleDeclaration@0:192..203
+              FullySpecifiedType@0:192..196
+                TypeSpecifier@0:192..196
+                  TypeSpecifierNonArray@0:192..196 `vec4`
+                    Vec4
+      Statement@0:212..232 `Expression`
+        ExprStatement@0:212..232
+          Expr `Variable`
+            Identifier@0:212..218 `color2`
+          AssignmentOp@0:219..220 `=`
+          Expr `Variable`
+            Identifier@0:221..231 `otherColor`
+      Statement@0:240..318 `Selection`
+        SelectionStatement@0:240..318
+          Expr `Binary`
+            BinaryOp@0:246..247 `>`
+            Expr `Variable`
+              Identifier@0:244..245 `c`
+            Expr `Variable`
+              Identifier@0:248..249 `d`
+          SelectionRestStatement@0:260..318 `Else`
+            Statement `Expression`
+              ExprStatement@0:260..278
+                Expr `Variable`
+                  Identifier@0:260..265 `color`
+                AssignmentOp@0:266..268 `+=`
+                Expr `Variable`
+                  Identifier@0:269..277 `bigColor`
+            Statement `Expression`
+              ExprStatement@0:298..318
+                Expr `Variable`
+                  Identifier@0:298..303 `color`
+                AssignmentOp@0:304..306 `+=`
+                Expr `Variable`
+                  Identifier@0:307..317 `smallColor`
+      Statement@0:326..356 `Expression`
+        ExprStatement@0:326..356
+          Expr `Variable`
+            Identifier@0:326..338 `gl_FragColor`
+          AssignmentOp@0:339..340 `=`
+          Expr `Binary`
+            BinaryOp@0:347..348 `*`
+            Expr `Variable`
+              Identifier@0:341..346 `color`
+            Expr `Variable`
+              Identifier@0:349..355 `color2`

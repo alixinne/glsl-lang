@@ -1,0 +1,60 @@
+ExternalDeclaration@0:14..28 `Declaration`
+  Declaration@0:14..28 `InitDeclaratorList`
+    InitDeclaratorList@0:14..27
+      SingleDeclaration@0:14..27
+        FullySpecifiedType@0:14..22
+          TypeQualifierSpec@0:14..16 `Storage`
+            StorageQualifier@0:14..16 `in`
+              In
+          TypeSpecifier@0:17..22
+            TypeSpecifierNonArray@0:17..22 `float`
+              Float
+ExternalDeclaration@0:29..45 `Declaration`
+  Declaration@0:29..45 `InitDeclaratorList`
+    InitDeclaratorList@0:29..44
+      SingleDeclaration@0:29..44
+        FullySpecifiedType@0:29..37
+          TypeQualifierSpec@0:29..32 `Storage`
+            StorageQualifier@0:29..32 `out`
+              Out
+          TypeSpecifier@0:33..37
+            TypeSpecifierNonArray@0:33..37 `vec4`
+              Vec4
+ExternalDeclaration@0:47..81 `FunctionDefinition`
+  FunctionDefinition@0:47..81
+    FunctionPrototype@0:47..61
+      FullySpecifiedType@0:47..51
+        TypeSpecifier@0:47..51
+          TypeSpecifierNonArray@0:47..51 `vec3`
+            Vec3
+      Identifier@0:52..59 `dead_fn`
+    CompoundStatement@0:62..81
+      Statement@0:64..79 `Jump`
+        JumpStatement@0:64..79 `return`
+          FunIdentifier@0:71..75 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:71..75 `vec3`
+                Vec3
+          Expr@0:76..77 `IntConst`
+            IntConst `0`
+ExternalDeclaration@0:83..121 `FunctionDefinition`
+  FunctionDefinition@0:83..121
+    FunctionPrototype@0:83..94
+      FullySpecifiedType@0:83..87
+        TypeSpecifier@0:83..87
+          TypeSpecifierNonArray@0:83..87 `void`
+            Void
+      Identifier@0:88..92 `main`
+    CompoundStatement@0:95..121
+      Statement@0:101..119 `Expression`
+        ExprStatement@0:101..119
+          Expr `Variable`
+            Identifier@0:101..106 `outf4`
+          AssignmentOp@0:107..108 `=`
+          Expr `FunCall`
+            FunIdentifier@0:109..113 `TypeSpecifier`
+              TypeSpecifier
+                TypeSpecifierNonArray@0:109..113 `vec4`
+                  Vec4
+            Expr@0:114..117 `Variable`
+              Identifier@0:114..117 `inf`

@@ -1,0 +1,135 @@
+ROOT@0..2445
+  PP_EXTENSION@0..49
+    HASH@0..1 "#"
+    IDENT_KW@1..10 "extension"
+    WS@10..11 " "
+    IDENT_KW@11..38 "GL_GOOGLE_include_dir ..."
+    WS@38..39 " "
+    COLON@39..40 ":"
+    WS@40..41 " "
+    IDENT_KW@41..47 "enable"
+    NEWLINE@47..49 "\r\n"
+  PP_LINE@49..61
+    HASH@49..50 "#"
+    IDENT_KW@50..54 "line"
+    WS@54..55 " "
+    PP_LINE_BODY@55..59
+      DIGITS@55..59 "8000"
+    NEWLINE@59..61 "\r\n"
+  PP_INCLUDE@61..71
+    HASH@61..62 "#"
+    IDENT_KW@62..69 "include"
+    PP_INCLUDE_PATH@69..69
+    NEWLINE@69..71 "\r\n"
+  PP_INCLUDE@71..85
+    HASH@71..72 "#"
+    IDENT_KW@72..79 "include"
+    WS@79..80 " "
+    PP_INCLUDE_PATH@80..83
+      DIGITS@80..83 "123"
+    NEWLINE@83..85 "\r\n"
+  PP_INCLUDE@85..105
+    HASH@85..86 "#"
+    IDENT_KW@86..93 "include"
+    WS@93..94 " "
+    PP_INCLUDE_PATH@94..103
+      QUOTE_STRING@94..103 "\"foo.oeu\""
+    NEWLINE@103..105 "\r\n"
+  PP_INCLUDE@105..136
+    HASH@105..106 "#"
+    IDENT_KW@106..113 "include"
+    WS@113..114 " "
+    PP_INCLUDE_PATH@114..134
+      QUOTE_STRING@114..134 "\"foo.oeu/ao eu/ao.h\""
+    NEWLINE@134..136 "\r\n"
+  PP_INCLUDE@136..156
+    HASH@136..137 "#"
+    IDENT_KW@137..144 "include"
+    WS@144..145 " "
+    PP_INCLUDE_PATH@145..154
+      QUOTE_STRING@145..154 "\"foo<oeu\""
+    NEWLINE@154..156 "\r\n"
+  PP_INCLUDE@156..176
+    HASH@156..157 "#"
+    IDENT_KW@157..164 "include"
+    WS@164..165 " "
+    PP_INCLUDE_PATH@165..174
+      QUOTE_STRING@165..174 "\"foo.oe>\""
+    NEWLINE@174..176 "\r\n"
+  PP_INCLUDE@176..195
+    HASH@176..177 "#"
+    IDENT_KW@177..184 "include"
+    WS@184..185 " "
+    PP_INCLUDE_PATH@185..193
+      ANGLE_STRING@185..193 "<foo.oe>"
+    NEWLINE@193..195 "\r\n"
+  PP_INCLUDE@195..216
+    HASH@195..196 "#"
+    IDENT_KW@196..203 "include"
+    WS@203..204 " "
+    PP_INCLUDE_PATH@204..214
+      ANGLE_STRING@204..214 "<foo\"bar\">"
+    NEWLINE@214..216 "\r\n"
+  PP_INCLUDE@216..236
+    HASH@216..217 "#"
+    IDENT_KW@217..224 "include"
+    WS@224..225 " "
+    PP_INCLUDE_PATH@225..234
+      ANGLE_STRING@225..234 "<foo\\bar>"
+    NEWLINE@234..236 "\r\n"
+  PP_INCLUDE@236..256
+    HASH@236..237 "#"
+    IDENT_KW@237..244 "include"
+    WS@244..245 " "
+    PP_INCLUDE_PATH@245..254
+      QUOTE_STRING@245..254 "\"foo.oe>\""
+    NEWLINE@254..256 "\r\n"
+  PP_INCLUDE@256..272
+    HASH@256..257 "#"
+    IDENT_KW@257..264 "include"
+    WS@264..265 " "
+    PP_INCLUDE_PATH@265..270
+      ANGLE_STRING@265..270 "<foo>"
+    NEWLINE@270..272 "\r\n"
+  PP_INCLUDE@272..299
+    HASH@272..273 "#"
+    IDENT_KW@273..280 "include"
+    WS@280..281 " "
+    PP_INCLUDE_PATH@281..297
+      QUOTE_STRING@281..289 "\"foo2.h\""
+      WS@289..290 " "
+      IDENT_KW@290..297 "garbage"
+    NEWLINE@297..299 "\r\n"
+  PP_INCLUDE@299..325
+    HASH@299..300 "#"
+    IDENT_KW@300..307 "include"
+    WS@307..308 " "
+    PP_INCLUDE_PATH@308..323
+      ANGLE_STRING@308..315 "<foo.h>"
+      WS@315..316 " "
+      IDENT_KW@316..323 "garbage"
+    NEWLINE@323..325 "\r\n"
+  COMMENT@325..338 "// max length"
+  NEWLINE@338..340 "\r\n"
+  PP_INCLUDE@340..1377
+    HASH@340..341 "#"
+    IDENT_KW@341..348 "include"
+    WS@348..349 " "
+    PP_INCLUDE_PATH@349..1375
+      ANGLE_STRING@349..1375 "<ABCDEF0123456789ABCD ..."
+    NEWLINE@1375..1377 "\r\n"
+  COMMENT@1377..1388 "// too long"
+  NEWLINE@1388..1390 "\r\n"
+  PP_INCLUDE@1390..2428
+    HASH@1390..1391 "#"
+    IDENT_KW@1391..1398 "include"
+    WS@1398..1399 " "
+    PP_INCLUDE_PATH@1399..2426
+      ANGLE_STRING@1399..2426 "<ABCDEF0123456789ABCD ..."
+    NEWLINE@2426..2428 "\r\n"
+  PP_INCLUDE@2428..2445
+    HASH@2428..2429 "#"
+    IDENT_KW@2429..2436 "include"
+    WS@2436..2437 " "
+    PP_INCLUDE_PATH@2437..2445
+      QUOTE_STRING@2437..2445 "\"no-eol\""

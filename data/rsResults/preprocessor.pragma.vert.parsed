@@ -1,0 +1,85 @@
+ROOT@0..172
+  PP_VERSION@0..17
+    HASH@0..1 "#"
+    IDENT_KW@1..8 "version"
+    WS@8..9 " "
+    PP_VERSION_NUMBER@9..12
+      DIGITS@9..12 "310"
+    WS@12..13 " "
+    PP_VERSION_PROFILE@13..15
+      IDENT_KW@13..15 "es"
+    NEWLINE@15..17 "\r\n"
+  NEWLINE@17..19 "\r\n"
+  PP_PRAGMA@19..41
+    HASH@19..20 "#"
+    IDENT_KW@20..26 "pragma"
+    WS@26..27 " "
+    PP_PRAGMA_BODY@27..39
+      IDENT_KW@27..35 "optimize"
+      LPAREN@35..36 "("
+      IDENT_KW@36..38 "on"
+      RPAREN@38..39 ")"
+    NEWLINE@39..41 "\r\n"
+  PP_PRAGMA@41..64
+    HASH@41..42 "#"
+    IDENT_KW@42..48 "pragma"
+    WS@48..49 " "
+    PP_PRAGMA_BODY@49..62
+      IDENT_KW@49..57 "optimize"
+      LPAREN@57..58 "("
+      IDENT_KW@58..61 "off"
+      RPAREN@61..62 ")"
+    NEWLINE@62..64 "\r\n"
+  PP_PRAGMA@64..83
+    HASH@64..65 "#"
+    IDENT_KW@65..71 "pragma"
+    WS@71..72 " "
+    PP_PRAGMA_BODY@72..81
+      IDENT_KW@72..77 "debug"
+      LPAREN@77..78 "("
+      IDENT_KW@78..80 "on"
+      RPAREN@80..81 ")"
+    NEWLINE@81..83 "\r\n"
+  PP_PRAGMA@83..103
+    HASH@83..84 "#"
+    IDENT_KW@84..90 "pragma"
+    WS@90..91 " "
+    PP_PRAGMA_BODY@91..101
+      IDENT_KW@91..96 "debug"
+      LPAREN@96..97 "("
+      IDENT_KW@97..100 "off"
+      RPAREN@100..101 ")"
+    NEWLINE@101..103 "\r\n"
+  NEWLINE@103..105 "\r\n"
+  PP_PRAGMA@105..137
+    HASH@105..106 "#"
+    IDENT_KW@106..112 "pragma"
+    WS@112..113 " "
+    PP_PRAGMA_BODY@113..135
+      IDENT_KW@113..129 "undefined_pragma"
+      LPAREN@129..130 "("
+      IDENT_KW@130..131 "x"
+      COMMA@131..132 ","
+      WS@132..133 " "
+      DIGITS@133..134 "4"
+      RPAREN@134..135 ")"
+    NEWLINE@135..137 "\r\n"
+  NEWLINE@137..139 "\r\n"
+  PP_PRAGMA@139..153
+    HASH@139..140 "#"
+    IDENT_KW@140..146 "pragma"
+    WS@146..147 " "
+    PP_PRAGMA_BODY@147..151
+      IDENT_KW@147..151 "once"
+    NEWLINE@151..153 "\r\n"
+  NEWLINE@153..155 "\r\n"
+  IDENT_KW@155..158 "int"
+  WS@158..159 " "
+  IDENT_KW@159..163 "main"
+  LPAREN@163..164 "("
+  RPAREN@164..165 ")"
+  WS@165..166 " "
+  LBRACE@166..167 "{"
+  NEWLINE@167..169 "\r\n"
+  RBRACE@169..170 "}"
+  NEWLINE@170..172 "\r\n"

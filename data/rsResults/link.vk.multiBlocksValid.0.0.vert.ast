@@ -1,0 +1,216 @@
+ExternalDeclaration@0:71..154 `Declaration`
+  Declaration@0:71..154 `Block`
+    Block@0:71..153
+      TypeQualifier@0:71..107
+        TypeQualifierSpec@0:71..99 `Layout`
+          LayoutQualifier@0:71..99
+            LayoutQualifierSpec@0:79..85 `Identifier`
+              Identifier@0:79..85 `std140`
+            LayoutQualifierSpec@0:87..98 `Identifier`
+              Identifier@0:87..94 `binding`
+              IntConst `0`
+        TypeQualifierSpec@0:100..107 `Storage`
+          StorageQualifier@0:100..107 `uniform`
+            Uniform
+      Identifier@0:108..119 `MatrixBlock`
+      StructFieldSpecifier@0:123..134
+        TypeSpecifier@0:123..127
+          TypeSpecifierNonArray@0:123..127 `mat4`
+            Mat4
+        ArrayedIdentifier@0:128..133
+          Identifier@0:128..133 `uProj`
+      StructFieldSpecifier@0:136..148
+        TypeSpecifier@0:136..140
+          TypeSpecifierNonArray@0:136..140 `mat4`
+            Mat4
+        ArrayedIdentifier@0:141..147
+          Identifier@0:141..147 `uWorld`
+      Identifier@0:151..153 `uM`
+ExternalDeclaration@0:215..253 `Declaration`
+  Declaration@0:215..253 `Block`
+    Block@0:215..252
+      TypeQualifier@0:215..218
+        TypeQualifierSpec@0:215..218 `Storage`
+          StorageQualifier@0:215..218 `out`
+            Out
+      Identifier@0:219..225 `Vertex`
+      StructFieldSpecifier@0:229..237
+        TypeSpecifier@0:229..233
+          TypeSpecifierNonArray@0:229..233 `vec4`
+            Vec4
+        ArrayedIdentifier@0:234..236
+          Identifier@0:234..236 `v1`
+      StructFieldSpecifier@0:239..247
+        TypeSpecifier@0:239..243
+          TypeSpecifierNonArray@0:239..243 `vec4`
+            Vec4
+        ArrayedIdentifier@0:244..246
+          Identifier@0:244..246 `v2`
+      Identifier@0:250..252 `oV`
+ExternalDeclaration@0:312..418 `Declaration`
+  Declaration@0:312..418 `Block`
+    Block@0:312..417
+      TypeQualifier@0:312..348
+        TypeQualifierSpec@0:312..340 `Layout`
+          LayoutQualifier@0:312..340
+            LayoutQualifierSpec@0:320..326 `Identifier`
+              Identifier@0:320..326 `std140`
+            LayoutQualifierSpec@0:328..339 `Identifier`
+              Identifier@0:328..335 `binding`
+              IntConst `1`
+        TypeQualifierSpec@0:341..348 `Storage`
+          StorageQualifier@0:341..348 `uniform`
+            Uniform
+      Identifier@0:349..359 `ColorBlock`
+      StructFieldSpecifier@0:363..375
+        TypeSpecifier@0:363..367
+          TypeSpecifierNonArray@0:363..367 `vec4`
+            Vec4
+        ArrayedIdentifier@0:368..374
+          Identifier@0:368..374 `color1`
+      StructFieldSpecifier@0:377..384
+        TypeSpecifier@0:377..381
+          TypeSpecifierNonArray@0:377..381 `bool`
+            Bool
+        ArrayedIdentifier@0:382..383
+          Identifier@0:382..383 `b`
+      StructFieldSpecifier@0:386..398
+        TypeSpecifier@0:386..390
+          TypeSpecifierNonArray@0:386..390 `vec4`
+            Vec4
+        ArrayedIdentifier@0:391..397
+          Identifier@0:391..397 `color2`
+      StructFieldSpecifier@0:400..412
+        TypeSpecifier@0:400..404
+          TypeSpecifierNonArray@0:400..404 `vec4`
+            Vec4
+        ArrayedIdentifier@0:405..411
+          Identifier@0:405..411 `color3`
+      Identifier@0:415..417 `uC`
+ExternalDeclaration@0:477..543 `Declaration`
+  Declaration@0:477..543 `Block`
+    Block@0:477..542
+      TypeQualifier@0:477..512
+        TypeQualifierSpec@0:477..505 `Layout`
+          LayoutQualifier@0:477..505
+            LayoutQualifierSpec@0:485..491 `Identifier`
+              Identifier@0:485..491 `std430`
+            LayoutQualifierSpec@0:493..504 `Identifier`
+              Identifier@0:493..500 `binding`
+              IntConst `1`
+        TypeQualifierSpec@0:506..512 `Storage`
+          StorageQualifier@0:506..512 `buffer`
+            Buffer
+      Identifier@0:513..524 `BufferBlock`
+      StructFieldSpecifier@0:528..535
+        TypeSpecifier@0:528..532
+          TypeSpecifierNonArray@0:528..532 `mat4`
+            Mat4
+        ArrayedIdentifier@0:533..534
+          Identifier@0:533..534 `p`
+      Identifier@0:538..542 `uBuf`
+ExternalDeclaration@0:545..624 `Declaration`
+  Declaration@0:545..624 `Block`
+    Block@0:545..623
+      TypeQualifier@0:545..580
+        TypeQualifierSpec@0:545..573 `Layout`
+          LayoutQualifier@0:545..573
+            LayoutQualifierSpec@0:553..559 `Identifier`
+              Identifier@0:553..559 `std430`
+            LayoutQualifierSpec@0:561..572 `Identifier`
+              Identifier@0:561..568 `binding`
+              IntConst `0`
+        TypeQualifierSpec@0:574..580 `Storage`
+          StorageQualifier@0:574..580 `buffer`
+            Buffer
+      Identifier@0:581..600 `SecondaryColorBlock`
+      StructFieldSpecifier@0:604..611
+        TypeSpecifier@0:604..608
+          TypeSpecifierNonArray@0:604..608 `vec4`
+            Vec4
+        ArrayedIdentifier@0:609..610
+          Identifier@0:609..610 `c`
+      Identifier@0:614..623 `uColorBuf`
+ExternalDeclaration@0:626..642 `Declaration`
+  Declaration@0:626..642 `FunctionPrototype`
+    FunctionPrototype@0:626..641
+      FullySpecifiedType@0:626..630
+        TypeSpecifier@0:626..630
+          TypeSpecifierNonArray@0:626..630 `vec4`
+            Vec4
+      Identifier@0:631..639 `getWorld`
+ExternalDeclaration@0:643..660 `Declaration`
+  Declaration@0:643..660 `FunctionPrototype`
+    FunctionPrototype@0:643..659
+      FullySpecifiedType@0:643..647
+        TypeSpecifier@0:643..647
+          TypeSpecifierNonArray@0:643..647 `vec4`
+            Vec4
+      Identifier@0:648..657 `getColor2`
+ExternalDeclaration@0:662..678 `Declaration`
+  Declaration@0:662..678 `InitDeclaratorList`
+    InitDeclaratorList@0:662..677
+      SingleDeclaration@0:662..677
+        FullySpecifiedType@0:662..670
+          TypeQualifierSpec@0:662..665 `Storage`
+            StorageQualifier@0:662..665 `out`
+              Out
+          TypeSpecifier@0:666..670
+            TypeSpecifierNonArray@0:666..670 `vec4`
+              Vec4
+ExternalDeclaration@0:680..803 `FunctionDefinition`
+  FunctionDefinition@0:680..803
+    FunctionPrototype@0:680..691
+      FullySpecifiedType@0:680..684
+        TypeSpecifier@0:680..684
+          TypeSpecifierNonArray@0:680..684 `void`
+            Void
+      Identifier@0:685..689 `main`
+    CompoundStatement@0:692..803
+      Statement@0:695..742 `Expression`
+        ExprStatement@0:695..742
+          Expr `Variable`
+            Identifier@0:695..701 `oColor`
+          AssignmentOp@0:702..703 `=`
+          Expr `Binary`
+            BinaryOp@0:728..729 `*`
+            Expr `Binary`
+              BinaryOp@0:714..715 `*`
+              Expr `Dot`
+                Expr `Variable`
+                  Identifier@0:704..706 `uC`
+                Identifier@0:707..713 `color1`
+              Expr `FunCall`
+                FunIdentifier@0:716..725 `Expr`
+                  Expr `Variable`
+                    Identifier@0:716..725 `getColor2`
+            Expr `Dot`
+              Expr `Variable`
+                Identifier@0:730..739 `uColorBuf`
+              Identifier@0:740..741 `c`
+      Statement@0:744..762 `Expression`
+        ExprStatement@0:744..762
+          Expr `Dot`
+            Expr `Variable`
+              Identifier@0:744..746 `oV`
+            Identifier@0:747..749 `v1`
+          AssignmentOp@0:750..751 `=`
+          Expr `Dot`
+            Expr `Variable`
+              Identifier@0:752..754 `uC`
+            Identifier@0:755..761 `color1`
+      Statement@0:765..801 `Expression`
+        ExprStatement@0:765..801
+          Expr `Variable`
+            Identifier@0:765..776 `gl_Position`
+          AssignmentOp@0:777..778 `=`
+          Expr `Binary`
+            BinaryOp@0:788..789 `*`
+            Expr `Dot`
+              Expr `Variable`
+                Identifier@0:779..781 `uM`
+              Identifier@0:782..787 `uProj`
+            Expr `FunCall`
+              FunIdentifier@0:790..798 `Expr`
+                Expr `Variable`
+                  Identifier@0:790..798 `getWorld`

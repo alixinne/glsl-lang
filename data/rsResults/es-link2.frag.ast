@@ -1,0 +1,31 @@
+ExternalDeclaration@0:14..48 `Declaration`
+  Declaration@0:14..48 `InitDeclaratorList`
+    InitDeclaratorList@0:14..47
+      SingleDeclaration@0:14..47
+        FullySpecifiedType@0:14..34
+          TypeQualifierSpec@0:14..21 `Storage`
+            StorageQualifier@0:14..21 `varying`
+              Varying
+          TypeQualifierSpec@0:22..29 `Precision`
+            PrecisionQualifier@0:22..29 `medium`
+          TypeSpecifier@0:30..34
+            TypeSpecifierNonArray@0:30..34 `vec4`
+              Vec4
+ExternalDeclaration@0:50..114 `FunctionDefinition`
+  FunctionDefinition@0:50..114
+    FunctionPrototype@0:50..79
+      FullySpecifiedType@0:50..62
+        TypeQualifierSpec@0:50..57 `Precision`
+          PrecisionQualifier@0:50..57 `medium`
+        TypeSpecifier@0:58..62
+          TypeSpecifierNonArray@0:58..62 `vec4`
+            Vec4
+      Identifier@0:63..77 `calculateColor`
+    CompoundStatement@0:80..114
+      Statement@0:86..112 `Jump`
+        JumpStatement@0:86..112 `return`
+          BinaryOp@0:106..107 `*`
+          Expr `Variable`
+            Identifier@0:93..105 `varyingColor`
+          Expr `FloatConst`
+            FloatConst `0.5`

@@ -1,0 +1,21 @@
+ExternalDeclaration@0:13..60 `Declaration`
+  Declaration@0:13..60 `InitDeclaratorList`
+    InitDeclaratorList@0:13..59
+      SingleDeclaration@0:13..59
+        FullySpecifiedType@0:13..52
+          TypeQualifierSpec@0:13..32 `Layout`
+            LayoutQualifier@0:13..32
+              LayoutQualifierSpec@0:20..31 `Identifier`
+                Identifier@0:20..27 `binding`
+                IntConst `0`
+          TypeQualifierSpec@0:33..40 `Storage`
+            StorageQualifier@0:33..40 `uniform`
+              Uniform
+          TypeSpecifier@0:41..52
+            TypeSpecifierNonArray@0:41..52 `atomic_uint`
+              AtomicUInt
+        ArraySpecifierDimension@0:54..57 `ExplicitlySized`
+          Expr `IntConst`
+            IntConst `1`
+        ArraySpecifierDimension@0:57..59 `Unsized`
+          Unsized

@@ -1,0 +1,3 @@
+0:144:1: unmatched #elif
+0:152:1: unmatched #elif
+0:177:16: 'macro expansion' : end of input in macro FUNC

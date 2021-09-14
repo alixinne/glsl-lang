@@ -1,0 +1,1802 @@
+ExternalDeclaration@0:14..36 `Declaration`
+  Declaration@0:14..36 `InitDeclaratorList`
+    InitDeclaratorList@0:14..35
+      SingleDeclaration@0:14..35
+        FullySpecifiedType@0:14..26
+          TypeQualifierSpec@0:14..21 `Storage`
+            StorageQualifier@0:14..21 `uniform`
+              Uniform
+          TypeSpecifier@0:22..26
+            TypeSpecifierNonArray@0:22..26 `vec4`
+              Vec4
+ExternalDeclaration@0:38..63 `Declaration`
+  Declaration@0:38..63 `InitDeclaratorList`
+    InitDeclaratorList@0:38..62
+      SingleDeclaration@0:38..62
+        FullySpecifiedType@0:38..50
+          TypeQualifierSpec@0:38..45 `Storage`
+            StorageQualifier@0:38..45 `uniform`
+              Uniform
+          TypeSpecifier@0:46..50
+            TypeSpecifierNonArray@0:46..50 `vec4`
+              Vec4
+ExternalDeclaration@0:65..90 `Declaration`
+  Declaration@0:65..90 `InitDeclaratorList`
+    InitDeclaratorList@0:65..89
+      SingleDeclaration@0:65..89
+        FullySpecifiedType@0:65..77
+          TypeQualifierSpec@0:65..72 `Storage`
+            StorageQualifier@0:65..72 `uniform`
+              Uniform
+          TypeSpecifier@0:73..77
+            TypeSpecifierNonArray@0:73..77 `vec4`
+              Vec4
+ExternalDeclaration@0:92..117 `Declaration`
+  Declaration@0:92..117 `InitDeclaratorList`
+    InitDeclaratorList@0:92..116
+      SingleDeclaration@0:92..116
+        FullySpecifiedType@0:92..104
+          TypeQualifierSpec@0:92..99 `Storage`
+            StorageQualifier@0:92..99 `uniform`
+              Uniform
+          TypeSpecifier@0:100..104
+            TypeSpecifierNonArray@0:100..104 `vec4`
+              Vec4
+ExternalDeclaration@0:119..142 `Declaration`
+  Declaration@0:119..142 `InitDeclaratorList`
+    InitDeclaratorList@0:119..141
+      SingleDeclaration@0:119..141
+        FullySpecifiedType@0:119..131
+          TypeQualifierSpec@0:119..126 `Storage`
+            StorageQualifier@0:119..126 `uniform`
+              Uniform
+          TypeSpecifier@0:127..131
+            TypeSpecifierNonArray@0:127..131 `vec4`
+              Vec4
+ExternalDeclaration@0:144..167 `Declaration`
+  Declaration@0:144..167 `InitDeclaratorList`
+    InitDeclaratorList@0:144..166
+      SingleDeclaration@0:144..166
+        FullySpecifiedType@0:144..156
+          TypeQualifierSpec@0:144..151 `Storage`
+            StorageQualifier@0:144..151 `uniform`
+              Uniform
+          TypeSpecifier@0:152..156
+            TypeSpecifierNonArray@0:152..156 `vec4`
+              Vec4
+ExternalDeclaration@0:169..192 `Declaration`
+  Declaration@0:169..192 `InitDeclaratorList`
+    InitDeclaratorList@0:169..191
+      SingleDeclaration@0:169..191
+        FullySpecifiedType@0:169..181
+          TypeQualifierSpec@0:169..176 `Storage`
+            StorageQualifier@0:169..176 `uniform`
+              Uniform
+          TypeSpecifier@0:177..181
+            TypeSpecifierNonArray@0:177..181 `vec4`
+              Vec4
+ExternalDeclaration@0:194..217 `Declaration`
+  Declaration@0:194..217 `InitDeclaratorList`
+    InitDeclaratorList@0:194..216
+      SingleDeclaration@0:194..216
+        FullySpecifiedType@0:194..206
+          TypeQualifierSpec@0:194..201 `Storage`
+            StorageQualifier@0:194..201 `uniform`
+              Uniform
+          TypeSpecifier@0:202..206
+            TypeSpecifierNonArray@0:202..206 `vec4`
+              Vec4
+ExternalDeclaration@0:219..242 `Declaration`
+  Declaration@0:219..242 `InitDeclaratorList`
+    InitDeclaratorList@0:219..241
+      SingleDeclaration@0:219..241
+        FullySpecifiedType@0:219..231
+          TypeQualifierSpec@0:219..226 `Storage`
+            StorageQualifier@0:219..226 `uniform`
+              Uniform
+          TypeSpecifier@0:227..231
+            TypeSpecifierNonArray@0:227..231 `vec4`
+              Vec4
+ExternalDeclaration@0:244..267 `Declaration`
+  Declaration@0:244..267 `InitDeclaratorList`
+    InitDeclaratorList@0:244..266
+      SingleDeclaration@0:244..266
+        FullySpecifiedType@0:244..256
+          TypeQualifierSpec@0:244..251 `Storage`
+            StorageQualifier@0:244..251 `uniform`
+              Uniform
+          TypeSpecifier@0:252..256
+            TypeSpecifierNonArray@0:252..256 `vec4`
+              Vec4
+ExternalDeclaration@0:269..292 `Declaration`
+  Declaration@0:269..292 `InitDeclaratorList`
+    InitDeclaratorList@0:269..291
+      SingleDeclaration@0:269..291
+        FullySpecifiedType@0:269..281
+          TypeQualifierSpec@0:269..276 `Storage`
+            StorageQualifier@0:269..276 `uniform`
+              Uniform
+          TypeSpecifier@0:277..281
+            TypeSpecifierNonArray@0:277..281 `vec4`
+              Vec4
+ExternalDeclaration@0:296..319 `Declaration`
+  Declaration@0:296..319 `InitDeclaratorList`
+    InitDeclaratorList@0:296..318
+      SingleDeclaration@0:296..318
+        FullySpecifiedType@0:296..308
+          TypeQualifierSpec@0:296..303 `Storage`
+            StorageQualifier@0:296..303 `varying`
+              Varying
+          TypeSpecifier@0:304..308
+            TypeSpecifierNonArray@0:304..308 `vec4`
+              Vec4
+ExternalDeclaration@0:323..339 `Declaration`
+  Declaration@0:323..339 `InitDeclaratorList`
+    InitDeclaratorList@0:323..338
+      SingleDeclaration@0:323..338
+        FullySpecifiedType@0:323..336
+          TypeQualifierSpec@0:323..330 `Storage`
+            StorageQualifier@0:323..330 `uniform`
+              Uniform
+          TypeSpecifier@0:331..336
+            TypeSpecifierNonArray@0:331..336 `float`
+              Float
+ExternalDeclaration@0:341..358 `Declaration`
+  Declaration@0:341..358 `InitDeclaratorList`
+    InitDeclaratorList@0:341..357
+      SingleDeclaration@0:341..357
+        FullySpecifiedType@0:341..354
+          TypeQualifierSpec@0:341..348 `Storage`
+            StorageQualifier@0:341..348 `uniform`
+              Uniform
+          TypeSpecifier@0:349..354
+            TypeSpecifierNonArray@0:349..354 `float`
+              Float
+ExternalDeclaration@0:360..377 `Declaration`
+  Declaration@0:360..377 `InitDeclaratorList`
+    InitDeclaratorList@0:360..376
+      SingleDeclaration@0:360..376
+        FullySpecifiedType@0:360..373
+          TypeQualifierSpec@0:360..367 `Storage`
+            StorageQualifier@0:360..367 `uniform`
+              Uniform
+          TypeSpecifier@0:368..373
+            TypeSpecifierNonArray@0:368..373 `float`
+              Float
+ExternalDeclaration@0:379..396 `Declaration`
+  Declaration@0:379..396 `InitDeclaratorList`
+    InitDeclaratorList@0:379..395
+      SingleDeclaration@0:379..395
+        FullySpecifiedType@0:379..392
+          TypeQualifierSpec@0:379..386 `Storage`
+            StorageQualifier@0:379..386 `uniform`
+              Uniform
+          TypeSpecifier@0:387..392
+            TypeSpecifierNonArray@0:387..392 `float`
+              Float
+ExternalDeclaration@0:398..415 `Declaration`
+  Declaration@0:398..415 `InitDeclaratorList`
+    InitDeclaratorList@0:398..414
+      SingleDeclaration@0:398..414
+        FullySpecifiedType@0:398..411
+          TypeQualifierSpec@0:398..405 `Storage`
+            StorageQualifier@0:398..405 `uniform`
+              Uniform
+          TypeSpecifier@0:406..411
+            TypeSpecifierNonArray@0:406..411 `float`
+              Float
+ExternalDeclaration@0:417..434 `Declaration`
+  Declaration@0:417..434 `InitDeclaratorList`
+    InitDeclaratorList@0:417..433
+      SingleDeclaration@0:417..433
+        FullySpecifiedType@0:417..430
+          TypeQualifierSpec@0:417..424 `Storage`
+            StorageQualifier@0:417..424 `uniform`
+              Uniform
+          TypeSpecifier@0:425..430
+            TypeSpecifierNonArray@0:425..430 `float`
+              Float
+ExternalDeclaration@0:436..453 `Declaration`
+  Declaration@0:436..453 `InitDeclaratorList`
+    InitDeclaratorList@0:436..452
+      SingleDeclaration@0:436..452
+        FullySpecifiedType@0:436..449
+          TypeQualifierSpec@0:436..443 `Storage`
+            StorageQualifier@0:436..443 `uniform`
+              Uniform
+          TypeSpecifier@0:444..449
+            TypeSpecifierNonArray@0:444..449 `float`
+              Float
+ExternalDeclaration@0:455..472 `Declaration`
+  Declaration@0:455..472 `InitDeclaratorList`
+    InitDeclaratorList@0:455..471
+      SingleDeclaration@0:455..471
+        FullySpecifiedType@0:455..468
+          TypeQualifierSpec@0:455..462 `Storage`
+            StorageQualifier@0:455..462 `uniform`
+              Uniform
+          TypeSpecifier@0:463..468
+            TypeSpecifierNonArray@0:463..468 `float`
+              Float
+ExternalDeclaration@0:474..491 `Declaration`
+  Declaration@0:474..491 `InitDeclaratorList`
+    InitDeclaratorList@0:474..490
+      SingleDeclaration@0:474..490
+        FullySpecifiedType@0:474..487
+          TypeQualifierSpec@0:474..481 `Storage`
+            StorageQualifier@0:474..481 `uniform`
+              Uniform
+          TypeSpecifier@0:482..487
+            TypeSpecifierNonArray@0:482..487 `float`
+              Float
+ExternalDeclaration@0:493..511 `Declaration`
+  Declaration@0:493..511 `InitDeclaratorList`
+    InitDeclaratorList@0:493..510
+      SingleDeclaration@0:493..510
+        FullySpecifiedType@0:493..506
+          TypeQualifierSpec@0:493..500 `Storage`
+            StorageQualifier@0:493..500 `uniform`
+              Uniform
+          TypeSpecifier@0:501..506
+            TypeSpecifierNonArray@0:501..506 `float`
+              Float
+ExternalDeclaration@0:513..531 `Declaration`
+  Declaration@0:513..531 `InitDeclaratorList`
+    InitDeclaratorList@0:513..530
+      SingleDeclaration@0:513..530
+        FullySpecifiedType@0:513..526
+          TypeQualifierSpec@0:513..520 `Storage`
+            StorageQualifier@0:513..520 `uniform`
+              Uniform
+          TypeSpecifier@0:521..526
+            TypeSpecifierNonArray@0:521..526 `float`
+              Float
+ExternalDeclaration@0:533..551 `Declaration`
+  Declaration@0:533..551 `InitDeclaratorList`
+    InitDeclaratorList@0:533..550
+      SingleDeclaration@0:533..550
+        FullySpecifiedType@0:533..546
+          TypeQualifierSpec@0:533..540 `Storage`
+            StorageQualifier@0:533..540 `uniform`
+              Uniform
+          TypeSpecifier@0:541..546
+            TypeSpecifierNonArray@0:541..546 `float`
+              Float
+ExternalDeclaration@0:553..571 `Declaration`
+  Declaration@0:553..571 `InitDeclaratorList`
+    InitDeclaratorList@0:553..570
+      SingleDeclaration@0:553..570
+        FullySpecifiedType@0:553..566
+          TypeQualifierSpec@0:553..560 `Storage`
+            StorageQualifier@0:553..560 `uniform`
+              Uniform
+          TypeSpecifier@0:561..566
+            TypeSpecifierNonArray@0:561..566 `float`
+              Float
+ExternalDeclaration@0:573..591 `Declaration`
+  Declaration@0:573..591 `InitDeclaratorList`
+    InitDeclaratorList@0:573..590
+      SingleDeclaration@0:573..590
+        FullySpecifiedType@0:573..586
+          TypeQualifierSpec@0:573..580 `Storage`
+            StorageQualifier@0:573..580 `uniform`
+              Uniform
+          TypeSpecifier@0:581..586
+            TypeSpecifierNonArray@0:581..586 `float`
+              Float
+ExternalDeclaration@0:593..611 `Declaration`
+  Declaration@0:593..611 `InitDeclaratorList`
+    InitDeclaratorList@0:593..610
+      SingleDeclaration@0:593..610
+        FullySpecifiedType@0:593..606
+          TypeQualifierSpec@0:593..600 `Storage`
+            StorageQualifier@0:593..600 `uniform`
+              Uniform
+          TypeSpecifier@0:601..606
+            TypeSpecifierNonArray@0:601..606 `float`
+              Float
+ExternalDeclaration@0:613..631 `Declaration`
+  Declaration@0:613..631 `InitDeclaratorList`
+    InitDeclaratorList@0:613..630
+      SingleDeclaration@0:613..630
+        FullySpecifiedType@0:613..626
+          TypeQualifierSpec@0:613..620 `Storage`
+            StorageQualifier@0:613..620 `uniform`
+              Uniform
+          TypeSpecifier@0:621..626
+            TypeSpecifierNonArray@0:621..626 `float`
+              Float
+ExternalDeclaration@0:633..651 `Declaration`
+  Declaration@0:633..651 `InitDeclaratorList`
+    InitDeclaratorList@0:633..650
+      SingleDeclaration@0:633..650
+        FullySpecifiedType@0:633..646
+          TypeQualifierSpec@0:633..640 `Storage`
+            StorageQualifier@0:633..640 `uniform`
+              Uniform
+          TypeSpecifier@0:641..646
+            TypeSpecifierNonArray@0:641..646 `float`
+              Float
+ExternalDeclaration@0:653..671 `Declaration`
+  Declaration@0:653..671 `InitDeclaratorList`
+    InitDeclaratorList@0:653..670
+      SingleDeclaration@0:653..670
+        FullySpecifiedType@0:653..666
+          TypeQualifierSpec@0:653..660 `Storage`
+            StorageQualifier@0:653..660 `uniform`
+              Uniform
+          TypeSpecifier@0:661..666
+            TypeSpecifierNonArray@0:661..666 `float`
+              Float
+ExternalDeclaration@0:673..691 `Declaration`
+  Declaration@0:673..691 `InitDeclaratorList`
+    InitDeclaratorList@0:673..690
+      SingleDeclaration@0:673..690
+        FullySpecifiedType@0:673..686
+          TypeQualifierSpec@0:673..680 `Storage`
+            StorageQualifier@0:673..680 `uniform`
+              Uniform
+          TypeSpecifier@0:681..686
+            TypeSpecifierNonArray@0:681..686 `float`
+              Float
+ExternalDeclaration@0:693..711 `Declaration`
+  Declaration@0:693..711 `InitDeclaratorList`
+    InitDeclaratorList@0:693..710
+      SingleDeclaration@0:693..710
+        FullySpecifiedType@0:693..706
+          TypeQualifierSpec@0:693..700 `Storage`
+            StorageQualifier@0:693..700 `uniform`
+              Uniform
+          TypeSpecifier@0:701..706
+            TypeSpecifierNonArray@0:701..706 `float`
+              Float
+ExternalDeclaration@0:713..731 `Declaration`
+  Declaration@0:713..731 `InitDeclaratorList`
+    InitDeclaratorList@0:713..730
+      SingleDeclaration@0:713..730
+        FullySpecifiedType@0:713..726
+          TypeQualifierSpec@0:713..720 `Storage`
+            StorageQualifier@0:713..720 `uniform`
+              Uniform
+          TypeSpecifier@0:721..726
+            TypeSpecifierNonArray@0:721..726 `float`
+              Float
+ExternalDeclaration@0:733..751 `Declaration`
+  Declaration@0:733..751 `InitDeclaratorList`
+    InitDeclaratorList@0:733..750
+      SingleDeclaration@0:733..750
+        FullySpecifiedType@0:733..746
+          TypeQualifierSpec@0:733..740 `Storage`
+            StorageQualifier@0:733..740 `uniform`
+              Uniform
+          TypeSpecifier@0:741..746
+            TypeSpecifierNonArray@0:741..746 `float`
+              Float
+ExternalDeclaration@0:753..771 `Declaration`
+  Declaration@0:753..771 `InitDeclaratorList`
+    InitDeclaratorList@0:753..770
+      SingleDeclaration@0:753..770
+        FullySpecifiedType@0:753..766
+          TypeQualifierSpec@0:753..760 `Storage`
+            StorageQualifier@0:753..760 `uniform`
+              Uniform
+          TypeSpecifier@0:761..766
+            TypeSpecifierNonArray@0:761..766 `float`
+              Float
+ExternalDeclaration@0:773..791 `Declaration`
+  Declaration@0:773..791 `InitDeclaratorList`
+    InitDeclaratorList@0:773..790
+      SingleDeclaration@0:773..790
+        FullySpecifiedType@0:773..786
+          TypeQualifierSpec@0:773..780 `Storage`
+            StorageQualifier@0:773..780 `uniform`
+              Uniform
+          TypeSpecifier@0:781..786
+            TypeSpecifierNonArray@0:781..786 `float`
+              Float
+ExternalDeclaration@0:793..811 `Declaration`
+  Declaration@0:793..811 `InitDeclaratorList`
+    InitDeclaratorList@0:793..810
+      SingleDeclaration@0:793..810
+        FullySpecifiedType@0:793..806
+          TypeQualifierSpec@0:793..800 `Storage`
+            StorageQualifier@0:793..800 `uniform`
+              Uniform
+          TypeSpecifier@0:801..806
+            TypeSpecifierNonArray@0:801..806 `float`
+              Float
+ExternalDeclaration@0:813..831 `Declaration`
+  Declaration@0:813..831 `InitDeclaratorList`
+    InitDeclaratorList@0:813..830
+      SingleDeclaration@0:813..830
+        FullySpecifiedType@0:813..826
+          TypeQualifierSpec@0:813..820 `Storage`
+            StorageQualifier@0:813..820 `uniform`
+              Uniform
+          TypeSpecifier@0:821..826
+            TypeSpecifierNonArray@0:821..826 `float`
+              Float
+ExternalDeclaration@0:833..851 `Declaration`
+  Declaration@0:833..851 `InitDeclaratorList`
+    InitDeclaratorList@0:833..850
+      SingleDeclaration@0:833..850
+        FullySpecifiedType@0:833..846
+          TypeQualifierSpec@0:833..840 `Storage`
+            StorageQualifier@0:833..840 `uniform`
+              Uniform
+          TypeSpecifier@0:841..846
+            TypeSpecifierNonArray@0:841..846 `float`
+              Float
+ExternalDeclaration@0:853..871 `Declaration`
+  Declaration@0:853..871 `InitDeclaratorList`
+    InitDeclaratorList@0:853..870
+      SingleDeclaration@0:853..870
+        FullySpecifiedType@0:853..866
+          TypeQualifierSpec@0:853..860 `Storage`
+            StorageQualifier@0:853..860 `uniform`
+              Uniform
+          TypeSpecifier@0:861..866
+            TypeSpecifierNonArray@0:861..866 `float`
+              Float
+ExternalDeclaration@0:873..891 `Declaration`
+  Declaration@0:873..891 `InitDeclaratorList`
+    InitDeclaratorList@0:873..890
+      SingleDeclaration@0:873..890
+        FullySpecifiedType@0:873..886
+          TypeQualifierSpec@0:873..880 `Storage`
+            StorageQualifier@0:873..880 `uniform`
+              Uniform
+          TypeSpecifier@0:881..886
+            TypeSpecifierNonArray@0:881..886 `float`
+              Float
+ExternalDeclaration@0:893..911 `Declaration`
+  Declaration@0:893..911 `InitDeclaratorList`
+    InitDeclaratorList@0:893..910
+      SingleDeclaration@0:893..910
+        FullySpecifiedType@0:893..906
+          TypeQualifierSpec@0:893..900 `Storage`
+            StorageQualifier@0:893..900 `uniform`
+              Uniform
+          TypeSpecifier@0:901..906
+            TypeSpecifierNonArray@0:901..906 `float`
+              Float
+ExternalDeclaration@0:913..931 `Declaration`
+  Declaration@0:913..931 `InitDeclaratorList`
+    InitDeclaratorList@0:913..930
+      SingleDeclaration@0:913..930
+        FullySpecifiedType@0:913..926
+          TypeQualifierSpec@0:913..920 `Storage`
+            StorageQualifier@0:913..920 `uniform`
+              Uniform
+          TypeSpecifier@0:921..926
+            TypeSpecifierNonArray@0:921..926 `float`
+              Float
+ExternalDeclaration@0:933..951 `Declaration`
+  Declaration@0:933..951 `InitDeclaratorList`
+    InitDeclaratorList@0:933..950
+      SingleDeclaration@0:933..950
+        FullySpecifiedType@0:933..946
+          TypeQualifierSpec@0:933..940 `Storage`
+            StorageQualifier@0:933..940 `uniform`
+              Uniform
+          TypeSpecifier@0:941..946
+            TypeSpecifierNonArray@0:941..946 `float`
+              Float
+ExternalDeclaration@0:953..971 `Declaration`
+  Declaration@0:953..971 `InitDeclaratorList`
+    InitDeclaratorList@0:953..970
+      SingleDeclaration@0:953..970
+        FullySpecifiedType@0:953..966
+          TypeQualifierSpec@0:953..960 `Storage`
+            StorageQualifier@0:953..960 `uniform`
+              Uniform
+          TypeSpecifier@0:961..966
+            TypeSpecifierNonArray@0:961..966 `float`
+              Float
+ExternalDeclaration@0:973..991 `Declaration`
+  Declaration@0:973..991 `InitDeclaratorList`
+    InitDeclaratorList@0:973..990
+      SingleDeclaration@0:973..990
+        FullySpecifiedType@0:973..986
+          TypeQualifierSpec@0:973..980 `Storage`
+            StorageQualifier@0:973..980 `uniform`
+              Uniform
+          TypeSpecifier@0:981..986
+            TypeSpecifierNonArray@0:981..986 `float`
+              Float
+ExternalDeclaration@0:995..1013 `Declaration`
+  Declaration@0:995..1013 `InitDeclaratorList`
+    InitDeclaratorList@0:995..1012
+      SingleDeclaration@0:995..1012
+        FullySpecifiedType@0:995..1006
+          TypeQualifierSpec@0:995..1002 `Storage`
+            StorageQualifier@0:995..1002 `uniform`
+              Uniform
+          TypeSpecifier@0:1003..1006
+            TypeSpecifierNonArray@0:1003..1006 `int`
+              Int
+ExternalDeclaration@0:1017..6238 `FunctionDefinition`
+  FunctionDefinition@0:1017..6238
+    FunctionPrototype@0:1017..1028
+      FullySpecifiedType@0:1017..1021
+        TypeSpecifier@0:1017..1021
+          TypeSpecifierNonArray@0:1017..1021 `void`
+            Void
+      Identifier@0:1022..1026 `main`
+    CompoundStatement@0:1030..6238
+      Statement@0:1037..1060 `Declaration`
+        Declaration@0:1037..1060 `InitDeclaratorList`
+          InitDeclaratorList@0:1037..1059
+            SingleDeclaration@0:1037..1059
+              FullySpecifiedType@0:1037..1041
+                TypeSpecifier@0:1037..1041
+                  TypeSpecifierNonArray@0:1037..1041 `vec4`
+                    Vec4
+              Expr `Variable`
+                Identifier@0:1050..1059 `BaseColor`
+      Statement@0:1092..1353 `Iteration`
+        IterationStatement@0:1092..1353 `while`
+          Condition@0:1099..1103 `Expr`
+            Expr@0:1099..1103 `BoolConst`
+              BoolConst `true`
+          Statement `Compound`
+            CompoundStatement@0:1105..1353
+              Statement@0:1116..1202 `Selection`
+                SelectionStatement@0:1116..1202
+                  Expr `Binary`
+                    BinaryOp@0:1128..1129 `<`
+                    Expr `Dot`
+                      Expr `Variable`
+                        Identifier@0:1120..1125 `color`
+                      Identifier@0:1126..1127 `x`
+                    Expr `FloatConst`
+                      FloatConst `0.33`
+                  SelectionRestStatement@0:1136..1202 `Statement`
+                    Statement `Compound`
+                      CompoundStatement@0:1136..1202
+                        Statement@0:1151..1171 `Expression`
+                          ExprStatement@0:1151..1171
+                            Expr `Variable`
+                              Identifier@0:1151..1156 `color`
+                            AssignmentOp@0:1157..1159 `+=`
+                            Expr `FunCall`
+                              FunIdentifier@0:1160..1164 `TypeSpecifier`
+                                TypeSpecifier
+                                  TypeSpecifierNonArray@0:1160..1164 `vec4`
+                                    Vec4
+                              Expr@0:1165..1169 `FloatConst`
+                                FloatConst `0.33`
+                        Statement@0:1185..1191 `Jump`
+                          JumpStatement@0:1185..1191 `break`
+                            Break
+              Statement@0:1212..1298 `Selection`
+                SelectionStatement@0:1212..1298
+                  Expr `Binary`
+                    BinaryOp@0:1224..1225 `<`
+                    Expr `Dot`
+                      Expr `Variable`
+                        Identifier@0:1216..1221 `color`
+                      Identifier@0:1222..1223 `x`
+                    Expr `FloatConst`
+                      FloatConst `0.66`
+                  SelectionRestStatement@0:1232..1298 `Statement`
+                    Statement `Compound`
+                      CompoundStatement@0:1232..1298
+                        Statement@0:1247..1267 `Expression`
+                          ExprStatement@0:1247..1267
+                            Expr `Variable`
+                              Identifier@0:1247..1252 `color`
+                            AssignmentOp@0:1253..1255 `+=`
+                            Expr `FunCall`
+                              FunIdentifier@0:1256..1260 `TypeSpecifier`
+                                TypeSpecifier
+                                  TypeSpecifierNonArray@0:1256..1260 `vec4`
+                                    Vec4
+                              Expr@0:1261..1265 `FloatConst`
+                                FloatConst `0.66`
+                        Statement@0:1281..1287 `Jump`
+                          JumpStatement@0:1281..1287 `break`
+                            Break
+              Statement@0:1310..1330 `Expression`
+                ExprStatement@0:1310..1330
+                  Expr `Variable`
+                    Identifier@0:1310..1315 `color`
+                  AssignmentOp@0:1316..1318 `+=`
+                  Expr `FunCall`
+                    FunIdentifier@0:1319..1323 `TypeSpecifier`
+                      TypeSpecifier
+                        TypeSpecifierNonArray@0:1319..1323 `vec4`
+                          Vec4
+                    Expr@0:1324..1328 `FloatConst`
+                      FloatConst `0.33`
+              Statement@0:1340..1346 `Jump`
+                JumpStatement@0:1340..1346 `break`
+                  Break
+      Statement@0:1375..1431 `Iteration`
+        IterationStatement@0:1375..1431 `while`
+          Condition@0:1382..1393 `Expr`
+            Expr@0:1382..1393 `Binary`
+              BinaryOp@0:1390..1391 `<`
+              Expr `Dot`
+                Expr `Variable`
+                  Identifier@0:1382..1387 `color`
+                Identifier@0:1388..1389 `x`
+              Expr `Variable`
+                Identifier@0:1392..1393 `d`
+          Statement `Compound`
+            CompoundStatement@0:1395..1431
+              Statement@0:1406..1424 `Expression`
+                ExprStatement@0:1406..1424
+                  Expr `Variable`
+                    Identifier@0:1406..1411 `color`
+                  AssignmentOp@0:1412..1414 `+=`
+                  Expr `Variable`
+                    Identifier@0:1415..1423 `bigColor`
+      Statement@0:1462..1603 `Iteration`
+        IterationStatement@0:1462..1603 `while`
+          Condition@0:1469..1480 `Expr`
+            Expr@0:1469..1480 `Binary`
+              BinaryOp@0:1477..1478 `<`
+              Expr `Dot`
+                Expr `Variable`
+                  Identifier@0:1469..1474 `color`
+                Identifier@0:1475..1476 `z`
+              Expr `Variable`
+                Identifier@0:1479..1480 `d`
+          Statement `Compound`
+            CompoundStatement@0:1482..1603
+              Statement@0:1493..1514 `Expression`
+                ExprStatement@0:1493..1514
+                  Expr `Variable`
+                    Identifier@0:1493..1498 `color`
+                  AssignmentOp@0:1499..1501 `+=`
+                  Expr `Variable`
+                    Identifier@0:1502..1513 `bigColor1_1`
+              Statement@0:1524..1563 `Selection`
+                SelectionStatement@0:1524..1563
+                  Expr `Binary`
+                    BinaryOp@0:1536..1537 `<`
+                    Expr `Dot`
+                      Expr `Variable`
+                        Identifier@0:1528..1533 `color`
+                      Identifier@0:1534..1535 `w`
+                    Expr `Variable`
+                      Identifier@0:1538..1539 `d`
+                  SelectionRestStatement@0:1554..1563 `Statement`
+                    Statement `Jump`
+                      JumpStatement@0:1554..1563 `continue`
+                        Continue
+              Statement@0:1575..1596 `Expression`
+                ExprStatement@0:1575..1596
+                  Expr `Variable`
+                    Identifier@0:1575..1580 `color`
+                  AssignmentOp@0:1581..1583 `+=`
+                  Expr `Variable`
+                    Identifier@0:1584..1595 `bigColor1_1`
+      Statement@0:1636..1685 `Iteration`
+        IterationStatement@0:1636..1685 `while`
+          Condition@0:1643..1657 `Expr`
+            Expr@0:1643..1657 `Binary`
+              BinaryOp@0:1651..1652 `<`
+              Expr `Dot`
+                Expr `Variable`
+                  Identifier@0:1643..1648 `color`
+                Identifier@0:1649..1650 `x`
+              Expr `FloatConst`
+                FloatConst `42`
+          Statement `Compound`
+            CompoundStatement@0:1659..1685
+              Statement@0:1670..1678 `Expression`
+                ExprStatement@0:1670..1678
+                  UnaryOp@0:1670..1672 `++`
+                  Expr `Variable`
+                    Identifier@0:1672..1677 `color`
+      Statement@0:1733..1809 `Iteration`
+        IterationStatement@0:1733..1809 `while`
+          Condition@0:1740..1768 `Expr`
+            Expr@0:1740..1768 `Binary`
+              BinaryOp@0:1753..1755 `&&`
+              Expr `Binary`
+                BinaryOp@0:1748..1749 `<`
+                Expr `Dot`
+                  Expr `Variable`
+                    Identifier@0:1740..1745 `color`
+                  Identifier@0:1746..1747 `w`
+                Expr `Variable`
+                  Identifier@0:1750..1752 `d2`
+              Expr `Binary`
+                BinaryOp@0:1764..1765 `<`
+                Expr `Dot`
+                  Expr `Variable`
+                    Identifier@0:1756..1761 `color`
+                  Identifier@0:1762..1763 `y`
+                Expr `Variable`
+                  Identifier@0:1766..1768 `d3`
+          Statement `Compound`
+            CompoundStatement@0:1770..1809
+              Statement@0:1781..1802 `Expression`
+                ExprStatement@0:1781..1802
+                  Expr `Variable`
+                    Identifier@0:1781..1786 `color`
+                  AssignmentOp@0:1787..1789 `+=`
+                  Expr `Variable`
+                    Identifier@0:1790..1801 `bigColor1_2`
+      Statement@0:1844..1982 `Iteration`
+        IterationStatement@0:1844..1982 `while`
+          Condition@0:1851..1863 `Expr`
+            Expr@0:1851..1863 `Binary`
+              BinaryOp@0:1859..1860 `<`
+              Expr `Dot`
+                Expr `Variable`
+                  Identifier@0:1851..1856 `color`
+                Identifier@0:1857..1858 `z`
+              Expr `Variable`
+                Identifier@0:1861..1863 `d3`
+          Statement `Compound`
+            CompoundStatement@0:1865..1982
+              Statement@0:1876..1897 `Expression`
+                ExprStatement@0:1876..1897
+                  Expr `Variable`
+                    Identifier@0:1876..1881 `color`
+                  AssignmentOp@0:1882..1884 `+=`
+                  Expr `Variable`
+                    Identifier@0:1885..1896 `bigColor1_3`
+              Statement@0:1907..1944 `Selection`
+                SelectionStatement@0:1907..1944
+                  Expr `Binary`
+                    BinaryOp@0:1919..1920 `<`
+                    Expr `Dot`
+                      Expr `Variable`
+                        Identifier@0:1911..1916 `color`
+                      Identifier@0:1917..1918 `y`
+                    Expr `Variable`
+                      Identifier@0:1921..1923 `d4`
+                  SelectionRestStatement@0:1938..1944 `Statement`
+                    Statement `Jump`
+                      JumpStatement@0:1938..1944 `break`
+                        Break
+              Statement@0:1954..1975 `Expression`
+                ExprStatement@0:1954..1975
+                  Expr `Variable`
+                    Identifier@0:1954..1959 `color`
+                  AssignmentOp@0:1960..1962 `+=`
+                  Expr `Variable`
+                    Identifier@0:1963..1974 `bigColor1_3`
+      Statement@0:2012..2081 `Iteration`
+        IterationStatement@0:2012..2081 `for`
+          ForInitStatement@0:2017..2027 `Declaration`
+            Declaration `InitDeclaratorList`
+              InitDeclaratorList@0:2017..2026
+                SingleDeclaration@0:2017..2026
+                  FullySpecifiedType@0:2017..2020
+                    TypeSpecifier@0:2017..2020
+                      TypeSpecifierNonArray@0:2017..2020 `int`
+                        Int
+                  Expr `IntConst`
+                    IntConst `0`
+          ForRestStatement@0:2028..2042
+            Expr@0:2028..2037 `Binary`
+              BinaryOp@0:2030..2031 `<`
+              Expr `Variable`
+                Identifier@0:2028..2029 `i`
+              Expr `Variable`
+                Identifier@0:2032..2037 `Count`
+            UnaryOp@0:2039..2041 `++`
+            Expr `Variable`
+              Identifier@0:2041..2042 `i`
+          Statement `Compound`
+            CompoundStatement@0:2044..2081
+              Statement@0:2055..2074 `Expression`
+                ExprStatement@0:2055..2074
+                  Expr `Variable`
+                    Identifier@0:2055..2060 `color`
+                  AssignmentOp@0:2061..2063 `+=`
+                  Expr `Variable`
+                    Identifier@0:2064..2073 `bigColor2`
+      Statement@0:2106..2168 `Iteration`
+        IterationStatement@0:2106..2168 `do`
+          Statement `Compound`
+            CompoundStatement@0:2109..2146
+              Statement@0:2120..2139 `Expression`
+                ExprStatement@0:2120..2139
+                  Expr `Variable`
+                    Identifier@0:2120..2125 `color`
+                  AssignmentOp@0:2126..2128 `+=`
+                  Expr `Variable`
+                    Identifier@0:2129..2138 `bigColor3`
+          Expr `Binary`
+            BinaryOp@0:2162..2163 `<`
+            Expr `Dot`
+              Expr `Variable`
+                Identifier@0:2154..2159 `color`
+              Identifier@0:2160..2161 `x`
+            Expr `Variable`
+              Identifier@0:2164..2166 `d2`
+      Statement@0:2197..2258 `Iteration`
+        IterationStatement@0:2197..2258 `for`
+          ForInitStatement@0:2202..2212 `Declaration`
+            Declaration `InitDeclaratorList`
+              InitDeclaratorList@0:2202..2211
+                SingleDeclaration@0:2202..2211
+                  FullySpecifiedType@0:2202..2205
+                    TypeSpecifier@0:2202..2205
+                      TypeSpecifierNonArray@0:2202..2205 `int`
+                        Int
+                  Expr `IntConst`
+                    IntConst `0`
+          ForRestStatement@0:2213..2224
+            Expr@0:2213..2219 `Binary`
+              BinaryOp@0:2215..2216 `<`
+              Expr `Variable`
+                Identifier@0:2213..2214 `i`
+              Expr `IntConst`
+                IntConst `42`
+            UnaryOp@0:2221..2223 `++`
+            Expr `Variable`
+              Identifier@0:2223..2224 `i`
+          Statement `Compound`
+            CompoundStatement@0:2226..2258
+              Statement@0:2237..2251 `Expression`
+                ExprStatement@0:2237..2251
+                  Expr `Dot`
+                    Expr `Variable`
+                      Identifier@0:2237..2242 `color`
+                    Identifier@0:2243..2244 `z`
+                  AssignmentOp@0:2245..2247 `+=`
+                  Expr `Variable`
+                    Identifier@0:2248..2250 `d3`
+      Statement@0:2300..2541 `Iteration`
+        IterationStatement@0:2300..2541 `for`
+          ForInitStatement@0:2305..2315 `Declaration`
+            Declaration `InitDeclaratorList`
+              InitDeclaratorList@0:2305..2314
+                SingleDeclaration@0:2305..2314
+                  FullySpecifiedType@0:2305..2308
+                    TypeSpecifier@0:2305..2308
+                      TypeSpecifierNonArray@0:2305..2308 `int`
+                        Int
+                  Expr `IntConst`
+                    IntConst `0`
+          ForRestStatement@0:2316..2328
+            Expr@0:2316..2323 `Binary`
+              BinaryOp@0:2318..2319 `<`
+              Expr `Variable`
+                Identifier@0:2316..2317 `i`
+              Expr `IntConst`
+                IntConst `100`
+            UnaryOp@0:2325..2327 `++`
+            Expr `Variable`
+              Identifier@0:2327..2328 `i`
+          Statement `Compound`
+            CompoundStatement@0:2330..2541
+              Statement@0:2341..2422 `Selection`
+                SelectionStatement@0:2341..2422
+                  Expr `Binary`
+                    BinaryOp@0:2353..2354 `<`
+                    Expr `Dot`
+                      Expr `Variable`
+                        Identifier@0:2345..2350 `color`
+                      Identifier@0:2351..2352 `z`
+                    Expr `FloatConst`
+                      FloatConst `20`
+                  SelectionRestStatement@0:2374..2422 `Else`
+                    Statement `Expression`
+                      ExprStatement@0:2374..2384
+                        Expr `Dot`
+                          Expr `Variable`
+                            Identifier@0:2374..2379 `color`
+                          Identifier@0:2380..2381 `x`
+                    Statement `Expression`
+                      ExprStatement@0:2412..2422
+                        Expr `Dot`
+                          Expr `Variable`
+                            Identifier@0:2412..2417 `color`
+                          Identifier@0:2418..2419 `y`
+              Statement@0:2432..2507 `Selection`
+                SelectionStatement@0:2432..2507
+                  Expr `Binary`
+                    BinaryOp@0:2444..2445 `<`
+                    Expr `Dot`
+                      Expr `Variable`
+                        Identifier@0:2436..2441 `color`
+                      Identifier@0:2442..2443 `w`
+                    Expr `FloatConst`
+                      FloatConst `20`
+                  SelectionRestStatement@0:2465..2507 `Statement`
+                    Statement `Selection`
+                      SelectionStatement@0:2465..2507
+                        Expr `Binary`
+                          BinaryOp@0:2477..2478 `>`
+                          Expr `Dot`
+                            Expr `Variable`
+                              Identifier@0:2469..2474 `color`
+                            Identifier@0:2475..2476 `z`
+                          Expr `Dot`
+                            Expr `Variable`
+                              Identifier@0:2479..2484 `color`
+                            Identifier@0:2485..2486 `y`
+                        SelectionRestStatement@0:2505..2507 `Statement`
+                          Statement `Expression`
+                            ExprStatement@0:2505..2507
+                              IntConst `0`
+      Statement@0:2600..2729 `Iteration`
+        IterationStatement@0:2600..2729 `for`
+          ForInitStatement@0:2605..2615 `Declaration`
+            Declaration `InitDeclaratorList`
+              InitDeclaratorList@0:2605..2614
+                SingleDeclaration@0:2605..2614
+                  FullySpecifiedType@0:2605..2608
+                    TypeSpecifier@0:2605..2608
+                      TypeSpecifierNonArray@0:2605..2608 `int`
+                        Int
+                  Expr `IntConst`
+                    IntConst `0`
+          ForRestStatement@0:2616..2628
+            Expr@0:2616..2623 `Binary`
+              BinaryOp@0:2618..2619 `<`
+              Expr `Variable`
+                Identifier@0:2616..2617 `i`
+              Expr `IntConst`
+                IntConst `120`
+            UnaryOp@0:2625..2627 `++`
+            Expr `Variable`
+              Identifier@0:2627..2628 `i`
+          Statement `Compound`
+            CompoundStatement@0:2630..2729
+              Statement@0:2641..2722 `Selection`
+                SelectionStatement@0:2641..2722
+                  Expr `Binary`
+                    BinaryOp@0:2653..2654 `<`
+                    Expr `Dot`
+                      Expr `Variable`
+                        Identifier@0:2645..2650 `color`
+                      Identifier@0:2651..2652 `z`
+                    Expr `FloatConst`
+                      FloatConst `20`
+                  SelectionRestStatement@0:2674..2722 `Else`
+                    Statement `Expression`
+                      ExprStatement@0:2674..2684
+                        Expr `Dot`
+                          Expr `Variable`
+                            Identifier@0:2674..2679 `color`
+                          Identifier@0:2680..2681 `x`
+                    Statement `Expression`
+                      ExprStatement@0:2712..2722
+                        Expr `Dot`
+                          Expr `Variable`
+                            Identifier@0:2712..2717 `color`
+                          Identifier@0:2718..2719 `y`
+      Statement@0:2765..2896 `Iteration`
+        IterationStatement@0:2765..2896 `for`
+          ForInitStatement@0:2770..2780 `Declaration`
+            Declaration `InitDeclaratorList`
+              InitDeclaratorList@0:2770..2779
+                SingleDeclaration@0:2770..2779
+                  FullySpecifiedType@0:2770..2773
+                    TypeSpecifier@0:2770..2773
+                      TypeSpecifierNonArray@0:2770..2773 `int`
+                        Int
+                  Expr `IntConst`
+                    IntConst `0`
+          ForRestStatement@0:2781..2792
+            Expr@0:2781..2787 `Binary`
+              BinaryOp@0:2783..2784 `<`
+              Expr `Variable`
+                Identifier@0:2781..2782 `i`
+              Expr `IntConst`
+                IntConst `42`
+            UnaryOp@0:2789..2791 `++`
+            Expr `Variable`
+              Identifier@0:2791..2792 `i`
+          Statement `Compound`
+            CompoundStatement@0:2794..2896
+              Statement@0:2805..2819 `Expression`
+                ExprStatement@0:2805..2819
+                  Expr `Dot`
+                    Expr `Variable`
+                      Identifier@0:2805..2810 `color`
+                    Identifier@0:2811..2812 `z`
+                  AssignmentOp@0:2813..2815 `+=`
+                  Expr `Variable`
+                    Identifier@0:2816..2818 `d3`
+              Statement@0:2829..2869 `Selection`
+                SelectionStatement@0:2829..2869
+                  Expr `Binary`
+                    BinaryOp@0:2841..2842 `<`
+                    Expr `Dot`
+                      Expr `Variable`
+                        Identifier@0:2833..2838 `color`
+                      Identifier@0:2839..2840 `x`
+                    Expr `Variable`
+                      Identifier@0:2843..2845 `d4`
+                  SelectionRestStatement@0:2860..2869 `Statement`
+                    Statement `Jump`
+                      JumpStatement@0:2860..2869 `continue`
+                        Continue
+              Statement@0:2879..2889 `Expression`
+                ExprStatement@0:2879..2889
+                  UnaryOp@0:2879..2881 `++`
+                  Expr `Dot`
+                    Expr `Variable`
+                      Identifier@0:2881..2886 `color`
+                    Identifier@0:2887..2888 `w`
+      Statement@0:2936..3064 `Iteration`
+        IterationStatement@0:2936..3064 `for`
+          ForInitStatement@0:2941..2951 `Declaration`
+            Declaration `InitDeclaratorList`
+              InitDeclaratorList@0:2941..2950
+                SingleDeclaration@0:2941..2950
+                  FullySpecifiedType@0:2941..2944
+                    TypeSpecifier@0:2941..2944
+                      TypeSpecifierNonArray@0:2941..2944 `int`
+                        Int
+                  Expr `IntConst`
+                    IntConst `0`
+          ForRestStatement@0:2952..2963
+            Expr@0:2952..2958 `Binary`
+              BinaryOp@0:2954..2955 `<`
+              Expr `Variable`
+                Identifier@0:2952..2953 `i`
+              Expr `IntConst`
+                IntConst `42`
+            UnaryOp@0:2960..2962 `++`
+            Expr `Variable`
+              Identifier@0:2962..2963 `i`
+          Statement `Compound`
+            CompoundStatement@0:2965..3064
+              Statement@0:2976..2990 `Expression`
+                ExprStatement@0:2976..2990
+                  Expr `Dot`
+                    Expr `Variable`
+                      Identifier@0:2976..2981 `color`
+                    Identifier@0:2982..2983 `z`
+                  AssignmentOp@0:2984..2986 `+=`
+                  Expr `Variable`
+                    Identifier@0:2987..2989 `d3`
+              Statement@0:3000..3037 `Selection`
+                SelectionStatement@0:3000..3037
+                  Expr `Binary`
+                    BinaryOp@0:3012..3013 `<`
+                    Expr `Dot`
+                      Expr `Variable`
+                        Identifier@0:3004..3009 `color`
+                      Identifier@0:3010..3011 `x`
+                    Expr `Variable`
+                      Identifier@0:3014..3016 `d4`
+                  SelectionRestStatement@0:3031..3037 `Statement`
+                    Statement `Jump`
+                      JumpStatement@0:3031..3037 `break`
+                        Break
+              Statement@0:3047..3057 `Expression`
+                ExprStatement@0:3047..3057
+                  UnaryOp@0:3047..3049 `++`
+                  Expr `Dot`
+                    Expr `Variable`
+                      Identifier@0:3049..3054 `color`
+                    Identifier@0:3055..3056 `w`
+      Statement@0:3087..3296 `Iteration`
+        IterationStatement@0:3087..3296 `do`
+          Statement `Compound`
+            CompoundStatement@0:3090..3274
+              Statement@0:3101..3120 `Expression`
+                ExprStatement@0:3101..3120
+                  Expr `Variable`
+                    Identifier@0:3101..3106 `color`
+                  AssignmentOp@0:3107..3109 `+=`
+                  Expr `Variable`
+                    Identifier@0:3110..3119 `bigColor4`
+              Statement@0:3130..3170 `Selection`
+                SelectionStatement@0:3130..3170
+                  Expr `Binary`
+                    BinaryOp@0:3142..3143 `<`
+                    Expr `Dot`
+                      Expr `Variable`
+                        Identifier@0:3134..3139 `color`
+                      Identifier@0:3140..3141 `x`
+                    Expr `Variable`
+                      Identifier@0:3144..3146 `d4`
+                  SelectionRestStatement@0:3161..3170 `Statement`
+                    Statement `Jump`
+                      JumpStatement@0:3161..3170 `continue`
+                        Continue
+              Statement@0:3180..3267 `Selection`
+                SelectionStatement@0:3180..3267
+                  Expr `Binary`
+                    BinaryOp@0:3192..3193 `<`
+                    Expr `Dot`
+                      Expr `Variable`
+                        Identifier@0:3184..3189 `color`
+                      Identifier@0:3190..3191 `y`
+                    Expr `Variable`
+                      Identifier@0:3194..3196 `d4`
+                  SelectionRestStatement@0:3211..3267 `Else`
+                    Statement `Expression`
+                      ExprStatement@0:3211..3225
+                        Expr `Dot`
+                          Expr `Variable`
+                            Identifier@0:3211..3216 `color`
+                          Identifier@0:3217..3218 `y`
+                        AssignmentOp@0:3219..3221 `+=`
+                        Expr `Variable`
+                          Identifier@0:3222..3224 `d4`
+                    Statement `Expression`
+                      ExprStatement@0:3253..3267
+                        Expr `Dot`
+                          Expr `Variable`
+                            Identifier@0:3253..3258 `color`
+                          Identifier@0:3259..3260 `x`
+                        AssignmentOp@0:3261..3263 `+=`
+                        Expr `Variable`
+                          Identifier@0:3264..3266 `d4`
+          Expr `Binary`
+            BinaryOp@0:3290..3291 `<`
+            Expr `Dot`
+              Expr `Variable`
+                Identifier@0:3282..3287 `color`
+              Identifier@0:3288..3289 `z`
+            Expr `Variable`
+              Identifier@0:3292..3294 `d4`
+      Statement@0:3334..3451 `Iteration`
+        IterationStatement@0:3334..3451 `do`
+          Statement `Compound`
+            CompoundStatement@0:3337..3429
+              Statement@0:3348..3367 `Expression`
+                ExprStatement@0:3348..3367
+                  Expr `Variable`
+                    Identifier@0:3348..3353 `color`
+                  AssignmentOp@0:3354..3356 `+=`
+                  Expr `Variable`
+                    Identifier@0:3357..3366 `bigColor5`
+              Statement@0:3377..3422 `Selection`
+                SelectionStatement@0:3377..3422
+                  Expr `Binary`
+                    BinaryOp@0:3389..3390 `<`
+                    Expr `Dot`
+                      Expr `Variable`
+                        Identifier@0:3381..3386 `color`
+                      Identifier@0:3387..3388 `y`
+                    Expr `Variable`
+                      Identifier@0:3391..3393 `d5`
+                  SelectionRestStatement@0:3408..3422 `Statement`
+                    Statement `Expression`
+                      ExprStatement@0:3408..3422
+                        Expr `Dot`
+                          Expr `Variable`
+                            Identifier@0:3408..3413 `color`
+                          Identifier@0:3414..3415 `y`
+                        AssignmentOp@0:3416..3418 `+=`
+                        Expr `Variable`
+                          Identifier@0:3419..3421 `d5`
+          Expr `Binary`
+            BinaryOp@0:3445..3446 `<`
+            Expr `Dot`
+              Expr `Variable`
+                Identifier@0:3437..3442 `color`
+              Identifier@0:3443..3444 `x`
+            Expr `Variable`
+              Identifier@0:3447..3449 `d5`
+      Statement@0:3480..3650 `Selection`
+        SelectionStatement@0:3480..3650
+          Expr `Binary`
+            BinaryOp@0:3492..3493 `<`
+            Expr `Dot`
+              Expr `Variable`
+                Identifier@0:3484..3489 `color`
+              Identifier@0:3490..3491 `x`
+            Expr `Variable`
+              Identifier@0:3494..3496 `d6`
+          SelectionRestStatement@0:3498..3650 `Else`
+            Statement `Compound`
+              CompoundStatement@0:3498..3569
+                Statement@0:3509..3562 `Iteration`
+                  IterationStatement@0:3509..3562 `while`
+                    Condition@0:3516..3528 `Expr`
+                      Expr@0:3516..3528 `Binary`
+                        BinaryOp@0:3524..3525 `<`
+                        Expr `Dot`
+                          Expr `Variable`
+                            Identifier@0:3516..3521 `color`
+                          Identifier@0:3522..3523 `y`
+                        Expr `Variable`
+                          Identifier@0:3526..3528 `d6`
+                    Statement `Expression`
+                      ExprStatement@0:3543..3562
+                        Expr `Variable`
+                          Identifier@0:3543..3548 `color`
+                        AssignmentOp@0:3549..3551 `+=`
+                        Expr `Variable`
+                          Identifier@0:3552..3561 `bigColor6`
+            Statement `Compound`
+              CompoundStatement@0:3575..3650
+                Statement@0:3586..3643 `Iteration`
+                  IterationStatement@0:3586..3643 `while`
+                    Condition@0:3593..3605 `Expr`
+                      Expr@0:3593..3605 `Binary`
+                        BinaryOp@0:3601..3602 `<`
+                        Expr `Dot`
+                          Expr `Variable`
+                            Identifier@0:3593..3598 `color`
+                          Identifier@0:3599..3600 `z`
+                        Expr `Variable`
+                          Identifier@0:3603..3605 `d6`
+                    Statement `Expression`
+                      ExprStatement@0:3620..3643
+                        Expr `Dot`
+                          Expr `Variable`
+                            Identifier@0:3620..3625 `color`
+                          Identifier@0:3626..3627 `z`
+                        AssignmentOp@0:3628..3630 `+=`
+                        Expr `Dot`
+                          Expr `Variable`
+                            Identifier@0:3631..3640 `bigColor6`
+                          Identifier@0:3641..3642 `z`
+      Statement@0:3685..3921 `Selection`
+        SelectionStatement@0:3685..3921
+          Expr `Binary`
+            BinaryOp@0:3697..3698 `<`
+            Expr `Dot`
+              Expr `Variable`
+                Identifier@0:3689..3694 `color`
+              Identifier@0:3695..3696 `x`
+            Expr `Variable`
+              Identifier@0:3699..3701 `d6`
+          SelectionRestStatement@0:3703..3921 `Else`
+            Statement `Compound`
+              CompoundStatement@0:3703..3840
+                Statement@0:3714..3831 `Iteration`
+                  IterationStatement@0:3714..3831 `while`
+                    Condition@0:3721..3733 `Expr`
+                      Expr@0:3721..3733 `Binary`
+                        BinaryOp@0:3729..3730 `<`
+                        Expr `Dot`
+                          Expr `Variable`
+                            Identifier@0:3721..3726 `color`
+                          Identifier@0:3727..3728 `y`
+                        Expr `Variable`
+                          Identifier@0:3731..3733 `d6`
+                    Statement `Compound`
+                      CompoundStatement@0:3735..3831
+                        Statement@0:3750..3769 `Expression`
+                          ExprStatement@0:3750..3769
+                            Expr `Variable`
+                              Identifier@0:3750..3755 `color`
+                            AssignmentOp@0:3756..3758 `+=`
+                            Expr `Variable`
+                              Identifier@0:3759..3768 `bigColor6`
+                        Statement@0:3783..3820 `Selection`
+                          SelectionStatement@0:3783..3820
+                            Expr `Binary`
+                              BinaryOp@0:3790..3791 `<`
+                              Expr `Variable`
+                                Identifier@0:3787..3789 `d7`
+                              Expr `FloatConst`
+                                FloatConst `1`
+                            SelectionRestStatement@0:3814..3820 `Statement`
+                              Statement `Jump`
+                                JumpStatement@0:3814..3820 `break`
+                                  Break
+            Statement `Compound`
+              CompoundStatement@0:3846..3921
+                Statement@0:3857..3914 `Iteration`
+                  IterationStatement@0:3857..3914 `while`
+                    Condition@0:3864..3876 `Expr`
+                      Expr@0:3864..3876 `Binary`
+                        BinaryOp@0:3872..3873 `<`
+                        Expr `Dot`
+                          Expr `Variable`
+                            Identifier@0:3864..3869 `color`
+                          Identifier@0:3870..3871 `z`
+                        Expr `Variable`
+                          Identifier@0:3874..3876 `d6`
+                    Statement `Expression`
+                      ExprStatement@0:3891..3914
+                        Expr `Dot`
+                          Expr `Variable`
+                            Identifier@0:3891..3896 `color`
+                          Identifier@0:3897..3898 `z`
+                        AssignmentOp@0:3899..3901 `+=`
+                        Expr `Dot`
+                          Expr `Variable`
+                            Identifier@0:3902..3911 `bigColor6`
+                          Identifier@0:3912..3913 `z`
+      Statement@0:3950..4156 `Iteration`
+        IterationStatement@0:3950..4156 `do`
+          Statement `Compound`
+            CompoundStatement@0:3953..4142
+              Statement@0:3963..3995 `Selection`
+                SelectionStatement@0:3963..3995
+                  Expr `Binary`
+                    BinaryOp@0:3970..3971 `<`
+                    Expr `Variable`
+                      Identifier@0:3967..3969 `d7`
+                    Expr `FloatConst`
+                      FloatConst `0`
+                  SelectionRestStatement@0:3989..3995 `Statement`
+                    Statement `Jump`
+                      JumpStatement@0:3989..3995 `break`
+                        Break
+              Statement@0:4006..4025 `Expression`
+                ExprStatement@0:4006..4025
+                  Expr `Variable`
+                    Identifier@0:4006..4011 `color`
+                  AssignmentOp@0:4012..4014 `+=`
+                  Expr `Variable`
+                    Identifier@0:4015..4024 `bigColor7`
+              Statement@0:4036..4103 `Selection`
+                SelectionStatement@0:4036..4103
+                  Expr `Binary`
+                    BinaryOp@0:4043..4044 `<`
+                    Expr `Variable`
+                      Identifier@0:4040..4042 `d7`
+                    Expr `FloatConst`
+                      FloatConst `1`
+                  SelectionRestStatement@0:4050..4103 `Statement`
+                    Statement `Compound`
+                      CompoundStatement@0:4050..4103
+                        Statement@0:4064..4074 `Expression`
+                          ExprStatement@0:4064..4074
+                            Expr `Dot`
+                              Expr `Variable`
+                                Identifier@0:4064..4069 `color`
+                              Identifier@0:4070..4071 `z`
+                        Statement@0:4087..4093 `Jump`
+                          JumpStatement@0:4087..4093 `break`
+                            Break
+              Statement@0:4114..4133 `Expression`
+                ExprStatement@0:4114..4133
+                  Expr `Variable`
+                    Identifier@0:4114..4119 `color`
+                  AssignmentOp@0:4120..4122 `+=`
+                  Expr `Variable`
+                    Identifier@0:4123..4132 `BaseColor`
+          Expr `BoolConst`
+            BoolConst `true`
+      Statement@0:4186..4694 `Iteration`
+        IterationStatement@0:4186..4694 `do`
+          Statement `Compound`
+            CompoundStatement@0:4189..4672
+              Statement@0:4376..4408 `Selection`
+                SelectionStatement@0:4376..4408
+                  Expr `Binary`
+                    BinaryOp@0:4383..4384 `<`
+                    Expr `Variable`
+                      Identifier@0:4380..4382 `d8`
+                    Expr `FloatConst`
+                      FloatConst `0`
+                  SelectionRestStatement@0:4402..4408 `Statement`
+                    Statement `Jump`
+                      JumpStatement@0:4402..4408 `break`
+                        Break
+              Statement@0:4419..4438 `Expression`
+                ExprStatement@0:4419..4438
+                  Expr `Variable`
+                    Identifier@0:4419..4424 `color`
+                  AssignmentOp@0:4425..4427 `+=`
+                  Expr `Variable`
+                    Identifier@0:4428..4437 `bigColor7`
+              Statement@0:4449..4633 `Selection`
+                SelectionStatement@0:4449..4633
+                  Expr `Binary`
+                    BinaryOp@0:4456..4457 `<`
+                    Expr `Variable`
+                      Identifier@0:4453..4455 `d8`
+                    Expr `FloatConst`
+                      FloatConst `1`
+                  SelectionRestStatement@0:4463..4633 `Statement`
+                    Statement `Compound`
+                      CompoundStatement@0:4463..4633
+                        Statement@0:4477..4487 `Expression`
+                          ExprStatement@0:4477..4487
+                            Expr `Dot`
+                              Expr `Variable`
+                                Identifier@0:4477..4482 `color`
+                              Identifier@0:4483..4484 `z`
+                        Statement@0:4500..4604 `Selection`
+                          SelectionStatement@0:4500..4604
+                            Expr `Binary`
+                              BinaryOp@0:4507..4508 `<`
+                              Expr `Variable`
+                                Identifier@0:4504..4506 `d8`
+                              Expr `FloatConst`
+                                FloatConst `2`
+                            SelectionRestStatement@0:4514..4604 `Else`
+                              Statement `Compound`
+                                CompoundStatement@0:4514..4556
+                                  Statement@0:4532..4542 `Expression`
+                                    ExprStatement@0:4532..4542
+                                      Expr `Dot`
+                                        Expr `Variable`
+                                          Identifier@0:4532..4537 `color`
+                                        Identifier@0:4538..4539 `y`
+                              Statement `Compound`
+                                CompoundStatement@0:4562..4604
+                                  Statement@0:4580..4590 `Expression`
+                                    ExprStatement@0:4580..4590
+                                      Expr `Dot`
+                                        Expr `Variable`
+                                          Identifier@0:4580..4585 `color`
+                                        Identifier@0:4586..4587 `x`
+                        Statement@0:4617..4623 `Jump`
+                          JumpStatement@0:4617..4623 `break`
+                            Break
+              Statement@0:4644..4663 `Expression`
+                ExprStatement@0:4644..4663
+                  Expr `Variable`
+                    Identifier@0:4644..4649 `color`
+                  AssignmentOp@0:4650..4652 `+=`
+                  Expr `Variable`
+                    Identifier@0:4653..4662 `BaseColor`
+          Expr `Binary`
+            BinaryOp@0:4688..4689 `<`
+            Expr `Dot`
+              Expr `Variable`
+                Identifier@0:4680..4685 `color`
+              Identifier@0:4686..4687 `z`
+            Expr `Variable`
+              Identifier@0:4690..4692 `d8`
+      Statement@0:4720..4954 `Iteration`
+        IterationStatement@0:4720..4954 `while`
+          Condition@0:4727..4739 `Expr`
+            Expr@0:4727..4739 `Binary`
+              BinaryOp@0:4735..4736 `<`
+              Expr `Dot`
+                Expr `Variable`
+                  Identifier@0:4727..4732 `color`
+                Identifier@0:4733..4734 `w`
+              Expr `Variable`
+                Identifier@0:4737..4739 `d9`
+          Statement `Compound`
+            CompoundStatement@0:4741..4954
+              Statement@0:4752..4945 `Selection`
+                SelectionStatement@0:4752..4945
+                  Expr `Binary`
+                    BinaryOp@0:4759..4760 `>`
+                    Expr `Variable`
+                      Identifier@0:4756..4758 `d9`
+                    Expr `Variable`
+                      Identifier@0:4761..4763 `d8`
+                  SelectionRestStatement@0:4765..4945 `Statement`
+                    Statement `Compound`
+                      CompoundStatement@0:4765..4945
+                        Statement@0:4780..4934 `Selection`
+                          SelectionStatement@0:4780..4934
+                            Expr `Binary`
+                              BinaryOp@0:4792..4794 `<=`
+                              Expr `Dot`
+                                Expr `Variable`
+                                  Identifier@0:4784..4789 `color`
+                                Identifier@0:4790..4791 `x`
+                              Expr `Variable`
+                                Identifier@0:4795..4797 `d7`
+                            SelectionRestStatement@0:4799..4934 `Statement`
+                              Statement `Compound`
+                                CompoundStatement@0:4799..4934
+                                  Statement@0:4818..4919 `Selection`
+                                    SelectionStatement@0:4818..4919
+                                      Expr `Binary`
+                                        BinaryOp@0:4830..4832 `==`
+                                        Expr `Dot`
+                                          Expr `Variable`
+                                            Identifier@0:4822..4827 `color`
+                                          Identifier@0:4828..4829 `z`
+                                        Expr `FloatConst`
+                                          FloatConst `5`
+                                      SelectionRestStatement@0:4859..4919 `Else`
+                                        Statement `Expression`
+                                          ExprStatement@0:4859..4869
+                                            Expr `Dot`
+                                              Expr `Variable`
+                                                Identifier@0:4859..4864 `color`
+                                              Identifier@0:4865..4866 `w`
+                                        Statement `Jump`
+                                          JumpStatement@0:4913..4919 `break`
+                                            Break
+      Statement@0:4988..5268 `Iteration`
+        IterationStatement@0:4988..5268 `while`
+          Condition@0:4995..5008 `Expr`
+            Expr@0:4995..5008 `Binary`
+              BinaryOp@0:5003..5004 `<`
+              Expr `Dot`
+                Expr `Variable`
+                  Identifier@0:4995..5000 `color`
+                Identifier@0:5001..5002 `z`
+              Expr `Variable`
+                Identifier@0:5005..5008 `d10`
+          Statement `Compound`
+            CompoundStatement@0:5010..5268
+              Statement@0:5021..5031 `Expression`
+                ExprStatement@0:5021..5031
+                  Expr `Dot`
+                    Expr `Variable`
+                      Identifier@0:5021..5026 `color`
+                    Identifier@0:5027..5028 `y`
+              Statement@0:5041..5225 `Selection`
+                SelectionStatement@0:5041..5225
+                  Expr `Binary`
+                    BinaryOp@0:5053..5054 `<`
+                    Expr `Dot`
+                      Expr `Variable`
+                        Identifier@0:5045..5050 `color`
+                      Identifier@0:5051..5052 `y`
+                    Expr `Variable`
+                      Identifier@0:5055..5058 `d11`
+                  SelectionRestStatement@0:5060..5225 `Statement`
+                    Statement `Compound`
+                      CompoundStatement@0:5060..5225
+                        Statement@0:5075..5085 `Expression`
+                          ExprStatement@0:5075..5085
+                            Expr `Dot`
+                              Expr `Variable`
+                                Identifier@0:5075..5080 `color`
+                              Identifier@0:5081..5082 `z`
+                        Statement@0:5099..5191 `Selection`
+                          SelectionStatement@0:5099..5191
+                            Expr `Binary`
+                              BinaryOp@0:5111..5112 `<`
+                              Expr `Dot`
+                                Expr `Variable`
+                                  Identifier@0:5103..5108 `color`
+                                Identifier@0:5109..5110 `w`
+                              Expr `Variable`
+                                Identifier@0:5113..5116 `d12`
+                            SelectionRestStatement@0:5135..5191 `Else`
+                              Statement `Expression`
+                                ExprStatement@0:5135..5145
+                                  Expr `Dot`
+                                    Expr `Variable`
+                                      Identifier@0:5135..5140 `color`
+                                    Identifier@0:5141..5142 `w`
+                              Statement `Expression`
+                                ExprStatement@0:5181..5191
+                                  Expr `Dot`
+                                    Expr `Variable`
+                                      Identifier@0:5181..5186 `color`
+                                    Identifier@0:5187..5188 `x`
+                        Statement@0:5205..5214 `Jump`
+                          JumpStatement@0:5205..5214 `continue`
+                            Continue
+              Statement@0:5237..5245 `Expression`
+                ExprStatement@0:5237..5245
+                  Expr `Variable`
+                    Identifier@0:5237..5242 `color`
+              Statement@0:5255..5261 `Jump`
+                JumpStatement@0:5255..5261 `break`
+                  Break
+      Statement@0:5299..5481 `Iteration`
+        IterationStatement@0:5299..5481 `while`
+          Condition@0:5306..5320 `Expr`
+            Expr@0:5306..5320 `Binary`
+              BinaryOp@0:5314..5315 `<`
+              Expr `Dot`
+                Expr `Variable`
+                  Identifier@0:5306..5311 `color`
+                Identifier@0:5312..5313 `x`
+              Expr `FloatConst`
+                FloatConst `10`
+          Statement `Compound`
+            CompoundStatement@0:5322..5481
+              Statement@0:5333..5352 `Expression`
+                ExprStatement@0:5333..5352
+                  Expr `Variable`
+                    Identifier@0:5333..5338 `color`
+                  AssignmentOp@0:5339..5341 `+=`
+                  Expr `Variable`
+                    Identifier@0:5342..5351 `bigColor8`
+              Statement@0:5364..5439 `Selection`
+                SelectionStatement@0:5364..5439
+                  Expr `Binary`
+                    BinaryOp@0:5376..5377 `<`
+                    Expr `Dot`
+                      Expr `Variable`
+                        Identifier@0:5368..5373 `color`
+                      Identifier@0:5374..5375 `z`
+                    Expr `Variable`
+                      Identifier@0:5378..5380 `d8`
+                  SelectionRestStatement@0:5395..5439 `Statement`
+                    Statement `Selection`
+                      SelectionStatement@0:5395..5439
+                        Expr `Binary`
+                          BinaryOp@0:5407..5408 `<`
+                          Expr `Dot`
+                            Expr `Variable`
+                              Identifier@0:5399..5404 `color`
+                            Identifier@0:5405..5406 `w`
+                          Expr `Variable`
+                            Identifier@0:5409..5411 `d6`
+                        SelectionRestStatement@0:5430..5439 `Statement`
+                          Statement `Jump`
+                            JumpStatement@0:5430..5439 `continue`
+                              Continue
+              Statement@0:5451..5474 `Expression`
+                ExprStatement@0:5451..5474
+                  Expr `Dot`
+                    Expr `Variable`
+                      Identifier@0:5451..5456 `color`
+                    Identifier@0:5457..5458 `y`
+                  AssignmentOp@0:5459..5461 `+=`
+                  Expr `Dot`
+                    Expr `Variable`
+                      Identifier@0:5462..5471 `bigColor8`
+                    Identifier@0:5472..5473 `x`
+      Statement@0:5489..5497 `Expression`
+        ExprStatement@0:5489..5497
+          Expr `Variable`
+            Identifier@0:5489..5494 `color`
+      Statement@0:5503..5524 `Expression`
+        ExprStatement@0:5503..5524
+          Expr `Variable`
+            Identifier@0:5503..5515 `gl_FragColor`
+          AssignmentOp@0:5516..5517 `=`
+          Expr `Variable`
+            Identifier@0:5518..5523 `color`
+      Statement@0:5553..5681 `Iteration`
+        IterationStatement@0:5553..5681 `while`
+          Condition@0:5560..5573 `Expr`
+            Expr@0:5560..5573 `Binary`
+              BinaryOp@0:5568..5569 `<`
+              Expr `Dot`
+                Expr `Variable`
+                  Identifier@0:5560..5565 `color`
+                Identifier@0:5566..5567 `x`
+              Expr `Variable`
+                Identifier@0:5570..5573 `d14`
+          Statement `Compound`
+            CompoundStatement@0:5575..5681
+              Statement@0:5586..5674 `Selection`
+                SelectionStatement@0:5586..5674
+                  Expr `Binary`
+                    BinaryOp@0:5598..5599 `<`
+                    Expr `Dot`
+                      Expr `Variable`
+                        Identifier@0:5590..5595 `color`
+                      Identifier@0:5596..5597 `y`
+                    Expr `Variable`
+                      Identifier@0:5600..5603 `d15`
+                  SelectionRestStatement@0:5605..5674 `Else`
+                    Statement `Compound`
+                      CompoundStatement@0:5605..5638
+                        Statement@0:5620..5627 `Jump`
+                          JumpStatement@0:5620..5627 `return`
+                    Statement `Expression`
+                      ExprStatement@0:5666..5674
+                        Expr `Variable`
+                          Identifier@0:5666..5671 `color`
+      Statement@0:5689..5697 `Expression`
+        ExprStatement@0:5689..5697
+          Expr `Variable`
+            Identifier@0:5689..5694 `color`
+      Statement@0:5705..5755 `Iteration`
+        IterationStatement@0:5705..5755 `while`
+          Condition@0:5712..5725 `Expr`
+            Expr@0:5712..5725 `Binary`
+              BinaryOp@0:5720..5721 `<`
+              Expr `Dot`
+                Expr `Variable`
+                  Identifier@0:5712..5717 `color`
+                Identifier@0:5718..5719 `w`
+              Expr `Variable`
+                Identifier@0:5722..5725 `d16`
+          Statement `Compound`
+            CompoundStatement@0:5727..5755
+              Statement@0:5738..5748 `Expression`
+                ExprStatement@0:5738..5748
+                  Expr `Dot`
+                    Expr `Variable`
+                      Identifier@0:5738..5743 `color`
+                    Identifier@0:5744..5745 `w`
+      Statement@0:5805..5929 `Iteration`
+        IterationStatement@0:5805..5929 `while`
+          Condition@0:5812..5840 `Expr`
+            Expr@0:5812..5840 `Binary`
+              BinaryOp@0:5825..5827 `&&`
+              Expr `Binary`
+                BinaryOp@0:5820..5821 `<`
+                Expr `Dot`
+                  Expr `Variable`
+                    Identifier@0:5812..5817 `color`
+                  Identifier@0:5818..5819 `w`
+                Expr `Variable`
+                  Identifier@0:5822..5824 `d2`
+              Expr `Binary`
+                BinaryOp@0:5836..5837 `<`
+                Expr `Dot`
+                  Expr `Variable`
+                    Identifier@0:5828..5833 `color`
+                  Identifier@0:5834..5835 `y`
+                Expr `Variable`
+                  Identifier@0:5838..5840 `d3`
+          Statement `Compound`
+            CompoundStatement@0:5842..5929
+              Statement@0:5853..5874 `Expression`
+                ExprStatement@0:5853..5874
+                  Expr `Variable`
+                    Identifier@0:5853..5858 `color`
+                  AssignmentOp@0:5859..5861 `+=`
+                  Expr `Variable`
+                    Identifier@0:5862..5873 `bigColor1_2`
+              Statement@0:5884..5922 `Selection`
+                SelectionStatement@0:5884..5922
+                  Expr `Binary`
+                    BinaryOp@0:5896..5897 `<`
+                    Expr `Dot`
+                      Expr `Variable`
+                        Identifier@0:5888..5893 `color`
+                      Identifier@0:5894..5895 `z`
+                    Expr `Variable`
+                      Identifier@0:5898..5900 `d3`
+                  SelectionRestStatement@0:5915..5922 `Statement`
+                    Statement `Jump`
+                      JumpStatement@0:5915..5922 `return`
+      Statement@0:5939..6040 `Iteration`
+        IterationStatement@0:5939..6040 `do`
+          Statement `Compound`
+            CompoundStatement@0:5942..6017
+              Statement@0:5953..5992 `Selection`
+                SelectionStatement@0:5953..5992
+                  Expr `Binary`
+                    BinaryOp@0:5965..5966 `<`
+                    Expr `Dot`
+                      Expr `Variable`
+                        Identifier@0:5957..5962 `color`
+                      Identifier@0:5963..5964 `y`
+                    Expr `Variable`
+                      Identifier@0:5967..5970 `d18`
+                  SelectionRestStatement@0:5985..5992 `Statement`
+                    Statement `Jump`
+                      JumpStatement@0:5985..5992 `return`
+              Statement@0:6002..6010 `Expression`
+                ExprStatement@0:6002..6010
+                  Expr `Variable`
+                    Identifier@0:6002..6007 `color`
+          Expr `Binary`
+            BinaryOp@0:6033..6034 `<`
+            Expr `Dot`
+              Expr `Variable`
+                Identifier@0:6025..6030 `color`
+              Identifier@0:6031..6032 `x`
+            Expr `Variable`
+              Identifier@0:6035..6038 `d17`
+      Statement@0:6070..6190 `Iteration`
+        IterationStatement@0:6070..6190 `while`
+          Condition@0:6077..6090 `Expr`
+            Expr@0:6077..6090 `Binary`
+              BinaryOp@0:6085..6086 `<`
+              Expr `Dot`
+                Expr `Variable`
+                  Identifier@0:6077..6082 `color`
+                Identifier@0:6083..6084 `y`
+              Expr `Variable`
+                Identifier@0:6087..6090 `d16`
+          Statement `Compound`
+            CompoundStatement@0:6092..6190
+              Statement@0:6103..6183 `Selection`
+                SelectionStatement@0:6103..6183
+                  Expr `Binary`
+                    BinaryOp@0:6115..6116 `<`
+                    Expr `Dot`
+                      Expr `Variable`
+                        Identifier@0:6107..6112 `color`
+                      Identifier@0:6113..6114 `w`
+                    Expr `Variable`
+                      Identifier@0:6117..6120 `d16`
+                  SelectionRestStatement@0:6122..6183 `Else`
+                    Statement `Compound`
+                      CompoundStatement@0:6122..6156
+                        Statement@0:6137..6145 `Jump`
+                          JumpStatement@0:6137..6145 `discard`
+                            Discard
+                    Statement `Expression`
+                      ExprStatement@0:6175..6183
+                        Expr `Variable`
+                          Identifier@0:6175..6180 `color`
+      Statement@0:6198..6206 `Expression`
+        ExprStatement@0:6198..6206
+          Expr `Variable`
+            Identifier@0:6198..6203 `color`
+      Statement@0:6214..6235 `Expression`
+        ExprStatement@0:6214..6235
+          Expr `Variable`
+            Identifier@0:6214..6226 `gl_FragColor`
+          AssignmentOp@0:6227..6228 `=`
+          Expr `Variable`
+            Identifier@0:6229..6234 `color`

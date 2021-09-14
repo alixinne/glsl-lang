@@ -1,0 +1,167 @@
+ExternalDeclaration@0:198..358 `FunctionDefinition`
+  FunctionDefinition@0:198..358
+    FunctionPrototype@0:198..209
+      FullySpecifiedType@0:198..202
+        TypeSpecifier@0:198..202
+          TypeSpecifierNonArray@0:198..202 `void`
+            Void
+      Identifier@0:203..207 `main`
+    CompoundStatement@0:210..358
+      Statement@0:216..227 `Declaration`
+        Declaration@0:216..227 `InitDeclaratorList`
+          InitDeclaratorList@0:216..226
+            SingleDeclaration@0:216..226
+              FullySpecifiedType@0:216..219
+                TypeSpecifier@0:216..219
+                  TypeSpecifierNonArray@0:216..219 `int`
+                    Int
+              Expr `IntConst`
+                IntConst `4`
+      Statement@0:232..244 `Declaration`
+        Declaration@0:232..244 `InitDeclaratorList`
+          InitDeclaratorList@0:232..243
+            SingleDeclaration@0:232..243
+              FullySpecifiedType@0:232..235
+                TypeSpecifier@0:232..235
+                  TypeSpecifierNonArray@0:232..235 `int`
+                    Int
+              Expr `Variable`
+                Identifier@0:241..243 `f1`
+      Statement@0:249..264 `Declaration`
+        Declaration@0:249..264 `InitDeclaratorList`
+          InitDeclaratorList@0:249..263
+            SingleDeclaration@0:249..263
+              FullySpecifiedType@0:249..252
+                TypeSpecifier@0:249..252
+                  TypeSpecifierNonArray@0:249..252 `int`
+                    Int
+              Expr `Binary`
+                BinaryOp@0:258..263 `*`
+                Expr `IntConst`
+                  IntConst `3`
+                Expr `IntConst`
+                  IntConst `3`
+      Statement@0:269..288 `Declaration`
+        Declaration@0:269..288 `InitDeclaratorList`
+          InitDeclaratorList@0:269..287
+            SingleDeclaration@0:269..287
+              FullySpecifiedType@0:269..272
+                TypeSpecifier@0:269..272
+                  TypeSpecifierNonArray@0:269..272 `int`
+                    Int
+              Expr `Binary`
+                BinaryOp@0:278..287 `+`
+                Expr `Binary`
+                  BinaryOp@0:278..287 `*`
+                  Expr `IntConst`
+                    IntConst `0`
+                  Expr `IntConst`
+                    IntConst `0`
+                Expr `Binary`
+                  BinaryOp@0:278..287 `*`
+                  Expr `Binary`
+                    BinaryOp@0:278..287 `+`
+                    Expr `IntConst`
+                      IntConst `0`
+                    Expr `IntConst`
+                      IntConst `1`
+                  Expr `Binary`
+                    BinaryOp@0:278..287 `+`
+                    Expr `IntConst`
+                      IntConst `0`
+                    Expr `IntConst`
+                      IntConst `1`
+      Statement@0:293..312 `Declaration`
+        Declaration@0:293..312 `InitDeclaratorList`
+          InitDeclaratorList@0:293..311
+            SingleDeclaration@0:293..311
+              FullySpecifiedType@0:293..296
+                TypeSpecifier@0:293..296
+                  TypeSpecifierNonArray@0:293..296 `int`
+                    Int
+              Expr `Binary`
+                BinaryOp@0:302..311 `+`
+                Expr `Binary`
+                  BinaryOp@0:302..311 `+`
+                  Expr `Binary`
+                    BinaryOp@0:302..311 `*`
+                    Expr `IntConst`
+                      IntConst `0`
+                    Expr `IntConst`
+                      IntConst `0`
+                  Expr `Binary`
+                    BinaryOp@0:302..311 `*`
+                    Expr `Binary`
+                      BinaryOp@0:302..311 `+`
+                      Expr `IntConst`
+                        IntConst `0`
+                      Expr `IntConst`
+                        IntConst `1`
+                    Expr `Binary`
+                      BinaryOp@0:302..311 `+`
+                      Expr `IntConst`
+                        IntConst `0`
+                      Expr `IntConst`
+                        IntConst `1`
+                Expr `Binary`
+                  BinaryOp@0:302..311 `*`
+                  Expr `Binary`
+                    BinaryOp@0:302..311 `+`
+                    Expr `IntConst`
+                      IntConst `0`
+                    Expr `IntConst`
+                      IntConst `2`
+                  Expr `Binary`
+                    BinaryOp@0:302..311 `+`
+                    Expr `IntConst`
+                      IntConst `0`
+                    Expr `IntConst`
+                      IntConst `2`
+      Statement@0:318..356 `Declaration`
+        Declaration@0:318..356 `InitDeclaratorList`
+          InitDeclaratorList@0:318..355
+            SingleDeclaration@0:318..355
+              FullySpecifiedType@0:318..329
+                TypeQualifierSpec@0:318..323 `Precision`
+                  PrecisionQualifier@0:318..323 `high`
+                TypeSpecifier@0:324..329
+                  TypeSpecifierNonArray@0:324..329 `float`
+                    Float
+              Expr `Binary`
+                BinaryOp@0:338..355 `+`
+                Expr `Binary`
+                  BinaryOp@0:338..355 `+`
+                  Expr `Binary`
+                    BinaryOp@0:338..355 `*`
+                    Expr `FloatConst`
+                      FloatConst `0.1`
+                    Expr `FloatConst`
+                      FloatConst `0.1`
+                  Expr `Binary`
+                    BinaryOp@0:338..355 `*`
+                    Expr `Binary`
+                      BinaryOp@0:338..355 `+`
+                      Expr `FloatConst`
+                        FloatConst `0.1`
+                      Expr `FloatConst`
+                        FloatConst `0.2`
+                    Expr `Binary`
+                      BinaryOp@0:338..355 `+`
+                      Expr `FloatConst`
+                        FloatConst `0.1`
+                      Expr `FloatConst`
+                        FloatConst `0.2`
+                Expr `Binary`
+                  BinaryOp@0:338..355 `*`
+                  Expr `Binary`
+                    BinaryOp@0:338..355 `+`
+                    Expr `FloatConst`
+                      FloatConst `0.1`
+                    Expr `FloatConst`
+                      FloatConst `0.5`
+                  Expr `Binary`
+                    BinaryOp@0:338..355 `+`
+                    Expr `FloatConst`
+                      FloatConst `0.1`
+                    Expr `FloatConst`
+                      FloatConst `0.5`

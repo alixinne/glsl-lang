@@ -1,0 +1,3 @@
+0:9:1: '#error' : This should show up in pp output.
+0:14:1: unexpected NEWLINE, expected [COLON]
+0:15:1: unknown preprocessor directive `#def`

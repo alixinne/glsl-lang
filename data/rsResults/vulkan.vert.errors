@@ -1,0 +1,2 @@
+0:42:1: '#error' : VULKAN should be defined
+0:46:1: '#error' : VULKAN should be 100

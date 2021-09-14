@@ -1,0 +1,1 @@
+Ok(EnterFile { file_id: FileId(0), path: "../data/empty.frag", canonical_path: "/home/vincent/Applications/apps/glsl-lang/data/empty.frag" })

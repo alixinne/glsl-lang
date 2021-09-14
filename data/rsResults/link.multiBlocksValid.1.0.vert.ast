@@ -1,0 +1,148 @@
+ExternalDeclaration@0:13..76 `Declaration`
+  Declaration@0:13..76 `Block`
+    Block@0:13..75
+      TypeQualifier@0:13..36
+        TypeQualifierSpec@0:13..28 `Layout`
+          LayoutQualifier@0:13..28
+            LayoutQualifierSpec@0:21..27 `Identifier`
+              Identifier@0:21..27 `std140`
+        TypeQualifierSpec@0:29..36 `Storage`
+          StorageQualifier@0:29..36 `uniform`
+            Uniform
+      Identifier@0:37..42 `Block`
+      StructFieldSpecifier@0:46..57
+        TypeSpecifier@0:46..50
+          TypeSpecifierNonArray@0:46..50 `mat4`
+            Mat4
+        ArrayedIdentifier@0:51..56
+          Identifier@0:51..56 `uProj`
+      StructFieldSpecifier@0:59..71
+        TypeSpecifier@0:59..63
+          TypeSpecifierNonArray@0:59..63 `mat4`
+            Mat4
+        ArrayedIdentifier@0:64..70
+          Identifier@0:64..70 `uWorld`
+      Identifier@0:74..75 `a`
+ExternalDeclaration@0:78..115 `Declaration`
+  Declaration@0:78..115 `Block`
+    Block@0:78..114
+      TypeQualifier@0:78..81
+        TypeQualifierSpec@0:78..81 `Storage`
+          StorageQualifier@0:78..81 `out`
+            Out
+      Identifier@0:82..88 `Vertex`
+      StructFieldSpecifier@0:92..100
+        TypeSpecifier@0:92..96
+          TypeSpecifierNonArray@0:92..96 `vec4`
+            Vec4
+        ArrayedIdentifier@0:97..99
+          Identifier@0:97..99 `v1`
+      StructFieldSpecifier@0:102..110
+        TypeSpecifier@0:102..106
+          TypeSpecifierNonArray@0:102..106 `vec4`
+            Vec4
+        ArrayedIdentifier@0:107..109
+          Identifier@0:107..109 `v2`
+      Identifier@0:113..114 `b`
+ExternalDeclaration@0:117..186 `Declaration`
+  Declaration@0:117..186 `Block`
+    Block@0:117..185
+      TypeQualifier@0:117..140
+        TypeQualifierSpec@0:117..132 `Layout`
+          LayoutQualifier@0:117..132
+            LayoutQualifierSpec@0:125..131 `Identifier`
+              Identifier@0:125..131 `std140`
+        TypeQualifierSpec@0:133..140 `Storage`
+          StorageQualifier@0:133..140 `uniform`
+            Uniform
+      Identifier@0:141..151 `ColorBlock`
+      StructFieldSpecifier@0:155..167
+        TypeSpecifier@0:155..159
+          TypeSpecifierNonArray@0:155..159 `vec4`
+            Vec4
+        ArrayedIdentifier@0:160..166
+          Identifier@0:160..166 `color1`
+      StructFieldSpecifier@0:169..181
+        TypeSpecifier@0:169..173
+          TypeSpecifierNonArray@0:169..173 `vec4`
+            Vec4
+        ArrayedIdentifier@0:174..180
+          Identifier@0:174..180 `color2`
+      Identifier@0:184..185 `c`
+ExternalDeclaration@0:188..204 `Declaration`
+  Declaration@0:188..204 `FunctionPrototype`
+    FunctionPrototype@0:188..203
+      FullySpecifiedType@0:188..192
+        TypeSpecifier@0:188..192
+          TypeSpecifierNonArray@0:188..192 `vec4`
+            Vec4
+      Identifier@0:193..201 `getWorld`
+ExternalDeclaration@0:205..222 `Declaration`
+  Declaration@0:205..222 `FunctionPrototype`
+    FunctionPrototype@0:205..221
+      FullySpecifiedType@0:205..209
+        TypeSpecifier@0:205..209
+          TypeSpecifierNonArray@0:205..209 `vec4`
+            Vec4
+      Identifier@0:210..219 `getColor2`
+ExternalDeclaration@0:224..240 `Declaration`
+  Declaration@0:224..240 `InitDeclaratorList`
+    InitDeclaratorList@0:224..239
+      SingleDeclaration@0:224..239
+        FullySpecifiedType@0:224..232
+          TypeQualifierSpec@0:224..227 `Storage`
+            StorageQualifier@0:224..227 `out`
+              Out
+          TypeSpecifier@0:228..232
+            TypeSpecifierNonArray@0:228..232 `vec4`
+              Vec4
+ExternalDeclaration@0:242..347 `FunctionDefinition`
+  FunctionDefinition@0:242..347
+    FunctionPrototype@0:242..253
+      FullySpecifiedType@0:242..246
+        TypeSpecifier@0:242..246
+          TypeSpecifierNonArray@0:242..246 `void`
+            Void
+      Identifier@0:247..251 `main`
+    CompoundStatement@0:254..347
+      Statement@0:257..289 `Expression`
+        ExprStatement@0:257..289
+          Expr `Variable`
+            Identifier@0:257..263 `oColor`
+          AssignmentOp@0:264..265 `=`
+          Expr `Binary`
+            BinaryOp@0:275..276 `*`
+            Expr `Dot`
+              Expr `Variable`
+                Identifier@0:266..267 `c`
+              Identifier@0:268..274 `color1`
+            Expr `FunCall`
+              FunIdentifier@0:277..286 `Expr`
+                Expr `Variable`
+                  Identifier@0:277..286 `getColor2`
+      Statement@0:291..307 `Expression`
+        ExprStatement@0:291..307
+          Expr `Dot`
+            Expr `Variable`
+              Identifier@0:291..292 `b`
+            Identifier@0:293..295 `v1`
+          AssignmentOp@0:296..297 `=`
+          Expr `Dot`
+            Expr `Variable`
+              Identifier@0:298..299 `c`
+            Identifier@0:300..306 `color1`
+      Statement@0:310..345 `Expression`
+        ExprStatement@0:310..345
+          Expr `Variable`
+            Identifier@0:310..321 `gl_Position`
+          AssignmentOp@0:322..323 `=`
+          Expr `Binary`
+            BinaryOp@0:332..333 `*`
+            Expr `Dot`
+              Expr `Variable`
+                Identifier@0:324..325 `a`
+              Identifier@0:326..331 `uProj`
+            Expr `FunCall`
+              FunIdentifier@0:334..342 `Expr`
+                Expr `Variable`
+                  Identifier@0:334..342 `getWorld`

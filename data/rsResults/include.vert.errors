@@ -1,0 +1,2 @@
+../data/./inc1/parent.h:1:1: No such file or directory (os error 2)
+../data/inc2\bar.h:9:1: No such file or directory (os error 2)

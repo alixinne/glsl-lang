@@ -1,0 +1,2822 @@
+ExternalDeclaration@0:80..108 `Declaration`
+  Declaration@0:80..108 `InitDeclaratorList`
+    InitDeclaratorList@0:80..107
+      SingleDeclaration@0:80..107
+        FullySpecifiedType@0:80..90
+          TypeQualifierSpec@0:80..85 `Storage`
+            StorageQualifier@0:80..85 `const`
+              Const
+          TypeSpecifier@0:86..90
+            TypeSpecifierNonArray@0:86..90 `bool`
+              Bool
+        Expr `BoolConst`
+          BoolConst `true`
+ExternalDeclaration@0:110..148 `Declaration`
+  Declaration@0:110..148 `InitDeclaratorList`
+    InitDeclaratorList@0:110..147
+      SingleDeclaration@0:110..147
+        FullySpecifiedType@0:110..122
+          TypeQualifierSpec@0:110..115 `Storage`
+            StorageQualifier@0:110..115 `const`
+              Const
+          TypeSpecifier@0:116..122
+            TypeSpecifierNonArray@0:116..122 `TypeName`
+              TypeName@0:116..122
+        Expr `FunCall`
+          FunIdentifier@0:137..143 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:137..143 `TypeName`
+                TypeName@0:137..143
+          Expr@0:144..146 `Unary`
+            UnaryOp@0:144..145 `-`
+            Expr `IntConst`
+              IntConst `1`
+ExternalDeclaration@0:150..191 `Declaration`
+  Declaration@0:150..191 `InitDeclaratorList`
+    InitDeclaratorList@0:150..190
+      SingleDeclaration@0:150..190
+        FullySpecifiedType@0:150..163
+          TypeQualifierSpec@0:150..155 `Storage`
+            StorageQualifier@0:150..155 `const`
+              Const
+          TypeSpecifier@0:156..163
+            TypeSpecifierNonArray@0:156..163 `TypeName`
+              TypeName@0:156..163
+        Expr `FunCall`
+          FunIdentifier@0:179..186 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:179..186 `TypeName`
+                TypeName@0:179..186
+          Expr@0:187..189 `Unary`
+            UnaryOp@0:187..188 `-`
+            Expr `IntConst`
+              IntConst `2`
+ExternalDeclaration@0:193..234 `Declaration`
+  Declaration@0:193..234 `InitDeclaratorList`
+    InitDeclaratorList@0:193..233
+      SingleDeclaration@0:193..233
+        FullySpecifiedType@0:193..206
+          TypeQualifierSpec@0:193..198 `Storage`
+            StorageQualifier@0:193..198 `const`
+              Const
+          TypeSpecifier@0:199..206
+            TypeSpecifierNonArray@0:199..206 `TypeName`
+              TypeName@0:199..206
+        Expr `FunCall`
+          FunIdentifier@0:222..229 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:222..229 `TypeName`
+                TypeName@0:222..229
+          Expr@0:230..232 `Unary`
+            UnaryOp@0:230..231 `-`
+            Expr `IntConst`
+              IntConst `3`
+ExternalDeclaration@0:236..277 `Declaration`
+  Declaration@0:236..277 `InitDeclaratorList`
+    InitDeclaratorList@0:236..276
+      SingleDeclaration@0:236..276
+        FullySpecifiedType@0:236..249
+          TypeQualifierSpec@0:236..241 `Storage`
+            StorageQualifier@0:236..241 `const`
+              Const
+          TypeSpecifier@0:242..249
+            TypeSpecifierNonArray@0:242..249 `TypeName`
+              TypeName@0:242..249
+        Expr `FunCall`
+          FunIdentifier@0:265..272 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:265..272 `TypeName`
+                TypeName@0:265..272
+          Expr@0:273..275 `Unary`
+            UnaryOp@0:273..274 `-`
+            Expr `IntConst`
+              IntConst `4`
+ExternalDeclaration@0:279..319 `Declaration`
+  Declaration@0:279..319 `InitDeclaratorList`
+    InitDeclaratorList@0:279..318
+      SingleDeclaration@0:279..318
+        FullySpecifiedType@0:279..292
+          TypeQualifierSpec@0:279..284 `Storage`
+            StorageQualifier@0:279..284 `const`
+              Const
+          TypeSpecifier@0:285..292
+            TypeSpecifierNonArray@0:285..292 `TypeName`
+              TypeName@0:285..292
+        Expr `FunCall`
+          FunIdentifier@0:308..315 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:308..315 `TypeName`
+                TypeName@0:308..315
+          Expr@0:316..317 `IntConst`
+            IntConst `1`
+ExternalDeclaration@0:321..364 `Declaration`
+  Declaration@0:321..364 `InitDeclaratorList`
+    InitDeclaratorList@0:321..363
+      SingleDeclaration@0:321..363
+        FullySpecifiedType@0:321..335
+          TypeQualifierSpec@0:321..326 `Storage`
+            StorageQualifier@0:321..326 `const`
+              Const
+          TypeSpecifier@0:327..335
+            TypeSpecifierNonArray@0:327..335 `TypeName`
+              TypeName@0:327..335
+        Expr `FunCall`
+          FunIdentifier@0:352..360 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:352..360 `TypeName`
+                TypeName@0:352..360
+          Expr@0:361..362 `IntConst`
+            IntConst `2`
+ExternalDeclaration@0:366..409 `Declaration`
+  Declaration@0:366..409 `InitDeclaratorList`
+    InitDeclaratorList@0:366..408
+      SingleDeclaration@0:366..408
+        FullySpecifiedType@0:366..380
+          TypeQualifierSpec@0:366..371 `Storage`
+            StorageQualifier@0:366..371 `const`
+              Const
+          TypeSpecifier@0:372..380
+            TypeSpecifierNonArray@0:372..380 `TypeName`
+              TypeName@0:372..380
+        Expr `FunCall`
+          FunIdentifier@0:397..405 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:397..405 `TypeName`
+                TypeName@0:397..405
+          Expr@0:406..407 `IntConst`
+            IntConst `3`
+ExternalDeclaration@0:411..454 `Declaration`
+  Declaration@0:411..454 `InitDeclaratorList`
+    InitDeclaratorList@0:411..453
+      SingleDeclaration@0:411..453
+        FullySpecifiedType@0:411..425
+          TypeQualifierSpec@0:411..416 `Storage`
+            StorageQualifier@0:411..416 `const`
+              Const
+          TypeSpecifier@0:417..425
+            TypeSpecifierNonArray@0:417..425 `TypeName`
+              TypeName@0:417..425
+        Expr `FunCall`
+          FunIdentifier@0:442..450 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:442..450 `TypeName`
+                TypeName@0:442..450
+          Expr@0:451..452 `IntConst`
+            IntConst `4`
+ExternalDeclaration@0:456..505 `Declaration`
+  Declaration@0:456..505 `InitDeclaratorList`
+    InitDeclaratorList@0:456..504
+      SingleDeclaration@0:456..504
+        FullySpecifiedType@0:456..471
+          TypeQualifierSpec@0:456..461 `Storage`
+            StorageQualifier@0:456..461 `const`
+              Const
+          TypeSpecifier@0:462..471
+            TypeSpecifierNonArray@0:462..471 `TypeName`
+              TypeName@0:462..471
+        Expr `FunCall`
+          FunIdentifier@0:489..498 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:489..498 `TypeName`
+                TypeName@0:489..498
+          Expr@0:499..503 `FloatConst`
+            FloatConst `42`
+ExternalDeclaration@0:507..556 `Declaration`
+  Declaration@0:507..556 `InitDeclaratorList`
+    InitDeclaratorList@0:507..555
+      SingleDeclaration@0:507..555
+        FullySpecifiedType@0:507..522
+          TypeQualifierSpec@0:507..512 `Storage`
+            StorageQualifier@0:507..512 `const`
+              Const
+          TypeSpecifier@0:513..522
+            TypeSpecifierNonArray@0:513..522 `TypeName`
+              TypeName@0:513..522
+        Expr `FunCall`
+          FunIdentifier@0:540..549 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:540..549 `TypeName`
+                TypeName@0:540..549
+          Expr@0:550..554 `FloatConst`
+            FloatConst `13`
+ExternalDeclaration@0:558..607 `Declaration`
+  Declaration@0:558..607 `InitDeclaratorList`
+    InitDeclaratorList@0:558..606
+      SingleDeclaration@0:558..606
+        FullySpecifiedType@0:558..573
+          TypeQualifierSpec@0:558..563 `Storage`
+            StorageQualifier@0:558..563 `const`
+              Const
+          TypeSpecifier@0:564..573
+            TypeSpecifierNonArray@0:564..573 `TypeName`
+              TypeName@0:564..573
+        Expr `FunCall`
+          FunIdentifier@0:591..600 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:591..600 `TypeName`
+                TypeName@0:591..600
+          Expr@0:601..605 `Unary`
+            UnaryOp@0:601..602 `-`
+            Expr `FloatConst`
+              FloatConst `4`
+ExternalDeclaration@0:1135..1148 `Declaration`
+  Declaration@0:1135..1148 `InitDeclaratorList`
+    InitDeclaratorList@0:1135..1148
+      SingleDeclaration@0:1135..1148
+        FullySpecifiedType@0:1135..1148
+          TypeQualifierSpec@0:1135..1148 `Storage`
+            StorageQualifier@0:1135..1148 `const`
+              Const
+          TypeSpecifier@0:1135..1148
+            TypeSpecifierNonArray@0:1135..1148 `bool`
+              Bool
+        Expr `FunCall`
+          FunIdentifier@0:1135..1148 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1135..1148 `bool`
+                Bool
+          Expr@0:1135..1148 `Variable`
+            Identifier@0:1135..1148 `bool_init`
+ExternalDeclaration@0:1135..1148 `Declaration`
+  Declaration@0:1135..1148 `InitDeclaratorList`
+    InitDeclaratorList@0:1135..1148
+      SingleDeclaration@0:1135..1148
+        FullySpecifiedType@0:1135..1148
+          TypeQualifierSpec@0:1135..1148 `Storage`
+            StorageQualifier@0:1135..1148 `const`
+              Const
+          TypeSpecifier@0:1135..1148
+            TypeSpecifierNonArray@0:1135..1148 `bool`
+              Bool
+        Expr `FunCall`
+          FunIdentifier@0:1135..1148 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1135..1148 `bool`
+                Bool
+          Expr@0:1135..1148 `Variable`
+            Identifier@0:1135..1148 `int8_t_init`
+ExternalDeclaration@0:1135..1148 `Declaration`
+  Declaration@0:1135..1148 `InitDeclaratorList`
+    InitDeclaratorList@0:1135..1148
+      SingleDeclaration@0:1135..1148
+        FullySpecifiedType@0:1135..1148
+          TypeQualifierSpec@0:1135..1148 `Storage`
+            StorageQualifier@0:1135..1148 `const`
+              Const
+          TypeSpecifier@0:1135..1148
+            TypeSpecifierNonArray@0:1135..1148 `bool`
+              Bool
+        Expr `FunCall`
+          FunIdentifier@0:1135..1148 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1135..1148 `bool`
+                Bool
+          Expr@0:1135..1148 `Variable`
+            Identifier@0:1135..1148 `int16_t_init`
+ExternalDeclaration@0:1135..1148 `Declaration`
+  Declaration@0:1135..1148 `InitDeclaratorList`
+    InitDeclaratorList@0:1135..1148
+      SingleDeclaration@0:1135..1148
+        FullySpecifiedType@0:1135..1148
+          TypeQualifierSpec@0:1135..1148 `Storage`
+            StorageQualifier@0:1135..1148 `const`
+              Const
+          TypeSpecifier@0:1135..1148
+            TypeSpecifierNonArray@0:1135..1148 `bool`
+              Bool
+        Expr `FunCall`
+          FunIdentifier@0:1135..1148 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1135..1148 `bool`
+                Bool
+          Expr@0:1135..1148 `Variable`
+            Identifier@0:1135..1148 `int32_t_init`
+ExternalDeclaration@0:1135..1148 `Declaration`
+  Declaration@0:1135..1148 `InitDeclaratorList`
+    InitDeclaratorList@0:1135..1148
+      SingleDeclaration@0:1135..1148
+        FullySpecifiedType@0:1135..1148
+          TypeQualifierSpec@0:1135..1148 `Storage`
+            StorageQualifier@0:1135..1148 `const`
+              Const
+          TypeSpecifier@0:1135..1148
+            TypeSpecifierNonArray@0:1135..1148 `bool`
+              Bool
+        Expr `FunCall`
+          FunIdentifier@0:1135..1148 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1135..1148 `bool`
+                Bool
+          Expr@0:1135..1148 `Variable`
+            Identifier@0:1135..1148 `int64_t_init`
+ExternalDeclaration@0:1135..1148 `Declaration`
+  Declaration@0:1135..1148 `InitDeclaratorList`
+    InitDeclaratorList@0:1135..1148
+      SingleDeclaration@0:1135..1148
+        FullySpecifiedType@0:1135..1148
+          TypeQualifierSpec@0:1135..1148 `Storage`
+            StorageQualifier@0:1135..1148 `const`
+              Const
+          TypeSpecifier@0:1135..1148
+            TypeSpecifierNonArray@0:1135..1148 `bool`
+              Bool
+        Expr `FunCall`
+          FunIdentifier@0:1135..1148 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1135..1148 `bool`
+                Bool
+          Expr@0:1135..1148 `Variable`
+            Identifier@0:1135..1148 `uint8_t_init`
+ExternalDeclaration@0:1135..1148 `Declaration`
+  Declaration@0:1135..1148 `InitDeclaratorList`
+    InitDeclaratorList@0:1135..1148
+      SingleDeclaration@0:1135..1148
+        FullySpecifiedType@0:1135..1148
+          TypeQualifierSpec@0:1135..1148 `Storage`
+            StorageQualifier@0:1135..1148 `const`
+              Const
+          TypeSpecifier@0:1135..1148
+            TypeSpecifierNonArray@0:1135..1148 `bool`
+              Bool
+        Expr `FunCall`
+          FunIdentifier@0:1135..1148 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1135..1148 `bool`
+                Bool
+          Expr@0:1135..1148 `Variable`
+            Identifier@0:1135..1148 `uint16_t_init`
+ExternalDeclaration@0:1135..1148 `Declaration`
+  Declaration@0:1135..1148 `InitDeclaratorList`
+    InitDeclaratorList@0:1135..1148
+      SingleDeclaration@0:1135..1148
+        FullySpecifiedType@0:1135..1148
+          TypeQualifierSpec@0:1135..1148 `Storage`
+            StorageQualifier@0:1135..1148 `const`
+              Const
+          TypeSpecifier@0:1135..1148
+            TypeSpecifierNonArray@0:1135..1148 `bool`
+              Bool
+        Expr `FunCall`
+          FunIdentifier@0:1135..1148 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1135..1148 `bool`
+                Bool
+          Expr@0:1135..1148 `Variable`
+            Identifier@0:1135..1148 `uint32_t_init`
+ExternalDeclaration@0:1135..1148 `Declaration`
+  Declaration@0:1135..1148 `InitDeclaratorList`
+    InitDeclaratorList@0:1135..1148
+      SingleDeclaration@0:1135..1148
+        FullySpecifiedType@0:1135..1148
+          TypeQualifierSpec@0:1135..1148 `Storage`
+            StorageQualifier@0:1135..1148 `const`
+              Const
+          TypeSpecifier@0:1135..1148
+            TypeSpecifierNonArray@0:1135..1148 `bool`
+              Bool
+        Expr `FunCall`
+          FunIdentifier@0:1135..1148 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1135..1148 `bool`
+                Bool
+          Expr@0:1135..1148 `Variable`
+            Identifier@0:1135..1148 `uint64_t_init`
+ExternalDeclaration@0:1135..1148 `Declaration`
+  Declaration@0:1135..1148 `InitDeclaratorList`
+    InitDeclaratorList@0:1135..1148
+      SingleDeclaration@0:1135..1148
+        FullySpecifiedType@0:1135..1148
+          TypeQualifierSpec@0:1135..1148 `Storage`
+            StorageQualifier@0:1135..1148 `const`
+              Const
+          TypeSpecifier@0:1135..1148
+            TypeSpecifierNonArray@0:1135..1148 `bool`
+              Bool
+        Expr `FunCall`
+          FunIdentifier@0:1135..1148 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1135..1148 `bool`
+                Bool
+          Expr@0:1135..1148 `Variable`
+            Identifier@0:1135..1148 `float16_t_init`
+ExternalDeclaration@0:1135..1148 `Declaration`
+  Declaration@0:1135..1148 `InitDeclaratorList`
+    InitDeclaratorList@0:1135..1148
+      SingleDeclaration@0:1135..1148
+        FullySpecifiedType@0:1135..1148
+          TypeQualifierSpec@0:1135..1148 `Storage`
+            StorageQualifier@0:1135..1148 `const`
+              Const
+          TypeSpecifier@0:1135..1148
+            TypeSpecifierNonArray@0:1135..1148 `bool`
+              Bool
+        Expr `FunCall`
+          FunIdentifier@0:1135..1148 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1135..1148 `bool`
+                Bool
+          Expr@0:1135..1148 `Variable`
+            Identifier@0:1135..1148 `float32_t_init`
+ExternalDeclaration@0:1135..1149 `Declaration`
+  Declaration@0:1135..1149 `InitDeclaratorList`
+    InitDeclaratorList@0:1135..1148
+      SingleDeclaration@0:1135..1148
+        FullySpecifiedType@0:1135..1148
+          TypeQualifierSpec@0:1135..1148 `Storage`
+            StorageQualifier@0:1135..1148 `const`
+              Const
+          TypeSpecifier@0:1135..1148
+            TypeSpecifierNonArray@0:1135..1148 `bool`
+              Bool
+        Expr `FunCall`
+          FunIdentifier@0:1135..1148 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1135..1148 `bool`
+                Bool
+          Expr@0:1135..1148 `Variable`
+            Identifier@0:1135..1148 `float64_t_init`
+ExternalDeclaration@0:1151..1166 `Declaration`
+  Declaration@0:1151..1166 `InitDeclaratorList`
+    InitDeclaratorList@0:1151..1166
+      SingleDeclaration@0:1151..1166
+        FullySpecifiedType@0:1151..1166
+          TypeQualifierSpec@0:1151..1166 `Storage`
+            StorageQualifier@0:1151..1166 `const`
+              Const
+          TypeSpecifier@0:1151..1166
+            TypeSpecifierNonArray@0:1151..1166 `TypeName`
+              TypeName@0:1151..1166
+        Expr `FunCall`
+          FunIdentifier@0:1151..1166 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1151..1166 `TypeName`
+                TypeName@0:1151..1166
+          Expr@0:1151..1166 `Variable`
+            Identifier@0:1151..1166 `bool_init`
+ExternalDeclaration@0:1151..1166 `Declaration`
+  Declaration@0:1151..1166 `InitDeclaratorList`
+    InitDeclaratorList@0:1151..1166
+      SingleDeclaration@0:1151..1166
+        FullySpecifiedType@0:1151..1166
+          TypeQualifierSpec@0:1151..1166 `Storage`
+            StorageQualifier@0:1151..1166 `const`
+              Const
+          TypeSpecifier@0:1151..1166
+            TypeSpecifierNonArray@0:1151..1166 `TypeName`
+              TypeName@0:1151..1166
+        Expr `FunCall`
+          FunIdentifier@0:1151..1166 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1151..1166 `TypeName`
+                TypeName@0:1151..1166
+          Expr@0:1151..1166 `Variable`
+            Identifier@0:1151..1166 `int8_t_init`
+ExternalDeclaration@0:1151..1166 `Declaration`
+  Declaration@0:1151..1166 `InitDeclaratorList`
+    InitDeclaratorList@0:1151..1166
+      SingleDeclaration@0:1151..1166
+        FullySpecifiedType@0:1151..1166
+          TypeQualifierSpec@0:1151..1166 `Storage`
+            StorageQualifier@0:1151..1166 `const`
+              Const
+          TypeSpecifier@0:1151..1166
+            TypeSpecifierNonArray@0:1151..1166 `TypeName`
+              TypeName@0:1151..1166
+        Expr `FunCall`
+          FunIdentifier@0:1151..1166 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1151..1166 `TypeName`
+                TypeName@0:1151..1166
+          Expr@0:1151..1166 `Variable`
+            Identifier@0:1151..1166 `int16_t_init`
+ExternalDeclaration@0:1151..1166 `Declaration`
+  Declaration@0:1151..1166 `InitDeclaratorList`
+    InitDeclaratorList@0:1151..1166
+      SingleDeclaration@0:1151..1166
+        FullySpecifiedType@0:1151..1166
+          TypeQualifierSpec@0:1151..1166 `Storage`
+            StorageQualifier@0:1151..1166 `const`
+              Const
+          TypeSpecifier@0:1151..1166
+            TypeSpecifierNonArray@0:1151..1166 `TypeName`
+              TypeName@0:1151..1166
+        Expr `FunCall`
+          FunIdentifier@0:1151..1166 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1151..1166 `TypeName`
+                TypeName@0:1151..1166
+          Expr@0:1151..1166 `Variable`
+            Identifier@0:1151..1166 `int32_t_init`
+ExternalDeclaration@0:1151..1166 `Declaration`
+  Declaration@0:1151..1166 `InitDeclaratorList`
+    InitDeclaratorList@0:1151..1166
+      SingleDeclaration@0:1151..1166
+        FullySpecifiedType@0:1151..1166
+          TypeQualifierSpec@0:1151..1166 `Storage`
+            StorageQualifier@0:1151..1166 `const`
+              Const
+          TypeSpecifier@0:1151..1166
+            TypeSpecifierNonArray@0:1151..1166 `TypeName`
+              TypeName@0:1151..1166
+        Expr `FunCall`
+          FunIdentifier@0:1151..1166 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1151..1166 `TypeName`
+                TypeName@0:1151..1166
+          Expr@0:1151..1166 `Variable`
+            Identifier@0:1151..1166 `int64_t_init`
+ExternalDeclaration@0:1151..1166 `Declaration`
+  Declaration@0:1151..1166 `InitDeclaratorList`
+    InitDeclaratorList@0:1151..1166
+      SingleDeclaration@0:1151..1166
+        FullySpecifiedType@0:1151..1166
+          TypeQualifierSpec@0:1151..1166 `Storage`
+            StorageQualifier@0:1151..1166 `const`
+              Const
+          TypeSpecifier@0:1151..1166
+            TypeSpecifierNonArray@0:1151..1166 `TypeName`
+              TypeName@0:1151..1166
+        Expr `FunCall`
+          FunIdentifier@0:1151..1166 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1151..1166 `TypeName`
+                TypeName@0:1151..1166
+          Expr@0:1151..1166 `Variable`
+            Identifier@0:1151..1166 `uint8_t_init`
+ExternalDeclaration@0:1151..1166 `Declaration`
+  Declaration@0:1151..1166 `InitDeclaratorList`
+    InitDeclaratorList@0:1151..1166
+      SingleDeclaration@0:1151..1166
+        FullySpecifiedType@0:1151..1166
+          TypeQualifierSpec@0:1151..1166 `Storage`
+            StorageQualifier@0:1151..1166 `const`
+              Const
+          TypeSpecifier@0:1151..1166
+            TypeSpecifierNonArray@0:1151..1166 `TypeName`
+              TypeName@0:1151..1166
+        Expr `FunCall`
+          FunIdentifier@0:1151..1166 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1151..1166 `TypeName`
+                TypeName@0:1151..1166
+          Expr@0:1151..1166 `Variable`
+            Identifier@0:1151..1166 `uint16_t_init`
+ExternalDeclaration@0:1151..1166 `Declaration`
+  Declaration@0:1151..1166 `InitDeclaratorList`
+    InitDeclaratorList@0:1151..1166
+      SingleDeclaration@0:1151..1166
+        FullySpecifiedType@0:1151..1166
+          TypeQualifierSpec@0:1151..1166 `Storage`
+            StorageQualifier@0:1151..1166 `const`
+              Const
+          TypeSpecifier@0:1151..1166
+            TypeSpecifierNonArray@0:1151..1166 `TypeName`
+              TypeName@0:1151..1166
+        Expr `FunCall`
+          FunIdentifier@0:1151..1166 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1151..1166 `TypeName`
+                TypeName@0:1151..1166
+          Expr@0:1151..1166 `Variable`
+            Identifier@0:1151..1166 `uint32_t_init`
+ExternalDeclaration@0:1151..1166 `Declaration`
+  Declaration@0:1151..1166 `InitDeclaratorList`
+    InitDeclaratorList@0:1151..1166
+      SingleDeclaration@0:1151..1166
+        FullySpecifiedType@0:1151..1166
+          TypeQualifierSpec@0:1151..1166 `Storage`
+            StorageQualifier@0:1151..1166 `const`
+              Const
+          TypeSpecifier@0:1151..1166
+            TypeSpecifierNonArray@0:1151..1166 `TypeName`
+              TypeName@0:1151..1166
+        Expr `FunCall`
+          FunIdentifier@0:1151..1166 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1151..1166 `TypeName`
+                TypeName@0:1151..1166
+          Expr@0:1151..1166 `Variable`
+            Identifier@0:1151..1166 `uint64_t_init`
+ExternalDeclaration@0:1151..1166 `Declaration`
+  Declaration@0:1151..1166 `InitDeclaratorList`
+    InitDeclaratorList@0:1151..1166
+      SingleDeclaration@0:1151..1166
+        FullySpecifiedType@0:1151..1166
+          TypeQualifierSpec@0:1151..1166 `Storage`
+            StorageQualifier@0:1151..1166 `const`
+              Const
+          TypeSpecifier@0:1151..1166
+            TypeSpecifierNonArray@0:1151..1166 `TypeName`
+              TypeName@0:1151..1166
+        Expr `FunCall`
+          FunIdentifier@0:1151..1166 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1151..1166 `TypeName`
+                TypeName@0:1151..1166
+          Expr@0:1151..1166 `Variable`
+            Identifier@0:1151..1166 `float16_t_init`
+ExternalDeclaration@0:1151..1166 `Declaration`
+  Declaration@0:1151..1166 `InitDeclaratorList`
+    InitDeclaratorList@0:1151..1166
+      SingleDeclaration@0:1151..1166
+        FullySpecifiedType@0:1151..1166
+          TypeQualifierSpec@0:1151..1166 `Storage`
+            StorageQualifier@0:1151..1166 `const`
+              Const
+          TypeSpecifier@0:1151..1166
+            TypeSpecifierNonArray@0:1151..1166 `TypeName`
+              TypeName@0:1151..1166
+        Expr `FunCall`
+          FunIdentifier@0:1151..1166 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1151..1166 `TypeName`
+                TypeName@0:1151..1166
+          Expr@0:1151..1166 `Variable`
+            Identifier@0:1151..1166 `float32_t_init`
+ExternalDeclaration@0:1151..1167 `Declaration`
+  Declaration@0:1151..1167 `InitDeclaratorList`
+    InitDeclaratorList@0:1151..1166
+      SingleDeclaration@0:1151..1166
+        FullySpecifiedType@0:1151..1166
+          TypeQualifierSpec@0:1151..1166 `Storage`
+            StorageQualifier@0:1151..1166 `const`
+              Const
+          TypeSpecifier@0:1151..1166
+            TypeSpecifierNonArray@0:1151..1166 `TypeName`
+              TypeName@0:1151..1166
+        Expr `FunCall`
+          FunIdentifier@0:1151..1166 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1151..1166 `TypeName`
+                TypeName@0:1151..1166
+          Expr@0:1151..1166 `Variable`
+            Identifier@0:1151..1166 `float64_t_init`
+ExternalDeclaration@0:1169..1185 `Declaration`
+  Declaration@0:1169..1185 `InitDeclaratorList`
+    InitDeclaratorList@0:1169..1185
+      SingleDeclaration@0:1169..1185
+        FullySpecifiedType@0:1169..1185
+          TypeQualifierSpec@0:1169..1185 `Storage`
+            StorageQualifier@0:1169..1185 `const`
+              Const
+          TypeSpecifier@0:1169..1185
+            TypeSpecifierNonArray@0:1169..1185 `TypeName`
+              TypeName@0:1169..1185
+        Expr `FunCall`
+          FunIdentifier@0:1169..1185 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1169..1185 `TypeName`
+                TypeName@0:1169..1185
+          Expr@0:1169..1185 `Variable`
+            Identifier@0:1169..1185 `bool_init`
+ExternalDeclaration@0:1169..1185 `Declaration`
+  Declaration@0:1169..1185 `InitDeclaratorList`
+    InitDeclaratorList@0:1169..1185
+      SingleDeclaration@0:1169..1185
+        FullySpecifiedType@0:1169..1185
+          TypeQualifierSpec@0:1169..1185 `Storage`
+            StorageQualifier@0:1169..1185 `const`
+              Const
+          TypeSpecifier@0:1169..1185
+            TypeSpecifierNonArray@0:1169..1185 `TypeName`
+              TypeName@0:1169..1185
+        Expr `FunCall`
+          FunIdentifier@0:1169..1185 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1169..1185 `TypeName`
+                TypeName@0:1169..1185
+          Expr@0:1169..1185 `Variable`
+            Identifier@0:1169..1185 `int8_t_init`
+ExternalDeclaration@0:1169..1185 `Declaration`
+  Declaration@0:1169..1185 `InitDeclaratorList`
+    InitDeclaratorList@0:1169..1185
+      SingleDeclaration@0:1169..1185
+        FullySpecifiedType@0:1169..1185
+          TypeQualifierSpec@0:1169..1185 `Storage`
+            StorageQualifier@0:1169..1185 `const`
+              Const
+          TypeSpecifier@0:1169..1185
+            TypeSpecifierNonArray@0:1169..1185 `TypeName`
+              TypeName@0:1169..1185
+        Expr `FunCall`
+          FunIdentifier@0:1169..1185 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1169..1185 `TypeName`
+                TypeName@0:1169..1185
+          Expr@0:1169..1185 `Variable`
+            Identifier@0:1169..1185 `int16_t_init`
+ExternalDeclaration@0:1169..1185 `Declaration`
+  Declaration@0:1169..1185 `InitDeclaratorList`
+    InitDeclaratorList@0:1169..1185
+      SingleDeclaration@0:1169..1185
+        FullySpecifiedType@0:1169..1185
+          TypeQualifierSpec@0:1169..1185 `Storage`
+            StorageQualifier@0:1169..1185 `const`
+              Const
+          TypeSpecifier@0:1169..1185
+            TypeSpecifierNonArray@0:1169..1185 `TypeName`
+              TypeName@0:1169..1185
+        Expr `FunCall`
+          FunIdentifier@0:1169..1185 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1169..1185 `TypeName`
+                TypeName@0:1169..1185
+          Expr@0:1169..1185 `Variable`
+            Identifier@0:1169..1185 `int32_t_init`
+ExternalDeclaration@0:1169..1185 `Declaration`
+  Declaration@0:1169..1185 `InitDeclaratorList`
+    InitDeclaratorList@0:1169..1185
+      SingleDeclaration@0:1169..1185
+        FullySpecifiedType@0:1169..1185
+          TypeQualifierSpec@0:1169..1185 `Storage`
+            StorageQualifier@0:1169..1185 `const`
+              Const
+          TypeSpecifier@0:1169..1185
+            TypeSpecifierNonArray@0:1169..1185 `TypeName`
+              TypeName@0:1169..1185
+        Expr `FunCall`
+          FunIdentifier@0:1169..1185 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1169..1185 `TypeName`
+                TypeName@0:1169..1185
+          Expr@0:1169..1185 `Variable`
+            Identifier@0:1169..1185 `int64_t_init`
+ExternalDeclaration@0:1169..1185 `Declaration`
+  Declaration@0:1169..1185 `InitDeclaratorList`
+    InitDeclaratorList@0:1169..1185
+      SingleDeclaration@0:1169..1185
+        FullySpecifiedType@0:1169..1185
+          TypeQualifierSpec@0:1169..1185 `Storage`
+            StorageQualifier@0:1169..1185 `const`
+              Const
+          TypeSpecifier@0:1169..1185
+            TypeSpecifierNonArray@0:1169..1185 `TypeName`
+              TypeName@0:1169..1185
+        Expr `FunCall`
+          FunIdentifier@0:1169..1185 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1169..1185 `TypeName`
+                TypeName@0:1169..1185
+          Expr@0:1169..1185 `Variable`
+            Identifier@0:1169..1185 `uint8_t_init`
+ExternalDeclaration@0:1169..1185 `Declaration`
+  Declaration@0:1169..1185 `InitDeclaratorList`
+    InitDeclaratorList@0:1169..1185
+      SingleDeclaration@0:1169..1185
+        FullySpecifiedType@0:1169..1185
+          TypeQualifierSpec@0:1169..1185 `Storage`
+            StorageQualifier@0:1169..1185 `const`
+              Const
+          TypeSpecifier@0:1169..1185
+            TypeSpecifierNonArray@0:1169..1185 `TypeName`
+              TypeName@0:1169..1185
+        Expr `FunCall`
+          FunIdentifier@0:1169..1185 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1169..1185 `TypeName`
+                TypeName@0:1169..1185
+          Expr@0:1169..1185 `Variable`
+            Identifier@0:1169..1185 `uint16_t_init`
+ExternalDeclaration@0:1169..1185 `Declaration`
+  Declaration@0:1169..1185 `InitDeclaratorList`
+    InitDeclaratorList@0:1169..1185
+      SingleDeclaration@0:1169..1185
+        FullySpecifiedType@0:1169..1185
+          TypeQualifierSpec@0:1169..1185 `Storage`
+            StorageQualifier@0:1169..1185 `const`
+              Const
+          TypeSpecifier@0:1169..1185
+            TypeSpecifierNonArray@0:1169..1185 `TypeName`
+              TypeName@0:1169..1185
+        Expr `FunCall`
+          FunIdentifier@0:1169..1185 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1169..1185 `TypeName`
+                TypeName@0:1169..1185
+          Expr@0:1169..1185 `Variable`
+            Identifier@0:1169..1185 `uint32_t_init`
+ExternalDeclaration@0:1169..1185 `Declaration`
+  Declaration@0:1169..1185 `InitDeclaratorList`
+    InitDeclaratorList@0:1169..1185
+      SingleDeclaration@0:1169..1185
+        FullySpecifiedType@0:1169..1185
+          TypeQualifierSpec@0:1169..1185 `Storage`
+            StorageQualifier@0:1169..1185 `const`
+              Const
+          TypeSpecifier@0:1169..1185
+            TypeSpecifierNonArray@0:1169..1185 `TypeName`
+              TypeName@0:1169..1185
+        Expr `FunCall`
+          FunIdentifier@0:1169..1185 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1169..1185 `TypeName`
+                TypeName@0:1169..1185
+          Expr@0:1169..1185 `Variable`
+            Identifier@0:1169..1185 `uint64_t_init`
+ExternalDeclaration@0:1169..1185 `Declaration`
+  Declaration@0:1169..1185 `InitDeclaratorList`
+    InitDeclaratorList@0:1169..1185
+      SingleDeclaration@0:1169..1185
+        FullySpecifiedType@0:1169..1185
+          TypeQualifierSpec@0:1169..1185 `Storage`
+            StorageQualifier@0:1169..1185 `const`
+              Const
+          TypeSpecifier@0:1169..1185
+            TypeSpecifierNonArray@0:1169..1185 `TypeName`
+              TypeName@0:1169..1185
+        Expr `FunCall`
+          FunIdentifier@0:1169..1185 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1169..1185 `TypeName`
+                TypeName@0:1169..1185
+          Expr@0:1169..1185 `Variable`
+            Identifier@0:1169..1185 `float16_t_init`
+ExternalDeclaration@0:1169..1185 `Declaration`
+  Declaration@0:1169..1185 `InitDeclaratorList`
+    InitDeclaratorList@0:1169..1185
+      SingleDeclaration@0:1169..1185
+        FullySpecifiedType@0:1169..1185
+          TypeQualifierSpec@0:1169..1185 `Storage`
+            StorageQualifier@0:1169..1185 `const`
+              Const
+          TypeSpecifier@0:1169..1185
+            TypeSpecifierNonArray@0:1169..1185 `TypeName`
+              TypeName@0:1169..1185
+        Expr `FunCall`
+          FunIdentifier@0:1169..1185 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1169..1185 `TypeName`
+                TypeName@0:1169..1185
+          Expr@0:1169..1185 `Variable`
+            Identifier@0:1169..1185 `float32_t_init`
+ExternalDeclaration@0:1169..1186 `Declaration`
+  Declaration@0:1169..1186 `InitDeclaratorList`
+    InitDeclaratorList@0:1169..1185
+      SingleDeclaration@0:1169..1185
+        FullySpecifiedType@0:1169..1185
+          TypeQualifierSpec@0:1169..1185 `Storage`
+            StorageQualifier@0:1169..1185 `const`
+              Const
+          TypeSpecifier@0:1169..1185
+            TypeSpecifierNonArray@0:1169..1185 `TypeName`
+              TypeName@0:1169..1185
+        Expr `FunCall`
+          FunIdentifier@0:1169..1185 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1169..1185 `TypeName`
+                TypeName@0:1169..1185
+          Expr@0:1169..1185 `Variable`
+            Identifier@0:1169..1185 `float64_t_init`
+ExternalDeclaration@0:1188..1204 `Declaration`
+  Declaration@0:1188..1204 `InitDeclaratorList`
+    InitDeclaratorList@0:1188..1204
+      SingleDeclaration@0:1188..1204
+        FullySpecifiedType@0:1188..1204
+          TypeQualifierSpec@0:1188..1204 `Storage`
+            StorageQualifier@0:1188..1204 `const`
+              Const
+          TypeSpecifier@0:1188..1204
+            TypeSpecifierNonArray@0:1188..1204 `TypeName`
+              TypeName@0:1188..1204
+        Expr `FunCall`
+          FunIdentifier@0:1188..1204 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1188..1204 `TypeName`
+                TypeName@0:1188..1204
+          Expr@0:1188..1204 `Variable`
+            Identifier@0:1188..1204 `bool_init`
+ExternalDeclaration@0:1188..1204 `Declaration`
+  Declaration@0:1188..1204 `InitDeclaratorList`
+    InitDeclaratorList@0:1188..1204
+      SingleDeclaration@0:1188..1204
+        FullySpecifiedType@0:1188..1204
+          TypeQualifierSpec@0:1188..1204 `Storage`
+            StorageQualifier@0:1188..1204 `const`
+              Const
+          TypeSpecifier@0:1188..1204
+            TypeSpecifierNonArray@0:1188..1204 `TypeName`
+              TypeName@0:1188..1204
+        Expr `FunCall`
+          FunIdentifier@0:1188..1204 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1188..1204 `TypeName`
+                TypeName@0:1188..1204
+          Expr@0:1188..1204 `Variable`
+            Identifier@0:1188..1204 `int8_t_init`
+ExternalDeclaration@0:1188..1204 `Declaration`
+  Declaration@0:1188..1204 `InitDeclaratorList`
+    InitDeclaratorList@0:1188..1204
+      SingleDeclaration@0:1188..1204
+        FullySpecifiedType@0:1188..1204
+          TypeQualifierSpec@0:1188..1204 `Storage`
+            StorageQualifier@0:1188..1204 `const`
+              Const
+          TypeSpecifier@0:1188..1204
+            TypeSpecifierNonArray@0:1188..1204 `TypeName`
+              TypeName@0:1188..1204
+        Expr `FunCall`
+          FunIdentifier@0:1188..1204 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1188..1204 `TypeName`
+                TypeName@0:1188..1204
+          Expr@0:1188..1204 `Variable`
+            Identifier@0:1188..1204 `int16_t_init`
+ExternalDeclaration@0:1188..1204 `Declaration`
+  Declaration@0:1188..1204 `InitDeclaratorList`
+    InitDeclaratorList@0:1188..1204
+      SingleDeclaration@0:1188..1204
+        FullySpecifiedType@0:1188..1204
+          TypeQualifierSpec@0:1188..1204 `Storage`
+            StorageQualifier@0:1188..1204 `const`
+              Const
+          TypeSpecifier@0:1188..1204
+            TypeSpecifierNonArray@0:1188..1204 `TypeName`
+              TypeName@0:1188..1204
+        Expr `FunCall`
+          FunIdentifier@0:1188..1204 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1188..1204 `TypeName`
+                TypeName@0:1188..1204
+          Expr@0:1188..1204 `Variable`
+            Identifier@0:1188..1204 `int32_t_init`
+ExternalDeclaration@0:1188..1204 `Declaration`
+  Declaration@0:1188..1204 `InitDeclaratorList`
+    InitDeclaratorList@0:1188..1204
+      SingleDeclaration@0:1188..1204
+        FullySpecifiedType@0:1188..1204
+          TypeQualifierSpec@0:1188..1204 `Storage`
+            StorageQualifier@0:1188..1204 `const`
+              Const
+          TypeSpecifier@0:1188..1204
+            TypeSpecifierNonArray@0:1188..1204 `TypeName`
+              TypeName@0:1188..1204
+        Expr `FunCall`
+          FunIdentifier@0:1188..1204 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1188..1204 `TypeName`
+                TypeName@0:1188..1204
+          Expr@0:1188..1204 `Variable`
+            Identifier@0:1188..1204 `int64_t_init`
+ExternalDeclaration@0:1188..1204 `Declaration`
+  Declaration@0:1188..1204 `InitDeclaratorList`
+    InitDeclaratorList@0:1188..1204
+      SingleDeclaration@0:1188..1204
+        FullySpecifiedType@0:1188..1204
+          TypeQualifierSpec@0:1188..1204 `Storage`
+            StorageQualifier@0:1188..1204 `const`
+              Const
+          TypeSpecifier@0:1188..1204
+            TypeSpecifierNonArray@0:1188..1204 `TypeName`
+              TypeName@0:1188..1204
+        Expr `FunCall`
+          FunIdentifier@0:1188..1204 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1188..1204 `TypeName`
+                TypeName@0:1188..1204
+          Expr@0:1188..1204 `Variable`
+            Identifier@0:1188..1204 `uint8_t_init`
+ExternalDeclaration@0:1188..1204 `Declaration`
+  Declaration@0:1188..1204 `InitDeclaratorList`
+    InitDeclaratorList@0:1188..1204
+      SingleDeclaration@0:1188..1204
+        FullySpecifiedType@0:1188..1204
+          TypeQualifierSpec@0:1188..1204 `Storage`
+            StorageQualifier@0:1188..1204 `const`
+              Const
+          TypeSpecifier@0:1188..1204
+            TypeSpecifierNonArray@0:1188..1204 `TypeName`
+              TypeName@0:1188..1204
+        Expr `FunCall`
+          FunIdentifier@0:1188..1204 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1188..1204 `TypeName`
+                TypeName@0:1188..1204
+          Expr@0:1188..1204 `Variable`
+            Identifier@0:1188..1204 `uint16_t_init`
+ExternalDeclaration@0:1188..1204 `Declaration`
+  Declaration@0:1188..1204 `InitDeclaratorList`
+    InitDeclaratorList@0:1188..1204
+      SingleDeclaration@0:1188..1204
+        FullySpecifiedType@0:1188..1204
+          TypeQualifierSpec@0:1188..1204 `Storage`
+            StorageQualifier@0:1188..1204 `const`
+              Const
+          TypeSpecifier@0:1188..1204
+            TypeSpecifierNonArray@0:1188..1204 `TypeName`
+              TypeName@0:1188..1204
+        Expr `FunCall`
+          FunIdentifier@0:1188..1204 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1188..1204 `TypeName`
+                TypeName@0:1188..1204
+          Expr@0:1188..1204 `Variable`
+            Identifier@0:1188..1204 `uint32_t_init`
+ExternalDeclaration@0:1188..1204 `Declaration`
+  Declaration@0:1188..1204 `InitDeclaratorList`
+    InitDeclaratorList@0:1188..1204
+      SingleDeclaration@0:1188..1204
+        FullySpecifiedType@0:1188..1204
+          TypeQualifierSpec@0:1188..1204 `Storage`
+            StorageQualifier@0:1188..1204 `const`
+              Const
+          TypeSpecifier@0:1188..1204
+            TypeSpecifierNonArray@0:1188..1204 `TypeName`
+              TypeName@0:1188..1204
+        Expr `FunCall`
+          FunIdentifier@0:1188..1204 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1188..1204 `TypeName`
+                TypeName@0:1188..1204
+          Expr@0:1188..1204 `Variable`
+            Identifier@0:1188..1204 `uint64_t_init`
+ExternalDeclaration@0:1188..1204 `Declaration`
+  Declaration@0:1188..1204 `InitDeclaratorList`
+    InitDeclaratorList@0:1188..1204
+      SingleDeclaration@0:1188..1204
+        FullySpecifiedType@0:1188..1204
+          TypeQualifierSpec@0:1188..1204 `Storage`
+            StorageQualifier@0:1188..1204 `const`
+              Const
+          TypeSpecifier@0:1188..1204
+            TypeSpecifierNonArray@0:1188..1204 `TypeName`
+              TypeName@0:1188..1204
+        Expr `FunCall`
+          FunIdentifier@0:1188..1204 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1188..1204 `TypeName`
+                TypeName@0:1188..1204
+          Expr@0:1188..1204 `Variable`
+            Identifier@0:1188..1204 `float16_t_init`
+ExternalDeclaration@0:1188..1204 `Declaration`
+  Declaration@0:1188..1204 `InitDeclaratorList`
+    InitDeclaratorList@0:1188..1204
+      SingleDeclaration@0:1188..1204
+        FullySpecifiedType@0:1188..1204
+          TypeQualifierSpec@0:1188..1204 `Storage`
+            StorageQualifier@0:1188..1204 `const`
+              Const
+          TypeSpecifier@0:1188..1204
+            TypeSpecifierNonArray@0:1188..1204 `TypeName`
+              TypeName@0:1188..1204
+        Expr `FunCall`
+          FunIdentifier@0:1188..1204 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1188..1204 `TypeName`
+                TypeName@0:1188..1204
+          Expr@0:1188..1204 `Variable`
+            Identifier@0:1188..1204 `float32_t_init`
+ExternalDeclaration@0:1188..1205 `Declaration`
+  Declaration@0:1188..1205 `InitDeclaratorList`
+    InitDeclaratorList@0:1188..1204
+      SingleDeclaration@0:1188..1204
+        FullySpecifiedType@0:1188..1204
+          TypeQualifierSpec@0:1188..1204 `Storage`
+            StorageQualifier@0:1188..1204 `const`
+              Const
+          TypeSpecifier@0:1188..1204
+            TypeSpecifierNonArray@0:1188..1204 `TypeName`
+              TypeName@0:1188..1204
+        Expr `FunCall`
+          FunIdentifier@0:1188..1204 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1188..1204 `TypeName`
+                TypeName@0:1188..1204
+          Expr@0:1188..1204 `Variable`
+            Identifier@0:1188..1204 `float64_t_init`
+ExternalDeclaration@0:1207..1223 `Declaration`
+  Declaration@0:1207..1223 `InitDeclaratorList`
+    InitDeclaratorList@0:1207..1223
+      SingleDeclaration@0:1207..1223
+        FullySpecifiedType@0:1207..1223
+          TypeQualifierSpec@0:1207..1223 `Storage`
+            StorageQualifier@0:1207..1223 `const`
+              Const
+          TypeSpecifier@0:1207..1223
+            TypeSpecifierNonArray@0:1207..1223 `TypeName`
+              TypeName@0:1207..1223
+        Expr `FunCall`
+          FunIdentifier@0:1207..1223 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1207..1223 `TypeName`
+                TypeName@0:1207..1223
+          Expr@0:1207..1223 `Variable`
+            Identifier@0:1207..1223 `bool_init`
+ExternalDeclaration@0:1207..1223 `Declaration`
+  Declaration@0:1207..1223 `InitDeclaratorList`
+    InitDeclaratorList@0:1207..1223
+      SingleDeclaration@0:1207..1223
+        FullySpecifiedType@0:1207..1223
+          TypeQualifierSpec@0:1207..1223 `Storage`
+            StorageQualifier@0:1207..1223 `const`
+              Const
+          TypeSpecifier@0:1207..1223
+            TypeSpecifierNonArray@0:1207..1223 `TypeName`
+              TypeName@0:1207..1223
+        Expr `FunCall`
+          FunIdentifier@0:1207..1223 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1207..1223 `TypeName`
+                TypeName@0:1207..1223
+          Expr@0:1207..1223 `Variable`
+            Identifier@0:1207..1223 `int8_t_init`
+ExternalDeclaration@0:1207..1223 `Declaration`
+  Declaration@0:1207..1223 `InitDeclaratorList`
+    InitDeclaratorList@0:1207..1223
+      SingleDeclaration@0:1207..1223
+        FullySpecifiedType@0:1207..1223
+          TypeQualifierSpec@0:1207..1223 `Storage`
+            StorageQualifier@0:1207..1223 `const`
+              Const
+          TypeSpecifier@0:1207..1223
+            TypeSpecifierNonArray@0:1207..1223 `TypeName`
+              TypeName@0:1207..1223
+        Expr `FunCall`
+          FunIdentifier@0:1207..1223 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1207..1223 `TypeName`
+                TypeName@0:1207..1223
+          Expr@0:1207..1223 `Variable`
+            Identifier@0:1207..1223 `int16_t_init`
+ExternalDeclaration@0:1207..1223 `Declaration`
+  Declaration@0:1207..1223 `InitDeclaratorList`
+    InitDeclaratorList@0:1207..1223
+      SingleDeclaration@0:1207..1223
+        FullySpecifiedType@0:1207..1223
+          TypeQualifierSpec@0:1207..1223 `Storage`
+            StorageQualifier@0:1207..1223 `const`
+              Const
+          TypeSpecifier@0:1207..1223
+            TypeSpecifierNonArray@0:1207..1223 `TypeName`
+              TypeName@0:1207..1223
+        Expr `FunCall`
+          FunIdentifier@0:1207..1223 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1207..1223 `TypeName`
+                TypeName@0:1207..1223
+          Expr@0:1207..1223 `Variable`
+            Identifier@0:1207..1223 `int32_t_init`
+ExternalDeclaration@0:1207..1223 `Declaration`
+  Declaration@0:1207..1223 `InitDeclaratorList`
+    InitDeclaratorList@0:1207..1223
+      SingleDeclaration@0:1207..1223
+        FullySpecifiedType@0:1207..1223
+          TypeQualifierSpec@0:1207..1223 `Storage`
+            StorageQualifier@0:1207..1223 `const`
+              Const
+          TypeSpecifier@0:1207..1223
+            TypeSpecifierNonArray@0:1207..1223 `TypeName`
+              TypeName@0:1207..1223
+        Expr `FunCall`
+          FunIdentifier@0:1207..1223 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1207..1223 `TypeName`
+                TypeName@0:1207..1223
+          Expr@0:1207..1223 `Variable`
+            Identifier@0:1207..1223 `int64_t_init`
+ExternalDeclaration@0:1207..1223 `Declaration`
+  Declaration@0:1207..1223 `InitDeclaratorList`
+    InitDeclaratorList@0:1207..1223
+      SingleDeclaration@0:1207..1223
+        FullySpecifiedType@0:1207..1223
+          TypeQualifierSpec@0:1207..1223 `Storage`
+            StorageQualifier@0:1207..1223 `const`
+              Const
+          TypeSpecifier@0:1207..1223
+            TypeSpecifierNonArray@0:1207..1223 `TypeName`
+              TypeName@0:1207..1223
+        Expr `FunCall`
+          FunIdentifier@0:1207..1223 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1207..1223 `TypeName`
+                TypeName@0:1207..1223
+          Expr@0:1207..1223 `Variable`
+            Identifier@0:1207..1223 `uint8_t_init`
+ExternalDeclaration@0:1207..1223 `Declaration`
+  Declaration@0:1207..1223 `InitDeclaratorList`
+    InitDeclaratorList@0:1207..1223
+      SingleDeclaration@0:1207..1223
+        FullySpecifiedType@0:1207..1223
+          TypeQualifierSpec@0:1207..1223 `Storage`
+            StorageQualifier@0:1207..1223 `const`
+              Const
+          TypeSpecifier@0:1207..1223
+            TypeSpecifierNonArray@0:1207..1223 `TypeName`
+              TypeName@0:1207..1223
+        Expr `FunCall`
+          FunIdentifier@0:1207..1223 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1207..1223 `TypeName`
+                TypeName@0:1207..1223
+          Expr@0:1207..1223 `Variable`
+            Identifier@0:1207..1223 `uint16_t_init`
+ExternalDeclaration@0:1207..1223 `Declaration`
+  Declaration@0:1207..1223 `InitDeclaratorList`
+    InitDeclaratorList@0:1207..1223
+      SingleDeclaration@0:1207..1223
+        FullySpecifiedType@0:1207..1223
+          TypeQualifierSpec@0:1207..1223 `Storage`
+            StorageQualifier@0:1207..1223 `const`
+              Const
+          TypeSpecifier@0:1207..1223
+            TypeSpecifierNonArray@0:1207..1223 `TypeName`
+              TypeName@0:1207..1223
+        Expr `FunCall`
+          FunIdentifier@0:1207..1223 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1207..1223 `TypeName`
+                TypeName@0:1207..1223
+          Expr@0:1207..1223 `Variable`
+            Identifier@0:1207..1223 `uint32_t_init`
+ExternalDeclaration@0:1207..1223 `Declaration`
+  Declaration@0:1207..1223 `InitDeclaratorList`
+    InitDeclaratorList@0:1207..1223
+      SingleDeclaration@0:1207..1223
+        FullySpecifiedType@0:1207..1223
+          TypeQualifierSpec@0:1207..1223 `Storage`
+            StorageQualifier@0:1207..1223 `const`
+              Const
+          TypeSpecifier@0:1207..1223
+            TypeSpecifierNonArray@0:1207..1223 `TypeName`
+              TypeName@0:1207..1223
+        Expr `FunCall`
+          FunIdentifier@0:1207..1223 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1207..1223 `TypeName`
+                TypeName@0:1207..1223
+          Expr@0:1207..1223 `Variable`
+            Identifier@0:1207..1223 `uint64_t_init`
+ExternalDeclaration@0:1207..1223 `Declaration`
+  Declaration@0:1207..1223 `InitDeclaratorList`
+    InitDeclaratorList@0:1207..1223
+      SingleDeclaration@0:1207..1223
+        FullySpecifiedType@0:1207..1223
+          TypeQualifierSpec@0:1207..1223 `Storage`
+            StorageQualifier@0:1207..1223 `const`
+              Const
+          TypeSpecifier@0:1207..1223
+            TypeSpecifierNonArray@0:1207..1223 `TypeName`
+              TypeName@0:1207..1223
+        Expr `FunCall`
+          FunIdentifier@0:1207..1223 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1207..1223 `TypeName`
+                TypeName@0:1207..1223
+          Expr@0:1207..1223 `Variable`
+            Identifier@0:1207..1223 `float16_t_init`
+ExternalDeclaration@0:1207..1223 `Declaration`
+  Declaration@0:1207..1223 `InitDeclaratorList`
+    InitDeclaratorList@0:1207..1223
+      SingleDeclaration@0:1207..1223
+        FullySpecifiedType@0:1207..1223
+          TypeQualifierSpec@0:1207..1223 `Storage`
+            StorageQualifier@0:1207..1223 `const`
+              Const
+          TypeSpecifier@0:1207..1223
+            TypeSpecifierNonArray@0:1207..1223 `TypeName`
+              TypeName@0:1207..1223
+        Expr `FunCall`
+          FunIdentifier@0:1207..1223 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1207..1223 `TypeName`
+                TypeName@0:1207..1223
+          Expr@0:1207..1223 `Variable`
+            Identifier@0:1207..1223 `float32_t_init`
+ExternalDeclaration@0:1207..1224 `Declaration`
+  Declaration@0:1207..1224 `InitDeclaratorList`
+    InitDeclaratorList@0:1207..1223
+      SingleDeclaration@0:1207..1223
+        FullySpecifiedType@0:1207..1223
+          TypeQualifierSpec@0:1207..1223 `Storage`
+            StorageQualifier@0:1207..1223 `const`
+              Const
+          TypeSpecifier@0:1207..1223
+            TypeSpecifierNonArray@0:1207..1223 `TypeName`
+              TypeName@0:1207..1223
+        Expr `FunCall`
+          FunIdentifier@0:1207..1223 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1207..1223 `TypeName`
+                TypeName@0:1207..1223
+          Expr@0:1207..1223 `Variable`
+            Identifier@0:1207..1223 `float64_t_init`
+ExternalDeclaration@0:1226..1242 `Declaration`
+  Declaration@0:1226..1242 `InitDeclaratorList`
+    InitDeclaratorList@0:1226..1242
+      SingleDeclaration@0:1226..1242
+        FullySpecifiedType@0:1226..1242
+          TypeQualifierSpec@0:1226..1242 `Storage`
+            StorageQualifier@0:1226..1242 `const`
+              Const
+          TypeSpecifier@0:1226..1242
+            TypeSpecifierNonArray@0:1226..1242 `TypeName`
+              TypeName@0:1226..1242
+        Expr `FunCall`
+          FunIdentifier@0:1226..1242 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1226..1242 `TypeName`
+                TypeName@0:1226..1242
+          Expr@0:1226..1242 `Variable`
+            Identifier@0:1226..1242 `bool_init`
+ExternalDeclaration@0:1226..1242 `Declaration`
+  Declaration@0:1226..1242 `InitDeclaratorList`
+    InitDeclaratorList@0:1226..1242
+      SingleDeclaration@0:1226..1242
+        FullySpecifiedType@0:1226..1242
+          TypeQualifierSpec@0:1226..1242 `Storage`
+            StorageQualifier@0:1226..1242 `const`
+              Const
+          TypeSpecifier@0:1226..1242
+            TypeSpecifierNonArray@0:1226..1242 `TypeName`
+              TypeName@0:1226..1242
+        Expr `FunCall`
+          FunIdentifier@0:1226..1242 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1226..1242 `TypeName`
+                TypeName@0:1226..1242
+          Expr@0:1226..1242 `Variable`
+            Identifier@0:1226..1242 `int8_t_init`
+ExternalDeclaration@0:1226..1242 `Declaration`
+  Declaration@0:1226..1242 `InitDeclaratorList`
+    InitDeclaratorList@0:1226..1242
+      SingleDeclaration@0:1226..1242
+        FullySpecifiedType@0:1226..1242
+          TypeQualifierSpec@0:1226..1242 `Storage`
+            StorageQualifier@0:1226..1242 `const`
+              Const
+          TypeSpecifier@0:1226..1242
+            TypeSpecifierNonArray@0:1226..1242 `TypeName`
+              TypeName@0:1226..1242
+        Expr `FunCall`
+          FunIdentifier@0:1226..1242 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1226..1242 `TypeName`
+                TypeName@0:1226..1242
+          Expr@0:1226..1242 `Variable`
+            Identifier@0:1226..1242 `int16_t_init`
+ExternalDeclaration@0:1226..1242 `Declaration`
+  Declaration@0:1226..1242 `InitDeclaratorList`
+    InitDeclaratorList@0:1226..1242
+      SingleDeclaration@0:1226..1242
+        FullySpecifiedType@0:1226..1242
+          TypeQualifierSpec@0:1226..1242 `Storage`
+            StorageQualifier@0:1226..1242 `const`
+              Const
+          TypeSpecifier@0:1226..1242
+            TypeSpecifierNonArray@0:1226..1242 `TypeName`
+              TypeName@0:1226..1242
+        Expr `FunCall`
+          FunIdentifier@0:1226..1242 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1226..1242 `TypeName`
+                TypeName@0:1226..1242
+          Expr@0:1226..1242 `Variable`
+            Identifier@0:1226..1242 `int32_t_init`
+ExternalDeclaration@0:1226..1242 `Declaration`
+  Declaration@0:1226..1242 `InitDeclaratorList`
+    InitDeclaratorList@0:1226..1242
+      SingleDeclaration@0:1226..1242
+        FullySpecifiedType@0:1226..1242
+          TypeQualifierSpec@0:1226..1242 `Storage`
+            StorageQualifier@0:1226..1242 `const`
+              Const
+          TypeSpecifier@0:1226..1242
+            TypeSpecifierNonArray@0:1226..1242 `TypeName`
+              TypeName@0:1226..1242
+        Expr `FunCall`
+          FunIdentifier@0:1226..1242 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1226..1242 `TypeName`
+                TypeName@0:1226..1242
+          Expr@0:1226..1242 `Variable`
+            Identifier@0:1226..1242 `int64_t_init`
+ExternalDeclaration@0:1226..1242 `Declaration`
+  Declaration@0:1226..1242 `InitDeclaratorList`
+    InitDeclaratorList@0:1226..1242
+      SingleDeclaration@0:1226..1242
+        FullySpecifiedType@0:1226..1242
+          TypeQualifierSpec@0:1226..1242 `Storage`
+            StorageQualifier@0:1226..1242 `const`
+              Const
+          TypeSpecifier@0:1226..1242
+            TypeSpecifierNonArray@0:1226..1242 `TypeName`
+              TypeName@0:1226..1242
+        Expr `FunCall`
+          FunIdentifier@0:1226..1242 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1226..1242 `TypeName`
+                TypeName@0:1226..1242
+          Expr@0:1226..1242 `Variable`
+            Identifier@0:1226..1242 `uint8_t_init`
+ExternalDeclaration@0:1226..1242 `Declaration`
+  Declaration@0:1226..1242 `InitDeclaratorList`
+    InitDeclaratorList@0:1226..1242
+      SingleDeclaration@0:1226..1242
+        FullySpecifiedType@0:1226..1242
+          TypeQualifierSpec@0:1226..1242 `Storage`
+            StorageQualifier@0:1226..1242 `const`
+              Const
+          TypeSpecifier@0:1226..1242
+            TypeSpecifierNonArray@0:1226..1242 `TypeName`
+              TypeName@0:1226..1242
+        Expr `FunCall`
+          FunIdentifier@0:1226..1242 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1226..1242 `TypeName`
+                TypeName@0:1226..1242
+          Expr@0:1226..1242 `Variable`
+            Identifier@0:1226..1242 `uint16_t_init`
+ExternalDeclaration@0:1226..1242 `Declaration`
+  Declaration@0:1226..1242 `InitDeclaratorList`
+    InitDeclaratorList@0:1226..1242
+      SingleDeclaration@0:1226..1242
+        FullySpecifiedType@0:1226..1242
+          TypeQualifierSpec@0:1226..1242 `Storage`
+            StorageQualifier@0:1226..1242 `const`
+              Const
+          TypeSpecifier@0:1226..1242
+            TypeSpecifierNonArray@0:1226..1242 `TypeName`
+              TypeName@0:1226..1242
+        Expr `FunCall`
+          FunIdentifier@0:1226..1242 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1226..1242 `TypeName`
+                TypeName@0:1226..1242
+          Expr@0:1226..1242 `Variable`
+            Identifier@0:1226..1242 `uint32_t_init`
+ExternalDeclaration@0:1226..1242 `Declaration`
+  Declaration@0:1226..1242 `InitDeclaratorList`
+    InitDeclaratorList@0:1226..1242
+      SingleDeclaration@0:1226..1242
+        FullySpecifiedType@0:1226..1242
+          TypeQualifierSpec@0:1226..1242 `Storage`
+            StorageQualifier@0:1226..1242 `const`
+              Const
+          TypeSpecifier@0:1226..1242
+            TypeSpecifierNonArray@0:1226..1242 `TypeName`
+              TypeName@0:1226..1242
+        Expr `FunCall`
+          FunIdentifier@0:1226..1242 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1226..1242 `TypeName`
+                TypeName@0:1226..1242
+          Expr@0:1226..1242 `Variable`
+            Identifier@0:1226..1242 `uint64_t_init`
+ExternalDeclaration@0:1226..1242 `Declaration`
+  Declaration@0:1226..1242 `InitDeclaratorList`
+    InitDeclaratorList@0:1226..1242
+      SingleDeclaration@0:1226..1242
+        FullySpecifiedType@0:1226..1242
+          TypeQualifierSpec@0:1226..1242 `Storage`
+            StorageQualifier@0:1226..1242 `const`
+              Const
+          TypeSpecifier@0:1226..1242
+            TypeSpecifierNonArray@0:1226..1242 `TypeName`
+              TypeName@0:1226..1242
+        Expr `FunCall`
+          FunIdentifier@0:1226..1242 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1226..1242 `TypeName`
+                TypeName@0:1226..1242
+          Expr@0:1226..1242 `Variable`
+            Identifier@0:1226..1242 `float16_t_init`
+ExternalDeclaration@0:1226..1242 `Declaration`
+  Declaration@0:1226..1242 `InitDeclaratorList`
+    InitDeclaratorList@0:1226..1242
+      SingleDeclaration@0:1226..1242
+        FullySpecifiedType@0:1226..1242
+          TypeQualifierSpec@0:1226..1242 `Storage`
+            StorageQualifier@0:1226..1242 `const`
+              Const
+          TypeSpecifier@0:1226..1242
+            TypeSpecifierNonArray@0:1226..1242 `TypeName`
+              TypeName@0:1226..1242
+        Expr `FunCall`
+          FunIdentifier@0:1226..1242 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1226..1242 `TypeName`
+                TypeName@0:1226..1242
+          Expr@0:1226..1242 `Variable`
+            Identifier@0:1226..1242 `float32_t_init`
+ExternalDeclaration@0:1226..1243 `Declaration`
+  Declaration@0:1226..1243 `InitDeclaratorList`
+    InitDeclaratorList@0:1226..1242
+      SingleDeclaration@0:1226..1242
+        FullySpecifiedType@0:1226..1242
+          TypeQualifierSpec@0:1226..1242 `Storage`
+            StorageQualifier@0:1226..1242 `const`
+              Const
+          TypeSpecifier@0:1226..1242
+            TypeSpecifierNonArray@0:1226..1242 `TypeName`
+              TypeName@0:1226..1242
+        Expr `FunCall`
+          FunIdentifier@0:1226..1242 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1226..1242 `TypeName`
+                TypeName@0:1226..1242
+          Expr@0:1226..1242 `Variable`
+            Identifier@0:1226..1242 `float64_t_init`
+ExternalDeclaration@0:1245..1262 `Declaration`
+  Declaration@0:1245..1262 `InitDeclaratorList`
+    InitDeclaratorList@0:1245..1262
+      SingleDeclaration@0:1245..1262
+        FullySpecifiedType@0:1245..1262
+          TypeQualifierSpec@0:1245..1262 `Storage`
+            StorageQualifier@0:1245..1262 `const`
+              Const
+          TypeSpecifier@0:1245..1262
+            TypeSpecifierNonArray@0:1245..1262 `TypeName`
+              TypeName@0:1245..1262
+        Expr `FunCall`
+          FunIdentifier@0:1245..1262 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1245..1262 `TypeName`
+                TypeName@0:1245..1262
+          Expr@0:1245..1262 `Variable`
+            Identifier@0:1245..1262 `bool_init`
+ExternalDeclaration@0:1245..1262 `Declaration`
+  Declaration@0:1245..1262 `InitDeclaratorList`
+    InitDeclaratorList@0:1245..1262
+      SingleDeclaration@0:1245..1262
+        FullySpecifiedType@0:1245..1262
+          TypeQualifierSpec@0:1245..1262 `Storage`
+            StorageQualifier@0:1245..1262 `const`
+              Const
+          TypeSpecifier@0:1245..1262
+            TypeSpecifierNonArray@0:1245..1262 `TypeName`
+              TypeName@0:1245..1262
+        Expr `FunCall`
+          FunIdentifier@0:1245..1262 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1245..1262 `TypeName`
+                TypeName@0:1245..1262
+          Expr@0:1245..1262 `Variable`
+            Identifier@0:1245..1262 `int8_t_init`
+ExternalDeclaration@0:1245..1262 `Declaration`
+  Declaration@0:1245..1262 `InitDeclaratorList`
+    InitDeclaratorList@0:1245..1262
+      SingleDeclaration@0:1245..1262
+        FullySpecifiedType@0:1245..1262
+          TypeQualifierSpec@0:1245..1262 `Storage`
+            StorageQualifier@0:1245..1262 `const`
+              Const
+          TypeSpecifier@0:1245..1262
+            TypeSpecifierNonArray@0:1245..1262 `TypeName`
+              TypeName@0:1245..1262
+        Expr `FunCall`
+          FunIdentifier@0:1245..1262 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1245..1262 `TypeName`
+                TypeName@0:1245..1262
+          Expr@0:1245..1262 `Variable`
+            Identifier@0:1245..1262 `int16_t_init`
+ExternalDeclaration@0:1245..1262 `Declaration`
+  Declaration@0:1245..1262 `InitDeclaratorList`
+    InitDeclaratorList@0:1245..1262
+      SingleDeclaration@0:1245..1262
+        FullySpecifiedType@0:1245..1262
+          TypeQualifierSpec@0:1245..1262 `Storage`
+            StorageQualifier@0:1245..1262 `const`
+              Const
+          TypeSpecifier@0:1245..1262
+            TypeSpecifierNonArray@0:1245..1262 `TypeName`
+              TypeName@0:1245..1262
+        Expr `FunCall`
+          FunIdentifier@0:1245..1262 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1245..1262 `TypeName`
+                TypeName@0:1245..1262
+          Expr@0:1245..1262 `Variable`
+            Identifier@0:1245..1262 `int32_t_init`
+ExternalDeclaration@0:1245..1262 `Declaration`
+  Declaration@0:1245..1262 `InitDeclaratorList`
+    InitDeclaratorList@0:1245..1262
+      SingleDeclaration@0:1245..1262
+        FullySpecifiedType@0:1245..1262
+          TypeQualifierSpec@0:1245..1262 `Storage`
+            StorageQualifier@0:1245..1262 `const`
+              Const
+          TypeSpecifier@0:1245..1262
+            TypeSpecifierNonArray@0:1245..1262 `TypeName`
+              TypeName@0:1245..1262
+        Expr `FunCall`
+          FunIdentifier@0:1245..1262 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1245..1262 `TypeName`
+                TypeName@0:1245..1262
+          Expr@0:1245..1262 `Variable`
+            Identifier@0:1245..1262 `int64_t_init`
+ExternalDeclaration@0:1245..1262 `Declaration`
+  Declaration@0:1245..1262 `InitDeclaratorList`
+    InitDeclaratorList@0:1245..1262
+      SingleDeclaration@0:1245..1262
+        FullySpecifiedType@0:1245..1262
+          TypeQualifierSpec@0:1245..1262 `Storage`
+            StorageQualifier@0:1245..1262 `const`
+              Const
+          TypeSpecifier@0:1245..1262
+            TypeSpecifierNonArray@0:1245..1262 `TypeName`
+              TypeName@0:1245..1262
+        Expr `FunCall`
+          FunIdentifier@0:1245..1262 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1245..1262 `TypeName`
+                TypeName@0:1245..1262
+          Expr@0:1245..1262 `Variable`
+            Identifier@0:1245..1262 `uint8_t_init`
+ExternalDeclaration@0:1245..1262 `Declaration`
+  Declaration@0:1245..1262 `InitDeclaratorList`
+    InitDeclaratorList@0:1245..1262
+      SingleDeclaration@0:1245..1262
+        FullySpecifiedType@0:1245..1262
+          TypeQualifierSpec@0:1245..1262 `Storage`
+            StorageQualifier@0:1245..1262 `const`
+              Const
+          TypeSpecifier@0:1245..1262
+            TypeSpecifierNonArray@0:1245..1262 `TypeName`
+              TypeName@0:1245..1262
+        Expr `FunCall`
+          FunIdentifier@0:1245..1262 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1245..1262 `TypeName`
+                TypeName@0:1245..1262
+          Expr@0:1245..1262 `Variable`
+            Identifier@0:1245..1262 `uint16_t_init`
+ExternalDeclaration@0:1245..1262 `Declaration`
+  Declaration@0:1245..1262 `InitDeclaratorList`
+    InitDeclaratorList@0:1245..1262
+      SingleDeclaration@0:1245..1262
+        FullySpecifiedType@0:1245..1262
+          TypeQualifierSpec@0:1245..1262 `Storage`
+            StorageQualifier@0:1245..1262 `const`
+              Const
+          TypeSpecifier@0:1245..1262
+            TypeSpecifierNonArray@0:1245..1262 `TypeName`
+              TypeName@0:1245..1262
+        Expr `FunCall`
+          FunIdentifier@0:1245..1262 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1245..1262 `TypeName`
+                TypeName@0:1245..1262
+          Expr@0:1245..1262 `Variable`
+            Identifier@0:1245..1262 `uint32_t_init`
+ExternalDeclaration@0:1245..1262 `Declaration`
+  Declaration@0:1245..1262 `InitDeclaratorList`
+    InitDeclaratorList@0:1245..1262
+      SingleDeclaration@0:1245..1262
+        FullySpecifiedType@0:1245..1262
+          TypeQualifierSpec@0:1245..1262 `Storage`
+            StorageQualifier@0:1245..1262 `const`
+              Const
+          TypeSpecifier@0:1245..1262
+            TypeSpecifierNonArray@0:1245..1262 `TypeName`
+              TypeName@0:1245..1262
+        Expr `FunCall`
+          FunIdentifier@0:1245..1262 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1245..1262 `TypeName`
+                TypeName@0:1245..1262
+          Expr@0:1245..1262 `Variable`
+            Identifier@0:1245..1262 `uint64_t_init`
+ExternalDeclaration@0:1245..1262 `Declaration`
+  Declaration@0:1245..1262 `InitDeclaratorList`
+    InitDeclaratorList@0:1245..1262
+      SingleDeclaration@0:1245..1262
+        FullySpecifiedType@0:1245..1262
+          TypeQualifierSpec@0:1245..1262 `Storage`
+            StorageQualifier@0:1245..1262 `const`
+              Const
+          TypeSpecifier@0:1245..1262
+            TypeSpecifierNonArray@0:1245..1262 `TypeName`
+              TypeName@0:1245..1262
+        Expr `FunCall`
+          FunIdentifier@0:1245..1262 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1245..1262 `TypeName`
+                TypeName@0:1245..1262
+          Expr@0:1245..1262 `Variable`
+            Identifier@0:1245..1262 `float16_t_init`
+ExternalDeclaration@0:1245..1262 `Declaration`
+  Declaration@0:1245..1262 `InitDeclaratorList`
+    InitDeclaratorList@0:1245..1262
+      SingleDeclaration@0:1245..1262
+        FullySpecifiedType@0:1245..1262
+          TypeQualifierSpec@0:1245..1262 `Storage`
+            StorageQualifier@0:1245..1262 `const`
+              Const
+          TypeSpecifier@0:1245..1262
+            TypeSpecifierNonArray@0:1245..1262 `TypeName`
+              TypeName@0:1245..1262
+        Expr `FunCall`
+          FunIdentifier@0:1245..1262 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1245..1262 `TypeName`
+                TypeName@0:1245..1262
+          Expr@0:1245..1262 `Variable`
+            Identifier@0:1245..1262 `float32_t_init`
+ExternalDeclaration@0:1245..1263 `Declaration`
+  Declaration@0:1245..1263 `InitDeclaratorList`
+    InitDeclaratorList@0:1245..1262
+      SingleDeclaration@0:1245..1262
+        FullySpecifiedType@0:1245..1262
+          TypeQualifierSpec@0:1245..1262 `Storage`
+            StorageQualifier@0:1245..1262 `const`
+              Const
+          TypeSpecifier@0:1245..1262
+            TypeSpecifierNonArray@0:1245..1262 `TypeName`
+              TypeName@0:1245..1262
+        Expr `FunCall`
+          FunIdentifier@0:1245..1262 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1245..1262 `TypeName`
+                TypeName@0:1245..1262
+          Expr@0:1245..1262 `Variable`
+            Identifier@0:1245..1262 `float64_t_init`
+ExternalDeclaration@0:1265..1282 `Declaration`
+  Declaration@0:1265..1282 `InitDeclaratorList`
+    InitDeclaratorList@0:1265..1282
+      SingleDeclaration@0:1265..1282
+        FullySpecifiedType@0:1265..1282
+          TypeQualifierSpec@0:1265..1282 `Storage`
+            StorageQualifier@0:1265..1282 `const`
+              Const
+          TypeSpecifier@0:1265..1282
+            TypeSpecifierNonArray@0:1265..1282 `TypeName`
+              TypeName@0:1265..1282
+        Expr `FunCall`
+          FunIdentifier@0:1265..1282 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1265..1282 `TypeName`
+                TypeName@0:1265..1282
+          Expr@0:1265..1282 `Variable`
+            Identifier@0:1265..1282 `bool_init`
+ExternalDeclaration@0:1265..1282 `Declaration`
+  Declaration@0:1265..1282 `InitDeclaratorList`
+    InitDeclaratorList@0:1265..1282
+      SingleDeclaration@0:1265..1282
+        FullySpecifiedType@0:1265..1282
+          TypeQualifierSpec@0:1265..1282 `Storage`
+            StorageQualifier@0:1265..1282 `const`
+              Const
+          TypeSpecifier@0:1265..1282
+            TypeSpecifierNonArray@0:1265..1282 `TypeName`
+              TypeName@0:1265..1282
+        Expr `FunCall`
+          FunIdentifier@0:1265..1282 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1265..1282 `TypeName`
+                TypeName@0:1265..1282
+          Expr@0:1265..1282 `Variable`
+            Identifier@0:1265..1282 `int8_t_init`
+ExternalDeclaration@0:1265..1282 `Declaration`
+  Declaration@0:1265..1282 `InitDeclaratorList`
+    InitDeclaratorList@0:1265..1282
+      SingleDeclaration@0:1265..1282
+        FullySpecifiedType@0:1265..1282
+          TypeQualifierSpec@0:1265..1282 `Storage`
+            StorageQualifier@0:1265..1282 `const`
+              Const
+          TypeSpecifier@0:1265..1282
+            TypeSpecifierNonArray@0:1265..1282 `TypeName`
+              TypeName@0:1265..1282
+        Expr `FunCall`
+          FunIdentifier@0:1265..1282 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1265..1282 `TypeName`
+                TypeName@0:1265..1282
+          Expr@0:1265..1282 `Variable`
+            Identifier@0:1265..1282 `int16_t_init`
+ExternalDeclaration@0:1265..1282 `Declaration`
+  Declaration@0:1265..1282 `InitDeclaratorList`
+    InitDeclaratorList@0:1265..1282
+      SingleDeclaration@0:1265..1282
+        FullySpecifiedType@0:1265..1282
+          TypeQualifierSpec@0:1265..1282 `Storage`
+            StorageQualifier@0:1265..1282 `const`
+              Const
+          TypeSpecifier@0:1265..1282
+            TypeSpecifierNonArray@0:1265..1282 `TypeName`
+              TypeName@0:1265..1282
+        Expr `FunCall`
+          FunIdentifier@0:1265..1282 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1265..1282 `TypeName`
+                TypeName@0:1265..1282
+          Expr@0:1265..1282 `Variable`
+            Identifier@0:1265..1282 `int32_t_init`
+ExternalDeclaration@0:1265..1282 `Declaration`
+  Declaration@0:1265..1282 `InitDeclaratorList`
+    InitDeclaratorList@0:1265..1282
+      SingleDeclaration@0:1265..1282
+        FullySpecifiedType@0:1265..1282
+          TypeQualifierSpec@0:1265..1282 `Storage`
+            StorageQualifier@0:1265..1282 `const`
+              Const
+          TypeSpecifier@0:1265..1282
+            TypeSpecifierNonArray@0:1265..1282 `TypeName`
+              TypeName@0:1265..1282
+        Expr `FunCall`
+          FunIdentifier@0:1265..1282 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1265..1282 `TypeName`
+                TypeName@0:1265..1282
+          Expr@0:1265..1282 `Variable`
+            Identifier@0:1265..1282 `int64_t_init`
+ExternalDeclaration@0:1265..1282 `Declaration`
+  Declaration@0:1265..1282 `InitDeclaratorList`
+    InitDeclaratorList@0:1265..1282
+      SingleDeclaration@0:1265..1282
+        FullySpecifiedType@0:1265..1282
+          TypeQualifierSpec@0:1265..1282 `Storage`
+            StorageQualifier@0:1265..1282 `const`
+              Const
+          TypeSpecifier@0:1265..1282
+            TypeSpecifierNonArray@0:1265..1282 `TypeName`
+              TypeName@0:1265..1282
+        Expr `FunCall`
+          FunIdentifier@0:1265..1282 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1265..1282 `TypeName`
+                TypeName@0:1265..1282
+          Expr@0:1265..1282 `Variable`
+            Identifier@0:1265..1282 `uint8_t_init`
+ExternalDeclaration@0:1265..1282 `Declaration`
+  Declaration@0:1265..1282 `InitDeclaratorList`
+    InitDeclaratorList@0:1265..1282
+      SingleDeclaration@0:1265..1282
+        FullySpecifiedType@0:1265..1282
+          TypeQualifierSpec@0:1265..1282 `Storage`
+            StorageQualifier@0:1265..1282 `const`
+              Const
+          TypeSpecifier@0:1265..1282
+            TypeSpecifierNonArray@0:1265..1282 `TypeName`
+              TypeName@0:1265..1282
+        Expr `FunCall`
+          FunIdentifier@0:1265..1282 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1265..1282 `TypeName`
+                TypeName@0:1265..1282
+          Expr@0:1265..1282 `Variable`
+            Identifier@0:1265..1282 `uint16_t_init`
+ExternalDeclaration@0:1265..1282 `Declaration`
+  Declaration@0:1265..1282 `InitDeclaratorList`
+    InitDeclaratorList@0:1265..1282
+      SingleDeclaration@0:1265..1282
+        FullySpecifiedType@0:1265..1282
+          TypeQualifierSpec@0:1265..1282 `Storage`
+            StorageQualifier@0:1265..1282 `const`
+              Const
+          TypeSpecifier@0:1265..1282
+            TypeSpecifierNonArray@0:1265..1282 `TypeName`
+              TypeName@0:1265..1282
+        Expr `FunCall`
+          FunIdentifier@0:1265..1282 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1265..1282 `TypeName`
+                TypeName@0:1265..1282
+          Expr@0:1265..1282 `Variable`
+            Identifier@0:1265..1282 `uint32_t_init`
+ExternalDeclaration@0:1265..1282 `Declaration`
+  Declaration@0:1265..1282 `InitDeclaratorList`
+    InitDeclaratorList@0:1265..1282
+      SingleDeclaration@0:1265..1282
+        FullySpecifiedType@0:1265..1282
+          TypeQualifierSpec@0:1265..1282 `Storage`
+            StorageQualifier@0:1265..1282 `const`
+              Const
+          TypeSpecifier@0:1265..1282
+            TypeSpecifierNonArray@0:1265..1282 `TypeName`
+              TypeName@0:1265..1282
+        Expr `FunCall`
+          FunIdentifier@0:1265..1282 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1265..1282 `TypeName`
+                TypeName@0:1265..1282
+          Expr@0:1265..1282 `Variable`
+            Identifier@0:1265..1282 `uint64_t_init`
+ExternalDeclaration@0:1265..1282 `Declaration`
+  Declaration@0:1265..1282 `InitDeclaratorList`
+    InitDeclaratorList@0:1265..1282
+      SingleDeclaration@0:1265..1282
+        FullySpecifiedType@0:1265..1282
+          TypeQualifierSpec@0:1265..1282 `Storage`
+            StorageQualifier@0:1265..1282 `const`
+              Const
+          TypeSpecifier@0:1265..1282
+            TypeSpecifierNonArray@0:1265..1282 `TypeName`
+              TypeName@0:1265..1282
+        Expr `FunCall`
+          FunIdentifier@0:1265..1282 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1265..1282 `TypeName`
+                TypeName@0:1265..1282
+          Expr@0:1265..1282 `Variable`
+            Identifier@0:1265..1282 `float16_t_init`
+ExternalDeclaration@0:1265..1282 `Declaration`
+  Declaration@0:1265..1282 `InitDeclaratorList`
+    InitDeclaratorList@0:1265..1282
+      SingleDeclaration@0:1265..1282
+        FullySpecifiedType@0:1265..1282
+          TypeQualifierSpec@0:1265..1282 `Storage`
+            StorageQualifier@0:1265..1282 `const`
+              Const
+          TypeSpecifier@0:1265..1282
+            TypeSpecifierNonArray@0:1265..1282 `TypeName`
+              TypeName@0:1265..1282
+        Expr `FunCall`
+          FunIdentifier@0:1265..1282 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1265..1282 `TypeName`
+                TypeName@0:1265..1282
+          Expr@0:1265..1282 `Variable`
+            Identifier@0:1265..1282 `float32_t_init`
+ExternalDeclaration@0:1265..1283 `Declaration`
+  Declaration@0:1265..1283 `InitDeclaratorList`
+    InitDeclaratorList@0:1265..1282
+      SingleDeclaration@0:1265..1282
+        FullySpecifiedType@0:1265..1282
+          TypeQualifierSpec@0:1265..1282 `Storage`
+            StorageQualifier@0:1265..1282 `const`
+              Const
+          TypeSpecifier@0:1265..1282
+            TypeSpecifierNonArray@0:1265..1282 `TypeName`
+              TypeName@0:1265..1282
+        Expr `FunCall`
+          FunIdentifier@0:1265..1282 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1265..1282 `TypeName`
+                TypeName@0:1265..1282
+          Expr@0:1265..1282 `Variable`
+            Identifier@0:1265..1282 `float64_t_init`
+ExternalDeclaration@0:1285..1302 `Declaration`
+  Declaration@0:1285..1302 `InitDeclaratorList`
+    InitDeclaratorList@0:1285..1302
+      SingleDeclaration@0:1285..1302
+        FullySpecifiedType@0:1285..1302
+          TypeQualifierSpec@0:1285..1302 `Storage`
+            StorageQualifier@0:1285..1302 `const`
+              Const
+          TypeSpecifier@0:1285..1302
+            TypeSpecifierNonArray@0:1285..1302 `TypeName`
+              TypeName@0:1285..1302
+        Expr `FunCall`
+          FunIdentifier@0:1285..1302 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1285..1302 `TypeName`
+                TypeName@0:1285..1302
+          Expr@0:1285..1302 `Variable`
+            Identifier@0:1285..1302 `bool_init`
+ExternalDeclaration@0:1285..1302 `Declaration`
+  Declaration@0:1285..1302 `InitDeclaratorList`
+    InitDeclaratorList@0:1285..1302
+      SingleDeclaration@0:1285..1302
+        FullySpecifiedType@0:1285..1302
+          TypeQualifierSpec@0:1285..1302 `Storage`
+            StorageQualifier@0:1285..1302 `const`
+              Const
+          TypeSpecifier@0:1285..1302
+            TypeSpecifierNonArray@0:1285..1302 `TypeName`
+              TypeName@0:1285..1302
+        Expr `FunCall`
+          FunIdentifier@0:1285..1302 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1285..1302 `TypeName`
+                TypeName@0:1285..1302
+          Expr@0:1285..1302 `Variable`
+            Identifier@0:1285..1302 `int8_t_init`
+ExternalDeclaration@0:1285..1302 `Declaration`
+  Declaration@0:1285..1302 `InitDeclaratorList`
+    InitDeclaratorList@0:1285..1302
+      SingleDeclaration@0:1285..1302
+        FullySpecifiedType@0:1285..1302
+          TypeQualifierSpec@0:1285..1302 `Storage`
+            StorageQualifier@0:1285..1302 `const`
+              Const
+          TypeSpecifier@0:1285..1302
+            TypeSpecifierNonArray@0:1285..1302 `TypeName`
+              TypeName@0:1285..1302
+        Expr `FunCall`
+          FunIdentifier@0:1285..1302 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1285..1302 `TypeName`
+                TypeName@0:1285..1302
+          Expr@0:1285..1302 `Variable`
+            Identifier@0:1285..1302 `int16_t_init`
+ExternalDeclaration@0:1285..1302 `Declaration`
+  Declaration@0:1285..1302 `InitDeclaratorList`
+    InitDeclaratorList@0:1285..1302
+      SingleDeclaration@0:1285..1302
+        FullySpecifiedType@0:1285..1302
+          TypeQualifierSpec@0:1285..1302 `Storage`
+            StorageQualifier@0:1285..1302 `const`
+              Const
+          TypeSpecifier@0:1285..1302
+            TypeSpecifierNonArray@0:1285..1302 `TypeName`
+              TypeName@0:1285..1302
+        Expr `FunCall`
+          FunIdentifier@0:1285..1302 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1285..1302 `TypeName`
+                TypeName@0:1285..1302
+          Expr@0:1285..1302 `Variable`
+            Identifier@0:1285..1302 `int32_t_init`
+ExternalDeclaration@0:1285..1302 `Declaration`
+  Declaration@0:1285..1302 `InitDeclaratorList`
+    InitDeclaratorList@0:1285..1302
+      SingleDeclaration@0:1285..1302
+        FullySpecifiedType@0:1285..1302
+          TypeQualifierSpec@0:1285..1302 `Storage`
+            StorageQualifier@0:1285..1302 `const`
+              Const
+          TypeSpecifier@0:1285..1302
+            TypeSpecifierNonArray@0:1285..1302 `TypeName`
+              TypeName@0:1285..1302
+        Expr `FunCall`
+          FunIdentifier@0:1285..1302 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1285..1302 `TypeName`
+                TypeName@0:1285..1302
+          Expr@0:1285..1302 `Variable`
+            Identifier@0:1285..1302 `int64_t_init`
+ExternalDeclaration@0:1285..1302 `Declaration`
+  Declaration@0:1285..1302 `InitDeclaratorList`
+    InitDeclaratorList@0:1285..1302
+      SingleDeclaration@0:1285..1302
+        FullySpecifiedType@0:1285..1302
+          TypeQualifierSpec@0:1285..1302 `Storage`
+            StorageQualifier@0:1285..1302 `const`
+              Const
+          TypeSpecifier@0:1285..1302
+            TypeSpecifierNonArray@0:1285..1302 `TypeName`
+              TypeName@0:1285..1302
+        Expr `FunCall`
+          FunIdentifier@0:1285..1302 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1285..1302 `TypeName`
+                TypeName@0:1285..1302
+          Expr@0:1285..1302 `Variable`
+            Identifier@0:1285..1302 `uint8_t_init`
+ExternalDeclaration@0:1285..1302 `Declaration`
+  Declaration@0:1285..1302 `InitDeclaratorList`
+    InitDeclaratorList@0:1285..1302
+      SingleDeclaration@0:1285..1302
+        FullySpecifiedType@0:1285..1302
+          TypeQualifierSpec@0:1285..1302 `Storage`
+            StorageQualifier@0:1285..1302 `const`
+              Const
+          TypeSpecifier@0:1285..1302
+            TypeSpecifierNonArray@0:1285..1302 `TypeName`
+              TypeName@0:1285..1302
+        Expr `FunCall`
+          FunIdentifier@0:1285..1302 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1285..1302 `TypeName`
+                TypeName@0:1285..1302
+          Expr@0:1285..1302 `Variable`
+            Identifier@0:1285..1302 `uint16_t_init`
+ExternalDeclaration@0:1285..1302 `Declaration`
+  Declaration@0:1285..1302 `InitDeclaratorList`
+    InitDeclaratorList@0:1285..1302
+      SingleDeclaration@0:1285..1302
+        FullySpecifiedType@0:1285..1302
+          TypeQualifierSpec@0:1285..1302 `Storage`
+            StorageQualifier@0:1285..1302 `const`
+              Const
+          TypeSpecifier@0:1285..1302
+            TypeSpecifierNonArray@0:1285..1302 `TypeName`
+              TypeName@0:1285..1302
+        Expr `FunCall`
+          FunIdentifier@0:1285..1302 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1285..1302 `TypeName`
+                TypeName@0:1285..1302
+          Expr@0:1285..1302 `Variable`
+            Identifier@0:1285..1302 `uint32_t_init`
+ExternalDeclaration@0:1285..1302 `Declaration`
+  Declaration@0:1285..1302 `InitDeclaratorList`
+    InitDeclaratorList@0:1285..1302
+      SingleDeclaration@0:1285..1302
+        FullySpecifiedType@0:1285..1302
+          TypeQualifierSpec@0:1285..1302 `Storage`
+            StorageQualifier@0:1285..1302 `const`
+              Const
+          TypeSpecifier@0:1285..1302
+            TypeSpecifierNonArray@0:1285..1302 `TypeName`
+              TypeName@0:1285..1302
+        Expr `FunCall`
+          FunIdentifier@0:1285..1302 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1285..1302 `TypeName`
+                TypeName@0:1285..1302
+          Expr@0:1285..1302 `Variable`
+            Identifier@0:1285..1302 `uint64_t_init`
+ExternalDeclaration@0:1285..1302 `Declaration`
+  Declaration@0:1285..1302 `InitDeclaratorList`
+    InitDeclaratorList@0:1285..1302
+      SingleDeclaration@0:1285..1302
+        FullySpecifiedType@0:1285..1302
+          TypeQualifierSpec@0:1285..1302 `Storage`
+            StorageQualifier@0:1285..1302 `const`
+              Const
+          TypeSpecifier@0:1285..1302
+            TypeSpecifierNonArray@0:1285..1302 `TypeName`
+              TypeName@0:1285..1302
+        Expr `FunCall`
+          FunIdentifier@0:1285..1302 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1285..1302 `TypeName`
+                TypeName@0:1285..1302
+          Expr@0:1285..1302 `Variable`
+            Identifier@0:1285..1302 `float16_t_init`
+ExternalDeclaration@0:1285..1302 `Declaration`
+  Declaration@0:1285..1302 `InitDeclaratorList`
+    InitDeclaratorList@0:1285..1302
+      SingleDeclaration@0:1285..1302
+        FullySpecifiedType@0:1285..1302
+          TypeQualifierSpec@0:1285..1302 `Storage`
+            StorageQualifier@0:1285..1302 `const`
+              Const
+          TypeSpecifier@0:1285..1302
+            TypeSpecifierNonArray@0:1285..1302 `TypeName`
+              TypeName@0:1285..1302
+        Expr `FunCall`
+          FunIdentifier@0:1285..1302 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1285..1302 `TypeName`
+                TypeName@0:1285..1302
+          Expr@0:1285..1302 `Variable`
+            Identifier@0:1285..1302 `float32_t_init`
+ExternalDeclaration@0:1285..1303 `Declaration`
+  Declaration@0:1285..1303 `InitDeclaratorList`
+    InitDeclaratorList@0:1285..1302
+      SingleDeclaration@0:1285..1302
+        FullySpecifiedType@0:1285..1302
+          TypeQualifierSpec@0:1285..1302 `Storage`
+            StorageQualifier@0:1285..1302 `const`
+              Const
+          TypeSpecifier@0:1285..1302
+            TypeSpecifierNonArray@0:1285..1302 `TypeName`
+              TypeName@0:1285..1302
+        Expr `FunCall`
+          FunIdentifier@0:1285..1302 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1285..1302 `TypeName`
+                TypeName@0:1285..1302
+          Expr@0:1285..1302 `Variable`
+            Identifier@0:1285..1302 `float64_t_init`
+ExternalDeclaration@0:1305..1323 `Declaration`
+  Declaration@0:1305..1323 `InitDeclaratorList`
+    InitDeclaratorList@0:1305..1323
+      SingleDeclaration@0:1305..1323
+        FullySpecifiedType@0:1305..1323
+          TypeQualifierSpec@0:1305..1323 `Storage`
+            StorageQualifier@0:1305..1323 `const`
+              Const
+          TypeSpecifier@0:1305..1323
+            TypeSpecifierNonArray@0:1305..1323 `TypeName`
+              TypeName@0:1305..1323
+        Expr `FunCall`
+          FunIdentifier@0:1305..1323 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1305..1323 `TypeName`
+                TypeName@0:1305..1323
+          Expr@0:1305..1323 `Variable`
+            Identifier@0:1305..1323 `bool_init`
+ExternalDeclaration@0:1305..1323 `Declaration`
+  Declaration@0:1305..1323 `InitDeclaratorList`
+    InitDeclaratorList@0:1305..1323
+      SingleDeclaration@0:1305..1323
+        FullySpecifiedType@0:1305..1323
+          TypeQualifierSpec@0:1305..1323 `Storage`
+            StorageQualifier@0:1305..1323 `const`
+              Const
+          TypeSpecifier@0:1305..1323
+            TypeSpecifierNonArray@0:1305..1323 `TypeName`
+              TypeName@0:1305..1323
+        Expr `FunCall`
+          FunIdentifier@0:1305..1323 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1305..1323 `TypeName`
+                TypeName@0:1305..1323
+          Expr@0:1305..1323 `Variable`
+            Identifier@0:1305..1323 `int8_t_init`
+ExternalDeclaration@0:1305..1323 `Declaration`
+  Declaration@0:1305..1323 `InitDeclaratorList`
+    InitDeclaratorList@0:1305..1323
+      SingleDeclaration@0:1305..1323
+        FullySpecifiedType@0:1305..1323
+          TypeQualifierSpec@0:1305..1323 `Storage`
+            StorageQualifier@0:1305..1323 `const`
+              Const
+          TypeSpecifier@0:1305..1323
+            TypeSpecifierNonArray@0:1305..1323 `TypeName`
+              TypeName@0:1305..1323
+        Expr `FunCall`
+          FunIdentifier@0:1305..1323 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1305..1323 `TypeName`
+                TypeName@0:1305..1323
+          Expr@0:1305..1323 `Variable`
+            Identifier@0:1305..1323 `int16_t_init`
+ExternalDeclaration@0:1305..1323 `Declaration`
+  Declaration@0:1305..1323 `InitDeclaratorList`
+    InitDeclaratorList@0:1305..1323
+      SingleDeclaration@0:1305..1323
+        FullySpecifiedType@0:1305..1323
+          TypeQualifierSpec@0:1305..1323 `Storage`
+            StorageQualifier@0:1305..1323 `const`
+              Const
+          TypeSpecifier@0:1305..1323
+            TypeSpecifierNonArray@0:1305..1323 `TypeName`
+              TypeName@0:1305..1323
+        Expr `FunCall`
+          FunIdentifier@0:1305..1323 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1305..1323 `TypeName`
+                TypeName@0:1305..1323
+          Expr@0:1305..1323 `Variable`
+            Identifier@0:1305..1323 `int32_t_init`
+ExternalDeclaration@0:1305..1323 `Declaration`
+  Declaration@0:1305..1323 `InitDeclaratorList`
+    InitDeclaratorList@0:1305..1323
+      SingleDeclaration@0:1305..1323
+        FullySpecifiedType@0:1305..1323
+          TypeQualifierSpec@0:1305..1323 `Storage`
+            StorageQualifier@0:1305..1323 `const`
+              Const
+          TypeSpecifier@0:1305..1323
+            TypeSpecifierNonArray@0:1305..1323 `TypeName`
+              TypeName@0:1305..1323
+        Expr `FunCall`
+          FunIdentifier@0:1305..1323 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1305..1323 `TypeName`
+                TypeName@0:1305..1323
+          Expr@0:1305..1323 `Variable`
+            Identifier@0:1305..1323 `int64_t_init`
+ExternalDeclaration@0:1305..1323 `Declaration`
+  Declaration@0:1305..1323 `InitDeclaratorList`
+    InitDeclaratorList@0:1305..1323
+      SingleDeclaration@0:1305..1323
+        FullySpecifiedType@0:1305..1323
+          TypeQualifierSpec@0:1305..1323 `Storage`
+            StorageQualifier@0:1305..1323 `const`
+              Const
+          TypeSpecifier@0:1305..1323
+            TypeSpecifierNonArray@0:1305..1323 `TypeName`
+              TypeName@0:1305..1323
+        Expr `FunCall`
+          FunIdentifier@0:1305..1323 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1305..1323 `TypeName`
+                TypeName@0:1305..1323
+          Expr@0:1305..1323 `Variable`
+            Identifier@0:1305..1323 `uint8_t_init`
+ExternalDeclaration@0:1305..1323 `Declaration`
+  Declaration@0:1305..1323 `InitDeclaratorList`
+    InitDeclaratorList@0:1305..1323
+      SingleDeclaration@0:1305..1323
+        FullySpecifiedType@0:1305..1323
+          TypeQualifierSpec@0:1305..1323 `Storage`
+            StorageQualifier@0:1305..1323 `const`
+              Const
+          TypeSpecifier@0:1305..1323
+            TypeSpecifierNonArray@0:1305..1323 `TypeName`
+              TypeName@0:1305..1323
+        Expr `FunCall`
+          FunIdentifier@0:1305..1323 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1305..1323 `TypeName`
+                TypeName@0:1305..1323
+          Expr@0:1305..1323 `Variable`
+            Identifier@0:1305..1323 `uint16_t_init`
+ExternalDeclaration@0:1305..1323 `Declaration`
+  Declaration@0:1305..1323 `InitDeclaratorList`
+    InitDeclaratorList@0:1305..1323
+      SingleDeclaration@0:1305..1323
+        FullySpecifiedType@0:1305..1323
+          TypeQualifierSpec@0:1305..1323 `Storage`
+            StorageQualifier@0:1305..1323 `const`
+              Const
+          TypeSpecifier@0:1305..1323
+            TypeSpecifierNonArray@0:1305..1323 `TypeName`
+              TypeName@0:1305..1323
+        Expr `FunCall`
+          FunIdentifier@0:1305..1323 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1305..1323 `TypeName`
+                TypeName@0:1305..1323
+          Expr@0:1305..1323 `Variable`
+            Identifier@0:1305..1323 `uint32_t_init`
+ExternalDeclaration@0:1305..1323 `Declaration`
+  Declaration@0:1305..1323 `InitDeclaratorList`
+    InitDeclaratorList@0:1305..1323
+      SingleDeclaration@0:1305..1323
+        FullySpecifiedType@0:1305..1323
+          TypeQualifierSpec@0:1305..1323 `Storage`
+            StorageQualifier@0:1305..1323 `const`
+              Const
+          TypeSpecifier@0:1305..1323
+            TypeSpecifierNonArray@0:1305..1323 `TypeName`
+              TypeName@0:1305..1323
+        Expr `FunCall`
+          FunIdentifier@0:1305..1323 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1305..1323 `TypeName`
+                TypeName@0:1305..1323
+          Expr@0:1305..1323 `Variable`
+            Identifier@0:1305..1323 `uint64_t_init`
+ExternalDeclaration@0:1305..1323 `Declaration`
+  Declaration@0:1305..1323 `InitDeclaratorList`
+    InitDeclaratorList@0:1305..1323
+      SingleDeclaration@0:1305..1323
+        FullySpecifiedType@0:1305..1323
+          TypeQualifierSpec@0:1305..1323 `Storage`
+            StorageQualifier@0:1305..1323 `const`
+              Const
+          TypeSpecifier@0:1305..1323
+            TypeSpecifierNonArray@0:1305..1323 `TypeName`
+              TypeName@0:1305..1323
+        Expr `FunCall`
+          FunIdentifier@0:1305..1323 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1305..1323 `TypeName`
+                TypeName@0:1305..1323
+          Expr@0:1305..1323 `Variable`
+            Identifier@0:1305..1323 `float16_t_init`
+ExternalDeclaration@0:1305..1323 `Declaration`
+  Declaration@0:1305..1323 `InitDeclaratorList`
+    InitDeclaratorList@0:1305..1323
+      SingleDeclaration@0:1305..1323
+        FullySpecifiedType@0:1305..1323
+          TypeQualifierSpec@0:1305..1323 `Storage`
+            StorageQualifier@0:1305..1323 `const`
+              Const
+          TypeSpecifier@0:1305..1323
+            TypeSpecifierNonArray@0:1305..1323 `TypeName`
+              TypeName@0:1305..1323
+        Expr `FunCall`
+          FunIdentifier@0:1305..1323 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1305..1323 `TypeName`
+                TypeName@0:1305..1323
+          Expr@0:1305..1323 `Variable`
+            Identifier@0:1305..1323 `float32_t_init`
+ExternalDeclaration@0:1305..1324 `Declaration`
+  Declaration@0:1305..1324 `InitDeclaratorList`
+    InitDeclaratorList@0:1305..1323
+      SingleDeclaration@0:1305..1323
+        FullySpecifiedType@0:1305..1323
+          TypeQualifierSpec@0:1305..1323 `Storage`
+            StorageQualifier@0:1305..1323 `const`
+              Const
+          TypeSpecifier@0:1305..1323
+            TypeSpecifierNonArray@0:1305..1323 `TypeName`
+              TypeName@0:1305..1323
+        Expr `FunCall`
+          FunIdentifier@0:1305..1323 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1305..1323 `TypeName`
+                TypeName@0:1305..1323
+          Expr@0:1305..1323 `Variable`
+            Identifier@0:1305..1323 `float64_t_init`
+ExternalDeclaration@0:1326..1344 `Declaration`
+  Declaration@0:1326..1344 `InitDeclaratorList`
+    InitDeclaratorList@0:1326..1344
+      SingleDeclaration@0:1326..1344
+        FullySpecifiedType@0:1326..1344
+          TypeQualifierSpec@0:1326..1344 `Storage`
+            StorageQualifier@0:1326..1344 `const`
+              Const
+          TypeSpecifier@0:1326..1344
+            TypeSpecifierNonArray@0:1326..1344 `TypeName`
+              TypeName@0:1326..1344
+        Expr `FunCall`
+          FunIdentifier@0:1326..1344 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1326..1344 `TypeName`
+                TypeName@0:1326..1344
+          Expr@0:1326..1344 `Variable`
+            Identifier@0:1326..1344 `bool_init`
+ExternalDeclaration@0:1326..1344 `Declaration`
+  Declaration@0:1326..1344 `InitDeclaratorList`
+    InitDeclaratorList@0:1326..1344
+      SingleDeclaration@0:1326..1344
+        FullySpecifiedType@0:1326..1344
+          TypeQualifierSpec@0:1326..1344 `Storage`
+            StorageQualifier@0:1326..1344 `const`
+              Const
+          TypeSpecifier@0:1326..1344
+            TypeSpecifierNonArray@0:1326..1344 `TypeName`
+              TypeName@0:1326..1344
+        Expr `FunCall`
+          FunIdentifier@0:1326..1344 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1326..1344 `TypeName`
+                TypeName@0:1326..1344
+          Expr@0:1326..1344 `Variable`
+            Identifier@0:1326..1344 `int8_t_init`
+ExternalDeclaration@0:1326..1344 `Declaration`
+  Declaration@0:1326..1344 `InitDeclaratorList`
+    InitDeclaratorList@0:1326..1344
+      SingleDeclaration@0:1326..1344
+        FullySpecifiedType@0:1326..1344
+          TypeQualifierSpec@0:1326..1344 `Storage`
+            StorageQualifier@0:1326..1344 `const`
+              Const
+          TypeSpecifier@0:1326..1344
+            TypeSpecifierNonArray@0:1326..1344 `TypeName`
+              TypeName@0:1326..1344
+        Expr `FunCall`
+          FunIdentifier@0:1326..1344 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1326..1344 `TypeName`
+                TypeName@0:1326..1344
+          Expr@0:1326..1344 `Variable`
+            Identifier@0:1326..1344 `int16_t_init`
+ExternalDeclaration@0:1326..1344 `Declaration`
+  Declaration@0:1326..1344 `InitDeclaratorList`
+    InitDeclaratorList@0:1326..1344
+      SingleDeclaration@0:1326..1344
+        FullySpecifiedType@0:1326..1344
+          TypeQualifierSpec@0:1326..1344 `Storage`
+            StorageQualifier@0:1326..1344 `const`
+              Const
+          TypeSpecifier@0:1326..1344
+            TypeSpecifierNonArray@0:1326..1344 `TypeName`
+              TypeName@0:1326..1344
+        Expr `FunCall`
+          FunIdentifier@0:1326..1344 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1326..1344 `TypeName`
+                TypeName@0:1326..1344
+          Expr@0:1326..1344 `Variable`
+            Identifier@0:1326..1344 `int32_t_init`
+ExternalDeclaration@0:1326..1344 `Declaration`
+  Declaration@0:1326..1344 `InitDeclaratorList`
+    InitDeclaratorList@0:1326..1344
+      SingleDeclaration@0:1326..1344
+        FullySpecifiedType@0:1326..1344
+          TypeQualifierSpec@0:1326..1344 `Storage`
+            StorageQualifier@0:1326..1344 `const`
+              Const
+          TypeSpecifier@0:1326..1344
+            TypeSpecifierNonArray@0:1326..1344 `TypeName`
+              TypeName@0:1326..1344
+        Expr `FunCall`
+          FunIdentifier@0:1326..1344 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1326..1344 `TypeName`
+                TypeName@0:1326..1344
+          Expr@0:1326..1344 `Variable`
+            Identifier@0:1326..1344 `int64_t_init`
+ExternalDeclaration@0:1326..1344 `Declaration`
+  Declaration@0:1326..1344 `InitDeclaratorList`
+    InitDeclaratorList@0:1326..1344
+      SingleDeclaration@0:1326..1344
+        FullySpecifiedType@0:1326..1344
+          TypeQualifierSpec@0:1326..1344 `Storage`
+            StorageQualifier@0:1326..1344 `const`
+              Const
+          TypeSpecifier@0:1326..1344
+            TypeSpecifierNonArray@0:1326..1344 `TypeName`
+              TypeName@0:1326..1344
+        Expr `FunCall`
+          FunIdentifier@0:1326..1344 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1326..1344 `TypeName`
+                TypeName@0:1326..1344
+          Expr@0:1326..1344 `Variable`
+            Identifier@0:1326..1344 `uint8_t_init`
+ExternalDeclaration@0:1326..1344 `Declaration`
+  Declaration@0:1326..1344 `InitDeclaratorList`
+    InitDeclaratorList@0:1326..1344
+      SingleDeclaration@0:1326..1344
+        FullySpecifiedType@0:1326..1344
+          TypeQualifierSpec@0:1326..1344 `Storage`
+            StorageQualifier@0:1326..1344 `const`
+              Const
+          TypeSpecifier@0:1326..1344
+            TypeSpecifierNonArray@0:1326..1344 `TypeName`
+              TypeName@0:1326..1344
+        Expr `FunCall`
+          FunIdentifier@0:1326..1344 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1326..1344 `TypeName`
+                TypeName@0:1326..1344
+          Expr@0:1326..1344 `Variable`
+            Identifier@0:1326..1344 `uint16_t_init`
+ExternalDeclaration@0:1326..1344 `Declaration`
+  Declaration@0:1326..1344 `InitDeclaratorList`
+    InitDeclaratorList@0:1326..1344
+      SingleDeclaration@0:1326..1344
+        FullySpecifiedType@0:1326..1344
+          TypeQualifierSpec@0:1326..1344 `Storage`
+            StorageQualifier@0:1326..1344 `const`
+              Const
+          TypeSpecifier@0:1326..1344
+            TypeSpecifierNonArray@0:1326..1344 `TypeName`
+              TypeName@0:1326..1344
+        Expr `FunCall`
+          FunIdentifier@0:1326..1344 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1326..1344 `TypeName`
+                TypeName@0:1326..1344
+          Expr@0:1326..1344 `Variable`
+            Identifier@0:1326..1344 `uint32_t_init`
+ExternalDeclaration@0:1326..1344 `Declaration`
+  Declaration@0:1326..1344 `InitDeclaratorList`
+    InitDeclaratorList@0:1326..1344
+      SingleDeclaration@0:1326..1344
+        FullySpecifiedType@0:1326..1344
+          TypeQualifierSpec@0:1326..1344 `Storage`
+            StorageQualifier@0:1326..1344 `const`
+              Const
+          TypeSpecifier@0:1326..1344
+            TypeSpecifierNonArray@0:1326..1344 `TypeName`
+              TypeName@0:1326..1344
+        Expr `FunCall`
+          FunIdentifier@0:1326..1344 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1326..1344 `TypeName`
+                TypeName@0:1326..1344
+          Expr@0:1326..1344 `Variable`
+            Identifier@0:1326..1344 `uint64_t_init`
+ExternalDeclaration@0:1326..1344 `Declaration`
+  Declaration@0:1326..1344 `InitDeclaratorList`
+    InitDeclaratorList@0:1326..1344
+      SingleDeclaration@0:1326..1344
+        FullySpecifiedType@0:1326..1344
+          TypeQualifierSpec@0:1326..1344 `Storage`
+            StorageQualifier@0:1326..1344 `const`
+              Const
+          TypeSpecifier@0:1326..1344
+            TypeSpecifierNonArray@0:1326..1344 `TypeName`
+              TypeName@0:1326..1344
+        Expr `FunCall`
+          FunIdentifier@0:1326..1344 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1326..1344 `TypeName`
+                TypeName@0:1326..1344
+          Expr@0:1326..1344 `Variable`
+            Identifier@0:1326..1344 `float16_t_init`
+ExternalDeclaration@0:1326..1344 `Declaration`
+  Declaration@0:1326..1344 `InitDeclaratorList`
+    InitDeclaratorList@0:1326..1344
+      SingleDeclaration@0:1326..1344
+        FullySpecifiedType@0:1326..1344
+          TypeQualifierSpec@0:1326..1344 `Storage`
+            StorageQualifier@0:1326..1344 `const`
+              Const
+          TypeSpecifier@0:1326..1344
+            TypeSpecifierNonArray@0:1326..1344 `TypeName`
+              TypeName@0:1326..1344
+        Expr `FunCall`
+          FunIdentifier@0:1326..1344 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1326..1344 `TypeName`
+                TypeName@0:1326..1344
+          Expr@0:1326..1344 `Variable`
+            Identifier@0:1326..1344 `float32_t_init`
+ExternalDeclaration@0:1326..1345 `Declaration`
+  Declaration@0:1326..1345 `InitDeclaratorList`
+    InitDeclaratorList@0:1326..1344
+      SingleDeclaration@0:1326..1344
+        FullySpecifiedType@0:1326..1344
+          TypeQualifierSpec@0:1326..1344 `Storage`
+            StorageQualifier@0:1326..1344 `const`
+              Const
+          TypeSpecifier@0:1326..1344
+            TypeSpecifierNonArray@0:1326..1344 `TypeName`
+              TypeName@0:1326..1344
+        Expr `FunCall`
+          FunIdentifier@0:1326..1344 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1326..1344 `TypeName`
+                TypeName@0:1326..1344
+          Expr@0:1326..1344 `Variable`
+            Identifier@0:1326..1344 `float64_t_init`
+ExternalDeclaration@0:1347..1365 `Declaration`
+  Declaration@0:1347..1365 `InitDeclaratorList`
+    InitDeclaratorList@0:1347..1365
+      SingleDeclaration@0:1347..1365
+        FullySpecifiedType@0:1347..1365
+          TypeQualifierSpec@0:1347..1365 `Storage`
+            StorageQualifier@0:1347..1365 `const`
+              Const
+          TypeSpecifier@0:1347..1365
+            TypeSpecifierNonArray@0:1347..1365 `TypeName`
+              TypeName@0:1347..1365
+        Expr `FunCall`
+          FunIdentifier@0:1347..1365 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1347..1365 `TypeName`
+                TypeName@0:1347..1365
+          Expr@0:1347..1365 `Variable`
+            Identifier@0:1347..1365 `bool_init`
+ExternalDeclaration@0:1347..1365 `Declaration`
+  Declaration@0:1347..1365 `InitDeclaratorList`
+    InitDeclaratorList@0:1347..1365
+      SingleDeclaration@0:1347..1365
+        FullySpecifiedType@0:1347..1365
+          TypeQualifierSpec@0:1347..1365 `Storage`
+            StorageQualifier@0:1347..1365 `const`
+              Const
+          TypeSpecifier@0:1347..1365
+            TypeSpecifierNonArray@0:1347..1365 `TypeName`
+              TypeName@0:1347..1365
+        Expr `FunCall`
+          FunIdentifier@0:1347..1365 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1347..1365 `TypeName`
+                TypeName@0:1347..1365
+          Expr@0:1347..1365 `Variable`
+            Identifier@0:1347..1365 `int8_t_init`
+ExternalDeclaration@0:1347..1365 `Declaration`
+  Declaration@0:1347..1365 `InitDeclaratorList`
+    InitDeclaratorList@0:1347..1365
+      SingleDeclaration@0:1347..1365
+        FullySpecifiedType@0:1347..1365
+          TypeQualifierSpec@0:1347..1365 `Storage`
+            StorageQualifier@0:1347..1365 `const`
+              Const
+          TypeSpecifier@0:1347..1365
+            TypeSpecifierNonArray@0:1347..1365 `TypeName`
+              TypeName@0:1347..1365
+        Expr `FunCall`
+          FunIdentifier@0:1347..1365 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1347..1365 `TypeName`
+                TypeName@0:1347..1365
+          Expr@0:1347..1365 `Variable`
+            Identifier@0:1347..1365 `int16_t_init`
+ExternalDeclaration@0:1347..1365 `Declaration`
+  Declaration@0:1347..1365 `InitDeclaratorList`
+    InitDeclaratorList@0:1347..1365
+      SingleDeclaration@0:1347..1365
+        FullySpecifiedType@0:1347..1365
+          TypeQualifierSpec@0:1347..1365 `Storage`
+            StorageQualifier@0:1347..1365 `const`
+              Const
+          TypeSpecifier@0:1347..1365
+            TypeSpecifierNonArray@0:1347..1365 `TypeName`
+              TypeName@0:1347..1365
+        Expr `FunCall`
+          FunIdentifier@0:1347..1365 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1347..1365 `TypeName`
+                TypeName@0:1347..1365
+          Expr@0:1347..1365 `Variable`
+            Identifier@0:1347..1365 `int32_t_init`
+ExternalDeclaration@0:1347..1365 `Declaration`
+  Declaration@0:1347..1365 `InitDeclaratorList`
+    InitDeclaratorList@0:1347..1365
+      SingleDeclaration@0:1347..1365
+        FullySpecifiedType@0:1347..1365
+          TypeQualifierSpec@0:1347..1365 `Storage`
+            StorageQualifier@0:1347..1365 `const`
+              Const
+          TypeSpecifier@0:1347..1365
+            TypeSpecifierNonArray@0:1347..1365 `TypeName`
+              TypeName@0:1347..1365
+        Expr `FunCall`
+          FunIdentifier@0:1347..1365 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1347..1365 `TypeName`
+                TypeName@0:1347..1365
+          Expr@0:1347..1365 `Variable`
+            Identifier@0:1347..1365 `int64_t_init`
+ExternalDeclaration@0:1347..1365 `Declaration`
+  Declaration@0:1347..1365 `InitDeclaratorList`
+    InitDeclaratorList@0:1347..1365
+      SingleDeclaration@0:1347..1365
+        FullySpecifiedType@0:1347..1365
+          TypeQualifierSpec@0:1347..1365 `Storage`
+            StorageQualifier@0:1347..1365 `const`
+              Const
+          TypeSpecifier@0:1347..1365
+            TypeSpecifierNonArray@0:1347..1365 `TypeName`
+              TypeName@0:1347..1365
+        Expr `FunCall`
+          FunIdentifier@0:1347..1365 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1347..1365 `TypeName`
+                TypeName@0:1347..1365
+          Expr@0:1347..1365 `Variable`
+            Identifier@0:1347..1365 `uint8_t_init`
+ExternalDeclaration@0:1347..1365 `Declaration`
+  Declaration@0:1347..1365 `InitDeclaratorList`
+    InitDeclaratorList@0:1347..1365
+      SingleDeclaration@0:1347..1365
+        FullySpecifiedType@0:1347..1365
+          TypeQualifierSpec@0:1347..1365 `Storage`
+            StorageQualifier@0:1347..1365 `const`
+              Const
+          TypeSpecifier@0:1347..1365
+            TypeSpecifierNonArray@0:1347..1365 `TypeName`
+              TypeName@0:1347..1365
+        Expr `FunCall`
+          FunIdentifier@0:1347..1365 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1347..1365 `TypeName`
+                TypeName@0:1347..1365
+          Expr@0:1347..1365 `Variable`
+            Identifier@0:1347..1365 `uint16_t_init`
+ExternalDeclaration@0:1347..1365 `Declaration`
+  Declaration@0:1347..1365 `InitDeclaratorList`
+    InitDeclaratorList@0:1347..1365
+      SingleDeclaration@0:1347..1365
+        FullySpecifiedType@0:1347..1365
+          TypeQualifierSpec@0:1347..1365 `Storage`
+            StorageQualifier@0:1347..1365 `const`
+              Const
+          TypeSpecifier@0:1347..1365
+            TypeSpecifierNonArray@0:1347..1365 `TypeName`
+              TypeName@0:1347..1365
+        Expr `FunCall`
+          FunIdentifier@0:1347..1365 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1347..1365 `TypeName`
+                TypeName@0:1347..1365
+          Expr@0:1347..1365 `Variable`
+            Identifier@0:1347..1365 `uint32_t_init`
+ExternalDeclaration@0:1347..1365 `Declaration`
+  Declaration@0:1347..1365 `InitDeclaratorList`
+    InitDeclaratorList@0:1347..1365
+      SingleDeclaration@0:1347..1365
+        FullySpecifiedType@0:1347..1365
+          TypeQualifierSpec@0:1347..1365 `Storage`
+            StorageQualifier@0:1347..1365 `const`
+              Const
+          TypeSpecifier@0:1347..1365
+            TypeSpecifierNonArray@0:1347..1365 `TypeName`
+              TypeName@0:1347..1365
+        Expr `FunCall`
+          FunIdentifier@0:1347..1365 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1347..1365 `TypeName`
+                TypeName@0:1347..1365
+          Expr@0:1347..1365 `Variable`
+            Identifier@0:1347..1365 `uint64_t_init`
+ExternalDeclaration@0:1347..1365 `Declaration`
+  Declaration@0:1347..1365 `InitDeclaratorList`
+    InitDeclaratorList@0:1347..1365
+      SingleDeclaration@0:1347..1365
+        FullySpecifiedType@0:1347..1365
+          TypeQualifierSpec@0:1347..1365 `Storage`
+            StorageQualifier@0:1347..1365 `const`
+              Const
+          TypeSpecifier@0:1347..1365
+            TypeSpecifierNonArray@0:1347..1365 `TypeName`
+              TypeName@0:1347..1365
+        Expr `FunCall`
+          FunIdentifier@0:1347..1365 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1347..1365 `TypeName`
+                TypeName@0:1347..1365
+          Expr@0:1347..1365 `Variable`
+            Identifier@0:1347..1365 `float16_t_init`
+ExternalDeclaration@0:1347..1365 `Declaration`
+  Declaration@0:1347..1365 `InitDeclaratorList`
+    InitDeclaratorList@0:1347..1365
+      SingleDeclaration@0:1347..1365
+        FullySpecifiedType@0:1347..1365
+          TypeQualifierSpec@0:1347..1365 `Storage`
+            StorageQualifier@0:1347..1365 `const`
+              Const
+          TypeSpecifier@0:1347..1365
+            TypeSpecifierNonArray@0:1347..1365 `TypeName`
+              TypeName@0:1347..1365
+        Expr `FunCall`
+          FunIdentifier@0:1347..1365 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1347..1365 `TypeName`
+                TypeName@0:1347..1365
+          Expr@0:1347..1365 `Variable`
+            Identifier@0:1347..1365 `float32_t_init`
+ExternalDeclaration@0:1347..1366 `Declaration`
+  Declaration@0:1347..1366 `InitDeclaratorList`
+    InitDeclaratorList@0:1347..1365
+      SingleDeclaration@0:1347..1365
+        FullySpecifiedType@0:1347..1365
+          TypeQualifierSpec@0:1347..1365 `Storage`
+            StorageQualifier@0:1347..1365 `const`
+              Const
+          TypeSpecifier@0:1347..1365
+            TypeSpecifierNonArray@0:1347..1365 `TypeName`
+              TypeName@0:1347..1365
+        Expr `FunCall`
+          FunIdentifier@0:1347..1365 `TypeSpecifier`
+            TypeSpecifier
+              TypeSpecifierNonArray@0:1347..1365 `TypeName`
+                TypeName@0:1347..1365
+          Expr@0:1347..1365 `Variable`
+            Identifier@0:1347..1365 `float64_t_init`
+ExternalDeclaration@0:1370..1384 `FunctionDefinition`
+  FunctionDefinition@0:1370..1384
+    FunctionPrototype@0:1370..1381
+      FullySpecifiedType@0:1370..1374
+        TypeSpecifier@0:1370..1374
+          TypeSpecifierNonArray@0:1370..1374 `void`
+            Void
+      Identifier@0:1375..1379 `main`
+    CompoundStatement@0:1382..1384

@@ -1,0 +1,396 @@
+ExternalDeclaration@0:19..67 `Declaration`
+  Declaration@0:19..67 `InitDeclaratorList`
+    InitDeclaratorList@0:19..66
+      SingleDeclaration@0:19..66
+        FullySpecifiedType@0:19..58
+          TypeQualifierSpec@0:19..38 `Layout`
+            LayoutQualifier@0:19..38
+              LayoutQualifierSpec@0:26..37 `Identifier`
+                Identifier@0:26..33 `binding`
+                IntConst `0`
+          TypeQualifierSpec@0:39..46 `Storage`
+            StorageQualifier@0:39..46 `uniform`
+              Uniform
+          TypeSpecifier@0:47..58
+            TypeSpecifierNonArray@0:47..58 `atomic_uint`
+              AtomicUInt
+ExternalDeclaration@0:68..128 `Declaration`
+  Declaration@0:68..128 `InitDeclaratorList`
+    InitDeclaratorList@0:68..127
+      SingleDeclaration@0:68..127
+        FullySpecifiedType@0:68..119
+          TypeQualifierSpec@0:68..99 `Layout`
+            LayoutQualifier@0:68..99
+              LayoutQualifierSpec@0:75..86 `Identifier`
+                Identifier@0:75..82 `binding`
+                IntConst `0`
+              LayoutQualifierSpec@0:88..98 `Identifier`
+                Identifier@0:88..94 `offset`
+                IntConst `9`
+          TypeQualifierSpec@0:100..107 `Storage`
+            StorageQualifier@0:100..107 `uniform`
+              Uniform
+          TypeSpecifier@0:108..119
+            TypeSpecifierNonArray@0:108..119 `atomic_uint`
+              AtomicUInt
+ExternalDeclaration@0:130..196 `FunctionDefinition`
+  FunctionDefinition@0:130..196
+    FunctionPrototype@0:130..154
+      FullySpecifiedType@0:130..134
+        TypeSpecifier@0:130..134
+          TypeSpecifierNonArray@0:130..134 `uint`
+            UInt
+      Identifier@0:135..139 `func`
+      FunctionParameterDeclaration@0:140..153 `Named`
+        FunctionParameterDeclarator@0:140..153
+          TypeSpecifier@0:140..151
+            TypeSpecifierNonArray@0:140..151 `atomic_uint`
+              AtomicUInt
+          ArrayedIdentifier@0:152..153
+            Identifier@0:152..153 `c`
+    CompoundStatement@0:155..196
+      Statement@0:161..194 `Jump`
+        JumpStatement@0:161..194 `return`
+          FunIdentifier@0:168..190 `Expr`
+            Expr `Variable`
+              Identifier@0:168..190 `atomicCounterIncrement`
+          Expr@0:191..192 `Variable`
+            Identifier@0:191..192 `c`
+ExternalDeclaration@0:198..329 `FunctionDefinition`
+  FunctionDefinition@0:198..329
+    FunctionPrototype@0:198..227
+      FullySpecifiedType@0:198..202
+        TypeSpecifier@0:198..202
+          TypeSpecifierNonArray@0:198..202 `uint`
+            UInt
+      Identifier@0:203..208 `func2`
+      FunctionParameterDeclaration@0:209..226 `Named`
+        TypeQualifierSpec@0:209..212 `Storage`
+          StorageQualifier@0:209..212 `out`
+            Out
+        FunctionParameterDeclarator@0:213..226
+          TypeSpecifier@0:213..224
+            TypeSpecifierNonArray@0:213..224 `atomic_uint`
+              AtomicUInt
+          ArrayedIdentifier@0:225..226
+            Identifier@0:225..226 `c`
+    CompoundStatement@0:237..329
+      Statement@0:243..258 `Jump`
+        JumpStatement@0:243..258 `return`
+          Identifier@0:250..257 `counter`
+      Statement@0:297..327 `Jump`
+        JumpStatement@0:297..327 `return`
+          FunIdentifier@0:304..317 `Expr`
+            Expr `Variable`
+              Identifier@0:304..317 `atomicCounter`
+          Expr@0:318..325 `Variable`
+            Identifier@0:318..325 `counter`
+ExternalDeclaration@0:331..471 `FunctionDefinition`
+  FunctionDefinition@0:331..471
+    FunctionPrototype@0:331..342
+      FullySpecifiedType@0:331..335
+        TypeSpecifier@0:331..335
+          TypeSpecifierNonArray@0:331..335 `void`
+            Void
+      Identifier@0:336..340 `main`
+    CompoundStatement@0:343..471
+      Statement@0:350..382 `Declaration`
+        Declaration@0:350..382 `InitDeclaratorList`
+          InitDeclaratorList@0:350..381
+            SingleDeclaration@0:350..381
+              FullySpecifiedType@0:350..361
+                TypeSpecifier@0:350..361
+                  TypeSpecifierNonArray@0:350..361 `atomic_uint`
+                    AtomicUInt
+      Statement@0:397..431 `Declaration`
+        Declaration@0:397..431 `InitDeclaratorList`
+          InitDeclaratorList@0:397..430
+            SingleDeclaration@0:397..430
+              FullySpecifiedType@0:397..401
+                TypeSpecifier@0:397..401
+                  TypeSpecifierNonArray@0:397..401 `uint`
+                    UInt
+              Expr `FunCall`
+                FunIdentifier@0:408..421 `Expr`
+                  Expr `Variable`
+                    Identifier@0:408..421 `atomicCounter`
+                Expr@0:422..429 `Variable`
+                  Identifier@0:422..429 `counter`
+      Statement@0:437..469 `Expression`
+        ExprStatement@0:437..469
+          FunIdentifier@0:437..459 `Expr`
+            Expr `Variable`
+              Identifier@0:437..459 `atomicCounterDecrement`
+          Expr@0:460..467 `Variable`
+            Identifier@0:460..467 `counter`
+ExternalDeclaration@0:474..538 `Declaration`
+  Declaration@0:474..538 `InitDeclaratorList`
+    InitDeclaratorList@0:474..537
+      SingleDeclaration@0:474..537
+        FullySpecifiedType@0:474..525
+          TypeQualifierSpec@0:474..505 `Layout`
+            LayoutQualifier@0:474..505
+              LayoutQualifierSpec@0:481..492 `Identifier`
+                Identifier@0:481..488 `binding`
+                IntConst `1`
+              LayoutQualifierSpec@0:494..504 `Identifier`
+                Identifier@0:494..500 `offset`
+                IntConst `3`
+          TypeQualifierSpec@0:506..513 `Storage`
+            StorageQualifier@0:506..513 `uniform`
+              Uniform
+          TypeSpecifier@0:514..525
+            TypeSpecifierNonArray@0:514..525 `atomic_uint`
+              AtomicUInt
+        ArraySpecifierDimension@0:534..537 `ExplicitlySized`
+          Expr `IntConst`
+            IntConst `4`
+ExternalDeclaration@0:540..554 `Declaration`
+  Declaration@0:540..554 `InitDeclaratorList`
+    InitDeclaratorList@0:540..553
+      SingleDeclaration@0:540..553
+        FullySpecifiedType@0:540..551
+          TypeQualifierSpec@0:540..547 `Storage`
+            StorageQualifier@0:540..547 `uniform`
+              Uniform
+          TypeSpecifier@0:548..551
+            TypeSpecifierNonArray@0:548..551 `int`
+              Int
+ExternalDeclaration@0:558..762 `FunctionDefinition`
+  FunctionDefinition@0:558..762
+    FunctionPrototype@0:558..569
+      FullySpecifiedType@0:558..562
+        TypeSpecifier@0:558..562
+          TypeSpecifierNonArray@0:558..562 `void`
+            Void
+      Identifier@0:563..567 `opac`
+    CompoundStatement@0:571..762
+      Statement@0:578..596 `Expression`
+        ExprStatement@0:578..596
+          BinaryOp@0:586..587 `+`
+          Expr `Variable`
+            Identifier@0:578..585 `counter`
+          Expr `Variable`
+            Identifier@0:588..595 `counter`
+      Statement@0:612..621 `Expression`
+        ExprStatement@0:612..621
+          UnaryOp@0:612..613 `-`
+          Expr `Variable`
+            Identifier@0:613..620 `counter`
+      Statement@0:646..655 `Declaration`
+        Declaration@0:646..655 `InitDeclaratorList`
+          InitDeclaratorList@0:646..654
+            SingleDeclaration@0:646..654
+              FullySpecifiedType@0:646..649
+                TypeSpecifier@0:646..649
+                  TypeSpecifierNonArray@0:646..649 `int`
+                    Int
+              ArraySpecifierDimension@0:651..654 `ExplicitlySized`
+                Expr `IntConst`
+                  IntConst `3`
+      Statement@0:661..672 `Expression`
+        ExprStatement@0:661..672
+          Expr `Variable`
+            Identifier@0:661..662 `a`
+          Expr `Variable`
+            Identifier@0:663..670 `counter`
+      Statement@0:695..707 `Expression`
+        ExprStatement@0:695..707
+          Expr `Variable`
+            Identifier@0:695..703 `countArr`
+          Expr `IntConst`
+            IntConst `2`
+      Statement@0:713..725 `Expression`
+        ExprStatement@0:713..725
+          Expr `Variable`
+            Identifier@0:713..721 `countArr`
+          Expr `Variable`
+            Identifier@0:722..723 `i`
+      Statement@0:731..743 `Expression`
+        ExprStatement@0:731..743
+          Expr `Variable`
+            Identifier@0:731..738 `counter`
+          AssignmentOp@0:739..740 `=`
+          Expr `IntConst`
+            IntConst `4`
+ExternalDeclaration@0:766..786 `Declaration`
+  Declaration@0:766..786 `InitDeclaratorList`
+    InitDeclaratorList@0:766..785
+      SingleDeclaration@0:766..785
+        FullySpecifiedType@0:766..780
+          TypeQualifierSpec@0:766..768 `Storage`
+            StorageQualifier@0:766..768 `in`
+              In
+          TypeSpecifier@0:769..780
+            TypeSpecifierNonArray@0:769..780 `atomic_uint`
+              AtomicUInt
+ExternalDeclaration@0:800..816 `Declaration`
+  Declaration@0:800..816 `InitDeclaratorList`
+    InitDeclaratorList@0:800..815
+      SingleDeclaration@0:800..815
+        FullySpecifiedType@0:800..811
+          TypeSpecifier@0:800..811
+            TypeSpecifierNonArray@0:800..811 `atomic_uint`
+              AtomicUInt
+ExternalDeclaration@0:834..854 `Declaration`
+  Declaration@0:834..854 `InitDeclaratorList`
+    InitDeclaratorList@0:834..853
+      SingleDeclaration@0:834..853
+        FullySpecifiedType@0:834..853
+          TypeQualifierSpec@0:834..841 `Storage`
+            StorageQualifier@0:834..841 `uniform`
+              Uniform
+          TypeSpecifier@0:842..853
+            TypeSpecifierNonArray@0:842..853 `atomic_uint`
+              AtomicUInt
+ExternalDeclaration@0:856..884 `Declaration`
+  Declaration@0:856..884 `InitDeclaratorList`
+    InitDeclaratorList@0:856..883
+      SingleDeclaration@0:856..883
+        FullySpecifiedType@0:856..875
+          TypeQualifierSpec@0:856..863 `Storage`
+            StorageQualifier@0:856..863 `uniform`
+              Uniform
+          TypeSpecifier@0:864..875
+            TypeSpecifierNonArray@0:864..875 `atomic_uint`
+              AtomicUInt
+ExternalDeclaration@0:932..989 `Declaration`
+  Declaration@0:932..989 `InitDeclaratorList`
+    InitDeclaratorList@0:932..988
+      SingleDeclaration@0:932..988
+        FullySpecifiedType@0:932..980
+          TypeQualifierSpec@0:932..960 `Layout`
+            LayoutQualifier@0:932..960
+              LayoutQualifierSpec@0:939..948 `Identifier`
+                Identifier@0:939..946 `binding`
+                IntConst `0`
+              LayoutQualifierSpec@0:950..959 `Identifier`
+                Identifier@0:950..956 `offset`
+                IntConst `32`
+          TypeQualifierSpec@0:961..968 `Storage`
+            StorageQualifier@0:961..968 `uniform`
+              Uniform
+          TypeSpecifier@0:969..980
+            TypeSpecifierNonArray@0:969..980 `atomic_uint`
+              AtomicUInt
+ExternalDeclaration@0:991..1039 `Declaration`
+  Declaration@0:991..1039 `InitDeclaratorList`
+    InitDeclaratorList@0:991..1038
+      SingleDeclaration@0:991..1038
+        FullySpecifiedType@0:991..1038
+          TypeQualifierSpec@0:991..1018 `Layout`
+            LayoutQualifier@0:991..1018
+              LayoutQualifierSpec@0:998..1007 `Identifier`
+                Identifier@0:998..1005 `binding`
+                IntConst `0`
+              LayoutQualifierSpec@0:1009..1017 `Identifier`
+                Identifier@0:1009..1015 `offset`
+                IntConst `4`
+          TypeQualifierSpec@0:1019..1026 `Storage`
+            StorageQualifier@0:1019..1026 `uniform`
+              Uniform
+          TypeSpecifier@0:1027..1038
+            TypeSpecifierNonArray@0:1027..1038 `atomic_uint`
+              AtomicUInt
+ExternalDeclaration@0:1041..1084 `Declaration`
+  Declaration@0:1041..1084 `InitDeclaratorList`
+    InitDeclaratorList@0:1041..1083
+      SingleDeclaration@0:1041..1083
+        FullySpecifiedType@0:1041..1078
+          TypeQualifierSpec@0:1041..1058 `Layout`
+            LayoutQualifier@0:1041..1058
+              LayoutQualifierSpec@0:1048..1057 `Identifier`
+                Identifier@0:1048..1055 `binding`
+                IntConst `0`
+          TypeQualifierSpec@0:1059..1066 `Storage`
+            StorageQualifier@0:1059..1066 `uniform`
+              Uniform
+          TypeSpecifier@0:1067..1078
+            TypeSpecifierNonArray@0:1067..1078 `atomic_uint`
+              AtomicUInt
+ExternalDeclaration@0:1111..1155 `Declaration`
+  Declaration@0:1111..1155 `InitDeclaratorList`
+    InitDeclaratorList@0:1111..1154
+      SingleDeclaration@0:1111..1154
+        FullySpecifiedType@0:1111..1148
+          TypeQualifierSpec@0:1111..1128 `Layout`
+            LayoutQualifier@0:1111..1128
+              LayoutQualifierSpec@0:1118..1127 `Identifier`
+                Identifier@0:1118..1125 `binding`
+                IntConst `0`
+          TypeQualifierSpec@0:1129..1136 `Storage`
+            StorageQualifier@0:1129..1136 `uniform`
+              Uniform
+          TypeSpecifier@0:1137..1148
+            TypeSpecifierNonArray@0:1137..1148 `atomic_uint`
+              AtomicUInt
+        ArraySpecifierDimension@0:1151..1154 `ExplicitlySized`
+          Expr `IntConst`
+            IntConst `2`
+ExternalDeclaration@0:1180..1221 `Declaration`
+  Declaration@0:1180..1221 `InitDeclaratorList`
+    InitDeclaratorList@0:1180..1220
+      SingleDeclaration@0:1180..1220
+        FullySpecifiedType@0:1180..1217
+          TypeQualifierSpec@0:1180..1197 `Layout`
+            LayoutQualifier@0:1180..1197
+              LayoutQualifierSpec@0:1187..1196 `Identifier`
+                Identifier@0:1187..1194 `binding`
+                IntConst `0`
+          TypeQualifierSpec@0:1198..1205 `Storage`
+            StorageQualifier@0:1198..1205 `uniform`
+              Uniform
+          TypeSpecifier@0:1206..1217
+            TypeSpecifierNonArray@0:1206..1217 `atomic_uint`
+              AtomicUInt
+ExternalDeclaration@0:1250..1292 `Declaration`
+  Declaration@0:1250..1292 `InitDeclaratorList`
+    InitDeclaratorList@0:1250..1291
+      SingleDeclaration@0:1250..1291
+        FullySpecifiedType@0:1250..1286
+          TypeQualifierSpec@0:1250..1266 `Layout`
+            LayoutQualifier@0:1250..1266
+              LayoutQualifierSpec@0:1257..1265 `Identifier`
+                Identifier@0:1257..1263 `offset`
+                IntConst `8`
+          TypeQualifierSpec@0:1267..1274 `Storage`
+            StorageQualifier@0:1267..1274 `uniform`
+              Uniform
+          TypeSpecifier@0:1275..1286
+            TypeSpecifierNonArray@0:1275..1286 `atomic_uint`
+              AtomicUInt
+ExternalDeclaration@0:1326..1387 `Declaration`
+  Declaration@0:1326..1387 `InitDeclaratorList`
+    InitDeclaratorList@0:1326..1386
+      SingleDeclaration@0:1326..1386
+        FullySpecifiedType@0:1326..1378
+          TypeQualifierSpec@0:1326..1358 `Layout`
+            LayoutQualifier@0:1326..1358
+              LayoutQualifierSpec@0:1333..1344 `Identifier`
+                Identifier@0:1333..1340 `binding`
+                IntConst `0`
+              LayoutQualifierSpec@0:1346..1357 `Identifier`
+                Identifier@0:1346..1352 `offset`
+                IntConst `12`
+          TypeQualifierSpec@0:1359..1366 `Storage`
+            StorageQualifier@0:1359..1366 `uniform`
+              Uniform
+          TypeSpecifier@0:1367..1378
+            TypeSpecifierNonArray@0:1367..1378 `atomic_uint`
+              AtomicUInt
+ExternalDeclaration@0:1420..1469 `Declaration`
+  Declaration@0:1420..1469 `InitDeclaratorList`
+    InitDeclaratorList@0:1420..1468
+      SingleDeclaration@0:1420..1468
+        FullySpecifiedType@0:1420..1460
+          TypeQualifierSpec@0:1420..1440 `Layout`
+            LayoutQualifier@0:1420..1440
+              LayoutQualifierSpec@0:1427..1439 `Identifier`
+                Identifier@0:1427..1434 `binding`
+                IntConst `20`
+          TypeQualifierSpec@0:1441..1448 `Storage`
+            StorageQualifier@0:1441..1448 `uniform`
+              Uniform
+          TypeSpecifier@0:1449..1460
+            TypeSpecifierNonArray@0:1449..1460 `atomic_uint`
+              AtomicUInt

@@ -1,0 +1,4 @@
+Ok(EnterFile { file_id: FileId(0), path: "../data/overlongLiteral.frag", canonical_path: "/home/vincent/Applications/apps/glsl-lang/data/overlongLiteral.frag" })
+Ok(Token { source_token: DIGITS@NodeSpan { source_id: FileId(0), range: 0..1025 } "0x0000000000000000000 ...", token_kind: INT_CONST(0), state: Active })
+Ok(Token { source_token: SEMICOLON@NodeSpan { source_id: FileId(0), range: 1025..1026 } ";", token_kind: SEMICOLON, state: Active })
+Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 1026..1027 } "\n", token_kind: WS, state: Active })

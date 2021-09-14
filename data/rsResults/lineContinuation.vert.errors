@@ -1,0 +1,8 @@
+0:6:1: '#error' : e1
+0:11:1: '#error' : e2
+0:18:1: '#error' : e3
+0:49:1: '##' : invalid pasted token : $
+0:50:1: '##' : invalid pasted token : @
+0:54:1: '#error' : good continuation
+0:111:1: '#if' : malformed expression
+0:117:1: '#if' : malformed expression

@@ -1,0 +1,37 @@
+ExternalDeclaration@0:97..162 `FunctionDefinition`
+  FunctionDefinition@0:97..162
+    FunctionPrototype@0:97..108
+      FullySpecifiedType@0:97..101
+        TypeSpecifier@0:97..101
+          TypeSpecifierNonArray@0:97..101 `void`
+            Void
+      Identifier@0:102..106 `main`
+    CompoundStatement@0:109..162
+      Statement@0:115..160 `Expression`
+        ExprStatement@0:115..160
+          Expr `Variable`
+            Identifier@0:115..127 `gl_FragColor`
+          AssignmentOp@0:128..129 `=`
+          Expr `FunCall`
+            FunIdentifier@0:130..134 `TypeSpecifier`
+              TypeSpecifier
+                TypeSpecifierNonArray@0:130..134 `vec3`
+                  Vec3
+            Expr@0:135..140 `Binary`
+              BinaryOp@0:135..140 `*`
+              Expr `FloatConst`
+                FloatConst `2`
+              Expr `FloatConst`
+                FloatConst `3.14`
+            Expr@0:142..151 `Binary`
+              BinaryOp@0:142..151 `*`
+              Expr `FloatConst`
+                FloatConst `5`
+              Expr `FloatConst`
+                FloatConst `3.14`
+            Expr@0:153..158 `Binary`
+              BinaryOp@0:153..158 `*`
+              Expr `FloatConst`
+                FloatConst `2`
+              Expr `FloatConst`
+                FloatConst `3.14`

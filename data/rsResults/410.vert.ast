@@ -1,0 +1,52 @@
+ExternalDeclaration@0:19..31 `Declaration`
+  Declaration@0:19..31 `InitDeclaratorList`
+    InitDeclaratorList@0:19..30
+      SingleDeclaration@0:19..30
+        FullySpecifiedType@0:19..28
+          TypeQualifierSpec@0:19..21 `Storage`
+            StorageQualifier@0:19..21 `in`
+              In
+          TypeSpecifier@0:22..28
+            TypeSpecifierNonArray@0:22..28 `double`
+              Double
+ExternalDeclaration@0:32..44 `Declaration`
+  Declaration@0:32..44 `InitDeclaratorList`
+    InitDeclaratorList@0:32..43
+      SingleDeclaration@0:32..43
+        FullySpecifiedType@0:32..40
+          TypeQualifierSpec@0:32..34 `Storage`
+            StorageQualifier@0:32..34 `in`
+              In
+          TypeSpecifier@0:35..40
+            TypeSpecifierNonArray@0:35..40 `dvec3`
+              DVec3
+ExternalDeclaration@0:45..58 `Declaration`
+  Declaration@0:45..58 `InitDeclaratorList`
+    InitDeclaratorList@0:45..57
+      SingleDeclaration@0:45..57
+        FullySpecifiedType@0:45..53
+          TypeQualifierSpec@0:45..47 `Storage`
+            StorageQualifier@0:45..47 `in`
+              In
+          TypeSpecifier@0:48..53
+            TypeSpecifierNonArray@0:48..53 `dmat4`
+              DMat4
+ExternalDeclaration@0:60..120 `FunctionDefinition`
+  FunctionDefinition@0:60..120
+    FunctionPrototype@0:60..71
+      FullySpecifiedType@0:60..64
+        TypeSpecifier@0:60..64
+          TypeSpecifierNonArray@0:60..64 `void`
+            Void
+      Identifier@0:65..69 `main`
+    CompoundStatement@0:72..120
+      Statement@0:78..118 `Declaration`
+        Declaration@0:78..118 `InitDeclaratorList`
+          InitDeclaratorList@0:78..117
+            SingleDeclaration@0:78..117
+              FullySpecifiedType@0:78..81
+                TypeSpecifier@0:78..81
+                  TypeSpecifierNonArray@0:78..81 `int`
+                    Int
+              Expr `Variable`
+                Identifier@0:89..117 `gl_MaxFragmentUniformVectors`

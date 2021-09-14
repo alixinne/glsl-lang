@@ -1,8 +1,5 @@
 use std::path::Path;
-use std::{
-    fs::{self, File},
-    io::prelude::*,
-};
+use std::{fs::File, io::prelude::*};
 
 use glsl_lang_pp::{
     exts::{names::ExtNameAtom, DEFAULT_REGISTRY},

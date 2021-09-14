@@ -1,0 +1,12 @@
+ExternalDeclaration@0:0..14 `Preprocessor`
+  Preprocessor@0:0..14 `#define`
+    PreprocessorDefine@0:8..14 `ObjectLike`
+      Identifier@0:8..9 `f`
+      String `=y(.`
+ExternalDeclaration@0:15..32 `Preprocessor`
+  Preprocessor@0:15..32 `#define`
+    PreprocessorDefine@0:23..32 `FunctionLike`
+      Identifier@0:23..24 `y`
+      Identifier@0:25..26 `m`
+      String `
+y(f)`

@@ -8,7 +8,7 @@ ExternalDeclaration@0:21..44 `Preprocessor`
       Identifier@0:29..44 `GL_core_profile`
 ExternalDeclaration@0:46..96 `Preprocessor`
   Preprocessor@0:46..96 `#error`
-    PreprocessorError@0:54..96 `standard macro GL_core_profile not defined`
+    PreprocessorError@0:53..96 `standard macro GL_core_profile not defined`
       String `standard macro GL_core_profile not defined`
 ExternalDeclaration@0:98..104 `Preprocessor`
   Preprocessor@0:98..104 `#endif`
@@ -286,5 +286,5 @@ ExternalDeclaration@0:827..837 `Preprocessor`
       UIntConst `3000`
 ExternalDeclaration@0:839..879 `Preprocessor`
   Preprocessor@0:839..879 `#error`
-    PreprocessorError@0:846..879 `line of this error should be 3001`
+    PreprocessorError@0:845..879 `line of this error should be 3001`
       String `line of this error should be 3001`

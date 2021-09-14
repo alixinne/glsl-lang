@@ -1,0 +1,12 @@
+ExternalDeclaration@0:0..12 `Preprocessor`
+  Preprocessor@0:0..12 `#define`
+    PreprocessorDefine@0:8..12 `ObjectLike`
+      Identifier@0:8..9 `a`
+      String `b(`
+ExternalDeclaration@0:14..32 `Preprocessor`
+  Preprocessor@0:14..32 `#define`
+    PreprocessorDefine@0:22..32 `FunctionLike`
+      Identifier@0:22..23 `b`
+      Identifier@0:24..25 `x`
+      String `
+b(a)`

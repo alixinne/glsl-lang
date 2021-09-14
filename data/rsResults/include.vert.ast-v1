@@ -14,18 +14,18 @@ ExternalDeclaration@0:63..82 `Preprocessor`
       String `vec4`
 ExternalDeclaration@0:84..100 `Preprocessor`
   Preprocessor@0:84..100 `#include`
-    PreprocessorInclude@0:93..100
-      Path@0:93..100 `Relative`
+    PreprocessorInclude@0:92..100
+      Path@0:92..100 `Relative`
         String `bar.h`
 ExternalDeclaration@0:101..124 `Preprocessor`
   Preprocessor@0:101..124 `#include`
-    PreprocessorInclude@0:110..124
-      Path@0:110..124 `Relative`
+    PreprocessorInclude@0:109..124
+      Path@0:109..124 `Relative`
         String `./inc1/bar.h`
 ExternalDeclaration@0:125..146 `Preprocessor`
   Preprocessor@0:125..146 `#include`
-    PreprocessorInclude@0:134..146
-      Path@0:134..146 `Relative`
+    PreprocessorInclude@0:133..146
+      Path@0:133..146 `Relative`
         String `inc2\bar.h`
 ExternalDeclaration@0:148..163 `Declaration`
   Declaration@0:148..163 `InitDeclaratorList`

@@ -1,0 +1,23 @@
+ExternalDeclaration@0:0..12 `Preprocessor`
+  Preprocessor@0:0..12 `#define`
+    PreprocessorDefine@0:8..12 `ObjectLike`
+      Identifier@0:8..9 `n`
+      String `#0#`
+ExternalDeclaration@0:14..27 `Preprocessor`
+  Preprocessor@0:14..27 `#define`
+    PreprocessorDefine@0:22..27 `ObjectLike`
+      Identifier@0:22..23 `m`
+      String `#0#`
+ExternalDeclaration@0:29..34 `Preprocessor`
+  Preprocessor@0:29..34 `#if`
+    PreprocessorIf@0:32..34 `m`
+      String `m`
+ExternalDeclaration@0:36..42 `Preprocessor`
+  Preprocessor@0:36..42 `#endif`
+    EndIf
+ExternalDeclaration@0:44..63 `Preprocessor`
+  Preprocessor@0:44..63 `#define`
+    PreprocessorDefine@0:52..63 `FunctionLike`
+      Identifier@0:52..53 `n`
+      String `
+int n"`

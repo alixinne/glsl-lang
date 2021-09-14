@@ -19,10 +19,9 @@ ExternalDeclaration@0:35..41 `Preprocessor`
 ExternalDeclaration@0:42..48 `Preprocessor`
   Preprocessor@0:42..48 `#endif`
     EndIf
-ExternalDeclaration@0:50..53 `Preprocessor`
-  Preprocessor@0:50..53 `#if`
-    PreprocessorIf@0:53..53 ``
-      String ``
-ExternalDeclaration@0:54..59 `Preprocessor`
-  Preprocessor@0:54..59 `#else`
-    Else
+ExternalDeclaration@0:50..59 `Preprocessor`
+  Preprocessor@0:50..59 `#if`
+    PreprocessorIf@0:53..59 `
+#else`
+      String `
+#else`

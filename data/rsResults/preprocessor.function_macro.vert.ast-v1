@@ -42,7 +42,7 @@ ExternalDeclaration@0:236..270 `Preprocessor`
   Preprocessor@0:236..270 `#define`
     PreprocessorDefine@0:244..270 `FunctionLike`
       Identifier@0:244..245 `A`
-      Identifier@0:251..252 `Y`
+      Identifier@0:251..255 `Y`
       String `4 + 3 + Y`
 ExternalDeclaration@0:274..469 `FunctionDefinition`
   FunctionDefinition@0:274..469

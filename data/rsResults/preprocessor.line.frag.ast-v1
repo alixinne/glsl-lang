@@ -8,7 +8,7 @@ ExternalDeclaration@0:16..25 `Preprocessor`
       UIntConst `1`
 ExternalDeclaration@0:26..43 `Preprocessor`
   Preprocessor@0:26..43 `#pragma`
-    PreprocessorPragma@0:34..43 `something`
+    PreprocessorPragma@0:33..43 `something`
       String `something`
 ExternalDeclaration@0:44..58 `FunctionDefinition`
   FunctionDefinition@0:44..58

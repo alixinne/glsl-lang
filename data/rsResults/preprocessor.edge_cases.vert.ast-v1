@@ -1,0 +1,64 @@
+ExternalDeclaration@0:0..15 `Preprocessor`
+  Preprocessor@0:0..15 `#version`
+    PreprocessorVersion@0:9..15 `310`
+      ShortConst `310`
+ExternalDeclaration@0:17..58 `Preprocessor`
+  Preprocessor@0:17..58 `#define`
+    PreprocessorDefine@0:25..58 `FunctionLike`
+      Identifier@0:25..26 `X`
+      Identifier@0:27..28 `Y`
+      String `Y + 2`
+ExternalDeclaration@0:62..87 `Preprocessor`
+  Preprocessor@0:62..87 `#define`
+    PreprocessorDefine@0:70..87 `FunctionLike`
+      Identifier@0:70..71 `Y`
+      Identifier@0:72..73 `Z`
+      String `2 * Z`
+ExternalDeclaration@0:91..162 `Preprocessor`
+  Preprocessor@0:91..162 `#define`
+    PreprocessorDefine@0:99..162 `FunctionLike`
+      Identifier@0:99..100 `Z`
+      Identifier@0:101..102 `Y`
+      String `2 /*
+       */ + 3     * Y`
+ExternalDeclaration@0:166..225 `FunctionDefinition`
+  FunctionDefinition@0:166..225
+    FunctionPrototype@0:166..177
+      FullySpecifiedType@0:166..170
+        TypeSpecifier@0:166..170
+          TypeSpecifierNonArray@0:166..170 `void`
+            Void
+      Identifier@0:171..175 `main`
+    CompoundStatement@0:178..225
+      Statement@0:183..222 `Expression`
+        ExprStatement@0:183..222
+          Expr `Variable`
+            Identifier@0:183..194 `gl_Position`
+          AssignmentOp@0:195..196 `=`
+          Expr `FunCall`
+            FunIdentifier@0:197..201 `TypeSpecifier`
+              TypeSpecifier
+                TypeSpecifierNonArray@0:197..201 `vec4`
+                  Vec4
+            Expr@0:202..220 `Binary`
+              BinaryOp@0:214..215 `+`
+              Expr `Binary`
+                BinaryOp@0:207..208 `+`
+                Expr `FunCall`
+                  FunIdentifier@0:202..203 `Expr`
+                    Expr `Variable`
+                      Identifier@0:202..203 `X`
+                  Expr@0:204..205 `IntConst`
+                    IntConst `3`
+                Expr `FunCall`
+                  FunIdentifier@0:209..210 `Expr`
+                    Expr `Variable`
+                      Identifier@0:209..210 `Y`
+                  Expr@0:211..212 `IntConst`
+                    IntConst `4`
+              Expr `FunCall`
+                FunIdentifier@0:216..217 `Expr`
+                  Expr `Variable`
+                    Identifier@0:216..217 `Z`
+                Expr@0:218..219 `IntConst`
+                  IntConst `2`

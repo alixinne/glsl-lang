@@ -58,7 +58,7 @@ ExternalDeclaration@0:234..247 `Preprocessor`
       Identifier@0:241..247 `VULKAN`
 ExternalDeclaration@0:249..284 `Preprocessor`
   Preprocessor@0:249..284 `#error`
-    PreprocessorError@0:256..284 `VULKAN should not be defined`
+    PreprocessorError@0:255..284 `VULKAN should not be defined`
       String `VULKAN should not be defined`
 ExternalDeclaration@0:286..292 `Preprocessor`
   Preprocessor@0:286..292 `#endif`

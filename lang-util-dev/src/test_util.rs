@@ -52,10 +52,19 @@ impl<K: PathKey + 'static> Paths<K> {
             .unwrap()
             .to_string_lossy()
             .to_string();
-        let paths = K::all()
+
+        let paths: HashMap<_, _> = K::all()
             .iter()
             .map(|key| (key.clone(), PathBuf::from(format!("{}.{}", file_name, key))))
             .collect();
+
+        // Pre-run cleanup
+        for path in paths.values() {
+            let path = local_results.join(path);
+            if path.exists() {
+                fs::remove_file(path).expect("failed to cleanup result path");
+            }
+        }
 
         Ok(Self {
             local_results,

@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/310.vert", canonical_path: "/home/vincent/Applications/apps/glsl-lang/data/310.vert" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/310.vert", canonical_path: "/data/310.vert" })
 Ok(Directive { directive: EventDirective { node: PP_VERSION@0..17, kind: Version(Version { number: 310, profile: Es }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 17..19 } "\r\n", token_kind: WS, state: Active })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 19..25 } "shared", token_kind: SHARED, state: Active })

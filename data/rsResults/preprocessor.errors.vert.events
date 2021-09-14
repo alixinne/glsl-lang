@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/preprocessor.errors.vert", canonical_path: "/home/vincent/Applications/apps/glsl-lang/data/preprocessor.errors.vert" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/preprocessor.errors.vert", canonical_path: "/data/preprocessor.errors.vert" })
 Ok(Directive { directive: EventDirective { node: PP_VERSION@0..17, kind: Version(Version { number: 310, profile: Es }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 17..19 } "\r\n", token_kind: WS, state: Active })
 Ok(Directive { directive: EventDirective { node: PP_DEFINE@19..32, kind: Define(Define { name: "X", kind: Object(DefineObject { tokens: PP_DEFINE_BODY@29..30 }), protected: false }), errors: [], source_id: FileId(0) }, masked: false })

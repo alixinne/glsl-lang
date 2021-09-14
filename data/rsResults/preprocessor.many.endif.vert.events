@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/preprocessor.many.endif.vert", canonical_path: "/home/vincent/Applications/apps/glsl-lang/data/preprocessor.many.endif.vert" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/preprocessor.many.endif.vert", canonical_path: "/data/preprocessor.many.endif.vert" })
 Ok(Directive { directive: EventDirective { node: PP_ENDIF@0..7, kind: EndIf(EndIf), errors: [Located { inner: Processing(ExtraEndIf), pos: 0..7, current_file: Some(FileId(0)), path: None, file_override: None, line_number: 0, column: 0 }], source_id: FileId(0) }, masked: false })
 Ok(Directive { directive: EventDirective { node: PP_ENDIF@7..14, kind: EndIf(EndIf), errors: [Located { inner: Processing(ExtraEndIf), pos: 7..14, current_file: Some(FileId(0)), path: None, file_override: None, line_number: 1, column: 0 }], source_id: FileId(0) }, masked: false })
 Ok(Directive { directive: EventDirective { node: PP_ENDIF@14..21, kind: EndIf(EndIf), errors: [Located { inner: Processing(ExtraEndIf), pos: 14..21, current_file: Some(FileId(0)), path: None, file_override: None, line_number: 2, column: 0 }], source_id: FileId(0) }, masked: false })

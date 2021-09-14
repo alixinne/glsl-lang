@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/preprocessor.cpp_style___FILE__.vert", canonical_path: "/home/vincent/Applications/apps/glsl-lang/data/preprocessor.cpp_style___FILE__.vert" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/preprocessor.cpp_style___FILE__.vert", canonical_path: "/data/preprocessor.cpp_style___FILE__.vert" })
 Ok(Directive { directive: EventDirective { node: PP_EXTENSION@0..55, kind: Extension(Extension { name: Specific(Atom('GL_GOOGLE_cpp_style_line_directive' type=static)), behavior: Enable }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 55..56 } "\n", token_kind: WS, state: Active })
 Ok(Token { source_token: DIGITS@NodeSpan { source_id: FileId(0), range: 56..64 } "0", token_kind: INT_CONST(0), state: Active })

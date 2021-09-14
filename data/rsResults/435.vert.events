@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/435.vert", canonical_path: "/home/vincent/Applications/apps/glsl-lang/data/435.vert" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/435.vert", canonical_path: "/data/435.vert" })
 Ok(Error { error: Located { inner: Processing(DirectiveVersion(UnsupportedVersionNumber)), pos: 0..14, current_file: Some(FileId(0)), path: None, file_override: None, line_number: 0, column: 0 }, masked: false })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 14..18 } "void", token_kind: TYPE_NAME(VOID), state: Active })
 Ok(Token { source_token: WS@NodeSpan { source_id: FileId(0), range: 18..19 } " ", token_kind: WS, state: Active })

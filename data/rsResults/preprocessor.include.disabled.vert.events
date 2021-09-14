@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/preprocessor.include.disabled.vert", canonical_path: "/home/vincent/Applications/apps/glsl-lang/data/preprocessor.include.disabled.vert" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/preprocessor.include.disabled.vert", canonical_path: "/data/preprocessor.include.disabled.vert" })
 Ok(Directive { directive: EventDirective { node: PP_LINE@0..11, kind: Line(Line { file_id: FileId(0), body: PP_LINE_BODY@6..10 }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Error { error: Located { inner: Processing(IncludeNotSupported), pos: 11..20, current_file: Some(FileId(0)), path: None, file_override: None, line_number: 7999, column: 0 }, masked: false })
 Ok(Error { error: Located { inner: Processing(IncludeNotSupported), pos: 20..33, current_file: Some(FileId(0)), path: None, file_override: None, line_number: 8000, column: 0 }, masked: false })

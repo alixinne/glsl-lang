@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/implicitInnerAtomicUint.frag", canonical_path: "/home/vincent/Applications/apps/glsl-lang/data/implicitInnerAtomicUint.frag" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/implicitInnerAtomicUint.frag", canonical_path: "/data/implicitInnerAtomicUint.frag" })
 Ok(Directive { directive: EventDirective { node: PP_VERSION@0..13, kind: Version(Version { number: 460, profile: Core }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 13..19 } "layout", token_kind: LAYOUT, state: Active })
 Ok(Token { source_token: LPAREN@NodeSpan { source_id: FileId(0), range: 19..20 } "(", token_kind: LPAREN, state: Active })

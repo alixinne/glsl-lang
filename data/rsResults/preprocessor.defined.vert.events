@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/preprocessor.defined.vert", canonical_path: "/home/vincent/Applications/apps/glsl-lang/data/preprocessor.defined.vert" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/preprocessor.defined.vert", canonical_path: "/data/preprocessor.defined.vert" })
 Ok(Directive { directive: EventDirective { node: PP_DEFINE@0..27, kind: Define(Define { name: "defined_not_really", kind: Object(DefineObject { tokens: PP_DEFINE_BODY@26..26 }), protected: false }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Error { error: Located { inner: Parse(Unexpected { actual: DEFINED, expected: [IDENT_KW] }), pos: 27..85, current_file: Some(FileId(0)), path: None, file_override: None, line_number: 1, column: 0 }, masked: false })
 Ok(Error { error: Located { inner: Processing(DirectiveDefine(MissingName)), pos: 27..85, current_file: Some(FileId(0)), path: None, file_override: None, line_number: 1, column: 0 }, masked: false })

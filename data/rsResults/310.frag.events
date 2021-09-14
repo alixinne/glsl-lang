@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/310.frag", canonical_path: "/home/vincent/Applications/apps/glsl-lang/data/310.frag" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/310.frag", canonical_path: "/data/310.frag" })
 Ok(Directive { directive: EventDirective { node: PP_VERSION@0..17, kind: Version(Version { number: 310, profile: Es }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 17..22 } "highp", token_kind: HIGHP, state: Active })
 Ok(Token { source_token: WS@NodeSpan { source_id: FileId(0), range: 22..23 } " ", token_kind: WS, state: Active })

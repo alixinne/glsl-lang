@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/cppMerge.frag", canonical_path: "/home/vincent/Applications/apps/glsl-lang/data/cppMerge.frag" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/cppMerge.frag", canonical_path: "/data/cppMerge.frag" })
 Ok(Directive { directive: EventDirective { node: PP_VERSION@0..18, kind: Version(Version { number: 450, profile: Core }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 18..19 } "\n", token_kind: WS, state: Active })
 Ok(Directive { directive: EventDirective { node: PP_DEFINE@19..62, kind: Define(Define { name: "PASTER2", kind: Function(DefineFunction { args: ["type", "suffix"], tokens: PP_DEFINE_BODY@49..61 }), protected: false }), errors: [], source_id: FileId(0) }, masked: false })

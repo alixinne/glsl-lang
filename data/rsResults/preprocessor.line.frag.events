@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/preprocessor.line.frag", canonical_path: "/home/vincent/Applications/apps/glsl-lang/data/preprocessor.line.frag" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/preprocessor.line.frag", canonical_path: "/data/preprocessor.line.frag" })
 Ok(Directive { directive: EventDirective { node: PP_VERSION@0..16, kind: Version(Version { number: 310, profile: Es }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Directive { directive: EventDirective { node: PP_LINE@16..26, kind: Line(Line { file_id: FileId(0), body: PP_LINE_BODY@22..25 }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Directive { directive: EventDirective { node: PP_PRAGMA@26..44, kind: Pragma(Pragma { value: Unknown(PP_PRAGMA_BODY@34..43) }), errors: [], source_id: FileId(0) }, masked: false })

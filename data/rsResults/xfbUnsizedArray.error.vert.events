@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/xfbUnsizedArray.error.vert", canonical_path: "/home/vincent/Applications/apps/glsl-lang/data/xfbUnsizedArray.error.vert" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/xfbUnsizedArray.error.vert", canonical_path: "/data/xfbUnsizedArray.error.vert" })
 Ok(Directive { directive: EventDirective { node: PP_VERSION@0..19, kind: Version(Version { number: 430, profile: Core }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Directive { directive: EventDirective { node: PP_EXTENSION@19..65, kind: Extension(Extension { name: Specific(Atom('GL_ARB_enhanced_layouts' type=dynamic)), behavior: Require }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 65..67 } "\r\n", token_kind: WS, state: Active })

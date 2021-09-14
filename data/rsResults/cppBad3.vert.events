@@ -1,3 +1,3 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/cppBad3.vert", canonical_path: "/home/vincent/Applications/apps/glsl-lang/data/cppBad3.vert" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/cppBad3.vert", canonical_path: "/data/cppBad3.vert" })
 Ok(Directive { directive: EventDirective { node: PP_DEFINE@0..15, kind: Define(Define { name: "f", kind: Object(DefineObject { tokens: PP_DEFINE_BODY@10..14 }), protected: false }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Directive { directive: EventDirective { node: PP_DEFINE@15..28, kind: Define(Define { name: "y", kind: Function(DefineFunction { args: ["m"], tokens: PP_DEFINE_BODY@27..27 }), protected: false }), errors: [], source_id: FileId(0) }, masked: false })

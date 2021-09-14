@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/glsl.es320.subgroupShuffleRelative.comp", canonical_path: "/home/vincent/Applications/apps/glsl-lang/data/glsl.es320.subgroupShuffleRelative.comp" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/glsl.es320.subgroupShuffleRelative.comp", canonical_path: "/data/glsl.es320.subgroupShuffleRelative.comp" })
 Ok(Directive { directive: EventDirective { node: PP_VERSION@0..17, kind: Version(Version { number: 320, profile: Es }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 17..19 } "\r\n", token_kind: WS, state: Active })
 Ok(Directive { directive: EventDirective { node: PP_EXTENSION@19..79, kind: Extension(Extension { name: Specific(Atom('GL_KHR_shader_subgroup_shuffle_relative' type=dynamic)), behavior: Enable }), errors: [], source_id: FileId(0) }, masked: false })

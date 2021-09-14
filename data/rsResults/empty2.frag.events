@@ -1,2 +1,2 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/empty2.frag", canonical_path: "/home/vincent/Applications/apps/glsl-lang/data/empty2.frag" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/empty2.frag", canonical_path: "/data/empty2.frag" })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 0..1 } "\n", token_kind: WS, state: Active })

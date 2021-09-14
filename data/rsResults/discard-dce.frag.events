@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/discard-dce.frag", canonical_path: "/home/vincent/Applications/apps/glsl-lang/data/discard-dce.frag" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/discard-dce.frag", canonical_path: "/data/discard-dce.frag" })
 Ok(Directive { directive: EventDirective { node: PP_VERSION@0..14, kind: Version(Version { number: 110, profile: None }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 14..21 } "varying", token_kind: VARYING, state: Active })
 Ok(Token { source_token: WS@NodeSpan { source_id: FileId(0), range: 21..22 } " ", token_kind: WS, state: Active })

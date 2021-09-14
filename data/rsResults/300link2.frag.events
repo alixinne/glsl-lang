@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/300link2.frag", canonical_path: "/home/vincent/Applications/apps/glsl-lang/data/300link2.frag" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/300link2.frag", canonical_path: "/data/300link2.frag" })
 Ok(Directive { directive: EventDirective { node: PP_VERSION@0..17, kind: Version(Version { number: 300, profile: Es }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 17..26 } "precision", token_kind: PRECISION, state: Active })
 Ok(Token { source_token: WS@NodeSpan { source_id: FileId(0), range: 26..27 } " ", token_kind: WS, state: Active })

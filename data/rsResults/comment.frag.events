@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/comment.frag", canonical_path: "/home/vincent/Applications/apps/glsl-lang/data/comment.frag" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/comment.frag", canonical_path: "/data/comment.frag" })
 Ok(Token { source_token: WS@NodeSpan { source_id: FileId(0), range: 0..2 } "\t ", token_kind: WS, state: Active })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 2..3 } "\n", token_kind: WS, state: Active })
 Ok(Token { source_token: WS@NodeSpan { source_id: FileId(0), range: 3..6 } "\t  ", token_kind: WS, state: Active })

@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/preprocessor.success_if_parse_would_fail.vert", canonical_path: "/home/vincent/Applications/apps/glsl-lang/data/preprocessor.success_if_parse_would_fail.vert" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/preprocessor.success_if_parse_would_fail.vert", canonical_path: "/data/preprocessor.success_if_parse_would_fail.vert" })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 0..3 } "int", token_kind: TYPE_NAME(INT), state: Active })
 Ok(Token { source_token: WS@NodeSpan { source_id: FileId(0), range: 3..4 } " ", token_kind: WS, state: Active })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 4..5 } "x", token_kind: IDENT("x"), state: Active })

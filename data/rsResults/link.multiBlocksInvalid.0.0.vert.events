@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/link.multiBlocksInvalid.0.0.vert", canonical_path: "/home/vincent/Applications/apps/glsl-lang/data/link.multiBlocksInvalid.0.0.vert" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/link.multiBlocksInvalid.0.0.vert", canonical_path: "/data/link.multiBlocksInvalid.0.0.vert" })
 Ok(Directive { directive: EventDirective { node: PP_VERSION@0..13, kind: Version(Version { number: 430, profile: Core }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 13..14 } "\n", token_kind: WS, state: Active })
 Ok(Token { source_token: COMMENT@NodeSpan { source_id: FileId(0), range: 14..65 } "// Verify that blocks ...", token_kind: COMMENT, state: Active })

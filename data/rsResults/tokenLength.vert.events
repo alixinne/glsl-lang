@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/tokenLength.vert", canonical_path: "/home/vincent/Applications/apps/glsl-lang/data/tokenLength.vert" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/tokenLength.vert", canonical_path: "/data/tokenLength.vert" })
 Ok(Directive { directive: EventDirective { node: PP_VERSION@0..16, kind: Version(Version { number: 300, profile: Es }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: COMMENT@NodeSpan { source_id: FileId(0), range: 16..54 } "//#pragma glslang_bin ...", token_kind: COMMENT, state: Active })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 54..55 } "\n", token_kind: WS, state: Active })

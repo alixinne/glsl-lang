@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/420.geom", canonical_path: "/home/vincent/Applications/apps/glsl-lang/data/420.geom" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/420.geom", canonical_path: "/data/420.geom" })
 Ok(Directive { directive: EventDirective { node: PP_VERSION@0..19, kind: Version(Version { number: 420, profile: Core }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 19..21 } "\r\n", token_kind: WS, state: Active })
 Ok(Token { source_token: COMMENT@NodeSpan { source_id: FileId(0), range: 21..105 } "// testing input arra ...", token_kind: COMMENT, state: Active })

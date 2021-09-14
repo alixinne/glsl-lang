@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/420.vert", canonical_path: "/home/vincent/Applications/apps/glsl-lang/data/420.vert" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/420.vert", canonical_path: "/data/420.vert" })
 Ok(Directive { directive: EventDirective { node: PP_VERSION@0..18, kind: Version(Version { number: 420, profile: Core }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Directive { directive: EventDirective { node: PP_VERSION@18..36, kind: Version(Version { number: 420, profile: Core }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 36..43 } "varying", token_kind: VARYING, state: Active })

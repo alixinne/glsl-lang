@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/range_order.frag", canonical_path: "/home/vincent/Applications/apps/glsl-lang/lang/data/tests/range_order.glsl" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/range_order.frag", canonical_path: "/lang/data/tests/range_order.glsl" })
 Ok(Directive { directive: EventDirective { node: PP_DEFINE@0..18, kind: Define(Define { name: "M_PI", kind: Object(DefineObject { tokens: PP_DEFINE_BODY@13..17 }), protected: false }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Directive { directive: EventDirective { node: PP_DEFINE@18..44, kind: Define(Define { name: "M_2PI", kind: Object(DefineObject { tokens: PP_DEFINE_BODY@32..43 }), protected: false }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Directive { directive: EventDirective { node: PP_DEFINE@44..72, kind: Define(Define { name: "M_NPI", kind: Function(DefineFunction { args: ["x"], tokens: PP_DEFINE_BODY@61..71 }), protected: false }), errors: [], source_id: FileId(0) }, masked: false })

@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/cppDeepNest.frag", canonical_path: "/home/vincent/Applications/apps/glsl-lang/data/cppDeepNest.frag" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/cppDeepNest.frag", canonical_path: "/data/cppDeepNest.frag" })
 Ok(Directive { directive: EventDirective { node: PP_IFDEF@0..10, kind: IfDef(IfDef { ident: "O" }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Directive { directive: EventDirective { node: PP_IF@10..15, kind: If(If { file_id: FileId(0), body: PP_IF_EXPR@13..13 }), errors: [], source_id: FileId(0) }, masked: true })
 Ok(Directive { directive: EventDirective { node: PP_IF@15..20, kind: If(If { file_id: FileId(0), body: PP_IF_EXPR@18..18 }), errors: [], source_id: FileId(0) }, masked: true })

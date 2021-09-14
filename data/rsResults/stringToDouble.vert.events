@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/stringToDouble.vert", canonical_path: "/home/vincent/Applications/apps/glsl-lang/data/stringToDouble.vert" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/stringToDouble.vert", canonical_path: "/data/stringToDouble.vert" })
 Ok(Directive { directive: EventDirective { node: PP_VERSION@0..13, kind: Version(Version { number: 460, profile: Core }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Directive { directive: EventDirective { node: PP_EXTENSION@13..81, kind: Extension(Extension { name: Specific(Atom('GL_EXT_shader_explicit_arithmetic_types_float16' type=dynamic)), behavior: Enable }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 81..85 } "void", token_kind: TYPE_NAME(VOID), state: Active })

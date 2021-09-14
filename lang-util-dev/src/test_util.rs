@@ -100,7 +100,7 @@ impl<K: PathKey + 'static> Paths<K> {
                     Mode::Check
                 }
             })
-            .unwrap_or(Mode::Bump);
+            .unwrap_or(Mode::Check);
 
         for (_k, name) in self.paths {
             // Compute full result paths

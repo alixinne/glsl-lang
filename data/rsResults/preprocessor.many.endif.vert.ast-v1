@@ -1,0 +1,28 @@
+ExternalDeclaration@0:0..6 `Preprocessor`
+  Preprocessor@0:0..6 `#endif`
+    EndIf
+ExternalDeclaration@0:7..13 `Preprocessor`
+  Preprocessor@0:7..13 `#endif`
+    EndIf
+ExternalDeclaration@0:14..20 `Preprocessor`
+  Preprocessor@0:14..20 `#endif`
+    EndIf
+ExternalDeclaration@0:21..27 `Preprocessor`
+  Preprocessor@0:21..27 `#endif`
+    EndIf
+ExternalDeclaration@0:28..34 `Preprocessor`
+  Preprocessor@0:28..34 `#endif`
+    EndIf
+ExternalDeclaration@0:35..41 `Preprocessor`
+  Preprocessor@0:35..41 `#endif`
+    EndIf
+ExternalDeclaration@0:42..48 `Preprocessor`
+  Preprocessor@0:42..48 `#endif`
+    EndIf
+ExternalDeclaration@0:50..53 `Preprocessor`
+  Preprocessor@0:50..53 `#if`
+    PreprocessorIf@0:53..53 ``
+      String ``
+ExternalDeclaration@0:54..59 `Preprocessor`
+  Preprocessor@0:54..59 `#else`
+    Else

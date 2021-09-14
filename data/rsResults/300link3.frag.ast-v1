@@ -1,0 +1,30 @@
+ExternalDeclaration@0:0..15 `Preprocessor`
+  Preprocessor@0:0..15 `#version`
+    PreprocessorVersion@0:9..15 `300`
+      ShortConst `300`
+ExternalDeclaration@0:19..41 `Declaration`
+  Declaration@0:19..41 `Precision`
+    PrecisionQualifier@0:29..34 `high`
+    TypeSpecifier@0:35..40
+      TypeSpecifierNonArray@0:35..40 `float`
+        Float
+ExternalDeclaration@0:45..61 `Declaration`
+  Declaration@0:45..61 `InitDeclaratorList`
+    InitDeclaratorList@0:45..60
+      SingleDeclaration@0:45..60
+        FullySpecifiedType@0:45..53
+          TypeQualifierSpec@0:45..48 `Storage`
+            StorageQualifier@0:45..48 `out`
+              Out
+          TypeSpecifier@0:49..53
+            TypeSpecifierNonArray@0:49..53 `vec4`
+              Vec4
+ExternalDeclaration@0:65..79 `FunctionDefinition`
+  FunctionDefinition@0:65..79
+    FunctionPrototype@0:65..76
+      FullySpecifiedType@0:65..69
+        TypeSpecifier@0:65..69
+          TypeSpecifierNonArray@0:65..69 `void`
+            Void
+      Identifier@0:70..74 `main`
+    CompoundStatement@0:77..79

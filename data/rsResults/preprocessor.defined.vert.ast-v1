@@ -1,0 +1,10 @@
+ExternalDeclaration@0:0..26 `Preprocessor`
+  Preprocessor@0:0..26 `#define`
+    PreprocessorDefine@0:8..26 `ObjectLike`
+      Identifier@0:8..26 `defined_not_really`
+      String ``
+ExternalDeclaration@0:27..84 `Preprocessor`
+  Preprocessor@0:27..84 `#define`
+    PreprocessorDefine@0:35..84 `ObjectLike`
+      Identifier@0:35..42 `defined`
+      String `// ERROR: "defined" can't be (un)defined:`

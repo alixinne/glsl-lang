@@ -1,0 +1,344 @@
+ExternalDeclaration@0:0..17 `Preprocessor`
+  Preprocessor@0:0..17 `#version`
+    PreprocessorVersion@0:9..17 `330`
+      ShortConst `330`
+ExternalDeclaration@0:48..62 `FunctionDefinition`
+  FunctionDefinition@0:48..62
+    FunctionPrototype@0:48..59
+      FullySpecifiedType@0:48..52
+        TypeSpecifier@0:48..52
+          TypeSpecifierNonArray@0:48..52 `void`
+            Void
+      Identifier@0:53..57 `main`
+    CompoundStatement@0:60..62
+ExternalDeclaration@0:92..108 `Declaration`
+  Declaration@0:92..108 `FunctionPrototype`
+    FunctionPrototype@0:92..107
+      FullySpecifiedType@0:92..97
+        TypeSpecifier@0:92..97
+          TypeSpecifierNonArray@0:92..97 `float`
+            Float
+      Identifier@0:98..102 `cbar`
+      FunctionParameterDeclaration@0:103..106 `Unnamed`
+        TypeSpecifier@0:103..106
+          TypeSpecifierNonArray@0:103..106 `int`
+            Int
+ExternalDeclaration@0:112..145 `FunctionDefinition`
+  FunctionDefinition@0:112..145
+    FunctionPrototype@0:112..128
+      FullySpecifiedType@0:112..116
+        TypeSpecifier@0:112..116
+          TypeSpecifierNonArray@0:112..116 `void`
+            Void
+      Identifier@0:117..121 `cfoo`
+      FunctionParameterDeclaration@0:122..127 `Unnamed`
+        TypeSpecifier@0:122..127
+          TypeSpecifierNonArray@0:122..127 `float`
+            Float
+    CompoundStatement@0:130..145
+      Statement@0:134..142 `Expression`
+        ExprStatement@0:134..142
+          FunIdentifier@0:134..138 `Expr`
+            Expr `Variable`
+              Identifier@0:134..138 `cbar`
+          Expr@0:139..140 `IntConst`
+            IntConst `2`
+ExternalDeclaration@0:180..190 `Declaration`
+  Declaration@0:180..190 `FunctionPrototype`
+    FunctionPrototype@0:180..189
+      FullySpecifiedType@0:180..184
+        TypeSpecifier@0:180..184
+          TypeSpecifierNonArray@0:180..184 `void`
+            Void
+      Identifier@0:185..187 `CB`
+ExternalDeclaration@0:192..202 `Declaration`
+  Declaration@0:192..202 `FunctionPrototype`
+    FunctionPrototype@0:192..201
+      FullySpecifiedType@0:192..196
+        TypeSpecifier@0:192..196
+          TypeSpecifierNonArray@0:192..196 `void`
+            Void
+      Identifier@0:197..199 `CD`
+ExternalDeclaration@0:204..223 `FunctionDefinition`
+  FunctionDefinition@0:204..223
+    FunctionPrototype@0:204..213
+      FullySpecifiedType@0:204..208
+        TypeSpecifier@0:204..208
+          TypeSpecifierNonArray@0:204..208 `void`
+            Void
+      Identifier@0:209..211 `CA`
+    CompoundStatement@0:214..223
+      Statement@0:216..221 `Expression`
+        ExprStatement@0:216..221
+          FunIdentifier@0:216..218 `Expr`
+            Expr `Variable`
+              Identifier@0:216..218 `CB`
+ExternalDeclaration@0:225..244 `FunctionDefinition`
+  FunctionDefinition@0:225..244
+    FunctionPrototype@0:225..234
+      FullySpecifiedType@0:225..229
+        TypeSpecifier@0:225..229
+          TypeSpecifierNonArray@0:225..229 `void`
+            Void
+      Identifier@0:230..232 `CC`
+    CompoundStatement@0:235..244
+      Statement@0:237..242 `Expression`
+        ExprStatement@0:237..242
+          FunIdentifier@0:237..239 `Expr`
+            Expr `Variable`
+              Identifier@0:237..239 `CD`
+ExternalDeclaration@0:266..277 `Declaration`
+  Declaration@0:266..277 `FunctionPrototype`
+    FunctionPrototype@0:266..276
+      FullySpecifiedType@0:266..270
+        TypeSpecifier@0:266..270
+          TypeSpecifierNonArray@0:266..270 `void`
+            Void
+      Identifier@0:271..274 `CBT`
+ExternalDeclaration@0:279..290 `Declaration`
+  Declaration@0:279..290 `FunctionPrototype`
+    FunctionPrototype@0:279..289
+      FullySpecifiedType@0:279..283
+        TypeSpecifier@0:279..283
+          TypeSpecifierNonArray@0:279..283 `void`
+            Void
+      Identifier@0:284..287 `CDT`
+ExternalDeclaration@0:292..327 `FunctionDefinition`
+  FunctionDefinition@0:292..327
+    FunctionPrototype@0:292..302
+      FullySpecifiedType@0:292..296
+        TypeSpecifier@0:292..296
+          TypeSpecifierNonArray@0:292..296 `void`
+            Void
+      Identifier@0:297..300 `CAT`
+    CompoundStatement@0:303..327
+      Statement@0:305..311 `Expression`
+        ExprStatement@0:305..311
+          FunIdentifier@0:305..308 `Expr`
+            Expr `Variable`
+              Identifier@0:305..308 `CBT`
+      Statement@0:312..318 `Expression`
+        ExprStatement@0:312..318
+          FunIdentifier@0:312..315 `Expr`
+            Expr `Variable`
+              Identifier@0:312..315 `CBT`
+      Statement@0:319..325 `Expression`
+        ExprStatement@0:319..325
+          FunIdentifier@0:319..322 `Expr`
+            Expr `Variable`
+              Identifier@0:319..322 `CBT`
+ExternalDeclaration@0:329..364 `FunctionDefinition`
+  FunctionDefinition@0:329..364
+    FunctionPrototype@0:329..339
+      FullySpecifiedType@0:329..333
+        TypeSpecifier@0:329..333
+          TypeSpecifierNonArray@0:329..333 `void`
+            Void
+      Identifier@0:334..337 `CCT`
+    CompoundStatement@0:340..364
+      Statement@0:342..348 `Expression`
+        ExprStatement@0:342..348
+          FunIdentifier@0:342..345 `Expr`
+            Expr `Variable`
+              Identifier@0:342..345 `CDT`
+      Statement@0:349..355 `Expression`
+        ExprStatement@0:349..355
+          FunIdentifier@0:349..352 `Expr`
+            Expr `Variable`
+              Identifier@0:349..352 `CDT`
+      Statement@0:356..362 `Expression`
+        ExprStatement@0:356..362
+          FunIdentifier@0:356..359 `Expr`
+            Expr `Variable`
+              Identifier@0:356..359 `CBT`
+ExternalDeclaration@0:388..402 `FunctionDefinition`
+  FunctionDefinition@0:388..402
+    FunctionPrototype@0:388..399
+      FullySpecifiedType@0:388..392
+        TypeSpecifier@0:388..392
+          TypeSpecifierNonArray@0:388..392 `void`
+            Void
+      Identifier@0:393..397 `norA`
+    CompoundStatement@0:400..402
+ExternalDeclaration@0:404..427 `FunctionDefinition`
+  FunctionDefinition@0:404..427
+    FunctionPrototype@0:404..415
+      FullySpecifiedType@0:404..408
+        TypeSpecifier@0:404..408
+          TypeSpecifierNonArray@0:404..408 `void`
+            Void
+      Identifier@0:409..413 `norB`
+    CompoundStatement@0:416..427
+      Statement@0:418..425 `Expression`
+        ExprStatement@0:418..425
+          FunIdentifier@0:418..422 `Expr`
+            Expr `Variable`
+              Identifier@0:418..422 `norA`
+ExternalDeclaration@0:429..452 `FunctionDefinition`
+  FunctionDefinition@0:429..452
+    FunctionPrototype@0:429..440
+      FullySpecifiedType@0:429..433
+        TypeSpecifier@0:429..433
+          TypeSpecifierNonArray@0:429..433 `void`
+            Void
+      Identifier@0:434..438 `norC`
+    CompoundStatement@0:441..452
+      Statement@0:443..450 `Expression`
+        ExprStatement@0:443..450
+          FunIdentifier@0:443..447 `Expr`
+            Expr `Variable`
+              Identifier@0:443..447 `norA`
+ExternalDeclaration@0:454..477 `FunctionDefinition`
+  FunctionDefinition@0:454..477
+    FunctionPrototype@0:454..465
+      FullySpecifiedType@0:454..458
+        TypeSpecifier@0:454..458
+          TypeSpecifierNonArray@0:454..458 `void`
+            Void
+      Identifier@0:459..463 `norD`
+    CompoundStatement@0:466..477
+      Statement@0:468..475 `Expression`
+        ExprStatement@0:468..475
+          FunIdentifier@0:468..472 `Expr`
+            Expr `Variable`
+              Identifier@0:468..472 `norA`
+ExternalDeclaration@0:479..502 `FunctionDefinition`
+  FunctionDefinition@0:479..502
+    FunctionPrototype@0:479..490
+      FullySpecifiedType@0:479..483
+        TypeSpecifier@0:479..483
+          TypeSpecifierNonArray@0:479..483 `void`
+            Void
+      Identifier@0:484..488 `norE`
+    CompoundStatement@0:491..502
+      Statement@0:493..500 `Expression`
+        ExprStatement@0:493..500
+          FunIdentifier@0:493..497 `Expr`
+            Expr `Variable`
+              Identifier@0:493..497 `norB`
+ExternalDeclaration@0:504..527 `FunctionDefinition`
+  FunctionDefinition@0:504..527
+    FunctionPrototype@0:504..515
+      FullySpecifiedType@0:504..508
+        TypeSpecifier@0:504..508
+          TypeSpecifierNonArray@0:504..508 `void`
+            Void
+      Identifier@0:509..513 `norF`
+    CompoundStatement@0:516..527
+      Statement@0:518..525 `Expression`
+        ExprStatement@0:518..525
+          FunIdentifier@0:518..522 `Expr`
+            Expr `Variable`
+              Identifier@0:518..522 `norB`
+ExternalDeclaration@0:529..552 `FunctionDefinition`
+  FunctionDefinition@0:529..552
+    FunctionPrototype@0:529..540
+      FullySpecifiedType@0:529..533
+        TypeSpecifier@0:529..533
+          TypeSpecifierNonArray@0:529..533 `void`
+            Void
+      Identifier@0:534..538 `norG`
+    CompoundStatement@0:541..552
+      Statement@0:543..550 `Expression`
+        ExprStatement@0:543..550
+          FunIdentifier@0:543..547 `Expr`
+            Expr `Variable`
+              Identifier@0:543..547 `norE`
+ExternalDeclaration@0:554..577 `FunctionDefinition`
+  FunctionDefinition@0:554..577
+    FunctionPrototype@0:554..565
+      FullySpecifiedType@0:554..558
+        TypeSpecifier@0:554..558
+          TypeSpecifierNonArray@0:554..558 `void`
+            Void
+      Identifier@0:559..563 `norH`
+    CompoundStatement@0:566..577
+      Statement@0:568..575 `Expression`
+        ExprStatement@0:568..575
+          FunIdentifier@0:568..572 `Expr`
+            Expr `Variable`
+              Identifier@0:568..572 `norE`
+ExternalDeclaration@0:579..602 `FunctionDefinition`
+  FunctionDefinition@0:579..602
+    FunctionPrototype@0:579..590
+      FullySpecifiedType@0:579..583
+        TypeSpecifier@0:579..583
+          TypeSpecifierNonArray@0:579..583 `void`
+            Void
+      Identifier@0:584..588 `norI`
+    CompoundStatement@0:591..602
+      Statement@0:593..600 `Expression`
+        ExprStatement@0:593..600
+          FunIdentifier@0:593..597 `Expr`
+            Expr `Variable`
+              Identifier@0:593..597 `norE`
+ExternalDeclaration@0:686..702 `FunctionDefinition`
+  FunctionDefinition@0:686..702
+    FunctionPrototype@0:686..698
+      FullySpecifiedType@0:686..690
+        TypeSpecifier@0:686..690
+          TypeSpecifierNonArray@0:686..690 `void`
+            Void
+      Identifier@0:691..696 `norcA`
+    CompoundStatement@0:699..702
+ExternalDeclaration@0:704..729 `FunctionDefinition`
+  FunctionDefinition@0:704..729
+    FunctionPrototype@0:704..716
+      FullySpecifiedType@0:704..708
+        TypeSpecifier@0:704..708
+          TypeSpecifierNonArray@0:704..708 `void`
+            Void
+      Identifier@0:709..714 `norcB`
+    CompoundStatement@0:717..729
+      Statement@0:719..727 `Expression`
+        ExprStatement@0:719..727
+          FunIdentifier@0:719..724 `Expr`
+            Expr `Variable`
+              Identifier@0:719..724 `norcA`
+ExternalDeclaration@0:731..756 `FunctionDefinition`
+  FunctionDefinition@0:731..756
+    FunctionPrototype@0:731..743
+      FullySpecifiedType@0:731..735
+        TypeSpecifier@0:731..735
+          TypeSpecifierNonArray@0:731..735 `void`
+            Void
+      Identifier@0:736..741 `norcC`
+    CompoundStatement@0:744..756
+      Statement@0:746..754 `Expression`
+        ExprStatement@0:746..754
+          FunIdentifier@0:746..751 `Expr`
+            Expr `Variable`
+              Identifier@0:746..751 `norcB`
+ExternalDeclaration@0:758..792 `FunctionDefinition`
+  FunctionDefinition@0:758..792
+    FunctionPrototype@0:758..770
+      FullySpecifiedType@0:758..762
+        TypeSpecifier@0:758..762
+          TypeSpecifierNonArray@0:758..762 `void`
+            Void
+      Identifier@0:763..768 `norcD`
+    CompoundStatement@0:771..792
+      Statement@0:773..781 `Expression`
+        ExprStatement@0:773..781
+          FunIdentifier@0:773..778 `Expr`
+            Expr `Variable`
+              Identifier@0:773..778 `norcC`
+      Statement@0:782..790 `Expression`
+        ExprStatement@0:782..790
+          FunIdentifier@0:782..787 `Expr`
+            Expr `Variable`
+              Identifier@0:782..787 `norcB`
+ExternalDeclaration@0:811..836 `FunctionDefinition`
+  FunctionDefinition@0:811..836
+    FunctionPrototype@0:811..823
+      FullySpecifiedType@0:811..815
+        TypeSpecifier@0:811..815
+          TypeSpecifierNonArray@0:811..815 `void`
+            Void
+      Identifier@0:816..821 `norcE`
+    CompoundStatement@0:824..836
+      Statement@0:826..834 `Expression`
+        ExprStatement@0:826..834
+          FunIdentifier@0:826..831 `Expr`
+            Expr `Variable`
+              Identifier@0:826..831 `norcD`

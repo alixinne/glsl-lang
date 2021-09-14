@@ -1,0 +1,76 @@
+ExternalDeclaration@0:0..12 `Preprocessor`
+  Preprocessor@0:0..12 `#version`
+    PreprocessorVersion@0:9..12 `450`
+      ShortConst `450`
+ExternalDeclaration@0:14..61 `Preprocessor`
+  Preprocessor@0:14..61 `#extension`
+    PreprocessorExtension@0:25..61
+      PreprocessorExtensionName@0:25..61 `Specific`
+        String `GL_GOOGLE_include_directive`
+ExternalDeclaration@0:63..82 `Preprocessor`
+  Preprocessor@0:63..82 `#define`
+    PreprocessorDefine@0:71..82 `ObjectLike`
+      Identifier@0:71..77 `float4`
+      String `vec4`
+ExternalDeclaration@0:84..100 `Preprocessor`
+  Preprocessor@0:84..100 `#include`
+    PreprocessorInclude@0:93..100
+      Path@0:93..100 `Relative`
+        String `bar.h`
+ExternalDeclaration@0:101..124 `Preprocessor`
+  Preprocessor@0:101..124 `#include`
+    PreprocessorInclude@0:110..124
+      Path@0:110..124 `Relative`
+        String `./inc1/bar.h`
+ExternalDeclaration@0:125..146 `Preprocessor`
+  Preprocessor@0:125..146 `#include`
+    PreprocessorInclude@0:134..146
+      Path@0:134..146 `Relative`
+        String `inc2\bar.h`
+ExternalDeclaration@0:148..163 `Declaration`
+  Declaration@0:148..163 `InitDeclaratorList`
+    InitDeclaratorList@0:148..162
+      SingleDeclaration@0:148..162
+        FullySpecifiedType@0:148..156
+          TypeQualifierSpec@0:148..151 `Storage`
+            StorageQualifier@0:148..151 `out`
+              Out
+          TypeSpecifier@0:152..156
+            TypeSpecifierNonArray@0:152..156 `vec4`
+              Vec4
+ExternalDeclaration@0:165..221 `FunctionDefinition`
+  FunctionDefinition@0:165..221
+    FunctionPrototype@0:165..176
+      FullySpecifiedType@0:165..169
+        TypeSpecifier@0:165..169
+          TypeSpecifierNonArray@0:165..169 `void`
+            Void
+      Identifier@0:170..174 `main`
+    CompoundStatement@0:177..221
+      Statement@0:183..219 `Expression`
+        ExprStatement@0:183..219
+          Expr `Variable`
+            Identifier@0:183..188 `color`
+          AssignmentOp@0:189..190 `=`
+          Expr `Binary`
+            BinaryOp@0:214..215 `+`
+            Expr `Binary`
+              BinaryOp@0:209..210 `+`
+              Expr `Binary`
+                BinaryOp@0:204..205 `+`
+                Expr `Binary`
+                  BinaryOp@0:199..200 `+`
+                  Expr `Binary`
+                    BinaryOp@0:194..195 `+`
+                    Expr `Variable`
+                      Identifier@0:191..193 `i1`
+                    Expr `Variable`
+                      Identifier@0:196..198 `i2`
+                  Expr `Variable`
+                    Identifier@0:201..203 `i3`
+                Expr `Variable`
+                  Identifier@0:206..208 `i4`
+              Expr `Variable`
+                Identifier@0:211..213 `i5`
+            Expr `Variable`
+              Identifier@0:216..218 `i6`

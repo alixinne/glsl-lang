@@ -1,0 +1,24 @@
+ExternalDeclaration@0:207..224 `Preprocessor`
+  Preprocessor@0:207..224 `#version`
+    PreprocessorVersion@0:216..224 `430`
+      ShortConst `430`
+ExternalDeclaration@0:225..235 `Declaration`
+  Declaration@0:225..235 `InitDeclaratorList`
+    InitDeclaratorList@0:225..234
+      SingleDeclaration@0:225..234
+        FullySpecifiedType@0:225..232
+          TypeQualifierSpec@0:225..227 `Storage`
+            StorageQualifier@0:225..227 `in`
+              In
+          TypeSpecifier@0:228..232
+            TypeSpecifierNonArray@0:228..232 `vec4`
+              Vec4
+ExternalDeclaration@0:236..250 `FunctionDefinition`
+  FunctionDefinition@0:236..250
+    FunctionPrototype@0:236..247
+      FullySpecifiedType@0:236..240
+        TypeSpecifier@0:236..240
+          TypeSpecifierNonArray@0:236..240 `void`
+            Void
+      Identifier@0:241..245 `main`
+    CompoundStatement@0:248..250

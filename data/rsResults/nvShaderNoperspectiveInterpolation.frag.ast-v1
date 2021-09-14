@@ -1,0 +1,68 @@
+ExternalDeclaration@0:0..15 `Preprocessor`
+  Preprocessor@0:0..15 `#version`
+    PreprocessorVersion@0:9..15 `300`
+      ShortConst `300`
+ExternalDeclaration@0:17..41 `Declaration`
+  Declaration@0:17..41 `Precision`
+    PrecisionQualifier@0:27..34 `medium`
+    TypeSpecifier@0:35..40
+      TypeSpecifierNonArray@0:35..40 `float`
+        Float
+ExternalDeclaration@0:43..69 `Declaration`
+  Declaration@0:43..69 `InitDeclaratorList`
+    InitDeclaratorList@0:43..68
+      SingleDeclaration@0:43..68
+        FullySpecifiedType@0:43..64
+          TypeQualifierSpec@0:43..56 `Interpolation`
+            InterpolationQualifier@0:43..56 `noperspective`
+          TypeQualifierSpec@0:57..59 `Storage`
+            StorageQualifier@0:57..59 `in`
+              In
+          TypeSpecifier@0:60..64
+            TypeSpecifierNonArray@0:60..64 `vec4`
+              Vec4
+ExternalDeclaration@0:80..140 `Preprocessor`
+  Preprocessor@0:80..140 `#extension`
+    PreprocessorExtension@0:91..140
+      PreprocessorExtensionName@0:91..140 `Specific`
+        String `GL_NV_shader_noperspective_interpolation`
+ExternalDeclaration@0:142..170 `Declaration`
+  Declaration@0:142..170 `InitDeclaratorList`
+    InitDeclaratorList@0:142..169
+      SingleDeclaration@0:142..169
+        FullySpecifiedType@0:142..163
+          TypeQualifierSpec@0:142..155 `Interpolation`
+            InterpolationQualifier@0:142..155 `noperspective`
+          TypeQualifierSpec@0:156..158 `Storage`
+            StorageQualifier@0:156..158 `in`
+              In
+          TypeSpecifier@0:159..163
+            TypeSpecifierNonArray@0:159..163 `vec4`
+              Vec4
+ExternalDeclaration@0:172..191 `Declaration`
+  Declaration@0:172..191 `InitDeclaratorList`
+    InitDeclaratorList@0:172..190
+      SingleDeclaration@0:172..190
+        FullySpecifiedType@0:172..180
+          TypeQualifierSpec@0:172..175 `Storage`
+            StorageQualifier@0:172..175 `out`
+              Out
+          TypeSpecifier@0:176..180
+            TypeSpecifierNonArray@0:176..180 `vec4`
+              Vec4
+ExternalDeclaration@0:193..231 `FunctionDefinition`
+  FunctionDefinition@0:193..231
+    FunctionPrototype@0:193..204
+      FullySpecifiedType@0:193..197
+        TypeSpecifier@0:193..197
+          TypeSpecifierNonArray@0:193..197 `void`
+            Void
+      Identifier@0:198..202 `main`
+    CompoundStatement@0:205..231
+      Statement@0:211..229 `Expression`
+        ExprStatement@0:211..229
+          Expr `Variable`
+            Identifier@0:211..220 `fragColor`
+          AssignmentOp@0:221..222 `=`
+          Expr `Variable`
+            Identifier@0:223..228 `color`

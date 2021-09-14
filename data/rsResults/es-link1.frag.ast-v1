@@ -1,0 +1,32 @@
+ExternalDeclaration@0:0..12 `Preprocessor`
+  Preprocessor@0:0..12 `#version`
+    PreprocessorVersion@0:9..12 `100`
+      ShortConst `100`
+ExternalDeclaration@0:14..44 `Declaration`
+  Declaration@0:14..44 `FunctionPrototype`
+    FunctionPrototype@0:14..43
+      FullySpecifiedType@0:14..26
+        TypeQualifierSpec@0:14..21 `Precision`
+          PrecisionQualifier@0:14..21 `medium`
+        TypeSpecifier@0:22..26
+          TypeSpecifierNonArray@0:22..26 `vec4`
+            Vec4
+      Identifier@0:27..41 `calculateColor`
+ExternalDeclaration@0:46..98 `FunctionDefinition`
+  FunctionDefinition@0:46..98
+    FunctionPrototype@0:46..57
+      FullySpecifiedType@0:46..50
+        TypeSpecifier@0:46..50
+          TypeSpecifierNonArray@0:46..50 `void`
+            Void
+      Identifier@0:51..55 `main`
+    CompoundStatement@0:58..98
+      Statement@0:64..96 `Expression`
+        ExprStatement@0:64..96
+          Expr `Variable`
+            Identifier@0:64..76 `gl_FragColor`
+          AssignmentOp@0:77..78 `=`
+          Expr `FunCall`
+            FunIdentifier@0:79..93 `Expr`
+              Expr `Variable`
+                Identifier@0:79..93 `calculateColor`

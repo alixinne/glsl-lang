@@ -1,0 +1,57 @@
+ExternalDeclaration@0:1602..1617 `Preprocessor`
+  Preprocessor@0:1602..1617 `#version`
+    PreprocessorVersion@0:1611..1617 `110`
+      ShortConst `110`
+ExternalDeclaration@0:1621..1666 `Preprocessor`
+  Preprocessor@0:1621..1666 `#extension`
+    PreprocessorExtension@0:1632..1666
+      PreprocessorExtensionName@0:1632..1666 `Specific`
+        String `GL_ARB_texture_rectangle`
+ExternalDeclaration@0:1670..1691 `Declaration`
+  Declaration@0:1670..1691 `InitDeclaratorList`
+    InitDeclaratorList@0:1670..1690
+      SingleDeclaration@0:1670..1690
+        FullySpecifiedType@0:1670..1684
+          TypeQualifierSpec@0:1670..1679 `Storage`
+            StorageQualifier@0:1670..1679 `attribute`
+              Attribute
+          TypeSpecifier@0:1680..1684
+            TypeSpecifierNonArray@0:1680..1684 `vec3`
+              Vec3
+ExternalDeclaration@0:1695..1721 `Declaration`
+  Declaration@0:1695..1721 `InitDeclaratorList`
+    InitDeclaratorList@0:1695..1720
+      SingleDeclaration@0:1695..1720
+        FullySpecifiedType@0:1695..1716
+          TypeQualifierSpec@0:1695..1702 `Storage`
+            StorageQualifier@0:1695..1702 `uniform`
+              Uniform
+          TypeSpecifier@0:1703..1716
+            TypeSpecifierNonArray@0:1703..1716 `sampler2DRect`
+              Sampler2DRect
+ExternalDeclaration@0:1725..1797 `FunctionDefinition`
+  FunctionDefinition@0:1725..1797
+    FunctionPrototype@0:1725..1736
+      FullySpecifiedType@0:1725..1729
+        TypeSpecifier@0:1725..1729
+          TypeSpecifierNonArray@0:1725..1729 `void`
+            Void
+      Identifier@0:1730..1734 `main`
+    CompoundStatement@0:1738..1797
+      Statement@0:1745..1780 `Expression`
+        ExprStatement@0:1745..1780
+          Expr `Variable`
+            Identifier@0:1745..1757 `gl_FragColor`
+          AssignmentOp@0:1758..1759 `=`
+          Expr `FunCall`
+            FunIdentifier@0:1760..1764 `TypeSpecifier`
+              TypeSpecifier
+                TypeSpecifierNonArray@0:1760..1764 `vec4`
+                  Vec4
+            Expr@0:1765..1770 `Variable`
+              Identifier@0:1765..1770 `color`
+            Expr@0:1772..1778 `FloatConst`
+              FloatConst `142`
+      Statement@0:1786..1794 `Jump`
+        JumpStatement@0:1786..1794 `discard`
+          Discard

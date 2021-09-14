@@ -1,0 +1,178 @@
+ExternalDeclaration@0:0..15 `Preprocessor`
+  Preprocessor@0:0..15 `#version`
+    PreprocessorVersion@0:9..15 `300`
+      ShortConst `300`
+ExternalDeclaration@0:16..40 `Declaration`
+  Declaration@0:16..40 `Precision`
+    PrecisionQualifier@0:26..33 `medium`
+    TypeSpecifier@0:34..39
+      TypeSpecifierNonArray@0:34..39 `float`
+        Float
+ExternalDeclaration@0:41..53 `Declaration`
+  Declaration@0:41..53 `InitDeclaratorList`
+    InitDeclaratorList@0:41..52
+      SingleDeclaration@0:41..52
+        FullySpecifiedType@0:41..48
+          TypeQualifierSpec@0:41..43 `Storage`
+            StorageQualifier@0:41..43 `in`
+              In
+          TypeSpecifier@0:44..48
+            TypeSpecifierNonArray@0:44..48 `vec4`
+              Vec4
+ExternalDeclaration@0:54..90 `Declaration`
+  Declaration@0:54..90 `InitDeclaratorList`
+    InitDeclaratorList@0:54..89
+      SingleDeclaration@0:54..89
+        FullySpecifiedType@0:54..83
+          TypeQualifierSpec@0:54..75 `Layout`
+            LayoutQualifier@0:54..75
+              LayoutQualifierSpec@0:62..74 `Identifier`
+                Identifier@0:62..70 `location`
+                IntConst `2`
+          TypeQualifierSpec@0:76..78 `Storage`
+            StorageQualifier@0:76..78 `in`
+              In
+          TypeSpecifier@0:79..83
+            TypeSpecifierNonArray@0:79..83 `vec4`
+              Vec4
+ExternalDeclaration@0:102..134 `Declaration`
+  Declaration@0:102..134 `InitDeclaratorList`
+    InitDeclaratorList@0:102..133
+      SingleDeclaration@0:102..133
+        FullySpecifiedType@0:102..131
+          TypeQualifierSpec@0:102..122 `Layout`
+            LayoutQualifier@0:102..122
+              LayoutQualifierSpec@0:109..121 `Identifier`
+                Identifier@0:109..117 `location`
+                IntConst `1`
+          TypeQualifierSpec@0:123..126 `Storage`
+            StorageQualifier@0:123..126 `out`
+              Out
+          TypeSpecifier@0:127..131
+            TypeSpecifierNonArray@0:127..131 `vec4`
+              Vec4
+ExternalDeclaration@0:135..167 `Declaration`
+  Declaration@0:135..167 `InitDeclaratorList`
+    InitDeclaratorList@0:135..166
+      SingleDeclaration@0:135..166
+        FullySpecifiedType@0:135..164
+          TypeQualifierSpec@0:135..155 `Layout`
+            LayoutQualifier@0:135..155
+              LayoutQualifierSpec@0:142..154 `Identifier`
+                Identifier@0:142..150 `location`
+                IntConst `3`
+          TypeQualifierSpec@0:156..159 `Storage`
+            StorageQualifier@0:156..159 `out`
+              Out
+          TypeSpecifier@0:160..164
+            TypeSpecifierNonArray@0:160..164 `vec4`
+              Vec4
+ExternalDeclaration@0:168..203 `Declaration`
+  Declaration@0:168..203 `InitDeclaratorList`
+    InitDeclaratorList@0:168..202
+      SingleDeclaration@0:168..202
+        FullySpecifiedType@0:168..197
+          TypeQualifierSpec@0:168..188 `Layout`
+            LayoutQualifier@0:168..188
+              LayoutQualifierSpec@0:175..187 `Identifier`
+                Identifier@0:175..183 `location`
+                IntConst `4`
+          TypeQualifierSpec@0:189..192 `Storage`
+            StorageQualifier@0:189..192 `out`
+              Out
+          TypeSpecifier@0:193..197
+            TypeSpecifierNonArray@0:193..197 `vec4`
+              Vec4
+        ArraySpecifierDimension@0:199..202 `ExplicitlySized`
+          Expr `IntConst`
+            IntConst `2`
+ExternalDeclaration@0:205..264 `FunctionDefinition`
+  FunctionDefinition@0:205..264
+    FunctionPrototype@0:205..216
+      FullySpecifiedType@0:205..209
+        TypeSpecifier@0:205..209
+          TypeSpecifierNonArray@0:205..209 `void`
+            Void
+      Identifier@0:210..214 `main`
+    CompoundStatement@0:217..264
+      Statement@0:223..233 `Expression`
+        ExprStatement@0:223..233
+          Expr `Variable`
+            Identifier@0:223..224 `c`
+          AssignmentOp@0:225..226 `=`
+          Expr `Variable`
+            Identifier@0:227..232 `color`
+      Statement@0:238..246 `Expression`
+        ExprStatement@0:238..246
+          Expr `Variable`
+            Identifier@0:238..239 `p`
+          AssignmentOp@0:240..241 `=`
+          Expr `Variable`
+            Identifier@0:242..245 `pos`
+      Statement@0:251..262 `Expression`
+        ExprStatement@0:251..262
+          Expr `Bracket`
+            Expr `Variable`
+              Identifier@0:251..252 `q`
+            Expr `IntConst`
+              IntConst `1`
+          AssignmentOp@0:256..257 `=`
+          Expr `Variable`
+            Identifier@0:258..261 `pos`
+ExternalDeclaration@0:266..304 `Declaration`
+  Declaration@0:266..304 `InitDeclaratorList`
+    InitDeclaratorList@0:266..303
+      SingleDeclaration@0:266..303
+        FullySpecifiedType@0:266..297
+          TypeQualifierSpec@0:266..287 `Layout`
+            LayoutQualifier@0:266..287
+              LayoutQualifierSpec@0:273..286 `Identifier`
+                Identifier@0:273..281 `location`
+                IntConst `40`
+          TypeQualifierSpec@0:288..291 `Storage`
+            StorageQualifier@0:288..291 `out`
+              Out
+          TypeSpecifier@0:292..297
+            TypeSpecifierNonArray@0:292..297 `float`
+              Float
+        ArraySpecifierDimension@0:300..303 `ExplicitlySized`
+          Expr `IntConst`
+            IntConst `4`
+ExternalDeclaration@0:339..377 `Declaration`
+  Declaration@0:339..377 `InitDeclaratorList`
+    InitDeclaratorList@0:339..376
+      SingleDeclaration@0:339..376
+        FullySpecifiedType@0:339..370
+          TypeQualifierSpec@0:339..360 `Layout`
+            LayoutQualifier@0:339..360
+              LayoutQualifierSpec@0:346..359 `Identifier`
+                Identifier@0:346..354 `location`
+                IntConst `41`
+          TypeQualifierSpec@0:361..364 `Storage`
+            StorageQualifier@0:361..364 `out`
+              Out
+          TypeSpecifier@0:365..370
+            TypeSpecifierNonArray@0:365..370 `float`
+              Float
+        ArraySpecifierDimension@0:373..376 `ExplicitlySized`
+          Expr `IntConst`
+            IntConst `2`
+ExternalDeclaration@0:412..450 `Declaration`
+  Declaration@0:412..450 `InitDeclaratorList`
+    InitDeclaratorList@0:412..449
+      SingleDeclaration@0:412..449
+        FullySpecifiedType@0:412..443
+          TypeQualifierSpec@0:412..433 `Layout`
+            LayoutQualifier@0:412..433
+              LayoutQualifierSpec@0:419..432 `Identifier`
+                Identifier@0:419..427 `location`
+                IntConst `39`
+          TypeQualifierSpec@0:434..437 `Storage`
+            StorageQualifier@0:434..437 `out`
+              Out
+          TypeSpecifier@0:438..443
+            TypeSpecifierNonArray@0:438..443 `float`
+              Float
+        ArraySpecifierDimension@0:446..449 `ExplicitlySized`
+          Expr `IntConst`
+            IntConst `6`

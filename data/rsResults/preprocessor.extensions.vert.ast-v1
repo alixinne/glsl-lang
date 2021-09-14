@@ -1,0 +1,38 @@
+ExternalDeclaration@0:0..15 `Preprocessor`
+  Preprocessor@0:0..15 `#version`
+    PreprocessorVersion@0:9..15 `310`
+      ShortConst `310`
+ExternalDeclaration@0:19..60 `Preprocessor`
+  Preprocessor@0:19..60 `#extension`
+    PreprocessorExtension@0:30..60
+      PreprocessorExtensionName@0:30..60 `Specific`
+        String `GL_EXT_geometry_shader`
+ExternalDeclaration@0:62..99 `Preprocessor`
+  Preprocessor@0:62..99 `#extension`
+    PreprocessorExtension@0:73..99
+      PreprocessorExtensionName@0:73..99 `Specific`
+        String `GL_EXT_frag_depth`
+ExternalDeclaration@0:101..139 `Preprocessor`
+  Preprocessor@0:101..139 `#extension`
+    PreprocessorExtension@0:112..139
+      PreprocessorExtensionName@0:112..139 `Specific`
+        String `GL_EXT_gpu_shader5`
+ExternalDeclaration@0:141..193 `Preprocessor`
+  Preprocessor@0:141..193 `#extension`
+    PreprocessorExtension@0:152..193
+      PreprocessorExtensionName@0:152..193 `Specific`
+        String `GL_EXT_shader_texture_image_samples`
+ExternalDeclaration@0:197..234 `Preprocessor`
+  Preprocessor@0:197..234 `#extension`
+    PreprocessorExtension@0:208..234
+      PreprocessorExtensionName@0:208..234 `Specific`
+        String `unknown_extension`
+ExternalDeclaration@0:238..253 `FunctionDefinition`
+  FunctionDefinition@0:238..253
+    FunctionPrototype@0:238..248
+      FullySpecifiedType@0:238..241
+        TypeSpecifier@0:238..241
+          TypeSpecifierNonArray@0:238..241 `int`
+            Int
+      Identifier@0:242..246 `main`
+    CompoundStatement@0:249..253

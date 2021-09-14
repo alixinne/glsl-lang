@@ -1,0 +1,356 @@
+ExternalDeclaration@0:0..17 `Preprocessor`
+  Preprocessor@0:0..17 `#version`
+    PreprocessorVersion@0:9..17 `420`
+      ShortConst `420`
+ExternalDeclaration@0:19..60 `Declaration`
+  Declaration@0:19..60 `InitDeclaratorList`
+    InitDeclaratorList@0:19..59
+      SingleDeclaration@0:19..59
+        FullySpecifiedType@0:19..46
+          TypeQualifierSpec@0:19..36 `Layout`
+            LayoutQualifier@0:19..36
+              LayoutQualifierSpec@0:26..35 `Identifier`
+                Identifier@0:26..35 `depth_any`
+          TypeQualifierSpec@0:37..40 `Storage`
+            StorageQualifier@0:37..40 `out`
+              Out
+          TypeSpecifier@0:41..46
+            TypeSpecifierNonArray@0:41..46 `float`
+              Float
+ExternalDeclaration@0:61..106 `Declaration`
+  Declaration@0:61..106 `InitDeclaratorList`
+    InitDeclaratorList@0:61..105
+      SingleDeclaration@0:61..105
+        FullySpecifiedType@0:61..92
+          TypeQualifierSpec@0:61..82 `Layout`
+            LayoutQualifier@0:61..82
+              LayoutQualifierSpec@0:68..81 `Identifier`
+                Identifier@0:68..81 `depth_greater`
+          TypeQualifierSpec@0:83..86 `Storage`
+            StorageQualifier@0:83..86 `out`
+              Out
+          TypeSpecifier@0:87..92
+            TypeSpecifierNonArray@0:87..92 `float`
+              Float
+ExternalDeclaration@0:157..196 `FunctionDefinition`
+  FunctionDefinition@0:157..196
+    FunctionPrototype@0:157..168
+      FullySpecifiedType@0:157..161
+        TypeSpecifier@0:157..161
+          TypeSpecifierNonArray@0:157..161 `void`
+            Void
+      Identifier@0:162..166 `main`
+    CompoundStatement@0:169..196
+      Statement@0:175..194 `Expression`
+        ExprStatement@0:175..194
+          Expr `Variable`
+            Identifier@0:175..187 `gl_FragDepth`
+          AssignmentOp@0:188..189 `=`
+          Expr `FloatConst`
+            FloatConst `0.3`
+ExternalDeclaration@0:198..232 `Declaration`
+  Declaration@0:198..232 `InitDeclaratorList`
+    InitDeclaratorList@0:198..231
+      SingleDeclaration@0:198..231
+        FullySpecifiedType@0:198..225
+          TypeQualifierSpec@0:198..216 `Layout`
+            LayoutQualifier@0:198..216
+              LayoutQualifierSpec@0:205..215 `Identifier`
+                Identifier@0:205..215 `depth_less`
+          TypeQualifierSpec@0:217..219 `Storage`
+            StorageQualifier@0:217..219 `in`
+              In
+          TypeSpecifier@0:220..225
+            TypeSpecifierNonArray@0:220..225 `float`
+              Float
+ExternalDeclaration@0:283..324 `Declaration`
+  Declaration@0:283..324 `InitDeclaratorList`
+    InitDeclaratorList@0:283..323
+      SingleDeclaration@0:283..323
+        FullySpecifiedType@0:283..310
+          TypeQualifierSpec@0:283..300 `Layout`
+            LayoutQualifier@0:283..300
+              LayoutQualifierSpec@0:290..299 `Identifier`
+                Identifier@0:290..299 `depth_any`
+          TypeQualifierSpec@0:301..304 `Storage`
+            StorageQualifier@0:301..304 `out`
+              Out
+          TypeSpecifier@0:305..310
+            TypeSpecifierNonArray@0:305..310 `float`
+              Float
+ExternalDeclaration@0:352..394 `Declaration`
+  Declaration@0:352..394 `InitDeclaratorList`
+    InitDeclaratorList@0:352..393
+      SingleDeclaration@0:352..393
+        FullySpecifiedType@0:352..389
+          TypeQualifierSpec@0:352..369 `Layout`
+            LayoutQualifier@0:352..369
+              LayoutQualifierSpec@0:359..368 `Identifier`
+                Identifier@0:359..366 `binding`
+                IntConst `0`
+          TypeQualifierSpec@0:370..377 `Storage`
+            StorageQualifier@0:370..377 `uniform`
+              Uniform
+          TypeSpecifier@0:378..389
+            TypeSpecifierNonArray@0:378..389 `atomic_uint`
+              AtomicUInt
+        ArraySpecifierDimension@0:391..393 `Unsized`
+          Unsized
+ExternalDeclaration@0:396..431 `Declaration`
+  Declaration@0:396..431 `InitDeclaratorList`
+    InitDeclaratorList@0:396..430
+      SingleDeclaration@0:396..430
+        FullySpecifiedType@0:396..421
+          TypeQualifierSpec@0:396..403 `Storage`
+            StorageQualifier@0:396..403 `uniform`
+              Uniform
+          TypeQualifierSpec@0:404..413 `Storage`
+            StorageQualifier@0:404..413 `writeonly`
+              WriteOnly
+          TypeSpecifier@0:414..421
+            TypeSpecifierNonArray@0:414..421 `image2D`
+              Image2D
+ExternalDeclaration@0:432..462 `Declaration`
+  Declaration@0:432..462 `InitDeclaratorList`
+    InitDeclaratorList@0:432..461
+      SingleDeclaration@0:432..461
+        FullySpecifiedType@0:432..437
+          TypeSpecifier@0:432..437
+            TypeSpecifierNonArray@0:432..437 `ivec2`
+              IVec2
+        Expr `FunCall`
+          FunIdentifier@0:447..456 `Expr`
+            Expr `Variable`
+              Identifier@0:447..456 `imageSize`
+          Expr@0:457..460 `Variable`
+            Identifier@0:457..460 `i2D`
+ExternalDeclaration@0:542..586 `Preprocessor`
+  Preprocessor@0:542..586 `#extension`
+    PreprocessorExtension@0:553..586
+      PreprocessorExtensionName@0:553..586 `Specific`
+        String `GL_ARB_shader_image_size`
+ExternalDeclaration@0:587..618 `Declaration`
+  Declaration@0:587..618 `InitDeclaratorList`
+    InitDeclaratorList@0:587..617
+      SingleDeclaration@0:587..617
+        FullySpecifiedType@0:587..592
+          TypeSpecifier@0:587..592
+            TypeSpecifierNonArray@0:587..592 `ivec2`
+              IVec2
+        Expr `FunCall`
+          FunIdentifier@0:603..612 `Expr`
+            Expr `Variable`
+              Identifier@0:603..612 `imageSize`
+          Expr@0:613..616 `Variable`
+            Identifier@0:613..616 `i2D`
+ExternalDeclaration@0:620..675 `Preprocessor`
+  Preprocessor@0:620..675 `#extension`
+    PreprocessorExtension@0:631..675
+      PreprocessorExtensionName@0:631..675 `Specific`
+        String `GL_ARB_shader_storage_buffer_object`
+ExternalDeclaration@0:677..753 `Declaration`
+  Declaration@0:677..753 `Block`
+    Block@0:677..752
+      TypeQualifier@0:677..710
+        TypeQualifierSpec@0:677..703 `Layout`
+          LayoutQualifier@0:677..703
+            LayoutQualifierSpec@0:684..695 `Identifier`
+              Identifier@0:684..691 `binding`
+              IntConst `0`
+            LayoutQualifierSpec@0:696..702 `Identifier`
+              Identifier@0:696..702 `std430`
+        TypeQualifierSpec@0:704..710 `Storage`
+          StorageQualifier@0:704..710 `buffer`
+            Buffer
+      Identifier@0:711..717 `Buffer`
+      StructFieldSpecifier@0:724..734
+        TypeSpecifier@0:724..727
+          TypeSpecifierNonArray@0:724..727 `int`
+            Int
+        ArrayedIdentifier@0:728..733
+          Identifier@0:728..733 `atomi`
+      StructFieldSpecifier@0:739..750
+        TypeSpecifier@0:739..743
+          TypeSpecifierNonArray@0:739..743 `uint`
+            UInt
+        ArrayedIdentifier@0:744..749
+          Identifier@0:744..749 `atomu`
+ExternalDeclaration@0:755..936 `FunctionDefinition`
+  FunctionDefinition@0:755..936
+    FunctionPrototype@0:755..774
+      FullySpecifiedType@0:755..759
+        TypeSpecifier@0:755..759
+          TypeSpecifierNonArray@0:755..759 `void`
+            Void
+      Identifier@0:760..772 `atomicOpPass`
+    CompoundStatement@0:775..936
+      Statement@0:781..813 `Declaration`
+        Declaration@0:781..813 `InitDeclaratorList`
+          InitDeclaratorList@0:781..812
+            SingleDeclaration@0:781..812
+              FullySpecifiedType@0:781..784
+                TypeSpecifier@0:781..784
+                  TypeSpecifierNonArray@0:781..784 `int`
+                    Int
+              Expr `FunCall`
+                FunIdentifier@0:793..802 `Expr`
+                  Expr `Variable`
+                    Identifier@0:793..802 `atomicAdd`
+                Expr@0:803..808 `Variable`
+                  Identifier@0:803..808 `atomi`
+                Expr@0:810..811 `IntConst`
+                  IntConst `3`
+      Statement@0:818..852 `Declaration`
+        Declaration@0:818..852 `InitDeclaratorList`
+          InitDeclaratorList@0:818..851
+            SingleDeclaration@0:818..851
+              FullySpecifiedType@0:818..822
+                TypeSpecifier@0:818..822
+                  TypeSpecifierNonArray@0:818..822 `uint`
+                    UInt
+              Expr `FunCall`
+                FunIdentifier@0:831..840 `Expr`
+                  Expr `Variable`
+                    Identifier@0:831..840 `atomicAnd`
+                Expr@0:841..846 `Variable`
+                  Identifier@0:841..846 `atomu`
+                Expr@0:848..850 `UIntConst`
+                  UIntConst `7`
+      Statement@0:857..890 `Expression`
+        ExprStatement@0:857..890
+          Expr `Variable`
+            Identifier@0:857..862 `origi`
+          AssignmentOp@0:863..864 `=`
+          Expr `FunCall`
+            FunIdentifier@0:865..879 `Expr`
+              Expr `Variable`
+                Identifier@0:865..879 `atomicExchange`
+            Expr@0:880..885 `Variable`
+              Identifier@0:880..885 `atomi`
+            Expr@0:887..888 `IntConst`
+              IntConst `4`
+      Statement@0:895..934 `Expression`
+        ExprStatement@0:895..934
+          Expr `Variable`
+            Identifier@0:895..900 `origu`
+          AssignmentOp@0:901..902 `=`
+          Expr `FunCall`
+            FunIdentifier@0:903..917 `Expr`
+              Expr `Variable`
+                Identifier@0:903..917 `atomicCompSwap`
+            Expr@0:918..923 `Variable`
+              Identifier@0:918..923 `atomu`
+            Expr@0:925..928 `UIntConst`
+              UIntConst `10`
+            Expr@0:930..932 `UIntConst`
+              UIntConst `8`
+ExternalDeclaration@0:938..1076 `Declaration`
+  Declaration@0:938..1076 `Block`
+    Block@0:938..1075
+      TypeQualifier@0:938..971
+        TypeQualifierSpec@0:938..964 `Layout`
+          LayoutQualifier@0:938..964
+            LayoutQualifierSpec@0:945..956 `Identifier`
+              Identifier@0:945..952 `binding`
+              IntConst `2`
+            LayoutQualifierSpec@0:957..963 `Identifier`
+              Identifier@0:957..963 `std430`
+        TypeQualifierSpec@0:965..971 `Storage`
+          StorageQualifier@0:965..971 `buffer`
+            Buffer
+      Identifier@0:972..982 `ssboElem01`
+      StructFieldSpecifier@0:989..1002
+        TypeSpecifier@0:989..992
+          TypeSpecifierNonArray@0:989..992 `int`
+            Int
+        ArrayedIdentifier@0:993..1001
+          Identifier@0:993..1001 `member01`
+      StructFieldSpecifier@0:1007..1026
+        TypeSpecifier@0:1007..1010
+          TypeSpecifierNonArray@0:1007..1010 `int`
+            Int
+        ArrayedIdentifier@0:1011..1025
+          Identifier@0:1011..1022 `memberArr01`
+          ArraySpecifierDimension@0:1022..1025 `ExplicitlySized`
+            Expr `IntConst`
+              IntConst `2`
+      StructFieldSpecifier@0:1031..1056
+        TypeSpecifier@0:1031..1034
+          TypeSpecifierNonArray@0:1031..1034 `int`
+            Int
+        ArrayedIdentifier@0:1035..1055
+          Identifier@0:1035..1053 `memberUnsizedArr01`
+          ArraySpecifierDimension@0:1053..1055 `Unsized`
+            Unsized
+      Identifier@0:1059..1072 `ssboStd430Arr`
+      ArraySpecifierDimension@0:1072..1075 `ExplicitlySized`
+        Expr `IntConst`
+          IntConst `2`
+ExternalDeclaration@0:1150..1288 `Declaration`
+  Declaration@0:1150..1288 `Block`
+    Block@0:1150..1287
+      TypeQualifier@0:1150..1183
+        TypeQualifierSpec@0:1150..1176 `Layout`
+          LayoutQualifier@0:1150..1176
+            LayoutQualifierSpec@0:1157..1168 `Identifier`
+              Identifier@0:1157..1164 `binding`
+              IntConst `3`
+            LayoutQualifierSpec@0:1169..1175 `shared`
+              Shared
+        TypeQualifierSpec@0:1177..1183 `Storage`
+          StorageQualifier@0:1177..1183 `buffer`
+            Buffer
+      Identifier@0:1184..1194 `ssboElem02`
+      StructFieldSpecifier@0:1201..1214
+        TypeSpecifier@0:1201..1204
+          TypeSpecifierNonArray@0:1201..1204 `int`
+            Int
+        ArrayedIdentifier@0:1205..1213
+          Identifier@0:1205..1213 `member02`
+      StructFieldSpecifier@0:1219..1238
+        TypeSpecifier@0:1219..1222
+          TypeSpecifierNonArray@0:1219..1222 `int`
+            Int
+        ArrayedIdentifier@0:1223..1237
+          Identifier@0:1223..1234 `memberArr02`
+          ArraySpecifierDimension@0:1234..1237 `ExplicitlySized`
+            Expr `IntConst`
+              IntConst `2`
+      StructFieldSpecifier@0:1243..1268
+        TypeSpecifier@0:1243..1246
+          TypeSpecifierNonArray@0:1243..1246 `int`
+            Int
+        ArrayedIdentifier@0:1247..1267
+          Identifier@0:1247..1265 `memberUnsizedArr02`
+          ArraySpecifierDimension@0:1265..1267 `Unsized`
+            Unsized
+      Identifier@0:1271..1284 `ssboSharedArr`
+      ArraySpecifierDimension@0:1284..1287 `ExplicitlySized`
+        Expr `IntConst`
+          IntConst `2`
+ExternalDeclaration@0:1290..1346 `Preprocessor`
+  Preprocessor@0:1290..1346 `#extension`
+    PreprocessorExtension@0:1301..1346
+      PreprocessorExtensionName@0:1301..1346 `Specific`
+        String `GL_ARB_shader_storage_buffer_object`
+ExternalDeclaration@0:1348..1466 `Declaration`
+  Declaration@0:1348..1466 `Block`
+    Block@0:1348..1465
+      TypeQualifier@0:1348..1381
+        TypeQualifierSpec@0:1348..1374 `Layout`
+          LayoutQualifier@0:1348..1374
+            LayoutQualifierSpec@0:1355..1366 `Identifier`
+              Identifier@0:1355..1362 `binding`
+              IntConst `1`
+            LayoutQualifierSpec@0:1367..1373 `Identifier`
+              Identifier@0:1367..1373 `std430`
+        TypeQualifierSpec@0:1375..1381 `Storage`
+          StorageQualifier@0:1375..1381 `buffer`
+            Buffer
+      Identifier@0:1382..1392 `BufferFail`
+      StructFieldSpecifier@0:1452..1463
+        TypeSpecifier@0:1452..1455
+          TypeSpecifierNonArray@0:1452..1455 `int`
+            Int
+        ArrayedIdentifier@0:1456..1462
+          Identifier@0:1456..1462 `atom1i`

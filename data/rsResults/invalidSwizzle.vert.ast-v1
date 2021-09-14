@@ -1,0 +1,58 @@
+ExternalDeclaration@0:0..12 `Preprocessor`
+  Preprocessor@0:0..12 `#version`
+    PreprocessorVersion@0:9..12 `420`
+      ShortConst `420`
+ExternalDeclaration@0:14..23 `Declaration`
+  Declaration@0:14..23 `FunctionPrototype`
+    FunctionPrototype@0:14..22
+      FullySpecifiedType@0:14..18
+        TypeSpecifier@0:14..18
+          TypeSpecifierNonArray@0:14..18 `void`
+            Void
+      Identifier@0:19..20 `f`
+ExternalDeclaration@0:24..44 `Declaration`
+  Declaration@0:24..44 `InitDeclaratorList`
+    InitDeclaratorList@0:24..43
+      SingleDeclaration@0:24..43
+        FullySpecifiedType@0:24..41
+          TypeQualifierSpec@0:24..31 `Storage`
+            StorageQualifier@0:24..31 `uniform`
+              Uniform
+          TypeSpecifier@0:32..41
+            TypeSpecifierNonArray@0:32..41 `sampler2D`
+              Sampler2D
+ExternalDeclaration@0:46..222 `FunctionDefinition`
+  FunctionDefinition@0:46..222
+    FunctionPrototype@0:46..57
+      FullySpecifiedType@0:46..50
+        TypeSpecifier@0:46..50
+          TypeSpecifierNonArray@0:46..50 `void`
+            Void
+      Identifier@0:51..55 `main`
+    CompoundStatement@0:58..222
+      Statement@0:64..78 `Declaration`
+        Declaration@0:64..78 `InitDeclaratorList`
+          InitDeclaratorList@0:64..77
+            SingleDeclaration@0:64..77
+              FullySpecifiedType@0:64..68
+                TypeSpecifier@0:64..68
+                  TypeSpecifierNonArray@0:64..68 `vec2`
+                    Vec2
+              Expr `Dot`
+                Expr `Variable`
+                  Identifier@0:73..74 `s`
+                Identifier@0:75..77 `rr`
+      Statement@0:120..127 `Expression`
+        ExprStatement@0:120..127
+          Expr `FunCall`
+            FunIdentifier@0:120..121 `Expr`
+              Expr `Variable`
+                Identifier@0:120..121 `f`
+          Identifier@0:124..126 `xx`
+      Statement@0:173..180 `Expression`
+        ExprStatement@0:173..180
+          Expr `FunCall`
+            FunIdentifier@0:173..174 `Expr`
+              Expr `Variable`
+                Identifier@0:173..174 `f`
+          Identifier@0:177..179 `xy`

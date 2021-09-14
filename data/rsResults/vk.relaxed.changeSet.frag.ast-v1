@@ -1,0 +1,83 @@
+ExternalDeclaration@0:0..12 `Preprocessor`
+  Preprocessor@0:0..12 `#version`
+    PreprocessorVersion@0:9..12 `460`
+      ShortConst `460`
+ExternalDeclaration@0:14..54 `Declaration`
+  Declaration@0:14..54 `InitDeclaratorList`
+    InitDeclaratorList@0:14..53
+      SingleDeclaration@0:14..53
+        FullySpecifiedType@0:14..43
+          TypeQualifierSpec@0:14..34 `Layout`
+            LayoutQualifier@0:14..34
+              LayoutQualifierSpec@0:21..33 `Identifier`
+                Identifier@0:21..29 `location`
+                IntConst `0`
+          TypeQualifierSpec@0:35..38 `Storage`
+            StorageQualifier@0:35..38 `out`
+              Out
+          TypeSpecifier@0:39..43
+            TypeSpecifierNonArray@0:39..43 `vec4`
+              Vec4
+ExternalDeclaration@0:56..83 `Declaration`
+  Declaration@0:56..83 `InitDeclaratorList`
+    InitDeclaratorList@0:56..82
+      SingleDeclaration@0:56..82
+        FullySpecifiedType@0:56..73
+          TypeQualifierSpec@0:56..63 `Storage`
+            StorageQualifier@0:56..63 `uniform`
+              Uniform
+          TypeSpecifier@0:64..73
+            TypeSpecifierNonArray@0:64..73 `sampler2D`
+              Sampler2D
+ExternalDeclaration@0:85..99 `Declaration`
+  Declaration@0:85..99 `InitDeclaratorList`
+    InitDeclaratorList@0:85..98
+      SingleDeclaration@0:85..98
+        FullySpecifiedType@0:85..92
+          TypeQualifierSpec@0:85..87 `Storage`
+            StorageQualifier@0:85..87 `in`
+              In
+          TypeSpecifier@0:88..92
+            TypeSpecifierNonArray@0:88..92 `vec4`
+              Vec4
+ExternalDeclaration@0:100..111 `Declaration`
+  Declaration@0:100..111 `InitDeclaratorList`
+    InitDeclaratorList@0:100..110
+      SingleDeclaration@0:100..110
+        FullySpecifiedType@0:100..107
+          TypeQualifierSpec@0:100..102 `Storage`
+            StorageQualifier@0:100..102 `in`
+              In
+          TypeSpecifier@0:103..107
+            TypeSpecifierNonArray@0:103..107 `vec2`
+              Vec2
+ExternalDeclaration@0:113..180 `FunctionDefinition`
+  FunctionDefinition@0:113..180
+    FunctionPrototype@0:113..124
+      FullySpecifiedType@0:113..117
+        TypeSpecifier@0:113..117
+          TypeSpecifierNonArray@0:113..117 `void`
+            Void
+      Identifier@0:118..122 `main`
+    CompoundStatement@0:125..180
+      Statement@0:131..178 `Expression`
+        ExprStatement@0:131..178
+          Expr `Variable`
+            Identifier@0:131..140 `fragColor`
+          AssignmentOp@0:141..142 `=`
+          Expr `Binary`
+            BinaryOp@0:149..150 `*`
+            Expr `Variable`
+              Identifier@0:143..148 `Color`
+            Expr `Dot`
+              Expr `FunCall`
+                FunIdentifier@0:151..158 `Expr`
+                  Expr `Variable`
+                    Identifier@0:151..158 `texture`
+                Expr@0:159..167 `Variable`
+                  Identifier@0:159..167 `sTexture`
+                Expr@0:169..174 `Dot`
+                  Expr `Variable`
+                    Identifier@0:169..171 `UV`
+                  Identifier@0:172..174 `st`
+              Identifier@0:176..177 `r`

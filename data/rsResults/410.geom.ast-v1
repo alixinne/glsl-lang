@@ -1,0 +1,172 @@
+ExternalDeclaration@0:0..17 `Preprocessor`
+  Preprocessor@0:0..17 `#version`
+    PreprocessorVersion@0:9..17 `410`
+      ShortConst `410`
+ExternalDeclaration@0:21..65 `FunctionDefinition`
+  FunctionDefinition@0:21..65
+    FunctionPrototype@0:21..32
+      FullySpecifiedType@0:21..25
+        TypeSpecifier@0:21..25
+          TypeSpecifierNonArray@0:21..25 `void`
+            Void
+      Identifier@0:26..30 `main`
+    CompoundStatement@0:34..65
+      Statement@0:41..62 `Expression`
+        ExprStatement@0:41..62
+          Expr `Variable`
+            Identifier@0:41..57 `gl_ViewportIndex`
+          AssignmentOp@0:58..59 `=`
+          Expr `IntConst`
+            IntConst `7`
+ExternalDeclaration@0:69..122 `Declaration`
+  Declaration@0:69..122 `Block`
+    Block@0:69..121
+      TypeQualifier@0:69..71
+        TypeQualifierSpec@0:69..71 `Storage`
+          StorageQualifier@0:69..71 `in`
+            In
+      Identifier@0:72..84 `gl_PerVertex`
+      StructFieldSpecifier@0:92..111
+        TypeSpecifier@0:92..97
+          TypeSpecifierNonArray@0:92..97 `float`
+            Float
+        ArrayedIdentifier@0:98..110
+          Identifier@0:98..110 `gl_PointSize`
+      Identifier@0:115..119 `myIn`
+      ArraySpecifierDimension@0:119..121 `Unsized`
+        Unsized
+ExternalDeclaration@0:170..226 `Declaration`
+  Declaration@0:170..226 `Block`
+    Block@0:170..225
+      TypeQualifier@0:170..172
+        TypeQualifierSpec@0:170..172 `Storage`
+          StorageQualifier@0:170..172 `in`
+            In
+      Identifier@0:173..185 `gl_PerVertex`
+      StructFieldSpecifier@0:193..212
+        TypeSpecifier@0:193..198
+          TypeSpecifierNonArray@0:193..198 `float`
+            Float
+        ArrayedIdentifier@0:199..211
+          Identifier@0:199..211 `gl_PointSize`
+      Identifier@0:216..223 `gl_myIn`
+      ArraySpecifierDimension@0:223..225 `Unsized`
+        Unsized
+ExternalDeclaration@0:274..328 `Declaration`
+  Declaration@0:274..328 `Block`
+    Block@0:274..327
+      TypeQualifier@0:274..276
+        TypeQualifierSpec@0:274..276 `Storage`
+          StorageQualifier@0:274..276 `in`
+            In
+      Identifier@0:277..289 `gl_PerVertex`
+      StructFieldSpecifier@0:297..316
+        TypeSpecifier@0:297..302
+          TypeSpecifierNonArray@0:297..302 `float`
+            Float
+        ArrayedIdentifier@0:303..315
+          Identifier@0:303..315 `gl_PointSize`
+      Identifier@0:320..325 `gl_in`
+      ArraySpecifierDimension@0:325..327 `Unsized`
+        Unsized
+ExternalDeclaration@0:332..386 `Declaration`
+  Declaration@0:332..386 `Block`
+    Block@0:332..385
+      TypeQualifier@0:332..334
+        TypeQualifierSpec@0:332..334 `Storage`
+          StorageQualifier@0:332..334 `in`
+            In
+      Identifier@0:335..347 `gl_PerVertex`
+      StructFieldSpecifier@0:355..374
+        TypeSpecifier@0:355..360
+          TypeSpecifierNonArray@0:355..360 `float`
+            Float
+        ArrayedIdentifier@0:361..373
+          Identifier@0:361..373 `gl_PointSize`
+      Identifier@0:378..383 `gl_in`
+      ArraySpecifierDimension@0:383..385 `Unsized`
+        Unsized
+ExternalDeclaration@0:422..469 `Declaration`
+  Declaration@0:422..469 `Block`
+    Block@0:422..468
+      TypeQualifier@0:422..425
+        TypeQualifierSpec@0:422..425 `Storage`
+          StorageQualifier@0:422..425 `out`
+            Out
+      Identifier@0:426..438 `gl_PerVertex`
+      StructFieldSpecifier@0:446..465
+        TypeSpecifier@0:446..451
+          TypeSpecifierNonArray@0:446..451 `float`
+            Float
+        ArrayedIdentifier@0:452..464
+          Identifier@0:452..464 `gl_PointSize`
+ExternalDeclaration@0:473..775 `FunctionDefinition`
+  FunctionDefinition@0:473..775
+    FunctionPrototype@0:473..483
+      FullySpecifiedType@0:473..477
+        TypeSpecifier@0:473..477
+          TypeSpecifierNonArray@0:473..477 `void`
+            Void
+      Identifier@0:478..481 `foo`
+    CompoundStatement@0:485..775
+      Statement@0:492..524 `Declaration`
+        Declaration@0:492..524 `InitDeclaratorList`
+          InitDeclaratorList@0:492..523
+            SingleDeclaration@0:492..523
+              FullySpecifiedType@0:492..497
+                TypeSpecifier@0:492..497
+                  TypeSpecifierNonArray@0:492..497 `float`
+                    Float
+              Expr `Dot`
+                Expr `Bracket`
+                  Expr `Variable`
+                    Identifier@0:502..507 `gl_in`
+                  Expr `IntConst`
+                    IntConst `1`
+                Identifier@0:511..523 `gl_PointSize`
+      Statement@0:552..569 `Expression`
+        ExprStatement@0:552..569
+          Expr `Variable`
+            Identifier@0:552..564 `gl_PointSize`
+          AssignmentOp@0:565..566 `=`
+          Expr `Variable`
+            Identifier@0:567..568 `p`
+      Statement@0:612..642 `Declaration`
+        Declaration@0:612..642 `InitDeclaratorList`
+          InitDeclaratorList@0:612..641
+            SingleDeclaration@0:612..641
+              FullySpecifiedType@0:612..616
+                TypeSpecifier@0:612..616
+                  TypeSpecifierNonArray@0:612..616 `vec4`
+                    Vec4
+              Expr `Dot`
+                Expr `Bracket`
+                  Expr `Variable`
+                    Identifier@0:621..626 `gl_in`
+                  Expr `IntConst`
+                    IntConst `1`
+                Identifier@0:630..641 `gl_Position`
+      Statement@0:695..719 `Expression`
+        ExprStatement@0:695..719
+          Expr `Variable`
+            Identifier@0:695..706 `gl_Position`
+          AssignmentOp@0:707..708 `=`
+          Expr `FunCall`
+            FunIdentifier@0:709..713 `TypeSpecifier`
+              TypeSpecifier
+                TypeSpecifierNonArray@0:709..713 `vec4`
+                  Vec4
+            Expr@0:714..717 `FloatConst`
+              FloatConst `1`
+ExternalDeclaration@0:779..851 `FunctionDefinition`
+  FunctionDefinition@0:779..851
+    FunctionPrototype@0:779..791
+      FullySpecifiedType@0:779..784
+        TypeSpecifier@0:779..784
+          TypeSpecifierNonArray@0:779..784 `float`
+            Float
+      Identifier@0:785..789 `foo5`
+    CompoundStatement@0:793..851
+      Statement@0:800..809 `Jump`
+        JumpStatement@0:800..809 `return`
+          IntConst `4`

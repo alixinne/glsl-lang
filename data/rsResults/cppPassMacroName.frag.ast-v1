@@ -1,0 +1,133 @@
+ExternalDeclaration@0:0..23 `Preprocessor`
+  Preprocessor@0:0..23 `#define`
+    PreprocessorDefine@0:8..23 `FunctionLike`
+      Identifier@0:8..10 `f1`
+      Identifier@0:11..12 `i`
+      String `((i)*(i))`
+ExternalDeclaration@0:24..54 `Preprocessor`
+  Preprocessor@0:24..54 `#define`
+    PreprocessorDefine@0:32..54 `FunctionLike`
+      Identifier@0:32..34 `I2`
+      Identifier@0:35..36 `f`
+      Identifier@0:38..39 `n`
+      String `f(n) + f(n+1)`
+ExternalDeclaration@0:55..89 `Preprocessor`
+  Preprocessor@0:55..89 `#define`
+    PreprocessorDefine@0:63..89 `FunctionLike`
+      Identifier@0:63..65 `I3`
+      Identifier@0:66..67 `f`
+      Identifier@0:69..70 `n`
+      String `I2(f, n) + f(n+2)`
+ExternalDeclaration@0:91..117 `Preprocessor`
+  Preprocessor@0:91..117 `#define`
+    PreprocessorDefine@0:99..117 `FunctionLike`
+      Identifier@0:99..104 `FL_f1`
+      Identifier@0:105..106 `i`
+      String `((i)*(i))`
+ExternalDeclaration@0:118..153 `Preprocessor`
+  Preprocessor@0:118..153 `#define`
+    PreprocessorDefine@0:126..153 `FunctionLike`
+      Identifier@0:126..131 `FL_I2`
+      Identifier@0:132..133 `f`
+      Identifier@0:135..136 `n`
+      String `f(n) + f(n+0.2)`
+ExternalDeclaration@0:154..196 `Preprocessor`
+  Preprocessor@0:154..196 `#define`
+    PreprocessorDefine@0:162..196 `FunctionLike`
+      Identifier@0:162..167 `FL_I3`
+      Identifier@0:168..169 `f`
+      Identifier@0:171..172 `n`
+      String `FL_I2(f, n) + f(n+0.5)`
+ExternalDeclaration@0:198..358 `FunctionDefinition`
+  FunctionDefinition@0:198..358
+    FunctionPrototype@0:198..209
+      FullySpecifiedType@0:198..202
+        TypeSpecifier@0:198..202
+          TypeSpecifierNonArray@0:198..202 `void`
+            Void
+      Identifier@0:203..207 `main`
+    CompoundStatement@0:210..358
+      Statement@0:216..227 `Declaration`
+        Declaration@0:216..227 `InitDeclaratorList`
+          InitDeclaratorList@0:216..226
+            SingleDeclaration@0:216..226
+              FullySpecifiedType@0:216..219
+                TypeSpecifier@0:216..219
+                  TypeSpecifierNonArray@0:216..219 `int`
+                    Int
+              Expr `IntConst`
+                IntConst `4`
+      Statement@0:232..244 `Declaration`
+        Declaration@0:232..244 `InitDeclaratorList`
+          InitDeclaratorList@0:232..243
+            SingleDeclaration@0:232..243
+              FullySpecifiedType@0:232..235
+                TypeSpecifier@0:232..235
+                  TypeSpecifierNonArray@0:232..235 `int`
+                    Int
+              Expr `Variable`
+                Identifier@0:241..243 `f1`
+      Statement@0:249..264 `Declaration`
+        Declaration@0:249..264 `InitDeclaratorList`
+          InitDeclaratorList@0:249..263
+            SingleDeclaration@0:249..263
+              FullySpecifiedType@0:249..252
+                TypeSpecifier@0:249..252
+                  TypeSpecifierNonArray@0:249..252 `int`
+                    Int
+              Expr `FunCall`
+                FunIdentifier@0:258..260 `Expr`
+                  Expr `Variable`
+                    Identifier@0:258..260 `f1`
+                Expr@0:261..262 `IntConst`
+                  IntConst `3`
+      Statement@0:269..288 `Declaration`
+        Declaration@0:269..288 `InitDeclaratorList`
+          InitDeclaratorList@0:269..287
+            SingleDeclaration@0:269..287
+              FullySpecifiedType@0:269..272
+                TypeSpecifier@0:269..272
+                  TypeSpecifierNonArray@0:269..272 `int`
+                    Int
+              Expr `FunCall`
+                FunIdentifier@0:278..280 `Expr`
+                  Expr `Variable`
+                    Identifier@0:278..280 `I2`
+                Expr@0:281..283 `Variable`
+                  Identifier@0:281..283 `f1`
+                Expr@0:285..286 `IntConst`
+                  IntConst `0`
+      Statement@0:293..312 `Declaration`
+        Declaration@0:293..312 `InitDeclaratorList`
+          InitDeclaratorList@0:293..311
+            SingleDeclaration@0:293..311
+              FullySpecifiedType@0:293..296
+                TypeSpecifier@0:293..296
+                  TypeSpecifierNonArray@0:293..296 `int`
+                    Int
+              Expr `FunCall`
+                FunIdentifier@0:302..304 `Expr`
+                  Expr `Variable`
+                    Identifier@0:302..304 `I3`
+                Expr@0:305..307 `Variable`
+                  Identifier@0:305..307 `f1`
+                Expr@0:309..310 `IntConst`
+                  IntConst `0`
+      Statement@0:318..356 `Declaration`
+        Declaration@0:318..356 `InitDeclaratorList`
+          InitDeclaratorList@0:318..355
+            SingleDeclaration@0:318..355
+              FullySpecifiedType@0:318..329
+                TypeQualifierSpec@0:318..323 `Precision`
+                  PrecisionQualifier@0:318..323 `high`
+                TypeSpecifier@0:324..329
+                  TypeSpecifierNonArray@0:324..329 `float`
+                    Float
+              Expr `FunCall`
+                FunIdentifier@0:338..343 `Expr`
+                  Expr `Variable`
+                    Identifier@0:338..343 `FL_I3`
+                Expr@0:344..349 `Variable`
+                  Identifier@0:344..349 `FL_f1`
+                Expr@0:351..354 `FloatConst`
+                  FloatConst `0.1`

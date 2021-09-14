@@ -1,0 +1,36 @@
+ExternalDeclaration@0:0..15 `Preprocessor`
+  Preprocessor@0:0..15 `#version`
+    PreprocessorVersion@0:9..15 `300`
+      ShortConst `300`
+ExternalDeclaration@0:19..41 `Declaration`
+  Declaration@0:19..41 `Precision`
+    PrecisionQualifier@0:29..34 `high`
+    TypeSpecifier@0:35..40
+      TypeSpecifierNonArray@0:35..40 `float`
+        Float
+ExternalDeclaration@0:45..57 `Declaration`
+  Declaration@0:45..57 `InitDeclaratorList`
+    InitDeclaratorList@0:45..56
+      SingleDeclaration@0:45..56
+        FullySpecifiedType@0:45..52
+          TypeQualifierSpec@0:45..47 `Storage`
+            StorageQualifier@0:45..47 `in`
+              In
+          TypeSpecifier@0:48..52
+            TypeSpecifierNonArray@0:48..52 `vec2`
+              Vec2
+ExternalDeclaration@0:61..108 `Preprocessor`
+  Preprocessor@0:61..108 `#extension`
+    PreprocessorExtension@0:72..108
+      PreprocessorExtensionName@0:72..108 `Specific`
+        String `GL_OES_standard_derivatives`
+ExternalDeclaration@0:110..156 `Preprocessor`
+  Preprocessor@0:110..156 `#extension`
+    PreprocessorExtension@0:121..156
+      PreprocessorExtensionName@0:121..156 `Specific`
+        String `GL_OES_EGL_image_external`
+ExternalDeclaration@0:158..195 `Preprocessor`
+  Preprocessor@0:158..195 `#extension`
+    PreprocessorExtension@0:169..195
+      PreprocessorExtensionName@0:169..195 `Specific`
+        String `GL_OES_texture_3D`

@@ -1,0 +1,79 @@
+ExternalDeclaration@0:0..22 `Declaration`
+  Declaration@0:0..22 `Precision`
+    PrecisionQualifier@0:10..15 `high`
+    TypeSpecifier@0:16..21
+      TypeSpecifierNonArray@0:16..21 `float`
+        Float
+ExternalDeclaration@0:24..50 `Declaration`
+  Declaration@0:24..50 `InitDeclaratorList`
+    InitDeclaratorList@0:24..49
+      SingleDeclaration@0:24..49
+        FullySpecifiedType@0:24..41
+          TypeQualifierSpec@0:24..31 `Storage`
+            StorageQualifier@0:24..31 `uniform`
+              Uniform
+          TypeSpecifier@0:32..41
+            TypeSpecifierNonArray@0:32..41 `sampler2D`
+              Sampler2D
+ExternalDeclaration@0:52..235 `FunctionDefinition`
+  FunctionDefinition@0:52..235
+    FunctionPrototype@0:52..63
+      FullySpecifiedType@0:52..56
+        TypeSpecifier@0:52..56
+          TypeSpecifierNonArray@0:52..56 `void`
+            Void
+      Identifier@0:57..61 `main`
+    CompoundStatement@0:64..235
+      Statement@0:70..81 `Declaration`
+        Declaration@0:70..81 `InitDeclaratorList`
+          InitDeclaratorList@0:70..80
+            SingleDeclaration@0:70..80
+              FullySpecifiedType@0:70..74
+                TypeSpecifier@0:70..74
+                  TypeSpecifierNonArray@0:70..74 `vec4`
+                    Vec4
+      Statement@0:87..206 `Selection`
+        SelectionStatement@0:87..206
+          Expr `Binary`
+            BinaryOp@0:113..114 `<`
+            Expr `FunCall`
+              FunIdentifier@0:91..97 `Expr`
+                Expr `Variable`
+                  Identifier@0:91..97 `length`
+              Expr@0:98..111 `Variable`
+                Identifier@0:98..111 `gl_PointCoord`
+            Expr `FloatConst`
+              FloatConst `0.3`
+          SelectionRestStatement@0:128..206 `Else`
+            Statement `Expression`
+              ExprStatement@0:128..170
+                Expr `Variable`
+                  Identifier@0:128..133 `color`
+                AssignmentOp@0:134..135 `=`
+                Expr `FunCall`
+                  FunIdentifier@0:136..145 `Expr`
+                    Expr `Variable`
+                      Identifier@0:136..145 `texture2D`
+                  Expr@0:146..153 `Variable`
+                    Identifier@0:146..153 `sampler`
+                  Expr@0:155..168 `Variable`
+                    Identifier@0:155..168 `gl_PointCoord`
+            Statement `Expression`
+              ExprStatement@0:188..206
+                Expr `Variable`
+                  Identifier@0:188..193 `color`
+                AssignmentOp@0:194..195 `=`
+                Expr `FunCall`
+                  FunIdentifier@0:196..200 `TypeSpecifier`
+                    TypeSpecifier
+                      TypeSpecifierNonArray@0:196..200 `vec4`
+                        Vec4
+                  Expr@0:201..204 `FloatConst`
+                    FloatConst `0`
+      Statement@0:212..233 `Expression`
+        ExprStatement@0:212..233
+          Expr `Variable`
+            Identifier@0:212..224 `gl_FragColor`
+          AssignmentOp@0:225..226 `=`
+          Expr `Variable`
+            Identifier@0:227..232 `color`

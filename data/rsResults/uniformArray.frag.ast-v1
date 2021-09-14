@@ -1,0 +1,111 @@
+ExternalDeclaration@0:0..12 `Preprocessor`
+  Preprocessor@0:0..12 `#version`
+    PreprocessorVersion@0:9..12 `130`
+      ShortConst `130`
+ExternalDeclaration@0:14..45 `Declaration`
+  Declaration@0:14..45 `InitDeclaratorList`
+    InitDeclaratorList@0:14..44
+      SingleDeclaration@0:14..44
+        FullySpecifiedType@0:14..31
+          TypeQualifierSpec@0:14..21 `Storage`
+            StorageQualifier@0:14..21 `uniform`
+              Uniform
+          TypeSpecifier@0:22..31
+            TypeSpecifierNonArray@0:22..31 `sampler2D`
+              Sampler2D
+ExternalDeclaration@0:47..68 `Declaration`
+  Declaration@0:47..68 `InitDeclaratorList`
+    InitDeclaratorList@0:47..67
+      SingleDeclaration@0:47..67
+        FullySpecifiedType@0:47..59
+          TypeQualifierSpec@0:47..54 `Storage`
+            StorageQualifier@0:47..54 `uniform`
+              Uniform
+          TypeSpecifier@0:55..59
+            TypeSpecifierNonArray@0:55..59 `vec3`
+              Vec3
+ExternalDeclaration@0:70..92 `Declaration`
+  Declaration@0:70..92 `InitDeclaratorList`
+    InitDeclaratorList@0:70..91
+      SingleDeclaration@0:70..91
+        FullySpecifiedType@0:70..82
+          TypeQualifierSpec@0:70..77 `Storage`
+            StorageQualifier@0:70..77 `uniform`
+              Uniform
+          TypeSpecifier@0:78..82
+            TypeSpecifierNonArray@0:78..82 `vec4`
+              Vec4
+        ArraySpecifierDimension@0:88..91 `ExplicitlySized`
+          Expr `IntConst`
+            IntConst `6`
+ExternalDeclaration@0:94..118 `Declaration`
+  Declaration@0:94..118 `InitDeclaratorList`
+    InitDeclaratorList@0:94..117
+      SingleDeclaration@0:94..117
+        FullySpecifiedType@0:94..107
+          TypeQualifierSpec@0:94..101 `Storage`
+            StorageQualifier@0:94..101 `uniform`
+              Uniform
+          TypeSpecifier@0:102..107
+            TypeSpecifierNonArray@0:102..107 `float`
+              Float
+        ArraySpecifierDimension@0:113..117 `ExplicitlySized`
+          Expr `IntConst`
+            IntConst `16`
+ExternalDeclaration@0:122..268 `FunctionDefinition`
+  FunctionDefinition@0:122..268
+    FunctionPrototype@0:122..133
+      FullySpecifiedType@0:122..126
+        TypeSpecifier@0:122..126
+          TypeSpecifierNonArray@0:122..126 `void`
+            Void
+      Identifier@0:127..131 `main`
+    CompoundStatement@0:135..268
+      Statement@0:139..175 `Declaration`
+        Declaration@0:139..175 `InitDeclaratorList`
+          InitDeclaratorList@0:139..174
+            SingleDeclaration@0:139..174
+              FullySpecifiedType@0:139..143
+                TypeSpecifier@0:139..143
+                  TypeSpecifierNonArray@0:139..143 `vec4`
+                    Vec4
+              Expr `Binary`
+                BinaryOp@0:164..165 `+`
+                Expr `Bracket`
+                  Expr `Variable`
+                    Identifier@0:155..160 `color`
+                  Expr `IntConst`
+                    IntConst `1`
+                Expr `Bracket`
+                  Expr `Variable`
+                    Identifier@0:166..171 `color`
+                  Expr `IntConst`
+                    IntConst `1`
+      Statement@0:180..204 `Expression`
+        ExprStatement@0:180..204
+          Expr `Dot`
+            Expr `Variable`
+              Identifier@0:180..188 `texColor`
+            Identifier@0:189..192 `xyz`
+          AssignmentOp@0:193..195 `+=`
+          Expr `Variable`
+            Identifier@0:196..203 `inColor`
+      Statement@0:209..233 `Expression`
+        ExprStatement@0:209..233
+          Expr `Dot`
+            Expr `Variable`
+              Identifier@0:209..217 `texColor`
+            Identifier@0:218..219 `a`
+          AssignmentOp@0:220..222 `+=`
+          Expr `Bracket`
+            Expr `Variable`
+              Identifier@0:223..228 `alpha`
+            Expr `IntConst`
+              IntConst `12`
+      Statement@0:241..265 `Expression`
+        ExprStatement@0:241..265
+          Expr `Variable`
+            Identifier@0:241..253 `gl_FragColor`
+          AssignmentOp@0:254..255 `=`
+          Expr `Variable`
+            Identifier@0:256..264 `texColor`

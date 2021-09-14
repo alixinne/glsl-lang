@@ -1,0 +1,50 @@
+ExternalDeclaration@0:0..17 `Preprocessor`
+  Preprocessor@0:0..17 `#define`
+    PreprocessorDefine@0:8..17 `ObjectLike`
+      Identifier@0:8..12 `M_PI`
+      String `3.14`
+ExternalDeclaration@0:18..43 `Preprocessor`
+  Preprocessor@0:18..43 `#define`
+    PreprocessorDefine@0:26..43 `ObjectLike`
+      Identifier@0:26..31 `M_2PI`
+      String `(2. * M_PI)`
+ExternalDeclaration@0:44..71 `Preprocessor`
+  Preprocessor@0:44..71 `#define`
+    PreprocessorDefine@0:52..71 `FunctionLike`
+      Identifier@0:52..57 `M_NPI`
+      Identifier@0:58..59 `x`
+      String `(x * M_PI)`
+ExternalDeclaration@0:72..95 `Preprocessor`
+  Preprocessor@0:72..95 `#define`
+    PreprocessorDefine@0:80..95 `ObjectLike`
+      Identifier@0:80..85 `M_TAU`
+      String `M_NPI(2.)`
+ExternalDeclaration@0:97..162 `FunctionDefinition`
+  FunctionDefinition@0:97..162
+    FunctionPrototype@0:97..108
+      FullySpecifiedType@0:97..101
+        TypeSpecifier@0:97..101
+          TypeSpecifierNonArray@0:97..101 `void`
+            Void
+      Identifier@0:102..106 `main`
+    CompoundStatement@0:109..162
+      Statement@0:115..160 `Expression`
+        ExprStatement@0:115..160
+          Expr `Variable`
+            Identifier@0:115..127 `gl_FragColor`
+          AssignmentOp@0:128..129 `=`
+          Expr `FunCall`
+            FunIdentifier@0:130..134 `TypeSpecifier`
+              TypeSpecifier
+                TypeSpecifierNonArray@0:130..134 `vec3`
+                  Vec3
+            Expr@0:135..140 `Variable`
+              Identifier@0:135..140 `M_2PI`
+            Expr@0:142..151 `FunCall`
+              FunIdentifier@0:142..147 `Expr`
+                Expr `Variable`
+                  Identifier@0:142..147 `M_NPI`
+              Expr@0:148..150 `FloatConst`
+                FloatConst `5`
+            Expr@0:153..158 `Variable`
+              Identifier@0:153..158 `M_TAU`

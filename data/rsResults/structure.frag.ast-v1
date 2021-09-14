@@ -1,0 +1,210 @@
+ExternalDeclaration@0:0..12 `Preprocessor`
+  Preprocessor@0:0..12 `#version`
+    PreprocessorVersion@0:9..12 `130`
+      ShortConst `130`
+ExternalDeclaration@0:14..40 `Declaration`
+  Declaration@0:14..40 `InitDeclaratorList`
+    InitDeclaratorList@0:14..39
+      SingleDeclaration@0:14..39
+        FullySpecifiedType@0:14..31
+          TypeQualifierSpec@0:14..21 `Storage`
+            StorageQualifier@0:14..21 `uniform`
+              Uniform
+          TypeSpecifier@0:22..31
+            TypeSpecifierNonArray@0:22..31 `sampler2D`
+              Sampler2D
+ExternalDeclaration@0:42..61 `Declaration`
+  Declaration@0:42..61 `InitDeclaratorList`
+    InitDeclaratorList@0:42..60
+      SingleDeclaration@0:42..60
+        FullySpecifiedType@0:42..54
+          TypeQualifierSpec@0:42..49 `Storage`
+            StorageQualifier@0:42..49 `varying`
+              Varying
+          TypeSpecifier@0:50..54
+            TypeSpecifierNonArray@0:50..54 `vec2`
+              Vec2
+ExternalDeclaration@0:65..133 `Declaration`
+  Declaration@0:65..133 `InitDeclaratorList`
+    InitDeclaratorList@0:65..132
+      SingleDeclaration@0:65..132
+        FullySpecifiedType@0:65..132
+          TypeSpecifier@0:65..132
+            TypeSpecifierNonArray@0:65..132 `struct`
+              StructSpecifier@0:65..132
+                StructFieldSpecifier@0:92..98
+                  TypeSpecifier@0:92..95
+                    TypeSpecifierNonArray@0:92..95 `int`
+                      Int
+                  ArrayedIdentifier@0:96..97
+                    Identifier@0:96..97 `i`
+                StructFieldSpecifier@0:101..112
+                  TypeSpecifier@0:101..106
+                    TypeSpecifierNonArray@0:101..106 `float`
+                      Float
+                  ArrayedIdentifier@0:107..111
+                    Identifier@0:107..108 `f`
+                    ArraySpecifierDimension@0:108..111 `ExplicitlySized`
+                      Expr `IntConst`
+                        IntConst `4`
+                StructFieldSpecifier@0:115..129
+                  TypeSpecifier@0:115..119
+                    TypeSpecifierNonArray@0:115..119 `vec4`
+                      Vec4
+                  ArrayedIdentifier@0:120..128
+                    Identifier@0:120..125 `color`
+                    ArraySpecifierDimension@0:125..128 `ExplicitlySized`
+                      Expr `IntConst`
+                        IntConst `5`
+ExternalDeclaration@0:137..215 `Declaration`
+  Declaration@0:137..215 `InitDeclaratorList`
+    InitDeclaratorList@0:137..214
+      SingleDeclaration@0:137..214
+        FullySpecifiedType@0:137..214
+          TypeSpecifier@0:137..214
+            TypeSpecifierNonArray@0:137..214 `struct`
+              StructSpecifier@0:137..214
+                StructFieldSpecifier@0:164..173
+                  TypeSpecifier@0:164..167
+                    TypeSpecifierNonArray@0:164..167 `int`
+                      Int
+                  ArrayedIdentifier@0:168..172
+                    Identifier@0:168..169 `i`
+                    ArraySpecifierDimension@0:169..172 `ExplicitlySized`
+                      Expr `IntConst`
+                        IntConst `5`
+                StructFieldSpecifier@0:179..187
+                  TypeSpecifier@0:179..184
+                    TypeSpecifierNonArray@0:179..184 `float`
+                      Float
+                  ArrayedIdentifier@0:185..186
+                    Identifier@0:185..186 `f`
+                StructFieldSpecifier@0:190..211
+                  TypeSpecifier@0:190..202
+                    TypeSpecifierNonArray@0:190..202 `TypeName`
+                      TypeName@0:190..202
+                  ArrayedIdentifier@0:203..210
+                    Identifier@0:203..207 `s1_1`
+                    ArraySpecifierDimension@0:207..210 `ExplicitlySized`
+                      Expr `IntConst`
+                        IntConst `7`
+ExternalDeclaration@0:219..244 `Declaration`
+  Declaration@0:219..244 `InitDeclaratorList`
+    InitDeclaratorList@0:219..243
+      SingleDeclaration@0:219..243
+        FullySpecifiedType@0:219..239
+          TypeQualifierSpec@0:219..226 `Storage`
+            StorageQualifier@0:219..226 `uniform`
+              Uniform
+          TypeSpecifier@0:227..239
+            TypeSpecifierNonArray@0:227..239 `TypeName`
+              TypeName@0:227..239
+ExternalDeclaration@0:246..275 `Declaration`
+  Declaration@0:246..275 `InitDeclaratorList`
+    InitDeclaratorList@0:246..274
+      SingleDeclaration@0:246..274
+        FullySpecifiedType@0:246..266
+          TypeQualifierSpec@0:246..253 `Storage`
+            StorageQualifier@0:246..253 `uniform`
+              Uniform
+          TypeSpecifier@0:254..266
+            TypeSpecifierNonArray@0:254..266 `TypeName`
+              TypeName@0:254..266
+        ArraySpecifierDimension@0:271..274 `ExplicitlySized`
+          Expr `IntConst`
+            IntConst `5`
+ExternalDeclaration@0:279..477 `FunctionDefinition`
+  FunctionDefinition@0:279..477
+    FunctionPrototype@0:279..290
+      FullySpecifiedType@0:279..283
+        TypeSpecifier@0:279..283
+          TypeSpecifierNonArray@0:279..283 `void`
+            Void
+      Identifier@0:284..288 `main`
+    CompoundStatement@0:292..477
+      Statement@0:296..314 `Declaration`
+        Declaration@0:296..314 `InitDeclaratorList`
+          InitDeclaratorList@0:296..313
+            SingleDeclaration@0:296..313
+              FullySpecifiedType@0:296..301
+                TypeSpecifier@0:296..301
+                  TypeSpecifierNonArray@0:296..301 `float`
+                    Float
+              Expr `FloatConst`
+                FloatConst `0`
+      Statement@0:319..419 `Selection`
+        SelectionStatement@0:319..419
+          Expr `Binary`
+            BinaryOp@0:336..337 `>`
+            Expr `Bracket`
+              Expr `Dot`
+                Expr `Bracket`
+                  Expr `Variable`
+                    Identifier@0:323..327 `foo2`
+                  Expr `IntConst`
+                    IntConst `3`
+                Identifier@0:331..332 `i`
+              Expr `IntConst`
+                IntConst `4`
+            Expr `IntConst`
+              IntConst `0`
+          SelectionRestStatement@0:344..419 `Else`
+            Statement `Expression`
+              ExprStatement@0:344..379
+                Expr `Variable`
+                  Identifier@0:344..349 `scale`
+                AssignmentOp@0:350..351 `=`
+                Expr `Dot`
+                  Expr `Bracket`
+                    Expr `Dot`
+                      Expr `Bracket`
+                        Expr `Dot`
+                          Expr `Bracket`
+                            Expr `Variable`
+                              Identifier@0:352..356 `foo2`
+                            Expr `IntConst`
+                              IntConst `3`
+                          Identifier@0:360..364 `s1_1`
+                        Expr `IntConst`
+                          IntConst `2`
+                      Identifier@0:368..373 `color`
+                    Expr `IntConst`
+                      IntConst `3`
+                  Identifier@0:377..378 `x`
+            Statement `Expression`
+              ExprStatement@0:390..419
+                Expr `Variable`
+                  Identifier@0:390..395 `scale`
+                AssignmentOp@0:396..397 `=`
+                Expr `Bracket`
+                  Expr `Dot`
+                    Expr `Bracket`
+                      Expr `Dot`
+                        Expr `Bracket`
+                          Expr `Variable`
+                            Identifier@0:398..402 `foo2`
+                          Expr `IntConst`
+                            IntConst `3`
+                        Identifier@0:406..410 `s1_1`
+                      Expr `IntConst`
+                        IntConst `2`
+                    Identifier@0:414..415 `f`
+                  Expr `IntConst`
+                    IntConst `3`
+      Statement@0:424..474 `Expression`
+        ExprStatement@0:424..474
+          Expr `Variable`
+            Identifier@0:424..436 `gl_FragColor`
+          AssignmentOp@0:437..438 `=`
+          Expr `Binary`
+            BinaryOp@0:446..447 `*`
+            Expr `Variable`
+              Identifier@0:440..445 `scale`
+            Expr `FunCall`
+              FunIdentifier@0:448..457 `Expr`
+                Expr `Variable`
+                  Identifier@0:448..457 `texture2D`
+              Expr@0:458..465 `Variable`
+                Identifier@0:458..465 `sampler`
+              Expr@0:467..472 `Variable`
+                Identifier@0:467..472 `coord`

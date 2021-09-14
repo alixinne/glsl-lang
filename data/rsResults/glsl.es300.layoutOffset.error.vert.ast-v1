@@ -1,0 +1,68 @@
+ExternalDeclaration@0:0..15 `Preprocessor`
+  Preprocessor@0:0..15 `#version`
+    PreprocessorVersion@0:9..15 `300`
+      ShortConst `300`
+ExternalDeclaration@0:19..127 `Declaration`
+  Declaration@0:19..127 `Block`
+    Block@0:19..126
+      TypeQualifier@0:19..59
+        TypeQualifierSpec@0:19..51 `Layout`
+          LayoutQualifier@0:19..51
+            LayoutQualifierSpec@0:27..38 `Identifier`
+              Identifier@0:27..34 `binding`
+              IntConst `0`
+            LayoutQualifierSpec@0:40..50 `Identifier`
+              Identifier@0:40..46 `offset`
+              IntConst `0`
+        TypeQualifierSpec@0:52..59 `Storage`
+          StorageQualifier@0:52..59 `uniform`
+            Uniform
+      Identifier@0:60..63 `UBO`
+      StructFieldSpecifier@0:116..123
+        TypeSpecifier@0:116..120
+          TypeSpecifierNonArray@0:116..120 `vec4`
+            Vec4
+        ArrayedIdentifier@0:121..122
+          Identifier@0:121..122 `a`
+ExternalDeclaration@0:131..146 `Declaration`
+  Declaration@0:131..146 `InitDeclaratorList`
+    InitDeclaratorList@0:131..145
+      SingleDeclaration@0:131..145
+        FullySpecifiedType@0:131..139
+          TypeQualifierSpec@0:131..133 `Storage`
+            StorageQualifier@0:131..133 `in`
+              In
+          TypeSpecifier@0:135..139
+            TypeSpecifierNonArray@0:135..139 `vec4`
+              Vec4
+ExternalDeclaration@0:148..164 `Declaration`
+  Declaration@0:148..164 `InitDeclaratorList`
+    InitDeclaratorList@0:148..163
+      SingleDeclaration@0:148..163
+        FullySpecifiedType@0:148..156
+          TypeQualifierSpec@0:148..151 `Storage`
+            StorageQualifier@0:148..151 `out`
+              Out
+          TypeSpecifier@0:152..156
+            TypeSpecifierNonArray@0:152..156 `vec4`
+              Vec4
+ExternalDeclaration@0:168..210 `FunctionDefinition`
+  FunctionDefinition@0:168..210
+    FunctionPrototype@0:168..179
+      FullySpecifiedType@0:168..172
+        TypeSpecifier@0:168..172
+          TypeSpecifierNonArray@0:168..172 `void`
+            Void
+      Identifier@0:173..177 `main`
+    CompoundStatement@0:181..210
+      Statement@0:188..207 `Expression`
+        ExprStatement@0:188..207
+          Expr `Variable`
+            Identifier@0:188..194 `out_vs`
+          AssignmentOp@0:195..196 `=`
+          Expr `Binary`
+            BinaryOp@0:203..204 `+`
+            Expr `Variable`
+              Identifier@0:197..202 `in_vs`
+            Expr `Variable`
+              Identifier@0:205..206 `a`

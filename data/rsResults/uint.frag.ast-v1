@@ -1,0 +1,968 @@
+ExternalDeclaration@0:0..15 `Preprocessor`
+  Preprocessor@0:0..15 `#version`
+    PreprocessorVersion@0:9..15 `300`
+      ShortConst `300`
+ExternalDeclaration@0:16..30 `Declaration`
+  Declaration@0:16..30 `InitDeclaratorList`
+    InitDeclaratorList@0:16..29
+      SingleDeclaration@0:16..29
+        FullySpecifiedType@0:16..24
+          TypeQualifierSpec@0:16..18 `Storage`
+            StorageQualifier@0:16..18 `in`
+              In
+          TypeSpecifier@0:19..24
+            TypeSpecifierNonArray@0:19..24 `uvec2`
+              UVec2
+ExternalDeclaration@0:41..57 `Declaration`
+  Declaration@0:41..57 `InitDeclaratorList`
+    InitDeclaratorList@0:41..56
+      SingleDeclaration@0:41..56
+        FullySpecifiedType@0:41..54
+          TypeQualifierSpec@0:41..45 `Interpolation`
+            InterpolationQualifier@0:41..45 `flat`
+          TypeQualifierSpec@0:46..48 `Storage`
+            StorageQualifier@0:46..48 `in`
+              In
+          TypeSpecifier@0:49..54
+            TypeSpecifierNonArray@0:49..54 `uvec2`
+              UVec2
+ExternalDeclaration@0:58..75 `Declaration`
+  Declaration@0:58..75 `InitDeclaratorList`
+    InitDeclaratorList@0:58..74
+      SingleDeclaration@0:58..74
+        FullySpecifiedType@0:58..72
+          TypeQualifierSpec@0:58..60 `Storage`
+            StorageQualifier@0:58..60 `in`
+              In
+          TypeQualifierSpec@0:61..66 `Precision`
+            PrecisionQualifier@0:61..66 `high`
+          TypeSpecifier@0:67..72
+            TypeSpecifierNonArray@0:67..72 `float`
+              Float
+ExternalDeclaration@0:76..93 `Declaration`
+  Declaration@0:76..93 `InitDeclaratorList`
+    InitDeclaratorList@0:76..92
+      SingleDeclaration@0:76..92
+        FullySpecifiedType@0:76..89
+          TypeQualifierSpec@0:76..78 `Storage`
+            StorageQualifier@0:76..78 `in`
+              In
+          TypeQualifierSpec@0:79..84 `Precision`
+            PrecisionQualifier@0:79..84 `high`
+          TypeSpecifier@0:85..89
+            TypeSpecifierNonArray@0:85..89 `vec2`
+              Vec2
+ExternalDeclaration@0:94..106 `Declaration`
+  Declaration@0:94..106 `InitDeclaratorList`
+    InitDeclaratorList@0:94..105
+      SingleDeclaration@0:94..105
+        FullySpecifiedType@0:94..101
+          TypeQualifierSpec@0:94..96 `Storage`
+            StorageQualifier@0:94..96 `in`
+              In
+          TypeSpecifier@0:97..101
+            TypeSpecifierNonArray@0:97..101 `bool`
+              Bool
+ExternalDeclaration@0:119..135 `Declaration`
+  Declaration@0:119..135 `InitDeclaratorList`
+    InitDeclaratorList@0:119..134
+      SingleDeclaration@0:119..134
+        FullySpecifiedType@0:119..132
+          TypeQualifierSpec@0:119..126 `Storage`
+            StorageQualifier@0:119..126 `uniform`
+              Uniform
+          TypeSpecifier@0:127..132
+            TypeSpecifierNonArray@0:127..132 `uvec4`
+              UVec4
+ExternalDeclaration@0:136..150 `Declaration`
+  Declaration@0:136..150 `InitDeclaratorList`
+    InitDeclaratorList@0:136..149
+      SingleDeclaration@0:136..149
+        FullySpecifiedType@0:136..147
+          TypeQualifierSpec@0:136..143 `Storage`
+            StorageQualifier@0:136..143 `uniform`
+              Uniform
+          TypeSpecifier@0:144..147
+            TypeSpecifierNonArray@0:144..147 `int`
+              Int
+ExternalDeclaration@0:151..166 `Declaration`
+  Declaration@0:151..166 `InitDeclaratorList`
+    InitDeclaratorList@0:151..165
+      SingleDeclaration@0:151..165
+        FullySpecifiedType@0:151..163
+          TypeQualifierSpec@0:151..158 `Storage`
+            StorageQualifier@0:151..158 `uniform`
+              Uniform
+          TypeSpecifier@0:159..163
+            TypeSpecifierNonArray@0:159..163 `bool`
+              Bool
+ExternalDeclaration@0:168..180 `Declaration`
+  Declaration@0:168..180 `InitDeclaratorList`
+    InitDeclaratorList@0:168..179
+      SingleDeclaration@0:168..179
+        FullySpecifiedType@0:168..177
+          TypeQualifierSpec@0:168..171 `Storage`
+            StorageQualifier@0:168..171 `out`
+              Out
+          TypeSpecifier@0:172..177
+            TypeSpecifierNonArray@0:172..177 `uvec4`
+              UVec4
+ExternalDeclaration@0:182..215 `Declaration`
+  Declaration@0:182..215 `InitDeclaratorList`
+    InitDeclaratorList@0:182..214
+      SingleDeclaration@0:182..214
+        FullySpecifiedType@0:182..205
+          TypeQualifierSpec@0:182..189 `Storage`
+            StorageQualifier@0:182..189 `uniform`
+              Uniform
+          TypeQualifierSpec@0:190..194 `Precision`
+            PrecisionQualifier@0:190..194 `low`
+          TypeSpecifier@0:195..205
+            TypeSpecifierNonArray@0:195..205 `usampler2D`
+              USampler2D
+ExternalDeclaration@0:217..2634 `FunctionDefinition`
+  FunctionDefinition@0:217..2634
+    FunctionPrototype@0:217..228
+      FullySpecifiedType@0:217..221
+        TypeSpecifier@0:217..221
+          TypeSpecifierNonArray@0:217..221 `void`
+            Void
+      Identifier@0:222..226 `main`
+    CompoundStatement@0:229..2634
+      Statement@0:235..249 `Declaration`
+        Declaration@0:235..249 `InitDeclaratorList`
+          InitDeclaratorList@0:235..248
+            SingleDeclaration@0:235..248
+              FullySpecifiedType@0:235..238
+                TypeSpecifier@0:235..238
+                  TypeSpecifierNonArray@0:235..238 `int`
+                    Int
+              Expr `IntConst`
+                IntConst `1`
+      Statement@0:255..273 `Declaration`
+        Declaration@0:255..273 `InitDeclaratorList`
+          InitDeclaratorList@0:255..272
+            SingleDeclaration@0:255..272
+              FullySpecifiedType@0:255..259
+                TypeSpecifier@0:255..259
+                  TypeSpecifierNonArray@0:255..259 `uint`
+                    UInt
+              Expr `Binary`
+                BinaryOp@0:268..269 `+`
+                Expr `Dot`
+                  Expr `Variable`
+                    Identifier@0:264..265 `t`
+                  Identifier@0:266..267 `y`
+                Expr `UIntConst`
+                  UIntConst `3`
+      Statement@0:278..311 `Declaration`
+        Declaration@0:278..311 `InitDeclaratorList`
+          InitDeclaratorList@0:278..310
+            SingleDeclaration@0:278..310
+              FullySpecifiedType@0:278..288
+                TypeQualifierSpec@0:278..283 `Storage`
+                  StorageQualifier@0:278..283 `const`
+                    Const
+                TypeSpecifier@0:284..288
+                  TypeSpecifierNonArray@0:284..288 `uint`
+                    UInt
+              Expr `IntConst`
+                IntConst `-1`
+      Statement@0:326..355 `Declaration`
+        Declaration@0:326..355 `InitDeclaratorList`
+          InitDeclaratorList@0:326..354
+            SingleDeclaration@0:326..354
+              FullySpecifiedType@0:326..336
+                TypeQualifierSpec@0:326..331 `Storage`
+                  StorageQualifier@0:326..331 `const`
+                    Const
+                TypeSpecifier@0:332..336
+                  TypeSpecifierNonArray@0:332..336 `uint`
+                    UInt
+              Expr `UIntConst`
+                UIntConst `4294967295`
+      Statement@0:360..381 `Declaration`
+        Declaration@0:360..381 `InitDeclaratorList`
+          InitDeclaratorList@0:360..380
+            SingleDeclaration@0:360..380
+              FullySpecifiedType@0:360..370
+                TypeQualifierSpec@0:360..365 `Storage`
+                  StorageQualifier@0:360..365 `const`
+                    Const
+                TypeSpecifier@0:366..370
+                  TypeSpecifierNonArray@0:366..370 `uint`
+                    UInt
+              Expr `Unary`
+                UnaryOp@0:377..378 `-`
+                Expr `UIntConst`
+                  UIntConst `1`
+      Statement@0:413..433 `Declaration`
+        Declaration@0:413..433 `InitDeclaratorList`
+          InitDeclaratorList@0:413..432
+            SingleDeclaration@0:413..432
+              FullySpecifiedType@0:413..423
+                TypeQualifierSpec@0:413..418 `Storage`
+                  StorageQualifier@0:413..418 `const`
+                    Const
+                TypeSpecifier@0:419..423
+                  TypeSpecifierNonArray@0:419..423 `uint`
+                    UInt
+              Expr `UIntConst`
+                UIntConst `1`
+      Statement@0:438..462 `Declaration`
+        Declaration@0:438..462 `InitDeclaratorList`
+          InitDeclaratorList@0:438..461
+            SingleDeclaration@0:438..461
+              FullySpecifiedType@0:438..448
+                TypeQualifierSpec@0:438..443 `Storage`
+                  StorageQualifier@0:438..443 `const`
+                    Const
+                TypeSpecifier@0:444..448
+                  TypeSpecifierNonArray@0:444..448 `uint`
+                    UInt
+              Expr `IntConst`
+                IntConst `1`
+      Statement@0:486..506 `Declaration`
+        Declaration@0:486..506 `InitDeclaratorList`
+          InitDeclaratorList@0:486..505
+            SingleDeclaration@0:486..505
+              FullySpecifiedType@0:486..496
+                TypeQualifierSpec@0:486..491 `Storage`
+                  StorageQualifier@0:486..491 `const`
+                    Const
+                TypeSpecifier@0:492..496
+                  TypeSpecifierNonArray@0:492..496 `uint`
+                    UInt
+              Expr `UIntConst`
+                UIntConst `1`
+      Statement@0:512..547 `Selection`
+        SelectionStatement@0:512..547
+          Expr `Binary`
+            BinaryOp@0:520..522 `==`
+            Expr `Variable`
+              Identifier@0:516..519 `cu1`
+            Expr `Variable`
+              Identifier@0:523..526 `cu2`
+          SelectionRestStatement@0:536..547 `Statement`
+            Statement `Expression`
+              ExprStatement@0:536..547
+                Expr `Variable`
+                  Identifier@0:536..541 `count`
+                AssignmentOp@0:542..544 `*`
+                Expr `IntConst`
+                  IntConst `2`
+      Statement@0:561..596 `Selection`
+        SelectionStatement@0:561..596
+          Expr `Binary`
+            BinaryOp@0:569..571 `==`
+            Expr `Variable`
+              Identifier@0:565..568 `cu3`
+            Expr `Variable`
+              Identifier@0:572..575 `cu4`
+          SelectionRestStatement@0:585..596 `Statement`
+            Statement `Expression`
+              ExprStatement@0:585..596
+                Expr `Variable`
+                  Identifier@0:585..590 `count`
+                AssignmentOp@0:591..593 `*`
+                Expr `IntConst`
+                  IntConst `3`
+      Statement@0:610..645 `Selection`
+        SelectionStatement@0:610..645
+          Expr `Binary`
+            BinaryOp@0:618..620 `==`
+            Expr `Variable`
+              Identifier@0:614..617 `cu2`
+            Expr `Variable`
+              Identifier@0:621..624 `cu3`
+          SelectionRestStatement@0:634..645 `Statement`
+            Statement `Expression`
+              ExprStatement@0:634..645
+                Expr `Variable`
+                  Identifier@0:634..639 `count`
+                AssignmentOp@0:640..642 `*`
+                Expr `IntConst`
+                  IntConst `5`
+      Statement@0:664..712 `Declaration`
+        Declaration@0:664..712 `InitDeclaratorList`
+          InitDeclaratorList@0:664..711
+            SingleDeclaration@0:664..711
+              FullySpecifiedType@0:664..674
+                TypeQualifierSpec@0:664..669 `Storage`
+                  StorageQualifier@0:664..669 `const`
+                    Const
+                TypeSpecifier@0:670..674
+                  TypeSpecifierNonArray@0:670..674 `uint`
+                    UInt
+              Expr `Binary`
+                BinaryOp@0:706..708 `>>`
+                Expr `IntConst`
+                  IntConst `-1`
+                Expr `IntConst`
+                  IntConst `10`
+      Statement@0:728..776 `Declaration`
+        Declaration@0:728..776 `InitDeclaratorList`
+          InitDeclaratorList@0:728..775
+            SingleDeclaration@0:728..775
+              FullySpecifiedType@0:728..738
+                TypeQualifierSpec@0:728..733 `Storage`
+                  StorageQualifier@0:728..733 `const`
+                    Const
+                TypeSpecifier@0:735..738
+                  TypeSpecifierNonArray@0:735..738 `int`
+                    Int
+              Expr `Binary`
+                BinaryOp@0:770..772 `>>`
+                Expr `IntConst`
+                  IntConst `-1`
+                Expr `IntConst`
+                  IntConst `10`
+      Statement@0:781..829 `Declaration`
+        Declaration@0:781..829 `InitDeclaratorList`
+          InitDeclaratorList@0:781..828
+            SingleDeclaration@0:781..828
+              FullySpecifiedType@0:781..791
+                TypeQualifierSpec@0:781..786 `Storage`
+                  StorageQualifier@0:781..786 `const`
+                    Const
+                TypeSpecifier@0:787..791
+                  TypeSpecifierNonArray@0:787..791 `uint`
+                    UInt
+              Expr `Binary`
+                BinaryOp@0:823..825 `>>`
+                Expr `UIntConst`
+                  UIntConst `4294967295`
+                Expr `IntConst`
+                  IntConst `10`
+      Statement@0:834..883 `Declaration`
+        Declaration@0:834..883 `InitDeclaratorList`
+          InitDeclaratorList@0:834..882
+            SingleDeclaration@0:834..882
+              FullySpecifiedType@0:834..844
+                TypeQualifierSpec@0:834..839 `Storage`
+                  StorageQualifier@0:834..839 `const`
+                    Const
+                TypeSpecifier@0:840..844
+                  TypeSpecifierNonArray@0:840..844 `uint`
+                    UInt
+              Expr `Binary`
+                BinaryOp@0:876..878 `>>`
+                Expr `IntConst`
+                  IntConst `-1`
+                Expr `UIntConst`
+                  UIntConst `10`
+      Statement@0:898..947 `Declaration`
+        Declaration@0:898..947 `InitDeclaratorList`
+          InitDeclaratorList@0:898..946
+            SingleDeclaration@0:898..946
+              FullySpecifiedType@0:898..908
+                TypeQualifierSpec@0:898..903 `Storage`
+                  StorageQualifier@0:898..903 `const`
+                    Const
+                TypeSpecifier@0:905..908
+                  TypeSpecifierNonArray@0:905..908 `int`
+                    Int
+              Expr `Binary`
+                BinaryOp@0:940..942 `>>`
+                Expr `IntConst`
+                  IntConst `-1`
+                Expr `UIntConst`
+                  UIntConst `10`
+      Statement@0:952..1001 `Declaration`
+        Declaration@0:952..1001 `InitDeclaratorList`
+          InitDeclaratorList@0:952..1000
+            SingleDeclaration@0:952..1000
+              FullySpecifiedType@0:952..962
+                TypeQualifierSpec@0:952..957 `Storage`
+                  StorageQualifier@0:952..957 `const`
+                    Const
+                TypeSpecifier@0:958..962
+                  TypeSpecifierNonArray@0:958..962 `uint`
+                    UInt
+              Expr `Binary`
+                BinaryOp@0:994..996 `>>`
+                Expr `UIntConst`
+                  UIntConst `4294967295`
+                Expr `UIntConst`
+                  UIntConst `10`
+      Statement@0:1007..1056 `Selection`
+        SelectionStatement@0:1007..1056
+          Expr `Binary`
+            BinaryOp@0:1022..1024 `==`
+            Expr `Variable`
+              Identifier@0:1011..1021 `cshiftedii`
+            Expr `Variable`
+              Identifier@0:1025..1035 `cshiftediu`
+          SelectionRestStatement@0:1045..1056 `Statement`
+            Statement `Expression`
+              ExprStatement@0:1045..1056
+                Expr `Variable`
+                  Identifier@0:1045..1050 `count`
+                AssignmentOp@0:1051..1053 `*`
+                Expr `IntConst`
+                  IntConst `7`
+      Statement@0:1070..1122 `Selection`
+        SelectionStatement@0:1070..1122
+          Expr `Binary`
+            BinaryOp@0:1086..1088 `==`
+            Expr `Variable`
+              Identifier@0:1074..1085 `cushiftedui`
+            Expr `Variable`
+              Identifier@0:1089..1100 `cushifteduu`
+          SelectionRestStatement@0:1110..1122 `Statement`
+            Statement `Expression`
+              ExprStatement@0:1110..1122
+                Expr `Variable`
+                  Identifier@0:1110..1115 `count`
+                AssignmentOp@0:1116..1118 `*`
+                Expr `IntConst`
+                  IntConst `11`
+      Statement@0:1135..1191 `Selection`
+        SelectionStatement@0:1135..1191
+          Expr `Binary`
+            BinaryOp@0:1150..1152 `==`
+            Expr `Variable`
+              Identifier@0:1139..1149 `cshiftedii`
+            Expr `FunCall`
+              FunIdentifier@0:1153..1156 `TypeSpecifier`
+                TypeSpecifier
+                  TypeSpecifierNonArray@0:1153..1156 `int`
+                    Int
+              Expr@0:1157..1168 `Variable`
+                Identifier@0:1157..1168 `cushiftedui`
+          SelectionRestStatement@0:1179..1191 `Statement`
+            Statement `Expression`
+              ExprStatement@0:1179..1191
+                Expr `Variable`
+                  Identifier@0:1179..1184 `count`
+                AssignmentOp@0:1185..1187 `*`
+                Expr `IntConst`
+                  IntConst `13`
+      Statement@0:1209..1249 `Declaration`
+        Declaration@0:1209..1249 `InitDeclaratorList`
+          InitDeclaratorList@0:1209..1248
+            SingleDeclaration@0:1209..1248
+              FullySpecifiedType@0:1209..1213
+                TypeSpecifier@0:1209..1213
+                  TypeSpecifierNonArray@0:1209..1213 `uint`
+                    UInt
+              Expr `Binary`
+                BinaryOp@0:1243..1245 `>>`
+                Expr `IntConst`
+                  IntConst `-1`
+                Expr `IntConst`
+                  IntConst `10`
+      Statement@0:1266..1305 `Declaration`
+        Declaration@0:1266..1305 `InitDeclaratorList`
+          InitDeclaratorList@0:1266..1304
+            SingleDeclaration@0:1266..1304
+              FullySpecifiedType@0:1266..1269
+                TypeSpecifier@0:1266..1269
+                  TypeSpecifierNonArray@0:1266..1269 `int`
+                    Int
+              Expr `Binary`
+                BinaryOp@0:1299..1301 `>>`
+                Expr `IntConst`
+                  IntConst `-1`
+                Expr `IntConst`
+                  IntConst `10`
+      Statement@0:1310..1350 `Declaration`
+        Declaration@0:1310..1350 `InitDeclaratorList`
+          InitDeclaratorList@0:1310..1349
+            SingleDeclaration@0:1310..1349
+              FullySpecifiedType@0:1310..1314
+                TypeSpecifier@0:1310..1314
+                  TypeSpecifierNonArray@0:1310..1314 `uint`
+                    UInt
+              Expr `Binary`
+                BinaryOp@0:1344..1346 `>>`
+                Expr `UIntConst`
+                  UIntConst `4294967295`
+                Expr `IntConst`
+                  IntConst `10`
+      Statement@0:1355..1396 `Declaration`
+        Declaration@0:1355..1396 `InitDeclaratorList`
+          InitDeclaratorList@0:1355..1395
+            SingleDeclaration@0:1355..1395
+              FullySpecifiedType@0:1355..1359
+                TypeSpecifier@0:1355..1359
+                  TypeSpecifierNonArray@0:1355..1359 `uint`
+                    UInt
+              Expr `Binary`
+                BinaryOp@0:1389..1391 `>>`
+                Expr `IntConst`
+                  IntConst `-1`
+                Expr `UIntConst`
+                  UIntConst `10`
+      Statement@0:1412..1452 `Declaration`
+        Declaration@0:1412..1452 `InitDeclaratorList`
+          InitDeclaratorList@0:1412..1451
+            SingleDeclaration@0:1412..1451
+              FullySpecifiedType@0:1412..1415
+                TypeSpecifier@0:1412..1415
+                  TypeSpecifierNonArray@0:1412..1415 `int`
+                    Int
+              Expr `Binary`
+                BinaryOp@0:1445..1447 `>>`
+                Expr `IntConst`
+                  IntConst `-1`
+                Expr `UIntConst`
+                  UIntConst `10`
+      Statement@0:1457..1498 `Declaration`
+        Declaration@0:1457..1498 `InitDeclaratorList`
+          InitDeclaratorList@0:1457..1497
+            SingleDeclaration@0:1457..1497
+              FullySpecifiedType@0:1457..1461
+                TypeSpecifier@0:1457..1461
+                  TypeSpecifierNonArray@0:1457..1461 `uint`
+                    UInt
+              Expr `Binary`
+                BinaryOp@0:1491..1493 `>>`
+                Expr `UIntConst`
+                  UIntConst `4294967295`
+                Expr `UIntConst`
+                  UIntConst `10`
+      Statement@0:1504..1566 `Selection`
+        SelectionStatement@0:1504..1566
+          Expr `Binary`
+            BinaryOp@0:1518..1520 `==`
+            Expr `Variable`
+              Identifier@0:1508..1517 `shiftedii`
+            Expr `Variable`
+              Identifier@0:1521..1530 `shiftediu`
+          SelectionRestStatement@0:1540..1566 `Statement`
+            Statement `Expression`
+              ExprStatement@0:1540..1566
+                Expr `Variable`
+                  Identifier@0:1540..1541 `c`
+                AssignmentOp@0:1542..1543 `=`
+                Expr `FunCall`
+                  FunIdentifier@0:1544..1551 `Expr`
+                    Expr `Variable`
+                      Identifier@0:1544..1551 `texture`
+                  Expr@0:1552..1560 `Variable`
+                    Identifier@0:1552..1560 `usampler`
+                  Expr@0:1562..1564 `Variable`
+                    Identifier@0:1562..1564 `tc`
+      Statement@0:1571..1645 `Selection`
+        SelectionStatement@0:1571..1645
+          Expr `Binary`
+            BinaryOp@0:1585..1587 `==`
+            Expr `Variable`
+              Identifier@0:1575..1584 `shiftedui`
+            Expr `Variable`
+              Identifier@0:1588..1597 `shifteduu`
+          SelectionRestStatement@0:1607..1645 `Statement`
+            Statement `Expression`
+              ExprStatement@0:1607..1645
+                Expr `Variable`
+                  Identifier@0:1607..1608 `c`
+                AssignmentOp@0:1609..1610 `=`
+                Expr `FunCall`
+                  FunIdentifier@0:1611..1618 `Expr`
+                    Expr `Variable`
+                      Identifier@0:1611..1618 `texture`
+                  Expr@0:1619..1627 `Variable`
+                    Identifier@0:1619..1627 `usampler`
+                  Expr@0:1629..1643 `Binary`
+                    BinaryOp@0:1632..1633 `+`
+                    Expr `Variable`
+                      Identifier@0:1629..1631 `tc`
+                    Expr `FunCall`
+                      FunIdentifier@0:1634..1639 `TypeSpecifier`
+                        TypeSpecifier
+                          TypeSpecifierNonArray@0:1634..1639 `float`
+                            Float
+                      Expr@0:1640..1642 `UIntConst`
+                        UIntConst `1`
+      Statement@0:1650..1728 `Selection`
+        SelectionStatement@0:1650..1728
+          Expr `Binary`
+            BinaryOp@0:1664..1666 `==`
+            Expr `Variable`
+              Identifier@0:1654..1663 `shiftedii`
+            Expr `FunCall`
+              FunIdentifier@0:1667..1670 `TypeSpecifier`
+                TypeSpecifier
+                  TypeSpecifierNonArray@0:1667..1670 `int`
+                    Int
+              Expr@0:1671..1680 `Variable`
+                Identifier@0:1671..1680 `shiftedui`
+          SelectionRestStatement@0:1691..1728 `Statement`
+            Statement `Expression`
+              ExprStatement@0:1691..1728
+                Expr `Variable`
+                  Identifier@0:1691..1692 `c`
+                AssignmentOp@0:1693..1694 `=`
+                Expr `FunCall`
+                  FunIdentifier@0:1695..1702 `Expr`
+                    Expr `Variable`
+                      Identifier@0:1695..1702 `texture`
+                  Expr@0:1703..1711 `Variable`
+                    Identifier@0:1703..1711 `usampler`
+                  Expr@0:1713..1726 `Binary`
+                    BinaryOp@0:1716..1717 `-`
+                    Expr `Variable`
+                      Identifier@0:1713..1715 `tc`
+                    Expr `FunCall`
+                      FunIdentifier@0:1718..1722 `TypeSpecifier`
+                        TypeSpecifier
+                          TypeSpecifierNonArray@0:1718..1722 `vec2`
+                            Vec2
+                      Expr@0:1723..1725 `UIntConst`
+                        UIntConst `2`
+      Statement@0:1734..1894 `Selection`
+        SelectionStatement@0:1734..1894
+          Expr `Binary`
+            BinaryOp@0:1742..1743 `>`
+            Expr `Dot`
+              Expr `Variable`
+                Identifier@0:1738..1739 `t`
+              Identifier@0:1740..1741 `x`
+            Expr `UIntConst`
+              UIntConst `4`
+          SelectionRestStatement@0:1748..1894 `Statement`
+            Statement `Compound`
+              CompoundStatement@0:1748..1894
+                Statement@0:1758..1778 `Declaration`
+                  Declaration@0:1758..1778 `InitDeclaratorList`
+                    InitDeclaratorList@0:1758..1777
+                      SingleDeclaration@0:1758..1777
+                        FullySpecifiedType@0:1758..1763
+                          TypeSpecifier@0:1758..1763
+                            TypeSpecifierNonArray@0:1758..1763 `float`
+                              Float
+                        Expr `FunCall`
+                          FunIdentifier@0:1769..1774 `TypeSpecifier`
+                            TypeSpecifier
+                              TypeSpecifierNonArray@0:1769..1774 `float`
+                                Float
+                          Expr@0:1775..1776 `Variable`
+                            Identifier@0:1775..1776 `u`
+                Statement@0:1787..1805 `Declaration`
+                  Declaration@0:1787..1805 `InitDeclaratorList`
+                    InitDeclaratorList@0:1787..1804
+                      SingleDeclaration@0:1787..1804
+                        FullySpecifiedType@0:1787..1791
+                          TypeSpecifier@0:1787..1791
+                            TypeSpecifierNonArray@0:1787..1791 `bool`
+                              Bool
+                        Expr `FunCall`
+                          FunIdentifier@0:1797..1801 `TypeSpecifier`
+                            TypeSpecifier
+                              TypeSpecifierNonArray@0:1797..1801 `bool`
+                                Bool
+                          Expr@0:1802..1803 `Variable`
+                            Identifier@0:1802..1803 `u`
+                Statement@0:1814..1830 `Declaration`
+                  Declaration@0:1814..1830 `InitDeclaratorList`
+                    InitDeclaratorList@0:1814..1829
+                      SingleDeclaration@0:1814..1829
+                        FullySpecifiedType@0:1814..1817
+                          TypeSpecifier@0:1814..1817
+                            TypeSpecifierNonArray@0:1814..1817 `int`
+                              Int
+                        Expr `FunCall`
+                          FunIdentifier@0:1823..1826 `TypeSpecifier`
+                            TypeSpecifier
+                              TypeSpecifierNonArray@0:1823..1826 `int`
+                                Int
+                          Expr@0:1827..1828 `Variable`
+                            Identifier@0:1827..1828 `u`
+                Statement@0:1840..1888 `Expression`
+                  ExprStatement@0:1840..1888
+                    Expr `Variable`
+                      Identifier@0:1840..1841 `c`
+                    AssignmentOp@0:1842..1844 `+=`
+                    Expr `FunCall`
+                      FunIdentifier@0:1845..1850 `TypeSpecifier`
+                        TypeSpecifier
+                          TypeSpecifierNonArray@0:1845..1850 `uvec4`
+                            UVec4
+                      Expr@0:1851..1859 `FunCall`
+                        FunIdentifier@0:1851..1855 `TypeSpecifier`
+                          TypeSpecifier
+                            TypeSpecifierNonArray@0:1851..1855 `uint`
+                              UInt
+                        Expr@0:1856..1858 `Variable`
+                          Identifier@0:1856..1858 `af`
+                      Expr@0:1861..1869 `FunCall`
+                        FunIdentifier@0:1861..1865 `TypeSpecifier`
+                          TypeSpecifier
+                            TypeSpecifierNonArray@0:1861..1865 `uint`
+                              UInt
+                        Expr@0:1866..1868 `Variable`
+                          Identifier@0:1866..1868 `ab`
+                      Expr@0:1871..1879 `FunCall`
+                        FunIdentifier@0:1871..1875 `TypeSpecifier`
+                          TypeSpecifier
+                            TypeSpecifierNonArray@0:1871..1875 `uint`
+                              UInt
+                        Expr@0:1876..1878 `Variable`
+                          Identifier@0:1876..1878 `ai`
+                      Expr@0:1881..1886 `Variable`
+                        Identifier@0:1881..1886 `count`
+      Statement@0:1900..1927 `Declaration`
+        Declaration@0:1900..1927 `InitDeclaratorList`
+          InitDeclaratorList@0:1900..1926
+            SingleDeclaration@0:1900..1926
+              FullySpecifiedType@0:1900..1910
+                TypeQualifierSpec@0:1900..1905 `Storage`
+                  StorageQualifier@0:1900..1905 `const`
+                    Const
+                TypeSpecifier@0:1906..1910
+                  TypeSpecifierNonArray@0:1906..1910 `uint`
+                    UInt
+              Expr `UIntConst`
+                UIntConst `161`
+      Statement@0:1932..1959 `Declaration`
+        Declaration@0:1932..1959 `InitDeclaratorList`
+          InitDeclaratorList@0:1932..1958
+            SingleDeclaration@0:1932..1958
+              FullySpecifiedType@0:1932..1942
+                TypeQualifierSpec@0:1932..1937 `Storage`
+                  StorageQualifier@0:1932..1937 `const`
+                    Const
+                TypeSpecifier@0:1938..1942
+                  TypeSpecifierNonArray@0:1938..1942 `uint`
+                    UInt
+              Expr `UIntConst`
+                UIntConst `2576`
+      Statement@0:1964..1996 `Declaration`
+        Declaration@0:1964..1996 `InitDeclaratorList`
+          InitDeclaratorList@0:1964..1995
+            SingleDeclaration@0:1964..1995
+              FullySpecifiedType@0:1964..1974
+                TypeQualifierSpec@0:1964..1969 `Storage`
+                  StorageQualifier@0:1964..1969 `const`
+                    Const
+                TypeSpecifier@0:1970..1974
+                  TypeSpecifierNonArray@0:1970..1974 `uint`
+                    UInt
+              Expr `Binary`
+                BinaryOp@0:1991..1993 `<<`
+                Expr `Variable`
+                  Identifier@0:1984..1990 `cmask1`
+                Expr `IntConst`
+                  IntConst `4`
+      Statement@0:2001..2028 `Declaration`
+        Declaration@0:2001..2028 `InitDeclaratorList`
+          InitDeclaratorList@0:2001..2027
+            SingleDeclaration@0:2001..2027
+              FullySpecifiedType@0:2001..2011
+                TypeQualifierSpec@0:2001..2006 `Storage`
+                  StorageQualifier@0:2001..2006 `const`
+                    Const
+                TypeSpecifier@0:2007..2011
+                  TypeSpecifierNonArray@0:2007..2011 `uint`
+                    UInt
+              Expr `UIntConst`
+                UIntConst `2737`
+      Statement@0:2034..2076 `Selection`
+        SelectionStatement@0:2034..2076
+          Expr `Binary`
+            BinaryOp@0:2045..2047 `==`
+            Expr `Variable`
+              Identifier@0:2038..2044 `cmask3`
+            Expr `Variable`
+              Identifier@0:2048..2054 `cmask2`
+          SelectionRestStatement@0:2064..2076 `Statement`
+            Statement `Expression`
+              ExprStatement@0:2064..2076
+                Expr `Variable`
+                  Identifier@0:2064..2069 `count`
+                AssignmentOp@0:2070..2072 `*`
+                Expr `IntConst`
+                  IntConst `17`
+      Statement@0:2091..2140 `Selection`
+        SelectionStatement@0:2091..2140
+          Expr `Binary`
+            BinaryOp@0:2113..2115 `!=`
+            Expr `Binary`
+              BinaryOp@0:2103..2104 `&`
+              Expr `Variable`
+                Identifier@0:2096..2102 `cmask3`
+              Expr `Variable`
+                Identifier@0:2105..2111 `cmask1`
+            Expr `UIntConst`
+              UIntConst `0`
+          SelectionRestStatement@0:2128..2140 `Statement`
+            Statement `Expression`
+              ExprStatement@0:2128..2140
+                Expr `Variable`
+                  Identifier@0:2128..2133 `count`
+                AssignmentOp@0:2134..2136 `*`
+                Expr `IntConst`
+                  IntConst `19`
+      Statement@0:2158..2211 `Selection`
+        SelectionStatement@0:2158..2211
+          Expr `Binary`
+            BinaryOp@0:2180..2182 `==`
+            Expr `Binary`
+              BinaryOp@0:2170..2171 `|`
+              Expr `Variable`
+                Identifier@0:2163..2169 `cmask1`
+              Expr `Variable`
+                Identifier@0:2172..2178 `cmask3`
+            Expr `Variable`
+              Identifier@0:2183..2189 `cmask4`
+          SelectionRestStatement@0:2199..2211 `Statement`
+            Statement `Expression`
+              ExprStatement@0:2199..2211
+                Expr `Variable`
+                  Identifier@0:2199..2204 `count`
+                AssignmentOp@0:2205..2207 `*`
+                Expr `IntConst`
+                  IntConst `23`
+      Statement@0:2225..2278 `Selection`
+        SelectionStatement@0:2225..2278
+          Expr `Binary`
+            BinaryOp@0:2247..2249 `==`
+            Expr `Binary`
+              BinaryOp@0:2237..2238 `^`
+              Expr `Variable`
+                Identifier@0:2230..2236 `cmask1`
+              Expr `Variable`
+                Identifier@0:2239..2245 `cmask4`
+            Expr `UIntConst`
+              UIntConst `2576`
+          SelectionRestStatement@0:2266..2278 `Statement`
+            Statement `Expression`
+              ExprStatement@0:2266..2278
+                Expr `Variable`
+                  Identifier@0:2266..2271 `count`
+                AssignmentOp@0:2272..2274 `*`
+                Expr `IntConst`
+                  IntConst `27`
+      Statement@0:2292..2312 `Declaration`
+        Declaration@0:2292..2312 `InitDeclaratorList`
+          InitDeclaratorList@0:2292..2311
+            SingleDeclaration@0:2292..2311
+              FullySpecifiedType@0:2292..2296
+                TypeSpecifier@0:2292..2296
+                  TypeSpecifierNonArray@0:2292..2296 `uint`
+                    UInt
+              Expr `UIntConst`
+                UIntConst `161`
+      Statement@0:2317..2337 `Declaration`
+        Declaration@0:2317..2337 `InitDeclaratorList`
+          InitDeclaratorList@0:2317..2336
+            SingleDeclaration@0:2317..2336
+              FullySpecifiedType@0:2317..2321
+                TypeSpecifier@0:2317..2321
+                  TypeSpecifierNonArray@0:2317..2321 `uint`
+                    UInt
+              Expr `UIntConst`
+                UIntConst `2576`
+      Statement@0:2342..2366 `Declaration`
+        Declaration@0:2342..2366 `InitDeclaratorList`
+          InitDeclaratorList@0:2342..2365
+            SingleDeclaration@0:2342..2365
+              FullySpecifiedType@0:2342..2346
+                TypeSpecifier@0:2342..2346
+                  TypeSpecifierNonArray@0:2342..2346 `uint`
+                    UInt
+              Expr `Binary`
+                BinaryOp@0:2361..2363 `<<`
+                Expr `Variable`
+                  Identifier@0:2355..2360 `mask1`
+                Expr `IntConst`
+                  IntConst `4`
+      Statement@0:2371..2391 `Declaration`
+        Declaration@0:2371..2391 `InitDeclaratorList`
+          InitDeclaratorList@0:2371..2390
+            SingleDeclaration@0:2371..2390
+              FullySpecifiedType@0:2371..2375
+                TypeSpecifier@0:2371..2375
+                  TypeSpecifierNonArray@0:2371..2375 `uint`
+                    UInt
+              Expr `UIntConst`
+                UIntConst `2737`
+      Statement@0:2397..2438 `Selection`
+        SelectionStatement@0:2397..2438
+          Expr `Binary`
+            BinaryOp@0:2407..2409 `==`
+            Expr `Variable`
+              Identifier@0:2401..2406 `mask3`
+            Expr `Variable`
+              Identifier@0:2410..2415 `mask2`
+          SelectionRestStatement@0:2425..2438 `Statement`
+            Statement `Expression`
+              ExprStatement@0:2425..2438
+                Expr `Variable`
+                  Identifier@0:2425..2430 `count`
+                AssignmentOp@0:2431..2433 `*`
+                Expr `IntConst`
+                  IntConst `100`
+      Statement@0:2444..2492 `Selection`
+        SelectionStatement@0:2444..2492
+          Expr `Binary`
+            BinaryOp@0:2464..2466 `!=`
+            Expr `Binary`
+              BinaryOp@0:2455..2456 `&`
+              Expr `Variable`
+                Identifier@0:2449..2454 `mask3`
+              Expr `Variable`
+                Identifier@0:2457..2462 `mask1`
+            Expr `UIntConst`
+              UIntConst `0`
+          SelectionRestStatement@0:2479..2492 `Statement`
+            Statement `Expression`
+              ExprStatement@0:2479..2492
+                Expr `Variable`
+                  Identifier@0:2479..2484 `count`
+                AssignmentOp@0:2485..2487 `*`
+                Expr `IntConst`
+                  IntConst `101`
+      Statement@0:2498..2549 `Selection`
+        SelectionStatement@0:2498..2549
+          Expr `Binary`
+            BinaryOp@0:2518..2520 `==`
+            Expr `Binary`
+              BinaryOp@0:2509..2510 `|`
+              Expr `Variable`
+                Identifier@0:2503..2508 `mask1`
+              Expr `Variable`
+                Identifier@0:2511..2516 `mask3`
+            Expr `Variable`
+              Identifier@0:2521..2526 `mask4`
+          SelectionRestStatement@0:2536..2549 `Statement`
+            Statement `Expression`
+              ExprStatement@0:2536..2549
+                Expr `Variable`
+                  Identifier@0:2536..2541 `count`
+                AssignmentOp@0:2542..2544 `*`
+                Expr `IntConst`
+                  IntConst `102`
+      Statement@0:2555..2607 `Selection`
+        SelectionStatement@0:2555..2607
+          Expr `Binary`
+            BinaryOp@0:2575..2577 `==`
+            Expr `Binary`
+              BinaryOp@0:2566..2567 `^`
+              Expr `Variable`
+                Identifier@0:2560..2565 `mask1`
+              Expr `Variable`
+                Identifier@0:2568..2573 `mask4`
+            Expr `UIntConst`
+              UIntConst `2576`
+          SelectionRestStatement@0:2594..2607 `Statement`
+            Statement `Expression`
+              ExprStatement@0:2594..2607
+                Expr `Variable`
+                  Identifier@0:2594..2599 `count`
+                AssignmentOp@0:2600..2602 `*`
+                Expr `IntConst`
+                  IntConst `103`
+      Statement@0:2613..2631 `Expression`
+        ExprStatement@0:2613..2631
+          Expr `Variable`
+            Identifier@0:2613..2614 `c`
+          AssignmentOp@0:2615..2617 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:2618..2623 `TypeSpecifier`
+              TypeSpecifier
+                TypeSpecifierNonArray@0:2618..2623 `uvec4`
+                  UVec4
+            Expr@0:2624..2629 `Variable`
+              Identifier@0:2624..2629 `count`

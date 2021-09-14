@@ -1,0 +1,113 @@
+ExternalDeclaration@0:0..12 `Preprocessor`
+  Preprocessor@0:0..12 `#version`
+    PreprocessorVersion@0:9..12 `460`
+      ShortConst `460`
+ExternalDeclaration@0:14..27 `Declaration`
+  Declaration@0:14..27 `InitDeclaratorList`
+    InitDeclaratorList@0:14..26
+      SingleDeclaration@0:14..26
+        FullySpecifiedType@0:14..21
+          TypeQualifierSpec@0:14..16 `Storage`
+            StorageQualifier@0:14..16 `in`
+              In
+          TypeSpecifier@0:17..21
+            TypeSpecifierNonArray@0:17..21 `vec2`
+              Vec2
+ExternalDeclaration@0:28..40 `Declaration`
+  Declaration@0:28..40 `InitDeclaratorList`
+    InitDeclaratorList@0:28..39
+      SingleDeclaration@0:28..39
+        FullySpecifiedType@0:28..35
+          TypeQualifierSpec@0:28..30 `Storage`
+            StorageQualifier@0:28..30 `in`
+              In
+          TypeSpecifier@0:31..35
+            TypeSpecifierNonArray@0:31..35 `vec2`
+              Vec2
+ExternalDeclaration@0:41..56 `Declaration`
+  Declaration@0:41..56 `InitDeclaratorList`
+    InitDeclaratorList@0:41..55
+      SingleDeclaration@0:41..55
+        FullySpecifiedType@0:41..48
+          TypeQualifierSpec@0:41..43 `Storage`
+            StorageQualifier@0:41..43 `in`
+              In
+          TypeSpecifier@0:44..48
+            TypeSpecifierNonArray@0:44..48 `vec4`
+              Vec4
+ExternalDeclaration@0:57..87 `Declaration`
+  Declaration@0:57..87 `InitDeclaratorList`
+    InitDeclaratorList@0:57..86
+      SingleDeclaration@0:57..86
+        FullySpecifiedType@0:57..69
+          TypeQualifierSpec@0:57..64 `Storage`
+            StorageQualifier@0:57..64 `uniform`
+              Uniform
+          TypeSpecifier@0:65..69
+            TypeSpecifierNonArray@0:65..69 `mat4`
+              Mat4
+ExternalDeclaration@0:89..104 `Declaration`
+  Declaration@0:89..104 `InitDeclaratorList`
+    InitDeclaratorList@0:89..103
+      SingleDeclaration@0:89..103
+        FullySpecifiedType@0:89..97
+          TypeQualifierSpec@0:89..92 `Storage`
+            StorageQualifier@0:89..92 `out`
+              Out
+          TypeSpecifier@0:93..97
+            TypeSpecifierNonArray@0:93..97 `vec4`
+              Vec4
+ExternalDeclaration@0:105..117 `Declaration`
+  Declaration@0:105..117 `InitDeclaratorList`
+    InitDeclaratorList@0:105..116
+      SingleDeclaration@0:105..116
+        FullySpecifiedType@0:105..113
+          TypeQualifierSpec@0:105..108 `Storage`
+            StorageQualifier@0:105..108 `out`
+              Out
+          TypeSpecifier@0:109..113
+            TypeSpecifierNonArray@0:109..113 `vec2`
+              Vec2
+ExternalDeclaration@0:119..223 `FunctionDefinition`
+  FunctionDefinition@0:119..223
+    FunctionPrototype@0:119..130
+      FullySpecifiedType@0:119..123
+        TypeSpecifier@0:119..123
+          TypeSpecifierNonArray@0:119..123 `void`
+            Void
+      Identifier@0:124..128 `main`
+    CompoundStatement@0:131..223
+      Statement@0:137..152 `Expression`
+        ExprStatement@0:137..152
+          Expr `Variable`
+            Identifier@0:137..142 `Color`
+          AssignmentOp@0:143..144 `=`
+          Expr `Variable`
+            Identifier@0:145..151 `aColor`
+      Statement@0:157..166 `Expression`
+        ExprStatement@0:157..166
+          Expr `Variable`
+            Identifier@0:157..159 `UV`
+          AssignmentOp@0:160..161 `=`
+          Expr `Variable`
+            Identifier@0:162..165 `aUV`
+      Statement@0:171..221 `Expression`
+        ExprStatement@0:171..221
+          Expr `Variable`
+            Identifier@0:171..182 `gl_Position`
+          AssignmentOp@0:183..184 `=`
+          Expr `Binary`
+            BinaryOp@0:202..203 `*`
+            Expr `Variable`
+              Identifier@0:185..201 `projectionMatrix`
+            Expr `FunCall`
+              FunIdentifier@0:204..208 `TypeSpecifier`
+                TypeSpecifier
+                  TypeSpecifierNonArray@0:204..208 `vec4`
+                    Vec4
+              Expr@0:209..213 `Variable`
+                Identifier@0:209..213 `aPos`
+              Expr@0:215..216 `IntConst`
+                IntConst `0`
+              Expr@0:218..219 `IntConst`
+                IntConst `1`

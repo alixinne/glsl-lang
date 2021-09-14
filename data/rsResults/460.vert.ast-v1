@@ -1,0 +1,102 @@
+ExternalDeclaration@0:0..17 `Preprocessor`
+  Preprocessor@0:0..17 `#version`
+    PreprocessorVersion@0:9..17 `460`
+      ShortConst `460`
+ExternalDeclaration@0:21..27 `Declaration`
+  Declaration@0:21..27 `InitDeclaratorList`
+    InitDeclaratorList@0:21..26
+      SingleDeclaration@0:21..26
+        FullySpecifiedType@0:21..24
+          TypeSpecifier@0:21..24
+            TypeSpecifierNonArray@0:21..24 `int`
+              Int
+ExternalDeclaration@0:61..69 `Declaration`
+  Declaration@0:61..69 `InitDeclaratorList`
+    InitDeclaratorList@0:61..68
+      SingleDeclaration@0:61..68
+        FullySpecifiedType@0:61..66
+          TypeSpecifier@0:61..66
+            TypeSpecifierNonArray@0:61..66 `float`
+              Float
+ExternalDeclaration@0:75..254 `FunctionDefinition`
+  FunctionDefinition@0:75..254
+    FunctionPrototype@0:75..86
+      FullySpecifiedType@0:75..79
+        TypeSpecifier@0:75..79
+          TypeSpecifierNonArray@0:75..79 `void`
+            Void
+      Identifier@0:80..84 `main`
+    CompoundStatement@0:88..254
+      Statement@0:95..103 `Declaration`
+        Declaration@0:95..103 `InitDeclaratorList`
+          InitDeclaratorList@0:95..102
+            SingleDeclaration@0:95..102
+              FullySpecifiedType@0:95..99
+                TypeSpecifier@0:95..99
+                  TypeSpecifierNonArray@0:95..99 `bool`
+                    Bool
+      Statement@0:109..157 `Declaration`
+        Declaration@0:109..157 `InitDeclaratorList`
+          InitDeclaratorList@0:109..156
+            SingleDeclaration@0:109..156
+              FullySpecifiedType@0:109..114
+                TypeSpecifier@0:109..114
+                  TypeSpecifierNonArray@0:109..114 `float`
+                    Float
+              ArraySpecifierDimension@0:120..156 `ExplicitlySized`
+                Expr `FunCall`
+                  FunIdentifier@0:121..124 `TypeSpecifier`
+                    TypeSpecifier
+                      TypeSpecifierNonArray@0:121..124 `int`
+                        Int
+                  Expr@0:125..154 `FunCall`
+                    FunIdentifier@0:125..128 `Expr`
+                      Expr `Variable`
+                        Identifier@0:125..128 `mod`
+                    Expr@0:129..140 `FunCall`
+                      FunIdentifier@0:129..134 `TypeSpecifier`
+                        TypeSpecifier
+                          TypeSpecifierNonArray@0:129..134 `float`
+                            Float
+                      Expr@0:136..139 `FloatConst`
+                        FloatConst `7.1`
+                    Expr@0:142..153 `FunCall`
+                      FunIdentifier@0:142..147 `TypeSpecifier`
+                        TypeSpecifier
+                          TypeSpecifierNonArray@0:142..147 `float`
+                            Float
+                      Expr@0:149..152 `FloatConst`
+                        FloatConst `4`
+      Statement@0:163..186 `Expression`
+        ExprStatement@0:163..186
+          Expr `Variable`
+            Identifier@0:163..165 `b1`
+          AssignmentOp@0:166..167 `=`
+          Expr `FunCall`
+            FunIdentifier@0:168..181 `Expr`
+              Expr `Variable`
+                Identifier@0:168..181 `anyInvocation`
+            Expr@0:182..184 `Variable`
+              Identifier@0:182..184 `b1`
+      Statement@0:192..216 `Expression`
+        ExprStatement@0:192..216
+          Expr `Variable`
+            Identifier@0:192..194 `b1`
+          AssignmentOp@0:195..196 `=`
+          Expr `FunCall`
+            FunIdentifier@0:197..211 `Expr`
+              Expr `Variable`
+                Identifier@0:197..211 `allInvocations`
+            Expr@0:212..214 `Variable`
+              Identifier@0:212..214 `b1`
+      Statement@0:222..251 `Expression`
+        ExprStatement@0:222..251
+          Expr `Variable`
+            Identifier@0:222..224 `b1`
+          AssignmentOp@0:225..226 `=`
+          Expr `FunCall`
+            FunIdentifier@0:227..246 `Expr`
+              Expr `Variable`
+                Identifier@0:227..246 `allInvocationsEqual`
+            Expr@0:247..249 `Variable`
+              Identifier@0:247..249 `b1`

@@ -1,0 +1,13 @@
+ExternalDeclaration@0:0..12 `Preprocessor`
+  Preprocessor@0:0..12 `#version`
+    PreprocessorVersion@0:9..12 `435`
+      ShortConst `435`
+ExternalDeclaration@0:14..28 `FunctionDefinition`
+  FunctionDefinition@0:14..28
+    FunctionPrototype@0:14..25
+      FullySpecifiedType@0:14..18
+        TypeSpecifier@0:14..18
+          TypeSpecifierNonArray@0:14..18 `void`
+            Void
+      Identifier@0:19..23 `main`
+    CompoundStatement@0:26..28

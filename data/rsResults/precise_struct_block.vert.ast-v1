@@ -1,0 +1,921 @@
+ExternalDeclaration@0:0..12 `Preprocessor`
+  Preprocessor@0:0..12 `#version`
+    PreprocessorVersion@0:9..12 `450`
+      ShortConst `450`
+ExternalDeclaration@0:14..51 `Declaration`
+  Declaration@0:14..51 `InitDeclaratorList`
+    InitDeclaratorList@0:14..50
+      SingleDeclaration@0:14..50
+        FullySpecifiedType@0:14..50
+          TypeSpecifier@0:14..50
+            TypeSpecifierNonArray@0:14..50 `struct`
+              StructSpecifier@0:14..50
+                StructFieldSpecifier@0:27..36
+                  TypeSpecifier@0:27..32
+                    TypeSpecifierNonArray@0:27..32 `float`
+                      Float
+                  ArrayedIdentifier@0:33..35
+                    Identifier@0:33..35 `f1`
+                StructFieldSpecifier@0:39..48
+                  TypeSpecifier@0:39..44
+                    TypeSpecifierNonArray@0:39..44 `float`
+                      Float
+                  ArrayedIdentifier@0:45..47
+                    Identifier@0:45..47 `f2`
+ExternalDeclaration@0:53..106 `Declaration`
+  Declaration@0:53..106 `Block`
+    Block@0:53..105
+      TypeQualifier@0:53..56
+        TypeQualifierSpec@0:53..56 `Storage`
+          StorageQualifier@0:53..56 `out`
+            Out
+      Identifier@0:57..59 `B1`
+      StructFieldSpecifier@0:61..73
+        TypeQualifierSpec@0:61..68 `Precise`
+          Precise
+        TypeSpecifier@0:69..70
+          TypeSpecifierNonArray@0:69..70 `TypeName`
+            TypeName@0:69..70
+        ArrayedIdentifier@0:71..72
+          Identifier@0:71..72 `s`
+      StructFieldSpecifier@0:74..82
+        TypeSpecifier@0:74..79
+          TypeSpecifierNonArray@0:74..79 `float`
+            Float
+        ArrayedIdentifier@0:80..81
+          Identifier@0:80..81 `x`
+      Identifier@0:84..105 `partial_precise_block`
+ExternalDeclaration@0:107..156 `Declaration`
+  Declaration@0:107..156 `Block`
+    Block@0:107..155
+      TypeQualifier@0:107..118
+        TypeQualifierSpec@0:107..114 `Precise`
+          Precise
+        TypeQualifierSpec@0:115..118 `Storage`
+          StorageQualifier@0:115..118 `out`
+            Out
+      Identifier@0:119..121 `B2`
+      StructFieldSpecifier@0:123..127
+        TypeSpecifier@0:123..124
+          TypeSpecifierNonArray@0:123..124 `TypeName`
+            TypeName@0:123..124
+        ArrayedIdentifier@0:125..126
+          Identifier@0:125..126 `s`
+      StructFieldSpecifier@0:128..136
+        TypeSpecifier@0:128..133
+          TypeSpecifierNonArray@0:128..133 `float`
+            Float
+        ArrayedIdentifier@0:134..135
+          Identifier@0:134..135 `x`
+      Identifier@0:138..155 `all_precise_block`
+ExternalDeclaration@0:158..587 `FunctionDefinition`
+  FunctionDefinition@0:158..587
+    FunctionPrototype@0:158..179
+      FullySpecifiedType@0:158..163
+        TypeSpecifier@0:158..163
+          TypeSpecifierNonArray@0:158..163 `float`
+            Float
+      Identifier@0:164..177 `struct_member`
+    CompoundStatement@0:180..587
+      Statement@0:184..198 `Declaration`
+        Declaration@0:184..198 `InitDeclaratorList`
+          InitDeclaratorList@0:184..197
+            SingleDeclaration@0:184..197
+              FullySpecifiedType@0:184..189
+                TypeSpecifier@0:184..189
+                  TypeSpecifierNonArray@0:184..189 `float`
+                    Float
+              Expr `FloatConst`
+                FloatConst `1`
+      Statement@0:201..215 `Declaration`
+        Declaration@0:201..215 `InitDeclaratorList`
+          InitDeclaratorList@0:201..214
+            SingleDeclaration@0:201..214
+              FullySpecifiedType@0:201..206
+                TypeSpecifier@0:201..206
+                  TypeSpecifierNonArray@0:201..206 `float`
+                    Float
+              Expr `FloatConst`
+                FloatConst `2`
+      Statement@0:218..232 `Declaration`
+        Declaration@0:218..232 `InitDeclaratorList`
+          InitDeclaratorList@0:218..231
+            SingleDeclaration@0:218..231
+              FullySpecifiedType@0:218..223
+                TypeSpecifier@0:218..223
+                  TypeSpecifierNonArray@0:218..223 `float`
+                    Float
+              Expr `FloatConst`
+                FloatConst `3`
+      Statement@0:235..249 `Declaration`
+        Declaration@0:235..249 `InitDeclaratorList`
+          InitDeclaratorList@0:235..248
+            SingleDeclaration@0:235..248
+              FullySpecifiedType@0:235..240
+                TypeSpecifier@0:235..240
+                  TypeSpecifierNonArray@0:235..240 `float`
+                    Float
+              Expr `FloatConst`
+                FloatConst `4`
+      Statement@0:253..274 `Declaration`
+        Declaration@0:253..274 `InitDeclaratorList`
+          InitDeclaratorList@0:253..273
+            SingleDeclaration@0:253..273
+              FullySpecifiedType@0:253..266
+                TypeQualifierSpec@0:253..260 `Precise`
+                  Precise
+                TypeSpecifier@0:261..266
+                  TypeSpecifierNonArray@0:261..266 `float`
+                    Float
+      Statement@0:278..290 `Declaration`
+        Declaration@0:278..290 `InitDeclaratorList`
+          InitDeclaratorList@0:278..289
+            SingleDeclaration@0:278..281
+              FullySpecifiedType@0:278..279
+                TypeSpecifier@0:278..279
+                  TypeSpecifierNonArray@0:278..279 `TypeName`
+                    TypeName@0:278..279
+            SingleDeclarationNoType@0:283..285
+              ArrayedIdentifier@0:283..285
+                Identifier@0:283..285 `S2`
+            SingleDeclarationNoType@0:287..289
+              ArrayedIdentifier@0:287..289
+                Identifier@0:287..289 `S3`
+      Statement@0:294..310 `Expression`
+        ExprStatement@0:294..310
+          Expr `Dot`
+            Expr `Variable`
+              Identifier@0:294..296 `S2`
+            Identifier@0:297..299 `f1`
+          AssignmentOp@0:300..301 `=`
+          Expr `Binary`
+            BinaryOp@0:304..305 `+`
+            Expr `Variable`
+              Identifier@0:302..303 `a`
+            Expr `FloatConst`
+              FloatConst `0.2`
+      Statement@0:335..351 `Expression`
+        ExprStatement@0:335..351
+          Expr `Dot`
+            Expr `Variable`
+              Identifier@0:335..337 `S2`
+            Identifier@0:338..340 `f2`
+          AssignmentOp@0:341..342 `=`
+          Expr `Binary`
+            BinaryOp@0:345..346 `+`
+            Expr `Variable`
+              Identifier@0:343..344 `b`
+            Expr `FloatConst`
+              FloatConst `0.2`
+      Statement@0:380..394 `Expression`
+        ExprStatement@0:380..394
+          Expr `Dot`
+            Expr `Variable`
+              Identifier@0:380..382 `S3`
+            Identifier@0:383..385 `f1`
+          AssignmentOp@0:386..387 `=`
+          Expr `Binary`
+            BinaryOp@0:390..391 `+`
+            Expr `Variable`
+              Identifier@0:388..389 `a`
+            Expr `Variable`
+              Identifier@0:392..393 `b`
+      Statement@0:425..432 `Expression`
+        ExprStatement@0:425..432
+          Expr `Variable`
+            Identifier@0:425..426 `S`
+          AssignmentOp@0:427..428 `=`
+          Expr `Variable`
+            Identifier@0:429..431 `S2`
+      Statement@0:501..521 `Expression`
+        ExprStatement@0:501..521
+          Expr `Variable`
+            Identifier@0:501..507 `result`
+          AssignmentOp@0:508..509 `=`
+          Expr `Binary`
+            BinaryOp@0:515..516 `+`
+            Expr `Dot`
+              Expr `Variable`
+                Identifier@0:510..511 `S`
+              Identifier@0:512..514 `f1`
+            Expr `FloatConst`
+              FloatConst `0.1`
+      Statement@0:571..585 `Jump`
+        JumpStatement@0:571..585 `return`
+          Identifier@0:578..584 `result`
+ExternalDeclaration@0:589..1803 `FunctionDefinition`
+  FunctionDefinition@0:589..1803
+    FunctionPrototype@0:589..617
+      FullySpecifiedType@0:589..594
+        TypeSpecifier@0:589..594
+          TypeSpecifierNonArray@0:589..594 `float`
+            Float
+      Identifier@0:595..615 `complex_array_struct`
+    CompoundStatement@0:618..1803
+      Statement@0:622..643 `Declaration`
+        Declaration@0:622..643 `InitDeclaratorList`
+          InitDeclaratorList@0:622..642
+            SingleDeclaration@0:622..642
+              FullySpecifiedType@0:622..635
+                TypeQualifierSpec@0:622..629 `Precise`
+                  Precise
+                TypeSpecifier@0:630..635
+                  TypeSpecifierNonArray@0:630..635 `float`
+                    Float
+      Statement@0:646..706 `Declaration`
+        Declaration@0:646..706 `InitDeclaratorList`
+          InitDeclaratorList@0:646..705
+            SingleDeclaration@0:646..705
+              FullySpecifiedType@0:646..705
+                TypeSpecifier@0:646..705
+                  TypeSpecifierNonArray@0:646..705 `struct`
+                    StructSpecifier@0:646..705
+                      StructFieldSpecifier@0:662..680
+                        TypeSpecifier@0:662..667
+                          TypeSpecifierNonArray@0:662..667 `float`
+                            Float
+                        ArrayedIdentifier@0:668..679
+                          Identifier@0:668..676 `t1_array`
+                          ArraySpecifierDimension@0:676..679 `ExplicitlySized`
+                            Expr `IntConst`
+                              IntConst `3`
+                      StructFieldSpecifier@0:685..701
+                        TypeSpecifier@0:685..690
+                          TypeSpecifierNonArray@0:685..690 `float`
+                            Float
+                        ArrayedIdentifier@0:691..700
+                          Identifier@0:691..700 `t1_scalar`
+      Statement@0:709..770 `Declaration`
+        Declaration@0:709..770 `InitDeclaratorList`
+          InitDeclaratorList@0:709..769
+            SingleDeclaration@0:709..769
+              FullySpecifiedType@0:709..769
+                TypeSpecifier@0:709..769
+                  TypeSpecifierNonArray@0:709..769 `struct`
+                    StructSpecifier@0:709..769
+                      StructFieldSpecifier@0:725..735
+                        TypeSpecifier@0:725..727
+                          TypeSpecifierNonArray@0:725..727 `TypeName`
+                            TypeName@0:725..727
+                        ArrayedIdentifier@0:728..734
+                          Identifier@0:728..731 `t1a`
+                          ArraySpecifierDimension@0:731..734 `ExplicitlySized`
+                            Expr `IntConst`
+                              IntConst `5`
+                      StructFieldSpecifier@0:740..750
+                        TypeSpecifier@0:740..742
+                          TypeSpecifierNonArray@0:740..742 `TypeName`
+                            TypeName@0:740..742
+                        ArrayedIdentifier@0:743..749
+                          Identifier@0:743..746 `t1b`
+                          ArraySpecifierDimension@0:746..749 `ExplicitlySized`
+                            Expr `IntConst`
+                              IntConst `6`
+                      StructFieldSpecifier@0:755..765
+                        TypeSpecifier@0:755..757
+                          TypeSpecifierNonArray@0:755..757 `TypeName`
+                            TypeName@0:755..757
+                        ArrayedIdentifier@0:758..764
+                          Identifier@0:758..761 `t1c`
+                          ArraySpecifierDimension@0:761..764 `ExplicitlySized`
+                            Expr `IntConst`
+                              IntConst `7`
+      Statement@0:773..816 `Declaration`
+        Declaration@0:773..816 `InitDeclaratorList`
+          InitDeclaratorList@0:773..815
+            SingleDeclaration@0:773..815
+              FullySpecifiedType@0:773..815
+                TypeSpecifier@0:773..815
+                  TypeSpecifierNonArray@0:773..815 `struct`
+                    StructSpecifier@0:773..815
+                      StructFieldSpecifier@0:784..792
+                        TypeSpecifier@0:784..789
+                          TypeSpecifierNonArray@0:784..789 `float`
+                            Float
+                        ArrayedIdentifier@0:790..791
+                          Identifier@0:790..791 `f`
+                      StructFieldSpecifier@0:793..799
+                        TypeSpecifier@0:793..795
+                          TypeSpecifierNonArray@0:793..795 `TypeName`
+                            TypeName@0:793..795
+                        ArrayedIdentifier@0:796..798
+                          Identifier@0:796..798 `t2`
+                      StructFieldSpecifier@0:800..807
+                        TypeSpecifier@0:800..804
+                          TypeSpecifierNonArray@0:800..804 `vec4`
+                            Vec4
+                        ArrayedIdentifier@0:805..806
+                          Identifier@0:805..806 `v`
+                      StructFieldSpecifier@0:808..814
+                        TypeSpecifier@0:808..811
+                          TypeSpecifierNonArray@0:808..811 `int`
+                            Int
+                        ArrayedIdentifier@0:812..813
+                          Identifier@0:812..813 `p`
+      Statement@0:819..829 `Declaration`
+        Declaration@0:819..829 `InitDeclaratorList`
+          InitDeclaratorList@0:819..828
+            SingleDeclaration@0:819..828
+              FullySpecifiedType@0:819..821
+                TypeSpecifier@0:819..821
+                  TypeSpecifierNonArray@0:819..821 `TypeName`
+                    TypeName@0:819..821
+              ArraySpecifierDimension@0:824..828 `ExplicitlySized`
+                Expr `IntConst`
+                  IntConst `10`
+      Statement@0:832..1645 `Iteration`
+        IterationStatement@0:832..1645 `for`
+          ForInitStatement@0:836..844 `Declaration`
+            Declaration `InitDeclaratorList`
+              InitDeclaratorList@0:836..843
+                SingleDeclaration@0:836..843
+                  FullySpecifiedType@0:836..839
+                    TypeSpecifier@0:836..839
+                      TypeSpecifierNonArray@0:836..839 `int`
+                        Int
+                  Expr `IntConst`
+                    IntConst `0`
+          ForRestStatement@0:845..854
+            Expr@0:845..849 `Binary`
+              BinaryOp@0:846..847 `<`
+              Expr `Variable`
+                Identifier@0:845..846 `i`
+              Expr `IntConst`
+                IntConst `10`
+            Expr `Variable`
+              Identifier@0:851..852 `i`
+          Statement `Compound`
+            CompoundStatement@0:856..1645
+              Statement@0:862..880 `Expression`
+                ExprStatement@0:862..880
+                  Expr `Dot`
+                    Expr `Bracket`
+                      Expr `Variable`
+                        Identifier@0:862..864 `t3`
+                      Expr `Variable`
+                        Identifier@0:865..866 `i`
+                    Identifier@0:868..869 `f`
+                  AssignmentOp@0:870..871 `=`
+                  Expr `Binary`
+                    BinaryOp@0:874..875 `/`
+                    Expr `Variable`
+                      Identifier@0:872..873 `i`
+                    Expr `FloatConst`
+                      FloatConst `3`
+              Statement@0:906..930 `Expression`
+                ExprStatement@0:906..930
+                  Expr `Dot`
+                    Expr `Bracket`
+                      Expr `Variable`
+                        Identifier@0:906..908 `t3`
+                      Expr `Variable`
+                        Identifier@0:909..910 `i`
+                    Identifier@0:912..913 `v`
+                  AssignmentOp@0:914..915 `=`
+                  Expr `FunCall`
+                    FunIdentifier@0:916..920 `TypeSpecifier`
+                      TypeSpecifier
+                        TypeSpecifierNonArray@0:916..920 `vec4`
+                          Vec4
+                    Expr@0:921..928 `Binary`
+                      BinaryOp@0:923..924 `*`
+                      Expr `Variable`
+                        Identifier@0:921..922 `i`
+                      Expr `FloatConst`
+                        FloatConst `1.5`
+              Statement@0:952..968 `Expression`
+                ExprStatement@0:952..968
+                  Expr `Dot`
+                    Expr `Bracket`
+                      Expr `Variable`
+                        Identifier@0:952..954 `t3`
+                      Expr `Variable`
+                        Identifier@0:955..956 `i`
+                    Identifier@0:958..959 `p`
+                  AssignmentOp@0:960..961 `=`
+                  Expr `Binary`
+                    BinaryOp@0:964..965 `+`
+                    Expr `Variable`
+                      Identifier@0:962..963 `i`
+                    Expr `IntConst`
+                      IntConst `1`
+              Statement@0:973..1181 `Iteration`
+                IterationStatement@0:973..1181 `for`
+                  ForInitStatement@0:977..985 `Declaration`
+                    Declaration `InitDeclaratorList`
+                      InitDeclaratorList@0:977..984
+                        SingleDeclaration@0:977..984
+                          FullySpecifiedType@0:977..980
+                            TypeSpecifier@0:977..980
+                              TypeSpecifierNonArray@0:977..980 `int`
+                                Int
+                          Expr `IntConst`
+                            IntConst `0`
+                  ForRestStatement@0:986..994
+                    Expr@0:986..989 `Binary`
+                      BinaryOp@0:987..988 `<`
+                      Expr `Variable`
+                        Identifier@0:986..987 `j`
+                      Expr `IntConst`
+                        IntConst `5`
+                    Expr `Variable`
+                      Identifier@0:991..992 `j`
+                  Statement `Compound`
+                    CompoundStatement@0:996..1181
+                      Statement@0:1004..1108 `Iteration`
+                        IterationStatement@0:1004..1108 `for`
+                          ForInitStatement@0:1008..1018 `Declaration`
+                            Declaration `InitDeclaratorList`
+                              InitDeclaratorList@0:1008..1017
+                                SingleDeclaration@0:1008..1017
+                                  FullySpecifiedType@0:1008..1011
+                                    TypeSpecifier@0:1008..1011
+                                      TypeSpecifierNonArray@0:1008..1011 `int`
+                                        Int
+                                  Expr `IntConst`
+                                    IntConst `0`
+                          ForRestStatement@0:1019..1027
+                            Expr@0:1019..1022 `Binary`
+                              BinaryOp@0:1020..1021 `<`
+                              Expr `Variable`
+                                Identifier@0:1019..1020 `k`
+                              Expr `IntConst`
+                                IntConst `3`
+                            Expr `Variable`
+                              Identifier@0:1024..1025 `k`
+                          Statement `Compound`
+                            CompoundStatement@0:1029..1108
+                              Statement@0:1039..1079 `Expression`
+                                ExprStatement@0:1039..1079
+                                  Expr `Bracket`
+                                    Expr `Dot`
+                                      Expr `Bracket`
+                                        Expr `Dot`
+                                          Expr `Dot`
+                                            Expr `Bracket`
+                                              Expr `Variable`
+                                                Identifier@0:1039..1041 `t3`
+                                              Expr `Variable`
+                                                Identifier@0:1042..1043 `i`
+                                            Identifier@0:1045..1047 `t2`
+                                          Identifier@0:1048..1051 `t1a`
+                                        Expr `Variable`
+                                          Identifier@0:1052..1053 `j`
+                                      Identifier@0:1055..1063 `t1_array`
+                                    Expr `Variable`
+                                      Identifier@0:1064..1065 `k`
+                                  AssignmentOp@0:1067..1068 `=`
+                                  Expr `Binary`
+                                    BinaryOp@0:1075..1076 `+`
+                                    Expr `Binary`
+                                      BinaryOp@0:1071..1072 `*`
+                                      Expr `Variable`
+                                        Identifier@0:1069..1070 `i`
+                                      Expr `Variable`
+                                        Identifier@0:1073..1074 `j`
+                                    Expr `Variable`
+                                      Identifier@0:1077..1078 `k`
+                      Statement@0:1115..1155 `Expression`
+                        ExprStatement@0:1115..1155
+                          Expr `Dot`
+                            Expr `Bracket`
+                              Expr `Dot`
+                                Expr `Dot`
+                                  Expr `Bracket`
+                                    Expr `Variable`
+                                      Identifier@0:1115..1117 `t3`
+                                    Expr `Variable`
+                                      Identifier@0:1118..1119 `i`
+                                  Identifier@0:1121..1123 `t2`
+                                Identifier@0:1124..1127 `t1a`
+                              Expr `Variable`
+                                Identifier@0:1128..1129 `j`
+                            Identifier@0:1131..1140 `t1_scalar`
+                          AssignmentOp@0:1141..1142 `=`
+                          Expr `Binary`
+                            BinaryOp@0:1151..1152 `/`
+                            Expr `Binary`
+                              BinaryOp@0:1145..1146 `*`
+                              Expr `Variable`
+                                Identifier@0:1143..1144 `j`
+                              Expr `FloatConst`
+                                FloatConst `2`
+                            Expr `Variable`
+                              Identifier@0:1153..1154 `i`
+              Statement@0:1187..1392 `Iteration`
+                IterationStatement@0:1187..1392 `for`
+                  ForInitStatement@0:1191..1199 `Declaration`
+                    Declaration `InitDeclaratorList`
+                      InitDeclaratorList@0:1191..1198
+                        SingleDeclaration@0:1191..1198
+                          FullySpecifiedType@0:1191..1194
+                            TypeSpecifier@0:1191..1194
+                              TypeSpecifierNonArray@0:1191..1194 `int`
+                                Int
+                          Expr `IntConst`
+                            IntConst `0`
+                  ForRestStatement@0:1200..1208
+                    Expr@0:1200..1203 `Binary`
+                      BinaryOp@0:1201..1202 `<`
+                      Expr `Variable`
+                        Identifier@0:1200..1201 `j`
+                      Expr `IntConst`
+                        IntConst `6`
+                    Expr `Variable`
+                      Identifier@0:1205..1206 `j`
+                  Statement `Compound`
+                    CompoundStatement@0:1210..1392
+                      Statement@0:1218..1322 `Iteration`
+                        IterationStatement@0:1218..1322 `for`
+                          ForInitStatement@0:1222..1232 `Declaration`
+                            Declaration `InitDeclaratorList`
+                              InitDeclaratorList@0:1222..1231
+                                SingleDeclaration@0:1222..1231
+                                  FullySpecifiedType@0:1222..1225
+                                    TypeSpecifier@0:1222..1225
+                                      TypeSpecifierNonArray@0:1222..1225 `int`
+                                        Int
+                                  Expr `IntConst`
+                                    IntConst `0`
+                          ForRestStatement@0:1233..1241
+                            Expr@0:1233..1236 `Binary`
+                              BinaryOp@0:1234..1235 `<`
+                              Expr `Variable`
+                                Identifier@0:1233..1234 `k`
+                              Expr `IntConst`
+                                IntConst `3`
+                            Expr `Variable`
+                              Identifier@0:1238..1239 `k`
+                          Statement `Compound`
+                            CompoundStatement@0:1243..1322
+                              Statement@0:1253..1293 `Expression`
+                                ExprStatement@0:1253..1293
+                                  Expr `Bracket`
+                                    Expr `Dot`
+                                      Expr `Bracket`
+                                        Expr `Dot`
+                                          Expr `Dot`
+                                            Expr `Bracket`
+                                              Expr `Variable`
+                                                Identifier@0:1253..1255 `t3`
+                                              Expr `Variable`
+                                                Identifier@0:1256..1257 `i`
+                                            Identifier@0:1259..1261 `t2`
+                                          Identifier@0:1262..1265 `t1b`
+                                        Expr `Variable`
+                                          Identifier@0:1266..1267 `j`
+                                      Identifier@0:1269..1277 `t1_array`
+                                    Expr `Variable`
+                                      Identifier@0:1278..1279 `k`
+                                  AssignmentOp@0:1281..1282 `=`
+                                  Expr `Binary`
+                                    BinaryOp@0:1289..1290 `+`
+                                    Expr `Binary`
+                                      BinaryOp@0:1285..1286 `*`
+                                      Expr `Variable`
+                                        Identifier@0:1283..1284 `i`
+                                      Expr `Variable`
+                                        Identifier@0:1287..1288 `j`
+                                    Expr `Variable`
+                                      Identifier@0:1291..1292 `k`
+                      Statement@0:1329..1369 `Expression`
+                        ExprStatement@0:1329..1369
+                          Expr `Dot`
+                            Expr `Bracket`
+                              Expr `Dot`
+                                Expr `Dot`
+                                  Expr `Bracket`
+                                    Expr `Variable`
+                                      Identifier@0:1329..1331 `t3`
+                                    Expr `Variable`
+                                      Identifier@0:1332..1333 `i`
+                                  Identifier@0:1335..1337 `t2`
+                                Identifier@0:1338..1341 `t1b`
+                              Expr `Variable`
+                                Identifier@0:1342..1343 `j`
+                            Identifier@0:1345..1354 `t1_scalar`
+                          AssignmentOp@0:1355..1356 `=`
+                          Expr `Binary`
+                            BinaryOp@0:1365..1366 `/`
+                            Expr `Binary`
+                              BinaryOp@0:1359..1360 `*`
+                              Expr `Variable`
+                                Identifier@0:1357..1358 `j`
+                              Expr `FloatConst`
+                                FloatConst `2`
+                            Expr `Variable`
+                              Identifier@0:1367..1368 `i`
+              Statement@0:1398..1641 `Iteration`
+                IterationStatement@0:1398..1641 `for`
+                  ForInitStatement@0:1402..1410 `Declaration`
+                    Declaration `InitDeclaratorList`
+                      InitDeclaratorList@0:1402..1409
+                        SingleDeclaration@0:1402..1409
+                          FullySpecifiedType@0:1402..1405
+                            TypeSpecifier@0:1402..1405
+                              TypeSpecifierNonArray@0:1402..1405 `int`
+                                Int
+                          Expr `IntConst`
+                            IntConst `0`
+                  ForRestStatement@0:1411..1419
+                    Expr@0:1411..1414 `Binary`
+                      BinaryOp@0:1412..1413 `<`
+                      Expr `Variable`
+                        Identifier@0:1411..1412 `j`
+                      Expr `IntConst`
+                        IntConst `6`
+                    Expr `Variable`
+                      Identifier@0:1416..1417 `j`
+                  Statement `Compound`
+                    CompoundStatement@0:1421..1641
+                      Statement@0:1429..1567 `Iteration`
+                        IterationStatement@0:1429..1567 `for`
+                          ForInitStatement@0:1433..1443 `Declaration`
+                            Declaration `InitDeclaratorList`
+                              InitDeclaratorList@0:1433..1442
+                                SingleDeclaration@0:1433..1442
+                                  FullySpecifiedType@0:1433..1436
+                                    TypeSpecifier@0:1433..1436
+                                      TypeSpecifierNonArray@0:1433..1436 `int`
+                                        Int
+                                  Expr `IntConst`
+                                    IntConst `0`
+                          ForRestStatement@0:1444..1452
+                            Expr@0:1444..1447 `Binary`
+                              BinaryOp@0:1445..1446 `<`
+                              Expr `Variable`
+                                Identifier@0:1444..1445 `k`
+                              Expr `IntConst`
+                                IntConst `3`
+                            Expr `Variable`
+                              Identifier@0:1449..1450 `k`
+                          Statement `Compound`
+                            CompoundStatement@0:1454..1567
+                              Statement@0:1464..1504 `Expression`
+                                ExprStatement@0:1464..1504
+                                  Expr `Bracket`
+                                    Expr `Dot`
+                                      Expr `Bracket`
+                                        Expr `Dot`
+                                          Expr `Dot`
+                                            Expr `Bracket`
+                                              Expr `Variable`
+                                                Identifier@0:1464..1466 `t3`
+                                              Expr `Variable`
+                                                Identifier@0:1467..1468 `i`
+                                            Identifier@0:1470..1472 `t2`
+                                          Identifier@0:1473..1476 `t1c`
+                                        Expr `Variable`
+                                          Identifier@0:1477..1478 `j`
+                                      Identifier@0:1480..1488 `t1_array`
+                                    Expr `Variable`
+                                      Identifier@0:1489..1490 `k`
+                                  AssignmentOp@0:1492..1493 `=`
+                                  Expr `Binary`
+                                    BinaryOp@0:1500..1501 `+`
+                                    Expr `Binary`
+                                      BinaryOp@0:1496..1497 `*`
+                                      Expr `Variable`
+                                        Identifier@0:1494..1495 `i`
+                                      Expr `Variable`
+                                        Identifier@0:1498..1499 `j`
+                                    Expr `Variable`
+                                      Identifier@0:1502..1503 `k`
+                      Statement@0:1574..1614 `Expression`
+                        ExprStatement@0:1574..1614
+                          Expr `Dot`
+                            Expr `Bracket`
+                              Expr `Dot`
+                                Expr `Dot`
+                                  Expr `Bracket`
+                                    Expr `Variable`
+                                      Identifier@0:1574..1576 `t3`
+                                    Expr `Variable`
+                                      Identifier@0:1577..1578 `i`
+                                  Identifier@0:1580..1582 `t2`
+                                Identifier@0:1583..1586 `t1c`
+                              Expr `Variable`
+                                Identifier@0:1587..1588 `j`
+                            Identifier@0:1590..1599 `t1_scalar`
+                          AssignmentOp@0:1600..1601 `=`
+                          Expr `Binary`
+                            BinaryOp@0:1610..1611 `/`
+                            Expr `Binary`
+                              BinaryOp@0:1604..1605 `*`
+                              Expr `Variable`
+                                Identifier@0:1602..1603 `j`
+                              Expr `FloatConst`
+                                FloatConst `2`
+                            Expr `Variable`
+                              Identifier@0:1612..1613 `i`
+      Statement@0:1648..1658 `Declaration`
+        Declaration@0:1648..1658 `InitDeclaratorList`
+          InitDeclaratorList@0:1648..1657
+            SingleDeclaration@0:1648..1657
+              FullySpecifiedType@0:1648..1651
+                TypeSpecifier@0:1648..1651
+                  TypeSpecifierNonArray@0:1648..1651 `int`
+                    Int
+              Expr `IntConst`
+                IntConst `2`
+      Statement@0:1661..1767 `Expression`
+        ExprStatement@0:1661..1767
+          Expr `Variable`
+            Identifier@0:1661..1667 `result`
+          AssignmentOp@0:1668..1669 `=`
+          Expr `Binary`
+            BinaryOp@0:1748..1749 `+`
+            Expr `Binary`
+              BinaryOp@0:1709..1710 `+`
+              Expr `Bracket`
+                Expr `Dot`
+                  Expr `Bracket`
+                    Expr `Dot`
+                      Expr `Dot`
+                        Expr `Bracket`
+                          Expr `Variable`
+                            Identifier@0:1670..1672 `t3`
+                          Expr `IntConst`
+                            IntConst `5`
+                        Identifier@0:1676..1678 `t2`
+                      Identifier@0:1679..1682 `t1c`
+                    Expr `IntConst`
+                      IntConst `6`
+                  Identifier@0:1686..1694 `t1_array`
+                Expr `IntConst`
+                  IntConst `1`
+              Expr `Dot`
+                Expr `Bracket`
+                  Expr `Dot`
+                    Expr `Dot`
+                      Expr `Bracket`
+                        Expr `Variable`
+                          Identifier@0:1711..1713 `t3`
+                        Expr `IntConst`
+                          IntConst `2`
+                      Identifier@0:1717..1719 `t2`
+                    Identifier@0:1720..1723 `t1b`
+                  Expr `IntConst`
+                    IntConst `1`
+                Identifier@0:1727..1736 `t1_scalar`
+            Expr `Dot`
+              Expr `Dot`
+                Expr `Dot`
+                  Expr `Bracket`
+                    Expr `Variable`
+                      Identifier@0:1750..1752 `t3`
+                    Expr `Binary`
+                      BinaryOp@0:1755..1756 `-`
+                      Expr `Variable`
+                        Identifier@0:1753..1754 `i`
+                      Expr `IntConst`
+                        IntConst `1`
+                  Identifier@0:1760..1761 `v`
+                Identifier@0:1762..1764 `xy`
+              Identifier@0:1765..1766 `x`
+      Statement@0:1787..1801 `Jump`
+        JumpStatement@0:1787..1801 `return`
+          Identifier@0:1794..1800 `result`
+ExternalDeclaration@0:1805..2256 `FunctionDefinition`
+  FunctionDefinition@0:1805..2256
+    FunctionPrototype@0:1805..1822
+      FullySpecifiedType@0:1805..1810
+        TypeSpecifier@0:1805..1810
+          TypeSpecifierNonArray@0:1805..1810 `float`
+            Float
+      Identifier@0:1811..1820 `out_block`
+    CompoundStatement@0:1823..2256
+      Statement@0:1829..1843 `Declaration`
+        Declaration@0:1829..1843 `InitDeclaratorList`
+          InitDeclaratorList@0:1829..1842
+            SingleDeclaration@0:1829..1842
+              FullySpecifiedType@0:1829..1834
+                TypeSpecifier@0:1829..1834
+                  TypeSpecifierNonArray@0:1829..1834 `float`
+                    Float
+              Expr `FloatConst`
+                FloatConst `0.1`
+      Statement@0:1848..1862 `Declaration`
+        Declaration@0:1848..1862 `InitDeclaratorList`
+          InitDeclaratorList@0:1848..1861
+            SingleDeclaration@0:1848..1861
+              FullySpecifiedType@0:1848..1853
+                TypeSpecifier@0:1848..1853
+                  TypeSpecifierNonArray@0:1848..1853 `float`
+                    Float
+              Expr `FloatConst`
+                FloatConst `0.2`
+      Statement@0:1867..1902 `Expression`
+        ExprStatement@0:1867..1902
+          Expr `Dot`
+            Expr `Dot`
+              Expr `Variable`
+                Identifier@0:1867..1888 `partial_precise_block`
+              Identifier@0:1889..1890 `s`
+            Identifier@0:1891..1893 `f1`
+          AssignmentOp@0:1894..1895 `=`
+          Expr `Binary`
+            BinaryOp@0:1898..1899 `+`
+            Expr `Variable`
+              Identifier@0:1896..1897 `a`
+            Expr `Variable`
+              Identifier@0:1900..1901 `b`
+      Statement@0:1924..1959 `Expression`
+        ExprStatement@0:1924..1959
+          Expr `Dot`
+            Expr `Dot`
+              Expr `Variable`
+                Identifier@0:1924..1945 `partial_precise_block`
+              Identifier@0:1946..1947 `s`
+            Identifier@0:1948..1950 `f2`
+          AssignmentOp@0:1951..1952 `=`
+          Expr `Binary`
+            BinaryOp@0:1955..1956 `-`
+            Expr `Variable`
+              Identifier@0:1953..1954 `a`
+            Expr `Variable`
+              Identifier@0:1957..1958 `b`
+      Statement@0:1981..2013 `Expression`
+        ExprStatement@0:1981..2013
+          Expr `Dot`
+            Expr `Variable`
+              Identifier@0:1981..2002 `partial_precise_block`
+            Identifier@0:2003..2004 `x`
+          AssignmentOp@0:2005..2006 `=`
+          Expr `Binary`
+            BinaryOp@0:2009..2010 `*`
+            Expr `Variable`
+              Identifier@0:2007..2008 `a`
+            Expr `Variable`
+              Identifier@0:2011..2012 `b`
+      Statement@0:2040..2077 `Expression`
+        ExprStatement@0:2040..2077
+          Expr `Dot`
+            Expr `Dot`
+              Expr `Variable`
+                Identifier@0:2040..2057 `all_precise_block`
+              Identifier@0:2058..2059 `s`
+            Identifier@0:2060..2062 `f1`
+          AssignmentOp@0:2063..2064 `=`
+          Expr `Binary`
+            BinaryOp@0:2071..2072 `+`
+            Expr `Binary`
+              BinaryOp@0:2067..2068 `+`
+              Expr `Variable`
+                Identifier@0:2065..2066 `a`
+              Expr `Variable`
+                Identifier@0:2069..2070 `b`
+            Expr `FloatConst`
+              FloatConst `1`
+      Statement@0:2099..2136 `Expression`
+        ExprStatement@0:2099..2136
+          Expr `Dot`
+            Expr `Dot`
+              Expr `Variable`
+                Identifier@0:2099..2116 `all_precise_block`
+              Identifier@0:2117..2118 `s`
+            Identifier@0:2119..2121 `f2`
+          AssignmentOp@0:2122..2123 `=`
+          Expr `Binary`
+            BinaryOp@0:2130..2131 `-`
+            Expr `Binary`
+              BinaryOp@0:2126..2127 `-`
+              Expr `Variable`
+                Identifier@0:2124..2125 `a`
+              Expr `Variable`
+                Identifier@0:2128..2129 `b`
+            Expr `FloatConst`
+              FloatConst `1`
+      Statement@0:2158..2192 `Expression`
+        ExprStatement@0:2158..2192
+          Expr `Dot`
+            Expr `Variable`
+              Identifier@0:2158..2175 `all_precise_block`
+            Identifier@0:2176..2177 `x`
+          AssignmentOp@0:2178..2179 `=`
+          Expr `Binary`
+            BinaryOp@0:2186..2187 `*`
+            Expr `Binary`
+              BinaryOp@0:2182..2183 `*`
+              Expr `Variable`
+                Identifier@0:2180..2181 `a`
+              Expr `Variable`
+                Identifier@0:2184..2185 `b`
+            Expr `FloatConst`
+              FloatConst `2`
+      Statement@0:2220..2233 `Jump`
+        JumpStatement@0:2220..2233 `return`
+          BinaryOp@0:2229..2230 `+`
+          Expr `Variable`
+            Identifier@0:2227..2228 `a`
+          Expr `Variable`
+            Identifier@0:2231..2232 `b`
+ExternalDeclaration@0:2258..2271 `FunctionDefinition`
+  FunctionDefinition@0:2258..2271
+    FunctionPrototype@0:2258..2269
+      FullySpecifiedType@0:2258..2262
+        TypeSpecifier@0:2258..2262
+          TypeSpecifierNonArray@0:2258..2262 `void`
+            Void
+      Identifier@0:2263..2267 `main`
+    CompoundStatement@0:2269..2271

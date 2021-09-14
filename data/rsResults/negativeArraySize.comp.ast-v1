@@ -1,0 +1,39 @@
+ExternalDeclaration@0:0..15 `Preprocessor`
+  Preprocessor@0:0..15 `#version`
+    PreprocessorVersion@0:9..15 `310`
+      ShortConst `310`
+ExternalDeclaration@0:17..29 `Preprocessor`
+  Preprocessor@0:17..29 `#ifdef`
+    PreprocessorIfDef@0:24..29 `GL_ES`
+      Identifier@0:24..29 `GL_ES`
+ExternalDeclaration@0:30..54 `Declaration`
+  Declaration@0:30..54 `Precision`
+    PrecisionQualifier@0:40..47 `medium`
+    TypeSpecifier@0:48..53
+      TypeSpecifierNonArray@0:48..53 `float`
+        Float
+ExternalDeclaration@0:55..61 `Preprocessor`
+  Preprocessor@0:55..61 `#endif`
+    EndIf
+ExternalDeclaration@0:63..138 `FunctionDefinition`
+  FunctionDefinition@0:63..138
+    FunctionPrototype@0:63..74
+      FullySpecifiedType@0:63..67
+        TypeSpecifier@0:63..67
+          TypeSpecifierNonArray@0:63..67 `void`
+            Void
+      Identifier@0:68..72 `main`
+    CompoundStatement@0:75..138
+      Statement@0:80..92 `Declaration`
+        Declaration@0:80..92 `InitDeclaratorList`
+          InitDeclaratorList@0:80..91
+            SingleDeclaration@0:80..91
+              FullySpecifiedType@0:80..85
+                TypeSpecifier@0:80..85
+                  TypeSpecifierNonArray@0:80..85 `float`
+                    Float
+              ArraySpecifierDimension@0:87..91 `ExplicitlySized`
+                Expr `Unary`
+                  UnaryOp@0:88..89 `-`
+                  Expr `IntConst`
+                    IntConst `2`

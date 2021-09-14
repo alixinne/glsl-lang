@@ -1,0 +1,267 @@
+ExternalDeclaration@0:0..12 `Preprocessor`
+  Preprocessor@0:0..12 `#version`
+    PreprocessorVersion@0:9..12 `460`
+      ShortConst `460`
+ExternalDeclaration@0:16..50 `Declaration`
+  Declaration@0:16..50 `InitDeclaratorList`
+    InitDeclaratorList@0:16..49
+      SingleDeclaration@0:16..49
+        FullySpecifiedType@0:16..46
+          TypeQualifierSpec@0:16..37 `Layout`
+            LayoutQualifier@0:16..37
+              LayoutQualifierSpec@0:24..36 `Identifier`
+                Identifier@0:24..32 `location`
+                IntConst `0`
+          TypeQualifierSpec@0:38..41 `Storage`
+            StorageQualifier@0:38..41 `out`
+              Out
+          TypeSpecifier@0:42..46
+            TypeSpecifierNonArray@0:42..46 `vec4`
+              Vec4
+ExternalDeclaration@0:178..193 `Declaration`
+  Declaration@0:178..193 `InitDeclaratorList`
+    InitDeclaratorList@0:178..192
+      SingleDeclaration@0:178..192
+        FullySpecifiedType@0:178..190
+          TypeQualifierSpec@0:178..185 `Storage`
+            StorageQualifier@0:178..185 `uniform`
+              Uniform
+          TypeSpecifier@0:186..190
+            TypeSpecifierNonArray@0:186..190 `vec4`
+              Vec4
+ExternalDeclaration@0:226..242 `Declaration`
+  Declaration@0:226..242 `InitDeclaratorList`
+    InitDeclaratorList@0:226..241
+      SingleDeclaration@0:226..241
+        FullySpecifiedType@0:226..238
+          TypeQualifierSpec@0:226..233 `Storage`
+            StorageQualifier@0:226..233 `uniform`
+              Uniform
+          TypeSpecifier@0:234..238
+            TypeSpecifierNonArray@0:234..238 `vec2`
+              Vec2
+ExternalDeclaration@0:291..307 `Declaration`
+  Declaration@0:291..307 `InitDeclaratorList`
+    InitDeclaratorList@0:291..306
+      SingleDeclaration@0:291..306
+        FullySpecifiedType@0:291..303
+          TypeQualifierSpec@0:291..298 `Storage`
+            StorageQualifier@0:291..298 `uniform`
+              Uniform
+          TypeSpecifier@0:299..303
+            TypeSpecifierNonArray@0:299..303 `vec2`
+              Vec2
+ExternalDeclaration@0:309..325 `Declaration`
+  Declaration@0:309..325 `InitDeclaratorList`
+    InitDeclaratorList@0:309..324
+      SingleDeclaration@0:309..324
+        FullySpecifiedType@0:309..321
+          TypeQualifierSpec@0:309..316 `Storage`
+            StorageQualifier@0:309..316 `uniform`
+              Uniform
+          TypeSpecifier@0:317..321
+            TypeSpecifierNonArray@0:317..321 `vec4`
+              Vec4
+ExternalDeclaration@0:360..375 `Declaration`
+  Declaration@0:360..375 `InitDeclaratorList`
+    InitDeclaratorList@0:360..374
+      SingleDeclaration@0:360..374
+        FullySpecifiedType@0:360..372
+          TypeQualifierSpec@0:360..367 `Storage`
+            StorageQualifier@0:360..367 `uniform`
+              Uniform
+          TypeSpecifier@0:368..372
+            TypeSpecifierNonArray@0:368..372 `vec4`
+              Vec4
+ExternalDeclaration@0:379..397 `Declaration`
+  Declaration@0:379..397 `InitDeclaratorList`
+    InitDeclaratorList@0:379..396
+      SingleDeclaration@0:379..396
+        FullySpecifiedType@0:379..391
+          TypeQualifierSpec@0:379..386 `Storage`
+            StorageQualifier@0:379..386 `uniform`
+              Uniform
+          TypeSpecifier@0:387..391
+            TypeSpecifierNonArray@0:387..391 `vec4`
+              Vec4
+        ArraySpecifierDimension@0:393..396 `ExplicitlySized`
+          Expr `IntConst`
+            IntConst `4`
+ExternalDeclaration@0:401..451 `Declaration`
+  Declaration@0:401..451 `InitDeclaratorList`
+    InitDeclaratorList@0:401..450
+      SingleDeclaration@0:401..450
+        FullySpecifiedType@0:401..441
+          TypeQualifierSpec@0:401..421 `Layout`
+            LayoutQualifier@0:401..421
+              LayoutQualifierSpec@0:409..420 `Identifier`
+                Identifier@0:409..416 `binding`
+                IntConst `0`
+          TypeQualifierSpec@0:422..429 `Storage`
+            StorageQualifier@0:422..429 `uniform`
+              Uniform
+          TypeSpecifier@0:430..441
+            TypeSpecifierNonArray@0:430..441 `atomic_uint`
+              AtomicUInt
+ExternalDeclaration@0:453..503 `Declaration`
+  Declaration@0:453..503 `InitDeclaratorList`
+    InitDeclaratorList@0:453..502
+      SingleDeclaration@0:453..502
+        FullySpecifiedType@0:453..493
+          TypeQualifierSpec@0:453..473 `Layout`
+            LayoutQualifier@0:453..473
+              LayoutQualifierSpec@0:461..472 `Identifier`
+                Identifier@0:461..468 `binding`
+                IntConst `0`
+          TypeQualifierSpec@0:474..481 `Storage`
+            StorageQualifier@0:474..481 `uniform`
+              Uniform
+          TypeSpecifier@0:482..493
+            TypeSpecifierNonArray@0:482..493 `atomic_uint`
+              AtomicUInt
+ExternalDeclaration@0:507..690 `FunctionDefinition`
+  FunctionDefinition@0:507..690
+    FunctionPrototype@0:507..517
+      FullySpecifiedType@0:507..511
+        TypeSpecifier@0:507..511
+          TypeSpecifierNonArray@0:507..511 `vec4`
+            Vec4
+      Identifier@0:512..515 `foo`
+    CompoundStatement@0:518..690
+      Statement@0:525..602 `Declaration`
+        Declaration@0:525..602 `InitDeclaratorList`
+          InitDeclaratorList@0:525..601
+            SingleDeclaration@0:525..601
+              FullySpecifiedType@0:525..529
+                TypeSpecifier@0:525..529
+                  TypeSpecifierNonArray@0:525..529 `uint`
+                    UInt
+              Expr `Binary`
+                BinaryOp@0:567..568 `+`
+                Expr `FunCall`
+                  FunIdentifier@0:534..556 `Expr`
+                    Expr `Variable`
+                      Identifier@0:534..556 `atomicCounterIncrement`
+                  Expr@0:557..565 `Variable`
+                    Identifier@0:557..565 `counter2`
+                Expr `FunCall`
+                  FunIdentifier@0:569..591 `Expr`
+                    Expr `Variable`
+                      Identifier@0:569..591 `atomicCounterDecrement`
+                  Expr@0:592..600 `Variable`
+                    Identifier@0:592..600 `counter3`
+      Statement@0:608..659 `Declaration`
+        Declaration@0:608..659 `InitDeclaratorList`
+          InitDeclaratorList@0:608..658
+            SingleDeclaration@0:608..658
+              FullySpecifiedType@0:608..612
+                TypeSpecifier@0:608..612
+                  TypeSpecifierNonArray@0:608..612 `vec4`
+                    Vec4
+              Expr `Binary`
+                BinaryOp@0:655..656 `+`
+                Expr `Binary`
+                  BinaryOp@0:650..651 `+`
+                  Expr `Binary`
+                    BinaryOp@0:619..620 `+`
+                    Expr `Variable`
+                      Identifier@0:617..618 `a`
+                    Expr `FunCall`
+                      FunIdentifier@0:621..625 `TypeSpecifier`
+                        TypeSpecifier
+                          TypeSpecifierNonArray@0:621..625 `vec4`
+                            Vec4
+                      Expr@0:626..630 `Dot`
+                        Expr `Variable`
+                          Identifier@0:626..628 `b1`
+                        Identifier@0:629..630 `x`
+                      Expr@0:632..636 `Dot`
+                        Expr `Variable`
+                          Identifier@0:632..634 `b1`
+                        Identifier@0:635..636 `y`
+                      Expr@0:638..642 `Dot`
+                        Expr `Variable`
+                          Identifier@0:638..640 `b2`
+                        Identifier@0:641..642 `x`
+                      Expr@0:644..648 `Dot`
+                        Expr `Variable`
+                          Identifier@0:644..646 `b2`
+                        Identifier@0:647..648 `y`
+                  Expr `Variable`
+                    Identifier@0:652..654 `c2`
+                Expr `Variable`
+                  Identifier@0:657..658 `d`
+      Statement@0:667..687 `Jump`
+        JumpStatement@0:667..687 `return`
+          BinaryOp@0:683..684 `*`
+          Expr `FunCall`
+            FunIdentifier@0:674..679 `TypeSpecifier`
+              TypeSpecifier
+                TypeSpecifierNonArray@0:674..679 `float`
+                  Float
+            Expr@0:680..681 `Variable`
+              Identifier@0:680..681 `j`
+          Expr `Variable`
+            Identifier@0:685..686 `v`
+ExternalDeclaration@0:694..814 `FunctionDefinition`
+  FunctionDefinition@0:694..814
+    FunctionPrototype@0:694..705
+      FullySpecifiedType@0:694..698
+        TypeSpecifier@0:694..698
+          TypeSpecifierNonArray@0:694..698 `void`
+            Void
+      Identifier@0:699..703 `main`
+    CompoundStatement@0:706..814
+      Statement@0:715..730 `Declaration`
+        Declaration@0:715..730 `InitDeclaratorList`
+          InitDeclaratorList@0:715..729
+            SingleDeclaration@0:715..729
+              FullySpecifiedType@0:715..719
+                TypeSpecifier@0:715..719
+                  TypeSpecifierNonArray@0:715..719 `vec4`
+                    Vec4
+              Expr `FunCall`
+                FunIdentifier@0:724..727 `Expr`
+                  Expr `Variable`
+                    Identifier@0:724..727 `foo`
+      Statement@0:736..759 `Expression`
+        ExprStatement@0:736..759
+          Expr `Variable`
+            Identifier@0:736..737 `v`
+          AssignmentOp@0:738..739 `=`
+          Expr `Binary`
+            BinaryOp@0:742..743 `+`
+            Expr `Variable`
+              Identifier@0:740..741 `v`
+            Expr `Bracket`
+              Expr `Variable`
+                Identifier@0:744..745 `s`
+              Expr `Variable`
+                Identifier@0:746..757 `gl_VertexID`
+      Statement@0:765..798 `Expression`
+        ExprStatement@0:765..798
+          Expr `Dot`
+            Expr `Variable`
+              Identifier@0:765..766 `v`
+            Identifier@0:767..768 `x`
+          AssignmentOp@0:769..770 `=`
+          Expr `Binary`
+            BinaryOp@0:775..776 `-`
+            Expr `Dot`
+              Expr `Variable`
+                Identifier@0:771..772 `v`
+              Identifier@0:773..774 `x`
+            Expr `FunCall`
+              FunIdentifier@0:777..782 `TypeSpecifier`
+                TypeSpecifier
+                  TypeSpecifierNonArray@0:777..782 `float`
+                    Float
+              Expr@0:783..796 `Variable`
+                Identifier@0:783..796 `gl_InstanceID`
+      Statement@0:804..811 `Expression`
+        ExprStatement@0:804..811
+          Expr `Variable`
+            Identifier@0:804..806 `io`
+          AssignmentOp@0:807..808 `=`
+          Expr `Variable`
+            Identifier@0:809..810 `v`

@@ -1,0 +1,46 @@
+ExternalDeclaration@0:0..12 `Preprocessor`
+  Preprocessor@0:0..12 `#version`
+    PreprocessorVersion@0:9..12 `460`
+      ShortConst `460`
+ExternalDeclaration@0:16..60 `FunctionDefinition`
+  FunctionDefinition@0:16..60
+    FunctionPrototype@0:16..26
+      FullySpecifiedType@0:16..20
+        TypeSpecifier@0:16..20
+          TypeSpecifierNonArray@0:16..20 `void`
+            Void
+      Identifier@0:21..24 `bar`
+    CompoundStatement@0:28..60
+      Statement@0:35..57 `Expression`
+        ExprStatement@0:35..57
+          Expr `Variable`
+            Identifier@0:35..46 `gl_Position`
+          AssignmentOp@0:47..48 `=`
+          Expr `FunCall`
+            FunIdentifier@0:49..53 `TypeSpecifier`
+              TypeSpecifier
+                TypeSpecifierNonArray@0:49..53 `vec4`
+                  Vec4
+            Expr@0:54..55 `IntConst`
+              IntConst `1`
+ExternalDeclaration@0:64..109 `FunctionDefinition`
+  FunctionDefinition@0:64..109
+    FunctionPrototype@0:64..75
+      FullySpecifiedType@0:64..68
+        TypeSpecifier@0:64..68
+          TypeSpecifierNonArray@0:64..68 `void`
+            Void
+      Identifier@0:69..73 `main`
+    CompoundStatement@0:77..109
+      Statement@0:84..106 `Expression`
+        ExprStatement@0:84..106
+          Expr `Variable`
+            Identifier@0:84..95 `gl_Position`
+          AssignmentOp@0:96..97 `=`
+          Expr `FunCall`
+            FunIdentifier@0:98..102 `TypeSpecifier`
+              TypeSpecifier
+                TypeSpecifierNonArray@0:98..102 `vec4`
+                  Vec4
+            Expr@0:103..104 `IntConst`
+              IntConst `1`

@@ -1,0 +1,56 @@
+ExternalDeclaration@0:0..15 `Preprocessor`
+  Preprocessor@0:0..15 `#version`
+    PreprocessorVersion@0:9..15 `320`
+      ShortConst `320`
+ExternalDeclaration@0:17..64 `Preprocessor`
+  Preprocessor@0:17..64 `#extension`
+    PreprocessorExtension@0:28..64
+      PreprocessorExtensionName@0:28..64 `Specific`
+        String `GL_KHR_shader_subgroup_basic`
+ExternalDeclaration@0:66..102 `Declaration`
+  Declaration@0:66..102 `InitDeclaratorList`
+    InitDeclaratorList@0:66..101
+      SingleDeclaration@0:66..101
+        FullySpecifiedType@0:66..96
+          TypeQualifierSpec@0:66..86 `Layout`
+            LayoutQualifier@0:66..86
+              LayoutQualifierSpec@0:73..85 `Identifier`
+                Identifier@0:73..81 `location`
+                IntConst `0`
+          TypeQualifierSpec@0:87..90 `Storage`
+            StorageQualifier@0:87..90 `out`
+              Out
+          TypeSpecifier@0:91..96
+            TypeSpecifierNonArray@0:91..96 `uvec4`
+              UVec4
+ExternalDeclaration@0:104..191 `FunctionDefinition`
+  FunctionDefinition@0:104..191
+    FunctionPrototype@0:104..120
+      FullySpecifiedType@0:104..108
+        TypeSpecifier@0:104..108
+          TypeSpecifierNonArray@0:104..108 `void`
+            Void
+      Identifier@0:109..113 `main`
+      FunctionParameterDeclaration@0:115..119 `Unnamed`
+        TypeSpecifier@0:115..119
+          TypeSpecifierNonArray@0:115..119 `void`
+            Void
+    CompoundStatement@0:122..191
+      Statement@0:127..188 `Expression`
+        ExprStatement@0:127..188
+          Expr `Variable`
+            Identifier@0:127..131 `data`
+          AssignmentOp@0:132..133 `=`
+          Expr `FunCall`
+            FunIdentifier@0:134..139 `TypeSpecifier`
+              TypeSpecifier
+                TypeSpecifierNonArray@0:134..139 `uvec4`
+                  UVec4
+            Expr@0:140..155 `Variable`
+              Identifier@0:140..155 `gl_SubgroupSize`
+            Expr@0:157..180 `Variable`
+              Identifier@0:157..180 `gl_SubgroupInvocationID`
+            Expr@0:182..183 `IntConst`
+              IntConst `0`
+            Expr@0:185..186 `IntConst`
+              IntConst `0`

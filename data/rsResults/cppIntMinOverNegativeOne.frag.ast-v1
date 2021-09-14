@@ -1,0 +1,22 @@
+ExternalDeclaration@0:0..27 `Preprocessor`
+  Preprocessor@0:0..27 `#if`
+    PreprocessorIf@0:4..27 `(-2147483648 / -1) != 0`
+      String `(-2147483648 / -1) != 0`
+ExternalDeclaration@0:28..85 `Preprocessor`
+  Preprocessor@0:28..85 `#error`
+    PreprocessorError@0:35..85 `INT_MIN / -1 should yield 0, something went wrong.`
+      String `INT_MIN / -1 should yield 0, something went wrong.`
+ExternalDeclaration@0:86..92 `Preprocessor`
+  Preprocessor@0:86..92 `#endif`
+    EndIf
+ExternalDeclaration@0:93..120 `Preprocessor`
+  Preprocessor@0:93..120 `#if`
+    PreprocessorIf@0:97..120 `(-2147483648 % -1) != 0`
+      String `(-2147483648 % -1) != 0`
+ExternalDeclaration@0:121..178 `Preprocessor`
+  Preprocessor@0:121..178 `#error`
+    PreprocessorError@0:128..178 `INT_MIN % -1 should yield 0, something went wrong.`
+      String `INT_MIN % -1 should yield 0, something went wrong.`
+ExternalDeclaration@0:179..185 `Preprocessor`
+  Preprocessor@0:179..185 `#endif`
+    EndIf

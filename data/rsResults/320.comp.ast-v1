@@ -1,0 +1,92 @@
+ExternalDeclaration@0:0..15 `Preprocessor`
+  Preprocessor@0:0..15 `#version`
+    PreprocessorVersion@0:9..15 `320`
+      ShortConst `320`
+ExternalDeclaration@0:18..27 `Declaration`
+  Declaration@0:18..27 `InitDeclaratorList`
+    InitDeclaratorList@0:18..26
+      SingleDeclaration@0:18..26
+        FullySpecifiedType@0:18..23
+          TypeSpecifier@0:18..23
+            TypeSpecifierNonArray@0:18..23 `float`
+              Float
+ExternalDeclaration@0:28..37 `Declaration`
+  Declaration@0:28..37 `InitDeclaratorList`
+    InitDeclaratorList@0:28..36
+      SingleDeclaration@0:28..36
+        FullySpecifiedType@0:28..33
+          TypeSpecifier@0:28..33
+            TypeSpecifierNonArray@0:28..33 `float`
+              Float
+ExternalDeclaration@0:40..217 `FunctionDefinition`
+  FunctionDefinition@0:40..217
+    FunctionPrototype@0:40..51
+      FullySpecifiedType@0:40..44
+        TypeSpecifier@0:40..44
+          TypeSpecifierNonArray@0:40..44 `void`
+            Void
+      Identifier@0:45..49 `main`
+    CompoundStatement@0:52..217
+      Statement@0:58..67 `Expression`
+        ExprStatement@0:58..67
+          FunIdentifier@0:58..62 `Expr`
+            Expr `Variable`
+              Identifier@0:58..62 `dFdx`
+          Expr@0:63..65 `Variable`
+            Identifier@0:63..65 `fX`
+      Statement@0:72..81 `Expression`
+        ExprStatement@0:72..81
+          FunIdentifier@0:72..76 `Expr`
+            Expr `Variable`
+              Identifier@0:72..76 `dFdy`
+          Expr@0:77..79 `Variable`
+            Identifier@0:77..79 `fY`
+      Statement@0:86..97 `Expression`
+        ExprStatement@0:86..97
+          FunIdentifier@0:86..92 `Expr`
+            Expr `Variable`
+              Identifier@0:86..92 `fwidth`
+          Expr@0:93..95 `Variable`
+            Identifier@0:93..95 `fX`
+      Statement@0:102..117 `Expression`
+        ExprStatement@0:102..117
+          FunIdentifier@0:102..112 `Expr`
+            Expr `Variable`
+              Identifier@0:102..112 `dFdxCoarse`
+          Expr@0:113..115 `Variable`
+            Identifier@0:113..115 `fX`
+      Statement@0:122..137 `Expression`
+        ExprStatement@0:122..137
+          FunIdentifier@0:122..132 `Expr`
+            Expr `Variable`
+              Identifier@0:122..132 `dFdyCoarse`
+          Expr@0:133..135 `Variable`
+            Identifier@0:133..135 `fY`
+      Statement@0:142..159 `Expression`
+        ExprStatement@0:142..159
+          FunIdentifier@0:142..154 `Expr`
+            Expr `Variable`
+              Identifier@0:142..154 `fwidthCoarse`
+          Expr@0:155..157 `Variable`
+            Identifier@0:155..157 `fX`
+      Statement@0:164..177 `Expression`
+        ExprStatement@0:164..177
+          FunIdentifier@0:164..172 `Expr`
+            Expr `Variable`
+              Identifier@0:164..172 `dFdxFine`
+          Expr@0:173..175 `Variable`
+            Identifier@0:173..175 `fX`
+      Statement@0:182..195 `Expression`
+        ExprStatement@0:182..195
+          FunIdentifier@0:182..190 `Expr`
+            Expr `Variable`
+              Identifier@0:182..190 `dFdyFine`
+          Expr@0:191..193 `Variable`
+            Identifier@0:191..193 `fY`
+      Statement@0:200..215 `Expression`
+        ExprStatement@0:200..215
+          FunIdentifier@0:200..210 `Expr`
+            Expr `Variable`
+              Identifier@0:200..210 `fwidthFine`
+          Expr@0:211..213 `Variable`
+            Identifier@0:211..213 `fX`

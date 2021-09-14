@@ -1,0 +1,49 @@
+ExternalDeclaration@0:0..12 `Preprocessor`
+  Preprocessor@0:0..12 `#version`
+    PreprocessorVersion@0:9..12 `450`
+      ShortConst `450`
+ExternalDeclaration@0:16..119 `Declaration`
+  Declaration@0:16..119 `Block`
+    Block@0:16..118
+      TypeQualifier@0:16..46
+        TypeQualifierSpec@0:16..38 `Layout`
+          LayoutQualifier@0:16..38
+            LayoutQualifierSpec@0:24..37 `Identifier`
+              Identifier@0:24..37 `push_constant`
+        TypeQualifierSpec@0:39..46 `Storage`
+          StorageQualifier@0:39..46 `uniform`
+            Uniform
+      Identifier@0:47..64 `PushConstantBlock`
+      StructFieldSpecifier@0:70..81
+        TypeSpecifier@0:70..74
+          TypeSpecifierNonArray@0:70..74 `vec4`
+            Vec4
+        ArrayedIdentifier@0:75..80
+          Identifier@0:75..80 `color`
+      StructFieldSpecifier@0:84..96
+        TypeSpecifier@0:84..88
+          TypeSpecifierNonArray@0:84..88 `vec4`
+            Vec4
+        ArrayedIdentifier@0:89..95
+          Identifier@0:89..95 `color2`
+      StructFieldSpecifier@0:99..111
+        TypeSpecifier@0:99..104
+          TypeSpecifierNonArray@0:99..104 `float`
+            Float
+        ArrayedIdentifier@0:105..110
+          Identifier@0:105..110 `scale`
+      Identifier@0:115..118 `uPC`
+ExternalDeclaration@0:123..166 `FunctionDefinition`
+  FunctionDefinition@0:123..166
+    FunctionPrototype@0:123..140
+      FullySpecifiedType@0:123..128
+        TypeSpecifier@0:123..128
+          TypeSpecifierNonArray@0:123..128 `float`
+            Float
+      Identifier@0:130..138 `getScale`
+    CompoundStatement@0:142..166
+      Statement@0:146..163 `Jump`
+        JumpStatement@0:146..163 `return`
+          Expr `Variable`
+            Identifier@0:153..156 `uPC`
+          Identifier@0:157..162 `scale`

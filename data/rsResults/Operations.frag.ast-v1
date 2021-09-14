@@ -1,0 +1,1535 @@
+ExternalDeclaration@0:0..12 `Preprocessor`
+  Preprocessor@0:0..12 `#version`
+    PreprocessorVersion@0:9..12 `130`
+      ShortConst `130`
+ExternalDeclaration@0:16..35 `Declaration`
+  Declaration@0:16..35 `InitDeclaratorList`
+    InitDeclaratorList@0:16..34
+      SingleDeclaration@0:16..34
+        FullySpecifiedType@0:16..29
+          TypeQualifierSpec@0:16..23 `Storage`
+            StorageQualifier@0:16..23 `uniform`
+              Uniform
+          TypeSpecifier@0:24..29
+            TypeSpecifierNonArray@0:24..29 `ivec4`
+              IVec4
+ExternalDeclaration@0:37..54 `Declaration`
+  Declaration@0:37..54 `InitDeclaratorList`
+    InitDeclaratorList@0:37..53
+      SingleDeclaration@0:37..53
+        FullySpecifiedType@0:37..49
+          TypeQualifierSpec@0:37..44 `Storage`
+            StorageQualifier@0:37..44 `uniform`
+              Uniform
+          TypeSpecifier@0:45..49
+            TypeSpecifierNonArray@0:45..49 `vec4`
+              Vec4
+ExternalDeclaration@0:56..72 `Declaration`
+  Declaration@0:56..72 `InitDeclaratorList`
+    InitDeclaratorList@0:56..71
+      SingleDeclaration@0:56..71
+        FullySpecifiedType@0:56..68
+          TypeQualifierSpec@0:56..63 `Storage`
+            StorageQualifier@0:56..63 `uniform`
+              Uniform
+          TypeSpecifier@0:64..68
+            TypeSpecifierNonArray@0:64..68 `bool`
+              Bool
+ExternalDeclaration@0:74..99 `Declaration`
+  Declaration@0:74..99 `InitDeclaratorList`
+    InitDeclaratorList@0:74..98
+      SingleDeclaration@0:74..92
+        FullySpecifiedType@0:74..87
+          TypeQualifierSpec@0:74..81 `Storage`
+            StorageQualifier@0:74..81 `uniform`
+              Uniform
+          TypeSpecifier@0:82..87
+            TypeSpecifierNonArray@0:82..87 `bvec4`
+              BVec4
+      SingleDeclarationNoType@0:94..98
+        ArrayedIdentifier@0:94..98
+          Identifier@0:94..98 `ub42`
+ExternalDeclaration@0:101..118 `Declaration`
+  Declaration@0:101..118 `InitDeclaratorList`
+    InitDeclaratorList@0:101..117
+      SingleDeclaration@0:101..117
+        FullySpecifiedType@0:101..114
+          TypeQualifierSpec@0:101..108 `Storage`
+            StorageQualifier@0:101..108 `uniform`
+              Uniform
+          TypeSpecifier@0:109..114
+            TypeSpecifierNonArray@0:109..114 `float`
+              Float
+ExternalDeclaration@0:120..135 `Declaration`
+  Declaration@0:120..135 `InitDeclaratorList`
+    InitDeclaratorList@0:120..134
+      SingleDeclaration@0:120..134
+        FullySpecifiedType@0:120..131
+          TypeQualifierSpec@0:120..127 `Storage`
+            StorageQualifier@0:120..127 `uniform`
+              Uniform
+          TypeSpecifier@0:128..131
+            TypeSpecifierNonArray@0:128..131 `int`
+              Int
+ExternalDeclaration@0:141..160 `Declaration`
+  Declaration@0:141..160 `InitDeclaratorList`
+    InitDeclaratorList@0:141..159
+      SingleDeclaration@0:141..159
+        FullySpecifiedType@0:141..154
+          TypeQualifierSpec@0:141..148 `Storage`
+            StorageQualifier@0:141..148 `uniform`
+              Uniform
+          TypeSpecifier@0:149..154
+            TypeSpecifierNonArray@0:149..154 `uvec4`
+              UVec4
+ExternalDeclaration@0:162..179 `Declaration`
+  Declaration@0:162..179 `InitDeclaratorList`
+    InitDeclaratorList@0:162..178
+      SingleDeclaration@0:162..178
+        FullySpecifiedType@0:162..174
+          TypeQualifierSpec@0:162..169 `Storage`
+            StorageQualifier@0:162..169 `uniform`
+              Uniform
+          TypeSpecifier@0:170..174
+            TypeSpecifierNonArray@0:170..174 `uint`
+              UInt
+ExternalDeclaration@0:185..2996 `FunctionDefinition`
+  FunctionDefinition@0:185..2996
+    FunctionPrototype@0:185..196
+      FullySpecifiedType@0:185..189
+        TypeSpecifier@0:185..189
+          TypeSpecifierNonArray@0:185..189 `void`
+            Void
+      Identifier@0:190..194 `main`
+    CompoundStatement@0:198..2996
+      Statement@0:205..212 `Declaration`
+        Declaration@0:205..212 `InitDeclaratorList`
+          InitDeclaratorList@0:205..211
+            SingleDeclaration@0:205..211
+              FullySpecifiedType@0:205..209
+                TypeSpecifier@0:205..209
+                  TypeSpecifierNonArray@0:205..209 `vec4`
+                    Vec4
+      Statement@0:215..223 `Declaration`
+        Declaration@0:215..223 `InitDeclaratorList`
+          InitDeclaratorList@0:215..222
+            SingleDeclaration@0:215..222
+              FullySpecifiedType@0:215..220
+                TypeSpecifier@0:215..220
+                  TypeSpecifierNonArray@0:215..220 `float`
+                    Float
+      Statement@0:226..233 `Declaration`
+        Declaration@0:226..233 `InitDeclaratorList`
+          InitDeclaratorList@0:226..232
+            SingleDeclaration@0:226..232
+              FullySpecifiedType@0:226..230
+                TypeSpecifier@0:226..230
+                  TypeSpecifierNonArray@0:226..230 `bool`
+                    Bool
+      Statement@0:236..246 `Declaration`
+        Declaration@0:236..246 `InitDeclaratorList`
+          InitDeclaratorList@0:236..245
+            SingleDeclaration@0:236..245
+              FullySpecifiedType@0:236..241
+                TypeSpecifier@0:236..241
+                  TypeSpecifierNonArray@0:236..241 `bvec4`
+                    BVec4
+      Statement@0:249..255 `Declaration`
+        Declaration@0:249..255 `InitDeclaratorList`
+          InitDeclaratorList@0:249..254
+            SingleDeclaration@0:249..254
+              FullySpecifiedType@0:249..252
+                TypeSpecifier@0:249..252
+                  TypeSpecifierNonArray@0:249..252 `int`
+                    Int
+      Statement@0:260..267 `Declaration`
+        Declaration@0:260..267 `InitDeclaratorList`
+          InitDeclaratorList@0:260..266
+            SingleDeclaration@0:260..266
+              FullySpecifiedType@0:260..264
+                TypeSpecifier@0:260..264
+                  TypeSpecifierNonArray@0:260..264 `uint`
+                    UInt
+      Statement@0:297..314 `Expression`
+        ExprStatement@0:297..314
+          Expr `Variable`
+            Identifier@0:297..298 `v`
+          AssignmentOp@0:299..300 `=`
+          Expr `FunCall`
+            FunIdentifier@0:301..308 `Expr`
+              Expr `Variable`
+                Identifier@0:301..308 `radians`
+            Expr@0:309..312 `Variable`
+              Identifier@0:309..312 `uv4`
+      Statement@0:320..336 `Expression`
+        ExprStatement@0:320..336
+          Expr `Variable`
+            Identifier@0:320..321 `v`
+          AssignmentOp@0:322..324 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:325..332 `Expr`
+              Expr `Variable`
+                Identifier@0:325..332 `degrees`
+            Expr@0:333..334 `Variable`
+              Identifier@0:333..334 `v`
+      Statement@0:342..367 `Expression`
+        ExprStatement@0:342..367
+          Expr `Variable`
+            Identifier@0:342..343 `v`
+          AssignmentOp@0:344..346 `+=`
+          Expr `Comma`
+            Expr `Assignment`
+              Expr `Variable`
+                Identifier@0:348..349 `i`
+              AssignmentOp@0:350..351 `=`
+              Expr `Binary`
+                BinaryOp@0:354..355 `*`
+                Expr `Variable`
+                  Identifier@0:352..354 `ui`
+                Expr `Variable`
+                  Identifier@0:355..357 `ui`
+            Expr `FunCall`
+              FunIdentifier@0:359..362 `Expr`
+                Expr `Variable`
+                  Identifier@0:359..362 `sin`
+              Expr@0:363..364 `Variable`
+                Identifier@0:363..364 `v`
+      Statement@0:373..385 `Expression`
+        ExprStatement@0:373..385
+          Expr `Variable`
+            Identifier@0:373..374 `v`
+          AssignmentOp@0:375..377 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:378..381 `Expr`
+              Expr `Variable`
+                Identifier@0:378..381 `cos`
+            Expr@0:382..383 `Variable`
+              Identifier@0:382..383 `v`
+      Statement@0:391..403 `Expression`
+        ExprStatement@0:391..403
+          Expr `Variable`
+            Identifier@0:391..392 `v`
+          AssignmentOp@0:393..395 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:396..399 `Expr`
+              Expr `Variable`
+                Identifier@0:396..399 `tan`
+            Expr@0:400..401 `Variable`
+              Identifier@0:400..401 `v`
+      Statement@0:409..422 `Expression`
+        ExprStatement@0:409..422
+          Expr `Variable`
+            Identifier@0:409..410 `v`
+          AssignmentOp@0:411..413 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:414..418 `Expr`
+              Expr `Variable`
+                Identifier@0:414..418 `asin`
+            Expr@0:419..420 `Variable`
+              Identifier@0:419..420 `v`
+      Statement@0:428..441 `Expression`
+        ExprStatement@0:428..441
+          Expr `Variable`
+            Identifier@0:428..429 `v`
+          AssignmentOp@0:430..432 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:433..437 `Expr`
+              Expr `Variable`
+                Identifier@0:433..437 `acos`
+            Expr@0:438..439 `Variable`
+              Identifier@0:438..439 `v`
+      Statement@0:449..462 `Expression`
+        ExprStatement@0:449..462
+          Expr `Variable`
+            Identifier@0:449..450 `v`
+          AssignmentOp@0:451..453 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:454..458 `Expr`
+              Expr `Variable`
+                Identifier@0:454..458 `atan`
+            Expr@0:459..460 `Variable`
+              Identifier@0:459..460 `v`
+      Statement@0:468..481 `Expression`
+        ExprStatement@0:468..481
+          Expr `Variable`
+            Identifier@0:468..469 `v`
+          AssignmentOp@0:470..472 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:473..477 `Expr`
+              Expr `Variable`
+                Identifier@0:473..477 `sinh`
+            Expr@0:478..479 `Variable`
+              Identifier@0:478..479 `v`
+      Statement@0:487..500 `Expression`
+        ExprStatement@0:487..500
+          Expr `Variable`
+            Identifier@0:487..488 `v`
+          AssignmentOp@0:489..491 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:492..496 `Expr`
+              Expr `Variable`
+                Identifier@0:492..496 `cosh`
+            Expr@0:497..498 `Variable`
+              Identifier@0:497..498 `v`
+      Statement@0:506..519 `Expression`
+        ExprStatement@0:506..519
+          Expr `Variable`
+            Identifier@0:506..507 `v`
+          AssignmentOp@0:508..510 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:511..515 `Expr`
+              Expr `Variable`
+                Identifier@0:511..515 `tanh`
+            Expr@0:516..517 `Variable`
+              Identifier@0:516..517 `v`
+      Statement@0:525..539 `Expression`
+        ExprStatement@0:525..539
+          Expr `Variable`
+            Identifier@0:525..526 `v`
+          AssignmentOp@0:527..529 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:530..535 `Expr`
+              Expr `Variable`
+                Identifier@0:530..535 `asinh`
+            Expr@0:536..537 `Variable`
+              Identifier@0:536..537 `v`
+      Statement@0:545..559 `Expression`
+        ExprStatement@0:545..559
+          Expr `Variable`
+            Identifier@0:545..546 `v`
+          AssignmentOp@0:547..549 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:550..555 `Expr`
+              Expr `Variable`
+                Identifier@0:550..555 `acosh`
+            Expr@0:556..557 `Variable`
+              Identifier@0:556..557 `v`
+      Statement@0:565..579 `Expression`
+        ExprStatement@0:565..579
+          Expr `Variable`
+            Identifier@0:565..566 `v`
+          AssignmentOp@0:567..569 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:570..575 `Expr`
+              Expr `Variable`
+                Identifier@0:570..575 `atanh`
+            Expr@0:576..577 `Variable`
+              Identifier@0:576..577 `v`
+      Statement@0:587..602 `Expression`
+        ExprStatement@0:587..602
+          Expr `Variable`
+            Identifier@0:587..588 `v`
+          AssignmentOp@0:589..591 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:592..595 `Expr`
+              Expr `Variable`
+                Identifier@0:592..595 `pow`
+            Expr@0:596..597 `Variable`
+              Identifier@0:596..597 `v`
+            Expr@0:599..600 `Variable`
+              Identifier@0:599..600 `v`
+      Statement@0:608..620 `Expression`
+        ExprStatement@0:608..620
+          Expr `Variable`
+            Identifier@0:608..609 `v`
+          AssignmentOp@0:610..612 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:613..616 `Expr`
+              Expr `Variable`
+                Identifier@0:613..616 `exp`
+            Expr@0:617..618 `Variable`
+              Identifier@0:617..618 `v`
+      Statement@0:626..638 `Expression`
+        ExprStatement@0:626..638
+          Expr `Variable`
+            Identifier@0:626..627 `v`
+          AssignmentOp@0:628..630 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:631..634 `Expr`
+              Expr `Variable`
+                Identifier@0:631..634 `log`
+            Expr@0:635..636 `Variable`
+              Identifier@0:635..636 `v`
+      Statement@0:644..657 `Expression`
+        ExprStatement@0:644..657
+          Expr `Variable`
+            Identifier@0:644..645 `v`
+          AssignmentOp@0:646..648 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:649..653 `Expr`
+              Expr `Variable`
+                Identifier@0:649..653 `exp2`
+            Expr@0:654..655 `Variable`
+              Identifier@0:654..655 `v`
+      Statement@0:663..676 `Expression`
+        ExprStatement@0:663..676
+          Expr `Variable`
+            Identifier@0:663..664 `v`
+          AssignmentOp@0:665..667 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:668..672 `Expr`
+              Expr `Variable`
+                Identifier@0:668..672 `log2`
+            Expr@0:673..674 `Variable`
+              Identifier@0:673..674 `v`
+      Statement@0:682..695 `Expression`
+        ExprStatement@0:682..695
+          Expr `Variable`
+            Identifier@0:682..683 `v`
+          AssignmentOp@0:684..686 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:687..691 `Expr`
+              Expr `Variable`
+                Identifier@0:687..691 `sqrt`
+            Expr@0:692..693 `Variable`
+              Identifier@0:692..693 `v`
+      Statement@0:701..721 `Expression`
+        ExprStatement@0:701..721
+          Expr `Variable`
+            Identifier@0:701..702 `v`
+          AssignmentOp@0:703..705 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:706..717 `Expr`
+              Expr `Variable`
+                Identifier@0:706..717 `inversesqrt`
+            Expr@0:718..719 `Variable`
+              Identifier@0:718..719 `v`
+      Statement@0:727..739 `Expression`
+        ExprStatement@0:727..739
+          Expr `Variable`
+            Identifier@0:727..728 `v`
+          AssignmentOp@0:729..731 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:732..735 `Expr`
+              Expr `Variable`
+                Identifier@0:732..735 `abs`
+            Expr@0:736..737 `Variable`
+              Identifier@0:736..737 `v`
+      Statement@0:745..758 `Expression`
+        ExprStatement@0:745..758
+          Expr `Variable`
+            Identifier@0:745..746 `v`
+          AssignmentOp@0:747..749 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:750..754 `Expr`
+              Expr `Variable`
+                Identifier@0:750..754 `sign`
+            Expr@0:755..756 `Variable`
+              Identifier@0:755..756 `v`
+      Statement@0:764..778 `Expression`
+        ExprStatement@0:764..778
+          Expr `Variable`
+            Identifier@0:764..765 `v`
+          AssignmentOp@0:766..768 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:769..774 `Expr`
+              Expr `Variable`
+                Identifier@0:769..774 `floor`
+            Expr@0:775..776 `Variable`
+              Identifier@0:775..776 `v`
+      Statement@0:788..802 `Expression`
+        ExprStatement@0:788..802
+          Expr `Variable`
+            Identifier@0:788..789 `v`
+          AssignmentOp@0:790..792 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:793..798 `Expr`
+              Expr `Variable`
+                Identifier@0:793..798 `trunc`
+            Expr@0:799..800 `Variable`
+              Identifier@0:799..800 `v`
+      Statement@0:808..822 `Expression`
+        ExprStatement@0:808..822
+          Expr `Variable`
+            Identifier@0:808..809 `v`
+          AssignmentOp@0:810..812 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:813..818 `Expr`
+              Expr `Variable`
+                Identifier@0:813..818 `round`
+            Expr@0:819..820 `Variable`
+              Identifier@0:819..820 `v`
+      Statement@0:828..846 `Expression`
+        ExprStatement@0:828..846
+          Expr `Variable`
+            Identifier@0:828..829 `v`
+          AssignmentOp@0:830..832 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:833..842 `Expr`
+              Expr `Variable`
+                Identifier@0:833..842 `roundEven`
+            Expr@0:843..844 `Variable`
+              Identifier@0:843..844 `v`
+      Statement@0:856..869 `Expression`
+        ExprStatement@0:856..869
+          Expr `Variable`
+            Identifier@0:856..857 `v`
+          AssignmentOp@0:858..860 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:861..865 `Expr`
+              Expr `Variable`
+                Identifier@0:861..865 `ceil`
+            Expr@0:866..867 `Variable`
+              Identifier@0:866..867 `v`
+      Statement@0:875..889 `Expression`
+        ExprStatement@0:875..889
+          Expr `Variable`
+            Identifier@0:875..876 `v`
+          AssignmentOp@0:877..879 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:880..885 `Expr`
+              Expr `Variable`
+                Identifier@0:880..885 `fract`
+            Expr@0:886..887 `Variable`
+              Identifier@0:886..887 `v`
+      Statement@0:895..910 `Expression`
+        ExprStatement@0:895..910
+          Expr `Variable`
+            Identifier@0:895..896 `v`
+          AssignmentOp@0:897..899 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:900..903 `Expr`
+              Expr `Variable`
+                Identifier@0:900..903 `mod`
+            Expr@0:904..905 `Variable`
+              Identifier@0:904..905 `v`
+            Expr@0:907..908 `Variable`
+              Identifier@0:907..908 `v`
+      Statement@0:913..930 `Expression`
+        ExprStatement@0:913..930
+          Expr `Variable`
+            Identifier@0:913..914 `v`
+          AssignmentOp@0:915..917 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:918..921 `Expr`
+              Expr `Variable`
+                Identifier@0:918..921 `mod`
+            Expr@0:922..923 `Variable`
+              Identifier@0:922..923 `v`
+            Expr@0:925..928 `Dot`
+              Expr `Variable`
+                Identifier@0:925..926 `v`
+              Identifier@0:927..928 `x`
+      Statement@0:940..956 `Expression`
+        ExprStatement@0:940..956
+          Expr `Variable`
+            Identifier@0:940..941 `v`
+          AssignmentOp@0:942..944 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:945..949 `Expr`
+              Expr `Variable`
+                Identifier@0:945..949 `modf`
+            Expr@0:950..951 `Variable`
+              Identifier@0:950..951 `v`
+            Expr@0:953..954 `Variable`
+              Identifier@0:953..954 `v`
+      Statement@0:966..983 `Expression`
+        ExprStatement@0:966..983
+          Expr `Variable`
+            Identifier@0:966..967 `v`
+          AssignmentOp@0:968..970 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:971..974 `Expr`
+              Expr `Variable`
+                Identifier@0:971..974 `min`
+            Expr@0:975..976 `Variable`
+              Identifier@0:975..976 `v`
+            Expr@0:978..981 `Variable`
+              Identifier@0:978..981 `uv4`
+      Statement@0:989..1006 `Expression`
+        ExprStatement@0:989..1006
+          Expr `Variable`
+            Identifier@0:989..990 `v`
+          AssignmentOp@0:991..993 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:994..997 `Expr`
+              Expr `Variable`
+                Identifier@0:994..997 `max`
+            Expr@0:998..999 `Variable`
+              Identifier@0:998..999 `v`
+            Expr@0:1001..1004 `Variable`
+              Identifier@0:1001..1004 `uv4`
+      Statement@0:1012..1036 `Expression`
+        ExprStatement@0:1012..1036
+          Expr `Variable`
+            Identifier@0:1012..1013 `v`
+          AssignmentOp@0:1014..1016 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1017..1022 `Expr`
+              Expr `Variable`
+                Identifier@0:1017..1022 `clamp`
+            Expr@0:1023..1024 `Variable`
+              Identifier@0:1023..1024 `v`
+            Expr@0:1026..1029 `Variable`
+              Identifier@0:1026..1029 `uv4`
+            Expr@0:1031..1034 `Variable`
+              Identifier@0:1031..1034 `uv4`
+      Statement@0:1042..1058 `Expression`
+        ExprStatement@0:1042..1058
+          Expr `Variable`
+            Identifier@0:1042..1043 `v`
+          AssignmentOp@0:1044..1046 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1047..1050 `Expr`
+              Expr `Variable`
+                Identifier@0:1047..1050 `mix`
+            Expr@0:1051..1052 `Variable`
+              Identifier@0:1051..1052 `v`
+            Expr@0:1053..1054 `Variable`
+              Identifier@0:1053..1054 `v`
+            Expr@0:1055..1056 `Variable`
+              Identifier@0:1055..1056 `v`
+      Statement@0:1068..1086 `Expression`
+        ExprStatement@0:1068..1086
+          Expr `Variable`
+            Identifier@0:1068..1069 `v`
+          AssignmentOp@0:1070..1072 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1073..1076 `Expr`
+              Expr `Variable`
+                Identifier@0:1073..1076 `mix`
+            Expr@0:1077..1078 `Variable`
+              Identifier@0:1077..1078 `v`
+            Expr@0:1079..1080 `Variable`
+              Identifier@0:1079..1080 `v`
+            Expr@0:1081..1084 `Variable`
+              Identifier@0:1081..1084 `bv4`
+      Statement@0:1092..1122 `Expression`
+        ExprStatement@0:1092..1122
+          Expr `Variable`
+            Identifier@0:1092..1093 `v`
+          AssignmentOp@0:1094..1096 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1097..1111 `Expr`
+              Expr `Variable`
+                Identifier@0:1097..1111 `intBitsToFloat`
+            Expr@0:1112..1120 `FunCall`
+              FunIdentifier@0:1112..1117 `TypeSpecifier`
+                TypeSpecifier
+                  TypeSpecifierNonArray@0:1112..1117 `ivec4`
+                    IVec4
+              Expr@0:1118..1119 `Variable`
+                Identifier@0:1118..1119 `i`
+      Statement@0:1128..1154 `Expression`
+        ExprStatement@0:1128..1154
+          Expr `Variable`
+            Identifier@0:1128..1129 `v`
+          AssignmentOp@0:1130..1132 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1133..1148 `Expr`
+              Expr `Variable`
+                Identifier@0:1133..1148 `uintBitsToFloat`
+            Expr@0:1149..1152 `Variable`
+              Identifier@0:1149..1152 `uv4`
+      Statement@0:1160..1176 `Expression`
+        ExprStatement@0:1160..1176
+          Expr `Variable`
+            Identifier@0:1160..1161 `v`
+          AssignmentOp@0:1162..1164 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1165..1168 `Expr`
+              Expr `Variable`
+                Identifier@0:1165..1168 `fma`
+            Expr@0:1169..1170 `Variable`
+              Identifier@0:1169..1170 `v`
+            Expr@0:1171..1172 `Variable`
+              Identifier@0:1171..1172 `v`
+            Expr@0:1173..1174 `Variable`
+              Identifier@0:1173..1174 `v`
+      Statement@0:1182..1196 `Expression`
+        ExprStatement@0:1182..1196
+          Expr `Variable`
+            Identifier@0:1182..1183 `v`
+          AssignmentOp@0:1184..1186 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1187..1192 `Expr`
+              Expr `Variable`
+                Identifier@0:1187..1192 `frexp`
+            Expr@0:1193..1194 `Variable`
+              Identifier@0:1193..1194 `v`
+      Statement@0:1202..1216 `Expression`
+        ExprStatement@0:1202..1216
+          Expr `Variable`
+            Identifier@0:1202..1203 `v`
+          AssignmentOp@0:1204..1206 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1207..1212 `Expr`
+              Expr `Variable`
+                Identifier@0:1207..1212 `ldexp`
+            Expr@0:1213..1214 `Variable`
+              Identifier@0:1213..1214 `v`
+      Statement@0:1222..1246 `Expression`
+        ExprStatement@0:1222..1246
+          Expr `Variable`
+            Identifier@0:1222..1223 `v`
+          AssignmentOp@0:1224..1226 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1227..1242 `Expr`
+              Expr `Variable`
+                Identifier@0:1227..1242 `unpackUnorm2x16`
+            Expr@0:1243..1244 `Variable`
+              Identifier@0:1243..1244 `v`
+      Statement@0:1252..1275 `Expression`
+        ExprStatement@0:1252..1275
+          Expr `Variable`
+            Identifier@0:1252..1253 `v`
+          AssignmentOp@0:1254..1256 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1257..1271 `Expr`
+              Expr `Variable`
+                Identifier@0:1257..1271 `unpackUnorm4x8`
+            Expr@0:1272..1273 `Variable`
+              Identifier@0:1272..1273 `v`
+      Statement@0:1281..1304 `Expression`
+        ExprStatement@0:1281..1304
+          Expr `Variable`
+            Identifier@0:1281..1282 `v`
+          AssignmentOp@0:1283..1285 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1286..1300 `Expr`
+              Expr `Variable`
+                Identifier@0:1286..1300 `unpackSnorm4x8`
+            Expr@0:1301..1302 `Variable`
+              Identifier@0:1301..1302 `v`
+      Statement@0:1314..1329 `Expression`
+        ExprStatement@0:1314..1329
+          Expr `Variable`
+            Identifier@0:1314..1315 `v`
+          AssignmentOp@0:1316..1318 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1319..1323 `Expr`
+              Expr `Variable`
+                Identifier@0:1319..1323 `step`
+            Expr@0:1324..1325 `Variable`
+              Identifier@0:1324..1325 `v`
+            Expr@0:1326..1327 `Variable`
+              Identifier@0:1326..1327 `v`
+      Statement@0:1335..1358 `Expression`
+        ExprStatement@0:1335..1358
+          Expr `Variable`
+            Identifier@0:1335..1336 `v`
+          AssignmentOp@0:1337..1339 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1340..1350 `Expr`
+              Expr `Variable`
+                Identifier@0:1340..1350 `smoothstep`
+            Expr@0:1351..1352 `Variable`
+              Identifier@0:1351..1352 `v`
+            Expr@0:1353..1354 `Variable`
+              Identifier@0:1353..1354 `v`
+            Expr@0:1355..1356 `Variable`
+              Identifier@0:1355..1356 `v`
+      Statement@0:1364..1380 `Expression`
+        ExprStatement@0:1364..1380
+          Expr `Variable`
+            Identifier@0:1364..1365 `v`
+          AssignmentOp@0:1366..1368 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1369..1373 `Expr`
+              Expr `Variable`
+                Identifier@0:1369..1373 `step`
+            Expr@0:1374..1376 `Variable`
+              Identifier@0:1374..1376 `uf`
+            Expr@0:1377..1378 `Variable`
+              Identifier@0:1377..1378 `v`
+      Statement@0:1386..1411 `Expression`
+        ExprStatement@0:1386..1411
+          Expr `Variable`
+            Identifier@0:1386..1387 `v`
+          AssignmentOp@0:1388..1390 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1391..1401 `Expr`
+              Expr `Variable`
+                Identifier@0:1391..1401 `smoothstep`
+            Expr@0:1402..1404 `Variable`
+              Identifier@0:1402..1404 `uf`
+            Expr@0:1405..1407 `Variable`
+              Identifier@0:1405..1407 `uf`
+            Expr@0:1408..1409 `Variable`
+              Identifier@0:1408..1409 `v`
+      Statement@0:1417..1435 `Expression`
+        ExprStatement@0:1417..1435
+          Expr `Variable`
+            Identifier@0:1417..1418 `v`
+          AssignmentOp@0:1419..1421 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1422..1431 `Expr`
+              Expr `Variable`
+                Identifier@0:1422..1431 `normalize`
+            Expr@0:1432..1433 `Variable`
+              Identifier@0:1432..1433 `v`
+      Statement@0:1441..1467 `Expression`
+        ExprStatement@0:1441..1467
+          Expr `Variable`
+            Identifier@0:1441..1442 `v`
+          AssignmentOp@0:1443..1445 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1446..1457 `Expr`
+              Expr `Variable`
+                Identifier@0:1446..1457 `faceforward`
+            Expr@0:1458..1459 `Variable`
+              Identifier@0:1458..1459 `v`
+            Expr@0:1461..1462 `Variable`
+              Identifier@0:1461..1462 `v`
+            Expr@0:1464..1465 `Variable`
+              Identifier@0:1464..1465 `v`
+      Statement@0:1473..1492 `Expression`
+        ExprStatement@0:1473..1492
+          Expr `Variable`
+            Identifier@0:1473..1474 `v`
+          AssignmentOp@0:1475..1477 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1478..1485 `Expr`
+              Expr `Variable`
+                Identifier@0:1478..1485 `reflect`
+            Expr@0:1486..1487 `Variable`
+              Identifier@0:1486..1487 `v`
+            Expr@0:1489..1490 `Variable`
+              Identifier@0:1489..1490 `v`
+      Statement@0:1498..1521 `Expression`
+        ExprStatement@0:1498..1521
+          Expr `Variable`
+            Identifier@0:1498..1499 `v`
+          AssignmentOp@0:1500..1502 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1503..1510 `Expr`
+              Expr `Variable`
+                Identifier@0:1503..1510 `refract`
+            Expr@0:1511..1512 `Variable`
+              Identifier@0:1511..1512 `v`
+            Expr@0:1514..1515 `Variable`
+              Identifier@0:1514..1515 `v`
+            Expr@0:1517..1519 `Variable`
+              Identifier@0:1517..1519 `uf`
+      Statement@0:1527..1540 `Expression`
+        ExprStatement@0:1527..1540
+          Expr `Variable`
+            Identifier@0:1527..1528 `v`
+          AssignmentOp@0:1529..1531 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1532..1536 `Expr`
+              Expr `Variable`
+                Identifier@0:1532..1536 `dFdx`
+            Expr@0:1537..1538 `Variable`
+              Identifier@0:1537..1538 `v`
+      Statement@0:1546..1559 `Expression`
+        ExprStatement@0:1546..1559
+          Expr `Variable`
+            Identifier@0:1546..1547 `v`
+          AssignmentOp@0:1548..1550 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1551..1555 `Expr`
+              Expr `Variable`
+                Identifier@0:1551..1555 `dFdy`
+            Expr@0:1556..1557 `Variable`
+              Identifier@0:1556..1557 `v`
+      Statement@0:1565..1580 `Expression`
+        ExprStatement@0:1565..1580
+          Expr `Variable`
+            Identifier@0:1565..1566 `v`
+          AssignmentOp@0:1567..1569 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1570..1576 `Expr`
+              Expr `Variable`
+                Identifier@0:1570..1576 `fwidth`
+            Expr@0:1577..1578 `Variable`
+              Identifier@0:1577..1578 `v`
+      Statement@0:1622..1635 `Expression`
+        ExprStatement@0:1622..1635
+          Expr `Variable`
+            Identifier@0:1622..1623 `i`
+          AssignmentOp@0:1624..1626 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1627..1630 `Expr`
+              Expr `Variable`
+                Identifier@0:1627..1630 `abs`
+            Expr@0:1631..1633 `Variable`
+              Identifier@0:1631..1633 `ui`
+      Statement@0:1638..1651 `Expression`
+        ExprStatement@0:1638..1651
+          Expr `Variable`
+            Identifier@0:1638..1639 `i`
+          AssignmentOp@0:1640..1642 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1643..1647 `Expr`
+              Expr `Variable`
+                Identifier@0:1643..1647 `sign`
+            Expr@0:1648..1649 `Variable`
+              Identifier@0:1648..1649 `i`
+      Statement@0:1654..1670 `Expression`
+        ExprStatement@0:1654..1670
+          Expr `Variable`
+            Identifier@0:1654..1655 `i`
+          AssignmentOp@0:1656..1658 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1659..1662 `Expr`
+              Expr `Variable`
+                Identifier@0:1659..1662 `min`
+            Expr@0:1663..1664 `Variable`
+              Identifier@0:1663..1664 `i`
+            Expr@0:1666..1668 `Variable`
+              Identifier@0:1666..1668 `ui`
+      Statement@0:1673..1689 `Expression`
+        ExprStatement@0:1673..1689
+          Expr `Variable`
+            Identifier@0:1673..1674 `i`
+          AssignmentOp@0:1675..1677 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1678..1681 `Expr`
+              Expr `Variable`
+                Identifier@0:1678..1681 `max`
+            Expr@0:1682..1683 `Variable`
+              Identifier@0:1682..1683 `i`
+            Expr@0:1685..1687 `Variable`
+              Identifier@0:1685..1687 `ui`
+      Statement@0:1692..1714 `Expression`
+        ExprStatement@0:1692..1714
+          Expr `Variable`
+            Identifier@0:1692..1693 `i`
+          AssignmentOp@0:1694..1696 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1697..1702 `Expr`
+              Expr `Variable`
+                Identifier@0:1697..1702 `clamp`
+            Expr@0:1703..1704 `Variable`
+              Identifier@0:1703..1704 `i`
+            Expr@0:1706..1708 `Variable`
+              Identifier@0:1706..1708 `ui`
+            Expr@0:1710..1712 `Variable`
+              Identifier@0:1710..1712 `ui`
+      Statement@0:1719..1738 `Expression`
+        ExprStatement@0:1719..1738
+          FunIdentifier@0:1719..1734 `Expr`
+            Expr `Variable`
+              Identifier@0:1719..1734 `floatsBitsToInt`
+          Expr@0:1735..1736 `Variable`
+            Identifier@0:1735..1736 `v`
+      Statement@0:1741..1758 `Expression`
+        ExprStatement@0:1741..1758
+          FunIdentifier@0:1741..1754 `Expr`
+            Expr `Variable`
+              Identifier@0:1741..1754 `packUnorm2x16`
+          Expr@0:1755..1756 `Variable`
+            Identifier@0:1755..1756 `v`
+      Statement@0:1761..1777 `Expression`
+        ExprStatement@0:1761..1777
+          FunIdentifier@0:1761..1773 `Expr`
+            Expr `Variable`
+              Identifier@0:1761..1773 `packUnorm4x8`
+          Expr@0:1774..1775 `Variable`
+            Identifier@0:1774..1775 `v`
+      Statement@0:1780..1796 `Expression`
+        ExprStatement@0:1780..1796
+          FunIdentifier@0:1780..1792 `Expr`
+            Expr `Variable`
+              Identifier@0:1780..1792 `packSnorm4x8`
+          Expr@0:1793..1794 `Variable`
+            Identifier@0:1793..1794 `v`
+      Statement@0:1826..1839 `Expression`
+        ExprStatement@0:1826..1839
+          Expr `Variable`
+            Identifier@0:1826..1827 `u`
+          AssignmentOp@0:1828..1829 `=`
+          Expr `FunCall`
+            FunIdentifier@0:1830..1833 `Expr`
+              Expr `Variable`
+                Identifier@0:1830..1833 `abs`
+            Expr@0:1834..1837 `Variable`
+              Identifier@0:1834..1837 `uui`
+      Statement@0:1845..1858 `Expression`
+        ExprStatement@0:1845..1858
+          Expr `Variable`
+            Identifier@0:1845..1846 `u`
+          AssignmentOp@0:1847..1849 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1850..1854 `Expr`
+              Expr `Variable`
+                Identifier@0:1850..1854 `sign`
+            Expr@0:1855..1856 `Variable`
+              Identifier@0:1855..1856 `u`
+      Statement@0:1864..1881 `Expression`
+        ExprStatement@0:1864..1881
+          Expr `Variable`
+            Identifier@0:1864..1865 `u`
+          AssignmentOp@0:1866..1868 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1869..1872 `Expr`
+              Expr `Variable`
+                Identifier@0:1869..1872 `min`
+            Expr@0:1873..1874 `Variable`
+              Identifier@0:1873..1874 `u`
+            Expr@0:1876..1879 `Variable`
+              Identifier@0:1876..1879 `uui`
+      Statement@0:1887..1904 `Expression`
+        ExprStatement@0:1887..1904
+          Expr `Variable`
+            Identifier@0:1887..1888 `u`
+          AssignmentOp@0:1889..1891 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1892..1895 `Expr`
+              Expr `Variable`
+                Identifier@0:1892..1895 `max`
+            Expr@0:1896..1897 `Variable`
+              Identifier@0:1896..1897 `u`
+            Expr@0:1899..1902 `Variable`
+              Identifier@0:1899..1902 `uui`
+      Statement@0:1910..1934 `Expression`
+        ExprStatement@0:1910..1934
+          Expr `Variable`
+            Identifier@0:1910..1911 `u`
+          AssignmentOp@0:1912..1914 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1915..1920 `Expr`
+              Expr `Variable`
+                Identifier@0:1915..1920 `clamp`
+            Expr@0:1921..1922 `Variable`
+              Identifier@0:1921..1922 `u`
+            Expr@0:1924..1927 `Variable`
+              Identifier@0:1924..1927 `uui`
+            Expr@0:1929..1932 `Variable`
+              Identifier@0:1929..1932 `uui`
+      Statement@0:1940..1963 `Expression`
+        ExprStatement@0:1940..1963
+          Expr `Variable`
+            Identifier@0:1940..1941 `u`
+          AssignmentOp@0:1942..1944 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1945..1959 `Expr`
+              Expr `Variable`
+                Identifier@0:1945..1959 `floatsBitToInt`
+            Expr@0:1960..1961 `Variable`
+              Identifier@0:1960..1961 `v`
+      Statement@0:1969..1991 `Expression`
+        ExprStatement@0:1969..1991
+          Expr `Variable`
+            Identifier@0:1969..1970 `u`
+          AssignmentOp@0:1971..1973 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:1974..1987 `Expr`
+              Expr `Variable`
+                Identifier@0:1974..1987 `packUnorm2x16`
+            Expr@0:1988..1989 `Variable`
+              Identifier@0:1988..1989 `v`
+      Statement@0:1997..2018 `Expression`
+        ExprStatement@0:1997..2018
+          Expr `Variable`
+            Identifier@0:1997..1998 `u`
+          AssignmentOp@0:1999..2001 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:2002..2014 `Expr`
+              Expr `Variable`
+                Identifier@0:2002..2014 `packUnorm4x8`
+            Expr@0:2015..2016 `Variable`
+              Identifier@0:2015..2016 `v`
+      Statement@0:2024..2037 `Expression`
+        ExprStatement@0:2024..2037
+          Expr `Variable`
+            Identifier@0:2024..2025 `i`
+          AssignmentOp@0:2026..2028 `+=`
+          Expr `Binary`
+            BinaryOp@0:2033..2034 `&`
+            Expr `Variable`
+              Identifier@0:2029..2032 `uui`
+            Expr `Variable`
+              Identifier@0:2035..2036 `i`
+      Statement@0:2098..2111 `Expression`
+        ExprStatement@0:2098..2111
+          Expr `Variable`
+            Identifier@0:2098..2099 `i`
+          AssignmentOp@0:2100..2102 `+=`
+          Expr `Binary`
+            BinaryOp@0:2107..2108 `^`
+            Expr `Variable`
+              Identifier@0:2103..2106 `uui`
+            Expr `Variable`
+              Identifier@0:2109..2110 `i`
+      Statement@0:2117..2130 `Expression`
+        ExprStatement@0:2117..2130
+          Expr `Variable`
+            Identifier@0:2117..2118 `i`
+          AssignmentOp@0:2119..2121 `+=`
+          Expr `Binary`
+            BinaryOp@0:2124..2125 `|`
+            Expr `Variable`
+              Identifier@0:2122..2123 `i`
+            Expr `Variable`
+              Identifier@0:2126..2129 `uui`
+      Statement@0:2147..2161 `Expression`
+        ExprStatement@0:2147..2161
+          Expr `Variable`
+            Identifier@0:2147..2148 `b`
+          AssignmentOp@0:2149..2150 `=`
+          Expr `FunCall`
+            FunIdentifier@0:2151..2156 `Expr`
+              Expr `Variable`
+                Identifier@0:2151..2156 `isnan`
+            Expr@0:2157..2159 `Variable`
+              Identifier@0:2157..2159 `uf`
+      Statement@0:2167..2182 `Expression`
+        ExprStatement@0:2167..2182
+          Expr `Variable`
+            Identifier@0:2167..2168 `b`
+          AssignmentOp@0:2169..2170 `=`
+          Expr `FunCall`
+            FunIdentifier@0:2171..2176 `Expr`
+              Expr `Variable`
+                Identifier@0:2171..2176 `isinf`
+            Expr@0:2177..2180 `Dot`
+              Expr `Variable`
+                Identifier@0:2177..2178 `v`
+              Identifier@0:2179..2180 `y`
+      Statement@0:2187..2213 `Expression`
+        ExprStatement@0:2187..2213
+          Expr `Variable`
+            Identifier@0:2187..2188 `b`
+          AssignmentOp@0:2189..2190 `=`
+          Expr `FunCall`
+            FunIdentifier@0:2191..2194 `Expr`
+              Expr `Variable`
+                Identifier@0:2191..2194 `any`
+            Expr@0:2195..2211 `FunCall`
+              FunIdentifier@0:2195..2203 `Expr`
+                Expr `Variable`
+                  Identifier@0:2195..2203 `lessThan`
+              Expr@0:2204..2205 `Variable`
+                Identifier@0:2204..2205 `v`
+              Expr@0:2207..2210 `Variable`
+                Identifier@0:2207..2210 `uv4`
+      Statement@0:2216..2254 `Expression`
+        ExprStatement@0:2216..2254
+          Expr `Variable`
+            Identifier@0:2216..2217 `b`
+          AssignmentOp@0:2218..2219 `=`
+          Expr `Binary`
+            BinaryOp@0:2223..2225 `&&`
+            Expr `Variable`
+              Identifier@0:2221..2222 `b`
+            Expr `FunCall`
+              FunIdentifier@0:2226..2229 `Expr`
+                Expr `Variable`
+                  Identifier@0:2226..2229 `any`
+              Expr@0:2230..2251 `FunCall`
+                FunIdentifier@0:2230..2243 `Expr`
+                  Expr `Variable`
+                    Identifier@0:2230..2243 `lessThanEqual`
+                Expr@0:2244..2245 `Variable`
+                  Identifier@0:2244..2245 `v`
+                Expr@0:2247..2250 `Variable`
+                  Identifier@0:2247..2250 `uv4`
+      Statement@0:2260..2296 `Expression`
+        ExprStatement@0:2260..2296
+          Expr `Variable`
+            Identifier@0:2260..2261 `b`
+          AssignmentOp@0:2262..2263 `=`
+          Expr `Binary`
+            BinaryOp@0:2267..2269 `&&`
+            Expr `Variable`
+              Identifier@0:2265..2266 `b`
+            Expr `FunCall`
+              FunIdentifier@0:2270..2273 `Expr`
+                Expr `Variable`
+                  Identifier@0:2270..2273 `any`
+              Expr@0:2274..2293 `FunCall`
+                FunIdentifier@0:2274..2285 `Expr`
+                  Expr `Variable`
+                    Identifier@0:2274..2285 `greaterThan`
+                Expr@0:2286..2287 `Variable`
+                  Identifier@0:2286..2287 `v`
+                Expr@0:2289..2292 `Variable`
+                  Identifier@0:2289..2292 `uv4`
+      Statement@0:2302..2343 `Expression`
+        ExprStatement@0:2302..2343
+          Expr `Variable`
+            Identifier@0:2302..2303 `b`
+          AssignmentOp@0:2304..2305 `=`
+          Expr `Binary`
+            BinaryOp@0:2309..2311 `&&`
+            Expr `Variable`
+              Identifier@0:2307..2308 `b`
+            Expr `FunCall`
+              FunIdentifier@0:2312..2315 `Expr`
+                Expr `Variable`
+                  Identifier@0:2312..2315 `any`
+              Expr@0:2316..2340 `FunCall`
+                FunIdentifier@0:2316..2332 `Expr`
+                  Expr `Variable`
+                    Identifier@0:2316..2332 `greaterThanEqual`
+                Expr@0:2333..2334 `Variable`
+                  Identifier@0:2333..2334 `v`
+                Expr@0:2336..2339 `Variable`
+                  Identifier@0:2336..2339 `uv4`
+      Statement@0:2349..2383 `Expression`
+        ExprStatement@0:2349..2383
+          Expr `Variable`
+            Identifier@0:2349..2350 `b`
+          AssignmentOp@0:2351..2352 `=`
+          Expr `Binary`
+            BinaryOp@0:2356..2358 `&&`
+            Expr `Variable`
+              Identifier@0:2354..2355 `b`
+            Expr `FunCall`
+              FunIdentifier@0:2359..2362 `Expr`
+                Expr `Variable`
+                  Identifier@0:2359..2362 `any`
+              Expr@0:2363..2380 `FunCall`
+                FunIdentifier@0:2363..2368 `Expr`
+                  Expr `Variable`
+                    Identifier@0:2363..2368 `equal`
+                Expr@0:2369..2373 `Variable`
+                  Identifier@0:2369..2373 `ub41`
+                Expr@0:2375..2379 `Variable`
+                  Identifier@0:2375..2379 `ub42`
+      Statement@0:2389..2426 `Expression`
+        ExprStatement@0:2389..2426
+          Expr `Variable`
+            Identifier@0:2389..2390 `b`
+          AssignmentOp@0:2391..2392 `=`
+          Expr `Binary`
+            BinaryOp@0:2396..2398 `&&`
+            Expr `Variable`
+              Identifier@0:2394..2395 `b`
+            Expr `FunCall`
+              FunIdentifier@0:2399..2402 `Expr`
+                Expr `Variable`
+                  Identifier@0:2399..2402 `any`
+              Expr@0:2403..2423 `FunCall`
+                FunIdentifier@0:2403..2411 `Expr`
+                  Expr `Variable`
+                    Identifier@0:2403..2411 `notEqual`
+                Expr@0:2412..2416 `Variable`
+                  Identifier@0:2412..2416 `ub41`
+                Expr@0:2418..2422 `Variable`
+                  Identifier@0:2418..2422 `ub42`
+      Statement@0:2432..2453 `Expression`
+        ExprStatement@0:2432..2453
+          Expr `Variable`
+            Identifier@0:2432..2433 `b`
+          AssignmentOp@0:2434..2435 `=`
+          Expr `Binary`
+            BinaryOp@0:2439..2441 `&&`
+            Expr `Variable`
+              Identifier@0:2437..2438 `b`
+            Expr `FunCall`
+              FunIdentifier@0:2442..2445 `Expr`
+                Expr `Variable`
+                  Identifier@0:2442..2445 `any`
+              Expr@0:2446..2450 `Variable`
+                Identifier@0:2446..2450 `ub41`
+      Statement@0:2459..2480 `Expression`
+        ExprStatement@0:2459..2480
+          Expr `Variable`
+            Identifier@0:2459..2460 `b`
+          AssignmentOp@0:2461..2462 `=`
+          Expr `Binary`
+            BinaryOp@0:2466..2468 `&&`
+            Expr `Variable`
+              Identifier@0:2464..2465 `b`
+            Expr `FunCall`
+              FunIdentifier@0:2469..2472 `Expr`
+                Expr `Variable`
+                  Identifier@0:2469..2472 `all`
+              Expr@0:2473..2477 `Variable`
+                Identifier@0:2473..2477 `ub41`
+      Statement@0:2486..2512 `Expression`
+        ExprStatement@0:2486..2512
+          Expr `Variable`
+            Identifier@0:2486..2487 `b`
+          AssignmentOp@0:2488..2489 `=`
+          Expr `Binary`
+            BinaryOp@0:2493..2495 `&&`
+            Expr `Variable`
+              Identifier@0:2491..2492 `b`
+            Expr `FunCall`
+              FunIdentifier@0:2496..2499 `Expr`
+                Expr `Variable`
+                  Identifier@0:2496..2499 `any`
+              Expr@0:2500..2509 `FunCall`
+                FunIdentifier@0:2500..2503 `Expr`
+                  Expr `Variable`
+                    Identifier@0:2500..2503 `not`
+                Expr@0:2504..2508 `Variable`
+                  Identifier@0:2504..2508 `ub41`
+      Statement@0:2518..2546 `Expression`
+        ExprStatement@0:2518..2546
+          Expr `Variable`
+            Identifier@0:2518..2519 `i`
+          AssignmentOp@0:2520..2521 `=`
+          Expr `Binary`
+            BinaryOp@0:2542..2543 `/`
+            Expr `Binary`
+              BinaryOp@0:2536..2537 `-`
+              Expr `Binary`
+                BinaryOp@0:2532..2533 `*`
+                Expr `Binary`
+                  BinaryOp@0:2526..2527 `+`
+                  Expr `Variable`
+                    Identifier@0:2524..2525 `i`
+                  Expr `Variable`
+                    Identifier@0:2528..2530 `ui`
+                Expr `Variable`
+                  Identifier@0:2534..2535 `i`
+              Expr `Variable`
+                Identifier@0:2538..2540 `ui`
+            Expr `Variable`
+              Identifier@0:2544..2545 `i`
+      Statement@0:2549..2560 `Expression`
+        ExprStatement@0:2549..2560
+          Expr `Variable`
+            Identifier@0:2549..2550 `i`
+          AssignmentOp@0:2551..2552 `=`
+          Expr `Binary`
+            BinaryOp@0:2555..2556 `%`
+            Expr `Variable`
+              Identifier@0:2553..2554 `i`
+            Expr `Variable`
+              Identifier@0:2557..2559 `ui`
+      Statement@0:2563..2618 `Selection`
+        SelectionStatement@0:2563..2618
+          Expr `Binary`
+            BinaryOp@0:2575..2577 `||`
+            Expr `Binary`
+              BinaryOp@0:2569..2571 `==`
+              Expr `Variable`
+                Identifier@0:2567..2568 `i`
+              Expr `Variable`
+                Identifier@0:2572..2574 `ui`
+            Expr `Binary`
+              BinaryOp@0:2597..2599 `^^`
+              Expr `Binary`
+                BinaryOp@0:2586..2588 `&&`
+                Expr `Binary`
+                  BinaryOp@0:2580..2582 `!=`
+                  Expr `Variable`
+                    Identifier@0:2578..2579 `i`
+                  Expr `Variable`
+                    Identifier@0:2583..2585 `ui`
+                Expr `Binary`
+                  BinaryOp@0:2591..2593 `==`
+                  Expr `Variable`
+                    Identifier@0:2589..2590 `i`
+                  Expr `Variable`
+                    Identifier@0:2594..2596 `ui`
+              Expr `Binary`
+                BinaryOp@0:2602..2604 `!=`
+                Expr `Variable`
+                  Identifier@0:2600..2601 `i`
+                Expr `IntConst`
+                  IntConst `2`
+          SelectionRestStatement@0:2614..2618 `Statement`
+            Statement `Expression`
+              ExprStatement@0:2614..2618
+                UnaryOp@0:2614..2616 `++`
+                Expr `Variable`
+                  Identifier@0:2616..2617 `i`
+      Statement@0:2624..2655 `Expression`
+        ExprStatement@0:2624..2655
+          Expr `Variable`
+            Identifier@0:2624..2625 `f`
+          AssignmentOp@0:2626..2627 `=`
+          Expr `Binary`
+            BinaryOp@0:2650..2651 `/`
+            Expr `Binary`
+              BinaryOp@0:2644..2645 `-`
+              Expr `Binary`
+                BinaryOp@0:2639..2640 `*`
+                Expr `Binary`
+                  BinaryOp@0:2633..2634 `+`
+                  Expr `Variable`
+                    Identifier@0:2630..2632 `uf`
+                  Expr `Variable`
+                    Identifier@0:2635..2637 `uf`
+                Expr `Variable`
+                  Identifier@0:2641..2643 `uf`
+              Expr `Variable`
+                Identifier@0:2646..2648 `uf`
+            Expr `Variable`
+              Identifier@0:2652..2654 `uf`
+      Statement@0:2660..2675 `Expression`
+        ExprStatement@0:2660..2675
+          Expr `Variable`
+            Identifier@0:2660..2661 `f`
+          AssignmentOp@0:2662..2664 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:2665..2671 `Expr`
+              Expr `Variable`
+                Identifier@0:2665..2671 `length`
+            Expr@0:2672..2673 `Variable`
+              Identifier@0:2672..2673 `v`
+      Statement@0:2681..2701 `Expression`
+        ExprStatement@0:2681..2701
+          Expr `Variable`
+            Identifier@0:2681..2682 `f`
+          AssignmentOp@0:2683..2685 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:2686..2694 `Expr`
+              Expr `Variable`
+                Identifier@0:2686..2694 `distance`
+            Expr@0:2695..2696 `Variable`
+              Identifier@0:2695..2696 `v`
+            Expr@0:2698..2699 `Variable`
+              Identifier@0:2698..2699 `v`
+      Statement@0:2707..2722 `Expression`
+        ExprStatement@0:2707..2722
+          Expr `Variable`
+            Identifier@0:2707..2708 `f`
+          AssignmentOp@0:2709..2711 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:2712..2715 `Expr`
+              Expr `Variable`
+                Identifier@0:2712..2715 `dot`
+            Expr@0:2716..2717 `Variable`
+              Identifier@0:2716..2717 `v`
+            Expr@0:2719..2720 `Variable`
+              Identifier@0:2719..2720 `v`
+      Statement@0:2728..2744 `Expression`
+        ExprStatement@0:2728..2744
+          Expr `Variable`
+            Identifier@0:2728..2729 `f`
+          AssignmentOp@0:2730..2732 `+=`
+          Expr `FunCall`
+            FunIdentifier@0:2733..2736 `Expr`
+              Expr `Variable`
+                Identifier@0:2733..2736 `dot`
+            Expr@0:2737..2738 `Variable`
+              Identifier@0:2737..2738 `f`
+            Expr@0:2740..2742 `Variable`
+              Identifier@0:2740..2742 `uf`
+      Statement@0:2747..2774 `Expression`
+        ExprStatement@0:2747..2774
+          Expr `Variable`
+            Identifier@0:2747..2748 `f`
+          AssignmentOp@0:2749..2751 `+=`
+          Expr `Dot`
+            Expr `FunCall`
+              FunIdentifier@0:2752..2757 `Expr`
+                Expr `Variable`
+                  Identifier@0:2752..2757 `cross`
+              Expr@0:2758..2763 `Dot`
+                Expr `Variable`
+                  Identifier@0:2758..2759 `v`
+                Identifier@0:2760..2763 `xyz`
+              Expr@0:2765..2770 `Dot`
+                Expr `Variable`
+                  Identifier@0:2765..2766 `v`
+                Identifier@0:2767..2770 `xyz`
+            Identifier@0:2772..2773 `x`
+      Statement@0:2779..2825 `Selection`
+        SelectionStatement@0:2779..2825
+          Expr `Binary`
+            BinaryOp@0:2791..2793 `||`
+            Expr `Binary`
+              BinaryOp@0:2785..2787 `==`
+              Expr `Variable`
+                Identifier@0:2783..2784 `f`
+              Expr `Variable`
+                Identifier@0:2788..2790 `uf`
+            Expr `Binary`
+              BinaryOp@0:2802..2804 `&&`
+              Expr `Binary`
+                BinaryOp@0:2796..2798 `!=`
+                Expr `Variable`
+                  Identifier@0:2794..2795 `f`
+                Expr `Variable`
+                  Identifier@0:2799..2801 `uf`
+              Expr `Binary`
+                BinaryOp@0:2807..2809 `!=`
+                Expr `Variable`
+                  Identifier@0:2805..2806 `f`
+                Expr `FloatConst`
+                  FloatConst `2`
+          SelectionRestStatement@0:2821..2825 `Statement`
+            Statement `Expression`
+              ExprStatement@0:2821..2825
+                UnaryOp@0:2821..2823 `++`
+                Expr `Variable`
+                  Identifier@0:2823..2824 `f`
+      Statement@0:2833..2841 `Expression`
+        ExprStatement@0:2833..2841
+          Expr `Variable`
+            Identifier@0:2833..2834 `i`
+          AssignmentOp@0:2835..2837 `&=`
+          Expr `Variable`
+            Identifier@0:2838..2840 `ui`
+      Statement@0:2847..2857 `Expression`
+        ExprStatement@0:2847..2857
+          Expr `Variable`
+            Identifier@0:2847..2848 `i`
+          AssignmentOp@0:2849..2851 `|=`
+          Expr `IntConst`
+            IntConst `66`
+      Statement@0:2863..2871 `Expression`
+        ExprStatement@0:2863..2871
+          Expr `Variable`
+            Identifier@0:2863..2864 `i`
+          AssignmentOp@0:2865..2867 `^=`
+          Expr `Variable`
+            Identifier@0:2868..2870 `ui`
+      Statement@0:2877..2885 `Expression`
+        ExprStatement@0:2877..2885
+          Expr `Variable`
+            Identifier@0:2877..2878 `i`
+          AssignmentOp@0:2879..2881 `%=`
+          Expr `IntConst`
+            IntConst `17`
+      Statement@0:2891..2899 `Expression`
+        ExprStatement@0:2891..2899
+          Expr `Variable`
+            Identifier@0:2891..2892 `i`
+          AssignmentOp@0:2893..2896 `>>=`
+          Expr `IntConst`
+            IntConst `2`
+      Statement@0:2905..2914 `Expression`
+        ExprStatement@0:2905..2914
+          Expr `Variable`
+            Identifier@0:2905..2906 `i`
+          AssignmentOp@0:2907..2910 `<<=`
+          Expr `Variable`
+            Identifier@0:2911..2913 `ui`
+      Statement@0:2920..2927 `Expression`
+        ExprStatement@0:2920..2927
+          Expr `Variable`
+            Identifier@0:2920..2921 `i`
+          AssignmentOp@0:2922..2923 `=`
+          Expr `Unary`
+            UnaryOp@0:2924..2925 `~`
+            Expr `Variable`
+              Identifier@0:2925..2926 `i`
+      Statement@0:2933..2940 `Expression`
+        ExprStatement@0:2933..2940
+          Expr `Variable`
+            Identifier@0:2933..2934 `b`
+          AssignmentOp@0:2935..2936 `=`
+          Expr `Unary`
+            UnaryOp@0:2937..2938 `!`
+            Expr `Variable`
+              Identifier@0:2938..2939 `b`
+      Statement@0:2948..2993 `Expression`
+        ExprStatement@0:2948..2993
+          Expr `Variable`
+            Identifier@0:2948..2960 `gl_FragColor`
+          AssignmentOp@0:2961..2962 `=`
+          Expr `Ternary`
+            Expr `Variable`
+              Identifier@0:2963..2964 `b`
+            Expr `Binary`
+              BinaryOp@0:2985..2986 `+`
+              Expr `Binary`
+                BinaryOp@0:2975..2976 `+`
+                Expr `FunCall`
+                  FunIdentifier@0:2967..2971 `TypeSpecifier`
+                    TypeSpecifier
+                      TypeSpecifierNonArray@0:2967..2971 `vec4`
+                        Vec4
+                  Expr@0:2972..2973 `Variable`
+                    Identifier@0:2972..2973 `i`
+                Expr `FunCall`
+                  FunIdentifier@0:2977..2981 `TypeSpecifier`
+                    TypeSpecifier
+                      TypeSpecifierNonArray@0:2977..2981 `vec4`
+                        Vec4
+                  Expr@0:2982..2983 `Variable`
+                    Identifier@0:2982..2983 `f`
+              Expr `Variable`
+                Identifier@0:2987..2988 `v`
+            Expr `Variable`
+              Identifier@0:2991..2992 `v`

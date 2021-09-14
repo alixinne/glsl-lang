@@ -1,0 +1,27 @@
+ExternalDeclaration@0:0..12 `Preprocessor`
+  Preprocessor@0:0..12 `#version`
+    PreprocessorVersion@0:9..12 `130`
+      ShortConst `130`
+ExternalDeclaration@0:14..43 `Declaration`
+  Declaration@0:14..43 `InitDeclaratorList`
+    InitDeclaratorList@0:14..42
+      SingleDeclaration@0:14..42
+        FullySpecifiedType@0:14..23
+          TypeQualifierSpec@0:14..17 `Storage`
+            StorageQualifier@0:14..17 `out`
+              Out
+          TypeSpecifier@0:18..23
+            TypeSpecifierNonArray@0:18..23 `float`
+              Float
+        ArraySpecifierDimension@0:39..42 `ExplicitlySized`
+          Expr `IntConst`
+            IntConst `8`
+ExternalDeclaration@0:77..92 `FunctionDefinition`
+  FunctionDefinition@0:77..92
+    FunctionPrototype@0:77..88
+      FullySpecifiedType@0:77..81
+        TypeSpecifier@0:77..81
+          TypeSpecifierNonArray@0:77..81 `void`
+            Void
+      Identifier@0:82..86 `main`
+    CompoundStatement@0:89..92

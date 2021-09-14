@@ -1,0 +1,1646 @@
+ExternalDeclaration@0:0..12 `Preprocessor`
+  Preprocessor@0:0..12 `#version`
+    PreprocessorVersion@0:9..12 `450`
+      ShortConst `450`
+ExternalDeclaration@0:16..7394 `FunctionDefinition`
+  FunctionDefinition@0:16..7394
+    FunctionPrototype@0:16..47
+      FullySpecifiedType@0:16..20
+        TypeSpecifier@0:16..20
+          TypeSpecifierNonArray@0:16..20 `vec4`
+            Vec4
+      Identifier@0:21..38 `undeclared_errors`
+      FunctionParameterDeclaration@0:39..46 `Named`
+        FunctionParameterDeclarator@0:39..46
+          TypeSpecifier@0:39..43
+            TypeSpecifierNonArray@0:39..43 `vec4`
+              Vec4
+          ArrayedIdentifier@0:44..46
+            Identifier@0:44..46 `f4`
+    CompoundStatement@0:49..7394
+      Statement@0:54..66 `Declaration`
+        Declaration@0:54..66 `InitDeclaratorList`
+          InitDeclaratorList@0:54..65
+            SingleDeclaration@0:54..65
+              FullySpecifiedType@0:54..58
+                TypeSpecifier@0:54..58
+                  TypeSpecifierNonArray@0:54..58 `vec4`
+                    Vec4
+      Statement@0:70..86 `Expression`
+        ExprStatement@0:70..86
+          Identifier@0:70..85 `gl_SubgroupSize`
+      Statement@0:144..168 `Expression`
+        ExprStatement@0:144..168
+          Identifier@0:144..167 `gl_SubgroupInvocationID`
+      Statement@0:218..236 `Expression`
+        ExprStatement@0:218..236
+          FunIdentifier@0:218..233 `Expr`
+            Expr `Variable`
+              Identifier@0:218..233 `subgroupBarrier`
+      Statement@0:292..316 `Expression`
+        ExprStatement@0:292..316
+          FunIdentifier@0:292..313 `Expr`
+            Expr `Variable`
+              Identifier@0:292..313 `subgroupMemoryBarrier`
+      Statement@0:375..405 `Expression`
+        ExprStatement@0:375..405
+          FunIdentifier@0:375..402 `Expr`
+            Expr `Variable`
+              Identifier@0:375..402 `subgroupMemoryBarrierBuffer`
+      Statement@0:449..478 `Expression`
+        ExprStatement@0:449..478
+          FunIdentifier@0:449..475 `Expr`
+            Expr `Variable`
+              Identifier@0:449..475 `subgroupMemoryBarrierImage`
+      Statement@0:523..539 `Expression`
+        ExprStatement@0:523..539
+          FunIdentifier@0:523..536 `Expr`
+            Expr `Variable`
+              Identifier@0:523..536 `subgroupElect`
+      Statement@0:597..613 `Expression`
+        ExprStatement@0:597..613
+          Identifier@0:597..612 `gl_NumSubgroups`
+      Statement@0:665..679 `Expression`
+        ExprStatement@0:665..679
+          Identifier@0:665..678 `gl_SubgroupID`
+      Statement@0:733..763 `Expression`
+        ExprStatement@0:733..763
+          FunIdentifier@0:733..760 `Expr`
+            Expr `Variable`
+              Identifier@0:733..760 `subgroupMemoryBarrierShared`
+      Statement@0:803..821 `Expression`
+        ExprStatement@0:803..821
+          FunIdentifier@0:803..814 `Expr`
+            Expr `Variable`
+              Identifier@0:803..814 `subgroupAll`
+          Expr@0:815..819 `BoolConst`
+            BoolConst `true`
+      Statement@0:870..889 `Expression`
+        ExprStatement@0:870..889
+          FunIdentifier@0:870..881 `Expr`
+            Expr `Variable`
+              Identifier@0:870..881 `subgroupAny`
+          Expr@0:882..887 `BoolConst`
+            BoolConst `false`
+      Statement@0:937..958 `Expression`
+        ExprStatement@0:937..958
+          FunIdentifier@0:937..953 `Expr`
+            Expr `Variable`
+              Identifier@0:937..953 `subgroupAllEqual`
+          Expr@0:954..956 `Variable`
+            Identifier@0:954..956 `f4`
+      Statement@0:1006..1024 `Expression`
+        ExprStatement@0:1006..1024
+          Identifier@0:1006..1023 `gl_SubgroupEqMask`
+      Statement@0:1091..1109 `Expression`
+        ExprStatement@0:1091..1109
+          Identifier@0:1091..1108 `gl_SubgroupGeMask`
+      Statement@0:1176..1194 `Expression`
+        ExprStatement@0:1176..1194
+          Identifier@0:1176..1193 `gl_SubgroupGtMask`
+      Statement@0:1261..1279 `Expression`
+        ExprStatement@0:1261..1279
+          Identifier@0:1261..1278 `gl_SubgroupLeMask`
+      Statement@0:1346..1364 `Expression`
+        ExprStatement@0:1346..1364
+          Identifier@0:1346..1363 `gl_SubgroupLtMask`
+      Statement@0:1431..1456 `Expression`
+        ExprStatement@0:1431..1456
+          FunIdentifier@0:1431..1448 `Expr`
+            Expr `Variable`
+              Identifier@0:1431..1448 `subgroupBroadcast`
+          Expr@0:1449..1451 `Variable`
+            Identifier@0:1449..1451 `f4`
+          Expr@0:1453..1454 `IntConst`
+            IntConst `0`
+      Statement@0:1516..1543 `Expression`
+        ExprStatement@0:1516..1543
+          FunIdentifier@0:1516..1538 `Expr`
+            Expr `Variable`
+              Identifier@0:1516..1538 `subgroupBroadcastFirst`
+          Expr@0:1539..1541 `Variable`
+            Identifier@0:1539..1541 `f4`
+      Statement@0:1601..1638 `Declaration`
+        Declaration@0:1601..1638 `InitDeclaratorList`
+          InitDeclaratorList@0:1601..1637
+            SingleDeclaration@0:1601..1637
+              FullySpecifiedType@0:1601..1606
+                TypeSpecifier@0:1601..1606
+                  TypeSpecifierNonArray@0:1601..1606 `uvec4`
+                    UVec4
+              Expr `FunCall`
+                FunIdentifier@0:1616..1630 `Expr`
+                  Expr `Variable`
+                    Identifier@0:1616..1630 `subgroupBallot`
+                Expr@0:1631..1636 `BoolConst`
+                  BoolConst `false`
+      Statement@0:1686..1720 `Expression`
+        ExprStatement@0:1686..1720
+          FunIdentifier@0:1686..1707 `Expr`
+            Expr `Variable`
+              Identifier@0:1686..1707 `subgroupInverseBallot`
+          Expr@0:1708..1718 `FunCall`
+            FunIdentifier@0:1708..1713 `TypeSpecifier`
+              TypeSpecifier
+                TypeSpecifierNonArray@0:1708..1713 `uvec4`
+                  UVec4
+            Expr@0:1714..1717 `IntConst`
+              IntConst `1`
+      Statement@0:1771..1807 `Expression`
+        ExprStatement@0:1771..1807
+          FunIdentifier@0:1771..1795 `Expr`
+            Expr `Variable`
+              Identifier@0:1771..1795 `subgroupBallotBitExtract`
+          Expr@0:1796..1802 `Variable`
+            Identifier@0:1796..1802 `ballot`
+          Expr@0:1804..1805 `IntConst`
+            IntConst `0`
+      Statement@0:1856..1887 `Expression`
+        ExprStatement@0:1856..1887
+          FunIdentifier@0:1856..1878 `Expr`
+            Expr `Variable`
+              Identifier@0:1856..1878 `subgroupBallotBitCount`
+          Expr@0:1879..1885 `Variable`
+            Identifier@0:1879..1885 `ballot`
+      Statement@0:1941..1981 `Expression`
+        ExprStatement@0:1941..1981
+          FunIdentifier@0:1941..1972 `Expr`
+            Expr `Variable`
+              Identifier@0:1941..1972 `subgroupBallotInclusiveBitCount`
+          Expr@0:1973..1979 `Variable`
+            Identifier@0:1973..1979 `ballot`
+      Statement@0:2026..2066 `Expression`
+        ExprStatement@0:2026..2066
+          FunIdentifier@0:2026..2057 `Expr`
+            Expr `Variable`
+              Identifier@0:2026..2057 `subgroupBallotExclusiveBitCount`
+          Expr@0:2058..2064 `Variable`
+            Identifier@0:2058..2064 `ballot`
+      Statement@0:2111..2141 `Expression`
+        ExprStatement@0:2111..2141
+          FunIdentifier@0:2111..2132 `Expr`
+            Expr `Variable`
+              Identifier@0:2111..2132 `subgroupBallotFindLSB`
+          Expr@0:2133..2139 `Variable`
+            Identifier@0:2133..2139 `ballot`
+      Statement@0:2196..2226 `Expression`
+        ExprStatement@0:2196..2226
+          FunIdentifier@0:2196..2217 `Expr`
+            Expr `Variable`
+              Identifier@0:2196..2217 `subgroupBallotFindMSB`
+          Expr@0:2218..2224 `Variable`
+            Identifier@0:2218..2224 `ballot`
+      Statement@0:2283..2306 `Expression`
+        ExprStatement@0:2283..2306
+          FunIdentifier@0:2283..2298 `Expr`
+            Expr `Variable`
+              Identifier@0:2283..2298 `subgroupShuffle`
+          Expr@0:2299..2301 `Variable`
+            Identifier@0:2299..2301 `f4`
+          Expr@0:2303..2304 `IntConst`
+            IntConst `0`
+      Statement@0:2361..2389 `Expression`
+        ExprStatement@0:2361..2389
+          FunIdentifier@0:2361..2379 `Expr`
+            Expr `Variable`
+              Identifier@0:2361..2379 `subgroupShuffleXor`
+          Expr@0:2380..2382 `Variable`
+            Identifier@0:2380..2382 `f4`
+          Expr@0:2384..2387 `IntConst`
+            IntConst `1`
+      Statement@0:2439..2464 `Expression`
+        ExprStatement@0:2439..2464
+          FunIdentifier@0:2439..2456 `Expr`
+            Expr `Variable`
+              Identifier@0:2439..2456 `subgroupShuffleUp`
+          Expr@0:2457..2459 `Variable`
+            Identifier@0:2457..2459 `f4`
+          Expr@0:2461..2462 `IntConst`
+            IntConst `1`
+      Statement@0:2526..2553 `Expression`
+        ExprStatement@0:2526..2553
+          FunIdentifier@0:2526..2545 `Expr`
+            Expr `Variable`
+              Identifier@0:2526..2545 `subgroupShuffleDown`
+          Expr@0:2546..2548 `Variable`
+            Identifier@0:2546..2548 `f4`
+          Expr@0:2550..2551 `IntConst`
+            IntConst `1`
+      Statement@0:2615..2640 `Expression`
+        ExprStatement@0:2615..2640
+          Expr `Variable`
+            Identifier@0:2615..2621 `result`
+          AssignmentOp@0:2622..2623 `=`
+          Expr `FunCall`
+            FunIdentifier@0:2624..2635 `Expr`
+              Expr `Variable`
+                Identifier@0:2624..2635 `subgroupAdd`
+            Expr@0:2636..2638 `Variable`
+              Identifier@0:2636..2638 `f4`
+      Statement@0:2692..2708 `Expression`
+        ExprStatement@0:2692..2708
+          FunIdentifier@0:2692..2703 `Expr`
+            Expr `Variable`
+              Identifier@0:2692..2703 `subgroupMul`
+          Expr@0:2704..2706 `Variable`
+            Identifier@0:2704..2706 `f4`
+      Statement@0:2769..2785 `Expression`
+        ExprStatement@0:2769..2785
+          FunIdentifier@0:2769..2780 `Expr`
+            Expr `Variable`
+              Identifier@0:2769..2780 `subgroupMin`
+          Expr@0:2781..2783 `Variable`
+            Identifier@0:2781..2783 `f4`
+      Statement@0:2846..2862 `Expression`
+        ExprStatement@0:2846..2862
+          FunIdentifier@0:2846..2857 `Expr`
+            Expr `Variable`
+              Identifier@0:2846..2857 `subgroupMax`
+          Expr@0:2858..2860 `Variable`
+            Identifier@0:2858..2860 `f4`
+      Statement@0:2923..2943 `Expression`
+        ExprStatement@0:2923..2943
+          FunIdentifier@0:2923..2934 `Expr`
+            Expr `Variable`
+              Identifier@0:2923..2934 `subgroupAnd`
+          Expr@0:2935..2941 `Variable`
+            Identifier@0:2935..2941 `ballot`
+      Statement@0:3000..3019 `Expression`
+        ExprStatement@0:3000..3019
+          FunIdentifier@0:3000..3010 `Expr`
+            Expr `Variable`
+              Identifier@0:3000..3010 `subgroupOr`
+          Expr@0:3011..3017 `Variable`
+            Identifier@0:3011..3017 `ballot`
+      Statement@0:3077..3097 `Expression`
+        ExprStatement@0:3077..3097
+          FunIdentifier@0:3077..3088 `Expr`
+            Expr `Variable`
+              Identifier@0:3077..3088 `subgroupXor`
+          Expr@0:3089..3095 `Variable`
+            Identifier@0:3089..3095 `ballot`
+      Statement@0:3154..3179 `Expression`
+        ExprStatement@0:3154..3179
+          FunIdentifier@0:3154..3174 `Expr`
+            Expr `Variable`
+              Identifier@0:3154..3174 `subgroupInclusiveAdd`
+          Expr@0:3175..3177 `Variable`
+            Identifier@0:3175..3177 `f4`
+      Statement@0:3231..3256 `Expression`
+        ExprStatement@0:3231..3256
+          FunIdentifier@0:3231..3251 `Expr`
+            Expr `Variable`
+              Identifier@0:3231..3251 `subgroupInclusiveMul`
+          Expr@0:3252..3254 `Variable`
+            Identifier@0:3252..3254 `f4`
+      Statement@0:3308..3333 `Expression`
+        ExprStatement@0:3308..3333
+          FunIdentifier@0:3308..3328 `Expr`
+            Expr `Variable`
+              Identifier@0:3308..3328 `subgroupInclusiveMin`
+          Expr@0:3329..3331 `Variable`
+            Identifier@0:3329..3331 `f4`
+      Statement@0:3385..3410 `Expression`
+        ExprStatement@0:3385..3410
+          FunIdentifier@0:3385..3405 `Expr`
+            Expr `Variable`
+              Identifier@0:3385..3405 `subgroupInclusiveMax`
+          Expr@0:3406..3408 `Variable`
+            Identifier@0:3406..3408 `f4`
+      Statement@0:3462..3491 `Expression`
+        ExprStatement@0:3462..3491
+          FunIdentifier@0:3462..3482 `Expr`
+            Expr `Variable`
+              Identifier@0:3462..3482 `subgroupInclusiveAnd`
+          Expr@0:3483..3489 `Variable`
+            Identifier@0:3483..3489 `ballot`
+      Statement@0:3539..3567 `Expression`
+        ExprStatement@0:3539..3567
+          FunIdentifier@0:3539..3558 `Expr`
+            Expr `Variable`
+              Identifier@0:3539..3558 `subgroupInclusiveOr`
+          Expr@0:3559..3565 `Variable`
+            Identifier@0:3559..3565 `ballot`
+      Statement@0:3616..3645 `Expression`
+        ExprStatement@0:3616..3645
+          FunIdentifier@0:3616..3636 `Expr`
+            Expr `Variable`
+              Identifier@0:3616..3636 `subgroupInclusiveXor`
+          Expr@0:3637..3643 `Variable`
+            Identifier@0:3637..3643 `ballot`
+      Statement@0:3693..3718 `Expression`
+        ExprStatement@0:3693..3718
+          FunIdentifier@0:3693..3713 `Expr`
+            Expr `Variable`
+              Identifier@0:3693..3713 `subgroupExclusiveAdd`
+          Expr@0:3714..3716 `Variable`
+            Identifier@0:3714..3716 `f4`
+      Statement@0:3770..3795 `Expression`
+        ExprStatement@0:3770..3795
+          FunIdentifier@0:3770..3790 `Expr`
+            Expr `Variable`
+              Identifier@0:3770..3790 `subgroupExclusiveMul`
+          Expr@0:3791..3793 `Variable`
+            Identifier@0:3791..3793 `f4`
+      Statement@0:3847..3872 `Expression`
+        ExprStatement@0:3847..3872
+          FunIdentifier@0:3847..3867 `Expr`
+            Expr `Variable`
+              Identifier@0:3847..3867 `subgroupExclusiveMin`
+          Expr@0:3868..3870 `Variable`
+            Identifier@0:3868..3870 `f4`
+      Statement@0:3924..3949 `Expression`
+        ExprStatement@0:3924..3949
+          FunIdentifier@0:3924..3944 `Expr`
+            Expr `Variable`
+              Identifier@0:3924..3944 `subgroupExclusiveMax`
+          Expr@0:3945..3947 `Variable`
+            Identifier@0:3945..3947 `f4`
+      Statement@0:4001..4030 `Expression`
+        ExprStatement@0:4001..4030
+          FunIdentifier@0:4001..4021 `Expr`
+            Expr `Variable`
+              Identifier@0:4001..4021 `subgroupExclusiveAnd`
+          Expr@0:4022..4028 `Variable`
+            Identifier@0:4022..4028 `ballot`
+      Statement@0:4078..4106 `Expression`
+        ExprStatement@0:4078..4106
+          FunIdentifier@0:4078..4097 `Expr`
+            Expr `Variable`
+              Identifier@0:4078..4097 `subgroupExclusiveOr`
+          Expr@0:4098..4104 `Variable`
+            Identifier@0:4098..4104 `ballot`
+      Statement@0:4155..4184 `Expression`
+        ExprStatement@0:4155..4184
+          FunIdentifier@0:4155..4175 `Expr`
+            Expr `Variable`
+              Identifier@0:4155..4175 `subgroupExclusiveXor`
+          Expr@0:4176..4182 `Variable`
+            Identifier@0:4176..4182 `ballot`
+      Statement@0:4234..4262 `Expression`
+        ExprStatement@0:4234..4262
+          FunIdentifier@0:4234..4254 `Expr`
+            Expr `Variable`
+              Identifier@0:4234..4254 `subgroupClusteredAdd`
+          Expr@0:4255..4257 `Variable`
+            Identifier@0:4255..4257 `f4`
+          Expr@0:4259..4260 `IntConst`
+            IntConst `2`
+      Statement@0:4315..4343 `Expression`
+        ExprStatement@0:4315..4343
+          FunIdentifier@0:4315..4335 `Expr`
+            Expr `Variable`
+              Identifier@0:4315..4335 `subgroupClusteredMul`
+          Expr@0:4336..4338 `Variable`
+            Identifier@0:4336..4338 `f4`
+          Expr@0:4340..4341 `IntConst`
+            IntConst `2`
+      Statement@0:4396..4424 `Expression`
+        ExprStatement@0:4396..4424
+          FunIdentifier@0:4396..4416 `Expr`
+            Expr `Variable`
+              Identifier@0:4396..4416 `subgroupClusteredMin`
+          Expr@0:4417..4419 `Variable`
+            Identifier@0:4417..4419 `f4`
+          Expr@0:4421..4422 `IntConst`
+            IntConst `2`
+      Statement@0:4477..4505 `Expression`
+        ExprStatement@0:4477..4505
+          FunIdentifier@0:4477..4497 `Expr`
+            Expr `Variable`
+              Identifier@0:4477..4497 `subgroupClusteredMax`
+          Expr@0:4498..4500 `Variable`
+            Identifier@0:4498..4500 `f4`
+          Expr@0:4502..4503 `IntConst`
+            IntConst `2`
+      Statement@0:4558..4590 `Expression`
+        ExprStatement@0:4558..4590
+          FunIdentifier@0:4558..4578 `Expr`
+            Expr `Variable`
+              Identifier@0:4558..4578 `subgroupClusteredAnd`
+          Expr@0:4579..4585 `Variable`
+            Identifier@0:4579..4585 `ballot`
+          Expr@0:4587..4588 `IntConst`
+            IntConst `2`
+      Statement@0:4639..4670 `Expression`
+        ExprStatement@0:4639..4670
+          FunIdentifier@0:4639..4658 `Expr`
+            Expr `Variable`
+              Identifier@0:4639..4658 `subgroupClusteredOr`
+          Expr@0:4659..4665 `Variable`
+            Identifier@0:4659..4665 `ballot`
+          Expr@0:4667..4668 `IntConst`
+            IntConst `2`
+      Statement@0:4720..4752 `Expression`
+        ExprStatement@0:4720..4752
+          FunIdentifier@0:4720..4740 `Expr`
+            Expr `Variable`
+              Identifier@0:4720..4740 `subgroupClusteredXor`
+          Expr@0:4741..4747 `Variable`
+            Identifier@0:4741..4747 `ballot`
+          Expr@0:4749..4750 `IntConst`
+            IntConst `2`
+      Statement@0:4803..4832 `Expression`
+        ExprStatement@0:4803..4832
+          FunIdentifier@0:4803..4824 `Expr`
+            Expr `Variable`
+              Identifier@0:4803..4824 `subgroupQuadBroadcast`
+          Expr@0:4825..4827 `Variable`
+            Identifier@0:4825..4827 `f4`
+          Expr@0:4829..4830 `IntConst`
+            IntConst `0`
+      Statement@0:4879..4910 `Expression`
+        ExprStatement@0:4879..4910
+          FunIdentifier@0:4879..4905 `Expr`
+            Expr `Variable`
+              Identifier@0:4879..4905 `subgroupQuadSwapHorizontal`
+          Expr@0:4906..4908 `Variable`
+            Identifier@0:4906..4908 `f4`
+      Statement@0:4955..4984 `Expression`
+        ExprStatement@0:4955..4984
+          FunIdentifier@0:4955..4979 `Expr`
+            Expr `Variable`
+              Identifier@0:4955..4979 `subgroupQuadSwapVertical`
+          Expr@0:4980..4982 `Variable`
+            Identifier@0:4980..4982 `f4`
+      Statement@0:5031..5060 `Expression`
+        ExprStatement@0:5031..5060
+          FunIdentifier@0:5031..5055 `Expr`
+            Expr `Variable`
+              Identifier@0:5031..5055 `subgroupQuadSwapDiagonal`
+          Expr@0:5056..5058 `Variable`
+            Identifier@0:5056..5058 `f4`
+      Statement@0:5109..5147 `Declaration`
+        Declaration@0:5109..5147 `InitDeclaratorList`
+          InitDeclaratorList@0:5109..5146
+            SingleDeclaration@0:5109..5146
+              FullySpecifiedType@0:5109..5114
+                TypeSpecifier@0:5109..5114
+                  TypeSpecifierNonArray@0:5109..5114 `uvec4`
+                    UVec4
+              Expr `FunCall`
+                FunIdentifier@0:5123..5142 `Expr`
+                  Expr `Variable`
+                    Identifier@0:5123..5142 `subgroupPartitionNV`
+                Expr@0:5143..5145 `Variable`
+                  Identifier@0:5143..5145 `f4`
+      Statement@0:5212..5248 `Expression`
+        ExprStatement@0:5212..5248
+          FunIdentifier@0:5212..5236 `Expr`
+            Expr `Variable`
+              Identifier@0:5212..5236 `subgroupPartitionedAddNV`
+          Expr@0:5237..5239 `Variable`
+            Identifier@0:5237..5239 `f4`
+          Expr@0:5241..5246 `Variable`
+            Identifier@0:5241..5246 `parti`
+      Statement@0:5315..5351 `Expression`
+        ExprStatement@0:5315..5351
+          FunIdentifier@0:5315..5339 `Expr`
+            Expr `Variable`
+              Identifier@0:5315..5339 `subgroupPartitionedMulNV`
+          Expr@0:5340..5342 `Variable`
+            Identifier@0:5340..5342 `f4`
+          Expr@0:5344..5349 `Variable`
+            Identifier@0:5344..5349 `parti`
+      Statement@0:5418..5454 `Expression`
+        ExprStatement@0:5418..5454
+          FunIdentifier@0:5418..5442 `Expr`
+            Expr `Variable`
+              Identifier@0:5418..5442 `subgroupPartitionedMinNV`
+          Expr@0:5443..5445 `Variable`
+            Identifier@0:5443..5445 `f4`
+          Expr@0:5447..5452 `Variable`
+            Identifier@0:5447..5452 `parti`
+      Statement@0:5521..5557 `Expression`
+        ExprStatement@0:5521..5557
+          FunIdentifier@0:5521..5545 `Expr`
+            Expr `Variable`
+              Identifier@0:5521..5545 `subgroupPartitionedMaxNV`
+          Expr@0:5546..5548 `Variable`
+            Identifier@0:5546..5548 `f4`
+          Expr@0:5550..5555 `Variable`
+            Identifier@0:5550..5555 `parti`
+      Statement@0:5624..5664 `Expression`
+        ExprStatement@0:5624..5664
+          FunIdentifier@0:5624..5648 `Expr`
+            Expr `Variable`
+              Identifier@0:5624..5648 `subgroupPartitionedAndNV`
+          Expr@0:5649..5655 `Variable`
+            Identifier@0:5649..5655 `ballot`
+          Expr@0:5657..5662 `Variable`
+            Identifier@0:5657..5662 `parti`
+      Statement@0:5727..5766 `Expression`
+        ExprStatement@0:5727..5766
+          FunIdentifier@0:5727..5750 `Expr`
+            Expr `Variable`
+              Identifier@0:5727..5750 `subgroupPartitionedOrNV`
+          Expr@0:5751..5757 `Variable`
+            Identifier@0:5751..5757 `ballot`
+          Expr@0:5759..5764 `Variable`
+            Identifier@0:5759..5764 `parti`
+      Statement@0:5830..5870 `Expression`
+        ExprStatement@0:5830..5870
+          FunIdentifier@0:5830..5854 `Expr`
+            Expr `Variable`
+              Identifier@0:5830..5854 `subgroupPartitionedXorNV`
+          Expr@0:5855..5861 `Variable`
+            Identifier@0:5855..5861 `ballot`
+          Expr@0:5863..5868 `Variable`
+            Identifier@0:5863..5868 `parti`
+      Statement@0:5933..5978 `Expression`
+        ExprStatement@0:5933..5978
+          FunIdentifier@0:5933..5966 `Expr`
+            Expr `Variable`
+              Identifier@0:5933..5966 `subgroupPartitionedInclusiveAddNV`
+          Expr@0:5967..5969 `Variable`
+            Identifier@0:5967..5969 `f4`
+          Expr@0:5971..5976 `Variable`
+            Identifier@0:5971..5976 `parti`
+      Statement@0:6036..6081 `Expression`
+        ExprStatement@0:6036..6081
+          FunIdentifier@0:6036..6069 `Expr`
+            Expr `Variable`
+              Identifier@0:6036..6069 `subgroupPartitionedInclusiveMulNV`
+          Expr@0:6070..6072 `Variable`
+            Identifier@0:6070..6072 `f4`
+          Expr@0:6074..6079 `Variable`
+            Identifier@0:6074..6079 `parti`
+      Statement@0:6139..6184 `Expression`
+        ExprStatement@0:6139..6184
+          FunIdentifier@0:6139..6172 `Expr`
+            Expr `Variable`
+              Identifier@0:6139..6172 `subgroupPartitionedInclusiveMinNV`
+          Expr@0:6173..6175 `Variable`
+            Identifier@0:6173..6175 `f4`
+          Expr@0:6177..6182 `Variable`
+            Identifier@0:6177..6182 `parti`
+      Statement@0:6242..6287 `Expression`
+        ExprStatement@0:6242..6287
+          FunIdentifier@0:6242..6275 `Expr`
+            Expr `Variable`
+              Identifier@0:6242..6275 `subgroupPartitionedInclusiveMaxNV`
+          Expr@0:6276..6278 `Variable`
+            Identifier@0:6276..6278 `f4`
+          Expr@0:6280..6285 `Variable`
+            Identifier@0:6280..6285 `parti`
+      Statement@0:6345..6394 `Expression`
+        ExprStatement@0:6345..6394
+          FunIdentifier@0:6345..6378 `Expr`
+            Expr `Variable`
+              Identifier@0:6345..6378 `subgroupPartitionedInclusiveAndNV`
+          Expr@0:6379..6385 `Variable`
+            Identifier@0:6379..6385 `ballot`
+          Expr@0:6387..6392 `Variable`
+            Identifier@0:6387..6392 `parti`
+      Statement@0:6448..6496 `Expression`
+        ExprStatement@0:6448..6496
+          FunIdentifier@0:6448..6480 `Expr`
+            Expr `Variable`
+              Identifier@0:6448..6480 `subgroupPartitionedInclusiveOrNV`
+          Expr@0:6481..6487 `Variable`
+            Identifier@0:6481..6487 `ballot`
+          Expr@0:6489..6494 `Variable`
+            Identifier@0:6489..6494 `parti`
+      Statement@0:6551..6600 `Expression`
+        ExprStatement@0:6551..6600
+          FunIdentifier@0:6551..6584 `Expr`
+            Expr `Variable`
+              Identifier@0:6551..6584 `subgroupPartitionedInclusiveXorNV`
+          Expr@0:6585..6591 `Variable`
+            Identifier@0:6585..6591 `ballot`
+          Expr@0:6593..6598 `Variable`
+            Identifier@0:6593..6598 `parti`
+      Statement@0:6654..6699 `Expression`
+        ExprStatement@0:6654..6699
+          FunIdentifier@0:6654..6687 `Expr`
+            Expr `Variable`
+              Identifier@0:6654..6687 `subgroupPartitionedExclusiveAddNV`
+          Expr@0:6688..6690 `Variable`
+            Identifier@0:6688..6690 `f4`
+          Expr@0:6692..6697 `Variable`
+            Identifier@0:6692..6697 `parti`
+      Statement@0:6757..6802 `Expression`
+        ExprStatement@0:6757..6802
+          FunIdentifier@0:6757..6790 `Expr`
+            Expr `Variable`
+              Identifier@0:6757..6790 `subgroupPartitionedExclusiveMulNV`
+          Expr@0:6791..6793 `Variable`
+            Identifier@0:6791..6793 `f4`
+          Expr@0:6795..6800 `Variable`
+            Identifier@0:6795..6800 `parti`
+      Statement@0:6860..6905 `Expression`
+        ExprStatement@0:6860..6905
+          FunIdentifier@0:6860..6893 `Expr`
+            Expr `Variable`
+              Identifier@0:6860..6893 `subgroupPartitionedExclusiveMinNV`
+          Expr@0:6894..6896 `Variable`
+            Identifier@0:6894..6896 `f4`
+          Expr@0:6898..6903 `Variable`
+            Identifier@0:6898..6903 `parti`
+      Statement@0:6963..7008 `Expression`
+        ExprStatement@0:6963..7008
+          FunIdentifier@0:6963..6996 `Expr`
+            Expr `Variable`
+              Identifier@0:6963..6996 `subgroupPartitionedExclusiveMaxNV`
+          Expr@0:6997..6999 `Variable`
+            Identifier@0:6997..6999 `f4`
+          Expr@0:7001..7006 `Variable`
+            Identifier@0:7001..7006 `parti`
+      Statement@0:7066..7115 `Expression`
+        ExprStatement@0:7066..7115
+          FunIdentifier@0:7066..7099 `Expr`
+            Expr `Variable`
+              Identifier@0:7066..7099 `subgroupPartitionedExclusiveAndNV`
+          Expr@0:7100..7106 `Variable`
+            Identifier@0:7100..7106 `ballot`
+          Expr@0:7108..7113 `Variable`
+            Identifier@0:7108..7113 `parti`
+      Statement@0:7169..7217 `Expression`
+        ExprStatement@0:7169..7217
+          FunIdentifier@0:7169..7201 `Expr`
+            Expr `Variable`
+              Identifier@0:7169..7201 `subgroupPartitionedExclusiveOrNV`
+          Expr@0:7202..7208 `Variable`
+            Identifier@0:7202..7208 `ballot`
+          Expr@0:7210..7215 `Variable`
+            Identifier@0:7210..7215 `parti`
+      Statement@0:7272..7321 `Expression`
+        ExprStatement@0:7272..7321
+          FunIdentifier@0:7272..7305 `Expr`
+            Expr `Variable`
+              Identifier@0:7272..7305 `subgroupPartitionedExclusiveXorNV`
+          Expr@0:7306..7312 `Variable`
+            Identifier@0:7306..7312 `ballot`
+          Expr@0:7314..7319 `Variable`
+            Identifier@0:7314..7319 `parti`
+      Statement@0:7377..7391 `Jump`
+        JumpStatement@0:7377..7391 `return`
+          Identifier@0:7384..7390 `result`
+ExternalDeclaration@0:7398..7445 `Preprocessor`
+  Preprocessor@0:7398..7445 `#extension`
+    PreprocessorExtension@0:7409..7445
+      PreprocessorExtensionName@0:7409..7445 `Specific`
+        String `GL_KHR_shader_subgroup_basic`
+ExternalDeclaration@0:7447..7483 `Declaration`
+  Declaration@0:7447..7483 `InitDeclaratorList`
+    InitDeclaratorList@0:7447..7482
+      SingleDeclaration@0:7447..7482
+        FullySpecifiedType@0:7447..7477
+          TypeQualifierSpec@0:7447..7467 `Layout`
+            LayoutQualifier@0:7447..7467
+              LayoutQualifierSpec@0:7454..7466 `Identifier`
+                Identifier@0:7454..7462 `location`
+                IntConst `0`
+          TypeQualifierSpec@0:7468..7471 `Storage`
+            StorageQualifier@0:7468..7471 `out`
+              Out
+          TypeSpecifier@0:7472..7477
+            TypeSpecifierNonArray@0:7472..7477 `uvec4`
+              UVec4
+ExternalDeclaration@0:7485..7709 `FunctionDefinition`
+  FunctionDefinition@0:7485..7709
+    FunctionPrototype@0:7485..7501
+      FullySpecifiedType@0:7485..7489
+        TypeSpecifier@0:7485..7489
+          TypeSpecifierNonArray@0:7485..7489 `void`
+            Void
+      Identifier@0:7490..7494 `main`
+      FunctionParameterDeclaration@0:7496..7500 `Unnamed`
+        TypeSpecifier@0:7496..7500
+          TypeSpecifierNonArray@0:7496..7500 `void`
+            Void
+    CompoundStatement@0:7503..7709
+      Statement@0:7508..7569 `Expression`
+        ExprStatement@0:7508..7569
+          Expr `Variable`
+            Identifier@0:7508..7512 `data`
+          AssignmentOp@0:7513..7514 `=`
+          Expr `FunCall`
+            FunIdentifier@0:7515..7520 `TypeSpecifier`
+              TypeSpecifier
+                TypeSpecifierNonArray@0:7515..7520 `uvec4`
+                  UVec4
+            Expr@0:7521..7536 `Variable`
+              Identifier@0:7521..7536 `gl_SubgroupSize`
+            Expr@0:7538..7561 `Variable`
+              Identifier@0:7538..7561 `gl_SubgroupInvocationID`
+            Expr@0:7563..7564 `IntConst`
+              IntConst `0`
+            Expr@0:7566..7567 `IntConst`
+              IntConst `0`
+      Statement@0:7573..7591 `Expression`
+        ExprStatement@0:7573..7591
+          FunIdentifier@0:7573..7588 `Expr`
+            Expr `Variable`
+              Identifier@0:7573..7588 `subgroupBarrier`
+      Statement@0:7595..7619 `Expression`
+        ExprStatement@0:7595..7619
+          FunIdentifier@0:7595..7616 `Expr`
+            Expr `Variable`
+              Identifier@0:7595..7616 `subgroupMemoryBarrier`
+      Statement@0:7623..7653 `Expression`
+        ExprStatement@0:7623..7653
+          FunIdentifier@0:7623..7650 `Expr`
+            Expr `Variable`
+              Identifier@0:7623..7650 `subgroupMemoryBarrierBuffer`
+      Statement@0:7657..7686 `Expression`
+        ExprStatement@0:7657..7686
+          FunIdentifier@0:7657..7683 `Expr`
+            Expr `Variable`
+              Identifier@0:7657..7683 `subgroupMemoryBarrierImage`
+      Statement@0:7690..7706 `Expression`
+        ExprStatement@0:7690..7706
+          FunIdentifier@0:7690..7703 `Expr`
+            Expr `Variable`
+              Identifier@0:7690..7703 `subgroupElect`
+ExternalDeclaration@0:7713..7761 `Preprocessor`
+  Preprocessor@0:7713..7761 `#extension`
+    PreprocessorExtension@0:7724..7761
+      PreprocessorExtensionName@0:7724..7761 `Specific`
+        String `GL_KHR_shader_subgroup_ballot`
+ExternalDeclaration@0:7763..8313 `FunctionDefinition`
+  FunctionDefinition@0:7763..8313
+    FunctionPrototype@0:7763..7789
+      FullySpecifiedType@0:7763..7767
+        TypeSpecifier@0:7763..7767
+          TypeSpecifierNonArray@0:7763..7767 `void`
+            Void
+      Identifier@0:7768..7780 `ballot_works`
+      FunctionParameterDeclaration@0:7781..7788 `Named`
+        FunctionParameterDeclarator@0:7781..7788
+          TypeSpecifier@0:7781..7785
+            TypeSpecifierNonArray@0:7781..7785 `vec4`
+              Vec4
+          ArrayedIdentifier@0:7786..7788
+            Identifier@0:7786..7788 `f4`
+    CompoundStatement@0:7790..8313
+      Statement@0:7795..7801 `Declaration`
+        Declaration@0:7795..7801 `InitDeclaratorList`
+          InitDeclaratorList@0:7795..7800
+            SingleDeclaration@0:7795..7800
+              FullySpecifiedType@0:7795..7798
+                TypeSpecifier@0:7795..7798
+                  TypeSpecifierNonArray@0:7795..7798 `int`
+                    Int
+      Statement@0:7805..7823 `Expression`
+        ExprStatement@0:7805..7823
+          Identifier@0:7805..7822 `gl_SubgroupEqMask`
+      Statement@0:7827..7845 `Expression`
+        ExprStatement@0:7827..7845
+          Identifier@0:7827..7844 `gl_SubgroupGeMask`
+      Statement@0:7849..7867 `Expression`
+        ExprStatement@0:7849..7867
+          Identifier@0:7849..7866 `gl_SubgroupGtMask`
+      Statement@0:7871..7889 `Expression`
+        ExprStatement@0:7871..7889
+          Identifier@0:7871..7888 `gl_SubgroupLeMask`
+      Statement@0:7893..7911 `Expression`
+        ExprStatement@0:7893..7911
+          Identifier@0:7893..7910 `gl_SubgroupLtMask`
+      Statement@0:7915..7940 `Expression`
+        ExprStatement@0:7915..7940
+          FunIdentifier@0:7915..7932 `Expr`
+            Expr `Variable`
+              Identifier@0:7915..7932 `subgroupBroadcast`
+          Expr@0:7933..7935 `Variable`
+            Identifier@0:7933..7935 `f4`
+          Expr@0:7937..7938 `IntConst`
+            IntConst `0`
+      Statement@0:7944..7969 `Expression`
+        ExprStatement@0:7944..7969
+          FunIdentifier@0:7944..7961 `Expr`
+            Expr `Variable`
+              Identifier@0:7944..7961 `subgroupBroadcast`
+          Expr@0:7962..7964 `Variable`
+            Identifier@0:7962..7964 `f4`
+          Expr@0:7966..7967 `Variable`
+            Identifier@0:7966..7967 `i`
+      Statement@0:7973..8000 `Expression`
+        ExprStatement@0:7973..8000
+          FunIdentifier@0:7973..7995 `Expr`
+            Expr `Variable`
+              Identifier@0:7973..7995 `subgroupBroadcastFirst`
+          Expr@0:7996..7998 `Variable`
+            Identifier@0:7996..7998 `f4`
+      Statement@0:8004..8041 `Declaration`
+        Declaration@0:8004..8041 `InitDeclaratorList`
+          InitDeclaratorList@0:8004..8040
+            SingleDeclaration@0:8004..8040
+              FullySpecifiedType@0:8004..8009
+                TypeSpecifier@0:8004..8009
+                  TypeSpecifierNonArray@0:8004..8009 `uvec4`
+                    UVec4
+              Expr `FunCall`
+                FunIdentifier@0:8019..8033 `Expr`
+                  Expr `Variable`
+                    Identifier@0:8019..8033 `subgroupBallot`
+                Expr@0:8034..8039 `BoolConst`
+                  BoolConst `false`
+      Statement@0:8045..8079 `Expression`
+        ExprStatement@0:8045..8079
+          FunIdentifier@0:8045..8066 `Expr`
+            Expr `Variable`
+              Identifier@0:8045..8066 `subgroupInverseBallot`
+          Expr@0:8067..8077 `FunCall`
+            FunIdentifier@0:8067..8072 `TypeSpecifier`
+              TypeSpecifier
+                TypeSpecifierNonArray@0:8067..8072 `uvec4`
+                  UVec4
+            Expr@0:8073..8076 `IntConst`
+              IntConst `1`
+      Statement@0:8083..8119 `Expression`
+        ExprStatement@0:8083..8119
+          FunIdentifier@0:8083..8107 `Expr`
+            Expr `Variable`
+              Identifier@0:8083..8107 `subgroupBallotBitExtract`
+          Expr@0:8108..8114 `Variable`
+            Identifier@0:8108..8114 `ballot`
+          Expr@0:8116..8117 `IntConst`
+            IntConst `0`
+      Statement@0:8123..8154 `Expression`
+        ExprStatement@0:8123..8154
+          FunIdentifier@0:8123..8145 `Expr`
+            Expr `Variable`
+              Identifier@0:8123..8145 `subgroupBallotBitCount`
+          Expr@0:8146..8152 `Variable`
+            Identifier@0:8146..8152 `ballot`
+      Statement@0:8158..8198 `Expression`
+        ExprStatement@0:8158..8198
+          FunIdentifier@0:8158..8189 `Expr`
+            Expr `Variable`
+              Identifier@0:8158..8189 `subgroupBallotInclusiveBitCount`
+          Expr@0:8190..8196 `Variable`
+            Identifier@0:8190..8196 `ballot`
+      Statement@0:8202..8242 `Expression`
+        ExprStatement@0:8202..8242
+          FunIdentifier@0:8202..8233 `Expr`
+            Expr `Variable`
+              Identifier@0:8202..8233 `subgroupBallotExclusiveBitCount`
+          Expr@0:8234..8240 `Variable`
+            Identifier@0:8234..8240 `ballot`
+      Statement@0:8246..8276 `Expression`
+        ExprStatement@0:8246..8276
+          FunIdentifier@0:8246..8267 `Expr`
+            Expr `Variable`
+              Identifier@0:8246..8267 `subgroupBallotFindLSB`
+          Expr@0:8268..8274 `Variable`
+            Identifier@0:8268..8274 `ballot`
+      Statement@0:8280..8310 `Expression`
+        ExprStatement@0:8280..8310
+          FunIdentifier@0:8280..8301 `Expr`
+            Expr `Variable`
+              Identifier@0:8280..8301 `subgroupBallotFindMSB`
+          Expr@0:8302..8308 `Variable`
+            Identifier@0:8302..8308 `ballot`
+ExternalDeclaration@0:8317..8363 `Preprocessor`
+  Preprocessor@0:8317..8363 `#extension`
+    PreprocessorExtension@0:8328..8363
+      PreprocessorExtensionName@0:8328..8363 `Specific`
+        String `GL_KHR_shader_subgroup_vote`
+ExternalDeclaration@0:8365..8465 `FunctionDefinition`
+  FunctionDefinition@0:8365..8465
+    FunctionPrototype@0:8365..8389
+      FullySpecifiedType@0:8365..8369
+        TypeSpecifier@0:8365..8369
+          TypeSpecifierNonArray@0:8365..8369 `void`
+            Void
+      Identifier@0:8370..8380 `vote_works`
+      FunctionParameterDeclaration@0:8381..8388 `Named`
+        FunctionParameterDeclarator@0:8381..8388
+          TypeSpecifier@0:8381..8385
+            TypeSpecifierNonArray@0:8381..8385 `vec4`
+              Vec4
+          ArrayedIdentifier@0:8386..8388
+            Identifier@0:8386..8388 `f4`
+    CompoundStatement@0:8391..8465
+      Statement@0:8396..8414 `Expression`
+        ExprStatement@0:8396..8414
+          FunIdentifier@0:8396..8407 `Expr`
+            Expr `Variable`
+              Identifier@0:8396..8407 `subgroupAll`
+          Expr@0:8408..8412 `BoolConst`
+            BoolConst `true`
+      Statement@0:8418..8437 `Expression`
+        ExprStatement@0:8418..8437
+          FunIdentifier@0:8418..8429 `Expr`
+            Expr `Variable`
+              Identifier@0:8418..8429 `subgroupAny`
+          Expr@0:8430..8435 `BoolConst`
+            BoolConst `false`
+      Statement@0:8441..8462 `Expression`
+        ExprStatement@0:8441..8462
+          FunIdentifier@0:8441..8457 `Expr`
+            Expr `Variable`
+              Identifier@0:8441..8457 `subgroupAllEqual`
+          Expr@0:8458..8460 `Variable`
+            Identifier@0:8458..8460 `f4`
+ExternalDeclaration@0:8469..8518 `Preprocessor`
+  Preprocessor@0:8469..8518 `#extension`
+    PreprocessorExtension@0:8480..8518
+      PreprocessorExtensionName@0:8480..8518 `Specific`
+        String `GL_KHR_shader_subgroup_shuffle`
+ExternalDeclaration@0:8520..8578 `Preprocessor`
+  Preprocessor@0:8520..8578 `#extension`
+    PreprocessorExtension@0:8531..8578
+      PreprocessorExtensionName@0:8531..8578 `Specific`
+        String `GL_KHR_shader_subgroup_shuffle_relative`
+ExternalDeclaration@0:8580..8732 `FunctionDefinition`
+  FunctionDefinition@0:8580..8732
+    FunctionPrototype@0:8580..8607
+      FullySpecifiedType@0:8580..8584
+        TypeSpecifier@0:8580..8584
+          TypeSpecifierNonArray@0:8580..8584 `void`
+            Void
+      Identifier@0:8585..8598 `shuffle_works`
+      FunctionParameterDeclaration@0:8599..8606 `Named`
+        FunctionParameterDeclarator@0:8599..8606
+          TypeSpecifier@0:8599..8603
+            TypeSpecifierNonArray@0:8599..8603 `vec4`
+              Vec4
+          ArrayedIdentifier@0:8604..8606
+            Identifier@0:8604..8606 `f4`
+    CompoundStatement@0:8609..8732
+      Statement@0:8614..8637 `Expression`
+        ExprStatement@0:8614..8637
+          FunIdentifier@0:8614..8629 `Expr`
+            Expr `Variable`
+              Identifier@0:8614..8629 `subgroupShuffle`
+          Expr@0:8630..8632 `Variable`
+            Identifier@0:8630..8632 `f4`
+          Expr@0:8634..8635 `IntConst`
+            IntConst `0`
+      Statement@0:8641..8669 `Expression`
+        ExprStatement@0:8641..8669
+          FunIdentifier@0:8641..8659 `Expr`
+            Expr `Variable`
+              Identifier@0:8641..8659 `subgroupShuffleXor`
+          Expr@0:8660..8662 `Variable`
+            Identifier@0:8660..8662 `f4`
+          Expr@0:8664..8667 `IntConst`
+            IntConst `1`
+      Statement@0:8673..8698 `Expression`
+        ExprStatement@0:8673..8698
+          FunIdentifier@0:8673..8690 `Expr`
+            Expr `Variable`
+              Identifier@0:8673..8690 `subgroupShuffleUp`
+          Expr@0:8691..8693 `Variable`
+            Identifier@0:8691..8693 `f4`
+          Expr@0:8695..8696 `IntConst`
+            IntConst `1`
+      Statement@0:8702..8729 `Expression`
+        ExprStatement@0:8702..8729
+          FunIdentifier@0:8702..8721 `Expr`
+            Expr `Variable`
+              Identifier@0:8702..8721 `subgroupShuffleDown`
+          Expr@0:8722..8724 `Variable`
+            Identifier@0:8722..8724 `f4`
+          Expr@0:8726..8727 `IntConst`
+            IntConst `1`
+ExternalDeclaration@0:8736..8788 `Preprocessor`
+  Preprocessor@0:8736..8788 `#extension`
+    PreprocessorExtension@0:8747..8788
+      PreprocessorExtensionName@0:8747..8788 `Specific`
+        String `GL_KHR_shader_subgroup_arithmetic`
+ExternalDeclaration@0:8790..9417 `FunctionDefinition`
+  FunctionDefinition@0:8790..9417
+    FunctionPrototype@0:8790..8815
+      FullySpecifiedType@0:8790..8794
+        TypeSpecifier@0:8790..8794
+          TypeSpecifierNonArray@0:8790..8794 `void`
+            Void
+      Identifier@0:8795..8806 `arith_works`
+      FunctionParameterDeclaration@0:8807..8814 `Named`
+        FunctionParameterDeclarator@0:8807..8814
+          TypeSpecifier@0:8807..8811
+            TypeSpecifierNonArray@0:8807..8811 `vec4`
+              Vec4
+          ArrayedIdentifier@0:8812..8814
+            Identifier@0:8812..8814 `f4`
+    CompoundStatement@0:8817..9417
+      Statement@0:8822..8835 `Declaration`
+        Declaration@0:8822..8835 `InitDeclaratorList`
+          InitDeclaratorList@0:8822..8834
+            SingleDeclaration@0:8822..8834
+              FullySpecifiedType@0:8822..8827
+                TypeSpecifier@0:8822..8827
+                  TypeSpecifierNonArray@0:8822..8827 `uvec4`
+                    UVec4
+      Statement@0:8839..8855 `Expression`
+        ExprStatement@0:8839..8855
+          FunIdentifier@0:8839..8850 `Expr`
+            Expr `Variable`
+              Identifier@0:8839..8850 `subgroupAdd`
+          Expr@0:8851..8853 `Variable`
+            Identifier@0:8851..8853 `f4`
+      Statement@0:8859..8875 `Expression`
+        ExprStatement@0:8859..8875
+          FunIdentifier@0:8859..8870 `Expr`
+            Expr `Variable`
+              Identifier@0:8859..8870 `subgroupMul`
+          Expr@0:8871..8873 `Variable`
+            Identifier@0:8871..8873 `f4`
+      Statement@0:8879..8895 `Expression`
+        ExprStatement@0:8879..8895
+          FunIdentifier@0:8879..8890 `Expr`
+            Expr `Variable`
+              Identifier@0:8879..8890 `subgroupMin`
+          Expr@0:8891..8893 `Variable`
+            Identifier@0:8891..8893 `f4`
+      Statement@0:8899..8915 `Expression`
+        ExprStatement@0:8899..8915
+          FunIdentifier@0:8899..8910 `Expr`
+            Expr `Variable`
+              Identifier@0:8899..8910 `subgroupMax`
+          Expr@0:8911..8913 `Variable`
+            Identifier@0:8911..8913 `f4`
+      Statement@0:8919..8939 `Expression`
+        ExprStatement@0:8919..8939
+          FunIdentifier@0:8919..8930 `Expr`
+            Expr `Variable`
+              Identifier@0:8919..8930 `subgroupAnd`
+          Expr@0:8931..8937 `Variable`
+            Identifier@0:8931..8937 `ballot`
+      Statement@0:8943..8962 `Expression`
+        ExprStatement@0:8943..8962
+          FunIdentifier@0:8943..8953 `Expr`
+            Expr `Variable`
+              Identifier@0:8943..8953 `subgroupOr`
+          Expr@0:8954..8960 `Variable`
+            Identifier@0:8954..8960 `ballot`
+      Statement@0:8966..8986 `Expression`
+        ExprStatement@0:8966..8986
+          FunIdentifier@0:8966..8977 `Expr`
+            Expr `Variable`
+              Identifier@0:8966..8977 `subgroupXor`
+          Expr@0:8978..8984 `Variable`
+            Identifier@0:8978..8984 `ballot`
+      Statement@0:8990..9015 `Expression`
+        ExprStatement@0:8990..9015
+          FunIdentifier@0:8990..9010 `Expr`
+            Expr `Variable`
+              Identifier@0:8990..9010 `subgroupInclusiveAdd`
+          Expr@0:9011..9013 `Variable`
+            Identifier@0:9011..9013 `f4`
+      Statement@0:9019..9044 `Expression`
+        ExprStatement@0:9019..9044
+          FunIdentifier@0:9019..9039 `Expr`
+            Expr `Variable`
+              Identifier@0:9019..9039 `subgroupInclusiveMul`
+          Expr@0:9040..9042 `Variable`
+            Identifier@0:9040..9042 `f4`
+      Statement@0:9048..9073 `Expression`
+        ExprStatement@0:9048..9073
+          FunIdentifier@0:9048..9068 `Expr`
+            Expr `Variable`
+              Identifier@0:9048..9068 `subgroupInclusiveMin`
+          Expr@0:9069..9071 `Variable`
+            Identifier@0:9069..9071 `f4`
+      Statement@0:9077..9102 `Expression`
+        ExprStatement@0:9077..9102
+          FunIdentifier@0:9077..9097 `Expr`
+            Expr `Variable`
+              Identifier@0:9077..9097 `subgroupInclusiveMax`
+          Expr@0:9098..9100 `Variable`
+            Identifier@0:9098..9100 `f4`
+      Statement@0:9106..9135 `Expression`
+        ExprStatement@0:9106..9135
+          FunIdentifier@0:9106..9126 `Expr`
+            Expr `Variable`
+              Identifier@0:9106..9126 `subgroupInclusiveAnd`
+          Expr@0:9127..9133 `Variable`
+            Identifier@0:9127..9133 `ballot`
+      Statement@0:9139..9167 `Expression`
+        ExprStatement@0:9139..9167
+          FunIdentifier@0:9139..9158 `Expr`
+            Expr `Variable`
+              Identifier@0:9139..9158 `subgroupInclusiveOr`
+          Expr@0:9159..9165 `Variable`
+            Identifier@0:9159..9165 `ballot`
+      Statement@0:9171..9200 `Expression`
+        ExprStatement@0:9171..9200
+          FunIdentifier@0:9171..9191 `Expr`
+            Expr `Variable`
+              Identifier@0:9171..9191 `subgroupInclusiveXor`
+          Expr@0:9192..9198 `Variable`
+            Identifier@0:9192..9198 `ballot`
+      Statement@0:9204..9229 `Expression`
+        ExprStatement@0:9204..9229
+          FunIdentifier@0:9204..9224 `Expr`
+            Expr `Variable`
+              Identifier@0:9204..9224 `subgroupExclusiveAdd`
+          Expr@0:9225..9227 `Variable`
+            Identifier@0:9225..9227 `f4`
+      Statement@0:9233..9258 `Expression`
+        ExprStatement@0:9233..9258
+          FunIdentifier@0:9233..9253 `Expr`
+            Expr `Variable`
+              Identifier@0:9233..9253 `subgroupExclusiveMul`
+          Expr@0:9254..9256 `Variable`
+            Identifier@0:9254..9256 `f4`
+      Statement@0:9262..9287 `Expression`
+        ExprStatement@0:9262..9287
+          FunIdentifier@0:9262..9282 `Expr`
+            Expr `Variable`
+              Identifier@0:9262..9282 `subgroupExclusiveMin`
+          Expr@0:9283..9285 `Variable`
+            Identifier@0:9283..9285 `f4`
+      Statement@0:9291..9316 `Expression`
+        ExprStatement@0:9291..9316
+          FunIdentifier@0:9291..9311 `Expr`
+            Expr `Variable`
+              Identifier@0:9291..9311 `subgroupExclusiveMax`
+          Expr@0:9312..9314 `Variable`
+            Identifier@0:9312..9314 `f4`
+      Statement@0:9320..9349 `Expression`
+        ExprStatement@0:9320..9349
+          FunIdentifier@0:9320..9340 `Expr`
+            Expr `Variable`
+              Identifier@0:9320..9340 `subgroupExclusiveAnd`
+          Expr@0:9341..9347 `Variable`
+            Identifier@0:9341..9347 `ballot`
+      Statement@0:9353..9381 `Expression`
+        ExprStatement@0:9353..9381
+          FunIdentifier@0:9353..9372 `Expr`
+            Expr `Variable`
+              Identifier@0:9353..9372 `subgroupExclusiveOr`
+          Expr@0:9373..9379 `Variable`
+            Identifier@0:9373..9379 `ballot`
+      Statement@0:9385..9414 `Expression`
+        ExprStatement@0:9385..9414
+          FunIdentifier@0:9385..9405 `Expr`
+            Expr `Variable`
+              Identifier@0:9385..9405 `subgroupExclusiveXor`
+          Expr@0:9406..9412 `Variable`
+            Identifier@0:9406..9412 `ballot`
+ExternalDeclaration@0:9421..9472 `Preprocessor`
+  Preprocessor@0:9421..9472 `#extension`
+    PreprocessorExtension@0:9432..9472
+      PreprocessorExtensionName@0:9432..9472 `Specific`
+        String `GL_KHR_shader_subgroup_clustered`
+ExternalDeclaration@0:9474..9781 `FunctionDefinition`
+  FunctionDefinition@0:9474..9781
+    FunctionPrototype@0:9474..9503
+      FullySpecifiedType@0:9474..9478
+        TypeSpecifier@0:9474..9478
+          TypeSpecifierNonArray@0:9474..9478 `void`
+            Void
+      Identifier@0:9479..9494 `clustered_works`
+      FunctionParameterDeclaration@0:9495..9502 `Named`
+        FunctionParameterDeclarator@0:9495..9502
+          TypeSpecifier@0:9495..9499
+            TypeSpecifierNonArray@0:9495..9499 `vec4`
+              Vec4
+          ArrayedIdentifier@0:9500..9502
+            Identifier@0:9500..9502 `f4`
+    CompoundStatement@0:9505..9781
+      Statement@0:9510..9543 `Declaration`
+        Declaration@0:9510..9543 `InitDeclaratorList`
+          InitDeclaratorList@0:9510..9542
+            SingleDeclaration@0:9510..9542
+              FullySpecifiedType@0:9510..9515
+                TypeSpecifier@0:9510..9515
+                  TypeSpecifierNonArray@0:9510..9515 `uvec4`
+                    UVec4
+              Expr `FunCall`
+                FunIdentifier@0:9525..9530 `TypeSpecifier`
+                  TypeSpecifier
+                    TypeSpecifierNonArray@0:9525..9530 `uvec4`
+                      UVec4
+                Expr@0:9531..9535 `IntConst`
+                  IntConst `85`
+                Expr@0:9536..9537 `IntConst`
+                  IntConst `0`
+                Expr@0:9538..9539 `IntConst`
+                  IntConst `0`
+                Expr@0:9540..9541 `IntConst`
+                  IntConst `0`
+      Statement@0:9547..9575 `Expression`
+        ExprStatement@0:9547..9575
+          FunIdentifier@0:9547..9567 `Expr`
+            Expr `Variable`
+              Identifier@0:9547..9567 `subgroupClusteredAdd`
+          Expr@0:9568..9570 `Variable`
+            Identifier@0:9568..9570 `f4`
+          Expr@0:9572..9573 `IntConst`
+            IntConst `2`
+      Statement@0:9579..9607 `Expression`
+        ExprStatement@0:9579..9607
+          FunIdentifier@0:9579..9599 `Expr`
+            Expr `Variable`
+              Identifier@0:9579..9599 `subgroupClusteredMul`
+          Expr@0:9600..9602 `Variable`
+            Identifier@0:9600..9602 `f4`
+          Expr@0:9604..9605 `IntConst`
+            IntConst `2`
+      Statement@0:9611..9639 `Expression`
+        ExprStatement@0:9611..9639
+          FunIdentifier@0:9611..9631 `Expr`
+            Expr `Variable`
+              Identifier@0:9611..9631 `subgroupClusteredMin`
+          Expr@0:9632..9634 `Variable`
+            Identifier@0:9632..9634 `f4`
+          Expr@0:9636..9637 `IntConst`
+            IntConst `2`
+      Statement@0:9643..9671 `Expression`
+        ExprStatement@0:9643..9671
+          FunIdentifier@0:9643..9663 `Expr`
+            Expr `Variable`
+              Identifier@0:9643..9663 `subgroupClusteredMax`
+          Expr@0:9664..9666 `Variable`
+            Identifier@0:9664..9666 `f4`
+          Expr@0:9668..9669 `IntConst`
+            IntConst `2`
+      Statement@0:9675..9707 `Expression`
+        ExprStatement@0:9675..9707
+          FunIdentifier@0:9675..9695 `Expr`
+            Expr `Variable`
+              Identifier@0:9675..9695 `subgroupClusteredAnd`
+          Expr@0:9696..9702 `Variable`
+            Identifier@0:9696..9702 `ballot`
+          Expr@0:9704..9705 `IntConst`
+            IntConst `2`
+      Statement@0:9711..9742 `Expression`
+        ExprStatement@0:9711..9742
+          FunIdentifier@0:9711..9730 `Expr`
+            Expr `Variable`
+              Identifier@0:9711..9730 `subgroupClusteredOr`
+          Expr@0:9731..9737 `Variable`
+            Identifier@0:9731..9737 `ballot`
+          Expr@0:9739..9740 `IntConst`
+            IntConst `2`
+      Statement@0:9746..9778 `Expression`
+        ExprStatement@0:9746..9778
+          FunIdentifier@0:9746..9766 `Expr`
+            Expr `Variable`
+              Identifier@0:9746..9766 `subgroupClusteredXor`
+          Expr@0:9767..9773 `Variable`
+            Identifier@0:9767..9773 `ballot`
+          Expr@0:9775..9776 `IntConst`
+            IntConst `2`
+ExternalDeclaration@0:9785..9831 `Preprocessor`
+  Preprocessor@0:9785..9831 `#extension`
+    PreprocessorExtension@0:9796..9831
+      PreprocessorExtensionName@0:9796..9831 `Specific`
+        String `GL_KHR_shader_subgroup_quad`
+ExternalDeclaration@0:9833..10040 `FunctionDefinition`
+  FunctionDefinition@0:9833..10040
+    FunctionPrototype@0:9833..9857
+      FullySpecifiedType@0:9833..9837
+        TypeSpecifier@0:9833..9837
+          TypeSpecifierNonArray@0:9833..9837 `void`
+            Void
+      Identifier@0:9838..9848 `quad_works`
+      FunctionParameterDeclaration@0:9849..9856 `Named`
+        FunctionParameterDeclarator@0:9849..9856
+          TypeSpecifier@0:9849..9853
+            TypeSpecifierNonArray@0:9849..9853 `vec4`
+              Vec4
+          ArrayedIdentifier@0:9854..9856
+            Identifier@0:9854..9856 `f4`
+    CompoundStatement@0:9859..10040
+      Statement@0:9864..9870 `Declaration`
+        Declaration@0:9864..9870 `InitDeclaratorList`
+          InitDeclaratorList@0:9864..9869
+            SingleDeclaration@0:9864..9869
+              FullySpecifiedType@0:9864..9867
+                TypeSpecifier@0:9864..9867
+                  TypeSpecifierNonArray@0:9864..9867 `int`
+                    Int
+      Statement@0:9874..9903 `Expression`
+        ExprStatement@0:9874..9903
+          FunIdentifier@0:9874..9895 `Expr`
+            Expr `Variable`
+              Identifier@0:9874..9895 `subgroupQuadBroadcast`
+          Expr@0:9896..9898 `Variable`
+            Identifier@0:9896..9898 `f4`
+          Expr@0:9900..9901 `IntConst`
+            IntConst `0`
+      Statement@0:9907..9936 `Expression`
+        ExprStatement@0:9907..9936
+          FunIdentifier@0:9907..9928 `Expr`
+            Expr `Variable`
+              Identifier@0:9907..9928 `subgroupQuadBroadcast`
+          Expr@0:9929..9931 `Variable`
+            Identifier@0:9929..9931 `f4`
+          Expr@0:9933..9934 `Variable`
+            Identifier@0:9933..9934 `i`
+      Statement@0:9940..9971 `Expression`
+        ExprStatement@0:9940..9971
+          FunIdentifier@0:9940..9966 `Expr`
+            Expr `Variable`
+              Identifier@0:9940..9966 `subgroupQuadSwapHorizontal`
+          Expr@0:9967..9969 `Variable`
+            Identifier@0:9967..9969 `f4`
+      Statement@0:9975..10004 `Expression`
+        ExprStatement@0:9975..10004
+          FunIdentifier@0:9975..9999 `Expr`
+            Expr `Variable`
+              Identifier@0:9975..9999 `subgroupQuadSwapVertical`
+          Expr@0:10000..10002 `Variable`
+            Identifier@0:10000..10002 `f4`
+      Statement@0:10008..10037 `Expression`
+        ExprStatement@0:10008..10037
+          FunIdentifier@0:10008..10032 `Expr`
+            Expr `Variable`
+              Identifier@0:10008..10032 `subgroupQuadSwapDiagonal`
+          Expr@0:10033..10035 `Variable`
+            Identifier@0:10033..10035 `f4`
+ExternalDeclaration@0:10044..10096 `Preprocessor`
+  Preprocessor@0:10044..10096 `#extension`
+    PreprocessorExtension@0:10055..10096
+      PreprocessorExtensionName@0:10055..10096 `Specific`
+        String `GL_NV_shader_subgroup_partitioned`
+ExternalDeclaration@0:10098..11213 `FunctionDefinition`
+  FunctionDefinition@0:10098..11213
+    FunctionPrototype@0:10098..10129
+      FullySpecifiedType@0:10098..10102
+        TypeSpecifier@0:10098..10102
+          TypeSpecifierNonArray@0:10098..10102 `void`
+            Void
+      Identifier@0:10103..10120 `partitioned_works`
+      FunctionParameterDeclaration@0:10121..10128 `Named`
+        FunctionParameterDeclarator@0:10121..10128
+          TypeSpecifier@0:10121..10125
+            TypeSpecifierNonArray@0:10121..10125 `vec4`
+              Vec4
+          ArrayedIdentifier@0:10126..10128
+            Identifier@0:10126..10128 `f4`
+    CompoundStatement@0:10131..11213
+      Statement@0:10136..10174 `Declaration`
+        Declaration@0:10136..10174 `InitDeclaratorList`
+          InitDeclaratorList@0:10136..10173
+            SingleDeclaration@0:10136..10173
+              FullySpecifiedType@0:10136..10141
+                TypeSpecifier@0:10136..10141
+                  TypeSpecifierNonArray@0:10136..10141 `uvec4`
+                    UVec4
+              Expr `FunCall`
+                FunIdentifier@0:10150..10169 `Expr`
+                  Expr `Variable`
+                    Identifier@0:10150..10169 `subgroupPartitionNV`
+                Expr@0:10170..10172 `Variable`
+                  Identifier@0:10170..10172 `f4`
+      Statement@0:10178..10211 `Declaration`
+        Declaration@0:10178..10211 `InitDeclaratorList`
+          InitDeclaratorList@0:10178..10210
+            SingleDeclaration@0:10178..10210
+              FullySpecifiedType@0:10178..10183
+                TypeSpecifier@0:10178..10183
+                  TypeSpecifierNonArray@0:10178..10183 `uvec4`
+                    UVec4
+              Expr `FunCall`
+                FunIdentifier@0:10193..10198 `TypeSpecifier`
+                  TypeSpecifier
+                    TypeSpecifierNonArray@0:10193..10198 `uvec4`
+                      UVec4
+                Expr@0:10199..10203 `IntConst`
+                  IntConst `85`
+                Expr@0:10204..10205 `IntConst`
+                  IntConst `0`
+                Expr@0:10206..10207 `IntConst`
+                  IntConst `0`
+                Expr@0:10208..10209 `IntConst`
+                  IntConst `0`
+      Statement@0:10215..10251 `Expression`
+        ExprStatement@0:10215..10251
+          FunIdentifier@0:10215..10239 `Expr`
+            Expr `Variable`
+              Identifier@0:10215..10239 `subgroupPartitionedAddNV`
+          Expr@0:10240..10242 `Variable`
+            Identifier@0:10240..10242 `f4`
+          Expr@0:10244..10249 `Variable`
+            Identifier@0:10244..10249 `parti`
+      Statement@0:10255..10291 `Expression`
+        ExprStatement@0:10255..10291
+          FunIdentifier@0:10255..10279 `Expr`
+            Expr `Variable`
+              Identifier@0:10255..10279 `subgroupPartitionedMulNV`
+          Expr@0:10280..10282 `Variable`
+            Identifier@0:10280..10282 `f4`
+          Expr@0:10284..10289 `Variable`
+            Identifier@0:10284..10289 `parti`
+      Statement@0:10295..10331 `Expression`
+        ExprStatement@0:10295..10331
+          FunIdentifier@0:10295..10319 `Expr`
+            Expr `Variable`
+              Identifier@0:10295..10319 `subgroupPartitionedMinNV`
+          Expr@0:10320..10322 `Variable`
+            Identifier@0:10320..10322 `f4`
+          Expr@0:10324..10329 `Variable`
+            Identifier@0:10324..10329 `parti`
+      Statement@0:10335..10371 `Expression`
+        ExprStatement@0:10335..10371
+          FunIdentifier@0:10335..10359 `Expr`
+            Expr `Variable`
+              Identifier@0:10335..10359 `subgroupPartitionedMaxNV`
+          Expr@0:10360..10362 `Variable`
+            Identifier@0:10360..10362 `f4`
+          Expr@0:10364..10369 `Variable`
+            Identifier@0:10364..10369 `parti`
+      Statement@0:10375..10415 `Expression`
+        ExprStatement@0:10375..10415
+          FunIdentifier@0:10375..10399 `Expr`
+            Expr `Variable`
+              Identifier@0:10375..10399 `subgroupPartitionedAndNV`
+          Expr@0:10400..10406 `Variable`
+            Identifier@0:10400..10406 `ballot`
+          Expr@0:10408..10413 `Variable`
+            Identifier@0:10408..10413 `parti`
+      Statement@0:10419..10458 `Expression`
+        ExprStatement@0:10419..10458
+          FunIdentifier@0:10419..10442 `Expr`
+            Expr `Variable`
+              Identifier@0:10419..10442 `subgroupPartitionedOrNV`
+          Expr@0:10443..10449 `Variable`
+            Identifier@0:10443..10449 `ballot`
+          Expr@0:10451..10456 `Variable`
+            Identifier@0:10451..10456 `parti`
+      Statement@0:10462..10502 `Expression`
+        ExprStatement@0:10462..10502
+          FunIdentifier@0:10462..10486 `Expr`
+            Expr `Variable`
+              Identifier@0:10462..10486 `subgroupPartitionedXorNV`
+          Expr@0:10487..10493 `Variable`
+            Identifier@0:10487..10493 `ballot`
+          Expr@0:10495..10500 `Variable`
+            Identifier@0:10495..10500 `parti`
+      Statement@0:10506..10551 `Expression`
+        ExprStatement@0:10506..10551
+          FunIdentifier@0:10506..10539 `Expr`
+            Expr `Variable`
+              Identifier@0:10506..10539 `subgroupPartitionedInclusiveAddNV`
+          Expr@0:10540..10542 `Variable`
+            Identifier@0:10540..10542 `f4`
+          Expr@0:10544..10549 `Variable`
+            Identifier@0:10544..10549 `parti`
+      Statement@0:10555..10600 `Expression`
+        ExprStatement@0:10555..10600
+          FunIdentifier@0:10555..10588 `Expr`
+            Expr `Variable`
+              Identifier@0:10555..10588 `subgroupPartitionedInclusiveMulNV`
+          Expr@0:10589..10591 `Variable`
+            Identifier@0:10589..10591 `f4`
+          Expr@0:10593..10598 `Variable`
+            Identifier@0:10593..10598 `parti`
+      Statement@0:10604..10649 `Expression`
+        ExprStatement@0:10604..10649
+          FunIdentifier@0:10604..10637 `Expr`
+            Expr `Variable`
+              Identifier@0:10604..10637 `subgroupPartitionedInclusiveMinNV`
+          Expr@0:10638..10640 `Variable`
+            Identifier@0:10638..10640 `f4`
+          Expr@0:10642..10647 `Variable`
+            Identifier@0:10642..10647 `parti`
+      Statement@0:10653..10698 `Expression`
+        ExprStatement@0:10653..10698
+          FunIdentifier@0:10653..10686 `Expr`
+            Expr `Variable`
+              Identifier@0:10653..10686 `subgroupPartitionedInclusiveMaxNV`
+          Expr@0:10687..10689 `Variable`
+            Identifier@0:10687..10689 `f4`
+          Expr@0:10691..10696 `Variable`
+            Identifier@0:10691..10696 `parti`
+      Statement@0:10702..10751 `Expression`
+        ExprStatement@0:10702..10751
+          FunIdentifier@0:10702..10735 `Expr`
+            Expr `Variable`
+              Identifier@0:10702..10735 `subgroupPartitionedInclusiveAndNV`
+          Expr@0:10736..10742 `Variable`
+            Identifier@0:10736..10742 `ballot`
+          Expr@0:10744..10749 `Variable`
+            Identifier@0:10744..10749 `parti`
+      Statement@0:10755..10803 `Expression`
+        ExprStatement@0:10755..10803
+          FunIdentifier@0:10755..10787 `Expr`
+            Expr `Variable`
+              Identifier@0:10755..10787 `subgroupPartitionedInclusiveOrNV`
+          Expr@0:10788..10794 `Variable`
+            Identifier@0:10788..10794 `ballot`
+          Expr@0:10796..10801 `Variable`
+            Identifier@0:10796..10801 `parti`
+      Statement@0:10807..10856 `Expression`
+        ExprStatement@0:10807..10856
+          FunIdentifier@0:10807..10840 `Expr`
+            Expr `Variable`
+              Identifier@0:10807..10840 `subgroupPartitionedInclusiveXorNV`
+          Expr@0:10841..10847 `Variable`
+            Identifier@0:10841..10847 `ballot`
+          Expr@0:10849..10854 `Variable`
+            Identifier@0:10849..10854 `parti`
+      Statement@0:10860..10905 `Expression`
+        ExprStatement@0:10860..10905
+          FunIdentifier@0:10860..10893 `Expr`
+            Expr `Variable`
+              Identifier@0:10860..10893 `subgroupPartitionedExclusiveAddNV`
+          Expr@0:10894..10896 `Variable`
+            Identifier@0:10894..10896 `f4`
+          Expr@0:10898..10903 `Variable`
+            Identifier@0:10898..10903 `parti`
+      Statement@0:10909..10954 `Expression`
+        ExprStatement@0:10909..10954
+          FunIdentifier@0:10909..10942 `Expr`
+            Expr `Variable`
+              Identifier@0:10909..10942 `subgroupPartitionedExclusiveMulNV`
+          Expr@0:10943..10945 `Variable`
+            Identifier@0:10943..10945 `f4`
+          Expr@0:10947..10952 `Variable`
+            Identifier@0:10947..10952 `parti`
+      Statement@0:10958..11003 `Expression`
+        ExprStatement@0:10958..11003
+          FunIdentifier@0:10958..10991 `Expr`
+            Expr `Variable`
+              Identifier@0:10958..10991 `subgroupPartitionedExclusiveMinNV`
+          Expr@0:10992..10994 `Variable`
+            Identifier@0:10992..10994 `f4`
+          Expr@0:10996..11001 `Variable`
+            Identifier@0:10996..11001 `parti`
+      Statement@0:11007..11052 `Expression`
+        ExprStatement@0:11007..11052
+          FunIdentifier@0:11007..11040 `Expr`
+            Expr `Variable`
+              Identifier@0:11007..11040 `subgroupPartitionedExclusiveMaxNV`
+          Expr@0:11041..11043 `Variable`
+            Identifier@0:11041..11043 `f4`
+          Expr@0:11045..11050 `Variable`
+            Identifier@0:11045..11050 `parti`
+      Statement@0:11056..11105 `Expression`
+        ExprStatement@0:11056..11105
+          FunIdentifier@0:11056..11089 `Expr`
+            Expr `Variable`
+              Identifier@0:11056..11089 `subgroupPartitionedExclusiveAndNV`
+          Expr@0:11090..11096 `Variable`
+            Identifier@0:11090..11096 `ballot`
+          Expr@0:11098..11103 `Variable`
+            Identifier@0:11098..11103 `parti`
+      Statement@0:11109..11157 `Expression`
+        ExprStatement@0:11109..11157
+          FunIdentifier@0:11109..11141 `Expr`
+            Expr `Variable`
+              Identifier@0:11109..11141 `subgroupPartitionedExclusiveOrNV`
+          Expr@0:11142..11148 `Variable`
+            Identifier@0:11142..11148 `ballot`
+          Expr@0:11150..11155 `Variable`
+            Identifier@0:11150..11155 `parti`
+      Statement@0:11161..11210 `Expression`
+        ExprStatement@0:11161..11210
+          FunIdentifier@0:11161..11194 `Expr`
+            Expr `Variable`
+              Identifier@0:11161..11194 `subgroupPartitionedExclusiveXorNV`
+          Expr@0:11195..11201 `Variable`
+            Identifier@0:11195..11201 `ballot`
+          Expr@0:11203..11208 `Variable`
+            Identifier@0:11203..11208 `parti`
+ExternalDeclaration@0:11253..11473 `FunctionDefinition`
+  FunctionDefinition@0:11253..11473
+    FunctionPrototype@0:11253..11275
+      FullySpecifiedType@0:11253..11257
+        TypeSpecifier@0:11253..11257
+          TypeSpecifierNonArray@0:11253..11257 `void`
+            Void
+      Identifier@0:11258..11273 `sm_builtins_err`
+    CompoundStatement@0:11277..11473
+      Statement@0:11284..11300 `Expression`
+        ExprStatement@0:11284..11300
+          Identifier@0:11284..11299 `gl_WarpsPerSMNV`
+      Statement@0:11332..11345 `Expression`
+        ExprStatement@0:11332..11345
+          Identifier@0:11332..11344 `gl_SMCountNV`
+      Statement@0:11380..11392 `Expression`
+        ExprStatement@0:11380..11392
+          Identifier@0:11380..11391 `gl_WarpIDNV`
+      Statement@0:11428..11438 `Expression`
+        ExprStatement@0:11428..11438
+          Identifier@0:11428..11437 `gl_SMIDNV`
+ExternalDeclaration@0:11477..11508 `Preprocessor`
+  Preprocessor@0:11477..11508 `#ifdef`
+    PreprocessorIfDef@0:11484..11508 `GL_NV_shader_sm_builtins`
+      Identifier@0:11484..11508 `GL_NV_shader_sm_builtins`
+ExternalDeclaration@0:11510..11554 `Preprocessor`
+  Preprocessor@0:11510..11554 `#extension`
+    PreprocessorExtension@0:11521..11554
+      PreprocessorExtensionName@0:11521..11554 `Specific`
+        String `GL_NV_shader_sm_builtins`
+ExternalDeclaration@0:11556..11562 `Preprocessor`
+  Preprocessor@0:11556..11562 `#endif`
+    EndIf
+ExternalDeclaration@0:11566..11665 `FunctionDefinition`
+  FunctionDefinition@0:11566..11665
+    FunctionPrototype@0:11566..11584
+      FullySpecifiedType@0:11566..11570
+        TypeSpecifier@0:11566..11570
+          TypeSpecifierNonArray@0:11566..11570 `void`
+            Void
+      Identifier@0:11571..11582 `sm_builtins`
+    CompoundStatement@0:11586..11665
+      Statement@0:11593..11609 `Expression`
+        ExprStatement@0:11593..11609
+          Identifier@0:11593..11608 `gl_WarpsPerSMNV`
+      Statement@0:11615..11628 `Expression`
+        ExprStatement@0:11615..11628
+          Identifier@0:11615..11627 `gl_SMCountNV`
+      Statement@0:11634..11646 `Expression`
+        ExprStatement@0:11634..11646
+          Identifier@0:11634..11645 `gl_WarpIDNV`
+      Statement@0:11652..11662 `Expression`
+        ExprStatement@0:11652..11662
+          Identifier@0:11652..11661 `gl_SMIDNV`

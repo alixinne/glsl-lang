@@ -1,0 +1,114 @@
+ExternalDeclaration@0:0..12 `Preprocessor`
+  Preprocessor@0:0..12 `#version`
+    PreprocessorVersion@0:9..12 `430`
+      ShortConst `430`
+ExternalDeclaration@0:14..75 `Declaration`
+  Declaration@0:14..75 `Block`
+    Block@0:14..74
+      TypeQualifier@0:14..37
+        TypeQualifierSpec@0:14..29 `Layout`
+          LayoutQualifier@0:14..29
+            LayoutQualifierSpec@0:22..28 `Identifier`
+              Identifier@0:22..28 `std140`
+        TypeQualifierSpec@0:30..37 `Storage`
+          StorageQualifier@0:30..37 `uniform`
+            Uniform
+      Identifier@0:38..48 `ColorBlock`
+      StructFieldSpecifier@0:52..64
+        TypeSpecifier@0:52..56
+          TypeSpecifierNonArray@0:52..56 `vec4`
+            Vec4
+        ArrayedIdentifier@0:57..63
+          Identifier@0:57..63 `color2`
+      Identifier@0:67..74 `uColorB`
+ExternalDeclaration@0:77..135 `Declaration`
+  Declaration@0:77..135 `Block`
+    Block@0:77..134
+      TypeQualifier@0:77..100
+        TypeQualifierSpec@0:77..92 `Layout`
+          LayoutQualifier@0:77..92
+            LayoutQualifierSpec@0:85..91 `Identifier`
+              Identifier@0:85..91 `std140`
+        TypeQualifierSpec@0:93..100 `Storage`
+          StorageQualifier@0:93..100 `uniform`
+            Uniform
+      Identifier@0:101..106 `Block`
+      StructFieldSpecifier@0:110..122
+        TypeSpecifier@0:110..114
+          TypeSpecifierNonArray@0:110..114 `mat4`
+            Mat4
+        ArrayedIdentifier@0:115..121
+          Identifier@0:115..121 `uWorld`
+      Identifier@0:125..134 `uDefaultB`
+ExternalDeclaration@0:137..168 `Declaration`
+  Declaration@0:137..168 `Block`
+    Block@0:137..167
+      TypeQualifier@0:137..140
+        TypeQualifierSpec@0:137..140 `Storage`
+          StorageQualifier@0:137..140 `out`
+            Out
+      Identifier@0:141..147 `Vertex`
+      StructFieldSpecifier@0:151..159
+        TypeSpecifier@0:151..155
+          TypeSpecifierNonArray@0:151..155 `vec4`
+            Vec4
+        ArrayedIdentifier@0:156..158
+          Identifier@0:156..158 `v2`
+      Identifier@0:162..167 `oVert`
+ExternalDeclaration@0:171..181 `Declaration`
+  Declaration@0:171..181 `InitDeclaratorList`
+    InitDeclaratorList@0:171..180
+      SingleDeclaration@0:171..180
+        FullySpecifiedType@0:171..178
+          TypeQualifierSpec@0:171..173 `Storage`
+            StorageQualifier@0:171..173 `in`
+              In
+          TypeSpecifier@0:174..178
+            TypeSpecifierNonArray@0:174..178 `vec4`
+              Vec4
+ExternalDeclaration@0:183..227 `FunctionDefinition`
+  FunctionDefinition@0:183..227
+    FunctionPrototype@0:183..199
+      FullySpecifiedType@0:183..187
+        TypeSpecifier@0:183..187
+          TypeSpecifierNonArray@0:183..187 `vec4`
+            Vec4
+      Identifier@0:188..197 `getColor2`
+    CompoundStatement@0:200..227
+      Statement@0:203..225 `Jump`
+        JumpStatement@0:203..225 `return`
+          Expr `Variable`
+            Identifier@0:210..217 `uColorB`
+          Identifier@0:218..224 `color2`
+ExternalDeclaration@0:229..299 `FunctionDefinition`
+  FunctionDefinition@0:229..299
+    FunctionPrototype@0:229..244
+      FullySpecifiedType@0:229..233
+        TypeSpecifier@0:229..233
+          TypeSpecifierNonArray@0:229..233 `vec4`
+            Vec4
+      Identifier@0:234..242 `getWorld`
+    CompoundStatement@0:245..299
+      Statement@0:248..276 `Jump`
+        JumpStatement@0:248..276 `return`
+          BinaryOp@0:272..273 `*`
+          Expr `Dot`
+            Expr `Variable`
+              Identifier@0:255..264 `uDefaultB`
+            Identifier@0:265..271 `uWorld`
+          Expr `Variable`
+            Identifier@0:274..275 `P`
+      Statement@0:278..297 `Expression`
+        ExprStatement@0:278..297
+          Expr `Dot`
+            Expr `Variable`
+              Identifier@0:278..283 `oVert`
+            Identifier@0:284..286 `v2`
+          AssignmentOp@0:287..288 `=`
+          Expr `FunCall`
+            FunIdentifier@0:289..293 `TypeSpecifier`
+              TypeSpecifier
+                TypeSpecifierNonArray@0:289..293 `vec4`
+                  Vec4
+            Expr@0:294..295 `IntConst`
+              IntConst `1`

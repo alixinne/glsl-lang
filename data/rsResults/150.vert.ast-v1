@@ -1,0 +1,290 @@
+ExternalDeclaration@0:0..17 `Preprocessor`
+  Preprocessor@0:0..17 `#version`
+    PreprocessorVersion@0:9..17 `150`
+      ShortConst `150`
+ExternalDeclaration@0:21..44 `Preprocessor`
+  Preprocessor@0:21..44 `#ifndef`
+    PreprocessorIfNDef@0:29..44 `GL_core_profile`
+      Identifier@0:29..44 `GL_core_profile`
+ExternalDeclaration@0:46..96 `Preprocessor`
+  Preprocessor@0:46..96 `#error`
+    PreprocessorError@0:54..96 `standard macro GL_core_profile not defined`
+      String `standard macro GL_core_profile not defined`
+ExternalDeclaration@0:98..104 `Preprocessor`
+  Preprocessor@0:98..104 `#endif`
+    EndIf
+ExternalDeclaration@0:108..120 `Declaration`
+  Declaration@0:108..120 `InitDeclaratorList`
+    InitDeclaratorList@0:108..119
+      SingleDeclaration@0:108..119
+        FullySpecifiedType@0:108..115
+          TypeQualifierSpec@0:108..110 `Storage`
+            StorageQualifier@0:108..110 `in`
+              In
+          TypeSpecifier@0:111..115
+            TypeSpecifierNonArray@0:111..115 `vec4`
+              Vec4
+ExternalDeclaration@0:124..141 `Declaration`
+  Declaration@0:124..141 `InitDeclaratorList`
+    InitDeclaratorList@0:124..140
+      SingleDeclaration@0:124..140
+        FullySpecifiedType@0:124..137
+          TypeQualifierSpec@0:124..131 `Storage`
+            StorageQualifier@0:124..131 `uniform`
+              Uniform
+          TypeSpecifier@0:132..137
+            TypeSpecifierNonArray@0:132..137 `float`
+              Float
+ExternalDeclaration@0:145..167 `Declaration`
+  Declaration@0:145..167 `Invariant`
+    Identifier@0:155..166 `gl_Position`
+ExternalDeclaration@0:171..295 `FunctionDefinition`
+  FunctionDefinition@0:171..295
+    FunctionPrototype@0:171..182
+      FullySpecifiedType@0:171..175
+        TypeSpecifier@0:171..175
+          TypeSpecifierNonArray@0:171..175 `void`
+            Void
+      Identifier@0:176..180 `main`
+    CompoundStatement@0:184..295
+      Statement@0:191..209 `Expression`
+        ExprStatement@0:191..209
+          Expr `Variable`
+            Identifier@0:191..202 `gl_Position`
+          AssignmentOp@0:203..204 `=`
+          Expr `Variable`
+            Identifier@0:205..208 `iv4`
+      Statement@0:215..233 `Expression`
+        ExprStatement@0:215..233
+          Expr `Variable`
+            Identifier@0:215..227 `gl_PointSize`
+          AssignmentOp@0:228..229 `=`
+          Expr `Variable`
+            Identifier@0:230..232 `ps`
+      Statement@0:239..266 `Expression`
+        ExprStatement@0:239..266
+          Expr `Bracket`
+            Expr `Variable`
+              Identifier@0:239..254 `gl_ClipDistance`
+            Expr `IntConst`
+              IntConst `2`
+          AssignmentOp@0:258..259 `=`
+          Expr `Dot`
+            Expr `Variable`
+              Identifier@0:260..263 `iv4`
+            Identifier@0:264..265 `x`
+      Statement@0:272..292 `Expression`
+        ExprStatement@0:272..292
+          Expr `Variable`
+            Identifier@0:272..285 `gl_ClipVertex`
+          AssignmentOp@0:286..287 `=`
+          Expr `Variable`
+            Identifier@0:288..291 `iv4`
+ExternalDeclaration@0:299..328 `Declaration`
+  Declaration@0:299..328 `InitDeclaratorList`
+    InitDeclaratorList@0:299..327
+      SingleDeclaration@0:299..327
+        FullySpecifiedType@0:299..308
+          TypeQualifierSpec@0:299..302 `Storage`
+            StorageQualifier@0:299..302 `out`
+              Out
+          TypeSpecifier@0:303..308
+            TypeSpecifierNonArray@0:303..308 `float`
+              Float
+        ArraySpecifierDimension@0:324..327 `ExplicitlySized`
+          Expr `IntConst`
+            IntConst `4`
+ExternalDeclaration@0:332..364 `Declaration`
+  Declaration@0:332..364 `Block`
+    Block@0:332..363
+      TypeQualifier@0:332..339
+        TypeQualifierSpec@0:332..339 `Storage`
+          StorageQualifier@0:332..339 `uniform`
+            Uniform
+      Identifier@0:340..344 `foob`
+      StructFieldSpecifier@0:352..360
+        TypeSpecifier@0:352..355
+          TypeSpecifierNonArray@0:352..355 `int`
+            Int
+        ArrayedIdentifier@0:356..359
+          Identifier@0:356..357 `a`
+          ArraySpecifierDimension@0:357..359 `Unsized`
+            Unsized
+ExternalDeclaration@0:366..375 `Declaration`
+  Declaration@0:366..375 `InitDeclaratorList`
+    InitDeclaratorList@0:366..374
+      SingleDeclaration@0:366..374
+        FullySpecifiedType@0:366..369
+          TypeSpecifier@0:366..369
+            TypeSpecifierNonArray@0:366..369 `int`
+              Int
+        ArraySpecifierDimension@0:371..374 `ExplicitlySized`
+          Expr `IntConst`
+            IntConst `5`
+ExternalDeclaration@0:416..434 `Declaration`
+  Declaration@0:416..434 `InitDeclaratorList`
+    InitDeclaratorList@0:416..433
+      SingleDeclaration@0:416..433
+        FullySpecifiedType@0:416..425
+          TypeQualifierSpec@0:416..418 `Storage`
+            StorageQualifier@0:416..418 `in`
+              In
+          TypeSpecifier@0:419..425
+            TypeSpecifierNonArray@0:419..425 `double`
+              Double
+ExternalDeclaration@0:503..548 `Preprocessor`
+  Preprocessor@0:503..548 `#extension`
+    PreprocessorExtension@0:514..548
+      PreprocessorExtensionName@0:514..548 `Specific`
+        String `GL_ARB_vertex_attrib_64bit`
+ExternalDeclaration@0:550..565 `Declaration`
+  Declaration@0:550..565 `InitDeclaratorList`
+    InitDeclaratorList@0:550..564
+      SingleDeclaration@0:550..564
+        FullySpecifiedType@0:550..559
+          TypeQualifierSpec@0:550..552 `Storage`
+            StorageQualifier@0:550..552 `in`
+              In
+          TypeSpecifier@0:553..559
+            TypeSpecifierNonArray@0:553..559 `double`
+              Double
+ExternalDeclaration@0:567..584 `Declaration`
+  Declaration@0:567..584 `InitDeclaratorList`
+    InitDeclaratorList@0:567..583
+      SingleDeclaration@0:567..583
+        FullySpecifiedType@0:567..575
+          TypeQualifierSpec@0:567..569 `Storage`
+            StorageQualifier@0:567..569 `in`
+              In
+          TypeSpecifier@0:570..575
+            TypeSpecifierNonArray@0:570..575 `dvec2`
+              DVec2
+ExternalDeclaration@0:586..603 `Declaration`
+  Declaration@0:586..603 `InitDeclaratorList`
+    InitDeclaratorList@0:586..602
+      SingleDeclaration@0:586..602
+        FullySpecifiedType@0:586..594
+          TypeQualifierSpec@0:586..588 `Storage`
+            StorageQualifier@0:586..588 `in`
+              In
+          TypeSpecifier@0:589..594
+            TypeSpecifierNonArray@0:589..594 `dvec3`
+              DVec3
+ExternalDeclaration@0:605..622 `Declaration`
+  Declaration@0:605..622 `InitDeclaratorList`
+    InitDeclaratorList@0:605..621
+      SingleDeclaration@0:605..621
+        FullySpecifiedType@0:605..613
+          TypeQualifierSpec@0:605..607 `Storage`
+            StorageQualifier@0:605..607 `in`
+              In
+          TypeSpecifier@0:608..613
+            TypeSpecifierNonArray@0:608..613 `dvec4`
+              DVec4
+ExternalDeclaration@0:624..643 `Declaration`
+  Declaration@0:624..643 `InitDeclaratorList`
+    InitDeclaratorList@0:624..642
+      SingleDeclaration@0:624..642
+        FullySpecifiedType@0:624..632
+          TypeQualifierSpec@0:624..626 `Storage`
+            StorageQualifier@0:624..626 `in`
+              In
+          TypeSpecifier@0:627..632
+            TypeSpecifierNonArray@0:627..632 `dmat2`
+              DMat2
+ExternalDeclaration@0:645..664 `Declaration`
+  Declaration@0:645..664 `InitDeclaratorList`
+    InitDeclaratorList@0:645..663
+      SingleDeclaration@0:645..663
+        FullySpecifiedType@0:645..653
+          TypeQualifierSpec@0:645..647 `Storage`
+            StorageQualifier@0:645..647 `in`
+              In
+          TypeSpecifier@0:648..653
+            TypeSpecifierNonArray@0:648..653 `dmat3`
+              DMat3
+ExternalDeclaration@0:666..685 `Declaration`
+  Declaration@0:666..685 `InitDeclaratorList`
+    InitDeclaratorList@0:666..684
+      SingleDeclaration@0:666..684
+        FullySpecifiedType@0:666..674
+          TypeQualifierSpec@0:666..668 `Storage`
+            StorageQualifier@0:666..668 `in`
+              In
+          TypeSpecifier@0:669..674
+            TypeSpecifierNonArray@0:669..674 `dmat4`
+              DMat4
+ExternalDeclaration@0:687..708 `Declaration`
+  Declaration@0:687..708 `InitDeclaratorList`
+    InitDeclaratorList@0:687..707
+      SingleDeclaration@0:687..707
+        FullySpecifiedType@0:687..697
+          TypeQualifierSpec@0:687..689 `Storage`
+            StorageQualifier@0:687..689 `in`
+              In
+          TypeSpecifier@0:690..697
+            TypeSpecifierNonArray@0:690..697 `dmat2x3`
+              DMat23
+ExternalDeclaration@0:710..731 `Declaration`
+  Declaration@0:710..731 `InitDeclaratorList`
+    InitDeclaratorList@0:710..730
+      SingleDeclaration@0:710..730
+        FullySpecifiedType@0:710..720
+          TypeQualifierSpec@0:710..712 `Storage`
+            StorageQualifier@0:710..712 `in`
+              In
+          TypeSpecifier@0:713..720
+            TypeSpecifierNonArray@0:713..720 `dmat2x4`
+              DMat24
+ExternalDeclaration@0:733..754 `Declaration`
+  Declaration@0:733..754 `InitDeclaratorList`
+    InitDeclaratorList@0:733..753
+      SingleDeclaration@0:733..753
+        FullySpecifiedType@0:733..743
+          TypeQualifierSpec@0:733..735 `Storage`
+            StorageQualifier@0:733..735 `in`
+              In
+          TypeSpecifier@0:736..743
+            TypeSpecifierNonArray@0:736..743 `dmat3x2`
+              DMat32
+ExternalDeclaration@0:756..777 `Declaration`
+  Declaration@0:756..777 `InitDeclaratorList`
+    InitDeclaratorList@0:756..776
+      SingleDeclaration@0:756..776
+        FullySpecifiedType@0:756..766
+          TypeQualifierSpec@0:756..758 `Storage`
+            StorageQualifier@0:756..758 `in`
+              In
+          TypeSpecifier@0:759..766
+            TypeSpecifierNonArray@0:759..766 `dmat3x4`
+              DMat34
+ExternalDeclaration@0:779..800 `Declaration`
+  Declaration@0:779..800 `InitDeclaratorList`
+    InitDeclaratorList@0:779..799
+      SingleDeclaration@0:779..799
+        FullySpecifiedType@0:779..789
+          TypeQualifierSpec@0:779..781 `Storage`
+            StorageQualifier@0:779..781 `in`
+              In
+          TypeSpecifier@0:782..789
+            TypeSpecifierNonArray@0:782..789 `dmat4x2`
+              DMat42
+ExternalDeclaration@0:802..823 `Declaration`
+  Declaration@0:802..823 `InitDeclaratorList`
+    InitDeclaratorList@0:802..822
+      SingleDeclaration@0:802..822
+        FullySpecifiedType@0:802..812
+          TypeQualifierSpec@0:802..804 `Storage`
+            StorageQualifier@0:802..804 `in`
+              In
+          TypeSpecifier@0:805..812
+            TypeSpecifierNonArray@0:805..812 `dmat4x3`
+              DMat43
+ExternalDeclaration@0:827..837 `Preprocessor`
+  Preprocessor@0:827..837 `#line`
+    PreprocessorLine@0:833..837 `3000`
+      UIntConst `3000`
+ExternalDeclaration@0:839..879 `Preprocessor`
+  Preprocessor@0:839..879 `#error`
+    PreprocessorError@0:846..879 `line of this error should be 3001`
+      String `line of this error should be 3001`

@@ -1,0 +1,33 @@
+ExternalDeclaration@0:0..12 `Preprocessor`
+  Preprocessor@0:0..12 `#version`
+    PreprocessorVersion@0:9..12 `400`
+      ShortConst `400`
+ExternalDeclaration@0:16..51 `FunctionDefinition`
+  FunctionDefinition@0:16..51
+    FunctionPrototype@0:16..26
+      FullySpecifiedType@0:16..20
+        TypeSpecifier@0:16..20
+          TypeSpecifierNonArray@0:16..20 `void`
+            Void
+      Identifier@0:21..24 `foo`
+    CompoundStatement@0:27..51
+      Statement@0:29..49 `Expression`
+        ExprStatement@0:29..49
+          Identifier@0:29..48 `terminateInvocation`
+ExternalDeclaration@0:87..134 `Preprocessor`
+  Preprocessor@0:87..134 `#extension`
+    PreprocessorExtension@0:98..134
+      PreprocessorExtensionName@0:98..134 `Specific`
+        String `GL_EXT_terminate_invocation`
+ExternalDeclaration@0:138..204 `FunctionDefinition`
+  FunctionDefinition@0:138..204
+    FunctionPrototype@0:138..149
+      FullySpecifiedType@0:138..142
+        TypeSpecifier@0:138..142
+          TypeSpecifierNonArray@0:138..142 `void`
+            Void
+      Identifier@0:143..147 `main`
+    CompoundStatement@0:151..204
+      Statement@0:158..178 `Expression`
+        ExprStatement@0:158..178
+          Identifier@0:158..177 `terminateInvocation`

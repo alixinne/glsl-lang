@@ -1,0 +1,67 @@
+ExternalDeclaration@0:0..17 `Preprocessor`
+  Preprocessor@0:0..17 `#version`
+    PreprocessorVersion@0:9..17 `460`
+      ShortConst `460`
+ExternalDeclaration@0:258..298 `Declaration`
+  Declaration@0:258..298 `Block`
+    Block@0:258..297
+      TypeQualifier@0:258..261
+        TypeQualifierSpec@0:258..261 `Storage`
+          StorageQualifier@0:258..261 `out`
+            Out
+      Identifier@0:262..271 `vs_output`
+      StructFieldSpecifier@0:277..288
+        TypeSpecifier@0:277..281
+          TypeSpecifierNonArray@0:277..281 `vec4`
+            Vec4
+        ArrayedIdentifier@0:282..287
+          Identifier@0:282..287 `color`
+      Identifier@0:291..297 `vs_out`
+ExternalDeclaration@0:301..311 `Declaration`
+  Declaration@0:301..311 `InitDeclaratorList`
+    InitDeclaratorList@0:301..310
+      SingleDeclaration@0:301..310
+        FullySpecifiedType@0:301..308
+          TypeQualifierSpec@0:301..303 `Storage`
+            StorageQualifier@0:301..303 `in`
+              In
+          TypeSpecifier@0:304..308
+            TypeSpecifierNonArray@0:304..308 `vec4`
+              Vec4
+ExternalDeclaration@0:312..392 `FunctionDefinition`
+  FunctionDefinition@0:312..392
+    FunctionPrototype@0:312..323
+      FullySpecifiedType@0:312..316
+        TypeSpecifier@0:312..316
+          TypeSpecifierNonArray@0:312..316 `void`
+            Void
+      Identifier@0:317..321 `main`
+    CompoundStatement@0:324..392
+      Statement@0:327..351 `Expression`
+        ExprStatement@0:327..351
+          Expr `Dot`
+            Expr `Variable`
+              Identifier@0:327..333 `vs_out`
+            Identifier@0:334..339 `color`
+          AssignmentOp@0:340..341 `=`
+          Expr `FunCall`
+            FunIdentifier@0:342..346 `TypeSpecifier`
+              TypeSpecifier
+                TypeSpecifierNonArray@0:342..346 `vec4`
+                  Vec4
+            Expr@0:347..349 `FloatConst`
+              FloatConst `1`
+      Statement@0:353..372 `Expression`
+        ExprStatement@0:353..372
+          Expr `Variable`
+            Identifier@0:353..365 `gl_PointSize`
+          AssignmentOp@0:366..367 `=`
+          Expr `FloatConst`
+            FloatConst `1`
+      Statement@0:374..390 `Expression`
+        ExprStatement@0:374..390
+          Expr `Variable`
+            Identifier@0:374..385 `gl_Position`
+          AssignmentOp@0:386..387 `=`
+          Expr `Variable`
+            Identifier@0:388..389 `P`

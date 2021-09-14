@@ -1,0 +1,309 @@
+ExternalDeclaration@0:0..15 `Preprocessor`
+  Preprocessor@0:0..15 `#version`
+    PreprocessorVersion@0:9..15 `310`
+      ShortConst `310`
+ExternalDeclaration@0:17..41 `Declaration`
+  Declaration@0:17..41 `Precision`
+    PrecisionQualifier@0:27..34 `medium`
+    TypeSpecifier@0:35..40
+      TypeSpecifierNonArray@0:35..40 `float`
+        Float
+ExternalDeclaration@0:45..80 `Declaration`
+  Declaration@0:45..80 `InitDeclaratorList`
+    InitDeclaratorList@0:45..79
+      SingleDeclaration@0:45..79
+        FullySpecifiedType@0:45..79
+          TypeSpecifier@0:45..79
+            TypeSpecifierNonArray@0:45..79 `struct`
+              StructSpecifier@0:45..79
+                StructFieldSpecifier@0:61..76
+                  TypeSpecifier@0:61..66
+                    TypeSpecifierNonArray@0:61..66 `float`
+                      Float
+                  ArrayedIdentifier@0:67..75
+                    Identifier@0:67..71 `buff`
+                    ArraySpecifierDimension@0:71..75 `ExplicitlySized`
+                      Expr `IntConst`
+                        IntConst `10`
+ExternalDeclaration@0:84..185 `Declaration`
+  Declaration@0:84..185 `Block`
+    Block@0:84..184
+      TypeQualifier@0:84..125
+        TypeQualifierSpec@0:84..109 `Layout`
+          LayoutQualifier@0:84..109
+            LayoutQualifierSpec@0:91..97 `Identifier`
+              Identifier@0:91..97 `std430`
+            LayoutQualifierSpec@0:99..108 `Identifier`
+              Identifier@0:99..106 `binding`
+              IntConst `2`
+        TypeQualifierSpec@0:110..118 `Storage`
+          StorageQualifier@0:110..118 `readonly`
+            ReadOnly
+        TypeQualifierSpec@0:119..125 `Storage`
+          StorageQualifier@0:119..125 `buffer`
+            Buffer
+      Identifier@0:126..132 `RoBuff`
+      StructFieldSpecifier@0:140..158
+        TypeSpecifier@0:140..145
+          TypeSpecifierNonArray@0:140..145 `float`
+            Float
+        ArrayedIdentifier@0:146..157
+          Identifier@0:146..153 `buff_ro`
+          ArraySpecifierDimension@0:153..157 `ExplicitlySized`
+            Expr `IntConst`
+              IntConst `10`
+      StructFieldSpecifier@0:164..171
+        TypeSpecifier@0:164..165
+          TypeSpecifierNonArray@0:164..165 `TypeName`
+            TypeName@0:164..165
+        ArrayedIdentifier@0:166..170
+          Identifier@0:166..170 `s_ro`
+      Identifier@0:175..184 `ro_buffer`
+ExternalDeclaration@0:189..277 `Declaration`
+  Declaration@0:189..277 `Block`
+    Block@0:189..276
+      TypeQualifier@0:189..221
+        TypeQualifierSpec@0:189..214 `Layout`
+          LayoutQualifier@0:189..214
+            LayoutQualifierSpec@0:196..202 `Identifier`
+              Identifier@0:196..202 `std430`
+            LayoutQualifierSpec@0:204..213 `Identifier`
+              Identifier@0:204..211 `binding`
+              IntConst `2`
+        TypeQualifierSpec@0:215..221 `Storage`
+          StorageQualifier@0:215..221 `buffer`
+            Buffer
+      Identifier@0:222..226 `Buff`
+      StructFieldSpecifier@0:234..249
+        TypeSpecifier@0:234..239
+          TypeSpecifierNonArray@0:234..239 `float`
+            Float
+        ArrayedIdentifier@0:240..248
+          Identifier@0:240..244 `buff`
+          ArraySpecifierDimension@0:244..248 `ExplicitlySized`
+            Expr `IntConst`
+              IntConst `10`
+      StructFieldSpecifier@0:255..259
+        TypeSpecifier@0:255..256
+          TypeSpecifierNonArray@0:255..256 `TypeName`
+            TypeName@0:255..256
+        ArrayedIdentifier@0:257..258
+          Identifier@0:257..258 `s`
+      Identifier@0:263..276 `non_ro_buffer`
+ExternalDeclaration@0:281..316 `FunctionDefinition`
+  FunctionDefinition@0:281..316
+    FunctionPrototype@0:281..312
+      FullySpecifiedType@0:281..285
+        TypeSpecifier@0:281..285
+          TypeSpecifierNonArray@0:281..285 `void`
+            Void
+      Identifier@0:286..296 `non_ro_fun`
+      FunctionParameterDeclaration@0:297..311 `Named`
+        FunctionParameterDeclarator@0:297..311
+          TypeSpecifier@0:297..306
+            TypeSpecifierNonArray@0:297..302 `float`
+              Float
+            ArraySpecifierDimension@0:302..306 `ExplicitlySized`
+              Expr `IntConst`
+                IntConst `10`
+          ArrayedIdentifier@0:307..311
+            Identifier@0:307..311 `buff`
+    CompoundStatement@0:313..316
+ExternalDeclaration@0:318..348 `FunctionDefinition`
+  FunctionDefinition@0:318..348
+    FunctionPrototype@0:318..344
+      FullySpecifiedType@0:318..322
+        TypeSpecifier@0:318..322
+          TypeSpecifierNonArray@0:318..322 `void`
+            Void
+      Identifier@0:323..334 `non_ro_funf`
+      FunctionParameterDeclaration@0:335..343 `Named`
+        FunctionParameterDeclarator@0:335..343
+          TypeSpecifier@0:335..340
+            TypeSpecifierNonArray@0:335..340 `float`
+              Float
+          ArrayedIdentifier@0:341..343
+            Identifier@0:341..343 `el`
+    CompoundStatement@0:345..348
+ExternalDeclaration@0:350..375 `FunctionDefinition`
+  FunctionDefinition@0:350..375
+    FunctionPrototype@0:350..371
+      FullySpecifiedType@0:350..354
+        TypeSpecifier@0:350..354
+          TypeSpecifierNonArray@0:350..354 `void`
+            Void
+      Identifier@0:355..366 `non_ro_funS`
+      FunctionParameterDeclaration@0:367..370 `Named`
+        FunctionParameterDeclarator@0:367..370
+          TypeSpecifier@0:367..368
+            TypeSpecifierNonArray@0:367..368 `TypeName`
+              TypeName@0:367..368
+          ArrayedIdentifier@0:369..370
+            Identifier@0:369..370 `s`
+    CompoundStatement@0:372..375
+ExternalDeclaration@0:379..398 `Declaration`
+  Declaration@0:379..398 `InitDeclaratorList`
+    InitDeclaratorList@0:379..397
+      SingleDeclaration@0:379..397
+        FullySpecifiedType@0:379..387
+          TypeQualifierSpec@0:379..382 `Storage`
+            StorageQualifier@0:379..382 `out`
+              Out
+          TypeSpecifier@0:383..387
+            TypeSpecifierNonArray@0:383..387 `vec4`
+              Vec4
+ExternalDeclaration@0:402..895 `FunctionDefinition`
+  FunctionDefinition@0:402..895
+    FunctionPrototype@0:402..413
+      FullySpecifiedType@0:402..406
+        TypeSpecifier@0:402..406
+          TypeSpecifierNonArray@0:402..406 `void`
+            Void
+      Identifier@0:407..411 `main`
+    CompoundStatement@0:415..895
+      Statement@0:422..426 `Declaration`
+        Declaration@0:422..426 `InitDeclaratorList`
+          InitDeclaratorList@0:422..425
+            SingleDeclaration@0:422..425
+              FullySpecifiedType@0:422..423
+                TypeSpecifier@0:422..423
+                  TypeSpecifierNonArray@0:422..423 `TypeName`
+                    TypeName@0:422..423
+      Statement@0:434..453 `Expression`
+        ExprStatement@0:434..453
+          FunIdentifier@0:434..444 `Expr`
+            Expr `Variable`
+              Identifier@0:434..444 `non_ro_fun`
+          Expr@0:445..451 `Dot`
+            Expr `Variable`
+              Identifier@0:445..446 `s`
+            Identifier@0:447..451 `buff`
+      Statement@0:459..482 `Expression`
+        ExprStatement@0:459..482
+          FunIdentifier@0:459..470 `Expr`
+            Expr `Variable`
+              Identifier@0:459..470 `non_ro_funf`
+          Expr@0:471..480 `Bracket`
+            Expr `Dot`
+              Expr `Variable`
+                Identifier@0:471..472 `s`
+              Identifier@0:473..477 `buff`
+            Expr `IntConst`
+              IntConst `3`
+      Statement@0:488..503 `Expression`
+        ExprStatement@0:488..503
+          FunIdentifier@0:488..499 `Expr`
+            Expr `Variable`
+              Identifier@0:488..499 `non_ro_funS`
+          Expr@0:500..501 `Variable`
+            Identifier@0:500..501 `s`
+      Statement@0:511..542 `Expression`
+        ExprStatement@0:511..542
+          FunIdentifier@0:511..521 `Expr`
+            Expr `Variable`
+              Identifier@0:511..521 `non_ro_fun`
+          Expr@0:522..540 `Dot`
+            Expr `Variable`
+              Identifier@0:522..535 `non_ro_buffer`
+            Identifier@0:536..540 `buff`
+      Statement@0:548..581 `Expression`
+        ExprStatement@0:548..581
+          FunIdentifier@0:548..558 `Expr`
+            Expr `Variable`
+              Identifier@0:548..558 `non_ro_fun`
+          Expr@0:559..579 `Dot`
+            Expr `Dot`
+              Expr `Variable`
+                Identifier@0:559..572 `non_ro_buffer`
+              Identifier@0:573..574 `s`
+            Identifier@0:575..579 `buff`
+      Statement@0:587..622 `Expression`
+        ExprStatement@0:587..622
+          FunIdentifier@0:587..598 `Expr`
+            Expr `Variable`
+              Identifier@0:587..598 `non_ro_funf`
+          Expr@0:599..620 `Bracket`
+            Expr `Dot`
+              Expr `Variable`
+                Identifier@0:599..612 `non_ro_buffer`
+              Identifier@0:613..617 `buff`
+            Expr `IntConst`
+              IntConst `3`
+      Statement@0:628..665 `Expression`
+        ExprStatement@0:628..665
+          FunIdentifier@0:628..639 `Expr`
+            Expr `Variable`
+              Identifier@0:628..639 `non_ro_funf`
+          Expr@0:640..663 `Bracket`
+            Expr `Dot`
+              Expr `Dot`
+                Expr `Variable`
+                  Identifier@0:640..653 `non_ro_buffer`
+                Identifier@0:654..655 `s`
+              Identifier@0:656..660 `buff`
+            Expr `IntConst`
+              IntConst `3`
+      Statement@0:671..700 `Expression`
+        ExprStatement@0:671..700
+          FunIdentifier@0:671..682 `Expr`
+            Expr `Variable`
+              Identifier@0:671..682 `non_ro_funS`
+          Expr@0:683..698 `Dot`
+            Expr `Variable`
+              Identifier@0:683..696 `non_ro_buffer`
+            Identifier@0:697..698 `s`
+      Statement@0:708..738 `Expression`
+        ExprStatement@0:708..738
+          FunIdentifier@0:708..718 `Expr`
+            Expr `Variable`
+              Identifier@0:708..718 `non_ro_fun`
+          Expr@0:719..736 `Dot`
+            Expr `Variable`
+              Identifier@0:719..728 `ro_buffer`
+            Identifier@0:729..736 `buff_ro`
+      Statement@0:744..776 `Expression`
+        ExprStatement@0:744..776
+          FunIdentifier@0:744..754 `Expr`
+            Expr `Variable`
+              Identifier@0:744..754 `non_ro_fun`
+          Expr@0:755..774 `Dot`
+            Expr `Dot`
+              Expr `Variable`
+                Identifier@0:755..764 `ro_buffer`
+              Identifier@0:765..769 `s_ro`
+            Identifier@0:770..774 `buff`
+      Statement@0:782..816 `Expression`
+        ExprStatement@0:782..816
+          FunIdentifier@0:782..793 `Expr`
+            Expr `Variable`
+              Identifier@0:782..793 `non_ro_funf`
+          Expr@0:794..814 `Bracket`
+            Expr `Dot`
+              Expr `Variable`
+                Identifier@0:794..803 `ro_buffer`
+              Identifier@0:804..811 `buff_ro`
+            Expr `IntConst`
+              IntConst `3`
+      Statement@0:822..858 `Expression`
+        ExprStatement@0:822..858
+          FunIdentifier@0:822..833 `Expr`
+            Expr `Variable`
+              Identifier@0:822..833 `non_ro_funf`
+          Expr@0:834..856 `Bracket`
+            Expr `Dot`
+              Expr `Dot`
+                Expr `Variable`
+                  Identifier@0:834..843 `ro_buffer`
+                Identifier@0:844..848 `s_ro`
+              Identifier@0:849..853 `buff`
+            Expr `IntConst`
+              IntConst `3`
+      Statement@0:864..892 `Expression`
+        ExprStatement@0:864..892
+          FunIdentifier@0:864..875 `Expr`
+            Expr `Variable`
+              Identifier@0:864..875 `non_ro_funS`
+          Expr@0:876..890 `Dot`
+            Expr `Variable`
+              Identifier@0:876..885 `ro_buffer`
+            Identifier@0:886..890 `s_ro`

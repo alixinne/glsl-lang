@@ -1,0 +1,37 @@
+ExternalDeclaration@0:0..15 `Preprocessor`
+  Preprocessor@0:0..15 `#version`
+    PreprocessorVersion@0:9..15 `310`
+      ShortConst `310`
+ExternalDeclaration@0:19..39 `Preprocessor`
+  Preprocessor@0:19..39 `#pragma`
+    PreprocessorPragma@0:27..39 `optimize(on)`
+      String `optimize(on)`
+ExternalDeclaration@0:41..62 `Preprocessor`
+  Preprocessor@0:41..62 `#pragma`
+    PreprocessorPragma@0:49..62 `optimize(off)`
+      String `optimize(off)`
+ExternalDeclaration@0:64..81 `Preprocessor`
+  Preprocessor@0:64..81 `#pragma`
+    PreprocessorPragma@0:72..81 `debug(on)`
+      String `debug(on)`
+ExternalDeclaration@0:83..101 `Preprocessor`
+  Preprocessor@0:83..101 `#pragma`
+    PreprocessorPragma@0:91..101 `debug(off)`
+      String `debug(off)`
+ExternalDeclaration@0:105..135 `Preprocessor`
+  Preprocessor@0:105..135 `#pragma`
+    PreprocessorPragma@0:113..135 `undefined_pragma(x, 4)`
+      String `undefined_pragma(x, 4)`
+ExternalDeclaration@0:139..151 `Preprocessor`
+  Preprocessor@0:139..151 `#pragma`
+    PreprocessorPragma@0:147..151 `once`
+      String `once`
+ExternalDeclaration@0:155..170 `FunctionDefinition`
+  FunctionDefinition@0:155..170
+    FunctionPrototype@0:155..165
+      FullySpecifiedType@0:155..158
+        TypeSpecifier@0:155..158
+          TypeSpecifierNonArray@0:155..158 `int`
+            Int
+      Identifier@0:159..163 `main`
+    CompoundStatement@0:166..170

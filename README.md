@@ -118,9 +118,9 @@ disabled.
 
 #### Tested on the glslangValidator test suite
 
-***Planned for next release.*** The `data` folder contains vendored test data
-from the [glslangValidator](https://github.com/KhronosGroup/glslang) project to
-be used as a reference point for validating the preprocessor and parser.
+The `data` folder contains vendored test data from the
+[glslangValidator](https://github.com/KhronosGroup/glslang) project to be used
+as a reference point for validating the preprocessor and parser.
 
 The `#[test]` definitions need to be generate before running the test suite on
 the glslang sources. Use the `gen-tests` task for this:
@@ -130,6 +130,19 @@ the glslang sources. Use the `gen-tests` task for this:
 Then run the tests:
 
     cargo test --test glslang
+
+`glsl-lang-pp` and `glsl-lang` are tested against this test suite. This is a
+snapshot-based test suite which checks the following:
+
+* `glsl-lang-pp`: errors, events, preprocessed output and preprocessing AST
+* `glsl-lang`: if parsing succeeds, AST, else first parsing error
+
+Snapshots have not been thoroughly checked, i.e. the `glslang` test passing for
+both crates does not mean we are spec-compliant yet. Please open issues if you
+encounter parsing or preprocessing errors.
+
+`glslang` tests are run during CI but are currently non-fatal. They are used to
+track the progress towards a spec-compliant parser.
 
 ### Why not pick this crate?
 

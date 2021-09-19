@@ -267,11 +267,14 @@ impl<'s> fmt::Display for ListDisplay<'s> {
 
             write!(f, "{}", KindDisplay(first))?;
 
-            for rest in self.0.iter().skip(1).take(self.0.len() - 2) {
-                write!(f, ", {}", KindDisplay(rest))?;
+            let len = self.0.len();
+            if len >= 2 {
+                for rest in self.0.iter().skip(1).take(len - 2) {
+                    write!(f, ", {}", KindDisplay(rest))?;
+                }
             }
 
-            if self.0.len() > 1 {
+            if len > 1 {
                 write!(f, " or {}", KindDisplay(self.0.last().unwrap()))?;
             }
 

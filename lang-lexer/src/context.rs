@@ -116,6 +116,14 @@ impl ParseContext {
     }
 }
 
+impl From<ParseContextData> for ParseContext {
+    fn from(data: ParseContextData) -> Self {
+        Self {
+            data: Rc::new(RefCell::new(data)),
+        }
+    }
+}
+
 /// Parsing context data
 #[derive(Debug, Clone)]
 pub struct ParseContextData {

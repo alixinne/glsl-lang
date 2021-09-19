@@ -6,7 +6,7 @@ use crate::{ast, parser};
 
 use glsl_lang_lexer::{HasLexerError, LangLexer, Token};
 
-pub use glsl_lang_lexer::{ParseContext, ParseOptions};
+pub use glsl_lang_lexer::{ParseContext, ParseContextData, ParseOptions};
 
 mod builder;
 pub use builder::*;

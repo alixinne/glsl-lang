@@ -2,6 +2,8 @@
 
 /// Unique file identifier
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[cfg_attr(feature = "serde", derive(rserde::Serialize, rserde::Deserialize))]
+#[cfg_attr(feature = "serde", serde(crate = "rserde"))]
 pub struct FileId(u32);
 
 const MAX_VALUE: u32 = 0x7FFFFFFF;

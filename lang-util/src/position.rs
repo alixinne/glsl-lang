@@ -11,6 +11,8 @@ use crate::FileId;
 
 /// A position in the lexer's input
 #[derive(Default, Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[cfg_attr(feature = "serde", derive(rserde::Serialize, rserde::Deserialize))]
+#[cfg_attr(feature = "serde", serde(crate = "rserde"))]
 pub struct LexerPosition {
     /// Source id
     pub source_id: FileId,
@@ -70,6 +72,8 @@ impl From<LexerPosition> for TextSize {
 
 /// Span information for a node, constructed from a pair of LexerPositions
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(rserde::Serialize, rserde::Deserialize))]
+#[cfg_attr(feature = "serde", serde(crate = "rserde"))]
 pub struct NodeSpan {
     /// The index of this span into the list of parsed units. This is used to
     /// identify which source string this span refers to when combining multiple ASTs

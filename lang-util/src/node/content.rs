@@ -1,8 +1,5 @@
 use std::fmt;
 
-#[cfg(feature = "serde")]
-use rserde as serde;
-
 use crate::position::{LexerPosition, NodeSpan};
 
 /// Trait for AST node contents.
@@ -30,6 +27,8 @@ pub trait NodeContent: fmt::Debug + Clone + PartialEq + Sized {
 
 /// A syntax node with span information
 #[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(rserde::Serialize, rserde::Deserialize))]
+#[cfg_attr(feature = "serde", serde(crate = "rserde"))]
 pub struct Node<T: NodeContent> {
     /// Contents of this syntax node
     pub content: T,
@@ -128,28 +127,5 @@ impl<T: NodeContent + Ord> Ord for Node<T> {
 impl<T: NodeContent + std::hash::Hash> std::hash::Hash for Node<T> {
     fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
         self.content.hash(state)
-    }
-}
-
-#[cfg(feature = "serde")]
-impl<T: NodeContent + serde::ser::Serialize> serde::ser::Serialize for Node<T> {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: serde::Serializer,
-    {
-        self.content.serialize(serializer)
-    }
-}
-
-#[cfg(feature = "serde")]
-impl<'de, T: NodeContent + serde::de::Deserialize<'de>> serde::de::Deserialize<'de> for Node<T> {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: serde::Deserializer<'de>,
-    {
-        Ok(Self {
-            content: T::deserialize(deserializer)?,
-            span: None,
-        })
     }
 }

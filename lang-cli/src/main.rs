@@ -68,10 +68,10 @@ use miette::{Diagnostic, SourceSpan};
 #[diagnostic(code(glsl_lang::parse::error))]
 struct ParseError<I: std::error::Error + 'static> {
     inner: lang_util::located::Located<I>,
+    #[source_code]
     src: NamedSource,
-    #[snippet(src, message("In this source file"))]
     snip: SourceSpan,
-    #[highlight(snip, label("Error occurred here."))]
+    #[label = "Error occurred here."]
     bad_bit: SourceSpan,
 }
 
@@ -92,8 +92,8 @@ impl<I: std::error::Error> std::fmt::Display for ParseError<I> {
     }
 }
 
-use miette::{DiagnosticResult, NamedSource};
-fn parse_tu(source: &str, path: &str) -> DiagnosticResult<glsl_lang::ast::TranslationUnit> {
+use miette::{NamedSource, Result};
+fn parse_tu(source: &str, path: &str) -> Result<glsl_lang::ast::TranslationUnit> {
     match glsl_lang::ast::TranslationUnit::parse(source) {
         Ok(tu) => Ok(tu),
         Err(err) => {

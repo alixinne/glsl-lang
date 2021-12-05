@@ -18,12 +18,12 @@ lang-util = "0.2.0"
 
 string_cache = "0.8"
 thiserror = "1.0"
-lexical = "5.2"
+lexical = "6.0"
 arrayvec = "0.7"
 derive_more = "0.99"
 
 # Preprocessor
-rowan = { version = "0.12", optional = true }
+rowan = { version = "0.15", optional = true }
 cbitset = { version = "0.2", optional = true }
 static_assertions = { version = "1.1", optional = true }
 bimap = { version = "0.6", optional = true }

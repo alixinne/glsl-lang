@@ -22,12 +22,12 @@ impl From<&SyntaxNode> for SendNode {
     fn from(node: &SyntaxNode) -> Self {
         let range = node.text_range();
         Self {
-            root: node
+            root: (*node
                 .ancestors()
                 .last()
                 .unwrap_or_else(|| node.clone())
-                .green()
-                .to_owned(),
+                .green())
+            .to_owned(),
             range,
         }
     }

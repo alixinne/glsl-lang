@@ -31,11 +31,17 @@ jobs:
           override: true
           target: ${{ matrix.target }}
 
+      - name: Remove fuzz target from members on Windows
+        run: |
+          if [[ "${{ matrix.target }}" == *-windows-* ]]; then
+            sed -i '/fuzz/d' Cargo.toml
+          fi
+
       - name: Run lib tests
-        run: cargo test --workspace -q --lib --exclude fuzz
+        run: cargo test --workspace -q --lib
 
       - name: Run lib tests with serde
-        run: cargo test --workspace -q --lib --exclude fuzz --features serde
+        run: cargo test --workspace -q --lib --features serde
 
       - name: Run lib tests with the three lexers
         run: |

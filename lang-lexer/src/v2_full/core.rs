@@ -261,13 +261,13 @@ impl LexerCore {
                                     Token::Identifier(quoted.into()),
                                     end,
                                 )));
-                                return;
                             } else {
                                 pending_events.push_back(maybe_lparen_result);
                                 *token_state =
                                     HandleTokenResult::Pending(pending_items, pending_events);
-                                return;
                             }
+
+                            return;
                         }
                     }
                 }

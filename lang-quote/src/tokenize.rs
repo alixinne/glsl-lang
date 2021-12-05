@@ -753,7 +753,7 @@ fn tokenize_storage_qualifier(q: &ast::StorageQualifier) -> TokenStream {
         }
 
         ast::StorageQualifierData::Subroutine(ref n) => {
-            let n = n.iter().map(|t| tokenize_type_specifier(t));
+            let n = n.iter().map(tokenize_type_specifier);
 
             quote! {
                 glsl_lang::ast::StorageQualifierData::Subroutine(vec![#(#n),*])
@@ -1111,7 +1111,7 @@ fn tokenize_single_declaration(d: &ast::SingleDeclaration) -> TokenStream {
     let span = tokenize_span(&d.span);
     let d = {
         let ty = tokenize_fully_specified_type(&d.ty);
-        let name = d.name.as_ref().map(|i| tokenize_identifier(i)).quote();
+        let name = d.name.as_ref().map(tokenize_identifier).quote();
         let array_specifier = d.array_specifier.as_ref().map(tokenize_array_spec).quote();
         let initializer = d.initializer.as_ref().map(tokenize_initializer).quote();
 
@@ -1267,7 +1267,7 @@ fn tokenize_statement(sst: &ast::Statement) -> TokenStream {
 fn tokenize_expr_statement(est: &ast::ExprStatement) -> TokenStream {
     let span = tokenize_span(&est.span);
     let est = {
-        let e = est.0.as_ref().map(|e| tokenize_expr(e)).quote();
+        let e = est.0.as_ref().map(tokenize_expr).quote();
         quote! { glsl_lang::ast::ExprStatementData(#e) }
     };
 
@@ -1390,7 +1390,7 @@ fn tokenize_for_init_statement(i: &ast::ForInitStatement) -> TokenStream {
     let span = tokenize_span(&i.span);
     let i = match i.content {
         ast::ForInitStatementData::Expression(ref expr) => {
-            let e = expr.as_ref().map(|e| tokenize_expr(e)).quote();
+            let e = expr.as_ref().map(tokenize_expr).quote();
             quote! { glsl_lang::ast::ForInitStatementData::Expression(#e) }
         }
 
@@ -1835,6 +1835,6 @@ fn tokenize_external_declaration(ed: &ast::ExternalDeclaration) -> TokenStream {
 }
 
 fn tokenize_translation_unit(tu: &ast::TranslationUnit) -> TokenStream {
-    let tu = (tu.0).iter().map(|d| tokenize_external_declaration(d));
+    let tu = (tu.0).iter().map(tokenize_external_declaration);
     quote! { glsl_lang::ast::TranslationUnit(vec![#(#tu),*]) }
 }

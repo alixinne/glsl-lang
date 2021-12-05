@@ -1983,7 +1983,7 @@ where
 pub fn show_external_declaration<F>(
     f: &mut F,
     ed: &ast::ExternalDeclaration,
-    mut state: &mut FormattingState<'_>,
+    state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
     F: Write,
@@ -1991,11 +1991,11 @@ where
     state.flush_line(f)?;
 
     match **ed {
-        ast::ExternalDeclarationData::Preprocessor(ref pp) => show_preprocessor(f, pp, &mut state),
+        ast::ExternalDeclarationData::Preprocessor(ref pp) => show_preprocessor(f, pp, state),
         ast::ExternalDeclarationData::FunctionDefinition(ref fd) => {
-            show_function_definition(f, fd, &mut state)
+            show_function_definition(f, fd, state)
         }
-        ast::ExternalDeclarationData::Declaration(ref d) => show_declaration(f, d, &mut state),
+        ast::ExternalDeclarationData::Declaration(ref d) => show_declaration(f, d, state),
     }
 }
 

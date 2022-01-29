@@ -80,15 +80,26 @@ pub fn test_file(path: impl AsRef<Path>) {
 
     let mut critical_error_count = 0;
 
-    // Figure out repository path
-    let base_path = std::env::current_dir().unwrap();
-    let base_path = base_path.parent().unwrap();
-    let base_path = base_path.to_string_lossy();
-
     for result in parsed.into_iter().tokenize(100, false, &DEFAULT_REGISTRY) {
         // Redact repository path from EnterFile events
         let debug_formatted = format!("{:?}", result);
-        let redacted = debug_formatted.replace(base_path.as_ref(), "");
+
+        // TODO: Make this more robust
+        let redacted = if debug_formatted.contains("EnterFile") {
+            let marker = ", canonical_path: ";
+            let idx = debug_formatted.find(marker).unwrap();
+            let without_canonical_path = String::from(&debug_formatted[..idx]) + " })";
+            if without_canonical_path.contains("\\\"") {
+                without_canonical_path
+                    .replace("\\\\", "/")
+                    .replace("\\\"", "\"")
+            } else {
+                without_canonical_path.replace("\\\\", "/")
+            }
+        } else {
+            debug_formatted
+        };
+
         writeln!(eventsf, "{}", redacted).unwrap();
 
         match result {

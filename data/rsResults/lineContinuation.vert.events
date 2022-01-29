@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/lineContinuation.vert", canonical_path: "/data/lineContinuation.vert" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/lineContinuation.vert" })
 Ok(Directive { directive: EventDirective { node: PP_VERSION@0..16, kind: Version(Version { number: 300, profile: Es, parsed_profile: Some(Es) }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 16..17 } "\n", token_kind: WS, state: Active })
 Ok(Token { source_token: COMMENT@NodeSpan { source_id: FileId(0), range: 17..135 } "// this file contains ...", token_kind: COMMENT, state: Active })

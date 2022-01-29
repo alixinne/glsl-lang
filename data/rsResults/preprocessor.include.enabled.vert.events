@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/preprocessor.include.enabled.vert", canonical_path: "/data/preprocessor.include.enabled.vert" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/preprocessor.include.enabled.vert" })
 Ok(Directive { directive: EventDirective { node: PP_EXTENSION@0..49, kind: Extension(Extension { name: Specific(Atom('GL_GOOGLE_include_directive' type=static)), behavior: Enable }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Directive { directive: EventDirective { node: PP_LINE@49..61, kind: Line(Line { file_id: FileId(0), body: PP_LINE_BODY@55..59 }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Error { error: Located { inner: Processing(DirectiveInclude(MissingPath)), pos: 61..71, current_file: Some(FileId(0)), path: None, file_override: None, line_number: 7999, column: 0 }, masked: false })

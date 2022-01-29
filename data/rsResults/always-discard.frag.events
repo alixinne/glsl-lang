@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/always-discard.frag", canonical_path: "/data/always-discard.frag" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/always-discard.frag" })
 Ok(Directive { directive: EventDirective { node: PP_VERSION@0..14, kind: Version(Version { number: 110, profile: None, parsed_profile: Some(None) }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 14..21 } "varying", token_kind: VARYING, state: Active })
 Ok(Token { source_token: WS@NodeSpan { source_id: FileId(0), range: 21..22 } " ", token_kind: WS, state: Active })

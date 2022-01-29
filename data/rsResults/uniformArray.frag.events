@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/uniformArray.frag", canonical_path: "/data/uniformArray.frag" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/uniformArray.frag" })
 Ok(Directive { directive: EventDirective { node: PP_VERSION@0..14, kind: Version(Version { number: 130, profile: None, parsed_profile: Some(None) }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 14..21 } "uniform", token_kind: UNIFORM, state: Active })
 Ok(Token { source_token: WS@NodeSpan { source_id: FileId(0), range: 21..22 } " ", token_kind: WS, state: Active })

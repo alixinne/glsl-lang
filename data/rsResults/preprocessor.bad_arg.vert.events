@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/preprocessor.bad_arg.vert", canonical_path: "/data/preprocessor.bad_arg.vert" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/preprocessor.bad_arg.vert" })
 Ok(Directive { directive: EventDirective { node: PP_DEFINE@0..16, kind: Define(Define { name: "M", kind: Function(DefineFunction { args: ["a"], tokens: PP_DEFINE_BODY@13..14 }), protected: false }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 16..19 } "int", token_kind: TYPE_NAME(INT), state: Active })
 Ok(Token { source_token: WS@NodeSpan { source_id: FileId(0), range: 19..20 } " ", token_kind: WS, state: Active })

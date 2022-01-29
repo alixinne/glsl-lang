@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(1), path: "", canonical_path: "" })
+Ok(EnterFile { file_id: FileId(1), path: "" })
 Ok(Directive { directive: EventDirective { node: PP_IF@0..6, kind: If(If { file_id: FileId(1), body: PP_IF_EXPR@3..5 }), errors: [Located { inner: Processing(DirectiveIf(Eval(InvalidExpr { token: Token(ERROR@NodeSpan { source_id: FileId(1), range: 3..5 } "þ") }))), pos: 0..6, current_file: Some(FileId(1)), path: None, file_override: None, line_number: 0, column: 0 }], source_id: FileId(1) }, masked: false })
 Ok(Directive { directive: EventDirective { node: PP_ENDIF@6..13, kind: EndIf(EndIf), errors: [], source_id: FileId(1) }, masked: false })
 Ok(Directive { directive: EventDirective { node: PP_ERROR@13..25, kind: Error(Error { message: "AÿB" }), errors: [Located { inner: Processing(ErrorDirective { message: "AÿB" }), pos: 13..25, current_file: Some(FileId(1)), path: None, file_override: None, line_number: 2, column: 0 }], source_id: FileId(1) }, masked: false })

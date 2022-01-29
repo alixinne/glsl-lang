@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/150.vert", canonical_path: "/data/150.vert" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/150.vert" })
 Ok(Directive { directive: EventDirective { node: PP_VERSION@0..19, kind: Version(Version { number: 150, profile: Core, parsed_profile: Some(Core) }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 19..21 } "\r\n", token_kind: WS, state: Active })
 Ok(Directive { directive: EventDirective { node: PP_IFNDEF@21..46, kind: IfNDef(IfNDef { ident: "GL_core_profile" }), errors: [], source_id: FileId(0) }, masked: false })

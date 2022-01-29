@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/mains1.frag", canonical_path: "/data/mains1.frag" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/mains1.frag" })
 Ok(Directive { directive: EventDirective { node: PP_VERSION@0..14, kind: Version(Version { number: 110, profile: None, parsed_profile: Some(None) }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 14..16 } "\r\n", token_kind: WS, state: Active })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 16..20 } "void", token_kind: TYPE_NAME(VOID), state: Active })

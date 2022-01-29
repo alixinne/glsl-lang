@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/cppPassMacroName.frag", canonical_path: "/data/cppPassMacroName.frag" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/cppPassMacroName.frag" })
 Ok(Directive { directive: EventDirective { node: PP_DEFINE@0..24, kind: Define(Define { name: "f1", kind: Function(DefineFunction { args: ["i"], tokens: PP_DEFINE_BODY@14..23 }), protected: false }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Directive { directive: EventDirective { node: PP_DEFINE@24..55, kind: Define(Define { name: "I2", kind: Function(DefineFunction { args: ["f", "n"], tokens: PP_DEFINE_BODY@41..54 }), protected: false }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Directive { directive: EventDirective { node: PP_DEFINE@55..90, kind: Define(Define { name: "I3", kind: Function(DefineFunction { args: ["f", "n"], tokens: PP_DEFINE_BODY@72..89 }), protected: false }), errors: [], source_id: FileId(0) }, masked: false })

@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/constantUnaryConversion.comp", canonical_path: "/data/constantUnaryConversion.comp" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/constantUnaryConversion.comp" })
 Ok(Directive { directive: EventDirective { node: PP_VERSION@0..14, kind: Version(Version { number: 450, profile: Core, parsed_profile: Some(None) }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 14..16 } "\r\n", token_kind: WS, state: Active })
 Ok(Directive { directive: EventDirective { node: PP_EXTENSION@16..78, kind: Extension(Extension { name: Specific(Atom('GL_EXT_shader_explicit_arithmetic_types' type=dynamic)), behavior: Require }), errors: [], source_id: FileId(0) }, masked: false })

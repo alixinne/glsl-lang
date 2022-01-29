@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/web.builtins.vert", canonical_path: "/data/web.builtins.vert" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/web.builtins.vert" })
 Ok(Directive { directive: EventDirective { node: PP_VERSION@0..17, kind: Version(Version { number: 310, profile: Es, parsed_profile: Some(Es) }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 17..19 } "\r\n", token_kind: WS, state: Active })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 19..25 } "layout", token_kind: LAYOUT, state: Active })

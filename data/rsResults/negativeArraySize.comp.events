@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/negativeArraySize.comp", canonical_path: "/data/negativeArraySize.comp" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/negativeArraySize.comp" })
 Ok(Directive { directive: EventDirective { node: PP_VERSION@0..16, kind: Version(Version { number: 310, profile: Es, parsed_profile: Some(Es) }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 16..17 } "\n", token_kind: WS, state: Active })
 Ok(Directive { directive: EventDirective { node: PP_IFDEF@17..30, kind: IfDef(IfDef { ident: "GL_ES" }), errors: [], source_id: FileId(0) }, masked: false })

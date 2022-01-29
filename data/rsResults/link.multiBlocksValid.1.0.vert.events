@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/link.multiBlocksValid.1.0.vert", canonical_path: "/data/link.multiBlocksValid.1.0.vert" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/link.multiBlocksValid.1.0.vert" })
 Ok(Directive { directive: EventDirective { node: PP_VERSION@0..13, kind: Version(Version { number: 430, profile: Core, parsed_profile: Some(None) }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 13..19 } "layout", token_kind: LAYOUT, state: Active })
 Ok(Token { source_token: WS@NodeSpan { source_id: FileId(0), range: 19..20 } " ", token_kind: WS, state: Active })

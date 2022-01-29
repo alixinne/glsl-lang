@@ -1,2 +1,2 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/preprocessor.eof_missing.vert", canonical_path: "/data/preprocessor.eof_missing.vert" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/preprocessor.eof_missing.vert" })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 0..5 } "noEOF", token_kind: IDENT("noEOF"), state: Active })

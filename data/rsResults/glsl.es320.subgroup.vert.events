@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/glsl.es320.subgroup.vert", canonical_path: "/data/glsl.es320.subgroup.vert" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/glsl.es320.subgroup.vert" })
 Ok(Directive { directive: EventDirective { node: PP_VERSION@0..17, kind: Version(Version { number: 320, profile: Es, parsed_profile: Some(Es) }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Directive { directive: EventDirective { node: PP_EXTENSION@17..66, kind: Extension(Extension { name: Specific(Atom('GL_KHR_shader_subgroup_basic' type=dynamic)), behavior: Enable }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 66..72 } "layout", token_kind: LAYOUT, state: Active })

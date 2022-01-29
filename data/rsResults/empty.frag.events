@@ -1,1 +1,1 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/empty.frag", canonical_path: "/data/empty.frag" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/empty.frag" })

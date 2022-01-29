@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/glsl.450.subgroupBasic.comp", canonical_path: "/data/glsl.450.subgroupBasic.comp" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/glsl.450.subgroupBasic.comp" })
 Ok(Directive { directive: EventDirective { node: PP_VERSION@0..14, kind: Version(Version { number: 450, profile: Core, parsed_profile: Some(None) }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 14..16 } "\r\n", token_kind: WS, state: Active })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 16..20 } "vec4", token_kind: TYPE_NAME(VEC4), state: Active })

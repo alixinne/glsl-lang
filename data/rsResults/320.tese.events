@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/320.tese", canonical_path: "/data/320.tese" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/320.tese" })
 Ok(Directive { directive: EventDirective { node: PP_VERSION@0..17, kind: Version(Version { number: 320, profile: Es, parsed_profile: Some(Es) }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 17..19 } "\r\n", token_kind: WS, state: Active })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 19..25 } "layout", token_kind: LAYOUT, state: Active })

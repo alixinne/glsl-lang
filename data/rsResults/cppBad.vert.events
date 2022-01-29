@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/cppBad.vert", canonical_path: "/data/cppBad.vert" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/cppBad.vert" })
 Ok(Directive { directive: EventDirective { node: PP_DEFINE@0..14, kind: Define(Define { name: "n", kind: Object(DefineObject { tokens: PP_DEFINE_BODY@9..12 }), protected: false }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Directive { directive: EventDirective { node: PP_DEFINE@14..29, kind: Define(Define { name: "m", kind: Object(DefineObject { tokens: PP_DEFINE_BODY@24..27 }), protected: false }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Directive { directive: EventDirective { node: PP_IF@29..36, kind: If(If { file_id: FileId(0), body: PP_IF_EXPR@33..34 }), errors: [Located { inner: Processing(DirectiveIf(Eval(InvalidExpr { token: Token(HASH@NodeSpan { source_id: FileId(0), range: 33..34 } "#") }))), pos: 29..36, current_file: Some(FileId(0)), path: None, file_override: None, line_number: 2, column: 0 }], source_id: FileId(0) }, masked: false })

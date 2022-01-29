@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/constFoldIntMin.frag", canonical_path: "/data/constFoldIntMin.frag" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/constFoldIntMin.frag" })
 Ok(Directive { directive: EventDirective { node: PP_VERSION@0..18, kind: Version(Version { number: 460, profile: Core, parsed_profile: Some(Core) }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Directive { directive: EventDirective { node: PP_EXTENSION@18..62, kind: Extension(Extension { name: Specific(Atom('GL_AMD_gpu_shader_int16' type=dynamic)), behavior: Enable }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Directive { directive: EventDirective { node: PP_EXTENSION@62..106, kind: Extension(Extension { name: Specific(Atom('GL_ARB_gpu_shader_int64' type=dynamic)), behavior: Enable }), errors: [], source_id: FileId(0) }, masked: false })

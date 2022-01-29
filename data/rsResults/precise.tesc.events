@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/precise.tesc", canonical_path: "/data/precise.tesc" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/precise.tesc" })
 Ok(Directive { directive: EventDirective { node: PP_VERSION@0..13, kind: Version(Version { number: 450, profile: Core, parsed_profile: Some(None) }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Directive { directive: EventDirective { node: PP_EXTENSION@13..61, kind: Extension(Extension { name: Specific(Atom('GL_EXT_tessellation_shader' type=dynamic)), behavior: Require }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Directive { directive: EventDirective { node: PP_EXTENSION@61..101, kind: Extension(Extension { name: Specific(Atom('GL_EXT_gpu_shader5' type=dynamic)), behavior: Require }), errors: [], source_id: FileId(0) }, masked: false })

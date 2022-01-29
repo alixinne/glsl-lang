@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/terminate.vert", canonical_path: "/data/terminate.vert" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/terminate.vert" })
 Ok(Directive { directive: EventDirective { node: PP_VERSION@0..14, kind: Version(Version { number: 400, profile: Core, parsed_profile: Some(None) }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 14..16 } "\r\n", token_kind: WS, state: Active })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 16..20 } "void", token_kind: TYPE_NAME(VOID), state: Active })

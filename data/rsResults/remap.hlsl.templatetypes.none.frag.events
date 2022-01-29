@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/remap.hlsl.templatetypes.none.frag", canonical_path: "/data/remap.hlsl.templatetypes.none.frag" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/remap.hlsl.templatetypes.none.frag" })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 0..1 } "\n", token_kind: WS, state: Active })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 1..6 } "float", token_kind: TYPE_NAME(FLOAT), state: Active })
 Ok(Token { source_token: WS@NodeSpan { source_id: FileId(0), range: 6..7 } " ", token_kind: WS, state: Active })

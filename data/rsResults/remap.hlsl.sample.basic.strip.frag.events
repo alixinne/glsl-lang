@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/remap.hlsl.sample.basic.strip.frag", canonical_path: "/data/remap.hlsl.sample.basic.strip.frag" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/remap.hlsl.sample.basic.strip.frag" })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 0..12 } "SamplerState", token_kind: IDENT("SamplerState"), state: Active })
 Ok(Token { source_token: WS@NodeSpan { source_id: FileId(0), range: 12..19 } "       ", token_kind: WS, state: Active })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 19..26 } "g_sSamp", token_kind: IDENT("g_sSamp"), state: Active })

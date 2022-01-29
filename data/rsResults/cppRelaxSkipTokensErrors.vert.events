@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/cppRelaxSkipTokensErrors.vert", canonical_path: "/data/cppRelaxSkipTokensErrors.vert" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/cppRelaxSkipTokensErrors.vert" })
 Ok(Directive { directive: EventDirective { node: PP_VERSION@0..14, kind: Version(Version { number: 110, profile: None, parsed_profile: Some(None) }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 14..16 } "\r\n", token_kind: WS, state: Active })
 Ok(Directive { directive: EventDirective { node: PP_IF@16..23, kind: If(If { file_id: FileId(0), body: PP_IF_EXPR@20..21 }), errors: [], source_id: FileId(0) }, masked: false })

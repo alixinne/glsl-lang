@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/cppComplexExpr.vert", canonical_path: "/data/cppComplexExpr.vert" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/cppComplexExpr.vert" })
 Ok(Directive { directive: EventDirective { node: PP_VERSION@0..16, kind: Version(Version { number: 300, profile: Es, parsed_profile: Some(Es) }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Directive { directive: EventDirective { node: PP_DEFINE@16..28, kind: Define(Define { name: "ON1", kind: Object(DefineObject { tokens: PP_DEFINE_BODY@27..27 }), protected: false }), errors: [], source_id: FileId(0) }, masked: false })
 Ok(Directive { directive: EventDirective { node: PP_DEFINE@28..40, kind: Define(Define { name: "ON2", kind: Object(DefineObject { tokens: PP_DEFINE_BODY@39..39 }), protected: false }), errors: [], source_id: FileId(0) }, masked: false })

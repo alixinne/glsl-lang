@@ -1,4 +1,4 @@
-Ok(EnterFile { file_id: FileId(0), path: "../data/pointCoord.frag", canonical_path: "/data/pointCoord.frag" })
+Ok(EnterFile { file_id: FileId(0), path: "../data/pointCoord.frag" })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 0..9 } "precision", token_kind: PRECISION, state: Active })
 Ok(Token { source_token: WS@NodeSpan { source_id: FileId(0), range: 9..10 } " ", token_kind: WS, state: Active })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 10..15 } "highp", token_kind: HIGHP, state: Active })

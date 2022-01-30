@@ -309,12 +309,21 @@ impl<F: FileSystem> Processor<F> {
         parent: impl AsRef<Path>,
         path: &ParsedPath,
     ) -> Option<PathBuf> {
+        // Convert the path (string) to a pathbuf
+        let path_as_pathbuf = PathBuf::from(&path.path);
+
+        if path_as_pathbuf.is_absolute() {
+            // If it's absolute, return it as-is
+            return Some(path_as_pathbuf);
+        }
+
+        // Else, try to resolve it
         match path.ty {
             PathType::Angle => self.system_paths.iter().find_map(|system_path| {
-                let full_path = system_path.join(&path.path);
+                let full_path = system_path.join(&path_as_pathbuf);
                 self.fs.exists(&full_path).then(|| full_path)
             }),
-            PathType::Quote => Some(parent.as_ref().join(&path.path)),
+            PathType::Quote => Some(parent.as_ref().join(path_as_pathbuf)),
         }
     }
 

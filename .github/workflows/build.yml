@@ -19,8 +19,10 @@ jobs:
         include:
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
+            ignore_tests: ''
           - target: x86_64-pc-windows-msvc
             os: windows-latest
+            ignore_tests: 'include_vert'
     runs-on: ${{ matrix.os }}
     steps:
       - name: Force git to use LF
@@ -57,6 +59,8 @@ jobs:
 
       - name: Generate test driver
         run: cargo xtask gen-tests
+        env:
+          IGNORE_TESTS: ${{ matrix.ignore_tests }}
 
       - name: Run glsl-lang-pp/glslang tests
         run: cargo test -p glsl-lang-pp --test glslang --features full

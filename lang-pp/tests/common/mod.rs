@@ -1,5 +1,4 @@
-use std::path::Path;
-use std::{fs::File, io::prelude::*};
+use std::{fs::File, io::prelude::*, path::Path};
 
 use glsl_lang_pp::{
     exts::{names::ExtNameAtom, DEFAULT_REGISTRY},
@@ -78,6 +77,40 @@ pub fn test_file(path: impl AsRef<Path>) {
     let mut ppf = File::create(paths.path(Output::Preprocessed)).unwrap();
     let mut errorsf = File::create(paths.path(Output::Errors)).unwrap();
 
+    // Redaction regex
+    // Replace Os specific info in errors
+    let err_os_redactor = regex::Regex::new("Os \\{ [^\\}]* \\}").unwrap();
+    // Replace Os specific messages in stdout
+    let stdout_matchers = [
+        (
+            regex::Regex::new(r#"The system cannot find the (path|file) specified. \(os error \d+\)"#)
+                .unwrap(),
+            "No such file or directory (os error 2)",
+        ),
+        (
+            regex::Regex::new(
+                r#"The filename, directory name, or volume label syntax is incorrect. \(os error \d+\)"#,
+            )
+            .unwrap(),
+            "No such file or directory (os error 2)",
+        ),
+    ];
+
+    // Error writer that does the replacements
+    let mut write_error = |err: &dyn std::fmt::Display| {
+        let mut formatted = err.to_string();
+
+        for (regex, replacement) in &stdout_matchers {
+            formatted = regex.replace(&formatted, *replacement).to_string();
+        }
+
+        if let Some(idx) = formatted.find(": ") {
+            formatted = formatted[..idx].replace("\\", "/") + &formatted[idx..];
+        }
+
+        writeln!(errorsf, "{}", formatted).unwrap();
+    };
+
     let mut critical_error_count = 0;
 
     for result in parsed.into_iter().tokenize(100, false, &DEFAULT_REGISTRY) {
@@ -96,6 +129,11 @@ pub fn test_file(path: impl AsRef<Path>) {
             } else {
                 without_canonical_path.replace("\\\\", "/")
             }
+        } else if debug_formatted.contains("inner: Os") {
+            err_os_redactor
+                .replace(&debug_formatted, "Os")
+                .replace("\\\\", "/")
+                .to_string()
         } else {
             debug_formatted
         };
@@ -106,7 +144,7 @@ pub fn test_file(path: impl AsRef<Path>) {
             Ok(event) => match event {
                 Event::Error { error, masked } => {
                     if !masked {
-                        writeln!(errorsf, "{}", error).unwrap();
+                        write_error(&error);
                     }
                 }
 
@@ -125,7 +163,7 @@ pub fn test_file(path: impl AsRef<Path>) {
                 Event::Directive { directive, masked } => {
                     if !masked {
                         for error in directive.errors() {
-                            writeln!(errorsf, "{}", error).unwrap();
+                            write_error(&error);
                         }
 
                         match directive.kind() {
@@ -150,7 +188,7 @@ pub fn test_file(path: impl AsRef<Path>) {
             },
 
             Err(err) => {
-                writeln!(errorsf, "{}", err).unwrap();
+                write_error(&err);
             }
         }
     }

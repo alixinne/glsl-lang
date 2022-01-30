@@ -259,7 +259,7 @@ Ok(Token { source_token: WS@NodeSpan { source_id: FileId(0), range: 1031..1032 }
 Ok(Token { source_token: WS@NodeSpan { source_id: FileId(0), range: 1032..1034 } "", token_kind: WS, state: Active })
 Ok(Token { source_token: PERIOD@NodeSpan { source_id: FileId(0), range: 1034..1035 } ".", token_kind: PERIOD, state: Active })
 Ok(Token { source_token: WS@NodeSpan { source_id: FileId(0), range: 1035..1037 } "", token_kind: WS, state: Active })
-Ok(Token { source_token: DIGITS@NodeSpan { source_id: FileId(0), range: 1037..1058 } "123e+17", token_kind: FLOAT_CONST(12300000000000000000.0), state: Active })
+Ok(Token { source_token: DIGITS@NodeSpan { source_id: FileId(0), range: 1037..1058 } "123e+17", token_kind: FLOAT_CONST(1.23e19), state: Active })
 Ok(Token { source_token: SEMICOLON@NodeSpan { source_id: FileId(0), range: 1058..1059 } ";", token_kind: SEMICOLON, state: Active })
 Ok(Token { source_token: WS@NodeSpan { source_id: FileId(0), range: 1059..1061 } "", token_kind: WS, state: Active })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 1061..1064 } "int", token_kind: TYPE_NAME(INT), state: Active })

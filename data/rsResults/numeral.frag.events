@@ -665,7 +665,7 @@ Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 1845..
 Ok(Token { source_token: WS@NodeSpan { source_id: FileId(0), range: 1847..1848 } " ", token_kind: WS, state: Active })
 Ok(Token { source_token: EQUAL@NodeSpan { source_id: FileId(0), range: 1848..1849 } "=", token_kind: EQUAL, state: Active })
 Ok(Token { source_token: WS@NodeSpan { source_id: FileId(0), range: 1849..1850 } " ", token_kind: WS, state: Active })
-Ok(Token { source_token: DIGITS@NodeSpan { source_id: FileId(0), range: 1850..1856 } "0.5e-5", token_kind: FLOAT_CONST(0.000005), state: Active })
+Ok(Token { source_token: DIGITS@NodeSpan { source_id: FileId(0), range: 1850..1856 } "0.5e-5", token_kind: FLOAT_CONST(5e-6), state: Active })
 Ok(Token { source_token: SEMICOLON@NodeSpan { source_id: FileId(0), range: 1856..1857 } ";", token_kind: SEMICOLON, state: Active })
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 1857..1859 } "\r\n", token_kind: WS, state: Active })
 Ok(Token { source_token: WS@NodeSpan { source_id: FileId(0), range: 1859..1863 } "    ", token_kind: WS, state: Active })

@@ -1,3 +1,0 @@
-(function() {var implementors = {};
-implementors["glsl_lang"] = [{"text":"impl <a class=\"trait\" href=\"lang_util/error/trait.Token.html\" title=\"trait lang_util::error::Token\">Token</a> for <a class=\"enum\" href=\"glsl_lang/lexer/token/enum.Token.html\" title=\"enum glsl_lang::lexer::token::Token\">Token</a>&lt;'_&gt;","synthetic":false,"types":["glsl_lang::lexer::token::Token"]}];
-if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["glsl_lang_pp"] = [{"text":"impl <a class=\"trait\" href=\"lang_util/located/trait.HasFileNumber.html\" title=\"trait lang_util::located::HasFileNumber\">HasFileNumber</a> for <a class=\"struct\" href=\"glsl_lang_pp/processor/expand/struct.ExpandLocation.html\" title=\"struct glsl_lang_pp::processor::expand::ExpandLocation\">ExpandLocation</a>","synthetic":false,"types":["glsl_lang_pp::processor::expand::ExpandLocation"]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

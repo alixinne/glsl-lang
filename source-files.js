@@ -1,7 +1,11 @@
 var N = null;var sourcesIndex = {};
-sourcesIndex["glsl_lang"] = {"name":"","dirs":[{"name":"lexer","files":["parsers.rs","preprocessor_token.rs","token.rs"]},{"name":"parse","files":["context.rs","parsable.rs"]},{"name":"transpiler","files":["glsl.rs"]}],"files":["ast.rs","lexer.rs","lib.rs","parse.rs","transpiler.rs","visitor.rs"]};
+sourcesIndex["glsl_lang"] = {"name":"","dirs":[{"name":"parse","files":["builder.rs","parsable.rs"]},{"name":"transpiler","files":["glsl.rs"]}],"files":["lib.rs","parse.rs","transpiler.rs","visitor.rs"]};
 sourcesIndex["glsl_lang_cli"] = {"name":"","files":["main.rs"]};
+sourcesIndex["glsl_lang_lexer"] = {"name":"","dirs":[{"name":"v2_full","files":["core.rs","directives.rs","fs.rs","str.rs"]}],"files":["context.rs","lib.rs","token.rs","v2.rs","v2_full.rs"]};
+sourcesIndex["glsl_lang_pp"] = {"name":"","dirs":[{"name":"exts","files":["names.rs"]},{"name":"last","files":["token.rs"]},{"name":"lexer","dirs":[{"name":"glue","files":["token.rs"]},{"name":"pre","files":["token.rs"]}],"files":["glue.rs","newline.rs","pre.rs"]},{"name":"parser","files":["ast.rs","error.rs","lang.rs","syntax.rs","syntax_kind.rs"]},{"name":"processor","dirs":[{"name":"event","files":["send.rs"]},{"name":"expand","files":["if_stack.rs"]}],"files":["definition.rs","event.rs","expand.rs","expr.rs","fs.rs","nodes.rs","str.rs"]},{"name":"types","files":["keywords.rs","path.rs","token.rs","type_names.rs"]},{"name":"util","files":["line_map.rs","text_token.rs","unescaped.rs"]}],"files":["exts.rs","last.rs","lexer.rs","lib.rs","parser.rs","processor.rs","types.rs","util.rs"]};
 sourcesIndex["glsl_lang_quote"] = {"name":"","files":["lib.rs","quoted.rs","tokenize.rs"]};
-sourcesIndex["lang_util"] = {"name":"","dirs":[{"name":"node","files":["content.rs","display.rs"]}],"files":["error.rs","lib.rs","node.rs","position.rs"]};
+sourcesIndex["glsl_lang_types"] = {"name":"","files":["ast.rs","lib.rs"]};
+sourcesIndex["lang_util"] = {"name":"","dirs":[{"name":"node","files":["content.rs","display.rs"]}],"files":["error.rs","file_id.rs","lib.rs","located.rs","node.rs","position.rs","token.rs"]};
 sourcesIndex["lang_util_derive"] = {"name":"","dirs":[{"name":"node_content","files":["content_display.rs"]}],"files":["lib.rs","node_content.rs","token.rs"]};
+sourcesIndex["lang_util_dev"] = {"name":"","files":["lib.rs","test_util.rs"]};
 createSourceSidebar();

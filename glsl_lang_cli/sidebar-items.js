@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["main","CLI entry point"],["output_glsl",""],["output_json",""],["output_text",""]]});
+initSidebarItems({"fn":[["main","CLI entry point"],["output_glsl",""],["output_json",""],["output_text",""],["parse_tu",""]],"struct":[["Opts","glsl-lang command-line interface"],["ParseError",""]]});

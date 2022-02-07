@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["TokenDescriptor","Information about a known token"]],"trait":[["Token","Trait to implement for a token to be used with `lang_util`’s infrastructure"]]});

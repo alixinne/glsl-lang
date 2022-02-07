@@ -1,0 +1,4 @@
+(function() {var implementors = {};
+implementors["glsl_lang_lexer"] = [{"text":"impl <a class=\"trait\" href=\"lang_util/token/trait.Token.html\" title=\"trait lang_util::token::Token\">Token</a> for <a class=\"enum\" href=\"glsl_lang_lexer/token/enum.Token.html\" title=\"enum glsl_lang_lexer::token::Token\">Token</a>","synthetic":false,"types":["glsl_lang_lexer::token::Token"]}];
+implementors["glsl_lang_pp"] = [{"text":"impl <a class=\"trait\" href=\"lang_util/token/trait.Token.html\" title=\"trait lang_util::token::Token\">Token</a> for <a class=\"enum\" href=\"glsl_lang_pp/types/token/enum.Token.html\" title=\"enum glsl_lang_pp::types::token::Token\">Token</a>","synthetic":false,"types":["glsl_lang_pp::types::token::Token"]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

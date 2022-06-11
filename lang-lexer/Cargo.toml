@@ -1,6 +1,6 @@
 [package]
 name = "glsl-lang-lexer"
-version = "0.2.0"
+version = "0.2.1"
 authors = ["Vincent Tavernier <vince.tavernier@gmail.com>"]
 edition = "2021"
 license = "BSD-3-Clause"
@@ -14,7 +14,7 @@ categories = ["parser-implementations", "rendering"]
 
 [dependencies]
 glsl-lang-types = "0.2.0"
-lang-util = { version = "0.2.0", features = ["lalrpop"] }
+lang-util = { version = "0.2.1", features = ["lalrpop"] }
 
 thiserror = "1.0"
 

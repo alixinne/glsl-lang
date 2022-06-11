@@ -44,6 +44,9 @@ jobs:
             sed -i '/fuzz/d' Cargo.toml
           fi
 
+      - name: Run doc tests
+        run: cargo test --workspace -q --doc
+
       - name: Run lib tests
         run: cargo test --workspace -q --lib
 

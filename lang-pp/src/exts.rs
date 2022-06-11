@@ -1,4 +1,4 @@
-use std::{array::IntoIter, collections::HashMap};
+use std::collections::HashMap;
 
 use crate::types::type_names::TypeNameAtom;
 
@@ -51,7 +51,7 @@ impl Registry {
 impl Default for Registry {
     fn default() -> Self {
         Self {
-            extensions: IntoIter::new([
+            extensions: [
                 ExtensionSpec::new(ExtNameAtom::from("GL_3DL_array_objects"), vec![]),
                 ExtensionSpec::new(
                     ExtNameAtom::from("GL_AMD_gpu_shader_int16"),
@@ -566,7 +566,8 @@ impl Default for Registry {
                     ],
                 ),
                 ExtensionSpec::new(ExtNameAtom::from("GL_OVR_multiview"), vec![]),
-            ])
+            ]
+            .into_iter()
             .map(|spec| (spec.name.clone(), spec))
             .collect(),
         }

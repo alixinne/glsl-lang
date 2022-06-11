@@ -845,7 +845,7 @@ impl<'d> MacroInvocation<'d> {
             .into_iter()
             .group_by(Event::is_token)
             .into_iter()
-            .map(|(is_token, events)| {
+            .flat_map(|(is_token, events)| {
                 if is_token {
                     // A token sequence
                     // TODO: Prevent re-allocation
@@ -863,7 +863,6 @@ impl<'d> MacroInvocation<'d> {
                     events.collect()
                 }
             })
-            .flatten()
             .collect();
 
         subs_stack.remove(self.definition.name());

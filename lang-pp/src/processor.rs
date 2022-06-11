@@ -1,4 +1,4 @@
-use std::{array::IntoIter, collections::HashMap};
+use std::collections::HashMap;
 
 use lang_util::{FileId, SmolStr};
 
@@ -232,10 +232,7 @@ impl<'r> ProcessorStateBuilder<'r> {
                 )
                 .chain(self.definitions.into_iter())
                 .map(|definition| Definition::Regular(definition.into(), FileId::default()))
-                .chain(
-                    IntoIter::new([Definition::Line, Definition::File, Definition::Version])
-                        .into_iter(),
-                )
+                .chain([Definition::Line, Definition::File, Definition::Version].into_iter())
                 .chain(self.registry.all().map(|spec| {
                     Definition::Regular(
                         Define::object(spec.name().as_ref().into(), one.clone(), true).into(),

@@ -15,7 +15,7 @@ elements.
 ### Parsing GLSL
 
 ```rust
-use glsl_lang::{ast, parse::Parse};
+use glsl_lang::{ast, parse::DefaultParse};
 
 // Some GLSL source to parse
 let source = r#"void main() {

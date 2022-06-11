@@ -2,7 +2,7 @@
 name = "glsl-lang-quote"
 version = "0.2.0"
 authors = ["Vincent Tavernier <vince.tavernier@gmail.com>"]
-edition = "2018"
+edition = "2021"
 license = "BSD-3-Clause"
 description = "Quoting proc-macro for glsl-lang"
 homepage = "https://github.com/vtavernier/glsl-lang"

@@ -2,7 +2,7 @@
 name = "glsl-lang-pp"
 version = "0.2.0"
 authors = ["Vincent Tavernier <vince.tavernier@gmail.com>"]
-edition = "2018"
+edition = "2021"
 license = "BSD-3-Clause"
 description = "GLSL language preprocessor"
 homepage = "https://github.com/vtavernier/glsl-lang"

@@ -2,7 +2,7 @@
 name = "lang-util-dev"
 version = "0.2.0"
 authors = ["Vincent Tavernier <vince.tavernier@gmail.com>"]
-edition = "2018"
+edition = "2021"
 license = "BSD-3-Clause"
 description = "Development utilities for parsers implemented using lang-util"
 homepage = "https://github.com/vtavernier/glsl-lang"

@@ -110,7 +110,7 @@ pub(crate) fn node_content_display(
 
                     let quoted = quote_spanned! {
                         variant.span() =>
-                            Self::#name#fields=> {
+                            Self::#name #fields=> {
                                 write!(f, " `{}`", #vs)?;
                             }
                     };

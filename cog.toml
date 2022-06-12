@@ -1,0 +1,24 @@
+ignore_merge_commits = false
+branch_whitelist = [
+  "master",
+]
+pre_bump_hooks = [
+  "./ci/bumpver.sh {{version}}",
+  "git add */Cargo.toml",
+]
+post_bump_hooks = [
+  "git push",
+  "git push origin {{version}}",
+  "./ci/release.sh",
+]
+tag_prefix = "v"
+
+[commit_types]
+
+[changelog]
+path = "CHANGELOG.md"
+authors = [
+  { signature = "Vincent Tavernier", username = "vtavernier" }
+]
+
+[bump_profiles]

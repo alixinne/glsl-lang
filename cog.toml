@@ -1,4 +1,4 @@
-ignore_merge_commits = false
+ignore_merge_commits = true
 branch_whitelist = [
   "master",
 ]
@@ -8,7 +8,7 @@ pre_bump_hooks = [
 ]
 post_bump_hooks = [
   "git push",
-  "git push origin {{version}}",
+  "git push origin v{{version}}",
   "./ci/release.sh",
 ]
 tag_prefix = "v"

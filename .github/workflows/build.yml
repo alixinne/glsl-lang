@@ -1,8 +1,56 @@
-name: build
+name: Build, test and release crate
 
-on: push
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+      - dev
 
 jobs:
+  check:
+    name: Check crate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - uses: cocogitto/cocogitto-action@v3.2
+        with:
+          check-latest-tag-only: true
+          git-user: glsl-lang
+          git-user-email: glsl-lang@vtavernier.github.io
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+          target: ${{ matrix.target }}
+          components: rustfmt, clippy
+
+      - uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}
+          path: |
+            ~/.cargo/bin/cargo-readme
+
+      - name: Install cargo-readme
+        run: |
+          cargo-readme -V || (
+            cargo install --force cargo-readme && cargo-readme -V
+          )
+
+      - name: Check READMEs
+        run: ./ci/readme.sh -c
+
+      - name: Check formatting
+        run: cargo fmt -- --check
+
+      - name: Check clippy lints
+        run: cargo clippy -- -D warnings
+
   test:
     name: Test crate
 
@@ -19,10 +67,10 @@ jobs:
         include:
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
-            ignore_tests: ''
+            ignore_tests: ""
           - target: x86_64-pc-windows-msvc
             os: windows-latest
-            ignore_tests: 'include_vert'
+            ignore_tests: "include_vert"
     runs-on: ${{ matrix.os }}
     steps:
       - name: Force git to use LF
@@ -80,5 +128,61 @@ jobs:
       - name: Run glsl-lang-quote tests
         run: |
           cargo test -p glsl-lang-quote
+
+  release:
+    name: Release crate
+    needs: [check, test]
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_PAT }}
+
+      - uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}
+          path: |
+            ~/.cargo/bin/cargo-set-version
+            ~/.cargo/bin/cargo-upgrade
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+          target: ${{ matrix.target }}
+
+      - name: Install cargo-edit
+        run: |
+          [[ "$(cargo-upgrade -V)" == *0.8.0 && "$(cargo-set-version -V)" == *0.8.0 ]] || (
+            cargo install cargo-edit --force --version 0.8.0 \
+              && cargo-upgrade -V \
+              && cargo-set-version -V
+          )
+
+      - uses: cocogitto/cocogitto-action@v3.2
+        id: release
+        # Set to true because the action fails if there's nothing to release
+        continue-on-error: true
+        # Propagate secrets
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+        with:
+          check: false
+          release: true
+          git-user: glsl-lang
+          git-user-email: glsl-lang@vtavernier.github.io
+
+      - run: cog changelog --at ${{ steps.release.outputs.version }} -t full_hash > GITHUB_CHANGELOG.md
+        if: steps.release.outputs.version != ''
+
+      - uses: softprops/action-gh-release@v1
+        if: steps.release.outputs.version != ''
+        with:
+          token: ${{ secrets.GH_PAT }}
+          body_path: GITHUB_CHANGELOG.md
+          tag_name: ${{ steps.release.outputs.version }}
 
 # vim: ft=yaml:ts=2:sw=2:et

@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  release:
+  release-docs:
     name: Build docs
     runs-on: ubuntu-latest
     steps:

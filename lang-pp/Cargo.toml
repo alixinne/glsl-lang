@@ -18,7 +18,7 @@ lang-util = "0.2.1"
 
 string_cache = "0.8"
 thiserror = "1.0"
-lexical = "6.0"
+lexical = "6.1"
 arrayvec = "0.7"
 derive_more = "0.99"
 
@@ -35,7 +35,7 @@ lazy_static = { version = "1.4", optional = true }
 [dev-dependencies]
 lang-util-dev = "0.2.0"
 
-expect-test = "1.1"
+expect-test = "1.3"
 encoding_rs = "0.8"
 regex = "1.5"
 

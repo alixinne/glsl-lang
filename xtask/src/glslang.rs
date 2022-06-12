@@ -3,7 +3,7 @@ use std::fs;
 use std::io::prelude::*;
 use std::path::{Path, PathBuf};
 
-use heck::SnakeCase;
+use heck::ToSnakeCase;
 
 const EXCLUDE_PREFIXES: &[&str] = &[
     "hlsl.", "spv.", /* TODO: Remove this when we support attributes */

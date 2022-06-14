@@ -143,6 +143,7 @@ jobs:
         with:
           key: ${{ runner.os }}
           path: |
+            ~/.cargo/bin/cargo-set-version
             ~/.cargo/bin/cargo-upgrade
 
       - uses: actions-rs/toolchain@v1
@@ -154,8 +155,10 @@ jobs:
 
       - name: Install cargo-edit
         run: |
-          cargo-upgrade -V || (
-            cargo install cargo-edit --force --version 0.8.0 && cargo-upgrade -V
+          [[ "$(cargo-upgrade -V)" == *0.8.0 && "$(cargo-set-version -V)" == *0.8.0 ]] || (
+            cargo install cargo-edit --force --version 0.8.0 \
+              && cargo-upgrade -V \
+              && cargo-set-version -V
           )
 
       - uses: cocogitto/cocogitto-action@v3.2

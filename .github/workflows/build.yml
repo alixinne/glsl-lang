@@ -132,22 +132,20 @@ jobs:
   release:
     name: Release crate
     needs: [check, test]
+    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        if: github.ref == 'refs/heads/master'
         with:
           fetch-depth: 0
 
       - uses: actions/cache@v2
-        if: github.ref == 'refs/heads/master'
         with:
           key: ${{ runner.os }}
           path: |
             ~/.cargo/bin/cargo-upgrade
 
       - uses: actions-rs/toolchain@v1
-        if: github.ref == 'refs/heads/master'
         with:
           profile: minimal
           toolchain: stable
@@ -155,14 +153,12 @@ jobs:
           target: ${{ matrix.target }}
 
       - name: Install cargo-edit
-        if: github.ref == 'refs/heads/master'
         run: |
           cargo-upgrade -V || (
             cargo install cargo-edit --force --version 0.8.0 && cargo-upgrade -V
           )
 
       - uses: cocogitto/cocogitto-action@v3.2
-        if: github.ref == 'refs/heads/master'
         id: release
         # Set to true because the action fails if there's nothing to release
         continue-on-error: true
@@ -173,10 +169,10 @@ jobs:
           git-user-email: glsl-lang@vtavernier.github.io
 
       - run: cog changelog --at ${{ steps.release.outputs.version }} -t full_hash > GITHUB_CHANGELOG.md
-        if: github.ref == 'refs/heads/master' && steps.release.outputs.version != ''
+        if: steps.release.outputs.version != ''
 
       - uses: softprops/action-gh-release@v1
-        if: github.ref == 'refs/heads/master' && steps.release.outputs.version != ''
+        if: steps.release.outputs.version != ''
         with:
           body_path: GITHUB_CHANGELOG.md
           tag_name: v${{ steps.release.outputs.version }}

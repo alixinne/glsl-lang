@@ -4,7 +4,7 @@
     </nav>
     <nav class="sidebar"><a class="sidebar-logo" href="../glsl_lang_quote/index.html"><div class="logo-container"><img class="rust-logo" src="../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"><a href="#">Crate glsl_lang_quote</a></h2><div class="sidebar-elems"><div class="block"><ul><li class="version">Version 0.2.1</li><li><a id="all-types" href="all.html">All Items</a></li></div></ul><section><div class="block"><ul><li><a href="#modules">Modules</a></li><li><a href="#macros">Macros</a></li><li><a href="#functions">Functions</a></li></ul></div></section><div id="sidebar-vars" data-name="glsl_lang_quote" data-ty="mod" data-relpath=""></div><script defer src="sidebar-items.js"></script></div></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../glsl_lang_quote/index.html"><img class="rust-logo" src="../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="main-heading">
-    <h1 class="fqn"><span class="in-band">Crate <a class="mod" href="#">glsl_lang_quote</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span></h1><span class="out-of-band"><a class="srclink" href="../src/glsl_lang_quote/lib.rs.html#1-121">source</a> · <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span></div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p><code>glsl-lang-quote</code> offers proc-macros to quote GLSL syntax in Rust, using the [glsl_lang] crate.</p>
+    <h1 class="fqn"><span class="in-band">Crate <a class="mod" href="#">glsl_lang_quote</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span></h1><span class="out-of-band"><a class="srclink" href="../src/glsl_lang_quote/lib.rs.html#1-121">source</a> · <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span></div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p><code>glsl-lang-quote</code> offers proc-macros to quote GLSL syntax in Rust, using the <a href="../glsl_lang/index.html" title="glsl_lang">glsl_lang</a> crate.</p>
 <h2 id="usage"><a href="#usage">Usage</a></h2>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">glsl_lang_quote::glsl</span>;
 
@@ -19,13 +19,13 @@
 <span class="macro">assert_eq!</span>(<span class="ident">ast</span>.<span class="number">0</span>.<span class="ident">len</span>(), <span class="number">1</span>);</code></pre></div>
 <h2 id="parsing-expressions"><a href="#parsing-expressions">Parsing expressions</a></h2>
 <p>This crate offers a set of features <code>quote-expr</code>, and <code>quote-statement</code>. Enabling those
-features enable the respective <code>parser-expr</code>, and <code>parser-statement</code> in [glsl_lang], which
+features enable the respective <code>parser-expr</code>, and <code>parser-statement</code> in <a href="../glsl_lang/index.html" title="glsl_lang">glsl_lang</a>, which
 creates dedicated parsers for those types of GLSL fragments of the language grammar.</p>
 <p>This is the most efficient option for parsing lots of expressions and statements at
 compile-time, however this will slow down the initial compilation of <code>glsl-lang-quote</code> since
-the generated parser file in [glsl_lang] will be much larger.</p>
+the generated parser file in <a href="../glsl_lang/index.html" title="glsl_lang">glsl_lang</a> will be much larger.</p>
 <p>This is why by default, this crate enables the <code>quote-parsable</code> feature, which uses
-[glsl_lang]’s [glsl_lang::parse::Parsable] trait, whose limitations apply. Whichever method you
+<a href="../glsl_lang/index.html" title="glsl_lang">glsl_lang</a>’s <a href="../glsl_lang/parse/parsable/trait.Parsable.html" title="glsl_lang::parse::Parsable">glsl_lang::parse::Parsable</a> trait, whose limitations apply. Whichever method you
 chose, the following code will work:</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">glsl_lang_quote::glsl_expr</span>;
@@ -35,7 +35,7 @@ chose, the following code will work:</p>
     <span class="ident">a</span> <span class="op">=</span> <span class="ident">vec4</span>(<span class="number">1.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">1.</span>)
 };</code></pre></div>
 <h2 id="quoting-and-stateful-lexers"><a href="#quoting-and-stateful-lexers">Quoting and stateful lexers</a></h2>
-<p>Since [glsl_lang]’s parser has a stateful lexer (to handle the fact that GLSL’s grammar is not
+<p>Since <a href="../glsl_lang/index.html" title="glsl_lang">glsl_lang</a>’s parser has a stateful lexer (to handle the fact that GLSL’s grammar is not
 context-free), declaring a type (a <code>struct</code> for example) and using it must happen in the same
 macro invocation, otherwise the parser will <em>forget</em> about the previously declared types. The
 best is to only parse whole translation units (<a href="macro.glsl.html" title="glsl!">glsl!</a> macro), or parse unambiguous fragments

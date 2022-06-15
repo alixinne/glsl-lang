@@ -1,6 +1,21 @@
 ## [Unreleased]
 
 - - -
+## v0.3.0 - 2022-06-15
+#### Bug Fixes
+- update all dependencies to 0.2.1 - (bea4a64) - vtavernier
+#### Build system
+- fix ci/bumpver.sh - (10c6aca) - vtavernier
+- configure cog - (0aed54d) - vtavernier
+#### Continuous Integration
+- configure cocogitto - (ea369e4) - vtavernier
+#### Features
+- update dependencies - (16020e4) - vtavernier
+#### Miscellaneous Chores
+- update CHANGELOG for cocogitto - (23bcf06) - vtavernier
+
+- - -
+
 
 ## [0.2.1] - 2022-06-11
 ### Changed

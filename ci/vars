@@ -1,3 +1,0 @@
-GLSL_DIRS=(lang lang-cli lang-lexer lang-pp lang-quote lang-types lang-util lang-util-derive lang-util-dev)
-
-# vim: ft=sh

@@ -142,10 +142,11 @@ jobs:
 
       - uses: actions/cache@v2
         with:
-          key: ${{ runner.os }}
+          key: ${{ runner.os }}-cargo-release-tools-v1
           path: |
             ~/.cargo/bin/cargo-set-version
             ~/.cargo/bin/cargo-upgrade
+            ~/.cargo/bin/cargo-workspaces
 
       - uses: actions-rs/toolchain@v1
         with:
@@ -154,12 +155,19 @@ jobs:
           override: true
           target: ${{ matrix.target }}
 
-      - name: Install cargo-edit
+      - name: Install cargo utilities
         run: |
+          # Install cargo-edit
           [[ "$(cargo-upgrade -V)" == *0.8.0 && "$(cargo-set-version -V)" == *0.8.0 ]] || (
             cargo install cargo-edit --force --version 0.8.0 \
               && cargo-upgrade -V \
               && cargo-set-version -V
+          )
+
+          # Install cargo-workspaces
+          [[ "$(cargo-workspaces -V)" == *0.2.34 ]] || (
+            cargo install cargo-workspaces --force --version 0.2.34 \
+              && cargo-workspaces -V
           )
 
       - uses: cocogitto/cocogitto-action@v3.2

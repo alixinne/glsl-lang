@@ -1,7 +1,5 @@
 #!/bin/bash
 
-. ci/vars
-
 CHECK_MODE=0
 
 while getopts ":c" opt; do
@@ -25,25 +23,37 @@ make_readme () {
 EXIT_CODE=0
 
 if [ $CHECK_MODE -gt 0 ]; then
-	for D in "${GLSL_DIRS[@]}"; do
+	process_readme () {
+		local D="$(basename "$(pwd)")"
 		printf "% 20s " "$D" >&2
 
-		if (cd $D && diff <(make_readme) README.md >/dev/null 2>&1); then
+		if [[ "$D" == xtask ]]; then
+			exit 0
+		fi
+
+		if diff <(make_readme) README.md >/dev/null 2>&1; then
 			echo ok
+			exit 0
 		else
 			echo not ok
-			EXIT_CODE=$((EXIT_CODE + 1))
+			exit 1
 		fi
-	done
+	}
 else
-	for D in "${GLSL_DIRS[@]}"; do
+	process_readme () {
+		local D="$(basename "$(pwd)")"
 		echo $D >&2
 
-		(
-			cd $D
-			make_readme -o README.md
-		)
-	done
+		if [[ "$D" == xtask ]]; then
+			exit 0
+		fi
+
+		make_readme -o README.md
+	}
 fi
+
+export -f make_readme
+export -f process_readme
+cargo workspaces exec --no-bail /bin/bash -c process_readme
 
 exit $EXIT_CODE

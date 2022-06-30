@@ -11,7 +11,7 @@
 
 #![deny(missing_docs)]
 
-pub use lang_util_derive::{NodeContent, Token};
+pub use lang_util_derive::{NodeContentDisplay, Token};
 
 #[cfg(feature = "lalrpop")]
 pub mod error;

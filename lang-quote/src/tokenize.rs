@@ -515,6 +515,100 @@ fn tokenize_type_specifier_non_array(t: &ast::TypeSpecifierNonArray) -> TokenStr
             quote! { glsl_lang::ast::TypeSpecifierNonArrayData::UImageCubeArray }
         }
 
+        // GL_KHR_vulkan_glsl types
+        ast::TypeSpecifierNonArrayData::Texture1D => {
+            quote!{ glsl_lang::ast::TypeSpecifierNonArrayData::Texture1D }
+        }
+        ast::TypeSpecifierNonArrayData::Texture2D => {
+            quote!{ glsl_lang::ast::TypeSpecifierNonArrayData::Texture2D }
+        }
+        ast::TypeSpecifierNonArrayData::Texture3D => {
+            quote!{ glsl_lang::ast::TypeSpecifierNonArrayData::Texture3D }
+        }
+        ast::TypeSpecifierNonArrayData::TextureCube => {
+            quote!{ glsl_lang::ast::TypeSpecifierNonArrayData::TextureCube }
+        }
+        ast::TypeSpecifierNonArrayData::Texture2DRect => {
+            quote!{ glsl_lang::ast::TypeSpecifierNonArrayData::Texture2DRect }
+        }
+        ast::TypeSpecifierNonArrayData::Texture1DArray => {
+            quote!{ glsl_lang::ast::TypeSpecifierNonArrayData::Texture1DArray }
+        }
+        ast::TypeSpecifierNonArrayData::Texture2DArray => {
+            quote!{ glsl_lang::ast::TypeSpecifierNonArrayData::Texture2DArray }
+        }
+        ast::TypeSpecifierNonArrayData::TextureBuffer => {
+            quote!{ glsl_lang::ast::TypeSpecifierNonArrayData::TextureBuffer }
+        }
+        ast::TypeSpecifierNonArrayData::Texture2DMs => {
+            quote!{ glsl_lang::ast::TypeSpecifierNonArrayData::Texture2DMs }
+        }
+        ast::TypeSpecifierNonArrayData::Texture2DMsArray => {
+            quote!{ glsl_lang::ast::TypeSpecifierNonArrayData::Texture2DMsArray }
+        }
+        ast::TypeSpecifierNonArrayData::TextureCubeArray => {
+            quote!{ glsl_lang::ast::TypeSpecifierNonArrayData::TextureCubeArray }
+        }
+        ast::TypeSpecifierNonArrayData::ITexture1D => {
+            quote!{ glsl_lang::ast::TypeSpecifierNonArrayData::ITexture1D }
+        }
+        ast::TypeSpecifierNonArrayData::ITexture2D => {
+            quote!{ glsl_lang::ast::TypeSpecifierNonArrayData::ITexture2D }
+        }
+        ast::TypeSpecifierNonArrayData::ITexture3D => {
+            quote!{ glsl_lang::ast::TypeSpecifierNonArrayData::ITexture3D }
+        }
+        ast::TypeSpecifierNonArrayData::ITextureCube => {
+            quote!{ glsl_lang::ast::TypeSpecifierNonArrayData::ITextureCube }
+        }
+        ast::TypeSpecifierNonArrayData::ITexture2DRect => {
+            quote!{ glsl_lang::ast::TypeSpecifierNonArrayData::ITexture2DRect }
+        }
+        ast::TypeSpecifierNonArrayData::ITexture1DArray => {
+            quote!{ glsl_lang::ast::TypeSpecifierNonArrayData::ITexture1DArray }
+        }
+        ast::TypeSpecifierNonArrayData::ITexture2DArray => {
+            quote!{ glsl_lang::ast::TypeSpecifierNonArrayData::ITexture2DArray }
+        }
+        ast::TypeSpecifierNonArrayData::ITextureBuffer => {
+            quote!{ glsl_lang::ast::TypeSpecifierNonArrayData::ITextureBuffer }
+        }
+        ast::TypeSpecifierNonArrayData::ITexture2DMs => {
+            quote!{ glsl_lang::ast::TypeSpecifierNonArrayData::ITexture2DMs }
+        }
+        ast::TypeSpecifierNonArrayData::ITexture2DMsArray => {
+            quote!{ glsl_lang::ast::TypeSpecifierNonArrayData::ITexture2DMsArray }
+        }
+        ast::TypeSpecifierNonArrayData::ITextureCubeArray => {
+            quote!{ glsl_lang::ast::TypeSpecifierNonArrayData::ITextureCubeArray }
+        }
+        ast::TypeSpecifierNonArrayData::Sampler => {
+            quote!{ glsl_lang::ast::TypeSpecifierNonArrayData::Sampler }
+        }
+        ast::TypeSpecifierNonArrayData::SamplerShadow => {
+            quote!{ glsl_lang::ast::TypeSpecifierNonArrayData::SamplerShadow }
+        }
+        ast::TypeSpecifierNonArrayData::SubpassInput => {
+            quote!{ glsl_lang::ast::TypeSpecifierNonArrayData::SubpassInput }
+        }
+        ast::TypeSpecifierNonArrayData::ISubpassInput => {
+            quote!{ glsl_lang::ast::TypeSpecifierNonArrayData::ISubpassInput }
+        }
+        ast::TypeSpecifierNonArrayData::USubpassInput => {
+            quote!{ glsl_lang::ast::TypeSpecifierNonArrayData::USubpassInput }
+        }
+        ast::TypeSpecifierNonArrayData::SubpassInputMs => {
+            quote!{ glsl_lang::ast::TypeSpecifierNonArrayData::SubpassInputMs }
+        }
+        ast::TypeSpecifierNonArrayData::ISubpassInputMs => {
+            quote!{ glsl_lang::ast::TypeSpecifierNonArrayData::ISubpassInputMs }
+        }
+        ast::TypeSpecifierNonArrayData::USubpassInputMs => {
+            quote!{ glsl_lang::ast::TypeSpecifierNonArrayData::USubpassInputMs }
+        }
+
+        // end GL_KHR_vulkan_glsl types
+
         ast::TypeSpecifierNonArrayData::Struct(ref s) => {
             let s = tokenize_struct_non_declaration(s);
             quote! { glsl_lang::ast::TypeSpecifierNonArrayData::Struct(#s) }

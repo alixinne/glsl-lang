@@ -59,7 +59,7 @@ impl IndentStyle {
     /// Write the current indenting level and style to the output
     pub fn write<F>(&self, f: &mut F, levels: u32) -> std::fmt::Result
     where
-        F: Write,
+        F: Write + ?Sized,
     {
         match self {
             Self::None => {}
@@ -100,7 +100,7 @@ impl Whitespace {
     /// Write this whitespace to the output
     pub fn write<F>(&self, f: &mut F, state: &mut FormattingState) -> std::fmt::Result
     where
-        F: Write,
+        F: Write + ?Sized,
     {
         match self {
             Self::None => Ok(()),
@@ -164,14 +164,14 @@ pub struct FormattingState<'s> {
 impl<'s> FormattingState<'s> {
     fn write_indent<F>(&self, f: &mut F) -> std::fmt::Result
     where
-        F: Write,
+        F: Write + ?Sized,
     {
         self.settings.indent_style.write(f, self.indentation_level)
     }
 
     fn write_line<F>(&mut self, f: &mut F) -> std::fmt::Result
     where
-        F: Write,
+        F: Write + ?Sized,
     {
         f.write_char('\n')?;
         self.write_indent(f)
@@ -194,7 +194,7 @@ impl<'s> FormattingState<'s> {
     /// Flush pending newlines to the output, if any
     pub fn flush_line<F>(&mut self, f: &mut F) -> std::fmt::Result
     where
-        F: Write,
+        F: Write + ?Sized,
     {
         if self.new_line_pending {
             self.write_line(f)?;
@@ -207,7 +207,7 @@ impl<'s> FormattingState<'s> {
     /// Flush pending newlines as spaces to the output, if any
     pub fn flush_space<F>(&mut self, f: &mut F) -> std::fmt::Result
     where
-        F: Write,
+        F: Write + ?Sized,
     {
         if self.new_line_pending {
             f.write_char(' ')?;
@@ -220,7 +220,7 @@ impl<'s> FormattingState<'s> {
     /// Enter a new block, and update the indentation level
     pub fn enter_block<F>(&mut self, f: &mut F) -> std::fmt::Result
     where
-        F: Write,
+        F: Write + ?Sized,
     {
         // Open block
         f.write_char('{')?;
@@ -235,7 +235,7 @@ impl<'s> FormattingState<'s> {
     /// Exit the current block, and update the indentation level
     pub fn exit_block<F>(&mut self, f: &mut F) -> std::fmt::Result
     where
-        F: Write,
+        F: Write + ?Sized,
     {
         // Update indentation level
         self.indentation_level -= 1;
@@ -258,7 +258,7 @@ impl<'s> FormattingState<'s> {
     /// Write a struct field separator
     pub fn write_struct_field_separator<F>(&mut self, f: &mut F) -> std::fmt::Result
     where
-        F: Write,
+        F: Write + ?Sized,
     {
         f.write_char(';')?;
         self.settings.struct_field_separator.write(f, self)
@@ -267,7 +267,7 @@ impl<'s> FormattingState<'s> {
     /// Write a struct declaration terminator
     pub fn write_struct_declaration_terminator<F>(&mut self, f: &mut F) -> std::fmt::Result
     where
-        F: Write,
+        F: Write + ?Sized,
     {
         f.write_char(';')?;
         self.settings.struct_declaration_terminator.write(f, self)
@@ -276,7 +276,7 @@ impl<'s> FormattingState<'s> {
     /// Write a declaration terminator
     pub fn write_declaration_terminator<F>(&mut self, f: &mut F) -> std::fmt::Result
     where
-        F: Write,
+        F: Write + ?Sized,
     {
         f.write_char(';')?;
         self.settings.declaration_terminator.write(f, self)
@@ -285,7 +285,7 @@ impl<'s> FormattingState<'s> {
     /// Write a binary operator
     pub fn write_binary_op<F>(&self, f: &mut F, op: &str) -> std::fmt::Result
     where
-        F: Write,
+        F: Write + ?Sized,
     {
         if self.settings.spaces_around_binary_ops {
             f.write_char(' ')?;
@@ -303,7 +303,7 @@ impl<'s> FormattingState<'s> {
     /// Write a statement terminator
     pub fn write_statement_terminator<F>(&mut self, f: &mut F) -> std::fmt::Result
     where
-        F: Write,
+        F: Write + ?Sized,
     {
         f.write_char(';')?;
         self.settings.statement_terminator.write(f, self)
@@ -312,7 +312,7 @@ impl<'s> FormattingState<'s> {
     /// Write a function definition terminator
     pub fn write_function_definition_terminator<F>(&mut self, f: &mut F) -> std::fmt::Result
     where
-        F: Write,
+        F: Write + ?Sized,
     {
         self.settings.function_definition_terminator.write(f, self)
     }
@@ -412,7 +412,7 @@ pub fn show_identifier<F>(
     _: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     f.write_str(&i.0)
 }
@@ -424,7 +424,7 @@ pub fn show_type_name<F>(
     _: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     f.write_str(&t.0)
 }
@@ -436,7 +436,7 @@ pub fn show_type_specifier_non_array<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     match **t {
         ast::TypeSpecifierNonArrayData::Void => f.write_str("void"),
@@ -572,7 +572,7 @@ pub fn show_type_specifier<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     show_type_specifier_non_array(f, &t.ty, state)?;
 
@@ -590,7 +590,7 @@ pub fn show_fully_specified_type<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     if let Some(ref qual) = t.qualifier {
         show_type_qualifier(f, qual, state)?;
@@ -607,7 +607,7 @@ pub fn show_struct_non_declaration<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     f.write_str("struct ")?;
 
@@ -635,7 +635,7 @@ pub fn show_struct<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     show_struct_non_declaration(f, st, state)?;
     state.write_struct_declaration_terminator(f)
@@ -648,7 +648,7 @@ pub fn show_struct_field<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     if let Some(ref qual) = field.qualifier {
         show_type_qualifier(f, qual, state)?;
@@ -680,7 +680,7 @@ pub fn show_array_spec<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     for dimension in &a.dimensions {
         match **dimension {
@@ -703,7 +703,7 @@ pub fn show_arrayed_identifier<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     write!(f, "{}", a.ident)?;
 
@@ -721,7 +721,7 @@ pub fn show_type_qualifier<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     let mut qualifiers = q.qualifiers.iter();
     let first = qualifiers.next().unwrap();
@@ -743,7 +743,7 @@ pub fn show_type_qualifier_spec<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     match **q {
         ast::TypeQualifierSpecData::Storage(ref st) => show_storage_qualifier(f, st, state),
@@ -764,7 +764,7 @@ pub fn show_storage_qualifier<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     match **q {
         ast::StorageQualifierData::Const => f.write_str("const"),
@@ -795,7 +795,7 @@ pub fn show_subroutine<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     f.write_str("subroutine")?;
 
@@ -825,7 +825,7 @@ pub fn show_layout_qualifier<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     let mut qualifiers = l.ids.iter();
     let first = qualifiers.next().unwrap();
@@ -848,7 +848,7 @@ pub fn show_layout_qualifier_spec<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     match **l {
         ast::LayoutQualifierSpecData::Identifier(ref i, Some(ref e)) => {
@@ -867,7 +867,7 @@ pub fn show_precision_qualifier<F>(
     _: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     match **p {
         ast::PrecisionQualifierData::High => f.write_str("highp"),
@@ -883,7 +883,7 @@ pub fn show_interpolation_qualifier<F>(
     _: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     match **i {
         ast::InterpolationQualifierData::Smooth => f.write_str("smooth"),
@@ -895,7 +895,7 @@ where
 /// Transpile a float<F>(f: &mut F, x: f32, _: &mut FormattingState to GLSL
 pub fn show_float<F>(f: &mut F, x: f32, _: &mut FormattingState<'_>) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     if x.fract() == 0. {
         write!(f, "{}.", x)
@@ -907,7 +907,7 @@ where
 /// Transpile a double<F>(f: &mut F, x: f64, _: &mut FormattingState to GLSL
 pub fn show_double<F>(f: &mut F, x: f64, _: &mut FormattingState<'_>) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     if x.fract() == 0. {
         write!(f, "{}.lf", x)
@@ -923,7 +923,7 @@ pub fn show_expr<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     match **expr {
         ast::ExprData::Variable(ref i) => show_identifier(f, i, state),
@@ -1113,7 +1113,7 @@ where
 /// Transpile a path<F>(f: &mut F, path: &ast::Path, _: &mut FormattingState to GLSL
 pub fn show_path<F>(f: &mut F, path: &ast::Path, _: &mut FormattingState<'_>) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     match **path {
         ast::PathData::Absolute(ref s) => write!(f, "<{}>", s),
@@ -1128,7 +1128,7 @@ pub fn show_unary_op<F>(
     _: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     match **op {
         ast::UnaryOpData::Inc => f.write_str("++"),
@@ -1147,7 +1147,7 @@ pub fn show_binary_op<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     match **op {
         ast::BinaryOpData::Or => state.write_binary_op(f, "||"),
@@ -1179,7 +1179,7 @@ pub fn show_assignment_op<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     match **op {
         ast::AssignmentOpData::Equal => state.write_binary_op(f, "="),
@@ -1203,7 +1203,7 @@ pub fn show_function_identifier<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     match **i {
         ast::FunIdentifierData::TypeSpecifier(ref n) => show_type_specifier(f, n, state),
@@ -1218,7 +1218,7 @@ pub fn show_declaration<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     match **d {
         ast::DeclarationData::FunctionPrototype(ref proto) => {
@@ -1254,7 +1254,7 @@ pub fn show_function_prototype<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     show_fully_specified_type(f, &fp.ty, state)?;
     f.write_str(" ")?;
@@ -1282,7 +1282,7 @@ pub fn show_function_parameter_declaration<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     match **p {
         ast::FunctionParameterDeclarationData::Named(ref qual, ref fpd) => {
@@ -1311,7 +1311,7 @@ pub fn show_function_parameter_declarator<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     show_type_specifier(f, &p.ty, state)?;
     f.write_str(" ")?;
@@ -1325,7 +1325,7 @@ pub fn show_init_declarator_list<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     show_single_declaration(f, &i.head, state)?;
 
@@ -1344,7 +1344,7 @@ pub fn show_single_declaration<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     show_fully_specified_type(f, &d.ty, state)?;
 
@@ -1372,7 +1372,7 @@ pub fn show_single_declaration_no_type<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     show_arrayed_identifier(f, &d.ident, state)?;
 
@@ -1391,7 +1391,7 @@ pub fn show_initializer<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     match **i {
         ast::InitializerData::Simple(ref e) => show_expr(f, e, state),
@@ -1415,7 +1415,7 @@ where
 /// Transpile a block<F>(f: &mut F, b: &ast::Block, state: &mut FormattingState to GLSL
 pub fn show_block<F>(f: &mut F, b: &ast::Block, state: &mut FormattingState<'_>) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     show_type_qualifier(f, &b.qualifier, state)?;
     f.write_str(" ")?;
@@ -1446,7 +1446,7 @@ pub fn show_function_definition<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     show_function_prototype(f, &fd.prototype, state)?;
     f.write_str(" ")?;
@@ -1462,7 +1462,7 @@ pub fn show_compound_statement<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     state.enter_block(f)?;
 
@@ -1482,7 +1482,7 @@ pub fn show_statement<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     state.flush_line(f)?;
 
@@ -1505,7 +1505,7 @@ pub fn show_expression_statement<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     if let Some(ref e) = est.0 {
         show_expr(f, e, state)?;
@@ -1521,7 +1521,7 @@ pub fn show_selection_statement<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     f.write_str("if (")?;
     show_expr(f, &sst.cond, state)?;
@@ -1536,7 +1536,7 @@ pub fn show_selection_rest_statement<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     match **sst {
         ast::SelectionRestStatementData::Statement(ref if_st) => show_statement(f, if_st, state),
@@ -1558,7 +1558,7 @@ pub fn show_switch_statement<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     f.write_str("switch (")?;
     show_expr(f, &sst.head, state)?;
@@ -1578,7 +1578,7 @@ pub fn show_case_label<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     match **cl {
         ast::CaseLabelData::Case(ref e) => {
@@ -1597,7 +1597,7 @@ pub fn show_iteration_statement<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     match **ist {
         ast::IterationStatementData::While(ref cond, ref body) => {
@@ -1632,7 +1632,7 @@ pub fn show_condition<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     match **c {
         ast::ConditionData::Expr(ref e) => show_expr(f, e, state),
@@ -1653,7 +1653,7 @@ pub fn show_for_init_statement<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     match **i {
         ast::ForInitStatementData::Expression(ref expr) => {
@@ -1674,7 +1674,7 @@ pub fn show_for_rest_statement<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     if let Some(ref cond) = r.condition {
         show_condition(f, cond, state)?;
@@ -1696,7 +1696,7 @@ pub fn show_jump_statement<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     match **j {
         ast::JumpStatementData::Continue => f.write_str("continue")?,
@@ -1720,7 +1720,7 @@ pub fn show_preprocessor<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     match **pp {
         ast::PreprocessorData::Define(ref pd) => show_preprocessor_define(f, pd, state),
@@ -1747,7 +1747,7 @@ pub fn show_preprocessor_define<F>(
     _: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     match **pd {
         ast::PreprocessorDefineData::ObjectLike {
@@ -1778,7 +1778,7 @@ where
 /// Transpile a preprocessor_else<F>(f: &mut F, _: &mut FormattingState to GLSL
 pub fn show_preprocessor_else<F>(f: &mut F, _: &mut FormattingState<'_>) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     f.write_str("#else\n")
 }
@@ -1790,7 +1790,7 @@ pub fn show_preprocessor_elseif<F>(
     _: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     writeln!(f, "#elseif {}", pei.condition)
 }
@@ -1802,7 +1802,7 @@ pub fn show_preprocessor_error<F>(
     _: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     writeln!(f, "#error {}", pe.message)
 }
@@ -1810,7 +1810,7 @@ where
 /// Transpile a preprocessor_endif<F>(f: &mut F, _: &mut FormattingState to GLSL
 pub fn show_preprocessor_endif<F>(f: &mut F, _: &mut FormattingState<'_>) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     f.write_str("#endif\n")
 }
@@ -1822,7 +1822,7 @@ pub fn show_preprocessor_if<F>(
     _: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     write!(f, "#if {}", pi.condition)
 }
@@ -1834,7 +1834,7 @@ pub fn show_preprocessor_ifdef<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     f.write_str("#ifdef ")?;
     show_identifier(f, &pid.ident, state)?;
@@ -1848,7 +1848,7 @@ pub fn show_preprocessor_ifndef<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     f.write_str("#ifndef ")?;
     show_identifier(f, &pind.ident, state)?;
@@ -1862,7 +1862,7 @@ pub fn show_preprocessor_include<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     f.write_str("#include ")?;
     show_path(f, &pi.path, state)?;
@@ -1876,7 +1876,7 @@ pub fn show_preprocessor_line<F>(
     _: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     write!(f, "#line {}", pl.line)?;
     if let Some(source_string_number) = pl.source_string_number {
@@ -1892,7 +1892,7 @@ pub fn show_preprocessor_pragma<F>(
     _: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     writeln!(f, "#pragma {}", pp.command)
 }
@@ -1904,7 +1904,7 @@ pub fn show_preprocessor_undef<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     f.write_str("#undef ")?;
     show_identifier(f, &pud.name, state)?;
@@ -1918,7 +1918,7 @@ pub fn show_preprocessor_version<F>(
     _: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     write!(f, "#version {}", pv.version)?;
 
@@ -1946,7 +1946,7 @@ pub fn show_preprocessor_extension<F>(
     _: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     f.write_str("#extension ")?;
 
@@ -1986,7 +1986,7 @@ pub fn show_external_declaration<F>(
     state: &mut FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     state.flush_line(f)?;
 
@@ -2006,7 +2006,7 @@ pub fn show_translation_unit<F>(
     mut state: FormattingState<'_>,
 ) -> std::fmt::Result
 where
-    F: Write,
+    F: Write + ?Sized,
 {
     for ed in &tu.0 {
         show_external_declaration(f, ed, &mut state)?;

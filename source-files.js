@@ -1,4 +1,4 @@
-var N = null;var sourcesIndex = {};
+var sourcesIndex = {};
 sourcesIndex["glsl_lang"] = {"name":"","dirs":[{"name":"parse","files":["builder.rs","parsable.rs"]},{"name":"transpiler","files":["glsl.rs"]}],"files":["lib.rs","parse.rs","transpiler.rs","visitor.rs"]};
 sourcesIndex["glsl_lang_cli"] = {"name":"","files":["main.rs"]};
 sourcesIndex["glsl_lang_lexer"] = {"name":"","dirs":[{"name":"v2_full","files":["core.rs","directives.rs","fs.rs","str.rs"]}],"files":["context.rs","lib.rs","token.rs","v2.rs","v2_full.rs"]};

@@ -1,6 +1,6 @@
 [package]
 name = "glsl-lang-quote"
-version = "0.3.0"
+version = "0.3.1"
 authors = ["Vincent Tavernier <vince.tavernier@gmail.com>"]
 edition = "2021"
 license = "BSD-3-Clause"

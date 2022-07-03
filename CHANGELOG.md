@@ -1,6 +1,14 @@
 ## [Unreleased]
 
 - - -
+## v0.3.1 - 2022-07-03
+#### Bug Fixes
+- **(transpiler)** allow !Sized sinks for transpiler functions - (0385b7e) - Alexandre Bléron
+#### Continuous Integration
+- use cargo-workspaces - (52f54da) - vtavernier
+
+- - -
+
 ## v0.3.0 - 2022-06-15
 #### Bug Fixes
 - update all dependencies to 0.2.1 - (bea4a64) - vtavernier

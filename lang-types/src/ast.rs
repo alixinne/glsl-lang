@@ -482,7 +482,6 @@ pub enum TypeSpecifierNonArrayData {
     UImageCubeArray,
 
     // GL_KHR_vulkan_glsl types
-
     /// `texture1D` type specifier
     #[lang_util(display(extra = "texture1D"))]
     Texture1D,
@@ -575,7 +574,6 @@ pub enum TypeSpecifierNonArrayData {
     USubpassInputMs,
 
     // end GL_KHR_vulkan_glsl types
-
     /// `struct` type specifier
     #[lang_util(display(extra = "struct"))]
     Struct(StructSpecifier),

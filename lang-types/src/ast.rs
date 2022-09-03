@@ -57,7 +57,6 @@ impl_node_content! {
     pub type Identifier = Node<IdentifierData>;
 }
 
-
 impl IdentifierData {
     /// Parses this identifier as a glsl-lang-quote Rust identifier
     ///

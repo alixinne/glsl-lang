@@ -26,7 +26,7 @@ use rserde::{Deserialize, Serialize};
 pub use lang_util::{
     node::{Node, NodeDisplay},
     position::NodeSpan,
-    NodeContent, SmolStr, TextRange, TextSize,
+    FileId, NodeContent, SmolStr, TextRange, TextSize,
 };
 
 /// A generic identifier.

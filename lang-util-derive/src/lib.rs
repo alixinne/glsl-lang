@@ -13,7 +13,7 @@ mod node_display;
 /// Derives an implementation of `NodeContentDisplay` for the given type.
 #[proc_macro_derive(NodeContentDisplay, attributes(lang_util))]
 pub fn node_display(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
-     node_display::node_display(input)
+    node_display::node_display(input)
 }
 
 mod token;

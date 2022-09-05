@@ -6,6 +6,6 @@ sourcesIndex["glsl_lang_pp"] = {"name":"","dirs":[{"name":"exts","files":["names
 sourcesIndex["glsl_lang_quote"] = {"name":"","files":["lib.rs","quoted.rs","tokenize.rs"]};
 sourcesIndex["glsl_lang_types"] = {"name":"","files":["ast.rs","lib.rs"]};
 sourcesIndex["lang_util"] = {"name":"","dirs":[{"name":"node","files":["content.rs","display.rs"]}],"files":["error.rs","file_id.rs","lib.rs","located.rs","node.rs","position.rs","token.rs"]};
-sourcesIndex["lang_util_derive"] = {"name":"","dirs":[{"name":"node_content","files":["content_display.rs"]}],"files":["lib.rs","node_content.rs","token.rs"]};
+sourcesIndex["lang_util_derive"] = {"name":"","files":["lib.rs","node_display.rs","token.rs"]};
 sourcesIndex["lang_util_dev"] = {"name":"","files":["lib.rs","test_util.rs"]};
 createSourceSidebar();

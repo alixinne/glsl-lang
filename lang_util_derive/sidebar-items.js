@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"derive":[["NodeContent","Mark a type as representing data in an AST node"],["Token","Derive `lang_util::error::Token` for an enum usable with Logos"]],"mod":[["node_content",""],["token",""]]};
+window.SIDEBAR_ITEMS = {"derive":[["NodeContentDisplay","Derives an implementation of `NodeContentDisplay` for the given type."],["Token","Derive `lang_util::error::Token` for an enum usable with Logos"]],"mod":[["node_display",""],["token",""]]};

@@ -480,6 +480,100 @@ pub enum TypeSpecifierNonArrayData {
     /// `uimageCubeArray` type specifier
     #[lang_util(display(extra = "uimageCubeArray"))]
     UImageCubeArray,
+
+    // GL_KHR_vulkan_glsl types
+    /// `texture1D` type specifier
+    #[lang_util(display(extra = "texture1D"))]
+    Texture1D,
+    /// `texture2D` type specifier
+    #[lang_util(display(extra = "texture2D"))]
+    Texture2D,
+    /// `texture3D` type specifier
+    #[lang_util(display(extra = "texture3D"))]
+    Texture3D,
+    /// `textureCube` type specifier
+    #[lang_util(display(extra = "textureCube"))]
+    TextureCube,
+    /// `texture2DRect` type specifier
+    #[lang_util(display(extra = "texture2DRect"))]
+    Texture2DRect,
+    /// `texture1DArray` type specifier
+    #[lang_util(display(extra = "texture1DArray"))]
+    Texture1DArray,
+    /// `texture2DArray` type specifier
+    #[lang_util(display(extra = "texture2DArray"))]
+    Texture2DArray,
+    /// `textureBuffer` type specifier
+    #[lang_util(display(extra = "textureBuffer"))]
+    TextureBuffer,
+    /// `texture2DMs` type specifier
+    #[lang_util(display(extra = "texture2DMS"))]
+    Texture2DMs,
+    /// `texture2DMsArray` type specifier
+    #[lang_util(display(extra = "texture2DMSArray"))]
+    Texture2DMsArray,
+    /// `textureCubeArray` type specifier
+    #[lang_util(display(extra = "textureCubeArray"))]
+    TextureCubeArray,
+    /// `itexture1D` type specifier
+    #[lang_util(display(extra = "itexture1D"))]
+    ITexture1D,
+    /// `itexture2D` type specifier
+    #[lang_util(display(extra = "itexture2D"))]
+    ITexture2D,
+    /// `itexture3D` type specifier
+    #[lang_util(display(extra = "itexture3D"))]
+    ITexture3D,
+    /// `itextureCube` type specifier
+    #[lang_util(display(extra = "itextureCube"))]
+    ITextureCube,
+    /// `itexture2DRect` type specifier
+    #[lang_util(display(extra = "itexture2DRect"))]
+    ITexture2DRect,
+    /// `itexture1DArray` type specifier
+    #[lang_util(display(extra = "itexture1DArray"))]
+    ITexture1DArray,
+    /// `itexture2DArray` type specifier
+    #[lang_util(display(extra = "itexture2DArray"))]
+    ITexture2DArray,
+    /// `itextureBuffer` type specifier
+    #[lang_util(display(extra = "itextureBuffer"))]
+    ITextureBuffer,
+    /// `itexture2DMs` type specifier
+    #[lang_util(display(extra = "itexture2DMS"))]
+    ITexture2DMs,
+    /// `itexture2DMsArray` type specifier
+    #[lang_util(display(extra = "itexture2DMSArray"))]
+    ITexture2DMsArray,
+    /// `itextureCubeArray` type specifier
+    #[lang_util(display(extra = "itextureCubeArray"))]
+    ITextureCubeArray,
+    /// `sampler` type specifier
+    #[lang_util(display(extra = "sampler"))]
+    Sampler,
+    /// `samplerShadow` type specifier
+    #[lang_util(display(extra = "samplerShadow"))]
+    SamplerShadow,
+    /// `subpassInput` type specifier
+    #[lang_util(display(extra = "subpassInput"))]
+    SubpassInput,
+    /// `isubpassInput` type specifier
+    #[lang_util(display(extra = "isubpassInput"))]
+    ISubpassInput,
+    /// `usubpassInput` type specifier
+    #[lang_util(display(extra = "usubpassInput"))]
+    USubpassInput,
+    /// `subpassInputMs` type specifier
+    #[lang_util(display(extra = "subpassInputMS"))]
+    SubpassInputMs,
+    /// `isubpassInputMs` type specifier
+    #[lang_util(display(extra = "isubpassInputMS"))]
+    ISubpassInputMs,
+    /// `usubpassInputMs` type specifier
+    #[lang_util(display(extra = "usubpassInputMS"))]
+    USubpassInputMs,
+
+    // end GL_KHR_vulkan_glsl types
     /// `struct` type specifier
     #[lang_util(display(extra = "struct"))]
     Struct(StructSpecifier),

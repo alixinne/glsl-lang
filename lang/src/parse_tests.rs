@@ -1,4 +1,4 @@
-use glsl_lang_lexer::HasLexerError;
+use glsl_lang_lexer::{HasLexerError, ParseOptions};
 use lang_util::node::NodeContent;
 
 use crate::{
@@ -2497,6 +2497,116 @@ fn parse_layout_buffer_block_0() {
     let expected = ast::TranslationUnit(vec![block.into()]);
 
     assert_eq!(ast::TranslationUnit::parse(src), Ok(expected));
+}
+
+#[test]
+fn parse_vulkan_types() {
+    fn uniform_decl(
+        name: &'static str,
+        ty: ast::TypeSpecifierNonArray,
+    ) -> ast::ExternalDeclaration {
+        ast::ExternalDeclarationData::Declaration(
+            ast::DeclarationData::InitDeclaratorList(
+                ast::InitDeclaratorListData {
+                    head: ast::SingleDeclarationData {
+                        ty: ast::FullySpecifiedTypeData {
+                            qualifier: Some(
+                                ast::TypeQualifierData {
+                                    qualifiers: vec![ast::TypeQualifierSpecData::Storage(
+                                        ast::StorageQualifierData::Uniform.into(),
+                                    )
+                                    .into()],
+                                }
+                                .into(),
+                            ),
+                            ty: ast::TypeSpecifierData {
+                                ty,
+                                array_specifier: None,
+                            }
+                            .into(),
+                        }
+                        .into(),
+                        name: Some(name.into_node()),
+                        array_specifier: None,
+                        initializer: None,
+                    }
+                    .into(),
+                    tail: vec![],
+                }
+                .into(),
+            )
+            .into(),
+        )
+        .into()
+    }
+
+    let expected = ast::TranslationUnit(vec![
+        uniform_decl("u1", ast::TypeSpecifierNonArrayData::Texture1D.into()),
+        uniform_decl("u2", ast::TypeSpecifierNonArrayData::Texture2D.into()),
+        uniform_decl("u3", ast::TypeSpecifierNonArrayData::Texture3D.into()),
+        uniform_decl("u4", ast::TypeSpecifierNonArrayData::TextureCube.into()),
+        uniform_decl("u5", ast::TypeSpecifierNonArrayData::Texture2DRect.into()),
+        uniform_decl("u6", ast::TypeSpecifierNonArrayData::Texture1DArray.into()),
+        uniform_decl("u7", ast::TypeSpecifierNonArrayData::Texture2DArray.into()),
+        uniform_decl("u8", ast::TypeSpecifierNonArrayData::TextureBuffer.into()),
+        uniform_decl("u9", ast::TypeSpecifierNonArrayData::Texture2DMs.into()),
+        uniform_decl(
+            "u10",
+            ast::TypeSpecifierNonArrayData::Texture2DMsArray.into(),
+        ),
+        uniform_decl(
+            "u11",
+            ast::TypeSpecifierNonArrayData::TextureCubeArray.into(),
+        ),
+        uniform_decl("u12", ast::TypeSpecifierNonArrayData::ITexture1D.into()),
+        uniform_decl("u13", ast::TypeSpecifierNonArrayData::ITexture2D.into()),
+        uniform_decl("u14", ast::TypeSpecifierNonArrayData::ITexture3D.into()),
+        uniform_decl("u15", ast::TypeSpecifierNonArrayData::ITextureCube.into()),
+        uniform_decl("u16", ast::TypeSpecifierNonArrayData::ITexture2DRect.into()),
+        uniform_decl(
+            "u17",
+            ast::TypeSpecifierNonArrayData::ITexture1DArray.into(),
+        ),
+        uniform_decl(
+            "u18",
+            ast::TypeSpecifierNonArrayData::ITexture2DArray.into(),
+        ),
+        uniform_decl("u19", ast::TypeSpecifierNonArrayData::ITextureBuffer.into()),
+        uniform_decl("u20", ast::TypeSpecifierNonArrayData::ITexture2DMs.into()),
+        uniform_decl(
+            "u21",
+            ast::TypeSpecifierNonArrayData::ITexture2DMsArray.into(),
+        ),
+        uniform_decl(
+            "u22",
+            ast::TypeSpecifierNonArrayData::ITextureCubeArray.into(),
+        ),
+        uniform_decl("u23", ast::TypeSpecifierNonArrayData::Sampler.into()),
+        uniform_decl("u24", ast::TypeSpecifierNonArrayData::SamplerShadow.into()),
+        uniform_decl("u25", ast::TypeSpecifierNonArrayData::SubpassInput.into()),
+        uniform_decl("u26", ast::TypeSpecifierNonArrayData::ISubpassInput.into()),
+        uniform_decl("u27", ast::TypeSpecifierNonArrayData::USubpassInput.into()),
+        uniform_decl("u28", ast::TypeSpecifierNonArrayData::SubpassInputMs.into()),
+        uniform_decl(
+            "u29",
+            ast::TypeSpecifierNonArrayData::ISubpassInputMs.into(),
+        ),
+        uniform_decl(
+            "u30",
+            ast::TypeSpecifierNonArrayData::USubpassInputMs.into(),
+        ),
+    ]);
+
+    let src = include_str!("../data/tests/vulkan_types.glsl");
+    let parsed = ast::TranslationUnit::parse_with_options(
+        src,
+        &ParseOptions {
+            target_vulkan: true,
+            ..Default::default()
+        },
+    )
+    .map(|x| x.0);
+    assert_eq!(parsed, Ok(expected));
 }
 
 #[cfg(not(feature = "lexer-v2-full"))]

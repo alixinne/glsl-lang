@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["LineMap",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["LineMap",""]]};

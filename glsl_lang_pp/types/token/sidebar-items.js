@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["ErrorKind",""],["Token",""],["TypeName",""]],"static":[["__TOKEN_TOKENS",""]]});
+window.SIDEBAR_ITEMS = {"enum":[["ErrorKind",""],["Token",""],["TypeName",""]],"static":[["__TOKEN_TOKENS",""]]};

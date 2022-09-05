@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["token_from_syntax_kind",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["token_from_syntax_kind",""]]};

@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["ProcessStrError",""]],"fn":[["parse",""],["process",""]],"struct":[["ExpandStr",""]]});
+window.SIDEBAR_ITEMS = {"enum":[["ProcessStrError",""]],"fn":[["parse",""],["process",""]],"struct":[["ExpandStr",""]]};

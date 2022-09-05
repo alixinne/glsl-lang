@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["HandleTokenResult",""]],"struct":[["LexerCore",""]],"type":[["Item",""]]});
+window.SIDEBAR_ITEMS = {"enum":[["HandleTokenResult",""]],"struct":[["LexerCore",""]],"type":[["Item",""]]};

@@ -1,1 +1,1 @@
-initSidebarItems({"trait":[["Quoted",""]]});
+window.SIDEBAR_ITEMS = {"trait":[["Quoted",""]]};

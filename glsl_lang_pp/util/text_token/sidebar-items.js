@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["TextToken",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["TextToken",""]]};

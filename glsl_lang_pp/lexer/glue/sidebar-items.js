@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["token",""]],"struct":[["Lexer","Final stage lexer."]],"type":[["TextToken",""]]});
+window.SIDEBAR_ITEMS = {"mod":[["token",""]],"struct":[["Lexer","Final stage lexer."]],"type":[["TextToken",""]]};

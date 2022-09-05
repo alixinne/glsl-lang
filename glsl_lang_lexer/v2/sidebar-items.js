@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["lang_token",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["lang_token",""]]};

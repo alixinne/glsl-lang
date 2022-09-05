@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["ast","GLSL abstract syntax tree and grammar."]]});
+window.SIDEBAR_ITEMS = {"mod":[["ast","GLSL abstract syntax tree and grammar."]]};

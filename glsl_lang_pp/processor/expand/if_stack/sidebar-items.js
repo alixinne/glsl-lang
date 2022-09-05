@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["IfError",""],["IfState",""]],"struct":[["IfStack",""]]});
+window.SIDEBAR_ITEMS = {"enum":[["IfError",""],["IfState",""]],"struct":[["IfStack",""]]};

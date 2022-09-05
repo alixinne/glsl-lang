@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["PreprocessorLang",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["PreprocessorLang",""]]};

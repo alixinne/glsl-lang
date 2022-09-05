@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["is_unit_enum",""],["node_content_display",""]],"struct":[["DisplayFieldOpts",""],["DisplayVariantOpts",""],["NodeDisplayField",""],["NodeDisplayVariant",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["is_unit_enum",""],["node_content_display",""]],"struct":[["DisplayFieldOpts",""],["DisplayVariantOpts",""],["NodeDisplayField",""],["NodeDisplayVariant",""]]};

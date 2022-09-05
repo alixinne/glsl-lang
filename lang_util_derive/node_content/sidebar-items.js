@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["node_content",""]],"mod":[["content_display",""]],"struct":[["NodeContentOpts",""],["NodeDisplay",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["node_content",""]],"mod":[["content_display",""]],"struct":[["NodeContentOpts",""],["NodeDisplay",""]]};

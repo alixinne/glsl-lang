@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["test_util","Testing utilities"]]});
+window.SIDEBAR_ITEMS = {"mod":[["test_util","Testing utilities"]]};

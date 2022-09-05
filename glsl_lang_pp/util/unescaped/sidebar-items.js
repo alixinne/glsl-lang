@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["TokenTextRepr",""]],"struct":[["TokenText",""],["UnescapeIter",""],["Unescaped",""]]});
+window.SIDEBAR_ITEMS = {"enum":[["TokenTextRepr",""]],"struct":[["TokenText",""],["UnescapeIter",""],["Unescaped",""]]};

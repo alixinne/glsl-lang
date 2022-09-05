@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["Token",""]],"macro":[["impl_from",""]],"static":[["__TOKEN_TOKENS",""]]});
+window.SIDEBAR_ITEMS = {"enum":[["Token",""]],"macro":[["impl_from",""]],"static":[["__TOKEN_TOKENS",""]]};

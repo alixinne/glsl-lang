@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["SyntaxKind",""]]});
+window.SIDEBAR_ITEMS = {"enum":[["SyntaxKind",""]]};

@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["EvalResult",""]],"struct":[["ExprEvaluator",""]]});
+window.SIDEBAR_ITEMS = {"enum":[["EvalResult",""]],"struct":[["ExprEvaluator",""]]};

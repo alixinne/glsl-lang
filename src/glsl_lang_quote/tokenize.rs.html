@@ -1,9 +1,10 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lang-quote/src/tokenize.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>tokenize.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
-    <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../glsl_lang_quote/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lang-quote/src/tokenize.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>tokenize.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../glsl_lang_quote/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
     <nav class="sidebar"><a class="sidebar-logo" href="../../glsl_lang_quote/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../glsl_lang_quote/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../glsl_lang_quote/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
+                                <a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div>
+                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -1843,6 +1844,99 @@
 <span id="1838">1838</span>
 <span id="1839">1839</span>
 <span id="1840">1840</span>
+<span id="1841">1841</span>
+<span id="1842">1842</span>
+<span id="1843">1843</span>
+<span id="1844">1844</span>
+<span id="1845">1845</span>
+<span id="1846">1846</span>
+<span id="1847">1847</span>
+<span id="1848">1848</span>
+<span id="1849">1849</span>
+<span id="1850">1850</span>
+<span id="1851">1851</span>
+<span id="1852">1852</span>
+<span id="1853">1853</span>
+<span id="1854">1854</span>
+<span id="1855">1855</span>
+<span id="1856">1856</span>
+<span id="1857">1857</span>
+<span id="1858">1858</span>
+<span id="1859">1859</span>
+<span id="1860">1860</span>
+<span id="1861">1861</span>
+<span id="1862">1862</span>
+<span id="1863">1863</span>
+<span id="1864">1864</span>
+<span id="1865">1865</span>
+<span id="1866">1866</span>
+<span id="1867">1867</span>
+<span id="1868">1868</span>
+<span id="1869">1869</span>
+<span id="1870">1870</span>
+<span id="1871">1871</span>
+<span id="1872">1872</span>
+<span id="1873">1873</span>
+<span id="1874">1874</span>
+<span id="1875">1875</span>
+<span id="1876">1876</span>
+<span id="1877">1877</span>
+<span id="1878">1878</span>
+<span id="1879">1879</span>
+<span id="1880">1880</span>
+<span id="1881">1881</span>
+<span id="1882">1882</span>
+<span id="1883">1883</span>
+<span id="1884">1884</span>
+<span id="1885">1885</span>
+<span id="1886">1886</span>
+<span id="1887">1887</span>
+<span id="1888">1888</span>
+<span id="1889">1889</span>
+<span id="1890">1890</span>
+<span id="1891">1891</span>
+<span id="1892">1892</span>
+<span id="1893">1893</span>
+<span id="1894">1894</span>
+<span id="1895">1895</span>
+<span id="1896">1896</span>
+<span id="1897">1897</span>
+<span id="1898">1898</span>
+<span id="1899">1899</span>
+<span id="1900">1900</span>
+<span id="1901">1901</span>
+<span id="1902">1902</span>
+<span id="1903">1903</span>
+<span id="1904">1904</span>
+<span id="1905">1905</span>
+<span id="1906">1906</span>
+<span id="1907">1907</span>
+<span id="1908">1908</span>
+<span id="1909">1909</span>
+<span id="1910">1910</span>
+<span id="1911">1911</span>
+<span id="1912">1912</span>
+<span id="1913">1913</span>
+<span id="1914">1914</span>
+<span id="1915">1915</span>
+<span id="1916">1916</span>
+<span id="1917">1917</span>
+<span id="1918">1918</span>
+<span id="1919">1919</span>
+<span id="1920">1920</span>
+<span id="1921">1921</span>
+<span id="1922">1922</span>
+<span id="1923">1923</span>
+<span id="1924">1924</span>
+<span id="1925">1925</span>
+<span id="1926">1926</span>
+<span id="1927">1927</span>
+<span id="1928">1928</span>
+<span id="1929">1929</span>
+<span id="1930">1930</span>
+<span id="1931">1931</span>
+<span id="1932">1932</span>
+<span id="1933">1933</span>
 </pre><pre class="rust"><code><span class="doccomment">//! The [`Tokenize`] trait, turning [glsl](https://crates.io/crates/glsl) into [`TokenStream`]s.</span>
 
 <span class="kw">use</span> <span class="ident">glsl_lang::ast</span>;
@@ -2360,6 +2454,99 @@
             <span class="macro">quote!</span> { <span class="ident">glsl_lang::ast::TypeSpecifierNonArrayData::UImageCubeArray</span> }
         }
 
+        <span class="comment">// GL_KHR_vulkan_glsl types</span>
+        <span class="ident">ast::TypeSpecifierNonArrayData::Texture1D</span> =&gt; {
+            <span class="macro">quote!</span> { <span class="ident">glsl_lang::ast::TypeSpecifierNonArrayData::Texture1D</span> }
+        }
+        <span class="ident">ast::TypeSpecifierNonArrayData::Texture2D</span> =&gt; {
+            <span class="macro">quote!</span> { <span class="ident">glsl_lang::ast::TypeSpecifierNonArrayData::Texture2D</span> }
+        }
+        <span class="ident">ast::TypeSpecifierNonArrayData::Texture3D</span> =&gt; {
+            <span class="macro">quote!</span> { <span class="ident">glsl_lang::ast::TypeSpecifierNonArrayData::Texture3D</span> }
+        }
+        <span class="ident">ast::TypeSpecifierNonArrayData::TextureCube</span> =&gt; {
+            <span class="macro">quote!</span> { <span class="ident">glsl_lang::ast::TypeSpecifierNonArrayData::TextureCube</span> }
+        }
+        <span class="ident">ast::TypeSpecifierNonArrayData::Texture2DRect</span> =&gt; {
+            <span class="macro">quote!</span> { <span class="ident">glsl_lang::ast::TypeSpecifierNonArrayData::Texture2DRect</span> }
+        }
+        <span class="ident">ast::TypeSpecifierNonArrayData::Texture1DArray</span> =&gt; {
+            <span class="macro">quote!</span> { <span class="ident">glsl_lang::ast::TypeSpecifierNonArrayData::Texture1DArray</span> }
+        }
+        <span class="ident">ast::TypeSpecifierNonArrayData::Texture2DArray</span> =&gt; {
+            <span class="macro">quote!</span> { <span class="ident">glsl_lang::ast::TypeSpecifierNonArrayData::Texture2DArray</span> }
+        }
+        <span class="ident">ast::TypeSpecifierNonArrayData::TextureBuffer</span> =&gt; {
+            <span class="macro">quote!</span> { <span class="ident">glsl_lang::ast::TypeSpecifierNonArrayData::TextureBuffer</span> }
+        }
+        <span class="ident">ast::TypeSpecifierNonArrayData::Texture2DMs</span> =&gt; {
+            <span class="macro">quote!</span> { <span class="ident">glsl_lang::ast::TypeSpecifierNonArrayData::Texture2DMs</span> }
+        }
+        <span class="ident">ast::TypeSpecifierNonArrayData::Texture2DMsArray</span> =&gt; {
+            <span class="macro">quote!</span> { <span class="ident">glsl_lang::ast::TypeSpecifierNonArrayData::Texture2DMsArray</span> }
+        }
+        <span class="ident">ast::TypeSpecifierNonArrayData::TextureCubeArray</span> =&gt; {
+            <span class="macro">quote!</span> { <span class="ident">glsl_lang::ast::TypeSpecifierNonArrayData::TextureCubeArray</span> }
+        }
+        <span class="ident">ast::TypeSpecifierNonArrayData::ITexture1D</span> =&gt; {
+            <span class="macro">quote!</span> { <span class="ident">glsl_lang::ast::TypeSpecifierNonArrayData::ITexture1D</span> }
+        }
+        <span class="ident">ast::TypeSpecifierNonArrayData::ITexture2D</span> =&gt; {
+            <span class="macro">quote!</span> { <span class="ident">glsl_lang::ast::TypeSpecifierNonArrayData::ITexture2D</span> }
+        }
+        <span class="ident">ast::TypeSpecifierNonArrayData::ITexture3D</span> =&gt; {
+            <span class="macro">quote!</span> { <span class="ident">glsl_lang::ast::TypeSpecifierNonArrayData::ITexture3D</span> }
+        }
+        <span class="ident">ast::TypeSpecifierNonArrayData::ITextureCube</span> =&gt; {
+            <span class="macro">quote!</span> { <span class="ident">glsl_lang::ast::TypeSpecifierNonArrayData::ITextureCube</span> }
+        }
+        <span class="ident">ast::TypeSpecifierNonArrayData::ITexture2DRect</span> =&gt; {
+            <span class="macro">quote!</span> { <span class="ident">glsl_lang::ast::TypeSpecifierNonArrayData::ITexture2DRect</span> }
+        }
+        <span class="ident">ast::TypeSpecifierNonArrayData::ITexture1DArray</span> =&gt; {
+            <span class="macro">quote!</span> { <span class="ident">glsl_lang::ast::TypeSpecifierNonArrayData::ITexture1DArray</span> }
+        }
+        <span class="ident">ast::TypeSpecifierNonArrayData::ITexture2DArray</span> =&gt; {
+            <span class="macro">quote!</span> { <span class="ident">glsl_lang::ast::TypeSpecifierNonArrayData::ITexture2DArray</span> }
+        }
+        <span class="ident">ast::TypeSpecifierNonArrayData::ITextureBuffer</span> =&gt; {
+            <span class="macro">quote!</span> { <span class="ident">glsl_lang::ast::TypeSpecifierNonArrayData::ITextureBuffer</span> }
+        }
+        <span class="ident">ast::TypeSpecifierNonArrayData::ITexture2DMs</span> =&gt; {
+            <span class="macro">quote!</span> { <span class="ident">glsl_lang::ast::TypeSpecifierNonArrayData::ITexture2DMs</span> }
+        }
+        <span class="ident">ast::TypeSpecifierNonArrayData::ITexture2DMsArray</span> =&gt; {
+            <span class="macro">quote!</span> { <span class="ident">glsl_lang::ast::TypeSpecifierNonArrayData::ITexture2DMsArray</span> }
+        }
+        <span class="ident">ast::TypeSpecifierNonArrayData::ITextureCubeArray</span> =&gt; {
+            <span class="macro">quote!</span> { <span class="ident">glsl_lang::ast::TypeSpecifierNonArrayData::ITextureCubeArray</span> }
+        }
+        <span class="ident">ast::TypeSpecifierNonArrayData::Sampler</span> =&gt; {
+            <span class="macro">quote!</span> { <span class="ident">glsl_lang::ast::TypeSpecifierNonArrayData::Sampler</span> }
+        }
+        <span class="ident">ast::TypeSpecifierNonArrayData::SamplerShadow</span> =&gt; {
+            <span class="macro">quote!</span> { <span class="ident">glsl_lang::ast::TypeSpecifierNonArrayData::SamplerShadow</span> }
+        }
+        <span class="ident">ast::TypeSpecifierNonArrayData::SubpassInput</span> =&gt; {
+            <span class="macro">quote!</span> { <span class="ident">glsl_lang::ast::TypeSpecifierNonArrayData::SubpassInput</span> }
+        }
+        <span class="ident">ast::TypeSpecifierNonArrayData::ISubpassInput</span> =&gt; {
+            <span class="macro">quote!</span> { <span class="ident">glsl_lang::ast::TypeSpecifierNonArrayData::ISubpassInput</span> }
+        }
+        <span class="ident">ast::TypeSpecifierNonArrayData::USubpassInput</span> =&gt; {
+            <span class="macro">quote!</span> { <span class="ident">glsl_lang::ast::TypeSpecifierNonArrayData::USubpassInput</span> }
+        }
+        <span class="ident">ast::TypeSpecifierNonArrayData::SubpassInputMs</span> =&gt; {
+            <span class="macro">quote!</span> { <span class="ident">glsl_lang::ast::TypeSpecifierNonArrayData::SubpassInputMs</span> }
+        }
+        <span class="ident">ast::TypeSpecifierNonArrayData::ISubpassInputMs</span> =&gt; {
+            <span class="macro">quote!</span> { <span class="ident">glsl_lang::ast::TypeSpecifierNonArrayData::ISubpassInputMs</span> }
+        }
+        <span class="ident">ast::TypeSpecifierNonArrayData::USubpassInputMs</span> =&gt; {
+            <span class="macro">quote!</span> { <span class="ident">glsl_lang::ast::TypeSpecifierNonArrayData::USubpassInputMs</span> }
+        }
+
+        <span class="comment">// end GL_KHR_vulkan_glsl types</span>
         <span class="ident">ast::TypeSpecifierNonArrayData::Struct</span>(<span class="kw-2">ref</span> <span class="ident">s</span>) =&gt; {
             <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">tokenize_struct_non_declaration</span>(<span class="ident">s</span>);
             <span class="macro">quote!</span> { <span class="ident">glsl_lang::ast::TypeSpecifierNonArrayData::Struct</span>(#<span class="ident">s</span>) }
@@ -3684,5 +3871,5 @@
     <span class="macro">quote!</span> { <span class="ident">glsl_lang::ast::TranslationUnit</span>(<span class="macro">vec!</span>[#(#<span class="ident">tu</span>),<span class="kw-2">*</span>]) }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="glsl_lang_quote" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.62.0 (a8314ef7d 2022-06-27)" ></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="glsl_lang_quote" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
 </body></html>

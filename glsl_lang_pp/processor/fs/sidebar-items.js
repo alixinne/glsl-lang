@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["PathOrSource",""]],"struct":[["ExpandStack",""],["ParsedFile",""],["Processor","Preprocessor based on a filesystem"],["Std",""]],"trait":[["FileSystem",""]],"type":[["StdProcessor",""]]});
+window.SIDEBAR_ITEMS = {"enum":[["PathOrSource",""]],"struct":[["ExpandStack",""],["ParsedFile",""],["Processor","Preprocessor based on a filesystem"],["Std",""]],"trait":[["FileSystem",""]],"type":[["StdProcessor",""]]};

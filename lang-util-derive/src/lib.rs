@@ -8,39 +8,12 @@
 #[macro_use]
 extern crate darling;
 
-mod node_content;
+mod node_display;
 
-/// Mark a type as representing data in an AST node
-///
-/// # Examples
-///
-/// If the name of the data structure doesn't end with `Data`, the `lang_util::NodeContent` trait
-/// will just be implemented for that type.
-/// ```ignore
-/// use lang_util_derive::NodeContent;
-///
-/// #[derive(NodeContent)]
-/// pub struct Declaration {
-///     pub name: String,
-/// }
-/// ```
-///
-/// If the name of the data structure ends with `Data`, the `lang_util::NodeContent` trait will be
-/// implemented for that type, and a type alias for `Node<T>` will be declared for the suffix-less
-/// name.
-/// ```ignore
-/// use lang_util_derive::NodeContent;
-///
-/// #[derive(NodeContent)]
-/// pub struct DeclarationData {
-///     pub name: String,
-/// }
-///
-/// // Will declare pub type Declaration = ::lang_util::node::Node<DeclarationData>;
-/// ```
-#[proc_macro_derive(NodeContent, attributes(lang_util))]
-pub fn node_content(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
-    node_content::node_content(input)
+/// Derives an implementation of `NodeContentDisplay` for the given type.
+#[proc_macro_derive(NodeContentDisplay, attributes(lang_util))]
+pub fn node_display(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    node_display::node_display(input)
 }
 
 mod token;

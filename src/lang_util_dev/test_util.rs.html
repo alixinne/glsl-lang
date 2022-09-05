@@ -142,7 +142,7 @@
 <span class="kw">use</span> <span class="ident">std::path::Path</span>;
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">fs</span>, <span class="ident">path::PathBuf</span>};
 
-<span class="kw">use</span> <span class="ident">similar_asserts::assert_str_eq</span>;
+<span class="kw">use</span> <span class="ident">similar_asserts::assert_eq</span>;
 
 <span class="doccomment">/// Key for differentiating between kinds of test outputs</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PathKey</span>: <span class="ident">std::fmt::Display</span> <span class="op">+</span> <span class="ident">PartialEq</span> <span class="op">+</span> <span class="ident">Eq</span> <span class="op">+</span> <span class="ident">std::hash::Hash</span> <span class="op">+</span> <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Sized</span> {
@@ -255,7 +255,7 @@
                         <span class="kw">let</span> <span class="ident">public</span> <span class="op">=</span> <span class="ident">std::fs::read_to_string</span>(<span class="kw-2">&amp;</span><span class="ident">public_result</span>)
                             .<span class="ident">expect</span>(<span class="string">&quot;failed to read snapshot&quot;</span>);
 
-                        <span class="macro">assert_str_eq!</span>(<span class="ident">local</span>, <span class="ident">public</span>, <span class="string">&quot;snapshot mismatch&quot;</span>);
+                        <span class="macro">assert_eq!</span>(<span class="ident">local</span>, <span class="ident">public</span>, <span class="string">&quot;snapshot mismatch&quot;</span>);
                     }
                     <span class="ident">Mode::Bump</span> =&gt; {
                         <span class="ident">std::fs::copy</span>(<span class="ident">local_result</span>, <span class="ident">public_result</span>)

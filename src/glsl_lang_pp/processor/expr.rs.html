@@ -764,11 +764,11 @@
                     <span class="ident">IDENT_KW</span> =&gt; {
                         <span class="comment">// Free-standing form, get the ident name</span>
                         <span class="kw">let</span> <span class="ident">ident</span> <span class="op">=</span> <span class="ident">Unescaped::new</span>(<span class="self">self</span>.<span class="ident">bump</span>()<span class="question-mark">?</span>.<span class="ident">text</span>()).<span class="ident">to_string</span>();
-                        <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="kw">if</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">get_definition</span>(<span class="kw-2">&amp;</span><span class="ident">ident</span>).<span class="ident">is_some</span>() {
+                        <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="kw">if</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">get_definition</span>(<span class="kw-2">&amp;</span><span class="ident">ident</span>).<span class="ident">is_some</span>() {
                             <span class="number">1</span>
                         } <span class="kw">else</span> {
                             <span class="number">0</span>
-                        }));
+                        }))
                     }
                     <span class="ident">LPAREN</span> =&gt; {
                         <span class="comment">// Parenthesis form</span>

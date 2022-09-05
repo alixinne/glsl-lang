@@ -2254,7 +2254,7 @@
 <span class="kw">use</span> <span class="ident">lazy_static::lazy_static</span>;
 
 <span class="doccomment">/// Indentation style of the output</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">IndentStyle</span> {
     <span class="doccomment">/// No indentation is generated</span>
     <span class="prelude-val">None</span>,
@@ -2304,7 +2304,7 @@
 }
 
 <span class="doccomment">/// Formatter whitespace</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Whitespace</span> {
     <span class="doccomment">/// No whitespace</span>
     <span class="prelude-val">None</span>,
@@ -2329,7 +2329,7 @@
 }
 
 <span class="doccomment">/// Formatting settings for the GLSL transpiler</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">FormattingSettings</span> {
     <span class="doccomment">/// Indentation style of the output</span>
     <span class="kw">pub</span> <span class="ident">indent_style</span>: <span class="ident">IndentStyle</span>,
@@ -2371,7 +2371,7 @@
 }
 
 <span class="doccomment">/// Formatting state of the GLSL transpiler</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">FormattingState</span><span class="op">&lt;</span><span class="lifetime">&#39;s</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Formatting settings</span>
     <span class="kw">pub</span> <span class="ident">settings</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;s</span> <span class="ident">FormattingSettings</span>,
@@ -3455,7 +3455,7 @@
 {
     <span class="kw">match</span> <span class="kw-2">*</span><span class="kw-2">*</span><span class="ident">i</span> {
         <span class="ident">ast::FunIdentifierData::TypeSpecifier</span>(<span class="kw-2">ref</span> <span class="ident">n</span>) =&gt; <span class="ident">show_type_specifier</span>(<span class="ident">f</span>, <span class="ident">n</span>, <span class="ident">state</span>),
-        <span class="ident">ast::FunIdentifierData::Expr</span>(<span class="kw-2">ref</span> <span class="ident">e</span>) =&gt; <span class="ident">show_expr</span>(<span class="ident">f</span>, <span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">e</span>, <span class="ident">state</span>),
+        <span class="ident">ast::FunIdentifierData::Expr</span>(<span class="kw-2">ref</span> <span class="ident">e</span>) =&gt; <span class="ident">show_expr</span>(<span class="ident">f</span>, <span class="ident">e</span>, <span class="ident">state</span>),
     }
 }
 

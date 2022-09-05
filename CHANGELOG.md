@@ -1,6 +1,14 @@
 ## [Unreleased]
 
 - - -
+## v0.4.1 - 2022-09-05
+#### Bug Fixes
+- **(glsl-lang-types)** do not generate node type aliases via a derive macro (#9) - (b4c75a1) - Alexandre Bléron
+#### Continuous Integration
+- retry cargo publish (#14) - (3cd8895) - vtavernier
+
+- - -
+
 ## v0.4.0 - 2022-09-05
 #### Bug Fixes
 - **(lang-util-dev)** update similar_asserts - (b3e5728) - *vtavernier*

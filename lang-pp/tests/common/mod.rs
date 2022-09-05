@@ -105,7 +105,7 @@ pub fn test_file(path: impl AsRef<Path>) {
         }
 
         if let Some(idx) = formatted.find(": ") {
-            formatted = formatted[..idx].replace("\\", "/") + &formatted[idx..];
+            formatted = formatted[..idx].replace('\\', "/") + &formatted[idx..];
         }
 
         writeln!(errorsf, "{}", formatted).unwrap();

@@ -30,7 +30,7 @@ pub use lang_util::{
 };
 
 /// A generic identifier.
-#[derive(Clone, Debug, PartialEq, PartialOrd, Hash, NodeContent)]
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Hash, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
 #[lang_util(display(leaf))]
@@ -73,7 +73,7 @@ impl fmt::Display for IdentifierData {
 }
 
 /// Any type name.
-#[derive(Clone, Debug, PartialEq, PartialOrd, Hash, NodeContent)]
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Hash, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
 #[lang_util(display(leaf))]
@@ -105,7 +105,7 @@ impl fmt::Display for TypeNameData {
 }
 
 /// A path literal.
-#[derive(Clone, Debug, PartialEq, NodeContent)]
+#[derive(Clone, Debug, PartialEq, Eq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
 pub enum PathData {
@@ -787,7 +787,7 @@ pub enum LayoutQualifierSpecData {
 }
 
 /// Precision qualifier.
-#[derive(Clone, Debug, PartialEq, NodeContent)]
+#[derive(Clone, Debug, PartialEq, Eq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
 pub enum PrecisionQualifierData {
@@ -803,7 +803,7 @@ pub enum PrecisionQualifierData {
 }
 
 /// Interpolation qualifier.
-#[derive(Clone, Debug, PartialEq, NodeContent)]
+#[derive(Clone, Debug, PartialEq, Eq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
 pub enum InterpolationQualifierData {
@@ -1139,7 +1139,7 @@ impl From<f64> for ExprData {
 }
 
 /// All unary operators that exist in GLSL.
-#[derive(Clone, Debug, PartialEq, NodeContent)]
+#[derive(Clone, Debug, PartialEq, Eq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
 pub enum UnaryOpData {
@@ -1164,7 +1164,7 @@ pub enum UnaryOpData {
 }
 
 /// All binary operators that exist in GLSL.
-#[derive(Clone, Debug, PartialEq, NodeContent)]
+#[derive(Clone, Debug, PartialEq, Eq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
 pub enum BinaryOpData {
@@ -1228,7 +1228,7 @@ pub enum BinaryOpData {
 }
 
 /// All possible operators for assigning expressions.
-#[derive(Clone, Debug, PartialEq, NodeContent)]
+#[derive(Clone, Debug, PartialEq, Eq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
 pub enum AssignmentOpData {
@@ -1495,7 +1495,7 @@ pub enum JumpStatementData {
 /// As it’s important to carry them around the AST because they cannot be substituted in a normal
 /// preprocessor (they’re used by GPU’s compilers), those preprocessor directives are available for
 /// inspection.
-#[derive(Clone, Debug, PartialEq, NodeContent)]
+#[derive(Clone, Debug, PartialEq, Eq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
 pub enum PreprocessorData {
@@ -1546,7 +1546,7 @@ pub enum PreprocessorData {
 /// A #define preprocessor directive.
 ///
 /// Allows any expression but only Integer and Float literals make sense
-#[derive(Clone, Debug, PartialEq, NodeContent)]
+#[derive(Clone, Debug, PartialEq, Eq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
 pub enum PreprocessorDefineData {
@@ -1570,7 +1570,7 @@ pub enum PreprocessorDefineData {
 }
 
 /// An #else preprocessor directive.
-#[derive(Clone, Debug, PartialEq, NodeContent)]
+#[derive(Clone, Debug, PartialEq, Eq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
 pub struct PreprocessorElseIfData {
@@ -1580,7 +1580,7 @@ pub struct PreprocessorElseIfData {
 }
 
 /// An #error preprocessor directive.
-#[derive(Clone, Debug, PartialEq, NodeContent)]
+#[derive(Clone, Debug, PartialEq, Eq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
 pub struct PreprocessorErrorData {
@@ -1590,7 +1590,7 @@ pub struct PreprocessorErrorData {
 }
 
 /// An #if preprocessor directive.
-#[derive(Clone, Debug, PartialEq, NodeContent)]
+#[derive(Clone, Debug, PartialEq, Eq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
 pub struct PreprocessorIfData {
@@ -1600,7 +1600,7 @@ pub struct PreprocessorIfData {
 }
 
 /// An #ifdef preprocessor directive.
-#[derive(Clone, Debug, PartialEq, NodeContent)]
+#[derive(Clone, Debug, PartialEq, Eq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
 pub struct PreprocessorIfDefData {
@@ -1610,7 +1610,7 @@ pub struct PreprocessorIfDefData {
 }
 
 /// A #ifndef preprocessor directive.
-#[derive(Clone, Debug, PartialEq, NodeContent)]
+#[derive(Clone, Debug, PartialEq, Eq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
 pub struct PreprocessorIfNDefData {
@@ -1620,7 +1620,7 @@ pub struct PreprocessorIfNDefData {
 }
 
 /// An #include name annotation.
-#[derive(Clone, Debug, PartialEq, NodeContent)]
+#[derive(Clone, Debug, PartialEq, Eq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
 pub struct PreprocessorIncludeData {
@@ -1629,7 +1629,7 @@ pub struct PreprocessorIncludeData {
 }
 
 /// A #line preprocessor directive.
-#[derive(Clone, Debug, PartialEq, NodeContent)]
+#[derive(Clone, Debug, PartialEq, Eq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
 pub struct PreprocessorLineData {
@@ -1642,7 +1642,7 @@ pub struct PreprocessorLineData {
 
 /// A #pragma preprocessor directive.
 /// Holds compiler-specific command.
-#[derive(Clone, Debug, PartialEq, NodeContent)]
+#[derive(Clone, Debug, PartialEq, Eq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
 pub struct PreprocessorPragmaData {
@@ -1652,7 +1652,7 @@ pub struct PreprocessorPragmaData {
 }
 
 /// A #undef preprocessor directive.
-#[derive(Clone, Debug, PartialEq, NodeContent)]
+#[derive(Clone, Debug, PartialEq, Eq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
 pub struct PreprocessorUndefData {
@@ -1662,7 +1662,7 @@ pub struct PreprocessorUndefData {
 }
 
 /// A #version preprocessor directive.
-#[derive(Clone, Debug, PartialEq, NodeContent)]
+#[derive(Clone, Debug, PartialEq, Eq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
 pub struct PreprocessorVersionData {
@@ -1674,7 +1674,7 @@ pub struct PreprocessorVersionData {
 }
 
 /// A #version profile annotation.
-#[derive(Clone, Debug, PartialEq, NodeContent)]
+#[derive(Clone, Debug, PartialEq, Eq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
 pub enum PreprocessorVersionProfileData {
@@ -1690,7 +1690,7 @@ pub enum PreprocessorVersionProfileData {
 }
 
 /// An #extension preprocessor directive.
-#[derive(Clone, Debug, PartialEq, NodeContent)]
+#[derive(Clone, Debug, PartialEq, Eq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
 pub struct PreprocessorExtensionData {
@@ -1701,7 +1701,7 @@ pub struct PreprocessorExtensionData {
 }
 
 /// An #extension name annotation.
-#[derive(Clone, Debug, PartialEq, NodeContent)]
+#[derive(Clone, Debug, PartialEq, Eq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
 pub enum PreprocessorExtensionNameData {
@@ -1713,7 +1713,7 @@ pub enum PreprocessorExtensionNameData {
 }
 
 /// An #extension behavior annotation.
-#[derive(Clone, Debug, PartialEq, NodeContent)]
+#[derive(Clone, Debug, PartialEq, Eq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
 pub enum PreprocessorExtensionBehaviorData {
@@ -1732,7 +1732,7 @@ pub enum PreprocessorExtensionBehaviorData {
 }
 
 /// A comment
-#[derive(Debug, Clone, PartialEq, NodeContent)]
+#[derive(Debug, Clone, PartialEq, Eq, NodeContent)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
 pub enum CommentData {

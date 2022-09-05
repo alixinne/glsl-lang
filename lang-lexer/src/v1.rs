@@ -370,7 +370,7 @@ impl<'i> LangLexerIterator for LexerIterator<'i> {
 }
 
 /// Lexical analysis error
-#[derive(Debug, PartialEq, Error)]
+#[derive(Debug, PartialEq, Eq, Error)]
 pub enum LexicalError {
     /// Invalid int literal
     #[error("invalid int literal: {source}")]

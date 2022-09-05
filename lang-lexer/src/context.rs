@@ -7,7 +7,7 @@ use lang_util::{FileId, SmolStr};
 use glsl_lang_types::ast;
 
 /// Parsing options
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct ParseOptions {
     /// Default GLSL version number to parse source as
     pub default_version: u16,

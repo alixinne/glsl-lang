@@ -119,11 +119,11 @@ impl<'i, I: Iterator<Item = &'i OutputToken>> ExprEvaluator<'i, I> {
                     IDENT_KW => {
                         // Free-standing form, get the ident name
                         let ident = Unescaped::new(self.bump()?.text()).to_string();
-                        return Some(Ok(if self.state.get_definition(&ident).is_some() {
+                        Some(Ok(if self.state.get_definition(&ident).is_some() {
                             1
                         } else {
                             0
-                        }));
+                        }))
                     }
                     LPAREN => {
                         // Parenthesis form

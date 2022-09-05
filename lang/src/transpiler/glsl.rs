@@ -36,7 +36,7 @@ use std::fmt::Write;
 use lazy_static::lazy_static;
 
 /// Indentation style of the output
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum IndentStyle {
     /// No indentation is generated
     None,
@@ -86,7 +86,7 @@ impl Default for IndentStyle {
 }
 
 /// Formatter whitespace
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Whitespace {
     /// No whitespace
     None,
@@ -111,7 +111,7 @@ impl Whitespace {
 }
 
 /// Formatting settings for the GLSL transpiler
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct FormattingSettings {
     /// Indentation style of the output
     pub indent_style: IndentStyle,
@@ -153,7 +153,7 @@ impl Default for FormattingSettings {
 }
 
 /// Formatting state of the GLSL transpiler
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct FormattingState<'s> {
     /// Formatting settings
     pub settings: &'s FormattingSettings,
@@ -1237,7 +1237,7 @@ where
 {
     match **i {
         ast::FunIdentifierData::TypeSpecifier(ref n) => show_type_specifier(f, n, state),
-        ast::FunIdentifierData::Expr(ref e) => show_expr(f, &*e, state),
+        ast::FunIdentifierData::Expr(ref e) => show_expr(f, e, state),
     }
 }
 

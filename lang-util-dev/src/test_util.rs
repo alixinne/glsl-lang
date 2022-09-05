@@ -4,7 +4,7 @@ use std::collections::HashMap;
 use std::path::Path;
 use std::{fs, path::PathBuf};
 
-use similar_asserts::assert_str_eq;
+use similar_asserts::assert_eq;
 
 /// Key for differentiating between kinds of test outputs
 pub trait PathKey: std::fmt::Display + PartialEq + Eq + std::hash::Hash + Clone + Sized {
@@ -117,7 +117,7 @@ impl<K: PathKey + 'static> Paths<K> {
                         let public = std::fs::read_to_string(&public_result)
                             .expect("failed to read snapshot");
 
-                        assert_str_eq!(local, public, "snapshot mismatch");
+                        assert_eq!(local, public, "snapshot mismatch");
                     }
                     Mode::Bump => {
                         std::fs::copy(local_result, public_result)

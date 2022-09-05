@@ -14,4 +14,4 @@ categories = ["parsing"]
 
 [dependencies]
 derive_more = "0.99"
-similar-asserts = "1.2"
+similar-asserts = "1.4"

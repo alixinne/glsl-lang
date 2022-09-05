@@ -1,6 +1,6 @@
 [package]
 name = "glsl-lang-cli"
-version = "0.3.1"
+version = "0.4.0"
 authors = ["Vincent Tavernier <vince.tavernier@gmail.com>"]
 edition = "2021"
 license = "BSD-3-Clause"
@@ -13,8 +13,8 @@ keywords = ["glsl", "language", "parser", "ast", "cli"]
 categories = ["command-line-interface", "parser-implementations", "rendering"]
 
 [dependencies]
-glsl-lang = { version = "0.3.0", features = ["lexer-v2-full"] }
-lang-util = "0.3.0"
+glsl-lang = { version = "0.4.0", features = ["lexer-v2-full"] }
+lang-util = "0.4.0"
 argh = "0.1"
 
 serde_json = { version = "1.0", optional = true }

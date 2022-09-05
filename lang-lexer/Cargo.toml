@@ -1,6 +1,6 @@
 [package]
 name = "glsl-lang-lexer"
-version = "0.3.1"
+version = "0.4.0"
 authors = ["Vincent Tavernier <vince.tavernier@gmail.com>"]
 edition = "2021"
 license = "BSD-3-Clause"
@@ -13,8 +13,8 @@ keywords = ["glsl", "language", "parser"]
 categories = ["parser-implementations", "rendering"]
 
 [dependencies]
-glsl-lang-types = "0.3.0"
-lang-util = { version = "0.3.0", features = ["lalrpop"] }
+glsl-lang-types = "0.4.0"
+lang-util = { version = "0.4.0", features = ["lalrpop"] }
 
 thiserror = "1.0"
 
@@ -24,7 +24,7 @@ rserde = { version = "1.0", optional = true, features = ["derive"], package = "s
 logos = { version = "0.12", optional = true }
 
 # v2 lexer dependencies
-glsl-lang-pp = { version = "0.3.0", optional = true }
+glsl-lang-pp = { version = "0.4.0", optional = true }
 lalrpop-util = { version = "0.19.7", default-features = false, optional = true }
 
 [features]

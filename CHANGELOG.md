@@ -1,6 +1,16 @@
 ## [Unreleased]
 
 - - -
+## v0.4.0 - 2022-09-05
+#### Bug Fixes
+- **(lang-util-dev)** update similar_asserts - (b3e5728) - *vtavernier*
+- implement Eq when applicable - (f7df6d0) - vtavernier
+- re-export FileId from glsl_lang::ast (#11) - (7138ef8) - Alexandre Bléron
+#### Features
+- add GL_KHR_vulkan_glsl types to parser - (12f9515) - Alexandre Bléron
+
+- - -
+
 ## v0.3.1 - 2022-07-03
 #### Bug Fixes
 - **(transpiler)** allow !Sized sinks for transpiler functions - (0385b7e) - Alexandre Bléron

@@ -10,7 +10,7 @@ use text_size::{TextRange, TextSize};
 use crate::{located::Located, position::LexerPosition, token::Token, FileId};
 
 /// Information about a lexed token
-#[derive(Debug, Clone, PartialEq, PartialOrd, Hash)]
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Hash)]
 #[cfg_attr(feature = "serde", derive(rserde::Serialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
 pub struct TokenDescription {
@@ -97,7 +97,7 @@ pub fn error_location<T, E: LexicalError>(
 
 // We represent tokens as formatted string since we only want to display them
 /// Parsing error kind
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ParseErrorKind<E: LexicalError> {
     /// An invalid token was encountered during lexical analysis
     InvalidToken,

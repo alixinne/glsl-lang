@@ -10,7 +10,7 @@ use lang_util::{
 pub mod str;
 
 /// Lexical analysis error
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum LexicalError {
     /// Invalid token in lexical analysis
     Token {

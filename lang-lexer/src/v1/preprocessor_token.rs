@@ -5,7 +5,7 @@ use super::{
     ParseContext, ParseOptions, Token,
 };
 
-#[derive(Debug, Clone, PartialEq, Logos)]
+#[derive(Debug, Clone, PartialEq, Eq, Logos)]
 #[logos(extras = (ParseContext, ParseOptions))]
 pub enum PreprocessorToken<'i> {
     #[regex("[a-zA-Z_][a-zA-Z_0-9]*")]

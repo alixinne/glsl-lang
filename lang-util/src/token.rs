@@ -1,7 +1,7 @@
 //! Token derive support definitions
 
 /// Information about a known token
-#[derive(Debug, Clone, PartialEq, PartialOrd, Hash)]
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Hash)]
 #[cfg_attr(feature = "serde", derive(rserde::Serialize))]
 #[cfg_attr(feature = "serde", serde(crate = "rserde"))]
 pub struct TokenDescriptor {

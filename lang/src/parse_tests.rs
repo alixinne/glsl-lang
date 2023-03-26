@@ -2619,41 +2619,51 @@ fn parse_pp(
 #[cfg(feature = "lexer-v2-full")]
 fn parse_pp(
     source: &str,
-) -> Result<ast::Preprocessor, parse::ParseError<<parse::DefaultLexer as HasLexerError>::Error>> {
+) -> Result<
+    impl Iterator<Item = ast::ExternalDeclaration>,
+    parse::ParseError<<parse::DefaultLexer as HasLexerError>::Error>,
+> {
     <ast::TranslationUnit as parse::DefaultParse>::parse_with_options(source, &Default::default())
         .map(|(mut tu, _parse, iter)| {
             iter.into_directives().inject(&mut tu);
-            match tu.0.into_iter().next().unwrap().content {
-                ast::ExternalDeclarationData::Preprocessor(pp) => pp,
-                _ => panic!("unsupported external declaration"),
-            }
+            tu.0.into_iter()
         })
 }
 
 #[test]
 fn parse_pp_version() {
     assert_eq!(
-        parse_pp("#version 450\n"),
-        Ok(ast::PreprocessorData::Version(
-            ast::PreprocessorVersionData {
-                version: 450,
-                profile: None,
-            }
+        parse_pp("#version 450\n").map(|mut iter| iter.next()),
+        Ok(Some(
+            ast::ExternalDeclarationData::Preprocessor(
+                ast::PreprocessorData::Version(
+                    ast::PreprocessorVersionData {
+                        version: 450,
+                        profile: None,
+                    }
+                    .into()
+                )
+                .into()
+            )
             .into()
-        )
-        .into())
+        ))
     );
 
     assert_eq!(
-        parse_pp("#version 450 core\n"),
-        Ok(ast::PreprocessorData::Version(
-            ast::PreprocessorVersionData {
-                version: 450,
-                profile: Some(ast::PreprocessorVersionProfileData::Core.into())
-            }
+        parse_pp("#version 450 core\n").map(|mut iter| iter.next()),
+        Ok(Some(
+            ast::ExternalDeclarationData::Preprocessor(
+                ast::PreprocessorData::Version(
+                    ast::PreprocessorVersionData {
+                        version: 450,
+                        profile: Some(ast::PreprocessorVersionProfileData::Core.into()),
+                    }
+                    .into()
+                )
+                .into()
+            )
             .into()
-        )
-        .into())
+        ))
     );
 }
 
@@ -2963,14 +2973,19 @@ fn parse_pp_line() {
 #[test]
 fn parse_pp_pragma() {
     assert_eq!(
-        parse_pp("#\\\npragma  some   flag"),
-        Ok(ast::PreprocessorData::Pragma(
-            ast::PreprocessorPragmaData {
-                command: "some   flag".to_owned()
-            }
+        parse_pp("#\\\npragma  some   flag").map(|mut iter| iter.next()),
+        Ok(Some(
+            ast::ExternalDeclarationData::Preprocessor(
+                ast::PreprocessorData::Pragma(
+                    ast::PreprocessorPragmaData {
+                        command: "some   flag".to_owned()
+                    }
+                    .into()
+                )
+                .into()
+            )
             .into()
-        )
-        .into())
+        ))
     );
 }
 
@@ -2995,31 +3010,93 @@ fn parse_pp_undef() {
 #[test]
 fn parse_pp_extension() {
     assert_eq!(
-        parse_pp("#extension all: disable\n"),
-        Ok(ast::PreprocessorData::Extension(
-            ast::PreprocessorExtensionData {
-                name: ast::PreprocessorExtensionNameData::All.into(),
-                behavior: Some(ast::PreprocessorExtensionBehaviorData::Disable.into())
-            }
+        parse_pp("#extension all: disable\n").map(|mut iter| iter.next()),
+        Ok(Some(
+            ast::ExternalDeclarationData::Preprocessor(
+                ast::PreprocessorData::Extension(
+                    ast::PreprocessorExtensionData {
+                        name: ast::PreprocessorExtensionNameData::All.into(),
+                        behavior: Some(ast::PreprocessorExtensionBehaviorData::Disable.into())
+                    }
+                    .into()
+                )
+                .into()
+            )
             .into()
-        )
-        .into())
+        ))
     );
 
     assert_eq!(
-        parse_pp("#extension GL_ARB_shading_language_include: warn\n"),
-        Ok(ast::PreprocessorData::Extension(
-            ast::PreprocessorExtensionData {
-                name: ast::PreprocessorExtensionNameData::Specific(
-                    "GL_ARB_shading_language_include".into()
+        parse_pp("#extension GL_ARB_shading_language_include: warn\n").map(|mut iter| iter.next()),
+        Ok(Some(
+            ast::ExternalDeclarationData::Preprocessor(
+                ast::PreprocessorData::Extension(
+                    ast::PreprocessorExtensionData {
+                        name: ast::PreprocessorExtensionNameData::Specific(
+                            "GL_ARB_shading_language_include".into()
+                        )
+                        .into(),
+                        behavior: Some(ast::PreprocessorExtensionBehaviorData::Warn.into())
+                    }
+                    .into()
                 )
-                .into(),
-                behavior: Some(ast::PreprocessorExtensionBehaviorData::Warn.into())
-            }
+                .into()
+            )
             .into()
-        )
-        .into())
+        ))
     );
+}
+
+#[test]
+fn parse_pp_several() {
+    let external_declarations =
+        parse_pp("#version 110\ninvariant x;\n#pragma once\n#pragma twice\ninvariant y;")
+            .unwrap()
+            .collect::<Vec<_>>();
+
+    let expected_external_declarations = vec![
+        ast::ExternalDeclarationData::Preprocessor(
+            ast::PreprocessorData::Version(
+                ast::PreprocessorVersionData {
+                    version: 110,
+                    profile: None,
+                }
+                .into(),
+            )
+            .into(),
+        )
+        .into(),
+        ast::ExternalDeclarationData::Declaration(
+            ast::DeclarationData::Invariant(ast::IdentifierData("x".into()).into()).into(),
+        )
+        .into(),
+        ast::ExternalDeclarationData::Preprocessor(
+            ast::PreprocessorData::Pragma(
+                ast::PreprocessorPragmaData {
+                    command: "once".into(),
+                }
+                .into(),
+            )
+            .into(),
+        )
+        .into(),
+        ast::ExternalDeclarationData::Preprocessor(
+            ast::PreprocessorData::Pragma(
+                ast::PreprocessorPragmaData {
+                    command: "twice".into(),
+                }
+                .into(),
+            )
+            .into(),
+        )
+        .into(),
+        ast::ExternalDeclarationData::Declaration(
+            ast::DeclarationData::Invariant(ast::IdentifierData("y".into()).into()).into(),
+        )
+        .into(),
+    ];
+
+    assert_eq!(external_declarations, expected_external_declarations);
 }
 
 #[test]

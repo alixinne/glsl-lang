@@ -97,8 +97,9 @@ impl Definition {
         entire_range: NodeSpan,
     ) -> impl IntoIterator<Item = OutputToken> {
         // Find the first non-trivial token
-        #[derive(Debug)]
+        #[derive(Debug, Default)]
         enum State {
+            #[default]
             Init,
             Lhs {
                 kind: SyntaxKind,
@@ -112,12 +113,6 @@ impl Definition {
                 pos: NodeSpan,
                 trivia_buffer: VecDeque<(SyntaxKind, TokenText<'static>, NodeSpan)>,
             },
-        }
-
-        impl Default for State {
-            fn default() -> Self {
-                State::Init
-            }
         }
 
         let mut state = State::default();

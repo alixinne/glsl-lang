@@ -273,7 +273,7 @@ impl ExpandOne {
                 match directive {
                     Ok(directive) => {
                         if active {
-                            current_state.extension(&*directive);
+                            current_state.extension(&directive);
                         }
 
                         Event::directive(directive, !active)

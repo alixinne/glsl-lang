@@ -44,7 +44,7 @@ impl<K: PathKey + 'static> Paths<K> {
         let public_results = dir_name.join(K::public_results_prefix());
 
         for result in &[&local_results, &public_results] {
-            fs::create_dir_all(&result)?;
+            fs::create_dir_all(result)?;
         }
 
         let file_name = input_path

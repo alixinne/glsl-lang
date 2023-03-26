@@ -321,7 +321,7 @@ impl<F: FileSystem> Processor<F> {
         match path.ty {
             PathType::Angle => self.system_paths.iter().find_map(|system_path| {
                 let full_path = system_path.join(&path_as_pathbuf);
-                self.fs.exists(&full_path).then(|| full_path)
+                self.fs.exists(&full_path).then_some(full_path)
             }),
             PathType::Quote => Some(parent.as_ref().join(path_as_pathbuf)),
         }

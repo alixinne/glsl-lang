@@ -22,14 +22,6 @@ jobs:
           git-user: glsl-lang
           git-user-email: glsl-lang@vtavernier.github.io
 
-      - uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-          override: true
-          target: ${{ matrix.target }}
-          components: rustfmt, clippy
-
       - uses: actions/cache@v2
         with:
           key: ${{ runner.os }}
@@ -71,7 +63,12 @@ jobs:
           - target: x86_64-pc-windows-msvc
             os: windows-latest
             ignore_tests: "include_vert"
+
     runs-on: ${{ matrix.os }}
+
+    env:
+      CARGO_BUILD_TARGET: ${{ matrix.target }}
+
     steps:
       - name: Force git to use LF
         run: |
@@ -79,12 +76,6 @@ jobs:
           git config --global core.eol lf
 
       - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-          override: true
-          target: ${{ matrix.target }}
 
       - name: Remove fuzz target from members on Windows
         run: |
@@ -147,13 +138,6 @@ jobs:
             ~/.cargo/bin/cargo-set-version
             ~/.cargo/bin/cargo-upgrade
             ~/.cargo/bin/cargo-workspaces
-
-      - uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-          override: true
-          target: ${{ matrix.target }}
 
       - name: Install cargo utilities
         run: |

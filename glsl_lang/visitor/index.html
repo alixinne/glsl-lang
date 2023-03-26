@@ -1,11 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="AST visitors (i.e. on-the-fly mutation at different places in the AST)."><meta name="keywords" content="rust, rustlang, rust-lang, visitor"><title>glsl_lang::visitor - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="sidebar-items.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../glsl_lang/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
-        </a><h2 class="location"></h2>
-    </nav>
-    <nav class="sidebar"><a class="sidebar-logo" href="../../glsl_lang/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
-        </a><h2 class="location"><a href="#">Module visitor</a></h2><div class="sidebar-elems"><section><div class="block"><ul><li><a href="#macros">Macros</a></li><li><a href="#enums">Enums</a></li><li><a href="#traits">Traits</a></li></ul></div></section></div></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../glsl_lang/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
-                                <a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div>
-                        </div></form></nav></div><section id="main-content" class="content"><div class="main-heading">
-    <h1 class="fqn"><span class="in-band">Module <a href="../index.html">glsl_lang</a>::<wbr><a class="mod" href="#">visitor</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span></h1><span class="out-of-band"><a class="srclink" href="../../src/glsl_lang/visitor.rs.html#1-1460">source</a> · <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span></div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>AST visitors (i.e. on-the-fly mutation at different places in the AST).</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="AST visitors (i.e. on-the-fly mutation at different places in the AST)."><meta name="keywords" content="rust, rustlang, rust-lang, visitor"><title>glsl_lang::visitor - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-1f7d512b176f0f72.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-124a1ca42af929b6.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-93196c7a1c3542a8.css" id="mainThemeStyle"><link rel="stylesheet" id="themeStyle" href="../../static.files/light-4743e13df3dfe8c4.css"><link rel="stylesheet" disabled href="../../static.files/dark-0e1b889528bd466b.css"><link rel="stylesheet" disabled href="../../static.files/ayu-65289d5d067c7c66.css"><script id="default-settings" ></script><script src="../../static.files/storage-d43fa987303ecbbb.js"></script><script defer src="../../static.files/main-3367e395607fafc1.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="logo-container" href="../../glsl_lang/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2></h2></nav><nav class="sidebar"><a class="logo-container" href="../../glsl_lang/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2 class="location"><a href="#">Module visitor</a></h2><div class="sidebar-elems"><section><ul class="block"><li><a href="#macros">Macros</a></li><li><a href="#enums">Enums</a></li><li><a href="#traits">Traits</a></li></ul></section></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-5ec35bf9ca753509.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Module <a href="../index.html">glsl_lang</a>::<wbr><a class="mod" href="#">visitor</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="srclink" href="../../src/glsl_lang/visitor.rs.html#1-1460">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>AST visitors (i.e. on-the-fly mutation at different places in the AST).</p>
 <p>Visitors are mutable objects that can mutate parts of an AST while traversing it. You can see
 them as flexible mutations taking place on <em>patterns</em> representing your AST – they get called
 everytime an interesting node gets visited. Because of their mutable nature, you can accumulate
@@ -15,62 +8,53 @@ a state as you traverse the AST and implement exotic filtering.</p>
 use the <a href="trait.Host.html"><code>Host</code></a> interface, that provides the <a href="trait.Host.html#tymethod.visit"><code>Host::visit</code></a> function.</p>
 <p>For instance, we can imagine visiting an AST to count how many variables are declared:</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">glsl_lang::ast</span>::{<span class="ident">CompoundStatement</span>, <span class="ident">CompoundStatementData</span>, <span class="ident">ExprData</span>, <span class="ident">SingleDeclaration</span>, <span class="ident">StatementData</span>, <span class="ident">TypeSpecifierNonArrayData</span>, <span class="ident">NodeContent</span>};
-<span class="kw">use</span> <span class="ident">glsl_lang::visitor</span>::{<span class="ident">Host</span>, <span class="ident">Visit</span>, <span class="ident">Visitor</span>};
-<span class="kw">use</span> <span class="ident">std::iter::FromIterator</span>;
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>glsl_lang::ast::{CompoundStatement, CompoundStatementData, ExprData, SingleDeclaration, StatementData, TypeSpecifierNonArrayData, NodeContent};
+<span class="kw">use </span>glsl_lang::visitor::{Host, Visit, Visitor};
+<span class="kw">use </span>std::iter::FromIterator;
 
-<span class="kw">let</span> <span class="ident">decl0</span> <span class="op">=</span> <span class="ident">StatementData::declare_var</span>(
-  <span class="ident">TypeSpecifierNonArrayData::Float</span>,
+<span class="kw">let </span>decl0 = StatementData::declare_var(
+  TypeSpecifierNonArrayData::Float,
   <span class="string">&quot;x&quot;</span>,
   <span class="prelude-val">None</span>,
-  <span class="prelude-val">Some</span>(<span class="ident">ExprData::from</span>(<span class="number">3.14</span>).<span class="ident">into_node</span>())
+  <span class="prelude-val">Some</span>(ExprData::from(<span class="number">3.14</span>).into_node())
 );
 
-<span class="kw">let</span> <span class="ident">decl1</span> <span class="op">=</span> <span class="ident">StatementData::declare_var</span>(
-  <span class="ident">TypeSpecifierNonArrayData::Int</span>,
+<span class="kw">let </span>decl1 = StatementData::declare_var(
+  TypeSpecifierNonArrayData::Int,
   <span class="string">&quot;y&quot;</span>,
   <span class="prelude-val">None</span>,
-  <span class="prelude-val">None</span>
-);
+  <span class="prelude-val">None
+</span>);
 
-<span class="kw">let</span> <span class="ident">decl2</span> <span class="op">=</span> <span class="ident">StatementData::declare_var</span>(
-  <span class="ident">TypeSpecifierNonArrayData::Vec4</span>,
+<span class="kw">let </span>decl2 = StatementData::declare_var(
+  TypeSpecifierNonArrayData::Vec4,
   <span class="string">&quot;z&quot;</span>,
   <span class="prelude-val">None</span>,
-  <span class="prelude-val">None</span>
-);
+  <span class="prelude-val">None
+</span>);
 
-<span class="kw">let</span> <span class="ident">compound</span>: <span class="ident">CompoundStatement</span> <span class="op">=</span> <span class="ident">CompoundStatementData::from_iter</span>(
-  <span class="macro">vec!</span>[<span class="ident">decl0</span>.<span class="ident">into</span>(), <span class="ident">decl1</span>.<span class="ident">into</span>(), <span class="ident">decl2</span>.<span class="ident">into</span>()]
-).<span class="ident">into</span>();
+<span class="kw">let </span>compound: CompoundStatement = CompoundStatementData::from_iter(
+  <span class="macro">vec!</span>[decl0.into(), decl1.into(), decl2.into()]
+).into();
 
-<span class="comment">// our visitor that will count the number of variables it saw</span>
-<span class="kw">struct</span> <span class="ident">Counter</span> {
-  <span class="ident">var_nb</span>: <span class="ident">usize</span>
+<span class="comment">// our visitor that will count the number of variables it saw
+</span><span class="kw">struct </span>Counter {
+  var_nb: usize
 }
 
-<span class="kw">impl</span> <span class="ident">Visitor</span> <span class="kw">for</span> <span class="ident">Counter</span> {
-  <span class="comment">// we are only interested in single declaration with a name</span>
-  <span class="kw">fn</span> <span class="ident">visit_single_declaration</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">declaration</span>: <span class="kw-2">&amp;</span><span class="ident">SingleDeclaration</span>) -&gt; <span class="ident">Visit</span> {
-    <span class="kw">if</span> <span class="ident">declaration</span>.<span class="ident">name</span>.<span class="ident">is_some</span>() {
-      <span class="self">self</span>.<span class="ident">var_nb</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+<span class="kw">impl </span>Visitor <span class="kw">for </span>Counter {
+  <span class="comment">// we are only interested in single declaration with a name
+  </span><span class="kw">fn </span>visit_single_declaration(<span class="kw-2">&amp;mut </span><span class="self">self</span>, declaration: <span class="kw-2">&amp;</span>SingleDeclaration) -&gt; Visit {
+    <span class="kw">if </span>declaration.name.is_some() {
+      <span class="self">self</span>.var_nb += <span class="number">1</span>;
     }
 
-    <span class="comment">// do not go deeper</span>
-    <span class="ident">Visit::Parent</span>
+    <span class="comment">// do not go deeper
+    </span>Visit::Parent
   }
 }
 
-<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">counter</span> <span class="op">=</span> <span class="ident">Counter</span> { <span class="ident">var_nb</span>: <span class="number">0</span> };
-<span class="ident">compound</span>.<span class="ident">visit</span>(<span class="kw-2">&amp;mut</span> <span class="ident">counter</span>);
-<span class="macro">assert_eq!</span>(<span class="ident">counter</span>.<span class="ident">var_nb</span>, <span class="number">3</span>);</code></pre></div>
-</div></details><h2 id="macros" class="small-section-header"><a href="#macros">Macros</a></h2>
-<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="macro" href="macro.make_host_trait.html" title="glsl_lang::visitor::make_host_trait macro">make_host_trait</a><span title="Restricted Visibility">&nbsp;🔒</span> </div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="macro" href="macro.make_visitor_trait.html" title="glsl_lang::visitor::make_visitor_trait macro">make_visitor_trait</a><span title="Restricted Visibility">&nbsp;🔒</span> </div><div class="item-right docblock-short"></div></div></div><h2 id="enums" class="small-section-header"><a href="#enums">Enums</a></h2>
-<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="enum" href="enum.Visit.html" title="glsl_lang::visitor::Visit enum">Visit</a></div><div class="item-right docblock-short"><p>Visit strategy after having visited an AST node.</p>
-</div></div></div><h2 id="traits" class="small-section-header"><a href="#traits">Traits</a></h2>
-<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.Host.html" title="glsl_lang::visitor::Host trait">Host</a></div><div class="item-right docblock-short"><p>Part of the AST that can be visited.</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.HostMut.html" title="glsl_lang::visitor::HostMut trait">HostMut</a></div><div class="item-right docblock-short"><p>Part of the AST that can be visited.</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.Visitor.html" title="glsl_lang::visitor::Visitor trait">Visitor</a></div><div class="item-right docblock-short"><p>Visitor object, visiting AST nodes.</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.VisitorMut.html" title="glsl_lang::visitor::VisitorMut trait">VisitorMut</a></div><div class="item-right docblock-short"><p>Visitor object, visiting AST nodes.</p>
-</div></div></div></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="glsl_lang" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
-</body></html>
+<span class="kw">let </span><span class="kw-2">mut </span>counter = Counter { var_nb: <span class="number">0 </span>};
+compound.visit(<span class="kw-2">&amp;mut </span>counter);
+<span class="macro">assert_eq!</span>(counter.var_nb, <span class="number">3</span>);</code></pre></div>
+</div></details><h2 id="macros" class="small-section-header"><a href="#macros">Macros</a></h2><div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="macro" href="macro.make_host_trait.html" title="glsl_lang::visitor::make_host_trait macro">make_host_trait</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="macro" href="macro.make_visitor_trait.html" title="glsl_lang::visitor::make_visitor_trait macro">make_visitor_trait</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div></div><h2 id="enums" class="small-section-header"><a href="#enums">Enums</a></h2><div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="enum" href="enum.Visit.html" title="glsl_lang::visitor::Visit enum">Visit</a></div><div class="item-right docblock-short">Visit strategy after having visited an AST node.</div></div></div><h2 id="traits" class="small-section-header"><a href="#traits">Traits</a></h2><div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.Host.html" title="glsl_lang::visitor::Host trait">Host</a></div><div class="item-right docblock-short">Part of the AST that can be visited.</div></div><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.HostMut.html" title="glsl_lang::visitor::HostMut trait">HostMut</a></div><div class="item-right docblock-short">Part of the AST that can be visited.</div></div><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.Visitor.html" title="glsl_lang::visitor::Visitor trait">Visitor</a></div><div class="item-right docblock-short">Visitor object, visiting AST nodes.</div></div><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.VisitorMut.html" title="glsl_lang::visitor::VisitorMut trait">VisitorMut</a></div><div class="item-right docblock-short">Visitor object, visiting AST nodes.</div></div></div></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="glsl_lang" data-themes="" data-resource-suffix="" data-rustdoc-version="1.68.1 (8460ca823 2023-03-20)" data-search-js="search-98d53477a794af0b.js" data-settings-js="settings-c3c521c753752a1a.js" data-settings-css="settings-08ddfdda51b8ee2e.css" ></div></body></html>

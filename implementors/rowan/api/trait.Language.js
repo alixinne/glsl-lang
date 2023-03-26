@@ -1,3 +1,3 @@
-(function() {var implementors = {};
-implementors["glsl_lang_pp"] = [{"text":"impl Language for <a class=\"struct\" href=\"glsl_lang_pp/parser/lang/struct.PreprocessorLang.html\" title=\"struct glsl_lang_pp::parser::lang::PreprocessorLang\">PreprocessorLang</a>","synthetic":false,"types":["glsl_lang_pp::parser::lang::PreprocessorLang"]}];
-if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
+(function() {var implementors = {
+"glsl_lang_pp":[["impl Language for <a class=\"struct\" href=\"glsl_lang_pp/parser/lang/struct.PreprocessorLang.html\" title=\"struct glsl_lang_pp::parser::lang::PreprocessorLang\">PreprocessorLang</a>"]]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

@@ -3,7 +3,7 @@ use glsl_lang_types::ast::{
     self, PreprocessorExtensionBehaviorData, PreprocessorExtensionNameData,
     PreprocessorVersionProfileData,
 };
-use lang_util::{position::LexerPosition, NodeContent, TextSize};
+use lang_util::NodeContent;
 
 #[derive(Default, Debug, Clone)]
 pub struct Directives {
@@ -111,17 +111,17 @@ impl Directives {
             let current_declaration = &root.0[declaration_idx];
 
             // Find where the range starts
-            let actual_start = if let Some(start) = start {
-                // This is the end of the previous declaration
-                start
-            } else if let Some(current_start) = current_declaration.span.map(|span| span.start()) {
-                // Start from the beginning of the file
-                LexerPosition::new(current_start.source_id, TextSize::default())
-            } else {
-                // No span information, keep looking
-                declaration_idx += 1;
-                continue;
-            };
+            let actual_start =
+                if let Some(current_start) = current_declaration.span.map(|span| span.start()) {
+                    current_start
+                } else if let Some(start) = start {
+                    // This is the end of the previous declaration
+                    start
+                } else {
+                    // No span information, keep looking
+                    declaration_idx += 1;
+                    continue;
+                };
 
             // Find where the current declaration ends
             let end = if let Some(current_end) = current_declaration.span.map(|span| span.end()) {

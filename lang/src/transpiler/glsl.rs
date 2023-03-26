@@ -900,7 +900,7 @@ where
     match **p {
         ast::PrecisionQualifierData::High => f.write_str("highp"),
         ast::PrecisionQualifierData::Medium => f.write_str("mediump"),
-        ast::PrecisionQualifierData::Low => f.write_str("low"),
+        ast::PrecisionQualifierData::Low => f.write_str("lowp"),
     }
 }
 
@@ -1259,6 +1259,7 @@ where
         }
         ast::DeclarationData::Precision(ref qual, ref ty) => {
             show_precision_qualifier(f, qual, state)?;
+            f.write_str(" ")?;
             show_type_specifier(f, ty, state)?;
             state.write_declaration_terminator(f)
         }

@@ -67,7 +67,7 @@ impl IdentifierData {
     pub fn as_rs_ident(&self) -> Option<&str> {
         if self.0.starts_with('#') & self.0.ends_with(')') {
             // Remove #\s* and )
-            let s = (&self.0[1..self.0.len() - 1]).trim();
+            let s = self.0[1..self.0.len() - 1].trim();
             // Remove ( and whitespace
             Some(s[1..].trim())
         } else {

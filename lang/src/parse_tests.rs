@@ -2612,8 +2612,11 @@ fn parse_vulkan_types() {
 #[cfg(not(feature = "lexer-v2-full"))]
 fn parse_pp(
     source: &str,
-) -> Result<ast::Preprocessor, parse::ParseError<<parse::DefaultLexer as HasLexerError>::Error>> {
-    ast::Preprocessor::parse(source)
+) -> Result<
+    impl Iterator<Item = ast::ExternalDeclaration>,
+    parse::ParseError<<parse::DefaultLexer as HasLexerError>::Error>,
+> {
+    Ok(ast::TranslationUnit::parse(source)?.0.into_iter())
 }
 
 #[cfg(feature = "lexer-v2-full")]

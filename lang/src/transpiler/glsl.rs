@@ -33,7 +33,7 @@
 
 use std::fmt::Write;
 
-use lazy_static::lazy_static;
+use once_cell::sync::Lazy;
 
 /// Indentation style of the output
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -328,9 +328,7 @@ impl<'s> From<&'s FormattingSettings> for FormattingState<'s> {
     }
 }
 
-lazy_static! {
-    static ref DEFAULT_SETTINGS: FormattingSettings = FormattingSettings::default();
-}
+static DEFAULT_SETTINGS: Lazy<FormattingSettings> = Lazy::new(FormattingSettings::default);
 
 impl Default for FormattingState<'static> {
     fn default() -> Self {

@@ -30,7 +30,7 @@ bimap = { version = "0.6", optional = true }
 itertools = { version = "0.10", optional = true }
 
 # Extension registry
-lazy_static = { version = "1.4", optional = true }
+once_cell = { version = "1.17.1", optional = true }
 
 [dev-dependencies]
 lang-util-dev = "0.4.0"
@@ -44,5 +44,5 @@ string_cache_codegen = "0.5"
 
 [features]
 default = []
-exts = ["lazy_static"]
+exts = ["once_cell"]
 full = ["exts", "rowan", "cbitset", "static_assertions", "bimap", "itertools"]

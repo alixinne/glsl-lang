@@ -1,5 +1,7 @@
 use std::collections::HashMap;
 
+use once_cell::sync::Lazy;
+
 use crate::types::type_names::TypeNameAtom;
 
 #[macro_use]
@@ -574,7 +576,5 @@ impl Default for Registry {
     }
 }
 
-lazy_static::lazy_static! {
-    pub static ref DEFAULT_REGISTRY: Registry = Registry::default();
-    pub static ref EMPTY_REGISTRY: Registry = Registry::new();
-}
+pub static DEFAULT_REGISTRY: Lazy<Registry> = Lazy::new(Registry::default);
+pub static EMPTY_REGISTRY: Lazy<Registry> = Lazy::new(Registry::new);

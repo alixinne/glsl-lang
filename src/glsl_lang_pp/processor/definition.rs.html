@@ -865,11 +865,6 @@
 <a href="#865" id="865">865</a>
 <a href="#866" id="866">866</a>
 <a href="#867" id="867">867</a>
-<a href="#868" id="868">868</a>
-<a href="#869" id="869">869</a>
-<a href="#870" id="870">870</a>
-<a href="#871" id="871">871</a>
-<a href="#872" id="872">872</a>
 </pre><pre class="rust"><code><span class="kw">use </span>std::{
     collections::{HashMap, HashSet, VecDeque},
     rc::Rc,
@@ -969,9 +964,10 @@
         entire_range: NodeSpan,
     ) -&gt; <span class="kw">impl </span>IntoIterator&lt;Item = OutputToken&gt; {
         <span class="comment">// Find the first non-trivial token
-        </span><span class="attr">#[derive(Debug)]
+        </span><span class="attr">#[derive(Debug, Default)]
         </span><span class="kw">enum </span>State {
-            Init,
+            <span class="attr">#[default]
+            </span>Init,
             Lhs {
                 kind: SyntaxKind,
                 text: TokenText&lt;<span class="lifetime">&#39;static</span>&gt;,
@@ -984,12 +980,6 @@
                 pos: NodeSpan,
                 trivia_buffer: VecDeque&lt;(SyntaxKind, TokenText&lt;<span class="lifetime">&#39;static</span>&gt;, NodeSpan)&gt;,
             },
-        }
-
-        <span class="kw">impl </span>Default <span class="kw">for </span>State {
-            <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
-                State::Init
-            }
         }
 
         <span class="kw">let </span><span class="kw-2">mut </span>state = State::default();

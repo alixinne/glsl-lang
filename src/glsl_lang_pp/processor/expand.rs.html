@@ -1254,7 +1254,7 @@
                 <span class="kw">match </span>directive {
                     <span class="prelude-val">Ok</span>(directive) =&gt; {
                         <span class="kw">if </span>active {
-                            current_state.extension(<span class="kw-2">&amp;*</span>directive);
+                            current_state.extension(<span class="kw-2">&amp;</span>directive);
                         }
 
                         Event::directive(directive, !active)

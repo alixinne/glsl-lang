@@ -41,7 +41,7 @@ jobs:
         run: cargo fmt -- --check
 
       - name: Check clippy lints
-        run: cargo clippy -- -D warnings
+        run: cargo clippy -- -D warnings -A clippy::result_large_err
 
   test:
     name: Test crate

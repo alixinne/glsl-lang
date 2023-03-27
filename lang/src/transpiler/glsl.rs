@@ -115,39 +115,100 @@ impl Whitespace {
 pub struct FormattingSettings {
     /// Indentation style of the output
     pub indent_style: IndentStyle,
+    /// Insert a space before block open braces
+    pub space_before_open_block: bool,
     /// Insert newlines after block open braces
     pub newline_after_open_block: bool,
     /// Insert newlines before block close braces
     pub newline_before_close_block: bool,
     /// Insert newline after block close brace
     pub newline_after_close_block: bool,
+    /// Insert newline after a compound statement collapsed to a simple statement
+    pub newline_after_collapsed_statement: bool,
+    /// Insert newline after a compound statement collapsed to a simple statement
+    pub newline_before_collapsed_statement: bool,
     /// What to insert between fields of a struct
     pub struct_field_separator: Whitespace,
     /// What to insert after a struct declaration
     pub struct_declaration_terminator: Whitespace,
     /// What to insert after a declaration
     pub declaration_terminator: Whitespace,
+    /// What to insert after the case label ending colon
+    pub case_label_terminator: Whitespace,
     /// Insert spaces around binary ops
     pub spaces_around_binary_ops: bool,
     /// What to insert after a statement
     pub statement_terminator: Whitespace,
     /// What to insert after a function definition
     pub function_definition_terminator: Whitespace,
+    /// Whether to collapse compound statements that contain a single statement
+    /// to a simple statement or not (i.e., remove braces)
+    pub collapse_single_item_compound_statements: bool,
+    /// Insert a space before the else keyword in an if statement
+    pub space_before_else: bool,
+    /// Insert a space after a list separator token (i.e., comma)
+    pub space_after_list_separator: bool,
+    /// Insert a space after a for statement separator token (i.e., semicolon)
+    pub space_after_for_statement_separator: bool,
+    /// Insert a space after the { and before the } delimiting a list of initializer
+    /// expressions
+    pub spaces_surrounding_initializer_list_expressions: bool,
+    /// Insert a space before the ( and after the ) that are part of a statement
+    pub spaces_surrounding_statement_parentheses: bool,
+}
+
+impl FormattingSettings {
+    /// Minifying (e.g, source code size reducing) formatting settings.
+    /// The generated code will be apt for machine consumption, but not for human comprehension
+    pub fn minifying() -> Self {
+        Self {
+            indent_style: IndentStyle::None,
+            space_before_open_block: false,
+            newline_after_open_block: false,
+            newline_before_close_block: false,
+            newline_after_close_block: false,
+            newline_after_collapsed_statement: false,
+            newline_before_collapsed_statement: false,
+            struct_field_separator: Whitespace::None,
+            struct_declaration_terminator: Whitespace::None,
+            declaration_terminator: Whitespace::None,
+            case_label_terminator: Whitespace::None,
+            spaces_around_binary_ops: false,
+            statement_terminator: Whitespace::None,
+            function_definition_terminator: Whitespace::None,
+            collapse_single_item_compound_statements: true,
+            space_before_else: false,
+            space_after_list_separator: false,
+            space_after_for_statement_separator: false,
+            spaces_surrounding_initializer_list_expressions: false,
+            spaces_surrounding_statement_parentheses: false,
+        }
+    }
 }
 
 impl Default for FormattingSettings {
     fn default() -> Self {
         Self {
             indent_style: IndentStyle::default(),
+            space_before_open_block: true,
             newline_after_open_block: true,
             newline_before_close_block: true,
             newline_after_close_block: true,
+            newline_after_collapsed_statement: true,
+            newline_before_collapsed_statement: true,
             struct_field_separator: Whitespace::Newline,
             struct_declaration_terminator: Whitespace::Newline,
             declaration_terminator: Whitespace::Newline,
+            case_label_terminator: Whitespace::Newline,
             spaces_around_binary_ops: true,
             statement_terminator: Whitespace::Newline,
             function_definition_terminator: Whitespace::Newline,
+            collapse_single_item_compound_statements: false,
+            space_before_else: true,
+            space_after_list_separator: true,
+            space_after_for_statement_separator: true,
+            spaces_surrounding_initializer_list_expressions: true,
+            spaces_surrounding_statement_parentheses: true,
         }
     }
 }
@@ -159,6 +220,7 @@ pub struct FormattingState<'s> {
     pub settings: &'s FormattingSettings,
     indentation_level: u32,
     new_line_pending: bool,
+    in_function_definition_statement: bool,
 }
 
 impl<'s> FormattingState<'s> {
@@ -217,8 +279,34 @@ impl<'s> FormattingState<'s> {
         Ok(())
     }
 
+    /// Enter a new compound statement block, and update the indentation level
+    pub fn enter_compound_statement_block<F>(&mut self, f: &mut F) -> std::fmt::Result
+    where
+        F: Write + ?Sized,
+    {
+        // Insert space if this is a top-level compound statement
+        if self.settings.space_before_open_block && self.in_function_definition_statement {
+            f.write_char(' ')?;
+        }
+
+        self.enter_block_inner(f)
+    }
+
     /// Enter a new block, and update the indentation level
     pub fn enter_block<F>(&mut self, f: &mut F) -> std::fmt::Result
+    where
+        F: Write + ?Sized,
+    {
+        // Insert space
+        if self.settings.space_before_open_block {
+            f.write_char(' ')?;
+        }
+
+        self.enter_block_inner(f)
+    }
+
+    /// Common logic for entering a new block, and updating the indentation level
+    fn enter_block_inner<F>(&mut self, f: &mut F) -> std::fmt::Result
     where
         F: Write + ?Sized,
     {
@@ -255,6 +343,95 @@ impl<'s> FormattingState<'s> {
         Ok(())
     }
 
+    /// Enter a new function definition statement
+    pub fn enter_function_definition_statement(&mut self) {
+        self.in_function_definition_statement = true;
+    }
+
+    /// Consume the current function definition statement
+    pub fn consume_function_definition_statement(&mut self) {
+        self.in_function_definition_statement = false;
+    }
+
+    /// Enter a collapsed compound statement
+    pub fn enter_collapsed_compound_statement(&mut self) -> std::fmt::Result {
+        // Update indentation level
+        self.indentation_level += 1;
+
+        // Next line
+        if self.settings.newline_before_collapsed_statement {
+            self.new_line(self.settings.newline_before_collapsed_statement)?;
+        }
+
+        Ok(())
+    }
+
+    /// Exit the current collapsed compound statement
+    pub fn exit_collapsed_compound_statement(&mut self) -> std::fmt::Result {
+        // Update indentation level
+        self.indentation_level -= 1;
+
+        // Next line
+        if self.settings.newline_after_collapsed_statement {
+            self.new_line(self.settings.newline_after_collapsed_statement)?;
+        }
+
+        Ok(())
+    }
+
+    /// Enter a list initializer
+    pub fn enter_initializer_list<F>(&mut self, f: &mut F) -> std::fmt::Result
+    where
+        F: Write + ?Sized,
+    {
+        f.write_char('{')?;
+
+        if self
+            .settings
+            .spaces_surrounding_initializer_list_expressions
+        {
+            f.write_char(' ')?;
+        }
+
+        Ok(())
+    }
+
+    /// Exit the current list initializer
+    pub fn end_initializer_list<F>(&mut self, f: &mut F) -> std::fmt::Result
+    where
+        F: Write + ?Sized,
+    {
+        if self
+            .settings
+            .spaces_surrounding_initializer_list_expressions
+        {
+            f.write_char(' ')?;
+        }
+
+        f.write_char('}')
+    }
+
+    /// Enter a case label
+    pub fn enter_case_label<F>(&mut self, f: &mut F) -> std::fmt::Result
+    where
+        F: Write + ?Sized,
+    {
+        f.write_char(':')?;
+        self.settings.case_label_terminator.write(f, self)
+    }
+
+    /// Write a else keyword, part of an if statement
+    pub fn write_else<F>(&mut self, f: &mut F) -> std::fmt::Result
+    where
+        F: Write + ?Sized,
+    {
+        if self.settings.space_before_else {
+            f.write_char(' ')?;
+        }
+
+        f.write_str("else ")
+    }
+
     /// Write a struct field separator
     pub fn write_struct_field_separator<F>(&mut self, f: &mut F) -> std::fmt::Result
     where
@@ -262,6 +439,32 @@ impl<'s> FormattingState<'s> {
     {
         f.write_char(';')?;
         self.settings.struct_field_separator.write(f, self)
+    }
+
+    /// Write a list separator
+    pub fn write_list_separator<F>(&mut self, f: &mut F) -> std::fmt::Result
+    where
+        F: Write + ?Sized,
+    {
+        f.write_char(',')?;
+        if self.settings.space_after_list_separator {
+            f.write_char(' ')?;
+        }
+
+        Ok(())
+    }
+
+    /// Write a for statement separator
+    pub fn write_for_statement_separator<F>(&mut self, f: &mut F) -> std::fmt::Result
+    where
+        F: Write + ?Sized,
+    {
+        f.write_char(';')?;
+        if self.settings.space_after_for_statement_separator {
+            f.write_char(' ')?;
+        }
+
+        Ok(())
     }
 
     /// Write a struct declaration terminator
@@ -316,6 +519,32 @@ impl<'s> FormattingState<'s> {
     {
         self.settings.function_definition_terminator.write(f, self)
     }
+
+    /// Write an opening parenthesis for a statement
+    pub fn write_statement_opening_parenthesis<F>(&mut self, f: &mut F) -> std::fmt::Result
+    where
+        F: Write + ?Sized,
+    {
+        if self.settings.spaces_surrounding_statement_parentheses {
+            f.write_char(' ')?;
+        }
+
+        f.write_char('(')
+    }
+
+    /// Write a closing parenthesis for a statement
+    pub fn write_statement_closing_parenthesis<F>(&mut self, f: &mut F) -> std::fmt::Result
+    where
+        F: Write + ?Sized,
+    {
+        f.write_char(')')?;
+
+        if self.settings.spaces_surrounding_statement_parentheses {
+            f.write_char(' ')?;
+        }
+
+        Ok(())
+    }
 }
 
 impl<'s> From<&'s FormattingSettings> for FormattingState<'s> {
@@ -324,6 +553,7 @@ impl<'s> From<&'s FormattingSettings> for FormattingState<'s> {
             settings,
             indentation_level: 0,
             new_line_pending: false,
+            in_function_definition_statement: false,
         }
     }
 }
@@ -336,6 +566,7 @@ impl Default for FormattingState<'static> {
             settings: &DEFAULT_SETTINGS,
             indentation_level: 0,
             new_line_pending: false,
+            in_function_definition_statement: false,
         }
     }
 }
@@ -622,7 +853,7 @@ where
 {
     if let Some(ref qual) = t.qualifier {
         show_type_qualifier(f, qual, state)?;
-        f.write_str(" ")?;
+        f.write_char(' ')?;
     }
 
     show_type_specifier(f, &t.ty, state)
@@ -640,7 +871,7 @@ where
     f.write_str("struct ")?;
 
     if let Some(ref name) = st.name {
-        write!(f, "{} ", name)?;
+        write!(f, "{}", name)?;
     }
 
     state.enter_block(f)?;
@@ -680,11 +911,11 @@ where
 {
     if let Some(ref qual) = field.qualifier {
         show_type_qualifier(f, qual, state)?;
-        f.write_str(" ")?;
+        f.write_char(' ')?;
     }
 
     show_type_specifier(f, &field.ty, state)?;
-    f.write_str(" ")?;
+    f.write_char(' ')?;
 
     // there’s at least one identifier
     let mut identifiers = field.identifiers.iter();
@@ -694,7 +925,7 @@ where
 
     // write the rest of the identifiers
     for identifier in identifiers {
-        f.write_str(", ")?;
+        state.write_list_separator(f)?;
         show_arrayed_identifier(f, identifier, state)?;
     }
 
@@ -714,9 +945,9 @@ where
         match **dimension {
             ast::ArraySpecifierDimensionData::Unsized => f.write_str("[]")?,
             ast::ArraySpecifierDimensionData::ExplicitlySized(ref e) => {
-                f.write_str("[")?;
+                f.write_char('[')?;
                 show_expr(f, e, state)?;
-                f.write_str("]")?
+                f.write_char(']')?
             }
         }
     }
@@ -757,7 +988,7 @@ where
     show_type_qualifier_spec(f, first, state)?;
 
     for qual_spec in qualifiers {
-        f.write_str(" ")?;
+        f.write_char(' ')?;
         show_type_qualifier_spec(f, qual_spec, state)?;
     }
 
@@ -828,7 +1059,7 @@ where
     f.write_str("subroutine")?;
 
     if !types.is_empty() {
-        f.write_str("(")?;
+        f.write_char('(')?;
 
         let mut types_iter = types.iter();
         let first = types_iter.next().unwrap();
@@ -836,11 +1067,11 @@ where
         show_type_specifier(f, first, state)?;
 
         for type_name in types_iter {
-            f.write_str(", ")?;
+            state.write_list_separator(f)?;
             show_type_specifier(f, type_name, state)?;
         }
 
-        f.write_str(")")?;
+        f.write_char(')')?;
     }
 
     Ok(())
@@ -858,15 +1089,15 @@ where
     let mut qualifiers = l.ids.iter();
     let first = qualifiers.next().unwrap();
 
-    f.write_str("layout (")?;
+    f.write_str("layout(")?;
     show_layout_qualifier_spec(f, first, state)?;
 
     for qual_spec in qualifiers {
-        f.write_str(", ")?;
+        state.write_list_separator(f)?;
         show_layout_qualifier_spec(f, qual_spec, state)?;
     }
 
-    f.write_str(")")
+    f.write_char(')')
 }
 
 /// Transpile a layout_qualifier_spec to GLSL
@@ -880,7 +1111,8 @@ where
 {
     match **l {
         ast::LayoutQualifierSpecData::Identifier(ref i, Some(ref e)) => {
-            write!(f, "{} = ", i)?;
+            write!(f, "{i}")?;
+            state.write_binary_op(f, "=")?;
             show_expr(f, e, state)
         }
         ast::LayoutQualifierSpecData::Identifier(ref i, None) => show_identifier(f, i, state),
@@ -965,16 +1197,16 @@ where
             show_unary_op(f, op, state)?;
 
             if e.precedence() > op.precedence() {
-                f.write_str("(")?;
+                f.write_char('(')?;
                 show_expr(f, e, state)?;
-                f.write_str(")")
+                f.write_char(')')
             } else if let ast::ExprData::Unary(eop, _) = &***e {
                 // Prevent double-unary plus/minus turning into inc/dec
                 if eop == op && (**eop == ast::UnaryOpData::Add || **eop == ast::UnaryOpData::Minus)
                 {
-                    f.write_str("(")?;
+                    f.write_char('(')?;
                     show_expr(f, e, state)?;
-                    f.write_str(")")
+                    f.write_char(')')
                 } else {
                     show_expr(f, e, state)
                 }
@@ -988,9 +1220,9 @@ where
             if l.precedence() <= op.precedence() {
                 show_expr(f, l, state)?;
             } else {
-                f.write_str("(")?;
+                f.write_char('(')?;
                 show_expr(f, l, state)?;
-                f.write_str(")")?;
+                f.write_char(')')?;
             }
 
             show_binary_op(f, op, state)?;
@@ -998,9 +1230,9 @@ where
             if r.precedence() < op.precedence() {
                 show_expr(f, r, state)
             } else {
-                f.write_str("(")?;
+                f.write_char('(')?;
                 show_expr(f, r, state)?;
-                f.write_str(")")
+                f.write_char(')')
             }
         }
         ast::ExprData::Ternary(ref c, ref st, ref e) => {
@@ -1009,19 +1241,19 @@ where
             if c.precedence() < expr.precedence() {
                 show_expr(f, c, state)?;
             } else {
-                f.write_str("(")?;
+                f.write_char('(')?;
                 show_expr(f, c, state)?;
-                f.write_str(")")?;
+                f.write_char(')')?;
             }
-            f.write_str(" ? ")?;
+            state.write_binary_op(f, "?")?;
             show_expr(f, st, state)?;
-            f.write_str(" : ")?;
+            state.write_binary_op(f, ":")?;
             if e.precedence() <= expr.precedence() {
                 show_expr(f, e, state)
             } else {
-                f.write_str("(")?;
+                f.write_char('(')?;
                 show_expr(f, e, state)?;
-                f.write_str(")")
+                f.write_char(')')
             }
         }
         ast::ExprData::Assignment(ref v, ref op, ref e) => {
@@ -1030,9 +1262,9 @@ where
             if v.precedence() < op.precedence() {
                 show_expr(f, v, state)?;
             } else {
-                f.write_str("(")?;
+                f.write_char('(')?;
                 show_expr(f, v, state)?;
-                f.write_str(")")?;
+                f.write_char(')')?;
             }
 
             show_assignment_op(f, op, state)?;
@@ -1040,9 +1272,9 @@ where
             if e.precedence() <= op.precedence() {
                 show_expr(f, e, state)
             } else {
-                f.write_str("(")?;
+                f.write_char('(')?;
                 show_expr(f, e, state)?;
-                f.write_str(")")
+                f.write_char(')')
             }
         }
         ast::ExprData::Bracket(ref e, ref a) => {
@@ -1051,16 +1283,16 @@ where
             if e.precedence() <= expr.precedence() {
                 show_expr(f, e, state)?;
             } else {
-                f.write_str("(")?;
+                f.write_char('(')?;
                 show_expr(f, e, state)?;
-                f.write_str(")")?;
+                f.write_char(')')?;
             }
 
             show_expr(f, a, state)
         }
         ast::ExprData::FunCall(ref fun, ref args) => {
             show_function_identifier(f, fun, state)?;
-            f.write_str("(")?;
+            f.write_char('(')?;
 
             if !args.is_empty() {
                 let mut args_iter = args.iter();
@@ -1068,12 +1300,12 @@ where
                 show_expr(f, first, state)?;
 
                 for e in args_iter {
-                    f.write_str(", ")?;
+                    state.write_list_separator(f)?;
                     show_expr(f, e, state)?;
                 }
             }
 
-            f.write_str(")")
+            f.write_char(')')
         }
         ast::ExprData::Dot(ref e, ref i) => {
             // Note: dot is left-to-right associative
@@ -1081,11 +1313,11 @@ where
             if e.precedence() <= expr.precedence() {
                 show_expr(f, e, state)?;
             } else {
-                f.write_str("(")?;
+                f.write_char('(')?;
                 show_expr(f, e, state)?;
-                f.write_str(")")?;
+                f.write_char(')')?;
             }
-            f.write_str(".")?;
+            f.write_char('.')?;
             show_identifier(f, i, state)
         }
         ast::ExprData::PostInc(ref e) => {
@@ -1094,9 +1326,9 @@ where
             if e.precedence() < expr.precedence() {
                 show_expr(f, e, state)?;
             } else {
-                f.write_str("(")?;
+                f.write_char('(')?;
                 show_expr(f, e, state)?;
-                f.write_str(")")?;
+                f.write_char(')')?;
             }
 
             f.write_str("++")
@@ -1107,9 +1339,9 @@ where
             if e.precedence() < expr.precedence() {
                 show_expr(f, e, state)?;
             } else {
-                f.write_str("(")?;
+                f.write_char('(')?;
                 show_expr(f, e, state)?;
-                f.write_str(")")?;
+                f.write_char(')')?;
             }
 
             f.write_str("--")
@@ -1120,19 +1352,19 @@ where
             if a.precedence() <= expr.precedence() {
                 show_expr(f, a, state)?;
             } else {
-                f.write_str("(")?;
+                f.write_char('(')?;
                 show_expr(f, a, state)?;
-                f.write_str(")")?;
+                f.write_char(')')?;
             }
 
-            f.write_str(", ")?;
+            state.write_list_separator(f)?;
 
             if b.precedence() < expr.precedence() {
                 show_expr(f, b, state)
             } else {
-                f.write_str("(")?;
+                f.write_char('(')?;
                 show_expr(f, b, state)?;
-                f.write_str(")")
+                f.write_char(')')
             }
         }
     }
@@ -1251,28 +1483,25 @@ where
     match **d {
         ast::DeclarationData::FunctionPrototype(ref proto) => {
             show_function_prototype(f, proto, state)?;
-            state.write_declaration_terminator(f)
         }
         ast::DeclarationData::InitDeclaratorList(ref list) => {
             show_init_declarator_list(f, list, state)?;
-            state.write_declaration_terminator(f)
         }
         ast::DeclarationData::Precision(ref qual, ref ty) => {
             show_precision_qualifier(f, qual, state)?;
             show_type_specifier(f, ty, state)?;
-            state.write_declaration_terminator(f)
         }
         ast::DeclarationData::Block(ref block) => {
             show_block(f, block, state)?;
-            state.write_declaration_terminator(f)
         }
         ast::DeclarationData::Invariant(ref ident) => {
             f.write_str("invariant")?;
-            f.write_str(" ")?;
+            f.write_char(' ')?;
             show_identifier(f, ident, state)?;
-            state.write_declaration_terminator(f)
         }
     }
+
+    state.write_declaration_terminator(f)
 }
 
 /// Transpile a function_prototype to GLSL
@@ -1285,10 +1514,10 @@ where
     F: Write + ?Sized,
 {
     show_fully_specified_type(f, &fp.ty, state)?;
-    f.write_str(" ")?;
+    f.write_char(' ')?;
     show_identifier(f, &fp.name, state)?;
 
-    f.write_str("(")?;
+    f.write_char('(')?;
 
     if !fp.parameters.is_empty() {
         let mut iter = fp.parameters.iter();
@@ -1296,12 +1525,12 @@ where
         show_function_parameter_declaration(f, first, state)?;
 
         for param in iter {
-            f.write_str(", ")?;
+            state.write_list_separator(f)?;
             show_function_parameter_declaration(f, param, state)?;
         }
     }
 
-    f.write_str(")")
+    f.write_char(')')
 }
 /// Transpile a function_parameter_declaration to GLSL
 pub fn show_function_parameter_declaration<F>(
@@ -1316,7 +1545,7 @@ where
         ast::FunctionParameterDeclarationData::Named(ref qual, ref fpd) => {
             if let Some(ref q) = *qual {
                 show_type_qualifier(f, q, state)?;
-                f.write_str(" ")?;
+                f.write_char(' ')?;
             }
 
             show_function_parameter_declarator(f, fpd, state)
@@ -1324,7 +1553,7 @@ where
         ast::FunctionParameterDeclarationData::Unnamed(ref qual, ref ty) => {
             if let Some(ref q) = *qual {
                 show_type_qualifier(f, q, state)?;
-                f.write_str(" ")?;
+                f.write_char(' ')?;
             }
 
             show_type_specifier(f, ty, state)
@@ -1342,7 +1571,7 @@ where
     F: Write + ?Sized,
 {
     show_type_specifier(f, &p.ty, state)?;
-    f.write_str(" ")?;
+    f.write_char(' ')?;
     show_arrayed_identifier(f, &p.ident, state)
 }
 
@@ -1358,7 +1587,7 @@ where
     show_single_declaration(f, &i.head, state)?;
 
     for decl in &i.tail {
-        f.write_str(", ")?;
+        state.write_list_separator(f)?;
         show_single_declaration_no_type(f, decl, state)?;
     }
 
@@ -1377,7 +1606,7 @@ where
     show_fully_specified_type(f, &d.ty, state)?;
 
     if let Some(ref name) = d.name {
-        f.write_str(" ")?;
+        f.write_char(' ')?;
         show_identifier(f, name, state)?;
     }
 
@@ -1386,7 +1615,7 @@ where
     }
 
     if let Some(ref initializer) = d.initializer {
-        f.write_str(" = ")?;
+        state.write_binary_op(f, "=")?;
         show_initializer(f, initializer, state)?;
     }
 
@@ -1405,7 +1634,7 @@ where
     show_arrayed_identifier(f, &d.ident, state)?;
 
     if let Some(ref initializer) = d.initializer {
-        f.write_str(" = ")?;
+        state.write_binary_op(f, "=")?;
         show_initializer(f, initializer, state)?;
     }
 
@@ -1427,15 +1656,16 @@ where
             let mut iter = list.iter();
             let first = iter.next().unwrap();
 
-            f.write_str("{ ")?;
+            state.enter_initializer_list(f)?;
+
             show_initializer(f, first, state)?;
 
             for ini in iter {
-                f.write_str(", ")?;
+                state.write_list_separator(f)?;
                 show_initializer(f, ini, state)?;
             }
 
-            f.write_str(" }")
+            state.end_initializer_list(f)
         }
     }
 }
@@ -1446,9 +1676,8 @@ where
     F: Write + ?Sized,
 {
     show_type_qualifier(f, &b.qualifier, state)?;
-    f.write_str(" ")?;
+    f.write_char(' ')?;
     show_identifier(f, &b.name, state)?;
-    f.write_str(" ")?;
 
     state.enter_block(f)?;
 
@@ -1477,7 +1706,7 @@ where
     F: Write + ?Sized,
 {
     show_function_prototype(f, &fd.prototype, state)?;
-    f.write_str(" ")?;
+    state.enter_function_definition_statement();
     show_compound_statement(f, &fd.statement, state)?;
     state.flush_line(f)?;
     state.write_function_definition_terminator(f)
@@ -1492,13 +1721,29 @@ pub fn show_compound_statement<F>(
 where
     F: Write + ?Sized,
 {
-    state.enter_block(f)?;
+    // Function definitions are the only symbols that require compound statements
+    let collapse = !state.in_function_definition_statement
+        && state.settings.collapse_single_item_compound_statements
+        && cst.statement_list.len() == 1;
+
+    if collapse {
+        state.enter_collapsed_compound_statement()?;
+    } else {
+        state.enter_compound_statement_block(f)?;
+    }
+
+    // The next statements are no longer a symbol of the function prototype grammar rule
+    state.consume_function_definition_statement();
 
     for st in &cst.statement_list {
         show_statement(f, st, state)?;
     }
 
-    state.exit_block(f)?;
+    if collapse {
+        state.exit_collapsed_compound_statement()?;
+    } else {
+        state.exit_block(f)?;
+    }
 
     Ok(())
 }
@@ -1551,9 +1796,10 @@ pub fn show_selection_statement<F>(
 where
     F: Write + ?Sized,
 {
-    f.write_str("if (")?;
+    f.write_str("if")?;
+    state.write_statement_opening_parenthesis(f)?;
     show_expr(f, &sst.cond, state)?;
-    f.write_str(") ")?;
+    state.write_statement_closing_parenthesis(f)?;
     show_selection_rest_statement(f, &sst.rest, state)
 }
 
@@ -1570,7 +1816,7 @@ where
         ast::SelectionRestStatementData::Statement(ref if_st) => show_statement(f, if_st, state),
         ast::SelectionRestStatementData::Else(ref if_st, ref else_st) => {
             show_statement(f, if_st, state)?;
-            f.write_str(" else ")?;
+            state.write_else(f)?;
             // TODO: This should be configurable instead of relying on show_statement's calling
             // flush_line
             state.consume_newline();
@@ -1588,15 +1834,20 @@ pub fn show_switch_statement<F>(
 where
     F: Write + ?Sized,
 {
-    f.write_str("switch (")?;
+    f.write_str("switch")?;
+    state.write_statement_opening_parenthesis(f)?;
     show_expr(f, &sst.head, state)?;
-    f.write_str(") {\n")?;
+    // Do not call write_statement_closing_parenthesis to maybe save an unexpected
+    // whitespace before the block
+    f.write_char(')')?;
+
+    state.enter_block(f)?;
 
     for st in &sst.body {
         show_statement(f, st, state)?;
     }
 
-    f.write_str("}\n")
+    state.exit_block(f)
 }
 
 /// Transpile a case_label to GLSL
@@ -1612,9 +1863,12 @@ where
         ast::CaseLabelData::Case(ref e) => {
             f.write_str("case ")?;
             show_expr(f, e, state)?;
-            f.write_str(":\n")
+            state.enter_case_label(f)
         }
-        ast::CaseLabelData::Def => f.write_str("default:\n"),
+        ast::CaseLabelData::Def => {
+            f.write_str("default")?;
+            state.enter_case_label(f)
+        }
     }
 }
 
@@ -1629,25 +1883,30 @@ where
 {
     match **ist {
         ast::IterationStatementData::While(ref cond, ref body) => {
-            f.write_str("while (")?;
+            f.write_str("while")?;
+            state.write_statement_opening_parenthesis(f)?;
             show_condition(f, cond, state)?;
-            f.write_str(") ")?;
+            state.write_statement_closing_parenthesis(f)?;
             show_statement(f, body, state)
         }
         ast::IterationStatementData::DoWhile(ref body, ref cond) => {
             f.write_str("do ")?;
             show_statement(f, body, state)?;
-            f.write_str(" while (")?;
+            f.write_str(" while")?;
+            state.write_statement_opening_parenthesis(f)?;
             show_expr(f, cond, state)?;
-            f.write_str(")")?;
+            // Do not call write_statement_closing_parenthesis to maybe save an unexpected
+            // whitespace before the terminator
+            f.write_char(')')?;
             state.write_statement_terminator(f)
         }
         ast::IterationStatementData::For(ref init, ref rest, ref body) => {
-            f.write_str("for (")?;
+            f.write_str("for")?;
+            state.write_statement_opening_parenthesis(f)?;
             show_for_init_statement(f, init, state)?;
             state.flush_space(f)?;
             show_for_rest_statement(f, rest, state)?;
-            f.write_str(") ")?;
+            state.write_statement_closing_parenthesis(f)?;
             show_statement(f, body, state)
         }
     }
@@ -1666,9 +1925,9 @@ where
         ast::ConditionData::Expr(ref e) => show_expr(f, e, state),
         ast::ConditionData::Assignment(ref ty, ref name, ref initializer) => {
             show_fully_specified_type(f, ty, state)?;
-            f.write_str(" ")?;
+            f.write_char(' ')?;
             show_identifier(f, name, state)?;
-            f.write_str(" = ")?;
+            state.write_binary_op(f, "=")?;
             show_initializer(f, initializer, state)
         }
     }
@@ -1689,7 +1948,7 @@ where
                 show_expr(f, e, state)?;
             }
 
-            Ok(())
+            state.write_for_statement_separator(f)
         }
         ast::ForInitStatementData::Declaration(ref d) => show_declaration(f, d, state),
     }
@@ -1708,7 +1967,7 @@ where
         show_condition(f, cond, state)?;
     }
 
-    f.write_str("; ")?;
+    state.write_for_statement_separator(f)?;
 
     if let Some(ref e) = r.post_expr {
         show_expr(f, e, state)?;
@@ -1731,8 +1990,9 @@ where
         ast::JumpStatementData::Break => f.write_str("break")?,
         ast::JumpStatementData::Discard => f.write_str("discard")?,
         ast::JumpStatementData::Return(ref e) => {
-            f.write_str("return ")?;
+            f.write_str("return")?;
             if let Some(e) = e {
+                f.write_char(' ')?;
                 show_expr(f, e, state)?;
             }
         }
@@ -2117,16 +2377,114 @@ mod tests {
     }
 
     #[test]
-    fn test_parentheses() {
+    fn test_single_statement_function_is_not_collapsed() {
         const SRC: &str = r#"vec2 main() {
-float n = 0.;
-float p = 0.;
-float u = vec2(0., 0.);
-if (n-p>0.&&u.y<n&&u.y>p) {
-}
-return u;
+return vec2(0., 0.);
 }
 "#;
+
+        let mut s = String::new();
+        show_function_definition(
+            &mut s,
+            &ast::FunctionDefinition::parse(SRC).unwrap(),
+            &mut FormattingState::from(&FormattingSettings {
+                collapse_single_item_compound_statements: true,
+                ..Default::default()
+            }),
+        )
+        .unwrap();
+
+        let expected = expect![[r#"
+            vec2 main() {
+                return vec2(0., 0.);
+            }
+        "#]];
+
+        expected.assert_eq(&s);
+    }
+
+    #[test]
+    fn test_minifying_statement_collapse() {
+        const SRC: &str = r#"
+            vec2 main() {
+                if (110 == 110) {
+                    return vec2(0., 0.);
+                } else {
+                    return vec2(1., 1.);
+                }
+            }
+        "#;
+
+        let mut s = String::new();
+        show_function_definition(
+            &mut s,
+            &ast::FunctionDefinition::parse(SRC).unwrap(),
+            &mut FormattingState::from(&FormattingSettings {
+                collapse_single_item_compound_statements: true,
+                newline_after_collapsed_statement: false,
+                newline_before_collapsed_statement: false,
+                ..Default::default()
+            }),
+        )
+        .unwrap();
+
+        let expected = expect![[r#"
+            vec2 main() {
+                if (110 == 110) return vec2(0., 0.); else return vec2(1., 1.);
+            }
+        "#]];
+
+        expected.assert_eq(&s);
+    }
+
+    #[test]
+    fn test_pretty_statement_collapse() {
+        const SRC: &str = r#"
+            vec2 main() {
+                if (110 == 110) {
+                    return vec2(0., 0.);
+                } else {
+                    return vec2(1., 1.);
+                }
+            }
+        "#;
+
+        let mut s = String::new();
+        show_function_definition(
+            &mut s,
+            &ast::FunctionDefinition::parse(SRC).unwrap(),
+            &mut FormattingState::from(&FormattingSettings {
+                collapse_single_item_compound_statements: true,
+                statement_terminator: Whitespace::None,
+                newline_after_collapsed_statement: true,
+                newline_before_collapsed_statement: true,
+                ..Default::default()
+            }),
+        )
+        .unwrap();
+
+        let expected = expect![[r#"
+            vec2 main() {
+                if (110 == 110) 
+                    return vec2(0., 0.); else 
+                    return vec2(1., 1.);
+            }
+        "#]];
+
+        expected.assert_eq(&s);
+    }
+
+    #[test]
+    fn test_parentheses() {
+        const SRC: &str = r#"
+            vec2 main() {
+                float n = 0.;
+                float p = 0.;
+                float u = vec2(0., 0.);
+                if (n-p>0.&&u.y<n&&u.y>p) {}
+                return u;
+            }
+        "#;
 
         let mut s = String::new();
         show_function_definition(
@@ -2190,7 +2548,7 @@ return u;
 
     #[test]
     fn block_decl_formatting() {
-        let src = r#"uniform Global { float param; };"#;
+        let src = r#"uniform Global { float param; float param2; };"#;
 
         let mut s = String::new();
         show_external_declaration(
@@ -2203,7 +2561,139 @@ return u;
         let expected = expect![[r#"
             uniform Global {
                 float param;
+                float param2;
             };"#]];
+
+        expected.assert_eq(&s);
+    }
+
+    #[test]
+    fn list_separator_formatting() {
+        let src = r#"void main(vec2 x, vec3 y) {}"#;
+
+        let mut s = String::new();
+        show_function_definition(
+            &mut s,
+            &ast::FunctionDefinition::parse(src).unwrap(),
+            &mut FormattingState::from(&FormattingSettings {
+                space_after_list_separator: false,
+                ..Default::default()
+            }),
+        )
+        .unwrap();
+
+        let expected = expect![[r#"
+            void main(vec2 x,vec3 y) {
+            }
+        "#]];
+
+        expected.assert_eq(&s);
+    }
+
+    static COMPLEX_GLSL_SOURCE: &str = r#"
+        void main(smooth vec2[][] x, vec3 y) {
+            if (var1)
+                return a;
+            else
+                return b;
+
+            if (var2) {
+                return --c;
+            } else if (var3) {
+                {
+                    vec2 x;
+                    vec2 y;
+                }
+
+                return d++;
+            } else {
+                return q;
+            }
+
+            const float e[3] = float[3](5.0, 7.2, 1.1);
+            int f[2] = { 3, 4, };
+
+            switch (x) {
+                case 0:
+                    ++x;
+                    break;
+                case 1:
+                    return;
+                default:
+                    discard;
+            }
+
+            while (x) --x;
+
+            do {
+                --y;
+            } while (y);
+
+            for (x = 0; x < 5; ++x) {
+                continue;
+            }
+        }
+    "#;
+
+    #[test]
+    fn complex_pretty_formatting() {
+        let mut s = String::new();
+        show_function_definition(
+            &mut s,
+            &ast::FunctionDefinition::parse(COMPLEX_GLSL_SOURCE).unwrap(),
+            &mut FormattingState::from(&FormattingSettings::default()),
+        )
+        .unwrap();
+
+        let expected = expect![[r#"
+            void main(smooth vec2[][] x, vec3 y) {
+                if (var1) return a; else return b;
+                if (var2) {
+                    return --c;
+                } else if (var3) {
+                    {
+                        vec2 x;
+                        vec2 y;
+                    }
+                    return d++;
+                } else {
+                    return q;
+                }
+                const float e[3] = float[3](5., 7.2, 1.1);
+                int f[2] = { 3, 4 };
+                switch (x) {
+                    case 0:
+                    ++x;
+                    break;
+                    case 1:
+                    return;
+                    default:
+                    discard;
+                }
+                while (x) --x;
+                do {
+                    --y;
+                } while (y);
+                for (x = 0; x < 5; ++x) {
+                    continue;
+                }
+            }
+        "#]];
+
+        expected.assert_eq(&s);
+    }
+
+    #[test]
+    fn complex_minifying_formatting() {
+        let mut s = String::new();
+        show_function_definition(
+            &mut s,
+            &ast::FunctionDefinition::parse(COMPLEX_GLSL_SOURCE).unwrap(),
+            &mut FormattingState::from(&FormattingSettings::minifying()),
+        )
+        .unwrap();
+
+        let expected = expect!["void main(smooth vec2[][] x,vec3 y){if(var1)return a;else return b;if(var2)return --c;else if(var3){{vec2 x;vec2 y;}return d++;}else return q;const float e[3]=float[3](5.,7.2,1.1);int f[2]={3,4};switch(x){case 0:++x;break;case 1:return;default:discard;}while(x)--x;do --y; while(y);for(x=0;x<5;++x)continue;}"];
 
         expected.assert_eq(&s);
     }

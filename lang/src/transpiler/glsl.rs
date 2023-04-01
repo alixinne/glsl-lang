@@ -221,6 +221,8 @@ pub struct FormattingState<'s> {
     indentation_level: u32,
     new_line_pending: bool,
     in_function_definition_statement: bool,
+    last_flush_line_flushed_line: bool,
+    is_first_external_declaration: bool,
 }
 
 impl<'s> FormattingState<'s> {
@@ -261,6 +263,24 @@ impl<'s> FormattingState<'s> {
         if self.new_line_pending {
             self.write_line(f)?;
             self.new_line_pending = false;
+            self.last_flush_line_flushed_line = true;
+        } else {
+            self.last_flush_line_flushed_line = false;
+        }
+
+        Ok(())
+    }
+
+    /// Makes sure that the next text to be written to the output will be put
+    /// at an empty line, or at a line with only indentation characters.
+    /// Does nothing if the output is already at an empty line
+    pub fn move_to_empty_line<F>(&mut self, f: &mut F) -> std::fmt::Result
+    where
+        F: Write + ?Sized,
+    {
+        if !self.is_first_external_declaration && !self.last_flush_line_flushed_line {
+            self.new_line(true)?;
+            self.write_line(f)?;
         }
 
         Ok(())
@@ -290,6 +310,19 @@ impl<'s> FormattingState<'s> {
         }
 
         self.enter_block_inner(f)
+    }
+
+    /// Enters a new external declaration, flushing pending newlines
+    pub fn enter_external_declaration<F>(&mut self, f: &mut F) -> std::fmt::Result
+    where
+        F: Write + ?Sized,
+    {
+        self.flush_line(f)
+    }
+
+    /// Exits the current external declaration
+    pub fn exit_external_declaration(&mut self) {
+        self.is_first_external_declaration = false;
     }
 
     /// Enter a new block, and update the indentation level
@@ -554,6 +587,8 @@ impl<'s> From<&'s FormattingSettings> for FormattingState<'s> {
             indentation_level: 0,
             new_line_pending: false,
             in_function_definition_statement: false,
+            last_flush_line_flushed_line: false,
+            is_first_external_declaration: true,
         }
     }
 }
@@ -567,6 +602,8 @@ impl Default for FormattingState<'static> {
             indentation_level: 0,
             new_line_pending: false,
             in_function_definition_statement: false,
+            last_flush_line_flushed_line: false,
+            is_first_external_declaration: true,
         }
     }
 }
@@ -2011,22 +2048,29 @@ pub fn show_preprocessor<F>(
 where
     F: Write + ?Sized,
 {
+    // As per spec, preprocessor directives must start on a line prefixed with
+    // zero or more horizontal space characters
+    state.move_to_empty_line(f)?;
+
     match **pp {
-        ast::PreprocessorData::Define(ref pd) => show_preprocessor_define(f, pd, state),
-        ast::PreprocessorData::Else => show_preprocessor_else(f, state),
-        ast::PreprocessorData::ElseIf(ref pei) => show_preprocessor_elseif(f, pei, state),
-        ast::PreprocessorData::EndIf => show_preprocessor_endif(f, state),
-        ast::PreprocessorData::Error(ref pe) => show_preprocessor_error(f, pe, state),
-        ast::PreprocessorData::If(ref pi) => show_preprocessor_if(f, pi, state),
-        ast::PreprocessorData::IfDef(ref pid) => show_preprocessor_ifdef(f, pid, state),
-        ast::PreprocessorData::IfNDef(ref pind) => show_preprocessor_ifndef(f, pind, state),
-        ast::PreprocessorData::Include(ref pi) => show_preprocessor_include(f, pi, state),
-        ast::PreprocessorData::Line(ref pl) => show_preprocessor_line(f, pl, state),
-        ast::PreprocessorData::Pragma(ref pp) => show_preprocessor_pragma(f, pp, state),
-        ast::PreprocessorData::Undef(ref pu) => show_preprocessor_undef(f, pu, state),
-        ast::PreprocessorData::Version(ref pv) => show_preprocessor_version(f, pv, state),
-        ast::PreprocessorData::Extension(ref pe) => show_preprocessor_extension(f, pe, state),
+        ast::PreprocessorData::Define(ref pd) => show_preprocessor_define(f, pd, state)?,
+        ast::PreprocessorData::Else => show_preprocessor_else(f, state)?,
+        ast::PreprocessorData::ElseIf(ref pei) => show_preprocessor_elseif(f, pei, state)?,
+        ast::PreprocessorData::EndIf => show_preprocessor_endif(f, state)?,
+        ast::PreprocessorData::Error(ref pe) => show_preprocessor_error(f, pe, state)?,
+        ast::PreprocessorData::If(ref pi) => show_preprocessor_if(f, pi, state)?,
+        ast::PreprocessorData::IfDef(ref pid) => show_preprocessor_ifdef(f, pid, state)?,
+        ast::PreprocessorData::IfNDef(ref pind) => show_preprocessor_ifndef(f, pind, state)?,
+        ast::PreprocessorData::Include(ref pi) => show_preprocessor_include(f, pi, state)?,
+        ast::PreprocessorData::Line(ref pl) => show_preprocessor_line(f, pl, state)?,
+        ast::PreprocessorData::Pragma(ref pp) => show_preprocessor_pragma(f, pp, state)?,
+        ast::PreprocessorData::Undef(ref pu) => show_preprocessor_undef(f, pu, state)?,
+        ast::PreprocessorData::Version(ref pv) => show_preprocessor_version(f, pv, state)?,
+        ast::PreprocessorData::Extension(ref pe) => show_preprocessor_extension(f, pe, state)?,
     }
+
+    // As per spec, preprocessor directives are terminated by a new line
+    state.new_line(true)
 }
 
 /// Transpile a preprocessor_define to GLSL
@@ -2042,7 +2086,7 @@ where
         ast::PreprocessorDefineData::ObjectLike {
             ref ident,
             ref value,
-        } => writeln!(f, "#define {} {}", ident, value),
+        } => write!(f, "#define {} {}", ident, value),
 
         ast::PreprocessorDefineData::FunctionLike {
             ref ident,
@@ -2059,7 +2103,7 @@ where
                 }
             }
 
-            writeln!(f, ") {}", value)
+            write!(f, ") {}", value)
         }
     }
 }
@@ -2069,7 +2113,7 @@ pub fn show_preprocessor_else<F>(f: &mut F, _: &mut FormattingState<'_>) -> std:
 where
     F: Write + ?Sized,
 {
-    f.write_str("#else\n")
+    f.write_str("#else")
 }
 
 /// Transpile a preprocessor_elseif to GLSL
@@ -2081,7 +2125,7 @@ pub fn show_preprocessor_elseif<F>(
 where
     F: Write + ?Sized,
 {
-    writeln!(f, "#elseif {}", pei.condition)
+    write!(f, "#elif {}", pei.condition)
 }
 
 /// Transpile a preprocessor_error to GLSL
@@ -2093,7 +2137,7 @@ pub fn show_preprocessor_error<F>(
 where
     F: Write + ?Sized,
 {
-    writeln!(f, "#error {}", pe.message)
+    write!(f, "#error {}", pe.message)
 }
 
 /// Transpile a preprocessor_endif<F>(f: &mut F, _: &mut FormattingState to GLSL
@@ -2101,7 +2145,7 @@ pub fn show_preprocessor_endif<F>(f: &mut F, _: &mut FormattingState<'_>) -> std
 where
     F: Write + ?Sized,
 {
-    f.write_str("#endif\n")
+    f.write_str("#endif")
 }
 
 /// Transpile a preprocessor_if to GLSL
@@ -2126,8 +2170,7 @@ where
     F: Write + ?Sized,
 {
     f.write_str("#ifdef ")?;
-    show_identifier(f, &pid.ident, state)?;
-    writeln!(f)
+    show_identifier(f, &pid.ident, state)
 }
 
 /// Transpile a preprocessor_ifndef to GLSL
@@ -2140,8 +2183,7 @@ where
     F: Write + ?Sized,
 {
     f.write_str("#ifndef ")?;
-    show_identifier(f, &pind.ident, state)?;
-    writeln!(f)
+    show_identifier(f, &pind.ident, state)
 }
 
 /// Transpile a preprocessor_include to GLSL
@@ -2154,8 +2196,7 @@ where
     F: Write + ?Sized,
 {
     f.write_str("#include ")?;
-    show_path(f, &pi.path, state)?;
-    writeln!(f)
+    show_path(f, &pi.path, state)
 }
 
 /// Transpile a preprocessor_line to GLSL
@@ -2171,7 +2212,7 @@ where
     if let Some(source_string_number) = pl.source_string_number {
         write!(f, " {}", source_string_number)?;
     }
-    writeln!(f)
+    Ok(())
 }
 
 /// Transpile a preprocessor_pragma to GLSL
@@ -2183,7 +2224,7 @@ pub fn show_preprocessor_pragma<F>(
 where
     F: Write + ?Sized,
 {
-    writeln!(f, "#pragma {}", pp.command)
+    write!(f, "#pragma {}", pp.command)
 }
 
 /// Transpile a preprocessor_undef to GLSL
@@ -2196,8 +2237,7 @@ where
     F: Write + ?Sized,
 {
     f.write_str("#undef ")?;
-    show_identifier(f, &pud.name, state)?;
-    writeln!(f)
+    show_identifier(f, &pud.name, state)
 }
 
 /// Transpile a preprocessor_version to GLSL
@@ -2225,7 +2265,7 @@ where
         }
     }
 
-    writeln!(f)
+    Ok(())
 }
 
 /// Transpile a preprocessor_extension to GLSL
@@ -2265,7 +2305,7 @@ where
         }
     }
 
-    writeln!(f)
+    Ok(())
 }
 
 /// Transpile an external_declaration to GLSL
@@ -2277,15 +2317,19 @@ pub fn show_external_declaration<F>(
 where
     F: Write + ?Sized,
 {
-    state.flush_line(f)?;
+    state.enter_external_declaration(f)?;
 
     match **ed {
-        ast::ExternalDeclarationData::Preprocessor(ref pp) => show_preprocessor(f, pp, state),
+        ast::ExternalDeclarationData::Preprocessor(ref pp) => show_preprocessor(f, pp, state)?,
         ast::ExternalDeclarationData::FunctionDefinition(ref fd) => {
-            show_function_definition(f, fd, state)
+            show_function_definition(f, fd, state)?
         }
-        ast::ExternalDeclarationData::Declaration(ref d) => show_declaration(f, d, state),
+        ast::ExternalDeclarationData::Declaration(ref d) => show_declaration(f, d, state)?,
     }
+
+    state.exit_external_declaration();
+
+    Ok(())
 }
 
 /// Transpile a translation_unit to GLSL
@@ -2314,8 +2358,9 @@ where
 ))]
 mod tests {
     use super::*;
-    use crate::parse::Parsable;
+    use crate::parse::{DefaultLexer, Parsable, ParseError};
     use expect_test::{expect, Expect};
+    use glsl_lang_lexer::HasLexerError;
 
     fn check_expr(src: &str, expected: Expect) {
         let expr = ast::Expr::parse(src).unwrap();
@@ -2327,6 +2372,27 @@ mod tests {
         let mut state = String::new();
         show_expr(&mut state, e, &mut FormattingState::default()).unwrap();
         state
+    }
+
+    #[cfg(not(feature = "lexer-v2-full"))]
+    fn parse_tu_with_preprocessor_directives(
+        source: &str,
+    ) -> Result<ast::TranslationUnit, ParseError<<DefaultLexer as HasLexerError>::Error>> {
+        ast::TranslationUnit::parse(source)
+    }
+
+    #[cfg(feature = "lexer-v2-full")]
+    fn parse_tu_with_preprocessor_directives(
+        source: &str,
+    ) -> Result<ast::TranslationUnit, ParseError<<DefaultLexer as HasLexerError>::Error>> {
+        <ast::TranslationUnit as crate::parse::DefaultParse>::parse_with_options(
+            source,
+            &Default::default(),
+        )
+        .map(|(mut tu, _parse, iter)| {
+            iter.into_directives().inject(&mut tu);
+            tu
+        })
     }
 
     #[test]
@@ -2591,6 +2657,36 @@ return vec2(0., 0.);
         expected.assert_eq(&s);
     }
 
+    #[test]
+    fn preprocessor_directives_are_always_put_in_newlines() {
+        let src = r#"
+            #version 110
+            vec3 u;
+            vec3 v;
+            #pragma "hi"
+            vec3 w;
+        "#;
+
+        let mut s = String::new();
+        show_translation_unit(
+            &mut s,
+            &parse_tu_with_preprocessor_directives(src).unwrap(),
+            FormattingState::from(&FormattingSettings {
+                declaration_terminator: Whitespace::None,
+                ..Default::default()
+            }),
+        )
+        .unwrap();
+
+        let expected = expect![[r#"
+            #version 110
+            vec3 u;vec3 v;
+            #pragma "hi"
+            vec3 w;"#]];
+
+        expected.assert_eq(&s);
+    }
+
     static COMPLEX_GLSL_SOURCE: &str = r#"
         void main(smooth vec2[][] x, vec3 y) {
             if (var1)
@@ -2680,6 +2776,31 @@ return vec2(0., 0.);
                 }
             }
         "#]];
+
+        expected.assert_eq(&s);
+    }
+
+    #[test]
+    fn preprocessor_directives_are_always_put_in_newlines_2() {
+        let src = r#"
+            vec3 u;
+            #version 110
+        "#;
+
+        let mut s = String::new();
+        show_translation_unit(
+            &mut s,
+            &parse_tu_with_preprocessor_directives(src).unwrap(),
+            FormattingState::from(&FormattingSettings {
+                declaration_terminator: Whitespace::None,
+                ..Default::default()
+            }),
+        )
+        .unwrap();
+
+        let expected = expect![[r#"
+            vec3 u;
+            #version 110"#]];
 
         expected.assert_eq(&s);
     }

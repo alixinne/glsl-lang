@@ -1,6 +1,6 @@
 [package]
 name = "lang-util-derive"
-version = "0.4.1"
+version = "0.5.0"
 authors = ["Vincent Tavernier <vince.tavernier@gmail.com>"]
 edition = "2021"
 license = "BSD-3-Clause"

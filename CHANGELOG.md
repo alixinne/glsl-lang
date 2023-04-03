@@ -1,6 +1,29 @@
 ## [Unreleased]
 
 - - -
+## v0.5.0 - 2023-04-03
+#### Bug Fixes
+- **(lexer/v2-full)** fix injecting pp. directives after ext. declarations - (a68c630) - Alejandro González
+- **(transpiler)** put pp. dirs on their own line no matter what the terminators are - (bb30674) - Alejandro González
+- **(transpiler)** correct transpilation of precision qualifiers - (4b059a6) - Alejandro González
+#### Build system
+- pin rust-toolchain version to 1.68.1 - (d79a36f) - vtavernier
+#### Continuous Integration
+- add skip ci to release commits - (eb57693) - vtavernier
+- enable build on next branch - (9cb8c4d) - vtavernier
+- allow clippy::result_large_err - (b8facaa) - vtavernier
+#### Features
+- **(transpiler)** overhaul formatting and customizability - (be86326) - Alejandro González
+#### Miscellaneous Chores
+- **(deps)** update lalrpop to 0.19.9 - (580cdb1) - *vtavernier*
+- **(deps)** replace dependency on `lazy_static` by `once_cell` - (7aa176e) - Alejandro González
+- add CODEOWNERS file - (3f3fad8) - vtavernier
+- fix clippy warnings - (ecf75a8) - vtavernier
+#### Tests
+- fix test build failure when not using the v2-full parser - (5b5092a) - Alejandro González
+
+- - -
+
 ## v0.4.1 - 2022-09-05
 #### Bug Fixes
 - **(glsl-lang-types)** do not generate node type aliases via a derive macro (#9) - (b4c75a1) - Alexandre Bléron

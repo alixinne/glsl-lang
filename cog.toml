@@ -7,6 +7,7 @@ pre_bump_hooks = [
   "git add */Cargo.toml",
 ]
 post_bump_hooks = [
+  "git commit --amend --no-edit -m \"chore(version): v{{version}} [skip ci]\"",
   "git push",
   "git push origin v{{version}}",
   "./ci/release.sh",

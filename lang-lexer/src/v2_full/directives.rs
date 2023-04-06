@@ -171,7 +171,11 @@ impl Directives {
                 let current_directive = &self.directives[directive_idx];
                 let span = current_directive.text_range();
 
-                if span.end().offset <= actual_start.offset {
+                // For directives in #include'd files, a previous #include directive event prevents
+                // inserting them too soon in the top-level file
+                if span.end().offset <= actual_start.offset
+                    || actual_start.source_id != span.source_id()
+                {
                     if let Some(declaration) =
                         Self::get_declaration(current_directive, &mut highest_version)
                     {

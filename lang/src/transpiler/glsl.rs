@@ -1325,7 +1325,9 @@ where
                 f.write_char(')')?;
             }
 
-            show_expr(f, a, state)
+            f.write_char('[')?;
+            show_expr(f, a, state)?;
+            f.write_char(']')
         }
         ast::ExprData::FunCall(ref fun, ref args) => {
             show_function_identifier(f, fun, state)?;
@@ -2441,6 +2443,11 @@ mod tests {
     fn dot_parentheses() {
         check_expr("a.x", expect![["a.x"]]);
         check_expr("(a + b).x", expect![[r#"(a + b).x"#]]);
+    }
+
+    #[test]
+    fn array_indexes() {
+        check_expr("arr[0][0]", expect![["arr[0][0]"]]);
     }
 
     #[test]

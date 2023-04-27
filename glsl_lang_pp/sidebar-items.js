@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"macro":[["ext_name",""],["keyword",""],["type_name",""]],"mod":[["exts",""],["last","Last preprocessing stage definitions"],["lexer",""],["parser",""],["processor",""],["types",""],["util",""]]};
+window.SIDEBAR_ITEMS = {"macro":["ext_name","keyword","type_name"],"mod":["exts","last","lexer","parser","processor","types","util"]};

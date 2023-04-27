@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["LexerPosition","A position in the lexer’s input"],["NodeSpan","Span information for a node, constructed from a pair of LexerPositions"]]};
+window.SIDEBAR_ITEMS = {"struct":["LexerPosition","NodeSpan"]};

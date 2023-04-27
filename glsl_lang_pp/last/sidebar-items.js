@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["Event",""],["TokenState",""]],"mod":[["token",""]],"struct":[["Tokenizer",""],["TypeTable",""]],"trait":[["LocatedIterator",""],["MaybeToken",""]]};
+window.SIDEBAR_ITEMS = {"enum":["Event","TokenState"],"mod":["token"],"struct":["Tokenizer","TypeTable"],"trait":["LocatedIterator","MaybeToken"]};

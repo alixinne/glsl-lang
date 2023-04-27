@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":[["content",""],["display",""]],"struct":[["Node","A syntax node with span information"],["NodeDisplayWrapper","A wrapper for a syntax node to be displayed"]],"trait":[["NodeContent","Trait for AST node contents."],["NodeContentDisplay","Trait for displaying an AST node’s content"],["NodeDisplay","Trait for displaying a syntax node"]]};
+window.SIDEBAR_ITEMS = {"mod":["content","display"],"struct":["Node","NodeDisplayWrapper"],"trait":["NodeContent","NodeContentDisplay","NodeDisplay"]};

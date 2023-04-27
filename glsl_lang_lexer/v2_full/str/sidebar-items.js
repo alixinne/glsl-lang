@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["Lexer","glsl-lang-pp memory lexer"],["LexerIterator","glsl-lang-pp memory lexer iterator"]]};
+window.SIDEBAR_ITEMS = {"struct":["Lexer","LexerIterator"]};

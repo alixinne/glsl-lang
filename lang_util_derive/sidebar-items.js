@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"derive":[["NodeContentDisplay","Derives an implementation of `NodeContentDisplay` for the given type."],["Token","Derive `lang_util::error::Token` for an enum usable with Logos"]],"mod":[["node_display",""],["token",""]]};
+window.SIDEBAR_ITEMS = {"derive":["NodeContentDisplay","Token"],"mod":["node_display","token"],"static":["_DECLS"]};

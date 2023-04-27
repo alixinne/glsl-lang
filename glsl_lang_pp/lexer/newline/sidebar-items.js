@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["NewlineTokenKind","Type of token for line splitting"]],"struct":[["NewlineSplitter","Basic lexer to split input lines according to the GLSL spec"]],"type":[["NewlineToken","First stage token with location"]]};
+window.SIDEBAR_ITEMS = {"enum":["NewlineTokenKind"],"struct":["NewlineSplitter"],"type":["NewlineToken"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["IncludeMode","Operating mode for #include directives"]],"mod":[["definition",""],["event",""],["expand",""],["expr",""],["fs",""],["nodes",""],["str",""]],"struct":[["ProcessorState","Current state of the preprocessor"],["ProcessorStateBuilder",""]]};
+window.SIDEBAR_ITEMS = {"enum":["IncludeMode"],"mod":["definition","event","expand","expr","fs","nodes","str"],"struct":["ProcessorState","ProcessorStateBuilder"]};

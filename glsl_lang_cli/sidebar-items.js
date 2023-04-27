@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["main","CLI entry point"],["output_glsl",""],["output_json",""],["output_text",""],["parse_tu",""]],"struct":[["Opts","glsl-lang command-line interface"],["ParseError",""]]};
+window.SIDEBAR_ITEMS = {"fn":["main","output_glsl","output_json","output_text","parse_tu"],"struct":["Opts","ParseError"]};

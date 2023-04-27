@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"macro":[["impl_parsable_statement",""]],"trait":[["Extractable","Part of the syntax tree that can be extracted from a parent tree"],["Parsable","A parsable is something we can parse either directly, or embedded in some other syntax structure."]]};
+window.SIDEBAR_ITEMS = {"macro":["impl_parsable_statement"],"trait":["Extractable","Parsable"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["LineMap",""]]};
+window.SIDEBAR_ITEMS = {"struct":["LineMap"]};

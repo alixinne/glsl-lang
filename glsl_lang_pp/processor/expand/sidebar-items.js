@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["ExpandEvent",""],["ExpandState",""],["HandleNodeResult",""],["LocationString",""]],"mod":[["if_stack",""]],"struct":[["ExpandLocation",""],["ExpandOne",""]]};
+window.SIDEBAR_ITEMS = {"enum":["ExpandEvent","ExpandState","HandleNodeResult","LocationString"],"mod":["if_stack"],"struct":["ExpandLocation","ExpandOne"]};

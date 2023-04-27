@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["Node","A syntax node with span information"]],"trait":[["NodeContent","Trait for AST node contents."]]};
+window.SIDEBAR_ITEMS = {"struct":["Node"],"trait":["NodeContent"]};

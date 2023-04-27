@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["Paths","Test output manager"]],"trait":[["PathKey","Key for differentiating between kinds of test outputs"]]};
+window.SIDEBAR_ITEMS = {"enum":["Mode"],"struct":["Paths"],"trait":["PathKey"]};

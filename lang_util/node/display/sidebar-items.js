@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"macro":[["forward_display",""]],"struct":[["NodeDisplayWrapper","A wrapper for a syntax node to be displayed"]],"trait":[["NodeContentDisplay","Trait for displaying an AST node’s content"],["NodeDisplay","Trait for displaying a syntax node"]]};
+window.SIDEBAR_ITEMS = {"macro":["forward_display"],"struct":["NodeDisplayWrapper"],"trait":["NodeContentDisplay","NodeDisplay"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":[["glsl","A GLSL450/GLSL460 transpiler that takes a syntax tree and writes it as a plain raw GLSL [`String`]."]]};
+window.SIDEBAR_ITEMS = {"mod":["glsl"]};

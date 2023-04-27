@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["PathType",""]],"struct":[["ParsedPath",""]]};
+window.SIDEBAR_ITEMS = {"enum":["PathType"],"struct":["ParsedPath"]};

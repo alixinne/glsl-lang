@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"constant":[["BUILTIN_BIT",""],["MAX_VALUE",""]],"struct":[["FileId","Unique file identifier"]]};
+window.SIDEBAR_ITEMS = {"constant":["BUILTIN_BIT","MAX_VALUE"],"struct":["FileId"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":[["keywords",""],["path",""],["token",""],["type_names",""]]};
+window.SIDEBAR_ITEMS = {"mod":["keywords","path","token","type_names"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":[["names",""]],"static":[["DEFAULT_REGISTRY",""],["EMPTY_REGISTRY",""]],"struct":[["ExtensionSpec",""],["Registry",""]]};
+window.SIDEBAR_ITEMS = {"mod":["names"],"static":["DEFAULT_REGISTRY","EMPTY_REGISTRY"],"struct":["ExtensionSpec","Registry"]};

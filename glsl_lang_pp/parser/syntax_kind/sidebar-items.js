@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["SyntaxKind",""]]};
+window.SIDEBAR_ITEMS = {"enum":["SyntaxKind"]};

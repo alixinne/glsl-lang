@@ -1,6 +1,14 @@
 ## [Unreleased]
 
 - - -
+## v0.5.1 - 2023-04-27
+#### Bug Fixes
+- **(transpiler)** add missing brackets for array expressions - (51a7729) - Alejandro González
+#### Miscellaneous Chores
+- **(version)** v0.5.0 [skip ci] - (881c0e4) - glsl-lang
+
+- - -
+
 ## v0.5.0 - 2023-04-03
 #### Bug Fixes
 - **(lexer/v2-full)** fix injecting pp. directives after ext. declarations - (a68c630) - Alejandro González

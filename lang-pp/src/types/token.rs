@@ -1983,7 +1983,7 @@ impl Token {
     }
 
     fn strip_suffix(text: &str) -> (bool, &str) {
-        if let Some(stripped) = text.strip_suffix('u').or_else(|| text.strip_suffix('U')) {
+        if let Some(stripped) = text.strip_suffix(&['u', 'U']) {
             (true, stripped)
         } else {
             (false, text)
@@ -2025,14 +2025,13 @@ impl Token {
             // Floating-point constant
 
             if let Some(double) = text.strip_suffix("lf").or_else(|| text.strip_suffix("LF")) {
-                lexical::parse(double)
+                double
+                    .parse()
                     .map(DOUBLE_CONST)
                     .map_err(|_| ErrorKind::InvalidDoubleLiteral)
-            } else if let Some(float) = text
-                .strip_suffix('f')
-                .or_else(|| text.strip_suffix('F').or(Some(text)))
-            {
-                lexical::parse(float)
+            } else if let Some(float) = text.strip_suffix(&['f', 'F']).or(Some(text)) {
+                float
+                    .parse()
                     .map(FLOAT_CONST)
                     .map_err(|_| ErrorKind::InvalidFloatLiteral)
             } else {

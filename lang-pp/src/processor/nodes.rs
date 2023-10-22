@@ -10,7 +10,10 @@ use crate::{
     exts::names::ExtNameAtom,
     parser::{SyntaxKind::*, SyntaxNode, SyntaxToken},
     processor::expr::{EvalResult, ExprEvaluator},
-    types::path::{ParsedPath, PathType},
+    types::{
+        path::{ParsedPath, PathType},
+        Token,
+    },
     util::Unescaped,
 };
 
@@ -123,7 +126,7 @@ pub enum VersionError {
     #[error("missing version number in #version directive")]
     MissingVersionNumber,
     #[error("invalid version number in #version directive")]
-    InvalidVersionNumber(#[from] lexical::Error),
+    InvalidVersionNumber { version_number: String },
     #[error("unsupported version number in #version directive")]
     UnsupportedVersionNumber,
     #[error("invalid version profile")]
@@ -143,7 +146,17 @@ impl TryFrom<(FileId, SyntaxNode)> for Version {
 
     fn try_from((_file_id, value): (FileId, SyntaxNode)) -> Result<Self, Self::Error> {
         // Parse version number
-        // TODO: Replace use of lexical with glsl parser
+        // The GLSL spec refers to the ISO/IEC 14882:1998 (C++) standard for preprocessor
+        // directives, and mentions that #version, due to it "following the same convention"
+        // as __VERSION__, is "a decimal integer". The cited standard, section 2.9
+        // "Preprocessing numbers", says that such numbers "lexically include all integral
+        // literal tokens". These correspond to the "integer-constant" (for the GLSL grammar)
+        // or "integer-literal" (for the C++ grammar) grammar symbols. But, because #version
+        // is a decimal integer, it is understood that the only "integer-constant" production
+        // rule we have to accept is the one for decimal constants, which are sequences of
+        // decimal digits beginning with a nonzero digit and followed by an optional
+        // "integer-suffix" (u or U character). This is a subset of what we can parse as
+        // (U)INT_CONST tokens, but other implementations are likely to observe Postel's law
         let version_number: u16 = value
             .children()
             .find_map(|token| {
@@ -155,8 +168,20 @@ impl TryFrom<(FileId, SyntaxNode)> for Version {
             })
             .ok_or(Self::Error::MissingVersionNumber)
             .and_then(|token| {
-                lexical::parse(Unescaped::new(token.text()).to_string().as_ref())
-                    .map_err(Into::into)
+                let token_string = Unescaped::new(token.text()).to_string();
+                match Token::parse_digits(&token_string) {
+                    Token::INT_CONST(version_number)
+                        if version_number >= 0 && version_number <= u16::MAX as i32 =>
+                    {
+                        Ok(version_number as u16)
+                    }
+                    Token::UINT_CONST(version_number) if version_number <= u16::MAX as u32 => {
+                        Ok(version_number as u16)
+                    }
+                    _ => Err(Self::Error::InvalidVersionNumber {
+                        version_number: token_string.into_owned(),
+                    }),
+                }
             })?;
 
         // Check the version number is supported

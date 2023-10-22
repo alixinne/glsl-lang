@@ -2,6 +2,7 @@ use std::iter::Peekable;
 
 use crate::{
     parser::SyntaxKind::{self, *},
+    types::Token,
     util::Unescaped,
 };
 
@@ -66,8 +67,12 @@ impl<'i, I: Iterator<Item = &'i OutputToken>> ExprEvaluator<'i, I> {
             DIGITS => {
                 // Try to parse the value before bumping. If parsing fails, we'll return the DIGITS
                 // token unparsed
-                if let Ok(value) = lexical::parse(Unescaped::new(token.text()).to_string().as_ref())
-                {
+                let value = match Token::parse_digits(&Unescaped::new(token.text()).to_string()) {
+                    Token::UINT_CONST(value) if value <= i32::MAX as u32 => Some(value as i32),
+                    Token::INT_CONST(value) => Some(value),
+                    _ => None,
+                };
+                if let Some(value) = value {
                     self.bump();
                     return Some(Ok(value));
                 }

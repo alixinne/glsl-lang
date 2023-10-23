@@ -1521,10 +1521,7 @@ fn tokenize_jump_statement(j: &ast::JumpStatement) -> TokenStream {
         ast::JumpStatementData::Break => quote! { glsl_lang::ast::JumpStatementData::Break },
         ast::JumpStatementData::Discard => quote! { glsl_lang::ast::JumpStatementData::Discard },
         ast::JumpStatementData::Return(ref e) => {
-            let e = e
-                .as_ref()
-                .map(|e| (&tokenize_expr(e)).quote())
-                .quote();
+            let e = e.as_ref().map(|e| (&tokenize_expr(e)).quote()).quote();
             quote! { glsl_lang::ast::JumpStatementData::Return(#e) }
         }
     };

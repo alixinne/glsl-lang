@@ -45,6 +45,7 @@ pub trait HasParser: Sized {
 }
 
 /// GLSL language parsing functions
+#[allow(clippy::result_large_err)]
 pub trait Parse: HasParser {
     /// Parse the input source
     fn parse<'i, L: LangLexer<'i>>(

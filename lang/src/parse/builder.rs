@@ -50,6 +50,7 @@ impl<'i, 'o, 'c, 'p, L: LangLexer<'i>, T: HasParser> ParseBuilder<'i, 'o, 'c, 'p
     }
 
     /// Execute the parsing operation
+    #[allow(clippy::result_large_err)]
     fn parse_source(
         source: L::Input,
         opts: Option<&'o ParseOptions>,
@@ -93,6 +94,7 @@ impl<'i, 'o, 'c, 'p, L: LangLexer<'i>, T: HasParser> ParseBuilder<'i, 'o, 'c, 'p
     }
 
     /// Execute the parsing operation
+    #[allow(clippy::result_large_err)]
     pub fn parse(self) -> ParseResult<L::Iter, <L::Iter as HasLexerError>::Error, T> {
         Self::parse_source(
             self.source,
@@ -104,6 +106,7 @@ impl<'i, 'o, 'c, 'p, L: LangLexer<'i>, T: HasParser> ParseBuilder<'i, 'o, 'c, 'p
     }
 
     /// Execute the parsing operation, and extract the wanted node
+    #[allow(clippy::result_large_err)]
     pub fn extract<U: Extractable<T>>(
         self,
     ) -> ParseResult<L::Iter, <L::Iter as HasLexerError>::Error, Option<U>> {

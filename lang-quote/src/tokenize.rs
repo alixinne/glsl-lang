@@ -718,7 +718,7 @@ fn tokenize_array_spec_dim(a: &ast::ArraySpecifierDimension) -> TokenStream {
             quote! { glsl_lang::ast::ArraySpecifierDimensionData::Unsized }
         }
         ast::ArraySpecifierDimensionData::ExplicitlySized(ref e) => {
-            let expr = Box::new(tokenize_expr(e)).quote();
+            let expr = (&tokenize_expr(e)).quote();
             quote! { glsl_lang::ast::ArraySpecifierDimensionData::ExplicitlySized(#expr) }
         }
     };
@@ -877,10 +877,7 @@ fn tokenize_layout_qualifier_spec(l: &ast::LayoutQualifierSpec) -> TokenStream {
     let l = match l.content {
         ast::LayoutQualifierSpecData::Identifier(ref i, ref e) => {
             let i = tokenize_identifier(i);
-            let expr = e
-                .as_ref()
-                .map(|e| Box::new(tokenize_expr(e)).quote())
-                .quote();
+            let expr = e.as_ref().map(|e| (&tokenize_expr(e)).quote()).quote();
             quote! { glsl_lang::ast::LayoutQualifierSpecData::Identifier(#i, #expr) }
         }
 
@@ -948,33 +945,33 @@ fn tokenize_expr(expr: &ast::Expr) -> TokenStream {
 
         ast::ExprData::Unary(ref op, ref e) => {
             let op = tokenize_unary_op(op);
-            let e = Box::new(tokenize_expr(e)).quote();
+            let e = (&tokenize_expr(e)).quote();
             quote! { glsl_lang::ast::ExprData::Unary(#op, #e) }
         }
 
         ast::ExprData::Binary(ref op, ref l, ref r) => {
             let op = tokenize_binary_op(op);
-            let l = Box::new(tokenize_expr(l)).quote();
-            let r = Box::new(tokenize_expr(r)).quote();
+            let l = (&tokenize_expr(l)).quote();
+            let r = (&tokenize_expr(r)).quote();
             quote! { glsl_lang::ast::ExprData::Binary(#op, #l, #r) }
         }
 
         ast::ExprData::Ternary(ref c, ref s, ref e) => {
-            let c = Box::new(tokenize_expr(c)).quote();
-            let s = Box::new(tokenize_expr(s)).quote();
-            let e = Box::new(tokenize_expr(e)).quote();
+            let c = (&tokenize_expr(c)).quote();
+            let s = (&tokenize_expr(s)).quote();
+            let e = (&tokenize_expr(e)).quote();
             quote! { glsl_lang::ast::ExprData::Ternary(#c, #s, #e) }
         }
 
         ast::ExprData::Assignment(ref v, ref op, ref e) => {
-            let v = Box::new(tokenize_expr(v)).quote();
+            let v = (&tokenize_expr(v)).quote();
             let op = tokenize_assignment_op(op);
-            let e = Box::new(tokenize_expr(e)).quote();
+            let e = (&tokenize_expr(e)).quote();
             quote! { glsl_lang::ast::ExprData::Assignment(#v, #op, #e) }
         }
 
         ast::ExprData::Bracket(ref e, ref a) => {
-            let e = Box::new(tokenize_expr(e)).quote();
+            let e = (&tokenize_expr(e)).quote();
             let a = tokenize_expr(a);
             quote! { glsl_lang::ast::ExprData::Bracket(#e, #a) }
         }
@@ -986,25 +983,25 @@ fn tokenize_expr(expr: &ast::Expr) -> TokenStream {
         }
 
         ast::ExprData::Dot(ref e, ref i) => {
-            let e = Box::new(tokenize_expr(e)).quote();
+            let e = (&tokenize_expr(e)).quote();
             let i = tokenize_identifier(i);
 
             quote! { glsl_lang::ast::ExprData::Dot(#e, #i) }
         }
 
         ast::ExprData::PostInc(ref e) => {
-            let e = Box::new(tokenize_expr(e)).quote();
+            let e = (&tokenize_expr(e)).quote();
             quote! { glsl_lang::ast::ExprData::PostInc(#e) }
         }
 
         ast::ExprData::PostDec(ref e) => {
-            let e = Box::new(tokenize_expr(e)).quote();
+            let e = (&tokenize_expr(e)).quote();
             quote! { glsl_lang::ast::ExprData::PostDec(#e) }
         }
 
         ast::ExprData::Comma(ref a, ref b) => {
-            let a = Box::new(tokenize_expr(a)).quote();
-            let b = Box::new(tokenize_expr(b)).quote();
+            let a = (&tokenize_expr(a)).quote();
+            let b = (&tokenize_expr(b)).quote();
             quote! { glsl_lang::ast::ExprData::Comma(#a, #b) }
         }
     };
@@ -1080,12 +1077,12 @@ fn tokenize_function_identifier(i: &ast::FunIdentifier) -> TokenStream {
     let span = tokenize_span(&i.span);
     let i = match i.content {
         ast::FunIdentifierData::TypeSpecifier(ref n) => {
-            let n = Box::new(tokenize_type_specifier(n)).quote();
+            let n = (&tokenize_type_specifier(n)).quote();
             quote! { glsl_lang::ast::FunIdentifierData::TypeSpecifier(#n) }
         }
 
         ast::FunIdentifierData::Expr(ref e) => {
-            let e = Box::new(tokenize_expr(e)).quote();
+            let e = (&tokenize_expr(e)).quote();
             quote! { glsl_lang::ast::FunIdentifierData::Expr(#e) }
         }
     };
@@ -1242,7 +1239,7 @@ fn tokenize_initializer(i: &ast::Initializer) -> TokenStream {
     let span = tokenize_span(&i.span);
     let i = match i.content {
         ast::InitializerData::Simple(ref e) => {
-            let e = Box::new(tokenize_expr(e)).quote();
+            let e = (&tokenize_expr(e)).quote();
             quote! { glsl_lang::ast::InitializerData::Simple(#e) }
         }
 
@@ -1370,7 +1367,7 @@ fn tokenize_expr_statement(est: &ast::ExprStatement) -> TokenStream {
 fn tokenize_selection_statement(sst: &ast::SelectionStatement) -> TokenStream {
     let span = tokenize_span(&sst.span);
     let sst = {
-        let cond = Box::new(tokenize_expr(&sst.cond)).quote();
+        let cond = (&tokenize_expr(&sst.cond)).quote();
         let rest = tokenize_selection_rest_statement(&sst.rest);
 
         quote! {
@@ -1388,13 +1385,13 @@ fn tokenize_selection_rest_statement(sst: &ast::SelectionRestStatement) -> Token
     let span = tokenize_span(&sst.span);
     let sst = match sst.content {
         ast::SelectionRestStatementData::Statement(ref if_st) => {
-            let e = Box::new(tokenize_statement(if_st)).quote();
+            let e = (&tokenize_statement(if_st)).quote();
             quote! { glsl_lang::ast::SelectionRestStatementData::Statement(#e) }
         }
 
         ast::SelectionRestStatementData::Else(ref if_st, ref else_st) => {
-            let if_st = Box::new(tokenize_statement(if_st)).quote();
-            let else_st = Box::new(tokenize_statement(else_st)).quote();
+            let if_st = (&tokenize_statement(if_st)).quote();
+            let else_st = (&tokenize_statement(else_st)).quote();
             quote! { glsl_lang::ast::SelectionRestStatementData::Else(#if_st, #else_st) }
         }
     };
@@ -1405,7 +1402,7 @@ fn tokenize_selection_rest_statement(sst: &ast::SelectionRestStatement) -> Token
 fn tokenize_switch_statement(sst: &ast::SwitchStatement) -> TokenStream {
     let span = tokenize_span(&sst.span);
     let sst = {
-        let head = Box::new(tokenize_expr(&sst.head)).quote();
+        let head = (&tokenize_expr(&sst.head)).quote();
         let body = sst.body.iter().map(tokenize_statement);
 
         quote! {
@@ -1423,7 +1420,7 @@ fn tokenize_case_label(cl: &ast::CaseLabel) -> TokenStream {
     let span = tokenize_span(&cl.span);
     let cl = match cl.content {
         ast::CaseLabelData::Case(ref e) => {
-            let e = Box::new(tokenize_expr(e)).quote();
+            let e = (&tokenize_expr(e)).quote();
             quote! { glsl_lang::ast::CaseLabelData::Case(#e) }
         }
 
@@ -1438,20 +1435,20 @@ fn tokenize_iteration_statement(ist: &ast::IterationStatement) -> TokenStream {
     let ist = match ist.content {
         ast::IterationStatementData::While(ref cond, ref body) => {
             let cond = tokenize_condition(cond);
-            let body = Box::new(tokenize_statement(body)).quote();
+            let body = (&tokenize_statement(body)).quote();
             quote! { glsl_lang::ast::IterationStatementData::While(#cond, #body) }
         }
 
         ast::IterationStatementData::DoWhile(ref body, ref cond) => {
-            let body = Box::new(tokenize_statement(body)).quote();
-            let cond = Box::new(tokenize_expr(cond)).quote();
+            let body = (&tokenize_statement(body)).quote();
+            let cond = (&tokenize_expr(cond)).quote();
             quote! { glsl_lang::ast::IterationStatementData::DoWhile(#body, #cond) }
         }
 
         ast::IterationStatementData::For(ref init, ref rest, ref body) => {
             let init = tokenize_for_init_statement(init);
             let rest = tokenize_for_rest_statement(rest);
-            let body = Box::new(tokenize_statement(body)).quote();
+            let body = (&tokenize_statement(body)).quote();
             quote! { glsl_lang::ast::IterationStatementData::For(#init, #rest, #body) }
         }
     };
@@ -1463,12 +1460,12 @@ fn tokenize_condition(c: &ast::Condition) -> TokenStream {
     let span = tokenize_span(&c.span);
     let c = match c.content {
         ast::ConditionData::Expr(ref e) => {
-            let e = Box::new(tokenize_expr(e)).quote();
+            let e = (&tokenize_expr(e)).quote();
             quote! { glsl_lang::ast::ConditionData::Expr(#e) }
         }
 
         ast::ConditionData::Assignment(ref ty, ref name, ref initializer) => {
-            let ty = Box::new(tokenize_fully_specified_type(ty)).quote();
+            let ty = (&tokenize_fully_specified_type(ty)).quote();
             let name = tokenize_identifier(name);
             let initializer = tokenize_initializer(initializer);
 
@@ -1488,7 +1485,7 @@ fn tokenize_for_init_statement(i: &ast::ForInitStatement) -> TokenStream {
         }
 
         ast::ForInitStatementData::Declaration(ref d) => {
-            let d = Box::new(tokenize_declaration(d)).quote();
+            let d = (&tokenize_declaration(d)).quote();
             quote! { glsl_lang::ast::ForInitStatementData::Declaration(#d) }
         }
     };
@@ -1503,7 +1500,7 @@ fn tokenize_for_rest_statement(r: &ast::ForRestStatement) -> TokenStream {
         let post = r
             .post_expr
             .as_ref()
-            .map(|e| Box::new(tokenize_expr(e)).quote())
+            .map(|e| (&tokenize_expr(e)).quote())
             .quote();
 
         quote! {
@@ -1526,7 +1523,7 @@ fn tokenize_jump_statement(j: &ast::JumpStatement) -> TokenStream {
         ast::JumpStatementData::Return(ref e) => {
             let e = e
                 .as_ref()
-                .map(|e| Box::new(tokenize_expr(e)).quote())
+                .map(|e| (&tokenize_expr(e)).quote())
                 .quote();
             quote! { glsl_lang::ast::JumpStatementData::Return(#e) }
         }

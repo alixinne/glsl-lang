@@ -35,9 +35,9 @@ where
     }
 }
 
-impl<T> Quoted for Box<T>
+impl<T> Quoted for &T
 where
-    T: ToTokens,
+    T: ToTokens + ?Sized,
 {
     fn quote(&self) -> TokenStream {
         quote! { Box::new(#self) }

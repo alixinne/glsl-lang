@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"constant":["ASSERT"],"enum":["ExpectAny"],"mod":["ast","error","lang","syntax","syntax_kind"],"struct":["Parser","ParserRun"],"type":["SyntaxBitset","SyntaxNode","SyntaxToken"]};
+window.SIDEBAR_ITEMS = {"enum":["ExpectAny"],"mod":["ast","error","lang","syntax","syntax_kind"],"struct":["Parser","ParserRun"],"type":["SyntaxBitset","SyntaxNode","SyntaxToken"]};

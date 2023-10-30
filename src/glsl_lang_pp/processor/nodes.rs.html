@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lang-pp/src/processor/nodes.rs`."><title>nodes.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-c4dbdcde0fbd8430.css" id="mainThemeStyle"><link rel="stylesheet" id="themeStyle" href="../../../static.files/light-db279b6232be9c13.css"><link rel="stylesheet" disabled href="../../../static.files/dark-cf923f49f397b216.css"><link rel="stylesheet" disabled href="../../../static.files/ayu-be46fdc453a55015.css"><script src="../../../static.files/storage-3891ce972e3a2bf8.js"></script><script defer src="../../../static.files/source-script-1b95b7cca98b26e5.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../static.files/main-98a684e84ae5b08b.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../glsl_lang_pp/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lang-pp/src/processor/nodes.rs`."><title>nodes.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-cb6f1f67f1bcd037.css" id="mainThemeStyle"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="glsl_lang_pp" data-themes="" data-resource-suffix="" data-rustdoc-version="1.73.0 (cc66ad468 2023-10-03)" data-channel="1.73.0" data-search-js="search-6dfdfced5eff6596.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-1596385f77d47ef2.css" data-theme-dark-css="dark-0a43001d3fc2282c.css" data-theme-ayu-css="ayu-fd19013d6ce078bf.css" ><script src="../../../static.files/storage-db41da1a38ea3cb8.js"></script><script defer src="../../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-0795b7d26be81095.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../static.files/light-1596385f77d47ef2.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../static.files/dark-0a43001d3fc2282c.css"><link rel="stylesheet" href="../../../static.files/noscript-cffde32267a19fd6.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../glsl_lang_pp/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -1221,7 +1221,32 @@
 <a href="#1221" id="1221">1221</a>
 <a href="#1222" id="1222">1222</a>
 <a href="#1223" id="1223">1223</a>
-</pre><pre class="rust"><code><span class="kw">use </span>std::{borrow::Cow, convert::TryFrom, str::FromStr};
+<a href="#1224" id="1224">1224</a>
+<a href="#1225" id="1225">1225</a>
+<a href="#1226" id="1226">1226</a>
+<a href="#1227" id="1227">1227</a>
+<a href="#1228" id="1228">1228</a>
+<a href="#1229" id="1229">1229</a>
+<a href="#1230" id="1230">1230</a>
+<a href="#1231" id="1231">1231</a>
+<a href="#1232" id="1232">1232</a>
+<a href="#1233" id="1233">1233</a>
+<a href="#1234" id="1234">1234</a>
+<a href="#1235" id="1235">1235</a>
+<a href="#1236" id="1236">1236</a>
+<a href="#1237" id="1237">1237</a>
+<a href="#1238" id="1238">1238</a>
+<a href="#1239" id="1239">1239</a>
+<a href="#1240" id="1240">1240</a>
+<a href="#1241" id="1241">1241</a>
+<a href="#1242" id="1242">1242</a>
+<a href="#1243" id="1243">1243</a>
+<a href="#1244" id="1244">1244</a>
+<a href="#1245" id="1245">1245</a>
+<a href="#1246" id="1246">1246</a>
+<a href="#1247" id="1247">1247</a>
+<a href="#1248" id="1248">1248</a>
+</pre></div><pre class="rust"><code><span class="kw">use </span>std::{borrow::Cow, convert::TryFrom, str::FromStr};
 
 <span class="kw">use </span>arrayvec::ArrayVec;
 <span class="kw">use </span>rowan::NodeOrToken;
@@ -1233,7 +1258,10 @@
     exts::names::ExtNameAtom,
     parser::{SyntaxKind::<span class="kw-2">*</span>, SyntaxNode, SyntaxToken},
     processor::expr::{EvalResult, ExprEvaluator},
-    types::path::{ParsedPath, PathType},
+    types::{
+        path::{ParsedPath, PathType},
+        Token,
+    },
     util::Unescaped,
 };
 
@@ -1346,7 +1374,7 @@
     <span class="attr">#[error(<span class="string">&quot;missing version number in #version directive&quot;</span>)]
     </span>MissingVersionNumber,
     <span class="attr">#[error(<span class="string">&quot;invalid version number in #version directive&quot;</span>)]
-    </span>InvalidVersionNumber(<span class="attr">#[from] </span>lexical::Error),
+    </span>InvalidVersionNumber { version_number: String },
     <span class="attr">#[error(<span class="string">&quot;unsupported version number in #version directive&quot;</span>)]
     </span>UnsupportedVersionNumber,
     <span class="attr">#[error(<span class="string">&quot;invalid version profile&quot;</span>)]
@@ -1366,7 +1394,17 @@
 
     <span class="kw">fn </span>try_from((_file_id, value): (FileId, SyntaxNode)) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt; {
         <span class="comment">// Parse version number
-        // TODO: Replace use of lexical with glsl parser
+        // The GLSL spec refers to the ISO/IEC 14882:1998 (C++) standard for preprocessor
+        // directives, and mentions that #version, due to it &quot;following the same convention&quot;
+        // as __VERSION__, is &quot;a decimal integer&quot;. The cited standard, section 2.9
+        // &quot;Preprocessing numbers&quot;, says that such numbers &quot;lexically include all integral
+        // literal tokens&quot;. These correspond to the &quot;integer-constant&quot; (for the GLSL grammar)
+        // or &quot;integer-literal&quot; (for the C++ grammar) grammar symbols. But, because #version
+        // is a decimal integer, it is understood that the only &quot;integer-constant&quot; production
+        // rule we have to accept is the one for decimal constants, which are sequences of
+        // decimal digits beginning with a nonzero digit and followed by an optional
+        // &quot;integer-suffix&quot; (u or U character). This is a subset of what we can parse as
+        // (U)INT_CONST tokens, but other implementations are likely to observe Postel&#39;s law
         </span><span class="kw">let </span>version_number: u16 = value
             .children()
             .find_map(|token| {
@@ -1378,8 +1416,20 @@
             })
             .ok_or(<span class="self">Self</span>::Error::MissingVersionNumber)
             .and_then(|token| {
-                lexical::parse(Unescaped::new(token.text()).to_string().as_ref())
-                    .map_err(Into::into)
+                <span class="kw">let </span>token_string = Unescaped::new(token.text()).to_string();
+                <span class="kw">match </span>Token::parse_digits(<span class="kw-2">&amp;</span>token_string) {
+                    Token::INT_CONST(version_number)
+                        <span class="kw">if </span>version_number &gt;= <span class="number">0 </span>&amp;&amp; version_number &lt;= u16::MAX <span class="kw">as </span>i32 =&gt;
+                    {
+                        <span class="prelude-val">Ok</span>(version_number <span class="kw">as </span>u16)
+                    }
+                    Token::UINT_CONST(version_number) <span class="kw">if </span>version_number &lt;= u16::MAX <span class="kw">as </span>u32 =&gt; {
+                        <span class="prelude-val">Ok</span>(version_number <span class="kw">as </span>u16)
+                    }
+                    <span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(<span class="self">Self</span>::Error::InvalidVersionNumber {
+                        version_number: token_string.into_owned(),
+                    }),
+                }
             })<span class="question-mark">?</span>;
 
         <span class="comment">// Check the version number is supported
@@ -2444,5 +2494,4 @@
         })
     }
 }
-</code></pre></div>
-</section></main><div id="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="glsl_lang_pp" data-themes="" data-resource-suffix="" data-rustdoc-version="1.69.0 (84c898d65 2023-04-16)" data-search-js="search-8a59a8356673ec1f.js" data-settings-js="settings-f0c5c39777a9a2f6.js" data-settings-css="settings-0bcba95ff279c1db.css" ></div></body></html>
+</code></pre></div></section></main></body></html>

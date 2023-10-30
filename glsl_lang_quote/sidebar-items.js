@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["glsl_internal"],"macro":["glsl","glsl_expr","glsl_statement"],"mod":["quoted","tokenize"],"static":["_DECLS"]};
+window.SIDEBAR_ITEMS = {"fn":["glsl_internal"],"macro":["glsl","glsl_expr","glsl_statement"],"mod":["quoted","tokenize"]};

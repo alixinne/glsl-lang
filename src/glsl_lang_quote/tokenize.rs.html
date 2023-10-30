@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lang-quote/src/tokenize.rs`."><title>tokenize.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-c4dbdcde0fbd8430.css" id="mainThemeStyle"><link rel="stylesheet" id="themeStyle" href="../../static.files/light-db279b6232be9c13.css"><link rel="stylesheet" disabled href="../../static.files/dark-cf923f49f397b216.css"><link rel="stylesheet" disabled href="../../static.files/ayu-be46fdc453a55015.css"><script src="../../static.files/storage-3891ce972e3a2bf8.js"></script><script defer src="../../static.files/source-script-1b95b7cca98b26e5.js"></script><script defer src="../../source-files.js"></script><script defer src="../../static.files/main-98a684e84ae5b08b.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../glsl_lang_quote/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lang-quote/src/tokenize.rs`."><title>tokenize.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-cb6f1f67f1bcd037.css" id="mainThemeStyle"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="glsl_lang_quote" data-themes="" data-resource-suffix="" data-rustdoc-version="1.73.0 (cc66ad468 2023-10-03)" data-channel="1.73.0" data-search-js="search-6dfdfced5eff6596.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-1596385f77d47ef2.css" data-theme-dark-css="dark-0a43001d3fc2282c.css" data-theme-ayu-css="ayu-fd19013d6ce078bf.css" ><script src="../../static.files/storage-db41da1a38ea3cb8.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-0795b7d26be81095.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-1596385f77d47ef2.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-0a43001d3fc2282c.css"><link rel="stylesheet" href="../../static.files/noscript-cffde32267a19fd6.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../glsl_lang_quote/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -1925,13 +1925,7 @@
 <a href="#1925" id="1925">1925</a>
 <a href="#1926" id="1926">1926</a>
 <a href="#1927" id="1927">1927</a>
-<a href="#1928" id="1928">1928</a>
-<a href="#1929" id="1929">1929</a>
-<a href="#1930" id="1930">1930</a>
-<a href="#1931" id="1931">1931</a>
-<a href="#1932" id="1932">1932</a>
-<a href="#1933" id="1933">1933</a>
-</pre><pre class="rust"><code><span class="doccomment">//! The [`Tokenize`] trait, turning [glsl](https://crates.io/crates/glsl) into [`TokenStream`]s.
+</pre></div><pre class="rust"><code><span class="doccomment">//! The [`Tokenize`] trait, turning [glsl](https://crates.io/crates/glsl) into [`TokenStream`]s.
 
 </span><span class="kw">use </span>glsl_lang::ast;
 <span class="kw">use </span>proc_macro2::TokenStream;
@@ -2651,7 +2645,7 @@
             <span class="macro">quote! </span>{ glsl_lang::ast::ArraySpecifierDimensionData::Unsized }
         }
         ast::ArraySpecifierDimensionData::ExplicitlySized(<span class="kw-2">ref </span>e) =&gt; {
-            <span class="kw">let </span>expr = Box::new(tokenize_expr(e)).quote();
+            <span class="kw">let </span>expr = (<span class="kw-2">&amp;</span>tokenize_expr(e)).quote();
             <span class="macro">quote! </span>{ glsl_lang::ast::ArraySpecifierDimensionData::ExplicitlySized(#expr) }
         }
     };
@@ -2810,10 +2804,7 @@
     <span class="kw">let </span>l = <span class="kw">match </span>l.content {
         ast::LayoutQualifierSpecData::Identifier(<span class="kw-2">ref </span>i, <span class="kw-2">ref </span>e) =&gt; {
             <span class="kw">let </span>i = tokenize_identifier(i);
-            <span class="kw">let </span>expr = e
-                .as_ref()
-                .map(|e| Box::new(tokenize_expr(e)).quote())
-                .quote();
+            <span class="kw">let </span>expr = e.as_ref().map(|e| (<span class="kw-2">&amp;</span>tokenize_expr(e)).quote()).quote();
             <span class="macro">quote! </span>{ glsl_lang::ast::LayoutQualifierSpecData::Identifier(#i, #expr) }
         }
 
@@ -2881,33 +2872,33 @@
 
         ast::ExprData::Unary(<span class="kw-2">ref </span>op, <span class="kw-2">ref </span>e) =&gt; {
             <span class="kw">let </span>op = tokenize_unary_op(op);
-            <span class="kw">let </span>e = Box::new(tokenize_expr(e)).quote();
+            <span class="kw">let </span>e = (<span class="kw-2">&amp;</span>tokenize_expr(e)).quote();
             <span class="macro">quote! </span>{ glsl_lang::ast::ExprData::Unary(#op, #e) }
         }
 
         ast::ExprData::Binary(<span class="kw-2">ref </span>op, <span class="kw-2">ref </span>l, <span class="kw-2">ref </span>r) =&gt; {
             <span class="kw">let </span>op = tokenize_binary_op(op);
-            <span class="kw">let </span>l = Box::new(tokenize_expr(l)).quote();
-            <span class="kw">let </span>r = Box::new(tokenize_expr(r)).quote();
+            <span class="kw">let </span>l = (<span class="kw-2">&amp;</span>tokenize_expr(l)).quote();
+            <span class="kw">let </span>r = (<span class="kw-2">&amp;</span>tokenize_expr(r)).quote();
             <span class="macro">quote! </span>{ glsl_lang::ast::ExprData::Binary(#op, #l, #r) }
         }
 
         ast::ExprData::Ternary(<span class="kw-2">ref </span>c, <span class="kw-2">ref </span>s, <span class="kw-2">ref </span>e) =&gt; {
-            <span class="kw">let </span>c = Box::new(tokenize_expr(c)).quote();
-            <span class="kw">let </span>s = Box::new(tokenize_expr(s)).quote();
-            <span class="kw">let </span>e = Box::new(tokenize_expr(e)).quote();
+            <span class="kw">let </span>c = (<span class="kw-2">&amp;</span>tokenize_expr(c)).quote();
+            <span class="kw">let </span>s = (<span class="kw-2">&amp;</span>tokenize_expr(s)).quote();
+            <span class="kw">let </span>e = (<span class="kw-2">&amp;</span>tokenize_expr(e)).quote();
             <span class="macro">quote! </span>{ glsl_lang::ast::ExprData::Ternary(#c, #s, #e) }
         }
 
         ast::ExprData::Assignment(<span class="kw-2">ref </span>v, <span class="kw-2">ref </span>op, <span class="kw-2">ref </span>e) =&gt; {
-            <span class="kw">let </span>v = Box::new(tokenize_expr(v)).quote();
+            <span class="kw">let </span>v = (<span class="kw-2">&amp;</span>tokenize_expr(v)).quote();
             <span class="kw">let </span>op = tokenize_assignment_op(op);
-            <span class="kw">let </span>e = Box::new(tokenize_expr(e)).quote();
+            <span class="kw">let </span>e = (<span class="kw-2">&amp;</span>tokenize_expr(e)).quote();
             <span class="macro">quote! </span>{ glsl_lang::ast::ExprData::Assignment(#v, #op, #e) }
         }
 
         ast::ExprData::Bracket(<span class="kw-2">ref </span>e, <span class="kw-2">ref </span>a) =&gt; {
-            <span class="kw">let </span>e = Box::new(tokenize_expr(e)).quote();
+            <span class="kw">let </span>e = (<span class="kw-2">&amp;</span>tokenize_expr(e)).quote();
             <span class="kw">let </span>a = tokenize_expr(a);
             <span class="macro">quote! </span>{ glsl_lang::ast::ExprData::Bracket(#e, #a) }
         }
@@ -2919,25 +2910,25 @@
         }
 
         ast::ExprData::Dot(<span class="kw-2">ref </span>e, <span class="kw-2">ref </span>i) =&gt; {
-            <span class="kw">let </span>e = Box::new(tokenize_expr(e)).quote();
+            <span class="kw">let </span>e = (<span class="kw-2">&amp;</span>tokenize_expr(e)).quote();
             <span class="kw">let </span>i = tokenize_identifier(i);
 
             <span class="macro">quote! </span>{ glsl_lang::ast::ExprData::Dot(#e, #i) }
         }
 
         ast::ExprData::PostInc(<span class="kw-2">ref </span>e) =&gt; {
-            <span class="kw">let </span>e = Box::new(tokenize_expr(e)).quote();
+            <span class="kw">let </span>e = (<span class="kw-2">&amp;</span>tokenize_expr(e)).quote();
             <span class="macro">quote! </span>{ glsl_lang::ast::ExprData::PostInc(#e) }
         }
 
         ast::ExprData::PostDec(<span class="kw-2">ref </span>e) =&gt; {
-            <span class="kw">let </span>e = Box::new(tokenize_expr(e)).quote();
+            <span class="kw">let </span>e = (<span class="kw-2">&amp;</span>tokenize_expr(e)).quote();
             <span class="macro">quote! </span>{ glsl_lang::ast::ExprData::PostDec(#e) }
         }
 
         ast::ExprData::Comma(<span class="kw-2">ref </span>a, <span class="kw-2">ref </span>b) =&gt; {
-            <span class="kw">let </span>a = Box::new(tokenize_expr(a)).quote();
-            <span class="kw">let </span>b = Box::new(tokenize_expr(b)).quote();
+            <span class="kw">let </span>a = (<span class="kw-2">&amp;</span>tokenize_expr(a)).quote();
+            <span class="kw">let </span>b = (<span class="kw-2">&amp;</span>tokenize_expr(b)).quote();
             <span class="macro">quote! </span>{ glsl_lang::ast::ExprData::Comma(#a, #b) }
         }
     };
@@ -3013,12 +3004,12 @@
     <span class="kw">let </span>span = tokenize_span(<span class="kw-2">&amp;</span>i.span);
     <span class="kw">let </span>i = <span class="kw">match </span>i.content {
         ast::FunIdentifierData::TypeSpecifier(<span class="kw-2">ref </span>n) =&gt; {
-            <span class="kw">let </span>n = Box::new(tokenize_type_specifier(n)).quote();
+            <span class="kw">let </span>n = (<span class="kw-2">&amp;</span>tokenize_type_specifier(n)).quote();
             <span class="macro">quote! </span>{ glsl_lang::ast::FunIdentifierData::TypeSpecifier(#n) }
         }
 
         ast::FunIdentifierData::Expr(<span class="kw-2">ref </span>e) =&gt; {
-            <span class="kw">let </span>e = Box::new(tokenize_expr(e)).quote();
+            <span class="kw">let </span>e = (<span class="kw-2">&amp;</span>tokenize_expr(e)).quote();
             <span class="macro">quote! </span>{ glsl_lang::ast::FunIdentifierData::Expr(#e) }
         }
     };
@@ -3175,7 +3166,7 @@
     <span class="kw">let </span>span = tokenize_span(<span class="kw-2">&amp;</span>i.span);
     <span class="kw">let </span>i = <span class="kw">match </span>i.content {
         ast::InitializerData::Simple(<span class="kw-2">ref </span>e) =&gt; {
-            <span class="kw">let </span>e = Box::new(tokenize_expr(e)).quote();
+            <span class="kw">let </span>e = (<span class="kw-2">&amp;</span>tokenize_expr(e)).quote();
             <span class="macro">quote! </span>{ glsl_lang::ast::InitializerData::Simple(#e) }
         }
 
@@ -3303,7 +3294,7 @@
 <span class="kw">fn </span>tokenize_selection_statement(sst: <span class="kw-2">&amp;</span>ast::SelectionStatement) -&gt; TokenStream {
     <span class="kw">let </span>span = tokenize_span(<span class="kw-2">&amp;</span>sst.span);
     <span class="kw">let </span>sst = {
-        <span class="kw">let </span>cond = Box::new(tokenize_expr(<span class="kw-2">&amp;</span>sst.cond)).quote();
+        <span class="kw">let </span>cond = (<span class="kw-2">&amp;</span>tokenize_expr(<span class="kw-2">&amp;</span>sst.cond)).quote();
         <span class="kw">let </span>rest = tokenize_selection_rest_statement(<span class="kw-2">&amp;</span>sst.rest);
 
         <span class="macro">quote! </span>{
@@ -3321,13 +3312,13 @@
     <span class="kw">let </span>span = tokenize_span(<span class="kw-2">&amp;</span>sst.span);
     <span class="kw">let </span>sst = <span class="kw">match </span>sst.content {
         ast::SelectionRestStatementData::Statement(<span class="kw-2">ref </span>if_st) =&gt; {
-            <span class="kw">let </span>e = Box::new(tokenize_statement(if_st)).quote();
+            <span class="kw">let </span>e = (<span class="kw-2">&amp;</span>tokenize_statement(if_st)).quote();
             <span class="macro">quote! </span>{ glsl_lang::ast::SelectionRestStatementData::Statement(#e) }
         }
 
         ast::SelectionRestStatementData::Else(<span class="kw-2">ref </span>if_st, <span class="kw-2">ref </span>else_st) =&gt; {
-            <span class="kw">let </span>if_st = Box::new(tokenize_statement(if_st)).quote();
-            <span class="kw">let </span>else_st = Box::new(tokenize_statement(else_st)).quote();
+            <span class="kw">let </span>if_st = (<span class="kw-2">&amp;</span>tokenize_statement(if_st)).quote();
+            <span class="kw">let </span>else_st = (<span class="kw-2">&amp;</span>tokenize_statement(else_st)).quote();
             <span class="macro">quote! </span>{ glsl_lang::ast::SelectionRestStatementData::Else(#if_st, #else_st) }
         }
     };
@@ -3338,7 +3329,7 @@
 <span class="kw">fn </span>tokenize_switch_statement(sst: <span class="kw-2">&amp;</span>ast::SwitchStatement) -&gt; TokenStream {
     <span class="kw">let </span>span = tokenize_span(<span class="kw-2">&amp;</span>sst.span);
     <span class="kw">let </span>sst = {
-        <span class="kw">let </span>head = Box::new(tokenize_expr(<span class="kw-2">&amp;</span>sst.head)).quote();
+        <span class="kw">let </span>head = (<span class="kw-2">&amp;</span>tokenize_expr(<span class="kw-2">&amp;</span>sst.head)).quote();
         <span class="kw">let </span>body = sst.body.iter().map(tokenize_statement);
 
         <span class="macro">quote! </span>{
@@ -3356,7 +3347,7 @@
     <span class="kw">let </span>span = tokenize_span(<span class="kw-2">&amp;</span>cl.span);
     <span class="kw">let </span>cl = <span class="kw">match </span>cl.content {
         ast::CaseLabelData::Case(<span class="kw-2">ref </span>e) =&gt; {
-            <span class="kw">let </span>e = Box::new(tokenize_expr(e)).quote();
+            <span class="kw">let </span>e = (<span class="kw-2">&amp;</span>tokenize_expr(e)).quote();
             <span class="macro">quote! </span>{ glsl_lang::ast::CaseLabelData::Case(#e) }
         }
 
@@ -3371,20 +3362,20 @@
     <span class="kw">let </span>ist = <span class="kw">match </span>ist.content {
         ast::IterationStatementData::While(<span class="kw-2">ref </span>cond, <span class="kw-2">ref </span>body) =&gt; {
             <span class="kw">let </span>cond = tokenize_condition(cond);
-            <span class="kw">let </span>body = Box::new(tokenize_statement(body)).quote();
+            <span class="kw">let </span>body = (<span class="kw-2">&amp;</span>tokenize_statement(body)).quote();
             <span class="macro">quote! </span>{ glsl_lang::ast::IterationStatementData::While(#cond, #body) }
         }
 
         ast::IterationStatementData::DoWhile(<span class="kw-2">ref </span>body, <span class="kw-2">ref </span>cond) =&gt; {
-            <span class="kw">let </span>body = Box::new(tokenize_statement(body)).quote();
-            <span class="kw">let </span>cond = Box::new(tokenize_expr(cond)).quote();
+            <span class="kw">let </span>body = (<span class="kw-2">&amp;</span>tokenize_statement(body)).quote();
+            <span class="kw">let </span>cond = (<span class="kw-2">&amp;</span>tokenize_expr(cond)).quote();
             <span class="macro">quote! </span>{ glsl_lang::ast::IterationStatementData::DoWhile(#body, #cond) }
         }
 
         ast::IterationStatementData::For(<span class="kw-2">ref </span>init, <span class="kw-2">ref </span>rest, <span class="kw-2">ref </span>body) =&gt; {
             <span class="kw">let </span>init = tokenize_for_init_statement(init);
             <span class="kw">let </span>rest = tokenize_for_rest_statement(rest);
-            <span class="kw">let </span>body = Box::new(tokenize_statement(body)).quote();
+            <span class="kw">let </span>body = (<span class="kw-2">&amp;</span>tokenize_statement(body)).quote();
             <span class="macro">quote! </span>{ glsl_lang::ast::IterationStatementData::For(#init, #rest, #body) }
         }
     };
@@ -3396,12 +3387,12 @@
     <span class="kw">let </span>span = tokenize_span(<span class="kw-2">&amp;</span>c.span);
     <span class="kw">let </span>c = <span class="kw">match </span>c.content {
         ast::ConditionData::Expr(<span class="kw-2">ref </span>e) =&gt; {
-            <span class="kw">let </span>e = Box::new(tokenize_expr(e)).quote();
+            <span class="kw">let </span>e = (<span class="kw-2">&amp;</span>tokenize_expr(e)).quote();
             <span class="macro">quote! </span>{ glsl_lang::ast::ConditionData::Expr(#e) }
         }
 
         ast::ConditionData::Assignment(<span class="kw-2">ref </span>ty, <span class="kw-2">ref </span>name, <span class="kw-2">ref </span>initializer) =&gt; {
-            <span class="kw">let </span>ty = Box::new(tokenize_fully_specified_type(ty)).quote();
+            <span class="kw">let </span>ty = (<span class="kw-2">&amp;</span>tokenize_fully_specified_type(ty)).quote();
             <span class="kw">let </span>name = tokenize_identifier(name);
             <span class="kw">let </span>initializer = tokenize_initializer(initializer);
 
@@ -3421,7 +3412,7 @@
         }
 
         ast::ForInitStatementData::Declaration(<span class="kw-2">ref </span>d) =&gt; {
-            <span class="kw">let </span>d = Box::new(tokenize_declaration(d)).quote();
+            <span class="kw">let </span>d = (<span class="kw-2">&amp;</span>tokenize_declaration(d)).quote();
             <span class="macro">quote! </span>{ glsl_lang::ast::ForInitStatementData::Declaration(#d) }
         }
     };
@@ -3436,7 +3427,7 @@
         <span class="kw">let </span>post = r
             .post_expr
             .as_ref()
-            .map(|e| Box::new(tokenize_expr(e)).quote())
+            .map(|e| (<span class="kw-2">&amp;</span>tokenize_expr(e)).quote())
             .quote();
 
         <span class="macro">quote! </span>{
@@ -3457,10 +3448,7 @@
         ast::JumpStatementData::Break =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::JumpStatementData::Break },
         ast::JumpStatementData::Discard =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::JumpStatementData::Discard },
         ast::JumpStatementData::Return(<span class="kw-2">ref </span>e) =&gt; {
-            <span class="kw">let </span>e = e
-                .as_ref()
-                .map(|e| Box::new(tokenize_expr(e)).quote())
-                .quote();
+            <span class="kw">let </span>e = e.as_ref().map(|e| (<span class="kw-2">&amp;</span>tokenize_expr(e)).quote()).quote();
             <span class="macro">quote! </span>{ glsl_lang::ast::JumpStatementData::Return(#e) }
         }
     };
@@ -3864,5 +3852,4 @@
     <span class="kw">let </span>tu = (tu.<span class="number">0</span>).iter().map(tokenize_external_declaration);
     <span class="macro">quote! </span>{ glsl_lang::ast::TranslationUnit(<span class="macro">vec!</span>[#(#tu),<span class="kw-2">*</span>]) }
 }
-</code></pre></div>
-</section></main><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="glsl_lang_quote" data-themes="" data-resource-suffix="" data-rustdoc-version="1.69.0 (84c898d65 2023-04-16)" data-search-js="search-8a59a8356673ec1f.js" data-settings-js="settings-f0c5c39777a9a2f6.js" data-settings-css="settings-0bcba95ff279c1db.css" ></div></body></html>
+</code></pre></div></section></main></body></html>

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"derive":["NodeContentDisplay","Token"],"mod":["node_display","token"],"static":["_DECLS"]};
+window.SIDEBAR_ITEMS = {"derive":["NodeContentDisplay","Token"],"mod":["node_display","token"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"derive":["NodeContentDisplay","Token"],"mod":["error","file_id","located","node","position","token"],"struct":["FileId","SmolStr","TextRange","TextSize"],"trait":["NodeContent"]};
+window.SIDEBAR_ITEMS = {"derive":["NodeContentDisplay","Token"],"mod":["error","file_id","located","node","position","token"],"struct":["FileId","SmolStr","TextRange","TextSize"]};

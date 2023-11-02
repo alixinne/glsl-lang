@@ -13,7 +13,7 @@ keywords = ["glsl", "language", "parser", "ast"]
 categories = ["parser-implementations", "rendering"]
 
 [dependencies]
-lalrpop-util = { version = "0.19.9", default-features = false, features = ["std"] }
+lalrpop-util = { version = "0.20.0", default-features = false, features = ["std"] }
 once_cell = "1.17.1"
 thiserror = "1.0"
 

@@ -15,13 +15,14 @@
 
 #![deny(missing_docs)]
 
-use std::io::prelude::*;
+use std::{io::prelude::*, path::Path};
 
 use argh::FromArgs;
 
 use glsl_lang::{
     ast::{NodeDisplay, TranslationUnit},
-    parse::DefaultParse,
+    lexer::v2_full::fs::PreprocessorExt,
+    parse::IntoParseBuilderExt,
 };
 
 fn output_text(output: &mut dyn std::io::Write, tu: TranslationUnit) -> std::io::Result<()> {
@@ -94,7 +95,20 @@ impl<I: std::error::Error> std::fmt::Display for ParseError<I> {
 
 use miette::{NamedSource, Result};
 fn parse_tu(source: &str, path: &str) -> Result<glsl_lang::ast::TranslationUnit> {
-    match glsl_lang::ast::TranslationUnit::parse(source) {
+    let mut processor = glsl_lang_pp::processor::fs::StdProcessor::new();
+    let tu: Result<glsl_lang::ast::TranslationUnit, _> = processor
+        .open_source(
+            source,
+            Path::new(path).parent().unwrap_or_else(|| Path::new(".")),
+        )
+        .builder()
+        .parse()
+        .map(|(mut tu, _, iter)| {
+            iter.into_directives().inject(&mut tu);
+            tu
+        });
+
+    match tu {
         Ok(tu) => Ok(tu),
         Err(err) => {
             let pos = err.pos();

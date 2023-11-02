@@ -2500,6 +2500,31 @@ fn parse_layout_buffer_block_0() {
 }
 
 #[test]
+#[cfg(feature = "lexer-v2-full")]
+fn parse_multifile_pp_a() {
+    use crate::lexer::v2_full::fs::PreprocessorExt;
+    use expect_test::expect;
+
+    let mut processor = glsl_lang_pp::processor::fs::StdProcessor::new();
+    let (mut tu, iter): (crate::ast::TranslationUnit, _) = processor
+        .open("data/tests/multifile_pp_a.glsl")
+        .expect("failed to open file")
+        .builder()
+        .parse()
+        .map(|(tu, _, iter)| (tu, iter))
+        .unwrap();
+
+    // 2 declarations before
+    assert_eq!(tu.0.len(), 2);
+
+    // Inject pp. directives
+    iter.into_directives().inject(&mut tu);
+
+    // Note that there's only one version directive, and it has the highest number
+    expect![[r#"TranslationUnit([Node { content: Preprocessor(Node { content: Version(Node { content: PreprocessorVersionData { version: 460, profile: Some(Node { content: Core, span: None }) }, span: None }), span: Some(NodeSpan { source_id: FileId(0), range: 0..18 }) }), span: Some(NodeSpan { source_id: FileId(0), range: 0..18 }) }, Node { content: Preprocessor(Node { content: Extension(Node { content: PreprocessorExtensionData { name: Node { content: Specific("GL_GOOGLE_include_directive"), span: None }, behavior: Some(Node { content: Require, span: None }) }, span: None }), span: Some(NodeSpan { source_id: FileId(0), range: 18..67 }) }), span: Some(NodeSpan { source_id: FileId(0), range: 18..67 }) }, Node { content: Declaration(Node { content: InitDeclaratorList(Node { content: InitDeclaratorListData { head: Node { content: SingleDeclarationData { ty: Node { content: FullySpecifiedTypeData { qualifier: Some(Node { content: TypeQualifierData { qualifiers: [Node { content: Storage(Node { content: Uniform, span: Some(NodeSpan { source_id: FileId(1), range: 18..25 }) }), span: Some(NodeSpan { source_id: FileId(1), range: 18..25 }) }] }, span: Some(NodeSpan { source_id: FileId(1), range: 18..25 }) }), ty: Node { content: TypeSpecifierData { ty: Node { content: Vec3, span: Some(NodeSpan { source_id: FileId(1), range: 26..30 }) }, array_specifier: None }, span: Some(NodeSpan { source_id: FileId(1), range: 26..30 }) } }, span: Some(NodeSpan { source_id: FileId(1), range: 18..30 }) }, name: Some(Node { content: IdentifierData("x"), span: Some(NodeSpan { source_id: FileId(1), range: 31..32 }) }), array_specifier: None, initializer: None }, span: Some(NodeSpan { source_id: FileId(1), range: 18..32 }) }, tail: [] }, span: Some(NodeSpan { source_id: FileId(1), range: 18..32 }) }), span: Some(NodeSpan { source_id: FileId(1), range: 18..33 }) }), span: Some(NodeSpan { source_id: FileId(1), range: 18..33 }) }, Node { content: Declaration(Node { content: InitDeclaratorList(Node { content: InitDeclaratorListData { head: Node { content: SingleDeclarationData { ty: Node { content: FullySpecifiedTypeData { qualifier: Some(Node { content: TypeQualifierData { qualifiers: [Node { content: Storage(Node { content: Uniform, span: Some(NodeSpan { source_id: FileId(0), range: 100..107 }) }), span: Some(NodeSpan { source_id: FileId(0), range: 100..107 }) }] }, span: Some(NodeSpan { source_id: FileId(0), range: 100..107 }) }), ty: Node { content: TypeSpecifierData { ty: Node { content: Vec2, span: Some(NodeSpan { source_id: FileId(0), range: 108..112 }) }, array_specifier: None }, span: Some(NodeSpan { source_id: FileId(0), range: 108..112 }) } }, span: Some(NodeSpan { source_id: FileId(0), range: 100..112 }) }, name: Some(Node { content: IdentifierData("y"), span: Some(NodeSpan { source_id: FileId(0), range: 113..114 }) }), array_specifier: None, initializer: None }, span: Some(NodeSpan { source_id: FileId(0), range: 100..114 }) }, tail: [] }, span: Some(NodeSpan { source_id: FileId(0), range: 100..114 }) }), span: Some(NodeSpan { source_id: FileId(0), range: 100..115 }) }), span: Some(NodeSpan { source_id: FileId(0), range: 100..115 }) }])"#]].assert_eq(&format!("{:?}", tu))
+}
+
+#[test]
 fn parse_vulkan_types() {
     fn uniform_decl(
         name: &'static str,

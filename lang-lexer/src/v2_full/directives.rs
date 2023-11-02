@@ -1,4 +1,9 @@
-use glsl_lang_pp::processor::event::{DirectiveKind, EventDirective};
+use std::cmp;
+
+use glsl_lang_pp::processor::{
+    event::{DirectiveKind, EventDirective},
+    nodes::VersionProfile,
+};
 use glsl_lang_types::ast::{
     self, PreprocessorExtensionBehaviorData, PreprocessorExtensionNameData,
     PreprocessorVersionProfileData,
@@ -15,36 +20,62 @@ impl Directives {
         &self.directives
     }
 
-    fn get_declaration(directive: &EventDirective) -> Option<ast::ExternalDeclaration> {
+    fn get_declaration(
+        directive: &EventDirective,
+        highest_version: &mut Option<(u16, Option<VersionProfile>)>,
+    ) -> Option<ast::ExternalDeclaration> {
         let start = directive.text_range().start();
         let end = directive.text_range().end();
 
         match directive.kind() {
-            DirectiveKind::Version(version) => Some(
-                ast::ExternalDeclarationData::Preprocessor(
-                    ast::PreprocessorData::Version(
-                        ast::PreprocessorVersionData {
-                            version: version.number,
-                            profile: match version.parsed_profile {
-                                None => None,
-                                Some(glsl_lang_pp::processor::nodes::VersionProfile::None) => None,
-                                Some(glsl_lang_pp::processor::nodes::VersionProfile::Core) => {
-                                    Some(PreprocessorVersionProfileData::Core.into())
-                                }
-                                Some(
-                                    glsl_lang_pp::processor::nodes::VersionProfile::Compatibility,
-                                ) => Some(PreprocessorVersionProfileData::Compatibility.into()),
-                                Some(glsl_lang_pp::processor::nodes::VersionProfile::Es) => {
-                                    Some(PreprocessorVersionProfileData::Es.into())
-                                }
-                            },
-                        }
-                        .into(),
+            DirectiveKind::Version(version) => {
+                let version_number = version.number;
+                let profile = version.parsed_profile;
+
+                let had_highest_version;
+                let (highest_version_number, highest_profile) = match highest_version {
+                    Some(version_data) => {
+                        had_highest_version = true;
+                        version_data
+                    }
+                    None => {
+                        had_highest_version = false;
+                        highest_version.insert((version_number, profile))
+                    }
+                };
+
+                *highest_version_number = cmp::max(version_number, *highest_version_number);
+                *highest_profile = cmp::max(
+                    // Wrap in Some to avoid OpenGL ES being considered higher than no profile (i.e., core profile)
+                    Some(profile.unwrap_or(VersionProfile::None)),
+                    *highest_profile,
+                );
+
+                (!had_highest_version).then_some(
+                    ast::ExternalDeclarationData::Preprocessor(
+                        ast::PreprocessorData::Version(
+                            ast::PreprocessorVersionData {
+                                version: version_number,
+                                profile: match profile {
+                                    None | Some(VersionProfile::None) => None,
+                                    Some(VersionProfile::Core) => {
+                                        Some(PreprocessorVersionProfileData::Core.into())
+                                    }
+                                    Some(VersionProfile::Compatibility) => {
+                                        Some(PreprocessorVersionProfileData::Compatibility.into())
+                                    }
+                                    Some(VersionProfile::Es) => {
+                                        Some(PreprocessorVersionProfileData::Es.into())
+                                    }
+                                },
+                            }
+                            .into(),
+                        )
+                        .spanned(start, end),
                     )
                     .spanned(start, end),
                 )
-                .spanned(start, end),
-            ),
+            }
 
             DirectiveKind::Pragma(pragma) => Some(
                 ast::ExternalDeclarationData::Preprocessor(
@@ -96,6 +127,7 @@ impl Directives {
                 )
                 .spanned(start, end),
             ),
+
             _ => None,
         }
     }
@@ -103,6 +135,8 @@ impl Directives {
     pub fn inject(mut self, root: &mut ast::TranslationUnit) -> Directives {
         let mut directive_idx = 0;
         let mut declaration_idx = 0;
+        let mut highest_version = None;
+        let mut version_directive_declaration_idx = None;
 
         // Insert directives
         let mut start = None;
@@ -137,23 +171,32 @@ impl Directives {
                 let current_directive = &self.directives[directive_idx];
                 let span = current_directive.text_range();
 
-                // TODO: What happends to directives from multiple files?
-                if span.source_id() == actual_start.source_id {
-                    if span.end().offset <= actual_start.offset {
-                        if let Some(declaration) = Self::get_declaration(current_directive) {
-                            // Add to ast
-                            root.0.insert(declaration_idx, declaration);
-                            declaration_idx += 1;
-                            // Processed, remove from directive list
-                            self.directives.remove(directive_idx);
-                        } else {
-                            // Can't be processed, skip it
-                            directive_idx += 1;
+                // For directives in #include'd files, a previous #include directive event prevents
+                // inserting them too soon in the top-level file
+                if span.end().offset <= actual_start.offset
+                    || actual_start.source_id != span.source_id()
+                {
+                    if let Some(declaration) =
+                        Self::get_declaration(current_directive, &mut highest_version)
+                    {
+                        // Add to ast
+                        root.0.insert(declaration_idx, declaration);
+
+                        if matches!(current_directive.kind(), DirectiveKind::Version(_)) {
+                            version_directive_declaration_idx.get_or_insert(declaration_idx);
                         }
+
+                        declaration_idx += 1;
+
+                        // Processed, remove from directive list
+                        self.directives.remove(directive_idx);
                     } else {
-                        // This directive comes later
-                        break;
+                        // Can't/shouldn't be processed, skip it
+                        directive_idx += 1;
                     }
+                } else {
+                    // This directive comes later
+                    break;
                 }
             }
 
@@ -164,13 +207,50 @@ impl Directives {
             start = Some(end);
         }
 
-        // TODO: Check source_id?
+        // Append any remaining directives
         while directive_idx < self.directives.len() {
-            if let Some(declaration) = Self::get_declaration(&self.directives[directive_idx]) {
+            let current_directive = &self.directives[directive_idx];
+
+            if let Some(declaration) =
+                Self::get_declaration(current_directive, &mut highest_version)
+            {
                 root.0.push(declaration);
+
+                if matches!(current_directive.kind(), DirectiveKind::Version(_)) {
+                    version_directive_declaration_idx.get_or_insert(root.0.len() - 1);
+                }
+
                 self.directives.remove(directive_idx);
             } else {
                 directive_idx += 1;
+            }
+        }
+
+        // Set the version directive value to the highest (i.e., the one that requires the most
+        // OpenGL features) that was found
+        if let (
+            Some(version_directive_declaration_idx),
+            Some((highest_version_number, highest_profile)),
+        ) = (version_directive_declaration_idx, highest_version)
+        {
+            if let ast::ExternalDeclarationData::Preprocessor(preprocessor_data) =
+                &mut root.0[version_directive_declaration_idx].content
+            {
+                if let ast::PreprocessorData::Version(preprocessor_version) =
+                    &mut preprocessor_data.content
+                {
+                    preprocessor_version.version = highest_version_number;
+                    preprocessor_version.profile = match highest_profile {
+                        None | Some(VersionProfile::None) => None,
+                        Some(VersionProfile::Core) => {
+                            Some(PreprocessorVersionProfileData::Core.into())
+                        }
+                        Some(VersionProfile::Compatibility) => {
+                            Some(PreprocessorVersionProfileData::Compatibility.into())
+                        }
+                        Some(VersionProfile::Es) => Some(PreprocessorVersionProfileData::Es.into()),
+                    };
+                }
             }
         }
 

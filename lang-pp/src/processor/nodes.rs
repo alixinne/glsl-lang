@@ -1,4 +1,4 @@
-use std::{borrow::Cow, convert::TryFrom, str::FromStr};
+use std::{borrow::Cow, cmp::Ordering, convert::TryFrom, str::FromStr};
 
 use arrayvec::ArrayVec;
 use rowan::NodeOrToken;
@@ -271,6 +271,36 @@ impl FromStr for VersionProfile {
                 return Err(());
             }
         })
+    }
+}
+
+impl VersionProfile {
+    /// Returns an integer representing the relative size of the feature set of an OpenGL profile.
+    /// Profiles with a higher index are assumed to offer a superset of the features of profiles
+    /// with a lower index.
+    fn as_feature_set_size_index(&self) -> usize {
+        // OpenGL ES offers a feature set smaller than the core profile.
+        // Conversely, the core profile has less features than the compatibility profile.
+        // When no profile is specified, the profile defaults to core
+        match self {
+            Self::None | Self::Core => 1,
+            Self::Compatibility => 2,
+            Self::Es => 0,
+        }
+    }
+}
+
+impl PartialOrd for VersionProfile {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        self.as_feature_set_size_index()
+            .partial_cmp(&other.as_feature_set_size_index())
+    }
+}
+
+impl Ord for VersionProfile {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.as_feature_set_size_index()
+            .cmp(&other.as_feature_set_size_index())
     }
 }
 

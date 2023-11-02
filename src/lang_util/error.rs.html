@@ -388,7 +388,7 @@
     <span class="kw">let </span>(location, len) = <span class="kw">match </span>error {
         <span class="comment">// TODO: Find out invalid token length
         </span>lalrpop_util::ParseError::InvalidToken { location } =&gt; (<span class="kw-2">*</span>location, TextSize::default()),
-        lalrpop_util::ParseError::UnrecognizedEOF { location, .. } =&gt; {
+        lalrpop_util::ParseError::UnrecognizedEof { location, .. } =&gt; {
             (<span class="kw-2">*</span>location, TextSize::default())
         }
         lalrpop_util::ParseError::UnrecognizedToken { token, .. } =&gt; {
@@ -525,7 +525,7 @@
         <span class="comment">// Map the error kind
         </span><span class="kw">match </span>error {
             lalrpop_util::ParseError::InvalidToken { .. } =&gt; ParseErrorKind::InvalidToken,
-            lalrpop_util::ParseError::UnrecognizedEOF { expected, .. } =&gt; {
+            lalrpop_util::ParseError::UnrecognizedEof { expected, .. } =&gt; {
                 ParseErrorKind::UnrecognizedEof {
                     expected: simplify()(expected),
                 }

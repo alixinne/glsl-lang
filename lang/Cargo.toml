@@ -25,7 +25,7 @@ glsl-lang-types = "=0.5.1"
 rserde = { version = "1.0", optional = true, features = ["derive"], package = "serde" }
 
 [build-dependencies]
-lalrpop = "0.19.9"
+lalrpop = "0.20.0"
 
 [dev-dependencies]
 lang-util-dev = "=0.5.1"

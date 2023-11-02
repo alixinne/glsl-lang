@@ -8,5 +8,6 @@ cargo workspaces version \
   '*' \
   --yes \
   --no-git-commit \
+  --exact \
   custom \
   "$1"

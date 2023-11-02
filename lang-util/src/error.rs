@@ -77,7 +77,7 @@ pub fn error_location<T, E: LexicalError>(
     let (location, len) = match error {
         // TODO: Find out invalid token length
         lalrpop_util::ParseError::InvalidToken { location } => (*location, TextSize::default()),
-        lalrpop_util::ParseError::UnrecognizedEOF { location, .. } => {
+        lalrpop_util::ParseError::UnrecognizedEof { location, .. } => {
             (*location, TextSize::default())
         }
         lalrpop_util::ParseError::UnrecognizedToken { token, .. } => {
@@ -214,7 +214,7 @@ impl<T: Token, E: LexicalError> From<lalrpop_util::ParseError<LexerPosition, T, 
         // Map the error kind
         match error {
             lalrpop_util::ParseError::InvalidToken { .. } => ParseErrorKind::InvalidToken,
-            lalrpop_util::ParseError::UnrecognizedEOF { expected, .. } => {
+            lalrpop_util::ParseError::UnrecognizedEof { expected, .. } => {
                 ParseErrorKind::UnrecognizedEof {
                     expected: simplify()(expected),
                 }

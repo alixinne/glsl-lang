@@ -14,7 +14,7 @@ categories = ["parser-implementations", "rendering"]
 
 [dependencies]
 glsl-lang-types = "0.5.0"
-lang-util = { version = "0.5.0", features = ["lalrpop"] }
+lang-util = { version = "0.5.1", features = ["lalrpop"] }
 
 thiserror = "1.0"
 

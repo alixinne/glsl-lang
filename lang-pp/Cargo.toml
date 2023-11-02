@@ -14,7 +14,7 @@ categories = ["parser-implementations", "rendering"]
 build = "build.rs"
 
 [dependencies]
-lang-util = "0.5.0"
+lang-util = "0.5.1"
 
 string_cache = "0.8"
 thiserror = "1.0"

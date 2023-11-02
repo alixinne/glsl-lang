@@ -14,6 +14,7 @@ categories = ["command-line-interface", "parser-implementations", "rendering"]
 
 [dependencies]
 glsl-lang = { version = "=0.5.1", features = ["lexer-v2-full"] }
+glsl-lang-pp = { version = "=0.5.1" }
 lang-util = "=0.5.1"
 argh = "0.1"
 

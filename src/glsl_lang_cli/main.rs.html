@@ -170,6 +170,20 @@
 <a href="#170" id="170">170</a>
 <a href="#171" id="171">171</a>
 <a href="#172" id="172">172</a>
+<a href="#173" id="173">173</a>
+<a href="#174" id="174">174</a>
+<a href="#175" id="175">175</a>
+<a href="#176" id="176">176</a>
+<a href="#177" id="177">177</a>
+<a href="#178" id="178">178</a>
+<a href="#179" id="179">179</a>
+<a href="#180" id="180">180</a>
+<a href="#181" id="181">181</a>
+<a href="#182" id="182">182</a>
+<a href="#183" id="183">183</a>
+<a href="#184" id="184">184</a>
+<a href="#185" id="185">185</a>
+<a href="#186" id="186">186</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! [`glsl-lang`](https://crates.io/crates/glsl-lang) debugging CLI.
 //!
 //! *This is only a prototype for debugging, more options will be added in later updates.*
@@ -187,13 +201,14 @@
 
 </span><span class="attr">#![deny(missing_docs)]
 
-</span><span class="kw">use </span>std::io::prelude::<span class="kw-2">*</span>;
+</span><span class="kw">use </span>std::{io::prelude::<span class="kw-2">*</span>, path::Path};
 
 <span class="kw">use </span>argh::FromArgs;
 
 <span class="kw">use </span>glsl_lang::{
     ast::{NodeDisplay, TranslationUnit},
-    parse::DefaultParse,
+    lexer::v2_full::fs::PreprocessorExt,
+    parse::IntoParseBuilderExt,
 };
 
 <span class="kw">fn </span>output_text(output: <span class="kw-2">&amp;mut </span><span class="kw">dyn </span>std::io::Write, tu: TranslationUnit) -&gt; std::io::Result&lt;()&gt; {
@@ -266,7 +281,20 @@
 
 <span class="kw">use </span>miette::{NamedSource, <span class="prelude-ty">Result</span>};
 <span class="kw">fn </span>parse_tu(source: <span class="kw-2">&amp;</span>str, path: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;glsl_lang::ast::TranslationUnit&gt; {
-    <span class="kw">match </span>glsl_lang::ast::TranslationUnit::parse(source) {
+    <span class="kw">let </span><span class="kw-2">mut </span>processor = glsl_lang_pp::processor::fs::StdProcessor::new();
+    <span class="kw">let </span>tu: <span class="prelude-ty">Result</span>&lt;glsl_lang::ast::TranslationUnit, <span class="kw">_</span>&gt; = processor
+        .open_source(
+            source,
+            Path::new(path).parent().unwrap_or_else(|| Path::new(<span class="string">&quot;.&quot;</span>)),
+        )
+        .builder()
+        .parse()
+        .map(|(<span class="kw-2">mut </span>tu, <span class="kw">_</span>, iter)| {
+            iter.into_directives().inject(<span class="kw-2">&amp;mut </span>tu);
+            tu
+        });
+
+    <span class="kw">match </span>tu {
         <span class="prelude-val">Ok</span>(tu) =&gt; <span class="prelude-val">Ok</span>(tu),
         <span class="prelude-val">Err</span>(err) =&gt; {
             <span class="kw">let </span>pos = err.pos();

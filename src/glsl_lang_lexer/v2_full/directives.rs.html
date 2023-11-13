@@ -189,7 +189,92 @@
 <a href="#189" id="189">189</a>
 <a href="#190" id="190">190</a>
 <a href="#191" id="191">191</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>glsl_lang_pp::processor::event::{DirectiveKind, EventDirective};
+<a href="#192" id="192">192</a>
+<a href="#193" id="193">193</a>
+<a href="#194" id="194">194</a>
+<a href="#195" id="195">195</a>
+<a href="#196" id="196">196</a>
+<a href="#197" id="197">197</a>
+<a href="#198" id="198">198</a>
+<a href="#199" id="199">199</a>
+<a href="#200" id="200">200</a>
+<a href="#201" id="201">201</a>
+<a href="#202" id="202">202</a>
+<a href="#203" id="203">203</a>
+<a href="#204" id="204">204</a>
+<a href="#205" id="205">205</a>
+<a href="#206" id="206">206</a>
+<a href="#207" id="207">207</a>
+<a href="#208" id="208">208</a>
+<a href="#209" id="209">209</a>
+<a href="#210" id="210">210</a>
+<a href="#211" id="211">211</a>
+<a href="#212" id="212">212</a>
+<a href="#213" id="213">213</a>
+<a href="#214" id="214">214</a>
+<a href="#215" id="215">215</a>
+<a href="#216" id="216">216</a>
+<a href="#217" id="217">217</a>
+<a href="#218" id="218">218</a>
+<a href="#219" id="219">219</a>
+<a href="#220" id="220">220</a>
+<a href="#221" id="221">221</a>
+<a href="#222" id="222">222</a>
+<a href="#223" id="223">223</a>
+<a href="#224" id="224">224</a>
+<a href="#225" id="225">225</a>
+<a href="#226" id="226">226</a>
+<a href="#227" id="227">227</a>
+<a href="#228" id="228">228</a>
+<a href="#229" id="229">229</a>
+<a href="#230" id="230">230</a>
+<a href="#231" id="231">231</a>
+<a href="#232" id="232">232</a>
+<a href="#233" id="233">233</a>
+<a href="#234" id="234">234</a>
+<a href="#235" id="235">235</a>
+<a href="#236" id="236">236</a>
+<a href="#237" id="237">237</a>
+<a href="#238" id="238">238</a>
+<a href="#239" id="239">239</a>
+<a href="#240" id="240">240</a>
+<a href="#241" id="241">241</a>
+<a href="#242" id="242">242</a>
+<a href="#243" id="243">243</a>
+<a href="#244" id="244">244</a>
+<a href="#245" id="245">245</a>
+<a href="#246" id="246">246</a>
+<a href="#247" id="247">247</a>
+<a href="#248" id="248">248</a>
+<a href="#249" id="249">249</a>
+<a href="#250" id="250">250</a>
+<a href="#251" id="251">251</a>
+<a href="#252" id="252">252</a>
+<a href="#253" id="253">253</a>
+<a href="#254" id="254">254</a>
+<a href="#255" id="255">255</a>
+<a href="#256" id="256">256</a>
+<a href="#257" id="257">257</a>
+<a href="#258" id="258">258</a>
+<a href="#259" id="259">259</a>
+<a href="#260" id="260">260</a>
+<a href="#261" id="261">261</a>
+<a href="#262" id="262">262</a>
+<a href="#263" id="263">263</a>
+<a href="#264" id="264">264</a>
+<a href="#265" id="265">265</a>
+<a href="#266" id="266">266</a>
+<a href="#267" id="267">267</a>
+<a href="#268" id="268">268</a>
+<a href="#269" id="269">269</a>
+<a href="#270" id="270">270</a>
+<a href="#271" id="271">271</a>
+</pre></div><pre class="rust"><code><span class="kw">use </span>std::cmp;
+
+<span class="kw">use </span>glsl_lang_pp::processor::{
+    event::{DirectiveKind, EventDirective},
+    nodes::VersionProfile,
+};
 <span class="kw">use </span>glsl_lang_types::ast::{
     <span class="self">self</span>, PreprocessorExtensionBehaviorData, PreprocessorExtensionNameData,
     PreprocessorVersionProfileData,
@@ -206,36 +291,62 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>.directives
     }
 
-    <span class="kw">fn </span>get_declaration(directive: <span class="kw-2">&amp;</span>EventDirective) -&gt; <span class="prelude-ty">Option</span>&lt;ast::ExternalDeclaration&gt; {
+    <span class="kw">fn </span>get_declaration(
+        directive: <span class="kw-2">&amp;</span>EventDirective,
+        highest_version: <span class="kw-2">&amp;mut </span><span class="prelude-ty">Option</span>&lt;(u16, <span class="prelude-ty">Option</span>&lt;VersionProfile&gt;)&gt;,
+    ) -&gt; <span class="prelude-ty">Option</span>&lt;ast::ExternalDeclaration&gt; {
         <span class="kw">let </span>start = directive.text_range().start();
         <span class="kw">let </span>end = directive.text_range().end();
 
         <span class="kw">match </span>directive.kind() {
-            DirectiveKind::Version(version) =&gt; <span class="prelude-val">Some</span>(
-                ast::ExternalDeclarationData::Preprocessor(
-                    ast::PreprocessorData::Version(
-                        ast::PreprocessorVersionData {
-                            version: version.number,
-                            profile: <span class="kw">match </span>version.parsed_profile {
-                                <span class="prelude-val">None </span>=&gt; <span class="prelude-val">None</span>,
-                                <span class="prelude-val">Some</span>(glsl_lang_pp::processor::nodes::VersionProfile::None) =&gt; <span class="prelude-val">None</span>,
-                                <span class="prelude-val">Some</span>(glsl_lang_pp::processor::nodes::VersionProfile::Core) =&gt; {
-                                    <span class="prelude-val">Some</span>(PreprocessorVersionProfileData::Core.into())
-                                }
-                                <span class="prelude-val">Some</span>(
-                                    glsl_lang_pp::processor::nodes::VersionProfile::Compatibility,
-                                ) =&gt; <span class="prelude-val">Some</span>(PreprocessorVersionProfileData::Compatibility.into()),
-                                <span class="prelude-val">Some</span>(glsl_lang_pp::processor::nodes::VersionProfile::Es) =&gt; {
-                                    <span class="prelude-val">Some</span>(PreprocessorVersionProfileData::Es.into())
-                                }
-                            },
-                        }
-                        .into(),
+            DirectiveKind::Version(version) =&gt; {
+                <span class="kw">let </span>version_number = version.number;
+                <span class="kw">let </span>profile = version.parsed_profile;
+
+                <span class="kw">let </span>had_highest_version;
+                <span class="kw">let </span>(highest_version_number, highest_profile) = <span class="kw">match </span>highest_version {
+                    <span class="prelude-val">Some</span>(version_data) =&gt; {
+                        had_highest_version = <span class="bool-val">true</span>;
+                        version_data
+                    }
+                    <span class="prelude-val">None </span>=&gt; {
+                        had_highest_version = <span class="bool-val">false</span>;
+                        highest_version.insert((version_number, profile))
+                    }
+                };
+
+                <span class="kw-2">*</span>highest_version_number = cmp::max(version_number, <span class="kw-2">*</span>highest_version_number);
+                <span class="kw-2">*</span>highest_profile = cmp::max(
+                    <span class="comment">// Wrap in Some to avoid OpenGL ES being considered higher than no profile (i.e., core profile)
+                    </span><span class="prelude-val">Some</span>(profile.unwrap_or(VersionProfile::None)),
+                    <span class="kw-2">*</span>highest_profile,
+                );
+
+                (!had_highest_version).then_some(
+                    ast::ExternalDeclarationData::Preprocessor(
+                        ast::PreprocessorData::Version(
+                            ast::PreprocessorVersionData {
+                                version: version_number,
+                                profile: <span class="kw">match </span>profile {
+                                    <span class="prelude-val">None </span>| <span class="prelude-val">Some</span>(VersionProfile::None) =&gt; <span class="prelude-val">None</span>,
+                                    <span class="prelude-val">Some</span>(VersionProfile::Core) =&gt; {
+                                        <span class="prelude-val">Some</span>(PreprocessorVersionProfileData::Core.into())
+                                    }
+                                    <span class="prelude-val">Some</span>(VersionProfile::Compatibility) =&gt; {
+                                        <span class="prelude-val">Some</span>(PreprocessorVersionProfileData::Compatibility.into())
+                                    }
+                                    <span class="prelude-val">Some</span>(VersionProfile::Es) =&gt; {
+                                        <span class="prelude-val">Some</span>(PreprocessorVersionProfileData::Es.into())
+                                    }
+                                },
+                            }
+                            .into(),
+                        )
+                        .spanned(start, end),
                     )
                     .spanned(start, end),
                 )
-                .spanned(start, end),
-            ),
+            }
 
             DirectiveKind::Pragma(pragma) =&gt; <span class="prelude-val">Some</span>(
                 ast::ExternalDeclarationData::Preprocessor(
@@ -287,6 +398,7 @@
                 )
                 .spanned(start, end),
             ),
+
             <span class="kw">_ </span>=&gt; <span class="prelude-val">None</span>,
         }
     }
@@ -294,6 +406,8 @@
     <span class="kw">pub fn </span>inject(<span class="kw-2">mut </span><span class="self">self</span>, root: <span class="kw-2">&amp;mut </span>ast::TranslationUnit) -&gt; Directives {
         <span class="kw">let </span><span class="kw-2">mut </span>directive_idx = <span class="number">0</span>;
         <span class="kw">let </span><span class="kw-2">mut </span>declaration_idx = <span class="number">0</span>;
+        <span class="kw">let </span><span class="kw-2">mut </span>highest_version = <span class="prelude-val">None</span>;
+        <span class="kw">let </span><span class="kw-2">mut </span>version_directive_declaration_idx = <span class="prelude-val">None</span>;
 
         <span class="comment">// Insert directives
         </span><span class="kw">let </span><span class="kw-2">mut </span>start = <span class="prelude-val">None</span>;
@@ -328,23 +442,32 @@
                 </span><span class="kw">let </span>current_directive = <span class="kw-2">&amp;</span><span class="self">self</span>.directives[directive_idx];
                 <span class="kw">let </span>span = current_directive.text_range();
 
-                <span class="comment">// TODO: What happends to directives from multiple files?
-                </span><span class="kw">if </span>span.source_id() == actual_start.source_id {
-                    <span class="kw">if </span>span.end().offset &lt;= actual_start.offset {
-                        <span class="kw">if let </span><span class="prelude-val">Some</span>(declaration) = <span class="self">Self</span>::get_declaration(current_directive) {
-                            <span class="comment">// Add to ast
-                            </span>root.<span class="number">0</span>.insert(declaration_idx, declaration);
-                            declaration_idx += <span class="number">1</span>;
-                            <span class="comment">// Processed, remove from directive list
-                            </span><span class="self">self</span>.directives.remove(directive_idx);
-                        } <span class="kw">else </span>{
-                            <span class="comment">// Can&#39;t be processed, skip it
-                            </span>directive_idx += <span class="number">1</span>;
+                <span class="comment">// For directives in #include&#39;d files, a previous #include directive event prevents
+                // inserting them too soon in the top-level file
+                </span><span class="kw">if </span>span.end().offset &lt;= actual_start.offset
+                    || actual_start.source_id != span.source_id()
+                {
+                    <span class="kw">if let </span><span class="prelude-val">Some</span>(declaration) =
+                        <span class="self">Self</span>::get_declaration(current_directive, <span class="kw-2">&amp;mut </span>highest_version)
+                    {
+                        <span class="comment">// Add to ast
+                        </span>root.<span class="number">0</span>.insert(declaration_idx, declaration);
+
+                        <span class="kw">if </span><span class="macro">matches!</span>(current_directive.kind(), DirectiveKind::Version(<span class="kw">_</span>)) {
+                            version_directive_declaration_idx.get_or_insert(declaration_idx);
                         }
+
+                        declaration_idx += <span class="number">1</span>;
+
+                        <span class="comment">// Processed, remove from directive list
+                        </span><span class="self">self</span>.directives.remove(directive_idx);
                     } <span class="kw">else </span>{
-                        <span class="comment">// This directive comes later
-                        </span><span class="kw">break</span>;
+                        <span class="comment">// Can&#39;t/shouldn&#39;t be processed, skip it
+                        </span>directive_idx += <span class="number">1</span>;
                     }
+                } <span class="kw">else </span>{
+                    <span class="comment">// This directive comes later
+                    </span><span class="kw">break</span>;
                 }
             }
 
@@ -355,13 +478,50 @@
             </span>start = <span class="prelude-val">Some</span>(end);
         }
 
-        <span class="comment">// TODO: Check source_id?
+        <span class="comment">// Append any remaining directives
         </span><span class="kw">while </span>directive_idx &lt; <span class="self">self</span>.directives.len() {
-            <span class="kw">if let </span><span class="prelude-val">Some</span>(declaration) = <span class="self">Self</span>::get_declaration(<span class="kw-2">&amp;</span><span class="self">self</span>.directives[directive_idx]) {
+            <span class="kw">let </span>current_directive = <span class="kw-2">&amp;</span><span class="self">self</span>.directives[directive_idx];
+
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(declaration) =
+                <span class="self">Self</span>::get_declaration(current_directive, <span class="kw-2">&amp;mut </span>highest_version)
+            {
                 root.<span class="number">0</span>.push(declaration);
+
+                <span class="kw">if </span><span class="macro">matches!</span>(current_directive.kind(), DirectiveKind::Version(<span class="kw">_</span>)) {
+                    version_directive_declaration_idx.get_or_insert(root.<span class="number">0</span>.len() - <span class="number">1</span>);
+                }
+
                 <span class="self">self</span>.directives.remove(directive_idx);
             } <span class="kw">else </span>{
                 directive_idx += <span class="number">1</span>;
+            }
+        }
+
+        <span class="comment">// Set the version directive value to the highest (i.e., the one that requires the most
+        // OpenGL features) that was found
+        </span><span class="kw">if let </span>(
+            <span class="prelude-val">Some</span>(version_directive_declaration_idx),
+            <span class="prelude-val">Some</span>((highest_version_number, highest_profile)),
+        ) = (version_directive_declaration_idx, highest_version)
+        {
+            <span class="kw">if let </span>ast::ExternalDeclarationData::Preprocessor(preprocessor_data) =
+                <span class="kw-2">&amp;mut </span>root.<span class="number">0</span>[version_directive_declaration_idx].content
+            {
+                <span class="kw">if let </span>ast::PreprocessorData::Version(preprocessor_version) =
+                    <span class="kw-2">&amp;mut </span>preprocessor_data.content
+                {
+                    preprocessor_version.version = highest_version_number;
+                    preprocessor_version.profile = <span class="kw">match </span>highest_profile {
+                        <span class="prelude-val">None </span>| <span class="prelude-val">Some</span>(VersionProfile::None) =&gt; <span class="prelude-val">None</span>,
+                        <span class="prelude-val">Some</span>(VersionProfile::Core) =&gt; {
+                            <span class="prelude-val">Some</span>(PreprocessorVersionProfileData::Core.into())
+                        }
+                        <span class="prelude-val">Some</span>(VersionProfile::Compatibility) =&gt; {
+                            <span class="prelude-val">Some</span>(PreprocessorVersionProfileData::Compatibility.into())
+                        }
+                        <span class="prelude-val">Some</span>(VersionProfile::Es) =&gt; <span class="prelude-val">Some</span>(PreprocessorVersionProfileData::Es.into()),
+                    };
+                }
             }
         }
 

@@ -1,6 +1,6 @@
 [package]
 name = "lang-util"
-version = "0.5.1"
+version = "0.5.2"
 authors = ["Vincent Tavernier <vince.tavernier@gmail.com>"]
 edition = "2021"
 license = "BSD-3-Clause"
@@ -13,7 +13,7 @@ keywords = ["language", "parser", "ast"]
 categories = ["parsing"]
 
 [dependencies]
-lang-util-derive = "=0.5.1"
+lang-util-derive = "=0.5.2"
 line-span = "0.1"
 smol_str = "0.1"
 text-size = "1.1"

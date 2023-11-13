@@ -1,6 +1,30 @@
 ## [Unreleased]
 
 - - -
+## v0.5.2 - 2023-11-13
+#### Bug Fixes
+- **(cli)** actually setup fs preprocessor - (ca89a01) - *vtavernier*
+- **(lang-lexer/inject)** prevent some #include'd pp. dirs. from being injected at wrong positions - (cbd63d0) - Alejandro González
+- **(lang-lexer/inject)** better support injection of pp. dirs. from multiple files - (556fd4b) - Alejandro González
+#### Continuous Integration
+- **(bumpver)** use --exact - (7b81cdb) - *vtavernier*
+#### Miscellaneous Chores
+- **(deps)** update rust crate lalrpop-util to 0.20.0 - (43c7226) - renovate[bot]
+- **(deps)** update rust crate lalrpop to 0.20.0 - (b1801d9) - renovate[bot]
+- **(deps)** update cocogitto/cocogitto-action action to v3.5 - (6728065) - renovate[bot]
+- **(deps)** drop dependency on `lexical` - (5dc7eb2) - Alejandro González
+- **(deps)** add renovate.json - (d73718f) - renovate[bot]
+- **(version)** v0.5.1 [skip ci] - (3198b9d) - glsl-lang
+- fix dependency updates - (e525715) - vtavernier
+- fix in-workspace package versions - (254a042) - vtavernier
+- silence a new Clippy lint, run `cargo fmt` - (8a34d08) - Alejandro González
+- fix new Clippy unnecessary allocs lint in `lang-quote` - (50f509d) - Alejandro González
+- bump Rust toolchain to 1.70.0 - (db51697) - Alejandro González
+#### Tests
+- **(multifile-pp)** add tests for #24 - (fba1694) - *vtavernier*
+
+- - -
+
 ## v0.5.1 - 2023-04-27
 #### Bug Fixes
 - **(transpiler)** add missing brackets for array expressions - (51a7729) - Alejandro González

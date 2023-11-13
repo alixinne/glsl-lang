@@ -1,6 +1,6 @@
 [package]
 name = "glsl-lang-pp"
-version = "0.5.1"
+version = "0.5.2"
 authors = ["Vincent Tavernier <vince.tavernier@gmail.com>"]
 edition = "2021"
 license = "BSD-3-Clause"
@@ -14,7 +14,7 @@ categories = ["parser-implementations", "rendering"]
 build = "build.rs"
 
 [dependencies]
-lang-util = "=0.5.1"
+lang-util = "=0.5.2"
 
 string_cache = "0.8"
 thiserror = "1.0"
@@ -32,7 +32,7 @@ itertools = { version = "0.10", optional = true }
 once_cell = { version = "1.17.1", optional = true }
 
 [dev-dependencies]
-lang-util-dev = "=0.5.1"
+lang-util-dev = "=0.5.2"
 
 expect-test = "1.3"
 encoding_rs = "0.8"

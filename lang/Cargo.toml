@@ -33,7 +33,7 @@ glsl-lang-pp = "=0.5.2"
 
 criterion = "0.3"
 expect-test = "1.3"
-glsl = "6"
+glsl = "7"
 
 [[test]]
 name = "pos_error"

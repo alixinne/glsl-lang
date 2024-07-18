@@ -1,13 +1,13 @@
 [package]
 name = "lang-util-derive"
 version = "0.5.2"
-authors = ["Vincent Tavernier <vince.tavernier@gmail.com>"]
+authors = ["Alixinne <alixinne@pm.me>"]
 edition = "2021"
 license = "BSD-3-Clause"
 description = "proc-macros for lang-util"
-homepage = "https://github.com/vtavernier/glsl-lang"
+homepage = "https://github.com/alixinne/glsl-lang"
 documentation = "https://docs.rs/lang-util-derive/"
-repository = "https://github.com/vtavernier/glsl-lang"
+repository = "https://github.com/alixinne/glsl-lang"
 readme = "README.md"
 keywords = ["language", "parser", "ast", "macro"]
 categories = ["parsing"]

@@ -1,13 +1,13 @@
 [package]
 name = "glsl-lang-lexer"
 version = "0.5.2"
-authors = ["Vincent Tavernier <vince.tavernier@gmail.com>"]
+authors = ["Alixinne <alixinne@pm.me>"]
 edition = "2021"
 license = "BSD-3-Clause"
 description = "GLSL language lexers"
-homepage = "https://github.com/vtavernier/glsl-lang"
+homepage = "https://github.com/alixinne/glsl-lang"
 documentation = "https://docs.rs/glsl-lang-lexer/"
-repository = "https://github.com/vtavernier/glsl-lang"
+repository = "https://github.com/alixinne/glsl-lang"
 readme = "README.md"
 keywords = ["glsl", "language", "parser"]
 categories = ["parser-implementations", "rendering"]

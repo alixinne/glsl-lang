@@ -2,7 +2,7 @@
 //! with partial support for preprocessor directives. Its AST and features are
 //! modeled after [Dimitri Sabadie's `glsl` crate](https://github.com/phaazon/glsl).
 //!
-//! See the [homepage](https://github.com/vtavernier/glsl-lang) for more detailed comparison
+//! See the [homepage](https://github.com/alixinne/glsl-lang) for more detailed comparison
 //! elements.
 //!
 //! # Examples

@@ -7,7 +7,7 @@ lang-util-dev provides utilities for developing language parsers built using lan
 
 ## Author
 
-Vincent Tavernier <vince.tavernier@gmail.com>
+Alixinne <alixinne@pm.me>
 
 ## License
 

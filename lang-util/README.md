@@ -16,7 +16,7 @@ but you may use its utilities for implementing your own language parsers:
 
 ## Author
 
-Vincent Tavernier <vince.tavernier@gmail.com>
+Alixinne <alixinne@pm.me>
 
 ## License
 

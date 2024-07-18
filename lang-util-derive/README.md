@@ -10,7 +10,7 @@ These macros are re-exported by the `lang-util` crate, which you should depend o
 
 ## Author
 
-Vincent Tavernier <vince.tavernier@gmail.com>
+Alixinne <alixinne@pm.me>
 
 ## License
 

@@ -1,9 +1,9 @@
-# [glsl-lang](https://github.com/vtavernier/glsl-lang)
+# [glsl-lang](https://github.com/alixinne/glsl-lang)
 
-[![Build](https://github.com/vtavernier/glsl-lang/workflows/build/badge.svg?branch=master)](https://github.com/vtavernier/glsl-lang/actions)
+[![Build](https://github.com/alixinne/glsl-lang/workflows/build/badge.svg?branch=master)](https://github.com/alixinne/glsl-lang/actions)
 [![Crates.io](https://img.shields.io/crates/v/glsl-lang)](https://crates.io/crates/glsl-lang)
 [![docs.rs](https://img.shields.io/docsrs/glsl-lang)](https://docs.rs/glsl-lang/)
-[![License](https://img.shields.io/github/license/vtavernier/glsl-lang)](LICENSE)
+[![License](https://img.shields.io/github/license/alixinne/glsl-lang)](LICENSE)
 
 `glsl-lang` is a crate implementing a LALR parser for the GLSL language, with
 full support for preprocessor directives. Its AST and features are modeled
@@ -212,6 +212,6 @@ Aside from the limitations mentioned in the paragraph above:
 ## License
 
 This work is licensed under the BSD 3-clause license. Lexer and LALR parser by
-Vincent Tavernier <vince.tavernier@gmail.com>. Original AST, test suite and
+Alixinne <alixinne@pm.me>. Original AST, test suite and
 quoting code by Dimitri Sabadie <dimitri.sabadie@gmail.com>. glslangValidator
 test suite from the Khronos group.

@@ -19,7 +19,7 @@ tag_prefix = "v"
 [changelog]
 path = "CHANGELOG.md"
 authors = [
-  { signature = "Vincent Tavernier", username = "vtavernier" }
+  { signature = "Alixinne", username = "alixinne" }
 ]
 
 [bump_profiles]

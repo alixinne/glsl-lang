@@ -21,7 +21,7 @@ jobs:
         with:
           check-latest-tag-only: true
           git-user: glsl-lang
-          git-user-email: glsl-lang@vtavernier.github.io
+          git-user-email: glsl-lang@alixinne.github.io
 
       - uses: actions/cache@v4
         with:
@@ -166,7 +166,7 @@ jobs:
           check: false
           release: true
           git-user: glsl-lang
-          git-user-email: glsl-lang@vtavernier.github.io
+          git-user-email: glsl-lang@alixinne.github.io
 
       - run: cog changelog --at ${{ steps.release.outputs.version }} -t full_hash > GITHUB_CHANGELOG.md
         if: steps.release.outputs.version != ''

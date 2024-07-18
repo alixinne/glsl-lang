@@ -72,7 +72,7 @@ let statement = glsl_expr! {
 
 ## Author
 
-Vincent Tavernier <vince.tavernier@gmail.com>
+Alixinne <alixinne@pm.me>
 
 ## License
 

@@ -208,42 +208,38 @@ impl<'r> ProcessorStateBuilder<'r> {
     pub fn finish(self) -> ProcessorState {
         let one = DefineObject::one();
 
-        let mut state = ProcessorState {
-            // No #include extensions enabled
-            include_mode: IncludeMode::None,
-            // Spec 3.3, "There is a built-in macro definition for each profile the implementation
-            // supports. All implementations provide the following macro:
-            // `#define GL_core_profile 1`
-            definitions: self
-                .core_profile
-                .then(|| Define::object("GL_core_profile".into(), one.clone(), true))
-                .into_iter()
-                .chain(
-                    self.compatibility_profile
-                        .then(|| {
-                            Define::object("GL_compatibility_profile".into(), one.clone(), true)
-                        })
-                        .into_iter(),
-                )
-                .chain(
-                    self.es_profile
-                        .then(|| Define::object("GL_es_profile".into(), one.clone(), true))
-                        .into_iter(),
-                )
-                .chain(self.definitions.into_iter())
-                .map(|definition| Definition::Regular(definition.into(), FileId::default()))
-                .chain([Definition::Line, Definition::File, Definition::Version].into_iter())
-                .chain(self.registry.all().map(|spec| {
-                    Definition::Regular(
-                        Define::object(spec.name().as_ref().into(), one.clone(), true).into(),
-                        FileId::default(),
+        let mut state =
+            ProcessorState {
+                // No #include extensions enabled
+                include_mode: IncludeMode::None,
+                // Spec 3.3, "There is a built-in macro definition for each profile the implementation
+                // supports. All implementations provide the following macro:
+                // `#define GL_core_profile 1`
+                definitions: self
+                    .core_profile
+                    .then(|| Define::object("GL_core_profile".into(), one.clone(), true))
+                    .into_iter()
+                    .chain(self.compatibility_profile.then(|| {
+                        Define::object("GL_compatibility_profile".into(), one.clone(), true)
+                    }))
+                    .chain(
+                        self.es_profile
+                            .then(|| Define::object("GL_es_profile".into(), one.clone(), true)),
                     )
-                }))
-                .map(|definition| (definition.name().into(), definition))
-                .collect(),
-            version: Version::default(),
-            cpp_style_line: false,
-        };
+                    .chain(self.definitions)
+                    .map(|definition| Definition::Regular(definition.into(), FileId::default()))
+                    .chain([Definition::Line, Definition::File, Definition::Version])
+                    .chain(self.registry.all().map(|spec| {
+                        Definition::Regular(
+                            Define::object(spec.name().as_ref().into(), one.clone(), true).into(),
+                            FileId::default(),
+                        )
+                    }))
+                    .map(|definition| (definition.name().into(), definition))
+                    .collect(),
+                version: Version::default(),
+                cpp_style_line: false,
+            };
 
         for (name, behavior) in self.extensions {
             state.add_extension(&name, behavior);

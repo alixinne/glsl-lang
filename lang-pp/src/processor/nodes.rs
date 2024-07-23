@@ -292,8 +292,7 @@ impl VersionProfile {
 
 impl PartialOrd for VersionProfile {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        self.as_feature_set_size_index()
-            .partial_cmp(&other.as_feature_set_size_index())
+        Some(self.cmp(other))
     }
 }
 

@@ -1,6 +1,6 @@
 [package]
 name = "glsl-lang-quote"
-version = "0.5.2"
+version = "0.5.3"
 authors = ["Alixinne <alixinne@pm.me>"]
 edition = "2021"
 license = "BSD-3-Clause"
@@ -17,7 +17,7 @@ proc-macro = true
 path = "src/lib.rs"
 
 [dependencies]
-glsl-lang = { version = "=0.5.2", default-features = false, features = ["lexer-v2-full"] }
+glsl-lang = { version = "=0.5.3", default-features = false, features = ["lexer-v2-full"] }
 
 proc-macro2 = "1"
 quote = "1"

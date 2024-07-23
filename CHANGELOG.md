@@ -1,6 +1,23 @@
 ## [Unreleased]
 
 - - -
+## v0.5.3 - 2024-07-23
+#### Bug Fixes
+- **(glsl-lang-quote)** correctly parse #(ident) at line start - (c47f7fc) - *alixinne*
+- update github profile information - (2beea1f) - Alix Tavernier
+#### Build system
+- set resolver to 2 - (73544c2) - alixinne
+#### Miscellaneous Chores
+- **(deps)** update rust crate glsl to v7 - (e8782ee) - renovate[bot]
+- **(deps)** update actions/cache action to v4 - (76c7bd2) - renovate[bot]
+- **(deps)** update actions/checkout action to v4 - (be49ea6) - renovate[bot]
+- **(deps)** update actions/cache action to v3 - (b159bfb) - renovate[bot]
+- **(version)** v0.5.2 [skip ci] - (c0ada55) - glsl-lang
+- fix clippy warnings - (c28f583) - alixinne
+- bump rust version to 1.74.0 - (23a3c9b) - alixinne
+
+- - -
+
 ## v0.5.2 - 2023-11-13
 #### Bug Fixes
 - **(cli)** actually setup fs preprocessor - (ca89a01) - *alixinne*

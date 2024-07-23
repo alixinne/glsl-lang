@@ -267,3 +267,17 @@ fn test_eof() {
     "##]],
     );
 }
+
+#[test]
+fn test_hash_ident() {
+    check(
+        parse("#(ident)"),
+        expect![[r##"
+            ROOT@0..8
+              HASH@0..1 "#"
+              LPAREN@1..2 "("
+              IDENT_KW@2..7 "ident"
+              RPAREN@7..8 ")"
+        "##]],
+    );
+}

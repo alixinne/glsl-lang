@@ -52,3 +52,40 @@ pub trait LangLexerIterator:
         err: lalrpop_util::ParseError<LexerPosition, Token, Self::Error>,
     ) -> lang_util::error::ParseError<Self::Error>;
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    const HASH_IDENT_TEST_CASE: &str = "# (ident) = hello";
+
+    fn test_hash_ident_with_lexer<'i>(lexer: impl LangLexer<'i, Input = &'i str>) {
+        let tokens: Vec<_> = lexer.run(ParseContext::default()).collect();
+        eprintln!("{:#?}", tokens);
+        assert!(tokens.len() > 1);
+    }
+
+    #[cfg(feature = "v2-min")]
+    #[test]
+    fn test_hash_ident_v2_min() {
+        test_hash_ident_with_lexer(v2_min::str::Lexer::new(
+            HASH_IDENT_TEST_CASE,
+            &ParseOptions {
+                allow_rs_ident: true,
+                ..Default::default()
+            },
+        ));
+    }
+
+    #[cfg(feature = "v2-full")]
+    #[test]
+    fn test_hash_ident_v2_full() {
+        test_hash_ident_with_lexer(v2_full::str::Lexer::new(
+            HASH_IDENT_TEST_CASE,
+            &ParseOptions {
+                allow_rs_ident: true,
+                ..Default::default()
+            },
+        ));
+    }
+}

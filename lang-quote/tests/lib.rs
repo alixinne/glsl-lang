@@ -107,3 +107,21 @@ fn layout_qualifier() {
         layout(std140) struct Q { float f; };
     };
 }
+
+#[test]
+fn statement_var_decl() {
+    let current_mat: ast::Expr =
+        ast::ExprData::Variable(ast::IdentifierData("main".into()).into()).into();
+    let work_var: ast::Expr =
+        ast::ExprData::Variable(ast::IdentifierData("work_var".into()).into()).into();
+    let work_var_ps: ast::Expr =
+        ast::ExprData::Variable(ast::IdentifierData("work_var_ps".into()).into()).into();
+
+    let _ = glsl_statement! {
+        {
+            mat3 mt = #(current_mat);
+            #(work_var.clone()) = mt * #(work_var);
+            #(work_var_ps.clone()) = mt * #(work_var_ps);
+        }
+    };
+}

@@ -149,6 +149,19 @@ fn if_section_or_control_line(parser: &mut ParserRun) {
                     pp_extension(parser);
                     Some(PP_EXTENSION)
                 }
+                "(" => {
+                    parser.bump();
+                    match pp_rs_ident(parser, token) {
+                        Ok(()) => {
+                            // Abort parsing a control directive, we parsed an rs_ident
+                            return;
+                        }
+                        Err(err) => {
+                            error = err.into();
+                        }
+                    }
+                    None
+                }
                 other => {
                     error = Some((
                         ErrorKind::UnknownPreprocessorDirective { name: other.into() },
@@ -229,6 +242,42 @@ fn if_section_or_control_line(parser: &mut ParserRun) {
             parser.finish_node();
         }
     }
+}
+
+fn pp_rs_ident(
+    parser: &mut ParserRun,
+    token: lexer::TextToken,
+) -> Result<(), (ErrorKind, TextRange)> {
+    let mut level = 1;
+    while level > 0 {
+        // Skip whitespace
+        parser.skip_trivia();
+
+        let peeked = parser.peek().map(|tt| SmolStr::from(parser.text(tt)));
+        match peeked.as_deref() {
+            Some("(") => {
+                level += 1;
+                parser.bump();
+            }
+            Some(")") => {
+                level -= 1;
+                parser.bump();
+            }
+            Some(_) => {
+                parser.bump();
+            }
+            None => {
+                return Err((
+                    ErrorKind::EndOfInput {
+                        expected: Box::new([lexer::Token::RPAREN]),
+                    },
+                    token.range,
+                ));
+            }
+        }
+    }
+
+    Ok(())
 }
 
 fn pp_include(parser: &mut ParserRun) {

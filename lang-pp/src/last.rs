@@ -338,7 +338,7 @@ mod tests {
     use lang_util::FileId;
     use rowan::NodeOrToken;
 
-    use crate::processor::event::DirectiveKind;
+    use crate::{processor::event::DirectiveKind, types::Token};
 
     use super::{Event, MaybeToken};
 
@@ -370,42 +370,13 @@ mod tests {
     fn test_hash_ident() {
         use super::Token::*;
 
-        let mut tokens = Vec::new();
-
-        let mut tokenizer = crate::processor::str::process(
+        let inputs = [
             "#(ident) = hello",
-            crate::processor::ProcessorState::default(),
-        )
-        .tokenize(100, false, &crate::exts::DEFAULT_REGISTRY);
-
-        #[allow(clippy::while_let_on_iterator)]
-        while let Some(result) = tokenizer.next() {
-            if let Ok(event) = result {
-                match event {
-                    Event::Token { token_kind, .. } => {
-                        tokens.push(token_kind);
-                    }
-                    Event::Directive { directive, .. }
-                        if matches!(directive.kind(), DirectiveKind::Invalid(_)) =>
-                    {
-                        // Extract the tokens from the directive parse tree
-                        tokens.extend(
-                            directive
-                                .node
-                                .descendants_with_tokens()
-                                .filter_map(NodeOrToken::into_token)
-                                .map(|token| {
-                                    tokenizer.tokenize_single(&(&token, FileId::default())).0
-                                }),
-                        );
-                    }
-                    _ => {}
-                }
-            }
-        }
-
-        assert_eq!(
-            &tokens,
+            "# (ident) = hello",
+            "#(ident.clone()) = hello",
+            "# (ident.clone()) = hello",
+        ];
+        let outputs: [&[Token]; 4] = [
             &[
                 HASH,
                 LPAREN,
@@ -414,8 +385,84 @@ mod tests {
                 WS,
                 EQUAL,
                 WS,
-                IDENT("hello".into())
-            ]
-        );
+                IDENT("hello".into()),
+            ],
+            &[
+                HASH,
+                WS,
+                LPAREN,
+                IDENT("ident".into()),
+                RPAREN,
+                WS,
+                EQUAL,
+                WS,
+                IDENT("hello".into()),
+            ],
+            &[
+                HASH,
+                LPAREN,
+                IDENT("ident".into()),
+                PERIOD,
+                IDENT("clone".into()),
+                LPAREN,
+                RPAREN,
+                RPAREN,
+                WS,
+                EQUAL,
+                WS,
+                IDENT("hello".into()),
+            ],
+            &[
+                HASH,
+                WS,
+                LPAREN,
+                IDENT("ident".into()),
+                PERIOD,
+                IDENT("clone".into()),
+                LPAREN,
+                RPAREN,
+                RPAREN,
+                WS,
+                EQUAL,
+                WS,
+                IDENT("hello".into()),
+            ],
+        ];
+
+        for (input, output) in inputs.iter().zip(outputs.iter()) {
+            let mut tokens = Vec::new();
+
+            let mut tokenizer =
+                crate::processor::str::process(input, crate::processor::ProcessorState::default())
+                    .tokenize(100, false, &crate::exts::DEFAULT_REGISTRY);
+
+            #[allow(clippy::while_let_on_iterator)]
+            while let Some(result) = tokenizer.next() {
+                if let Ok(event) = result {
+                    match event {
+                        Event::Token { token_kind, .. } => {
+                            tokens.push(token_kind);
+                        }
+                        Event::Directive { directive, .. }
+                            if matches!(directive.kind(), DirectiveKind::Invalid(_)) =>
+                        {
+                            // Extract the tokens from the directive parse tree
+                            tokens.extend(
+                                directive
+                                    .node
+                                    .descendants_with_tokens()
+                                    .filter_map(NodeOrToken::into_token)
+                                    .map(|token| {
+                                        tokenizer.tokenize_single(&(&token, FileId::default())).0
+                                    }),
+                            );
+                        }
+                        _ => {}
+                    }
+                }
+            }
+
+            assert_eq!(&tokens, output);
+        }
     }
 }

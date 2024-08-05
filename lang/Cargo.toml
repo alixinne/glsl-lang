@@ -31,7 +31,7 @@ lalrpop = "0.20.0"
 lang-util-dev = "=0.5.3"
 glsl-lang-pp = "=0.5.3"
 
-criterion = "0.3"
+criterion = "0.5"
 expect-test = "1.3"
 glsl = "7"
 

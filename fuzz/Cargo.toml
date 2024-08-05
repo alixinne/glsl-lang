@@ -23,5 +23,5 @@ path = "src/bin/lang_test.rs"
 [dependencies]
 glsl-lang-pp = "*"
 glsl-lang = "*"
-afl = "0.11"
+afl = "0.15"
 argh = "0.1.5"

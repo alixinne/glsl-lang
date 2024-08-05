@@ -171,7 +171,7 @@ jobs:
       - run: cog changelog --at ${{ steps.release.outputs.version }} -t full_hash > GITHUB_CHANGELOG.md
         if: steps.release.outputs.version != ''
 
-      - uses: softprops/action-gh-release@v1
+      - uses: softprops/action-gh-release@v2
         if: steps.release.outputs.version != ''
         with:
           token: ${{ secrets.GH_PAT }}

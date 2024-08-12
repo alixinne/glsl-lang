@@ -19,7 +19,7 @@ lang-util = "=0.5.3"
 string_cache = "0.8"
 thiserror = "1.0"
 arrayvec = "0.7"
-derive_more = "0.99"
+derive_more = { version = "1.0", features = ["display"] }
 
 # Preprocessor
 rowan = { version = "0.15", optional = true }

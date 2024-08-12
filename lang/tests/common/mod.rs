@@ -12,13 +12,13 @@ enum Output {
             not(feature = "lexer-v2-min"),
             not(feature = "lexer-v2-full")
         ),
-        display(fmt = "ast-v1")
+        display("ast-v1")
     )]
     #[cfg_attr(
         all(feature = "lexer-v2-min", not(feature = "lexer-v2-full")),
-        display(fmt = "ast-v1")
+        display("ast-v1")
     )]
-    #[cfg_attr(feature = "lexer-v2-full", display(fmt = "ast-v2-full"))]
+    #[cfg_attr(feature = "lexer-v2-full", display("ast-v2-full"))]
     Ast,
 }
 

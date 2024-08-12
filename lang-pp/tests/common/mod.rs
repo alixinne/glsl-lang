@@ -9,13 +9,13 @@ use lang_util_dev::test_util::PathKey;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, lang_util_dev::Display)]
 enum Output {
-    #[display(fmt = "parsed")]
+    #[display("parsed")]
     Parsed,
-    #[display(fmt = "events")]
+    #[display("events")]
     Events,
-    #[display(fmt = "pp")]
+    #[display("pp")]
     Preprocessed,
-    #[display(fmt = "errors")]
+    #[display("errors")]
     Errors,
 }
 

@@ -11,485 +11,485 @@ use super::{
 #[allow(non_camel_case_types)]
 pub enum TypeName {
     /// "void"
-    #[display(fmt = "void")]
+    #[display("void")]
     VOID,
     /// "int"
-    #[display(fmt = "int")]
+    #[display("int")]
     INT,
     /// "bool"
-    #[display(fmt = "bool")]
+    #[display("bool")]
     BOOL,
     /// "float"
-    #[display(fmt = "float")]
+    #[display("float")]
     FLOAT,
     /// "double"
-    #[display(fmt = "double")]
+    #[display("double")]
     DOUBLE,
     /// "vec2"
-    #[display(fmt = "vec2")]
+    #[display("vec2")]
     VEC2,
     /// "vec3"
-    #[display(fmt = "vec3")]
+    #[display("vec3")]
     VEC3,
     /// "vec4"
-    #[display(fmt = "vec4")]
+    #[display("vec4")]
     VEC4,
     /// "ivec2"
-    #[display(fmt = "ivec2")]
+    #[display("ivec2")]
     IVEC2,
     /// "ivec3"
-    #[display(fmt = "ivec3")]
+    #[display("ivec3")]
     IVEC3,
     /// "ivec4"
-    #[display(fmt = "ivec4")]
+    #[display("ivec4")]
     IVEC4,
     /// "bvec2"
-    #[display(fmt = "bvec2")]
+    #[display("bvec2")]
     BVEC2,
     /// "bvec3"
-    #[display(fmt = "bvec3")]
+    #[display("bvec3")]
     BVEC3,
     /// "bvec4"
-    #[display(fmt = "bvec4")]
+    #[display("bvec4")]
     BVEC4,
     /// "uint"
-    #[display(fmt = "uint")]
+    #[display("uint")]
     UINT,
     /// "atomic_uint"
-    #[display(fmt = "atomic_uint")]
+    #[display("atomic_uint")]
     ATOMIC_UINT,
     /// "uvec2"
-    #[display(fmt = "uvec2")]
+    #[display("uvec2")]
     UVEC2,
     /// "uvec3"
-    #[display(fmt = "uvec3")]
+    #[display("uvec3")]
     UVEC3,
     /// "uvec4"
-    #[display(fmt = "uvec4")]
+    #[display("uvec4")]
     UVEC4,
     /// "dvec2"
-    #[display(fmt = "dvec2")]
+    #[display("dvec2")]
     DVEC2,
     /// "dvec3"
-    #[display(fmt = "dvec3")]
+    #[display("dvec3")]
     DVEC3,
     /// "dvec4"
-    #[display(fmt = "dvec4")]
+    #[display("dvec4")]
     DVEC4,
     /// "mat2"
-    #[display(fmt = "mat2")]
+    #[display("mat2")]
     MAT2,
     /// "mat3"
-    #[display(fmt = "mat3")]
+    #[display("mat3")]
     MAT3,
     /// "mat4"
-    #[display(fmt = "mat4")]
+    #[display("mat4")]
     MAT4,
     /// "mat2x2"
-    #[display(fmt = "mat2x2")]
+    #[display("mat2x2")]
     MAT2X2,
     /// "mat2x3"
-    #[display(fmt = "mat2x3")]
+    #[display("mat2x3")]
     MAT2X3,
     /// "mat2x4"
-    #[display(fmt = "mat2x4")]
+    #[display("mat2x4")]
     MAT2X4,
     /// "mat3x2"
-    #[display(fmt = "mat3x2")]
+    #[display("mat3x2")]
     MAT3X2,
     /// "mat3x3"
-    #[display(fmt = "mat3x3")]
+    #[display("mat3x3")]
     MAT3X3,
     /// "mat3x4"
-    #[display(fmt = "mat3x4")]
+    #[display("mat3x4")]
     MAT3X4,
     /// "mat4x2"
-    #[display(fmt = "mat4x2")]
+    #[display("mat4x2")]
     MAT4X2,
     /// "mat4x3"
-    #[display(fmt = "mat4x3")]
+    #[display("mat4x3")]
     MAT4X3,
     /// "mat4x4"
-    #[display(fmt = "mat4x4")]
+    #[display("mat4x4")]
     MAT4X4,
     /// "dmat2"
-    #[display(fmt = "dmat2")]
+    #[display("dmat2")]
     DMAT2,
     /// "dmat3"
-    #[display(fmt = "dmat3")]
+    #[display("dmat3")]
     DMAT3,
     /// "dmat4"
-    #[display(fmt = "dmat4")]
+    #[display("dmat4")]
     DMAT4,
     /// "dmat2x2"
-    #[display(fmt = "dmat2x2")]
+    #[display("dmat2x2")]
     DMAT2X2,
     /// "dmat2x3"
-    #[display(fmt = "dmat2x3")]
+    #[display("dmat2x3")]
     DMAT2X3,
     /// "dmat2x4"
-    #[display(fmt = "dmat2x4")]
+    #[display("dmat2x4")]
     DMAT2X4,
     /// "dmat3x2"
-    #[display(fmt = "dmat3x2")]
+    #[display("dmat3x2")]
     DMAT3X2,
     /// "dmat3x3"
-    #[display(fmt = "dmat3x3")]
+    #[display("dmat3x3")]
     DMAT3X3,
     /// "dmat3x4"
-    #[display(fmt = "dmat3x4")]
+    #[display("dmat3x4")]
     DMAT3X4,
     /// "dmat4x2"
-    #[display(fmt = "dmat4x2")]
+    #[display("dmat4x2")]
     DMAT4X2,
     /// "dmat4x3"
-    #[display(fmt = "dmat4x3")]
+    #[display("dmat4x3")]
     DMAT4X3,
     /// "dmat4x4"
-    #[display(fmt = "dmat4x4")]
+    #[display("dmat4x4")]
     DMAT4X4,
     /// "sampler1D"
-    #[display(fmt = "sampler1D")]
+    #[display("sampler1D")]
     SAMPLER1D,
     /// "sampler1DShadow"
-    #[display(fmt = "sampler1DShadow")]
+    #[display("sampler1DShadow")]
     SAMPLER1DSHADOW,
     /// "sampler1DArray"
-    #[display(fmt = "sampler1DArray")]
+    #[display("sampler1DArray")]
     SAMPLER1DARRAY,
     /// "sampler1DArrayShadow"
-    #[display(fmt = "sampler1DArrayShadow")]
+    #[display("sampler1DArrayShadow")]
     SAMPLER1DARRAYSHADOW,
     /// "isampler1D"
-    #[display(fmt = "isampler1D")]
+    #[display("isampler1D")]
     ISAMPLER1D,
     /// "isampler1DArray"
-    #[display(fmt = "isampler1DArray")]
+    #[display("isampler1DArray")]
     ISAMPLER1DARRAY,
     /// "usampler1D"
-    #[display(fmt = "usampler1D")]
+    #[display("usampler1D")]
     USAMPLER1D,
     /// "usampler1DArray"
-    #[display(fmt = "usampler1DArray")]
+    #[display("usampler1DArray")]
     USAMPLER1DARRAY,
     /// "sampler2D"
-    #[display(fmt = "sampler2D")]
+    #[display("sampler2D")]
     SAMPLER2D,
     /// "sampler2DShadow"
-    #[display(fmt = "sampler2DShadow")]
+    #[display("sampler2DShadow")]
     SAMPLER2DSHADOW,
     /// "sampler2DArray"
-    #[display(fmt = "sampler2DArray")]
+    #[display("sampler2DArray")]
     SAMPLER2DARRAY,
     /// "sampler2DArrayShadow"
-    #[display(fmt = "sampler2DArrayShadow")]
+    #[display("sampler2DArrayShadow")]
     SAMPLER2DARRAYSHADOW,
     /// "isampler2D"
-    #[display(fmt = "isampler2D")]
+    #[display("isampler2D")]
     ISAMPLER2D,
     /// "isampler2DArray"
-    #[display(fmt = "isampler2DArray")]
+    #[display("isampler2DArray")]
     ISAMPLER2DARRAY,
     /// "usampler2D"
-    #[display(fmt = "usampler2D")]
+    #[display("usampler2D")]
     USAMPLER2D,
     /// "usampler2DArray"
-    #[display(fmt = "usampler2DArray")]
+    #[display("usampler2DArray")]
     USAMPLER2DARRAY,
     /// "sampler2DRect"
-    #[display(fmt = "sampler2DRect")]
+    #[display("sampler2DRect")]
     SAMPLER2DRECT,
     /// "sampler2DRectShadow"
-    #[display(fmt = "sampler2DRectShadow")]
+    #[display("sampler2DRectShadow")]
     SAMPLER2DRECTSHADOW,
     /// "isampler2DRect"
-    #[display(fmt = "isampler2DRect")]
+    #[display("isampler2DRect")]
     ISAMPLER2DRECT,
     /// "usampler2DRect"
-    #[display(fmt = "usampler2DRect")]
+    #[display("usampler2DRect")]
     USAMPLER2DRECT,
     /// "sampler2DMS"
-    #[display(fmt = "sampler2DMS")]
+    #[display("sampler2DMS")]
     SAMPLER2DMS,
     /// "isampler2DMS"
-    #[display(fmt = "isampler2DMS")]
+    #[display("isampler2DMS")]
     ISAMPLER2DMS,
     /// "usampler2DMS"
-    #[display(fmt = "usampler2DMS")]
+    #[display("usampler2DMS")]
     USAMPLER2DMS,
     /// "sampler2DMSArray"
-    #[display(fmt = "sampler2DMSArray")]
+    #[display("sampler2DMSArray")]
     SAMPLER2DMSARRAY,
     /// "isampler2DMSArray"
-    #[display(fmt = "isampler2DMSArray")]
+    #[display("isampler2DMSArray")]
     ISAMPLER2DMSARRAY,
     /// "usampler2DMSArray"
-    #[display(fmt = "usampler2DMSArray")]
+    #[display("usampler2DMSArray")]
     USAMPLER2DMSARRAY,
     /// "sampler3D"
-    #[display(fmt = "sampler3D")]
+    #[display("sampler3D")]
     SAMPLER3D,
     /// "isampler3D"
-    #[display(fmt = "isampler3D")]
+    #[display("isampler3D")]
     ISAMPLER3D,
     /// "usampler3D"
-    #[display(fmt = "usampler3D")]
+    #[display("usampler3D")]
     USAMPLER3D,
     /// "samplerCube"
-    #[display(fmt = "samplerCube")]
+    #[display("samplerCube")]
     SAMPLERCUBE,
     /// "samplerCubeShadow"
-    #[display(fmt = "samplerCubeShadow")]
+    #[display("samplerCubeShadow")]
     SAMPLERCUBESHADOW,
     /// "isamplerCube"
-    #[display(fmt = "isamplerCube")]
+    #[display("isamplerCube")]
     ISAMPLERCUBE,
     /// "usamplerCube"
-    #[display(fmt = "usamplerCube")]
+    #[display("usamplerCube")]
     USAMPLERCUBE,
     /// "samplerCubeArray"
-    #[display(fmt = "samplerCubeArray")]
+    #[display("samplerCubeArray")]
     SAMPLERCUBEARRAY,
     /// "samplerCubeArrayShadow"
-    #[display(fmt = "samplerCubeArrayShadow")]
+    #[display("samplerCubeArrayShadow")]
     SAMPLERCUBEARRAYSHADOW,
     /// "isamplerCubeArray"
-    #[display(fmt = "isamplerCubeArray")]
+    #[display("isamplerCubeArray")]
     ISAMPLERCUBEARRAY,
     /// "usamplerCubeArray"
-    #[display(fmt = "usamplerCubeArray")]
+    #[display("usamplerCubeArray")]
     USAMPLERCUBEARRAY,
     /// "samplerBuffer"
-    #[display(fmt = "samplerBuffer")]
+    #[display("samplerBuffer")]
     SAMPLERBUFFER,
     /// "isamplerBuffer"
-    #[display(fmt = "isamplerBuffer")]
+    #[display("isamplerBuffer")]
     ISAMPLERBUFFER,
     /// "usamplerBuffer"
-    #[display(fmt = "usamplerBuffer")]
+    #[display("usamplerBuffer")]
     USAMPLERBUFFER,
     /// "image1D"
-    #[display(fmt = "image1D")]
+    #[display("image1D")]
     IMAGE1D,
     /// "iimage1D"
-    #[display(fmt = "iimage1D")]
+    #[display("iimage1D")]
     IIMAGE1D,
     /// "uimage1D"
-    #[display(fmt = "uimage1D")]
+    #[display("uimage1D")]
     UIMAGE1D,
     /// "image1DArray"
-    #[display(fmt = "image1DArray")]
+    #[display("image1DArray")]
     IMAGE1DARRAY,
     /// "iimage1DArray"
-    #[display(fmt = "iimage1DArray")]
+    #[display("iimage1DArray")]
     IIMAGE1DARRAY,
     /// "uimage1DArray"
-    #[display(fmt = "uimage1DArray")]
+    #[display("uimage1DArray")]
     UIMAGE1DARRAY,
     /// "image2D"
-    #[display(fmt = "image2D")]
+    #[display("image2D")]
     IMAGE2D,
     /// "iimage2D"
-    #[display(fmt = "iimage2D")]
+    #[display("iimage2D")]
     IIMAGE2D,
     /// "uimage2D"
-    #[display(fmt = "uimage2D")]
+    #[display("uimage2D")]
     UIMAGE2D,
     /// "image2DArray"
-    #[display(fmt = "image2DArray")]
+    #[display("image2DArray")]
     IMAGE2DARRAY,
     /// "iimage2DArray"
-    #[display(fmt = "iimage2DArray")]
+    #[display("iimage2DArray")]
     IIMAGE2DARRAY,
     /// "uimage2DArray"
-    #[display(fmt = "uimage2DArray")]
+    #[display("uimage2DArray")]
     UIMAGE2DARRAY,
     /// "image2DRect"
-    #[display(fmt = "image2DRect")]
+    #[display("image2DRect")]
     IMAGE2DRECT,
     /// "iimage2DRect"
-    #[display(fmt = "iimage2DRect")]
+    #[display("iimage2DRect")]
     IIMAGE2DRECT,
     /// "uimage2DRect"
-    #[display(fmt = "uimage2DRect")]
+    #[display("uimage2DRect")]
     UIMAGE2DRECT,
     /// "image2DMS"
-    #[display(fmt = "image2DMS")]
+    #[display("image2DMS")]
     IMAGE2DMS,
     /// "iimage2DMS"
-    #[display(fmt = "iimage2DMS")]
+    #[display("iimage2DMS")]
     IIMAGE2DMS,
     /// "uimage2DMS"
-    #[display(fmt = "uimage2DMS")]
+    #[display("uimage2DMS")]
     UIMAGE2DMS,
     /// "image2DMSArray"
-    #[display(fmt = "image2DMSArray")]
+    #[display("image2DMSArray")]
     IMAGE2DMSARRAY,
     /// "iimage2DMSArray"
-    #[display(fmt = "iimage2DMSArray")]
+    #[display("iimage2DMSArray")]
     IIMAGE2DMSARRAY,
     /// "uimage2DMSArray"
-    #[display(fmt = "uimage2DMSArray")]
+    #[display("uimage2DMSArray")]
     UIMAGE2DMSARRAY,
     /// "image3D"
-    #[display(fmt = "image3D")]
+    #[display("image3D")]
     IMAGE3D,
     /// "iimage3D"
-    #[display(fmt = "iimage3D")]
+    #[display("iimage3D")]
     IIMAGE3D,
     /// "uimage3D"
-    #[display(fmt = "uimage3D")]
+    #[display("uimage3D")]
     UIMAGE3D,
     /// "imageCube"
-    #[display(fmt = "imageCube")]
+    #[display("imageCube")]
     IMAGECUBE,
     /// "iimageCube"
-    #[display(fmt = "iimageCube")]
+    #[display("iimageCube")]
     IIMAGECUBE,
     /// "uimageCube"
-    #[display(fmt = "uimageCube")]
+    #[display("uimageCube")]
     UIMAGECUBE,
     /// "imageCubeArray"
-    #[display(fmt = "imageCubeArray")]
+    #[display("imageCubeArray")]
     IMAGECUBEARRAY,
     /// "iimageCubeArray"
-    #[display(fmt = "iimageCubeArray")]
+    #[display("iimageCubeArray")]
     IIMAGECUBEARRAY,
     /// "uimageCubeArray"
-    #[display(fmt = "uimageCubeArray")]
+    #[display("uimageCubeArray")]
     UIMAGECUBEARRAY,
     /// "imageBuffer"
-    #[display(fmt = "imageBuffer")]
+    #[display("imageBuffer")]
     IMAGEBUFFER,
     /// "iimageBuffer"
-    #[display(fmt = "iimageBuffer")]
+    #[display("iimageBuffer")]
     IIMAGEBUFFER,
     /// "uimageBuffer"
-    #[display(fmt = "uimageBuffer")]
+    #[display("uimageBuffer")]
     UIMAGEBUFFER,
     // Vulkan type names
     /// "texture1D"
-    #[display(fmt = "texture1D")]
+    #[display("texture1D")]
     TEXTURE1D,
     /// "texture1DArray"
-    #[display(fmt = "texture1DArray")]
+    #[display("texture1DArray")]
     TEXTURE1DARRAY,
     /// "itexture1D"
-    #[display(fmt = "itexture1D")]
+    #[display("itexture1D")]
     ITEXTURE1D,
     /// "itexture1DArray"
-    #[display(fmt = "itexture1DArray")]
+    #[display("itexture1DArray")]
     ITEXTURE1DARRAY,
     /// "utexture1D"
-    #[display(fmt = "utexture1D")]
+    #[display("utexture1D")]
     UTEXTURE1D,
     /// "utexture1DArray"
-    #[display(fmt = "utexture1DArray")]
+    #[display("utexture1DArray")]
     UTEXTURE1DARRAY,
     /// "texture2D"
-    #[display(fmt = "texture2D")]
+    #[display("texture2D")]
     TEXTURE2D,
     /// "texture2DArray"
-    #[display(fmt = "texture2DArray")]
+    #[display("texture2DArray")]
     TEXTURE2DARRAY,
     /// "itexture2D"
-    #[display(fmt = "itexture2D")]
+    #[display("itexture2D")]
     ITEXTURE2D,
     /// "itexture2DArray"
-    #[display(fmt = "itexture2DArray")]
+    #[display("itexture2DArray")]
     ITEXTURE2DARRAY,
     /// "utexture2D"
-    #[display(fmt = "utexture2D")]
+    #[display("utexture2D")]
     UTEXTURE2D,
     /// "utexture2DArray"
-    #[display(fmt = "utexture2DArray")]
+    #[display("utexture2DArray")]
     UTEXTURE2DARRAY,
     /// "texture2DRect"
-    #[display(fmt = "texture2DRect")]
+    #[display("texture2DRect")]
     TEXTURE2DRECT,
     /// "itexture2DRect"
-    #[display(fmt = "itexture2DRect")]
+    #[display("itexture2DRect")]
     ITEXTURE2DRECT,
     /// "utexture2DRect"
-    #[display(fmt = "utexture2DRect")]
+    #[display("utexture2DRect")]
     UTEXTURE2DRECT,
     /// "texture2DMS"
-    #[display(fmt = "texture2DMS")]
+    #[display("texture2DMS")]
     TEXTURE2DMS,
     /// "itexture2DMS"
-    #[display(fmt = "itexture2DMS")]
+    #[display("itexture2DMS")]
     ITEXTURE2DMS,
     /// "utexture2DMS"
-    #[display(fmt = "utexture2DMS")]
+    #[display("utexture2DMS")]
     UTEXTURE2DMS,
     /// "texture2DMSArray"
-    #[display(fmt = "texture2DMSArray")]
+    #[display("texture2DMSArray")]
     TEXTURE2DMSARRAY,
     /// "itexture2DMSArray"
-    #[display(fmt = "itexture2DMSArray")]
+    #[display("itexture2DMSArray")]
     ITEXTURE2DMSARRAY,
     /// "utexture2DMSArray"
-    #[display(fmt = "utexture2DMSArray")]
+    #[display("utexture2DMSArray")]
     UTEXTURE2DMSARRAY,
     /// "texture3D"
-    #[display(fmt = "texture3D")]
+    #[display("texture3D")]
     TEXTURE3D,
     /// "itexture3D"
-    #[display(fmt = "itexture3D")]
+    #[display("itexture3D")]
     ITEXTURE3D,
     /// "utexture3D"
-    #[display(fmt = "utexture3D")]
+    #[display("utexture3D")]
     UTEXTURE3D,
     /// "textureCube"
-    #[display(fmt = "textureCube")]
+    #[display("textureCube")]
     TEXTURECUBE,
     /// "itextureCube"
-    #[display(fmt = "itextureCube")]
+    #[display("itextureCube")]
     ITEXTURECUBE,
     /// "utextureCube"
-    #[display(fmt = "utextureCube")]
+    #[display("utextureCube")]
     UTEXTURECUBE,
     /// "textureCubeArray"
-    #[display(fmt = "textureCubeArray")]
+    #[display("textureCubeArray")]
     TEXTURECUBEARRAY,
     /// "itextureCubeArray"
-    #[display(fmt = "itextureCubeArray")]
+    #[display("itextureCubeArray")]
     ITEXTURECUBEARRAY,
     /// "utextureCubeArray"
-    #[display(fmt = "utextureCubeArray")]
+    #[display("utextureCubeArray")]
     UTEXTURECUBEARRAY,
     /// "textureBuffer"
-    #[display(fmt = "textureBuffer")]
+    #[display("textureBuffer")]
     TEXTUREBUFFER,
     /// "itextureBuffer"
-    #[display(fmt = "itextureBuffer")]
+    #[display("itextureBuffer")]
     ITEXTUREBUFFER,
     /// "utextureBuffer"
-    #[display(fmt = "utextureBuffer")]
+    #[display("utextureBuffer")]
     UTEXTUREBUFFER,
     /// "sampler"
-    #[display(fmt = "sampler")]
+    #[display("sampler")]
     SAMPLER,
     /// "samplerShadow"
-    #[display(fmt = "samplerShadow")]
+    #[display("samplerShadow")]
     SAMPLERSHADOW,
     /// "subpassInput"
-    #[display(fmt = "subpassInput")]
+    #[display("subpassInput")]
     SUBPASSINPUT,
     /// "isubpassInput"
-    #[display(fmt = "isubpassInput")]
+    #[display("isubpassInput")]
     ISUBPASSINPUT,
     /// "usubpassInput"
-    #[display(fmt = "usubpassInput")]
+    #[display("usubpassInput")]
     USUBPASSINPUT,
     /// "subpassInputMS"
-    #[display(fmt = "subpassInputMS")]
+    #[display("subpassInputMS")]
     SUBPASSINPUTMS,
     /// "isubpassInputMS"
-    #[display(fmt = "isubpassInputMS")]
+    #[display("isubpassInputMS")]
     ISUBPASSINPUTMS,
     /// "usubpassInputMS"
-    #[display(fmt = "usubpassInputMS")]
+    #[display("usubpassInputMS")]
     USUBPASSINPUTMS,
     /// Reserved for future use
     RESERVED(TypeNameAtom),
@@ -1613,15 +1613,15 @@ pub enum Token {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, derive_more::Display)]
 pub enum ErrorKind {
-    #[display(fmt = "invalid token")]
+    #[display("invalid token")]
     InvalidToken,
-    #[display(fmt = "invalid int literal")]
+    #[display("invalid int literal")]
     InvalidIntLiteral,
-    #[display(fmt = "invalid uint literal")]
+    #[display("invalid uint literal")]
     InvalidUIntLiteral,
-    #[display(fmt = "invalid float literal")]
+    #[display("invalid float literal")]
     InvalidFloatLiteral,
-    #[display(fmt = "invalid double literal")]
+    #[display("invalid double literal")]
     InvalidDoubleLiteral,
 }
 

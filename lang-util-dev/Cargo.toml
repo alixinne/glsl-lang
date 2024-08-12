@@ -13,5 +13,5 @@ keywords = ["language", "parser", "ast"]
 categories = ["parsing"]
 
 [dependencies]
-derive_more = "0.99"
+derive_more = "1.0"
 similar-asserts = "1.4"

@@ -1,6 +1,7 @@
 ignore_merge_commits = true
 branch_whitelist = [
   "master",
+  "next",
 ]
 pre_bump_hooks = [
   "./ci/bumpver.sh {{version}}",

@@ -1,0 +1,1 @@
+searchState.loadedDescShard("glsl_lang_cli", 0, "<code>glsl-lang</code> debugging CLI.\nglsl-lang command-line interface\noutput format (text, json or glsl)\nReturns the argument unchanged.\nReturns the argument unchanged.\nCalls <code>U::from(self)</code>.\nCalls <code>U::from(self)</code>.\nCLI entry point\ninput file path")

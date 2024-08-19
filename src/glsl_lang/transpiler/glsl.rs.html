@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lang/src/transpiler/glsl.rs`."><title>glsl.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-fa3bb1812debf86c.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="glsl_lang" data-themes="" data-resource-suffix="" data-rustdoc-version="1.74.1 (a28077b28 2023-12-04)" data-channel="1.74.1" data-search-js="search-8be46b629f5f14a8.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-c5bd66d33317d69f.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../glsl_lang/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lang/src/transpiler/glsl.rs`."><title>glsl.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-dd39b87e5fcfba68.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="glsl_lang" data-themes="" data-resource-suffix="" data-rustdoc-version="1.80.1 (3f5fd8dd4 2024-08-06)" data-channel="1.80.1" data-search-js="search-d52510db62a78183.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -2894,12 +2894,12 @@
             <span class="self">Self</span>::None =&gt; {}
             <span class="self">Self</span>::Tabs { count, .. } =&gt; {
                 <span class="kw">for _ in </span><span class="number">0</span>..count * levels {
-                    f.write_char(<span class="string">&#39;\t&#39;</span>)<span class="question-mark">?</span>;
+                    f.write_char(<span class="string">'\t'</span>)<span class="question-mark">?</span>;
                 }
             }
             <span class="self">Self</span>::Spaces { count, .. } =&gt; {
                 <span class="kw">for _ in </span><span class="number">0</span>..count * levels {
-                    f.write_char(<span class="string">&#39; &#39;</span>)<span class="question-mark">?</span>;
+                    f.write_char(<span class="string">' '</span>)<span class="question-mark">?</span>;
                 }
             }
         }
@@ -2933,7 +2933,7 @@
     {
         <span class="kw">match </span><span class="self">self </span>{
             <span class="self">Self</span>::None =&gt; <span class="prelude-val">Ok</span>(()),
-            <span class="self">Self</span>::Space =&gt; f.write_char(<span class="string">&#39; &#39;</span>),
+            <span class="self">Self</span>::Space =&gt; f.write_char(<span class="string">' '</span>),
             <span class="self">Self</span>::Newline =&gt; state.new_line(<span class="bool-val">true</span>),
         }
     }
@@ -3044,9 +3044,9 @@
 
 <span class="doccomment">/// Formatting state of the GLSL transpiler
 </span><span class="attr">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-</span><span class="kw">pub struct </span>FormattingState&lt;<span class="lifetime">&#39;s</span>&gt; {
+</span><span class="kw">pub struct </span>FormattingState&lt;<span class="lifetime">'s</span>&gt; {
     <span class="doccomment">/// Formatting settings
-    </span><span class="kw">pub </span>settings: <span class="kw-2">&amp;</span><span class="lifetime">&#39;s </span>FormattingSettings,
+    </span><span class="kw">pub </span>settings: <span class="kw-2">&amp;</span><span class="lifetime">'s </span>FormattingSettings,
     indentation_level: u32,
     new_line_pending: bool,
     in_function_definition_statement: bool,
@@ -3054,7 +3054,7 @@
     is_first_external_declaration: bool,
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;s</span>&gt; FormattingState&lt;<span class="lifetime">&#39;s</span>&gt; {
+<span class="kw">impl</span>&lt;<span class="lifetime">'s</span>&gt; FormattingState&lt;<span class="lifetime">'s</span>&gt; {
     <span class="kw">fn </span>write_indent&lt;F&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>F) -&gt; std::fmt::Result
     <span class="kw">where
         </span>F: Write + <span class="question-mark">?</span>Sized,
@@ -3066,7 +3066,7 @@
     <span class="kw">where
         </span>F: Write + <span class="question-mark">?</span>Sized,
     {
-        f.write_char(<span class="string">&#39;\n&#39;</span>)<span class="question-mark">?</span>;
+        f.write_char(<span class="string">'\n'</span>)<span class="question-mark">?</span>;
         <span class="self">self</span>.write_indent(f)
     }
 
@@ -3121,7 +3121,7 @@
         </span>F: Write + <span class="question-mark">?</span>Sized,
     {
         <span class="kw">if </span><span class="self">self</span>.new_line_pending {
-            f.write_char(<span class="string">&#39; &#39;</span>)<span class="question-mark">?</span>;
+            f.write_char(<span class="string">' '</span>)<span class="question-mark">?</span>;
             <span class="self">self</span>.new_line_pending = <span class="bool-val">false</span>;
         }
 
@@ -3135,7 +3135,7 @@
     {
         <span class="comment">// Insert space if this is a top-level compound statement
         </span><span class="kw">if </span><span class="self">self</span>.settings.space_before_open_block &amp;&amp; <span class="self">self</span>.in_function_definition_statement {
-            f.write_char(<span class="string">&#39; &#39;</span>)<span class="question-mark">?</span>;
+            f.write_char(<span class="string">' '</span>)<span class="question-mark">?</span>;
         }
 
         <span class="self">self</span>.enter_block_inner(f)
@@ -3161,7 +3161,7 @@
     {
         <span class="comment">// Insert space
         </span><span class="kw">if </span><span class="self">self</span>.settings.space_before_open_block {
-            f.write_char(<span class="string">&#39; &#39;</span>)<span class="question-mark">?</span>;
+            f.write_char(<span class="string">' '</span>)<span class="question-mark">?</span>;
         }
 
         <span class="self">self</span>.enter_block_inner(f)
@@ -3173,7 +3173,7 @@
         </span>F: Write + <span class="question-mark">?</span>Sized,
     {
         <span class="comment">// Open block
-        </span>f.write_char(<span class="string">&#39;{&#39;</span>)<span class="question-mark">?</span>;
+        </span>f.write_char(<span class="string">'{'</span>)<span class="question-mark">?</span>;
 
         <span class="comment">// Write line with new indentation level
         </span><span class="self">self</span>.indentation_level += <span class="number">1</span>;
@@ -3197,7 +3197,7 @@
         </span><span class="self">self</span>.flush_line(f)<span class="question-mark">?</span>;
 
         <span class="comment">// Close block
-        </span>f.write_char(<span class="string">&#39;}&#39;</span>)<span class="question-mark">?</span>;
+        </span>f.write_char(<span class="string">'}'</span>)<span class="question-mark">?</span>;
 
         <span class="comment">// Next line
         </span><span class="self">self</span>.new_line(<span class="self">self</span>.settings.newline_after_close_block)<span class="question-mark">?</span>;
@@ -3246,13 +3246,13 @@
     <span class="kw">where
         </span>F: Write + <span class="question-mark">?</span>Sized,
     {
-        f.write_char(<span class="string">&#39;{&#39;</span>)<span class="question-mark">?</span>;
+        f.write_char(<span class="string">'{'</span>)<span class="question-mark">?</span>;
 
         <span class="kw">if </span><span class="self">self
             </span>.settings
             .spaces_surrounding_initializer_list_expressions
         {
-            f.write_char(<span class="string">&#39; &#39;</span>)<span class="question-mark">?</span>;
+            f.write_char(<span class="string">' '</span>)<span class="question-mark">?</span>;
         }
 
         <span class="prelude-val">Ok</span>(())
@@ -3267,10 +3267,10 @@
             </span>.settings
             .spaces_surrounding_initializer_list_expressions
         {
-            f.write_char(<span class="string">&#39; &#39;</span>)<span class="question-mark">?</span>;
+            f.write_char(<span class="string">' '</span>)<span class="question-mark">?</span>;
         }
 
-        f.write_char(<span class="string">&#39;}&#39;</span>)
+        f.write_char(<span class="string">'}'</span>)
     }
 
     <span class="doccomment">/// Enter a case label
@@ -3278,7 +3278,7 @@
     <span class="kw">where
         </span>F: Write + <span class="question-mark">?</span>Sized,
     {
-        f.write_char(<span class="string">&#39;:&#39;</span>)<span class="question-mark">?</span>;
+        f.write_char(<span class="string">':'</span>)<span class="question-mark">?</span>;
         <span class="self">self</span>.settings.case_label_terminator.write(f, <span class="self">self</span>)
     }
 
@@ -3288,10 +3288,10 @@
         </span>F: Write + <span class="question-mark">?</span>Sized,
     {
         <span class="kw">if </span><span class="self">self</span>.settings.space_before_else {
-            f.write_char(<span class="string">&#39; &#39;</span>)<span class="question-mark">?</span>;
+            f.write_char(<span class="string">' '</span>)<span class="question-mark">?</span>;
         }
 
-        f.write_str(<span class="string">&quot;else &quot;</span>)
+        f.write_str(<span class="string">"else "</span>)
     }
 
     <span class="doccomment">/// Write a struct field separator
@@ -3299,7 +3299,7 @@
     <span class="kw">where
         </span>F: Write + <span class="question-mark">?</span>Sized,
     {
-        f.write_char(<span class="string">&#39;;&#39;</span>)<span class="question-mark">?</span>;
+        f.write_char(<span class="string">';'</span>)<span class="question-mark">?</span>;
         <span class="self">self</span>.settings.struct_field_separator.write(f, <span class="self">self</span>)
     }
 
@@ -3308,9 +3308,9 @@
     <span class="kw">where
         </span>F: Write + <span class="question-mark">?</span>Sized,
     {
-        f.write_char(<span class="string">&#39;,&#39;</span>)<span class="question-mark">?</span>;
+        f.write_char(<span class="string">','</span>)<span class="question-mark">?</span>;
         <span class="kw">if </span><span class="self">self</span>.settings.space_after_list_separator {
-            f.write_char(<span class="string">&#39; &#39;</span>)<span class="question-mark">?</span>;
+            f.write_char(<span class="string">' '</span>)<span class="question-mark">?</span>;
         }
 
         <span class="prelude-val">Ok</span>(())
@@ -3321,9 +3321,9 @@
     <span class="kw">where
         </span>F: Write + <span class="question-mark">?</span>Sized,
     {
-        f.write_char(<span class="string">&#39;;&#39;</span>)<span class="question-mark">?</span>;
+        f.write_char(<span class="string">';'</span>)<span class="question-mark">?</span>;
         <span class="kw">if </span><span class="self">self</span>.settings.space_after_for_statement_separator {
-            f.write_char(<span class="string">&#39; &#39;</span>)<span class="question-mark">?</span>;
+            f.write_char(<span class="string">' '</span>)<span class="question-mark">?</span>;
         }
 
         <span class="prelude-val">Ok</span>(())
@@ -3334,7 +3334,7 @@
     <span class="kw">where
         </span>F: Write + <span class="question-mark">?</span>Sized,
     {
-        f.write_char(<span class="string">&#39;;&#39;</span>)<span class="question-mark">?</span>;
+        f.write_char(<span class="string">';'</span>)<span class="question-mark">?</span>;
         <span class="self">self</span>.settings.struct_declaration_terminator.write(f, <span class="self">self</span>)
     }
 
@@ -3343,7 +3343,7 @@
     <span class="kw">where
         </span>F: Write + <span class="question-mark">?</span>Sized,
     {
-        f.write_char(<span class="string">&#39;;&#39;</span>)<span class="question-mark">?</span>;
+        f.write_char(<span class="string">';'</span>)<span class="question-mark">?</span>;
         <span class="self">self</span>.settings.declaration_terminator.write(f, <span class="self">self</span>)
     }
 
@@ -3353,13 +3353,13 @@
         </span>F: Write + <span class="question-mark">?</span>Sized,
     {
         <span class="kw">if </span><span class="self">self</span>.settings.spaces_around_binary_ops {
-            f.write_char(<span class="string">&#39; &#39;</span>)<span class="question-mark">?</span>;
+            f.write_char(<span class="string">' '</span>)<span class="question-mark">?</span>;
         }
 
         f.write_str(op)<span class="question-mark">?</span>;
 
         <span class="kw">if </span><span class="self">self</span>.settings.spaces_around_binary_ops {
-            f.write_char(<span class="string">&#39; &#39;</span>)<span class="question-mark">?</span>;
+            f.write_char(<span class="string">' '</span>)<span class="question-mark">?</span>;
         }
 
         <span class="prelude-val">Ok</span>(())
@@ -3370,7 +3370,7 @@
     <span class="kw">where
         </span>F: Write + <span class="question-mark">?</span>Sized,
     {
-        f.write_char(<span class="string">&#39;;&#39;</span>)<span class="question-mark">?</span>;
+        f.write_char(<span class="string">';'</span>)<span class="question-mark">?</span>;
         <span class="self">self</span>.settings.statement_terminator.write(f, <span class="self">self</span>)
     }
 
@@ -3388,10 +3388,10 @@
         </span>F: Write + <span class="question-mark">?</span>Sized,
     {
         <span class="kw">if </span><span class="self">self</span>.settings.spaces_surrounding_statement_parentheses {
-            f.write_char(<span class="string">&#39; &#39;</span>)<span class="question-mark">?</span>;
+            f.write_char(<span class="string">' '</span>)<span class="question-mark">?</span>;
         }
 
-        f.write_char(<span class="string">&#39;(&#39;</span>)
+        f.write_char(<span class="string">'('</span>)
     }
 
     <span class="doccomment">/// Write a closing parenthesis for a statement
@@ -3399,18 +3399,18 @@
     <span class="kw">where
         </span>F: Write + <span class="question-mark">?</span>Sized,
     {
-        f.write_char(<span class="string">&#39;)&#39;</span>)<span class="question-mark">?</span>;
+        f.write_char(<span class="string">')'</span>)<span class="question-mark">?</span>;
 
         <span class="kw">if </span><span class="self">self</span>.settings.spaces_surrounding_statement_parentheses {
-            f.write_char(<span class="string">&#39; &#39;</span>)<span class="question-mark">?</span>;
+            f.write_char(<span class="string">' '</span>)<span class="question-mark">?</span>;
         }
 
         <span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;s</span>&gt; From&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;s </span>FormattingSettings&gt; <span class="kw">for </span>FormattingState&lt;<span class="lifetime">&#39;s</span>&gt; {
-    <span class="kw">fn </span>from(settings: <span class="kw-2">&amp;</span><span class="lifetime">&#39;s </span>FormattingSettings) -&gt; <span class="self">Self </span>{
+<span class="kw">impl</span>&lt;<span class="lifetime">'s</span>&gt; From&lt;<span class="kw-2">&amp;</span><span class="lifetime">'s </span>FormattingSettings&gt; <span class="kw">for </span>FormattingState&lt;<span class="lifetime">'s</span>&gt; {
+    <span class="kw">fn </span>from(settings: <span class="kw-2">&amp;</span><span class="lifetime">'s </span>FormattingSettings) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             settings,
             indentation_level: <span class="number">0</span>,
@@ -3424,7 +3424,7 @@
 
 <span class="kw">static </span>DEFAULT_SETTINGS: Lazy&lt;FormattingSettings&gt; = Lazy::new(FormattingSettings::default);
 
-<span class="kw">impl </span>Default <span class="kw">for </span>FormattingState&lt;<span class="lifetime">&#39;static</span>&gt; {
+<span class="kw">impl </span>Default <span class="kw">for </span>FormattingState&lt;<span class="lifetime">'static</span>&gt; {
     <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             settings: <span class="kw-2">&amp;</span>DEFAULT_SETTINGS,
@@ -3448,7 +3448,7 @@
 <span class="kw">impl </span>HasPrecedence <span class="kw">for </span>ast::ExprData {
     <span class="kw">fn </span>precedence(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; u32 {
         <span class="kw">match </span><span class="self">self </span>{
-            <span class="comment">// 0 isn&#39;t a valid precedence, but we use this to represent atomic expressions
+            <span class="comment">// 0 isn't a valid precedence, but we use this to represent atomic expressions
             </span><span class="self">Self</span>::Variable(<span class="kw">_</span>)
             | <span class="self">Self</span>::IntConst(<span class="kw">_</span>)
             | <span class="self">Self</span>::UIntConst(<span class="kw">_</span>)
@@ -3504,7 +3504,7 @@
 </span><span class="kw">pub fn </span>show_identifier&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     i: <span class="kw-2">&amp;</span>ast::Identifier,
-    <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
@@ -3516,7 +3516,7 @@
 </span><span class="kw">pub fn </span>show_type_name&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     t: <span class="kw-2">&amp;</span>ast::TypeName,
-    <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
@@ -3528,163 +3528,163 @@
 </span><span class="kw">pub fn </span>show_type_specifier_non_array&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     t: <span class="kw-2">&amp;</span>ast::TypeSpecifierNonArray,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
     <span class="kw">match </span><span class="kw-2">**</span>t {
-        ast::TypeSpecifierNonArrayData::Void =&gt; f.write_str(<span class="string">&quot;void&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Bool =&gt; f.write_str(<span class="string">&quot;bool&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Int =&gt; f.write_str(<span class="string">&quot;int&quot;</span>),
-        ast::TypeSpecifierNonArrayData::UInt =&gt; f.write_str(<span class="string">&quot;uint&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Float =&gt; f.write_str(<span class="string">&quot;float&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Double =&gt; f.write_str(<span class="string">&quot;double&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Vec2 =&gt; f.write_str(<span class="string">&quot;vec2&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Vec3 =&gt; f.write_str(<span class="string">&quot;vec3&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Vec4 =&gt; f.write_str(<span class="string">&quot;vec4&quot;</span>),
-        ast::TypeSpecifierNonArrayData::DVec2 =&gt; f.write_str(<span class="string">&quot;dvec2&quot;</span>),
-        ast::TypeSpecifierNonArrayData::DVec3 =&gt; f.write_str(<span class="string">&quot;dvec3&quot;</span>),
-        ast::TypeSpecifierNonArrayData::DVec4 =&gt; f.write_str(<span class="string">&quot;dvec4&quot;</span>),
-        ast::TypeSpecifierNonArrayData::BVec2 =&gt; f.write_str(<span class="string">&quot;bvec2&quot;</span>),
-        ast::TypeSpecifierNonArrayData::BVec3 =&gt; f.write_str(<span class="string">&quot;bvec3&quot;</span>),
-        ast::TypeSpecifierNonArrayData::BVec4 =&gt; f.write_str(<span class="string">&quot;bvec4&quot;</span>),
-        ast::TypeSpecifierNonArrayData::IVec2 =&gt; f.write_str(<span class="string">&quot;ivec2&quot;</span>),
-        ast::TypeSpecifierNonArrayData::IVec3 =&gt; f.write_str(<span class="string">&quot;ivec3&quot;</span>),
-        ast::TypeSpecifierNonArrayData::IVec4 =&gt; f.write_str(<span class="string">&quot;ivec4&quot;</span>),
-        ast::TypeSpecifierNonArrayData::UVec2 =&gt; f.write_str(<span class="string">&quot;uvec2&quot;</span>),
-        ast::TypeSpecifierNonArrayData::UVec3 =&gt; f.write_str(<span class="string">&quot;uvec3&quot;</span>),
-        ast::TypeSpecifierNonArrayData::UVec4 =&gt; f.write_str(<span class="string">&quot;uvec4&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Mat2 =&gt; f.write_str(<span class="string">&quot;mat2&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Mat3 =&gt; f.write_str(<span class="string">&quot;mat3&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Mat4 =&gt; f.write_str(<span class="string">&quot;mat4&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Mat22 =&gt; f.write_str(<span class="string">&quot;mat2x2&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Mat23 =&gt; f.write_str(<span class="string">&quot;mat2x3&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Mat24 =&gt; f.write_str(<span class="string">&quot;mat2x4&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Mat32 =&gt; f.write_str(<span class="string">&quot;mat3x2&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Mat33 =&gt; f.write_str(<span class="string">&quot;mat3x3&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Mat34 =&gt; f.write_str(<span class="string">&quot;mat3x4&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Mat42 =&gt; f.write_str(<span class="string">&quot;mat4x2&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Mat43 =&gt; f.write_str(<span class="string">&quot;mat4x3&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Mat44 =&gt; f.write_str(<span class="string">&quot;mat4x4&quot;</span>),
-        ast::TypeSpecifierNonArrayData::DMat2 =&gt; f.write_str(<span class="string">&quot;dmat2&quot;</span>),
-        ast::TypeSpecifierNonArrayData::DMat3 =&gt; f.write_str(<span class="string">&quot;dmat3&quot;</span>),
-        ast::TypeSpecifierNonArrayData::DMat4 =&gt; f.write_str(<span class="string">&quot;dmat4&quot;</span>),
-        ast::TypeSpecifierNonArrayData::DMat22 =&gt; f.write_str(<span class="string">&quot;dmat2x2&quot;</span>),
-        ast::TypeSpecifierNonArrayData::DMat23 =&gt; f.write_str(<span class="string">&quot;dmat2x3&quot;</span>),
-        ast::TypeSpecifierNonArrayData::DMat24 =&gt; f.write_str(<span class="string">&quot;dmat2x4&quot;</span>),
-        ast::TypeSpecifierNonArrayData::DMat32 =&gt; f.write_str(<span class="string">&quot;dmat3x2&quot;</span>),
-        ast::TypeSpecifierNonArrayData::DMat33 =&gt; f.write_str(<span class="string">&quot;dmat3x3&quot;</span>),
-        ast::TypeSpecifierNonArrayData::DMat34 =&gt; f.write_str(<span class="string">&quot;dmat3x4&quot;</span>),
-        ast::TypeSpecifierNonArrayData::DMat42 =&gt; f.write_str(<span class="string">&quot;dmat4x2&quot;</span>),
-        ast::TypeSpecifierNonArrayData::DMat43 =&gt; f.write_str(<span class="string">&quot;dmat4x3&quot;</span>),
-        ast::TypeSpecifierNonArrayData::DMat44 =&gt; f.write_str(<span class="string">&quot;dmat4x4&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Sampler1D =&gt; f.write_str(<span class="string">&quot;sampler1D&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Image1D =&gt; f.write_str(<span class="string">&quot;image1D&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Sampler2D =&gt; f.write_str(<span class="string">&quot;sampler2D&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Image2D =&gt; f.write_str(<span class="string">&quot;image2D&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Sampler3D =&gt; f.write_str(<span class="string">&quot;sampler3D&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Image3D =&gt; f.write_str(<span class="string">&quot;image3D&quot;</span>),
-        ast::TypeSpecifierNonArrayData::SamplerCube =&gt; f.write_str(<span class="string">&quot;samplerCube&quot;</span>),
-        ast::TypeSpecifierNonArrayData::ImageCube =&gt; f.write_str(<span class="string">&quot;imageCube&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Sampler2DRect =&gt; f.write_str(<span class="string">&quot;sampler2DRect&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Image2DRect =&gt; f.write_str(<span class="string">&quot;image2DRect&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Sampler1DArray =&gt; f.write_str(<span class="string">&quot;sampler1DArray&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Image1DArray =&gt; f.write_str(<span class="string">&quot;image1DArray&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Sampler2DArray =&gt; f.write_str(<span class="string">&quot;sampler2DArray&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Image2DArray =&gt; f.write_str(<span class="string">&quot;image2DArray&quot;</span>),
-        ast::TypeSpecifierNonArrayData::SamplerBuffer =&gt; f.write_str(<span class="string">&quot;samplerBuffer&quot;</span>),
-        ast::TypeSpecifierNonArrayData::ImageBuffer =&gt; f.write_str(<span class="string">&quot;imageBuffer&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Sampler2DMs =&gt; f.write_str(<span class="string">&quot;sampler2DMS&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Image2DMs =&gt; f.write_str(<span class="string">&quot;image2DMS&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Sampler2DMsArray =&gt; f.write_str(<span class="string">&quot;sampler2DMSArray&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Image2DMsArray =&gt; f.write_str(<span class="string">&quot;image2DMSArray&quot;</span>),
-        ast::TypeSpecifierNonArrayData::SamplerCubeArray =&gt; f.write_str(<span class="string">&quot;samplerCubeArray&quot;</span>),
-        ast::TypeSpecifierNonArrayData::ImageCubeArray =&gt; f.write_str(<span class="string">&quot;imageCubeArray&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Sampler1DShadow =&gt; f.write_str(<span class="string">&quot;sampler1DShadow&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Sampler2DShadow =&gt; f.write_str(<span class="string">&quot;sampler2DShadow&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Sampler2DRectShadow =&gt; f.write_str(<span class="string">&quot;sampler2DRectShadow&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Sampler1DArrayShadow =&gt; f.write_str(<span class="string">&quot;sampler1DArrayShadow&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Sampler2DArrayShadow =&gt; f.write_str(<span class="string">&quot;sampler2DArrayShadow&quot;</span>),
-        ast::TypeSpecifierNonArrayData::SamplerCubeShadow =&gt; f.write_str(<span class="string">&quot;samplerCubeShadow&quot;</span>),
+        ast::TypeSpecifierNonArrayData::Void =&gt; f.write_str(<span class="string">"void"</span>),
+        ast::TypeSpecifierNonArrayData::Bool =&gt; f.write_str(<span class="string">"bool"</span>),
+        ast::TypeSpecifierNonArrayData::Int =&gt; f.write_str(<span class="string">"int"</span>),
+        ast::TypeSpecifierNonArrayData::UInt =&gt; f.write_str(<span class="string">"uint"</span>),
+        ast::TypeSpecifierNonArrayData::Float =&gt; f.write_str(<span class="string">"float"</span>),
+        ast::TypeSpecifierNonArrayData::Double =&gt; f.write_str(<span class="string">"double"</span>),
+        ast::TypeSpecifierNonArrayData::Vec2 =&gt; f.write_str(<span class="string">"vec2"</span>),
+        ast::TypeSpecifierNonArrayData::Vec3 =&gt; f.write_str(<span class="string">"vec3"</span>),
+        ast::TypeSpecifierNonArrayData::Vec4 =&gt; f.write_str(<span class="string">"vec4"</span>),
+        ast::TypeSpecifierNonArrayData::DVec2 =&gt; f.write_str(<span class="string">"dvec2"</span>),
+        ast::TypeSpecifierNonArrayData::DVec3 =&gt; f.write_str(<span class="string">"dvec3"</span>),
+        ast::TypeSpecifierNonArrayData::DVec4 =&gt; f.write_str(<span class="string">"dvec4"</span>),
+        ast::TypeSpecifierNonArrayData::BVec2 =&gt; f.write_str(<span class="string">"bvec2"</span>),
+        ast::TypeSpecifierNonArrayData::BVec3 =&gt; f.write_str(<span class="string">"bvec3"</span>),
+        ast::TypeSpecifierNonArrayData::BVec4 =&gt; f.write_str(<span class="string">"bvec4"</span>),
+        ast::TypeSpecifierNonArrayData::IVec2 =&gt; f.write_str(<span class="string">"ivec2"</span>),
+        ast::TypeSpecifierNonArrayData::IVec3 =&gt; f.write_str(<span class="string">"ivec3"</span>),
+        ast::TypeSpecifierNonArrayData::IVec4 =&gt; f.write_str(<span class="string">"ivec4"</span>),
+        ast::TypeSpecifierNonArrayData::UVec2 =&gt; f.write_str(<span class="string">"uvec2"</span>),
+        ast::TypeSpecifierNonArrayData::UVec3 =&gt; f.write_str(<span class="string">"uvec3"</span>),
+        ast::TypeSpecifierNonArrayData::UVec4 =&gt; f.write_str(<span class="string">"uvec4"</span>),
+        ast::TypeSpecifierNonArrayData::Mat2 =&gt; f.write_str(<span class="string">"mat2"</span>),
+        ast::TypeSpecifierNonArrayData::Mat3 =&gt; f.write_str(<span class="string">"mat3"</span>),
+        ast::TypeSpecifierNonArrayData::Mat4 =&gt; f.write_str(<span class="string">"mat4"</span>),
+        ast::TypeSpecifierNonArrayData::Mat22 =&gt; f.write_str(<span class="string">"mat2x2"</span>),
+        ast::TypeSpecifierNonArrayData::Mat23 =&gt; f.write_str(<span class="string">"mat2x3"</span>),
+        ast::TypeSpecifierNonArrayData::Mat24 =&gt; f.write_str(<span class="string">"mat2x4"</span>),
+        ast::TypeSpecifierNonArrayData::Mat32 =&gt; f.write_str(<span class="string">"mat3x2"</span>),
+        ast::TypeSpecifierNonArrayData::Mat33 =&gt; f.write_str(<span class="string">"mat3x3"</span>),
+        ast::TypeSpecifierNonArrayData::Mat34 =&gt; f.write_str(<span class="string">"mat3x4"</span>),
+        ast::TypeSpecifierNonArrayData::Mat42 =&gt; f.write_str(<span class="string">"mat4x2"</span>),
+        ast::TypeSpecifierNonArrayData::Mat43 =&gt; f.write_str(<span class="string">"mat4x3"</span>),
+        ast::TypeSpecifierNonArrayData::Mat44 =&gt; f.write_str(<span class="string">"mat4x4"</span>),
+        ast::TypeSpecifierNonArrayData::DMat2 =&gt; f.write_str(<span class="string">"dmat2"</span>),
+        ast::TypeSpecifierNonArrayData::DMat3 =&gt; f.write_str(<span class="string">"dmat3"</span>),
+        ast::TypeSpecifierNonArrayData::DMat4 =&gt; f.write_str(<span class="string">"dmat4"</span>),
+        ast::TypeSpecifierNonArrayData::DMat22 =&gt; f.write_str(<span class="string">"dmat2x2"</span>),
+        ast::TypeSpecifierNonArrayData::DMat23 =&gt; f.write_str(<span class="string">"dmat2x3"</span>),
+        ast::TypeSpecifierNonArrayData::DMat24 =&gt; f.write_str(<span class="string">"dmat2x4"</span>),
+        ast::TypeSpecifierNonArrayData::DMat32 =&gt; f.write_str(<span class="string">"dmat3x2"</span>),
+        ast::TypeSpecifierNonArrayData::DMat33 =&gt; f.write_str(<span class="string">"dmat3x3"</span>),
+        ast::TypeSpecifierNonArrayData::DMat34 =&gt; f.write_str(<span class="string">"dmat3x4"</span>),
+        ast::TypeSpecifierNonArrayData::DMat42 =&gt; f.write_str(<span class="string">"dmat4x2"</span>),
+        ast::TypeSpecifierNonArrayData::DMat43 =&gt; f.write_str(<span class="string">"dmat4x3"</span>),
+        ast::TypeSpecifierNonArrayData::DMat44 =&gt; f.write_str(<span class="string">"dmat4x4"</span>),
+        ast::TypeSpecifierNonArrayData::Sampler1D =&gt; f.write_str(<span class="string">"sampler1D"</span>),
+        ast::TypeSpecifierNonArrayData::Image1D =&gt; f.write_str(<span class="string">"image1D"</span>),
+        ast::TypeSpecifierNonArrayData::Sampler2D =&gt; f.write_str(<span class="string">"sampler2D"</span>),
+        ast::TypeSpecifierNonArrayData::Image2D =&gt; f.write_str(<span class="string">"image2D"</span>),
+        ast::TypeSpecifierNonArrayData::Sampler3D =&gt; f.write_str(<span class="string">"sampler3D"</span>),
+        ast::TypeSpecifierNonArrayData::Image3D =&gt; f.write_str(<span class="string">"image3D"</span>),
+        ast::TypeSpecifierNonArrayData::SamplerCube =&gt; f.write_str(<span class="string">"samplerCube"</span>),
+        ast::TypeSpecifierNonArrayData::ImageCube =&gt; f.write_str(<span class="string">"imageCube"</span>),
+        ast::TypeSpecifierNonArrayData::Sampler2DRect =&gt; f.write_str(<span class="string">"sampler2DRect"</span>),
+        ast::TypeSpecifierNonArrayData::Image2DRect =&gt; f.write_str(<span class="string">"image2DRect"</span>),
+        ast::TypeSpecifierNonArrayData::Sampler1DArray =&gt; f.write_str(<span class="string">"sampler1DArray"</span>),
+        ast::TypeSpecifierNonArrayData::Image1DArray =&gt; f.write_str(<span class="string">"image1DArray"</span>),
+        ast::TypeSpecifierNonArrayData::Sampler2DArray =&gt; f.write_str(<span class="string">"sampler2DArray"</span>),
+        ast::TypeSpecifierNonArrayData::Image2DArray =&gt; f.write_str(<span class="string">"image2DArray"</span>),
+        ast::TypeSpecifierNonArrayData::SamplerBuffer =&gt; f.write_str(<span class="string">"samplerBuffer"</span>),
+        ast::TypeSpecifierNonArrayData::ImageBuffer =&gt; f.write_str(<span class="string">"imageBuffer"</span>),
+        ast::TypeSpecifierNonArrayData::Sampler2DMs =&gt; f.write_str(<span class="string">"sampler2DMS"</span>),
+        ast::TypeSpecifierNonArrayData::Image2DMs =&gt; f.write_str(<span class="string">"image2DMS"</span>),
+        ast::TypeSpecifierNonArrayData::Sampler2DMsArray =&gt; f.write_str(<span class="string">"sampler2DMSArray"</span>),
+        ast::TypeSpecifierNonArrayData::Image2DMsArray =&gt; f.write_str(<span class="string">"image2DMSArray"</span>),
+        ast::TypeSpecifierNonArrayData::SamplerCubeArray =&gt; f.write_str(<span class="string">"samplerCubeArray"</span>),
+        ast::TypeSpecifierNonArrayData::ImageCubeArray =&gt; f.write_str(<span class="string">"imageCubeArray"</span>),
+        ast::TypeSpecifierNonArrayData::Sampler1DShadow =&gt; f.write_str(<span class="string">"sampler1DShadow"</span>),
+        ast::TypeSpecifierNonArrayData::Sampler2DShadow =&gt; f.write_str(<span class="string">"sampler2DShadow"</span>),
+        ast::TypeSpecifierNonArrayData::Sampler2DRectShadow =&gt; f.write_str(<span class="string">"sampler2DRectShadow"</span>),
+        ast::TypeSpecifierNonArrayData::Sampler1DArrayShadow =&gt; f.write_str(<span class="string">"sampler1DArrayShadow"</span>),
+        ast::TypeSpecifierNonArrayData::Sampler2DArrayShadow =&gt; f.write_str(<span class="string">"sampler2DArrayShadow"</span>),
+        ast::TypeSpecifierNonArrayData::SamplerCubeShadow =&gt; f.write_str(<span class="string">"samplerCubeShadow"</span>),
         ast::TypeSpecifierNonArrayData::SamplerCubeArrayShadow =&gt; {
-            f.write_str(<span class="string">&quot;samplerCubeArrayShadow&quot;</span>)
+            f.write_str(<span class="string">"samplerCubeArrayShadow"</span>)
         }
-        ast::TypeSpecifierNonArrayData::ISampler1D =&gt; f.write_str(<span class="string">&quot;isampler1D&quot;</span>),
-        ast::TypeSpecifierNonArrayData::IImage1D =&gt; f.write_str(<span class="string">&quot;iimage1D&quot;</span>),
-        ast::TypeSpecifierNonArrayData::ISampler2D =&gt; f.write_str(<span class="string">&quot;isampler2D&quot;</span>),
-        ast::TypeSpecifierNonArrayData::IImage2D =&gt; f.write_str(<span class="string">&quot;iimage2D&quot;</span>),
-        ast::TypeSpecifierNonArrayData::ISampler3D =&gt; f.write_str(<span class="string">&quot;isampler3D&quot;</span>),
-        ast::TypeSpecifierNonArrayData::IImage3D =&gt; f.write_str(<span class="string">&quot;iimage3D&quot;</span>),
-        ast::TypeSpecifierNonArrayData::ISamplerCube =&gt; f.write_str(<span class="string">&quot;isamplerCube&quot;</span>),
-        ast::TypeSpecifierNonArrayData::IImageCube =&gt; f.write_str(<span class="string">&quot;iimageCube&quot;</span>),
-        ast::TypeSpecifierNonArrayData::ISampler2DRect =&gt; f.write_str(<span class="string">&quot;isampler2DRect&quot;</span>),
-        ast::TypeSpecifierNonArrayData::IImage2DRect =&gt; f.write_str(<span class="string">&quot;iimage2DRect&quot;</span>),
-        ast::TypeSpecifierNonArrayData::ISampler1DArray =&gt; f.write_str(<span class="string">&quot;isampler1DArray&quot;</span>),
-        ast::TypeSpecifierNonArrayData::IImage1DArray =&gt; f.write_str(<span class="string">&quot;iimage1DArray&quot;</span>),
-        ast::TypeSpecifierNonArrayData::ISampler2DArray =&gt; f.write_str(<span class="string">&quot;isampler2DArray&quot;</span>),
-        ast::TypeSpecifierNonArrayData::IImage2DArray =&gt; f.write_str(<span class="string">&quot;iimage2DArray&quot;</span>),
-        ast::TypeSpecifierNonArrayData::ISamplerBuffer =&gt; f.write_str(<span class="string">&quot;isamplerBuffer&quot;</span>),
-        ast::TypeSpecifierNonArrayData::IImageBuffer =&gt; f.write_str(<span class="string">&quot;iimageBuffer&quot;</span>),
-        ast::TypeSpecifierNonArrayData::ISampler2DMs =&gt; f.write_str(<span class="string">&quot;isampler2MS&quot;</span>),
-        ast::TypeSpecifierNonArrayData::IImage2DMs =&gt; f.write_str(<span class="string">&quot;iimage2DMS&quot;</span>),
-        ast::TypeSpecifierNonArrayData::ISampler2DMsArray =&gt; f.write_str(<span class="string">&quot;isampler2DMSArray&quot;</span>),
-        ast::TypeSpecifierNonArrayData::IImage2DMsArray =&gt; f.write_str(<span class="string">&quot;iimage2DMSArray&quot;</span>),
-        ast::TypeSpecifierNonArrayData::ISamplerCubeArray =&gt; f.write_str(<span class="string">&quot;isamplerCubeArray&quot;</span>),
-        ast::TypeSpecifierNonArrayData::IImageCubeArray =&gt; f.write_str(<span class="string">&quot;iimageCubeArray&quot;</span>),
-        ast::TypeSpecifierNonArrayData::AtomicUInt =&gt; f.write_str(<span class="string">&quot;atomic_uint&quot;</span>),
-        ast::TypeSpecifierNonArrayData::USampler1D =&gt; f.write_str(<span class="string">&quot;usampler1D&quot;</span>),
-        ast::TypeSpecifierNonArrayData::UImage1D =&gt; f.write_str(<span class="string">&quot;uimage1D&quot;</span>),
-        ast::TypeSpecifierNonArrayData::USampler2D =&gt; f.write_str(<span class="string">&quot;usampler2D&quot;</span>),
-        ast::TypeSpecifierNonArrayData::UImage2D =&gt; f.write_str(<span class="string">&quot;uimage2D&quot;</span>),
-        ast::TypeSpecifierNonArrayData::USampler3D =&gt; f.write_str(<span class="string">&quot;usampler3D&quot;</span>),
-        ast::TypeSpecifierNonArrayData::UImage3D =&gt; f.write_str(<span class="string">&quot;uimage3D&quot;</span>),
-        ast::TypeSpecifierNonArrayData::USamplerCube =&gt; f.write_str(<span class="string">&quot;usamplerCube&quot;</span>),
-        ast::TypeSpecifierNonArrayData::UImageCube =&gt; f.write_str(<span class="string">&quot;uimageCube&quot;</span>),
-        ast::TypeSpecifierNonArrayData::USampler2DRect =&gt; f.write_str(<span class="string">&quot;usampler2DRect&quot;</span>),
-        ast::TypeSpecifierNonArrayData::UImage2DRect =&gt; f.write_str(<span class="string">&quot;uimage2DRect&quot;</span>),
-        ast::TypeSpecifierNonArrayData::USampler1DArray =&gt; f.write_str(<span class="string">&quot;usampler1DArray&quot;</span>),
-        ast::TypeSpecifierNonArrayData::UImage1DArray =&gt; f.write_str(<span class="string">&quot;uimage1DArray&quot;</span>),
-        ast::TypeSpecifierNonArrayData::USampler2DArray =&gt; f.write_str(<span class="string">&quot;usampler2DArray&quot;</span>),
-        ast::TypeSpecifierNonArrayData::UImage2DArray =&gt; f.write_str(<span class="string">&quot;uimage2DArray&quot;</span>),
-        ast::TypeSpecifierNonArrayData::USamplerBuffer =&gt; f.write_str(<span class="string">&quot;usamplerBuffer&quot;</span>),
-        ast::TypeSpecifierNonArrayData::UImageBuffer =&gt; f.write_str(<span class="string">&quot;uimageBuffer&quot;</span>),
-        ast::TypeSpecifierNonArrayData::USampler2DMs =&gt; f.write_str(<span class="string">&quot;usampler2DMS&quot;</span>),
-        ast::TypeSpecifierNonArrayData::UImage2DMs =&gt; f.write_str(<span class="string">&quot;uimage2DMS&quot;</span>),
-        ast::TypeSpecifierNonArrayData::USampler2DMsArray =&gt; f.write_str(<span class="string">&quot;usamplerDMSArray&quot;</span>),
-        ast::TypeSpecifierNonArrayData::UImage2DMsArray =&gt; f.write_str(<span class="string">&quot;uimage2DMSArray&quot;</span>),
-        ast::TypeSpecifierNonArrayData::USamplerCubeArray =&gt; f.write_str(<span class="string">&quot;usamplerCubeArray&quot;</span>),
-        ast::TypeSpecifierNonArrayData::UImageCubeArray =&gt; f.write_str(<span class="string">&quot;uimageCubeArray&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Texture1D =&gt; f.write_str(<span class="string">&quot;texture1D&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Texture2D =&gt; f.write_str(<span class="string">&quot;texture2D&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Texture3D =&gt; f.write_str(<span class="string">&quot;texture3D&quot;</span>),
-        ast::TypeSpecifierNonArrayData::TextureCube =&gt; f.write_str(<span class="string">&quot;textureCube&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Texture2DRect =&gt; f.write_str(<span class="string">&quot;texture2DRect&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Texture1DArray =&gt; f.write_str(<span class="string">&quot;texture1DArray&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Texture2DArray =&gt; f.write_str(<span class="string">&quot;texture2DArray&quot;</span>),
-        ast::TypeSpecifierNonArrayData::TextureBuffer =&gt; f.write_str(<span class="string">&quot;textureBuffer&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Texture2DMs =&gt; f.write_str(<span class="string">&quot;texture2DMS&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Texture2DMsArray =&gt; f.write_str(<span class="string">&quot;texture2DMSArray&quot;</span>),
-        ast::TypeSpecifierNonArrayData::TextureCubeArray =&gt; f.write_str(<span class="string">&quot;textureCubeArray&quot;</span>),
-        ast::TypeSpecifierNonArrayData::ITexture1D =&gt; f.write_str(<span class="string">&quot;itexture1D&quot;</span>),
-        ast::TypeSpecifierNonArrayData::ITexture2D =&gt; f.write_str(<span class="string">&quot;itexture2D&quot;</span>),
-        ast::TypeSpecifierNonArrayData::ITexture3D =&gt; f.write_str(<span class="string">&quot;itexture3D&quot;</span>),
-        ast::TypeSpecifierNonArrayData::ITextureCube =&gt; f.write_str(<span class="string">&quot;itextureCube&quot;</span>),
-        ast::TypeSpecifierNonArrayData::ITexture2DRect =&gt; f.write_str(<span class="string">&quot;itexture2DRect&quot;</span>),
-        ast::TypeSpecifierNonArrayData::ITexture1DArray =&gt; f.write_str(<span class="string">&quot;itexture1DArray&quot;</span>),
-        ast::TypeSpecifierNonArrayData::ITexture2DArray =&gt; f.write_str(<span class="string">&quot;itexture2DArray&quot;</span>),
-        ast::TypeSpecifierNonArrayData::ITextureBuffer =&gt; f.write_str(<span class="string">&quot;itextureBuffer&quot;</span>),
-        ast::TypeSpecifierNonArrayData::ITexture2DMs =&gt; f.write_str(<span class="string">&quot;itexture2DMS&quot;</span>),
-        ast::TypeSpecifierNonArrayData::ITexture2DMsArray =&gt; f.write_str(<span class="string">&quot;itexture2DMSArray&quot;</span>),
-        ast::TypeSpecifierNonArrayData::ITextureCubeArray =&gt; f.write_str(<span class="string">&quot;itextureCubeArray&quot;</span>),
-        ast::TypeSpecifierNonArrayData::Sampler =&gt; f.write_str(<span class="string">&quot;sampler&quot;</span>),
-        ast::TypeSpecifierNonArrayData::SamplerShadow =&gt; f.write_str(<span class="string">&quot;samplerShadow&quot;</span>),
-        ast::TypeSpecifierNonArrayData::SubpassInput =&gt; f.write_str(<span class="string">&quot;subpassInput&quot;</span>),
-        ast::TypeSpecifierNonArrayData::ISubpassInput =&gt; f.write_str(<span class="string">&quot;isubpassInput&quot;</span>),
-        ast::TypeSpecifierNonArrayData::USubpassInput =&gt; f.write_str(<span class="string">&quot;usubpassInput&quot;</span>),
-        ast::TypeSpecifierNonArrayData::SubpassInputMs =&gt; f.write_str(<span class="string">&quot;subpassInputMS&quot;</span>),
-        ast::TypeSpecifierNonArrayData::ISubpassInputMs =&gt; f.write_str(<span class="string">&quot;isubpassInputMS&quot;</span>),
-        ast::TypeSpecifierNonArrayData::USubpassInputMs =&gt; f.write_str(<span class="string">&quot;usubpassInputMS&quot;</span>),
+        ast::TypeSpecifierNonArrayData::ISampler1D =&gt; f.write_str(<span class="string">"isampler1D"</span>),
+        ast::TypeSpecifierNonArrayData::IImage1D =&gt; f.write_str(<span class="string">"iimage1D"</span>),
+        ast::TypeSpecifierNonArrayData::ISampler2D =&gt; f.write_str(<span class="string">"isampler2D"</span>),
+        ast::TypeSpecifierNonArrayData::IImage2D =&gt; f.write_str(<span class="string">"iimage2D"</span>),
+        ast::TypeSpecifierNonArrayData::ISampler3D =&gt; f.write_str(<span class="string">"isampler3D"</span>),
+        ast::TypeSpecifierNonArrayData::IImage3D =&gt; f.write_str(<span class="string">"iimage3D"</span>),
+        ast::TypeSpecifierNonArrayData::ISamplerCube =&gt; f.write_str(<span class="string">"isamplerCube"</span>),
+        ast::TypeSpecifierNonArrayData::IImageCube =&gt; f.write_str(<span class="string">"iimageCube"</span>),
+        ast::TypeSpecifierNonArrayData::ISampler2DRect =&gt; f.write_str(<span class="string">"isampler2DRect"</span>),
+        ast::TypeSpecifierNonArrayData::IImage2DRect =&gt; f.write_str(<span class="string">"iimage2DRect"</span>),
+        ast::TypeSpecifierNonArrayData::ISampler1DArray =&gt; f.write_str(<span class="string">"isampler1DArray"</span>),
+        ast::TypeSpecifierNonArrayData::IImage1DArray =&gt; f.write_str(<span class="string">"iimage1DArray"</span>),
+        ast::TypeSpecifierNonArrayData::ISampler2DArray =&gt; f.write_str(<span class="string">"isampler2DArray"</span>),
+        ast::TypeSpecifierNonArrayData::IImage2DArray =&gt; f.write_str(<span class="string">"iimage2DArray"</span>),
+        ast::TypeSpecifierNonArrayData::ISamplerBuffer =&gt; f.write_str(<span class="string">"isamplerBuffer"</span>),
+        ast::TypeSpecifierNonArrayData::IImageBuffer =&gt; f.write_str(<span class="string">"iimageBuffer"</span>),
+        ast::TypeSpecifierNonArrayData::ISampler2DMs =&gt; f.write_str(<span class="string">"isampler2MS"</span>),
+        ast::TypeSpecifierNonArrayData::IImage2DMs =&gt; f.write_str(<span class="string">"iimage2DMS"</span>),
+        ast::TypeSpecifierNonArrayData::ISampler2DMsArray =&gt; f.write_str(<span class="string">"isampler2DMSArray"</span>),
+        ast::TypeSpecifierNonArrayData::IImage2DMsArray =&gt; f.write_str(<span class="string">"iimage2DMSArray"</span>),
+        ast::TypeSpecifierNonArrayData::ISamplerCubeArray =&gt; f.write_str(<span class="string">"isamplerCubeArray"</span>),
+        ast::TypeSpecifierNonArrayData::IImageCubeArray =&gt; f.write_str(<span class="string">"iimageCubeArray"</span>),
+        ast::TypeSpecifierNonArrayData::AtomicUInt =&gt; f.write_str(<span class="string">"atomic_uint"</span>),
+        ast::TypeSpecifierNonArrayData::USampler1D =&gt; f.write_str(<span class="string">"usampler1D"</span>),
+        ast::TypeSpecifierNonArrayData::UImage1D =&gt; f.write_str(<span class="string">"uimage1D"</span>),
+        ast::TypeSpecifierNonArrayData::USampler2D =&gt; f.write_str(<span class="string">"usampler2D"</span>),
+        ast::TypeSpecifierNonArrayData::UImage2D =&gt; f.write_str(<span class="string">"uimage2D"</span>),
+        ast::TypeSpecifierNonArrayData::USampler3D =&gt; f.write_str(<span class="string">"usampler3D"</span>),
+        ast::TypeSpecifierNonArrayData::UImage3D =&gt; f.write_str(<span class="string">"uimage3D"</span>),
+        ast::TypeSpecifierNonArrayData::USamplerCube =&gt; f.write_str(<span class="string">"usamplerCube"</span>),
+        ast::TypeSpecifierNonArrayData::UImageCube =&gt; f.write_str(<span class="string">"uimageCube"</span>),
+        ast::TypeSpecifierNonArrayData::USampler2DRect =&gt; f.write_str(<span class="string">"usampler2DRect"</span>),
+        ast::TypeSpecifierNonArrayData::UImage2DRect =&gt; f.write_str(<span class="string">"uimage2DRect"</span>),
+        ast::TypeSpecifierNonArrayData::USampler1DArray =&gt; f.write_str(<span class="string">"usampler1DArray"</span>),
+        ast::TypeSpecifierNonArrayData::UImage1DArray =&gt; f.write_str(<span class="string">"uimage1DArray"</span>),
+        ast::TypeSpecifierNonArrayData::USampler2DArray =&gt; f.write_str(<span class="string">"usampler2DArray"</span>),
+        ast::TypeSpecifierNonArrayData::UImage2DArray =&gt; f.write_str(<span class="string">"uimage2DArray"</span>),
+        ast::TypeSpecifierNonArrayData::USamplerBuffer =&gt; f.write_str(<span class="string">"usamplerBuffer"</span>),
+        ast::TypeSpecifierNonArrayData::UImageBuffer =&gt; f.write_str(<span class="string">"uimageBuffer"</span>),
+        ast::TypeSpecifierNonArrayData::USampler2DMs =&gt; f.write_str(<span class="string">"usampler2DMS"</span>),
+        ast::TypeSpecifierNonArrayData::UImage2DMs =&gt; f.write_str(<span class="string">"uimage2DMS"</span>),
+        ast::TypeSpecifierNonArrayData::USampler2DMsArray =&gt; f.write_str(<span class="string">"usamplerDMSArray"</span>),
+        ast::TypeSpecifierNonArrayData::UImage2DMsArray =&gt; f.write_str(<span class="string">"uimage2DMSArray"</span>),
+        ast::TypeSpecifierNonArrayData::USamplerCubeArray =&gt; f.write_str(<span class="string">"usamplerCubeArray"</span>),
+        ast::TypeSpecifierNonArrayData::UImageCubeArray =&gt; f.write_str(<span class="string">"uimageCubeArray"</span>),
+        ast::TypeSpecifierNonArrayData::Texture1D =&gt; f.write_str(<span class="string">"texture1D"</span>),
+        ast::TypeSpecifierNonArrayData::Texture2D =&gt; f.write_str(<span class="string">"texture2D"</span>),
+        ast::TypeSpecifierNonArrayData::Texture3D =&gt; f.write_str(<span class="string">"texture3D"</span>),
+        ast::TypeSpecifierNonArrayData::TextureCube =&gt; f.write_str(<span class="string">"textureCube"</span>),
+        ast::TypeSpecifierNonArrayData::Texture2DRect =&gt; f.write_str(<span class="string">"texture2DRect"</span>),
+        ast::TypeSpecifierNonArrayData::Texture1DArray =&gt; f.write_str(<span class="string">"texture1DArray"</span>),
+        ast::TypeSpecifierNonArrayData::Texture2DArray =&gt; f.write_str(<span class="string">"texture2DArray"</span>),
+        ast::TypeSpecifierNonArrayData::TextureBuffer =&gt; f.write_str(<span class="string">"textureBuffer"</span>),
+        ast::TypeSpecifierNonArrayData::Texture2DMs =&gt; f.write_str(<span class="string">"texture2DMS"</span>),
+        ast::TypeSpecifierNonArrayData::Texture2DMsArray =&gt; f.write_str(<span class="string">"texture2DMSArray"</span>),
+        ast::TypeSpecifierNonArrayData::TextureCubeArray =&gt; f.write_str(<span class="string">"textureCubeArray"</span>),
+        ast::TypeSpecifierNonArrayData::ITexture1D =&gt; f.write_str(<span class="string">"itexture1D"</span>),
+        ast::TypeSpecifierNonArrayData::ITexture2D =&gt; f.write_str(<span class="string">"itexture2D"</span>),
+        ast::TypeSpecifierNonArrayData::ITexture3D =&gt; f.write_str(<span class="string">"itexture3D"</span>),
+        ast::TypeSpecifierNonArrayData::ITextureCube =&gt; f.write_str(<span class="string">"itextureCube"</span>),
+        ast::TypeSpecifierNonArrayData::ITexture2DRect =&gt; f.write_str(<span class="string">"itexture2DRect"</span>),
+        ast::TypeSpecifierNonArrayData::ITexture1DArray =&gt; f.write_str(<span class="string">"itexture1DArray"</span>),
+        ast::TypeSpecifierNonArrayData::ITexture2DArray =&gt; f.write_str(<span class="string">"itexture2DArray"</span>),
+        ast::TypeSpecifierNonArrayData::ITextureBuffer =&gt; f.write_str(<span class="string">"itextureBuffer"</span>),
+        ast::TypeSpecifierNonArrayData::ITexture2DMs =&gt; f.write_str(<span class="string">"itexture2DMS"</span>),
+        ast::TypeSpecifierNonArrayData::ITexture2DMsArray =&gt; f.write_str(<span class="string">"itexture2DMSArray"</span>),
+        ast::TypeSpecifierNonArrayData::ITextureCubeArray =&gt; f.write_str(<span class="string">"itextureCubeArray"</span>),
+        ast::TypeSpecifierNonArrayData::Sampler =&gt; f.write_str(<span class="string">"sampler"</span>),
+        ast::TypeSpecifierNonArrayData::SamplerShadow =&gt; f.write_str(<span class="string">"samplerShadow"</span>),
+        ast::TypeSpecifierNonArrayData::SubpassInput =&gt; f.write_str(<span class="string">"subpassInput"</span>),
+        ast::TypeSpecifierNonArrayData::ISubpassInput =&gt; f.write_str(<span class="string">"isubpassInput"</span>),
+        ast::TypeSpecifierNonArrayData::USubpassInput =&gt; f.write_str(<span class="string">"usubpassInput"</span>),
+        ast::TypeSpecifierNonArrayData::SubpassInputMs =&gt; f.write_str(<span class="string">"subpassInputMS"</span>),
+        ast::TypeSpecifierNonArrayData::ISubpassInputMs =&gt; f.write_str(<span class="string">"isubpassInputMS"</span>),
+        ast::TypeSpecifierNonArrayData::USubpassInputMs =&gt; f.write_str(<span class="string">"usubpassInputMS"</span>),
         ast::TypeSpecifierNonArrayData::Struct(<span class="kw-2">ref </span>st) =&gt; show_struct_non_declaration(f, st, state),
         ast::TypeSpecifierNonArrayData::TypeName(<span class="kw-2">ref </span>tn) =&gt; show_type_name(f, tn, state),
     }
@@ -3694,7 +3694,7 @@
 </span><span class="kw">pub fn </span>show_type_specifier&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     t: <span class="kw-2">&amp;</span>ast::TypeSpecifier,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
@@ -3712,14 +3712,14 @@
 </span><span class="kw">pub fn </span>show_fully_specified_type&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     t: <span class="kw-2">&amp;</span>ast::FullySpecifiedType,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
     <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">ref </span>qual) = t.qualifier {
         show_type_qualifier(f, qual, state)<span class="question-mark">?</span>;
-        f.write_char(<span class="string">&#39; &#39;</span>)<span class="question-mark">?</span>;
+        f.write_char(<span class="string">' '</span>)<span class="question-mark">?</span>;
     }
 
     show_type_specifier(f, <span class="kw-2">&amp;</span>t.ty, state)
@@ -3729,15 +3729,15 @@
 </span><span class="kw">pub fn </span>show_struct_non_declaration&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     st: <span class="kw-2">&amp;</span>ast::StructSpecifier,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
-    f.write_str(<span class="string">&quot;struct &quot;</span>)<span class="question-mark">?</span>;
+    f.write_str(<span class="string">"struct "</span>)<span class="question-mark">?</span>;
 
     <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">ref </span>name) = st.name {
-        <span class="macro">write!</span>(f, <span class="string">&quot;{}&quot;</span>, name)<span class="question-mark">?</span>;
+        <span class="macro">write!</span>(f, <span class="string">"{}"</span>, name)<span class="question-mark">?</span>;
     }
 
     state.enter_block(f)<span class="question-mark">?</span>;
@@ -3757,7 +3757,7 @@
 </span><span class="kw">pub fn </span>show_struct&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     st: <span class="kw-2">&amp;</span>ast::StructSpecifier,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
@@ -3770,18 +3770,18 @@
 </span><span class="kw">pub fn </span>show_struct_field&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     field: <span class="kw-2">&amp;</span>ast::StructFieldSpecifier,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
     <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">ref </span>qual) = field.qualifier {
         show_type_qualifier(f, qual, state)<span class="question-mark">?</span>;
-        f.write_char(<span class="string">&#39; &#39;</span>)<span class="question-mark">?</span>;
+        f.write_char(<span class="string">' '</span>)<span class="question-mark">?</span>;
     }
 
     show_type_specifier(f, <span class="kw-2">&amp;</span>field.ty, state)<span class="question-mark">?</span>;
-    f.write_char(<span class="string">&#39; &#39;</span>)<span class="question-mark">?</span>;
+    f.write_char(<span class="string">' '</span>)<span class="question-mark">?</span>;
 
     <span class="comment">// there’s at least one identifier
     </span><span class="kw">let </span><span class="kw-2">mut </span>identifiers = field.identifiers.iter();
@@ -3802,18 +3802,18 @@
 </span><span class="kw">pub fn </span>show_array_spec&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     a: <span class="kw-2">&amp;</span>ast::ArraySpecifier,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
     <span class="kw">for </span>dimension <span class="kw">in </span><span class="kw-2">&amp;</span>a.dimensions {
         <span class="kw">match </span><span class="kw-2">**</span>dimension {
-            ast::ArraySpecifierDimensionData::Unsized =&gt; f.write_str(<span class="string">&quot;[]&quot;</span>)<span class="question-mark">?</span>,
+            ast::ArraySpecifierDimensionData::Unsized =&gt; f.write_str(<span class="string">"[]"</span>)<span class="question-mark">?</span>,
             ast::ArraySpecifierDimensionData::ExplicitlySized(<span class="kw-2">ref </span>e) =&gt; {
-                f.write_char(<span class="string">&#39;[&#39;</span>)<span class="question-mark">?</span>;
+                f.write_char(<span class="string">'['</span>)<span class="question-mark">?</span>;
                 show_expr(f, e, state)<span class="question-mark">?</span>;
-                f.write_char(<span class="string">&#39;]&#39;</span>)<span class="question-mark">?
+                f.write_char(<span class="string">']'</span>)<span class="question-mark">?
             </span>}
         }
     }
@@ -3825,12 +3825,12 @@
 </span><span class="kw">pub fn </span>show_arrayed_identifier&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     a: <span class="kw-2">&amp;</span>ast::ArrayedIdentifier,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
-    <span class="macro">write!</span>(f, <span class="string">&quot;{}&quot;</span>, a.ident)<span class="question-mark">?</span>;
+    <span class="macro">write!</span>(f, <span class="string">"{}"</span>, a.ident)<span class="question-mark">?</span>;
 
     <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">ref </span>arr_spec) = a.array_spec {
         show_array_spec(f, arr_spec, state)<span class="question-mark">?</span>;
@@ -3843,7 +3843,7 @@
 </span><span class="kw">pub fn </span>show_type_qualifier&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     q: <span class="kw-2">&amp;</span>ast::TypeQualifier,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
@@ -3854,7 +3854,7 @@
     show_type_qualifier_spec(f, first, state)<span class="question-mark">?</span>;
 
     <span class="kw">for </span>qual_spec <span class="kw">in </span>qualifiers {
-        f.write_char(<span class="string">&#39; &#39;</span>)<span class="question-mark">?</span>;
+        f.write_char(<span class="string">' '</span>)<span class="question-mark">?</span>;
         show_type_qualifier_spec(f, qual_spec, state)<span class="question-mark">?</span>;
     }
 
@@ -3865,7 +3865,7 @@
 </span><span class="kw">pub fn </span>show_type_qualifier_spec&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     q: <span class="kw-2">&amp;</span>ast::TypeQualifierSpec,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
@@ -3877,8 +3877,8 @@
         ast::TypeQualifierSpecData::Interpolation(<span class="kw-2">ref </span>i) =&gt; {
             show_interpolation_qualifier(f, i, state)
         }
-        ast::TypeQualifierSpecData::Invariant =&gt; f.write_str(<span class="string">&quot;invariant&quot;</span>),
-        ast::TypeQualifierSpecData::Precise =&gt; f.write_str(<span class="string">&quot;precise&quot;</span>),
+        ast::TypeQualifierSpecData::Invariant =&gt; f.write_str(<span class="string">"invariant"</span>),
+        ast::TypeQualifierSpecData::Precise =&gt; f.write_str(<span class="string">"precise"</span>),
     }
 }
 
@@ -3886,29 +3886,29 @@
 </span><span class="kw">pub fn </span>show_storage_qualifier&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     q: <span class="kw-2">&amp;</span>ast::StorageQualifier,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
     <span class="kw">match </span><span class="kw-2">**</span>q {
-        ast::StorageQualifierData::Const =&gt; f.write_str(<span class="string">&quot;const&quot;</span>),
-        ast::StorageQualifierData::InOut =&gt; f.write_str(<span class="string">&quot;inout&quot;</span>),
-        ast::StorageQualifierData::In =&gt; f.write_str(<span class="string">&quot;in&quot;</span>),
-        ast::StorageQualifierData::Out =&gt; f.write_str(<span class="string">&quot;out&quot;</span>),
-        ast::StorageQualifierData::Centroid =&gt; f.write_str(<span class="string">&quot;centroid&quot;</span>),
-        ast::StorageQualifierData::Patch =&gt; f.write_str(<span class="string">&quot;patch&quot;</span>),
-        ast::StorageQualifierData::Sample =&gt; f.write_str(<span class="string">&quot;sample&quot;</span>),
-        ast::StorageQualifierData::Uniform =&gt; f.write_str(<span class="string">&quot;uniform&quot;</span>),
-        ast::StorageQualifierData::Buffer =&gt; f.write_str(<span class="string">&quot;buffer&quot;</span>),
-        ast::StorageQualifierData::Shared =&gt; f.write_str(<span class="string">&quot;shared&quot;</span>),
-        ast::StorageQualifierData::Coherent =&gt; f.write_str(<span class="string">&quot;coherent&quot;</span>),
-        ast::StorageQualifierData::Volatile =&gt; f.write_str(<span class="string">&quot;volatile&quot;</span>),
-        ast::StorageQualifierData::Restrict =&gt; f.write_str(<span class="string">&quot;restrict&quot;</span>),
-        ast::StorageQualifierData::ReadOnly =&gt; f.write_str(<span class="string">&quot;readonly&quot;</span>),
-        ast::StorageQualifierData::WriteOnly =&gt; f.write_str(<span class="string">&quot;writeonly&quot;</span>),
-        ast::StorageQualifierData::Attribute =&gt; f.write_str(<span class="string">&quot;attribute&quot;</span>),
-        ast::StorageQualifierData::Varying =&gt; f.write_str(<span class="string">&quot;varying&quot;</span>),
+        ast::StorageQualifierData::Const =&gt; f.write_str(<span class="string">"const"</span>),
+        ast::StorageQualifierData::InOut =&gt; f.write_str(<span class="string">"inout"</span>),
+        ast::StorageQualifierData::In =&gt; f.write_str(<span class="string">"in"</span>),
+        ast::StorageQualifierData::Out =&gt; f.write_str(<span class="string">"out"</span>),
+        ast::StorageQualifierData::Centroid =&gt; f.write_str(<span class="string">"centroid"</span>),
+        ast::StorageQualifierData::Patch =&gt; f.write_str(<span class="string">"patch"</span>),
+        ast::StorageQualifierData::Sample =&gt; f.write_str(<span class="string">"sample"</span>),
+        ast::StorageQualifierData::Uniform =&gt; f.write_str(<span class="string">"uniform"</span>),
+        ast::StorageQualifierData::Buffer =&gt; f.write_str(<span class="string">"buffer"</span>),
+        ast::StorageQualifierData::Shared =&gt; f.write_str(<span class="string">"shared"</span>),
+        ast::StorageQualifierData::Coherent =&gt; f.write_str(<span class="string">"coherent"</span>),
+        ast::StorageQualifierData::Volatile =&gt; f.write_str(<span class="string">"volatile"</span>),
+        ast::StorageQualifierData::Restrict =&gt; f.write_str(<span class="string">"restrict"</span>),
+        ast::StorageQualifierData::ReadOnly =&gt; f.write_str(<span class="string">"readonly"</span>),
+        ast::StorageQualifierData::WriteOnly =&gt; f.write_str(<span class="string">"writeonly"</span>),
+        ast::StorageQualifierData::Attribute =&gt; f.write_str(<span class="string">"attribute"</span>),
+        ast::StorageQualifierData::Varying =&gt; f.write_str(<span class="string">"varying"</span>),
         ast::StorageQualifierData::Subroutine(<span class="kw-2">ref </span>n) =&gt; show_subroutine(f, n, state),
     }
 }
@@ -3917,15 +3917,15 @@
 </span><span class="kw">pub fn </span>show_subroutine&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     types: <span class="kw-2">&amp;</span>[ast::TypeSpecifier],
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
-    f.write_str(<span class="string">&quot;subroutine&quot;</span>)<span class="question-mark">?</span>;
+    f.write_str(<span class="string">"subroutine"</span>)<span class="question-mark">?</span>;
 
     <span class="kw">if </span>!types.is_empty() {
-        f.write_char(<span class="string">&#39;(&#39;</span>)<span class="question-mark">?</span>;
+        f.write_char(<span class="string">'('</span>)<span class="question-mark">?</span>;
 
         <span class="kw">let </span><span class="kw-2">mut </span>types_iter = types.iter();
         <span class="kw">let </span>first = types_iter.next().unwrap();
@@ -3937,7 +3937,7 @@
             show_type_specifier(f, type_name, state)<span class="question-mark">?</span>;
         }
 
-        f.write_char(<span class="string">&#39;)&#39;</span>)<span class="question-mark">?</span>;
+        f.write_char(<span class="string">')'</span>)<span class="question-mark">?</span>;
     }
 
     <span class="prelude-val">Ok</span>(())
@@ -3947,7 +3947,7 @@
 </span><span class="kw">pub fn </span>show_layout_qualifier&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     l: <span class="kw-2">&amp;</span>ast::LayoutQualifier,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
@@ -3955,7 +3955,7 @@
     <span class="kw">let </span><span class="kw-2">mut </span>qualifiers = l.ids.iter();
     <span class="kw">let </span>first = qualifiers.next().unwrap();
 
-    f.write_str(<span class="string">&quot;layout(&quot;</span>)<span class="question-mark">?</span>;
+    f.write_str(<span class="string">"layout("</span>)<span class="question-mark">?</span>;
     show_layout_qualifier_spec(f, first, state)<span class="question-mark">?</span>;
 
     <span class="kw">for </span>qual_spec <span class="kw">in </span>qualifiers {
@@ -3963,26 +3963,26 @@
         show_layout_qualifier_spec(f, qual_spec, state)<span class="question-mark">?</span>;
     }
 
-    f.write_char(<span class="string">&#39;)&#39;</span>)
+    f.write_char(<span class="string">')'</span>)
 }
 
 <span class="doccomment">/// Transpile a layout_qualifier_spec to GLSL
 </span><span class="kw">pub fn </span>show_layout_qualifier_spec&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     l: <span class="kw-2">&amp;</span>ast::LayoutQualifierSpec,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
     <span class="kw">match </span><span class="kw-2">**</span>l {
         ast::LayoutQualifierSpecData::Identifier(<span class="kw-2">ref </span>i, <span class="prelude-val">Some</span>(<span class="kw-2">ref </span>e)) =&gt; {
-            <span class="macro">write!</span>(f, <span class="string">&quot;{i}&quot;</span>)<span class="question-mark">?</span>;
-            state.write_binary_op(f, <span class="string">&quot;=&quot;</span>)<span class="question-mark">?</span>;
+            <span class="macro">write!</span>(f, <span class="string">"{i}"</span>)<span class="question-mark">?</span>;
+            state.write_binary_op(f, <span class="string">"="</span>)<span class="question-mark">?</span>;
             show_expr(f, e, state)
         }
         ast::LayoutQualifierSpecData::Identifier(<span class="kw-2">ref </span>i, <span class="prelude-val">None</span>) =&gt; show_identifier(f, i, state),
-        ast::LayoutQualifierSpecData::Shared =&gt; f.write_str(<span class="string">&quot;shared&quot;</span>),
+        ast::LayoutQualifierSpecData::Shared =&gt; f.write_str(<span class="string">"shared"</span>),
     }
 }
 
@@ -3990,15 +3990,15 @@
 </span><span class="kw">pub fn </span>show_precision_qualifier&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     p: <span class="kw-2">&amp;</span>ast::PrecisionQualifier,
-    <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
     <span class="kw">match </span><span class="kw-2">**</span>p {
-        ast::PrecisionQualifierData::High =&gt; f.write_str(<span class="string">&quot;highp&quot;</span>),
-        ast::PrecisionQualifierData::Medium =&gt; f.write_str(<span class="string">&quot;mediump&quot;</span>),
-        ast::PrecisionQualifierData::Low =&gt; f.write_str(<span class="string">&quot;lowp&quot;</span>),
+        ast::PrecisionQualifierData::High =&gt; f.write_str(<span class="string">"highp"</span>),
+        ast::PrecisionQualifierData::Medium =&gt; f.write_str(<span class="string">"mediump"</span>),
+        ast::PrecisionQualifierData::Low =&gt; f.write_str(<span class="string">"lowp"</span>),
     }
 }
 
@@ -4006,39 +4006,39 @@
 </span><span class="kw">pub fn </span>show_interpolation_qualifier&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     i: <span class="kw-2">&amp;</span>ast::InterpolationQualifier,
-    <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
     <span class="kw">match </span><span class="kw-2">**</span>i {
-        ast::InterpolationQualifierData::Smooth =&gt; f.write_str(<span class="string">&quot;smooth&quot;</span>),
-        ast::InterpolationQualifierData::Flat =&gt; f.write_str(<span class="string">&quot;flat&quot;</span>),
-        ast::InterpolationQualifierData::NoPerspective =&gt; f.write_str(<span class="string">&quot;noperspective&quot;</span>),
+        ast::InterpolationQualifierData::Smooth =&gt; f.write_str(<span class="string">"smooth"</span>),
+        ast::InterpolationQualifierData::Flat =&gt; f.write_str(<span class="string">"flat"</span>),
+        ast::InterpolationQualifierData::NoPerspective =&gt; f.write_str(<span class="string">"noperspective"</span>),
     }
 }
 
 <span class="doccomment">/// Transpile a float&lt;F&gt;(f: &amp;mut F, x: f32, _: &amp;mut FormattingState to GLSL
-</span><span class="kw">pub fn </span>show_float&lt;F&gt;(f: <span class="kw-2">&amp;mut </span>F, x: f32, <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result
+</span><span class="kw">pub fn </span>show_float&lt;F&gt;(f: <span class="kw-2">&amp;mut </span>F, x: f32, <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
     <span class="kw">if </span>x.fract() == <span class="number">0. </span>{
-        <span class="macro">write!</span>(f, <span class="string">&quot;{}.&quot;</span>, x)
+        <span class="macro">write!</span>(f, <span class="string">"{}."</span>, x)
     } <span class="kw">else </span>{
-        <span class="macro">write!</span>(f, <span class="string">&quot;{}&quot;</span>, x)
+        <span class="macro">write!</span>(f, <span class="string">"{}"</span>, x)
     }
 }
 
 <span class="doccomment">/// Transpile a double&lt;F&gt;(f: &amp;mut F, x: f64, _: &amp;mut FormattingState to GLSL
-</span><span class="kw">pub fn </span>show_double&lt;F&gt;(f: <span class="kw-2">&amp;mut </span>F, x: f64, <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result
+</span><span class="kw">pub fn </span>show_double&lt;F&gt;(f: <span class="kw-2">&amp;mut </span>F, x: f64, <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
     <span class="kw">if </span>x.fract() == <span class="number">0. </span>{
-        <span class="macro">write!</span>(f, <span class="string">&quot;{}.lf&quot;</span>, x)
+        <span class="macro">write!</span>(f, <span class="string">"{}.lf"</span>, x)
     } <span class="kw">else </span>{
-        <span class="macro">write!</span>(f, <span class="string">&quot;{}lf&quot;</span>, x)
+        <span class="macro">write!</span>(f, <span class="string">"{}lf"</span>, x)
     }
 }
 
@@ -4046,16 +4046,16 @@
 </span><span class="kw">pub fn </span>show_expr&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     expr: <span class="kw-2">&amp;</span>ast::Expr,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
     <span class="kw">match </span><span class="kw-2">**</span>expr {
         ast::ExprData::Variable(<span class="kw-2">ref </span>i) =&gt; show_identifier(f, i, state),
-        ast::ExprData::IntConst(<span class="kw-2">ref </span>x) =&gt; <span class="macro">write!</span>(f, <span class="string">&quot;{}&quot;</span>, x),
-        ast::ExprData::UIntConst(<span class="kw-2">ref </span>x) =&gt; <span class="macro">write!</span>(f, <span class="string">&quot;{}u&quot;</span>, x),
-        ast::ExprData::BoolConst(<span class="kw-2">ref </span>x) =&gt; <span class="macro">write!</span>(f, <span class="string">&quot;{}&quot;</span>, x),
+        ast::ExprData::IntConst(<span class="kw-2">ref </span>x) =&gt; <span class="macro">write!</span>(f, <span class="string">"{}"</span>, x),
+        ast::ExprData::UIntConst(<span class="kw-2">ref </span>x) =&gt; <span class="macro">write!</span>(f, <span class="string">"{}u"</span>, x),
+        ast::ExprData::BoolConst(<span class="kw-2">ref </span>x) =&gt; <span class="macro">write!</span>(f, <span class="string">"{}"</span>, x),
         ast::ExprData::FloatConst(<span class="kw-2">ref </span>x) =&gt; show_float(f, <span class="kw-2">*</span>x, state),
         ast::ExprData::DoubleConst(<span class="kw-2">ref </span>x) =&gt; show_double(f, <span class="kw-2">*</span>x, state),
         ast::ExprData::Unary(<span class="kw-2">ref </span>op, <span class="kw-2">ref </span>e) =&gt; {
@@ -4063,16 +4063,16 @@
             </span>show_unary_op(f, op, state)<span class="question-mark">?</span>;
 
             <span class="kw">if </span>e.precedence() &gt; op.precedence() {
-                f.write_char(<span class="string">&#39;(&#39;</span>)<span class="question-mark">?</span>;
+                f.write_char(<span class="string">'('</span>)<span class="question-mark">?</span>;
                 show_expr(f, e, state)<span class="question-mark">?</span>;
-                f.write_char(<span class="string">&#39;)&#39;</span>)
+                f.write_char(<span class="string">')'</span>)
             } <span class="kw">else if let </span>ast::ExprData::Unary(eop, <span class="kw">_</span>) = <span class="kw-2">&amp;***</span>e {
                 <span class="comment">// Prevent double-unary plus/minus turning into inc/dec
                 </span><span class="kw">if </span>eop == op &amp;&amp; (<span class="kw-2">**</span>eop == ast::UnaryOpData::Add || <span class="kw-2">**</span>eop == ast::UnaryOpData::Minus)
                 {
-                    f.write_char(<span class="string">&#39;(&#39;</span>)<span class="question-mark">?</span>;
+                    f.write_char(<span class="string">'('</span>)<span class="question-mark">?</span>;
                     show_expr(f, e, state)<span class="question-mark">?</span>;
-                    f.write_char(<span class="string">&#39;)&#39;</span>)
+                    f.write_char(<span class="string">')'</span>)
                 } <span class="kw">else </span>{
                     show_expr(f, e, state)
                 }
@@ -4086,9 +4086,9 @@
             </span><span class="kw">if </span>l.precedence() &lt;= op.precedence() {
                 show_expr(f, l, state)<span class="question-mark">?</span>;
             } <span class="kw">else </span>{
-                f.write_char(<span class="string">&#39;(&#39;</span>)<span class="question-mark">?</span>;
+                f.write_char(<span class="string">'('</span>)<span class="question-mark">?</span>;
                 show_expr(f, l, state)<span class="question-mark">?</span>;
-                f.write_char(<span class="string">&#39;)&#39;</span>)<span class="question-mark">?</span>;
+                f.write_char(<span class="string">')'</span>)<span class="question-mark">?</span>;
             }
 
             show_binary_op(f, op, state)<span class="question-mark">?</span>;
@@ -4096,9 +4096,9 @@
             <span class="kw">if </span>r.precedence() &lt; op.precedence() {
                 show_expr(f, r, state)
             } <span class="kw">else </span>{
-                f.write_char(<span class="string">&#39;(&#39;</span>)<span class="question-mark">?</span>;
+                f.write_char(<span class="string">'('</span>)<span class="question-mark">?</span>;
                 show_expr(f, r, state)<span class="question-mark">?</span>;
-                f.write_char(<span class="string">&#39;)&#39;</span>)
+                f.write_char(<span class="string">')'</span>)
             }
         }
         ast::ExprData::Ternary(<span class="kw-2">ref </span>c, <span class="kw-2">ref </span>st, <span class="kw-2">ref </span>e) =&gt; {
@@ -4107,19 +4107,19 @@
             </span><span class="kw">if </span>c.precedence() &lt; expr.precedence() {
                 show_expr(f, c, state)<span class="question-mark">?</span>;
             } <span class="kw">else </span>{
-                f.write_char(<span class="string">&#39;(&#39;</span>)<span class="question-mark">?</span>;
+                f.write_char(<span class="string">'('</span>)<span class="question-mark">?</span>;
                 show_expr(f, c, state)<span class="question-mark">?</span>;
-                f.write_char(<span class="string">&#39;)&#39;</span>)<span class="question-mark">?</span>;
+                f.write_char(<span class="string">')'</span>)<span class="question-mark">?</span>;
             }
-            state.write_binary_op(f, <span class="string">&quot;?&quot;</span>)<span class="question-mark">?</span>;
+            state.write_binary_op(f, <span class="string">"?"</span>)<span class="question-mark">?</span>;
             show_expr(f, st, state)<span class="question-mark">?</span>;
-            state.write_binary_op(f, <span class="string">&quot;:&quot;</span>)<span class="question-mark">?</span>;
+            state.write_binary_op(f, <span class="string">":"</span>)<span class="question-mark">?</span>;
             <span class="kw">if </span>e.precedence() &lt;= expr.precedence() {
                 show_expr(f, e, state)
             } <span class="kw">else </span>{
-                f.write_char(<span class="string">&#39;(&#39;</span>)<span class="question-mark">?</span>;
+                f.write_char(<span class="string">'('</span>)<span class="question-mark">?</span>;
                 show_expr(f, e, state)<span class="question-mark">?</span>;
-                f.write_char(<span class="string">&#39;)&#39;</span>)
+                f.write_char(<span class="string">')'</span>)
             }
         }
         ast::ExprData::Assignment(<span class="kw-2">ref </span>v, <span class="kw-2">ref </span>op, <span class="kw-2">ref </span>e) =&gt; {
@@ -4128,9 +4128,9 @@
             </span><span class="kw">if </span>v.precedence() &lt; op.precedence() {
                 show_expr(f, v, state)<span class="question-mark">?</span>;
             } <span class="kw">else </span>{
-                f.write_char(<span class="string">&#39;(&#39;</span>)<span class="question-mark">?</span>;
+                f.write_char(<span class="string">'('</span>)<span class="question-mark">?</span>;
                 show_expr(f, v, state)<span class="question-mark">?</span>;
-                f.write_char(<span class="string">&#39;)&#39;</span>)<span class="question-mark">?</span>;
+                f.write_char(<span class="string">')'</span>)<span class="question-mark">?</span>;
             }
 
             show_assignment_op(f, op, state)<span class="question-mark">?</span>;
@@ -4138,9 +4138,9 @@
             <span class="kw">if </span>e.precedence() &lt;= op.precedence() {
                 show_expr(f, e, state)
             } <span class="kw">else </span>{
-                f.write_char(<span class="string">&#39;(&#39;</span>)<span class="question-mark">?</span>;
+                f.write_char(<span class="string">'('</span>)<span class="question-mark">?</span>;
                 show_expr(f, e, state)<span class="question-mark">?</span>;
-                f.write_char(<span class="string">&#39;)&#39;</span>)
+                f.write_char(<span class="string">')'</span>)
             }
         }
         ast::ExprData::Bracket(<span class="kw-2">ref </span>e, <span class="kw-2">ref </span>a) =&gt; {
@@ -4149,18 +4149,18 @@
             </span><span class="kw">if </span>e.precedence() &lt;= expr.precedence() {
                 show_expr(f, e, state)<span class="question-mark">?</span>;
             } <span class="kw">else </span>{
-                f.write_char(<span class="string">&#39;(&#39;</span>)<span class="question-mark">?</span>;
+                f.write_char(<span class="string">'('</span>)<span class="question-mark">?</span>;
                 show_expr(f, e, state)<span class="question-mark">?</span>;
-                f.write_char(<span class="string">&#39;)&#39;</span>)<span class="question-mark">?</span>;
+                f.write_char(<span class="string">')'</span>)<span class="question-mark">?</span>;
             }
 
-            f.write_char(<span class="string">&#39;[&#39;</span>)<span class="question-mark">?</span>;
+            f.write_char(<span class="string">'['</span>)<span class="question-mark">?</span>;
             show_expr(f, a, state)<span class="question-mark">?</span>;
-            f.write_char(<span class="string">&#39;]&#39;</span>)
+            f.write_char(<span class="string">']'</span>)
         }
         ast::ExprData::FunCall(<span class="kw-2">ref </span>fun, <span class="kw-2">ref </span>args) =&gt; {
             show_function_identifier(f, fun, state)<span class="question-mark">?</span>;
-            f.write_char(<span class="string">&#39;(&#39;</span>)<span class="question-mark">?</span>;
+            f.write_char(<span class="string">'('</span>)<span class="question-mark">?</span>;
 
             <span class="kw">if </span>!args.is_empty() {
                 <span class="kw">let </span><span class="kw-2">mut </span>args_iter = args.iter();
@@ -4173,7 +4173,7 @@
                 }
             }
 
-            f.write_char(<span class="string">&#39;)&#39;</span>)
+            f.write_char(<span class="string">')'</span>)
         }
         ast::ExprData::Dot(<span class="kw-2">ref </span>e, <span class="kw-2">ref </span>i) =&gt; {
             <span class="comment">// Note: dot is left-to-right associative
@@ -4181,11 +4181,11 @@
             </span><span class="kw">if </span>e.precedence() &lt;= expr.precedence() {
                 show_expr(f, e, state)<span class="question-mark">?</span>;
             } <span class="kw">else </span>{
-                f.write_char(<span class="string">&#39;(&#39;</span>)<span class="question-mark">?</span>;
+                f.write_char(<span class="string">'('</span>)<span class="question-mark">?</span>;
                 show_expr(f, e, state)<span class="question-mark">?</span>;
-                f.write_char(<span class="string">&#39;)&#39;</span>)<span class="question-mark">?</span>;
+                f.write_char(<span class="string">')'</span>)<span class="question-mark">?</span>;
             }
-            f.write_char(<span class="string">&#39;.&#39;</span>)<span class="question-mark">?</span>;
+            f.write_char(<span class="string">'.'</span>)<span class="question-mark">?</span>;
             show_identifier(f, i, state)
         }
         ast::ExprData::PostInc(<span class="kw-2">ref </span>e) =&gt; {
@@ -4194,12 +4194,12 @@
             </span><span class="kw">if </span>e.precedence() &lt; expr.precedence() {
                 show_expr(f, e, state)<span class="question-mark">?</span>;
             } <span class="kw">else </span>{
-                f.write_char(<span class="string">&#39;(&#39;</span>)<span class="question-mark">?</span>;
+                f.write_char(<span class="string">'('</span>)<span class="question-mark">?</span>;
                 show_expr(f, e, state)<span class="question-mark">?</span>;
-                f.write_char(<span class="string">&#39;)&#39;</span>)<span class="question-mark">?</span>;
+                f.write_char(<span class="string">')'</span>)<span class="question-mark">?</span>;
             }
 
-            f.write_str(<span class="string">&quot;++&quot;</span>)
+            f.write_str(<span class="string">"++"</span>)
         }
         ast::ExprData::PostDec(<span class="kw-2">ref </span>e) =&gt; {
             <span class="comment">// Note: post-decrement is right-to-left associative
@@ -4207,12 +4207,12 @@
             </span><span class="kw">if </span>e.precedence() &lt; expr.precedence() {
                 show_expr(f, e, state)<span class="question-mark">?</span>;
             } <span class="kw">else </span>{
-                f.write_char(<span class="string">&#39;(&#39;</span>)<span class="question-mark">?</span>;
+                f.write_char(<span class="string">'('</span>)<span class="question-mark">?</span>;
                 show_expr(f, e, state)<span class="question-mark">?</span>;
-                f.write_char(<span class="string">&#39;)&#39;</span>)<span class="question-mark">?</span>;
+                f.write_char(<span class="string">')'</span>)<span class="question-mark">?</span>;
             }
 
-            f.write_str(<span class="string">&quot;--&quot;</span>)
+            f.write_str(<span class="string">"--"</span>)
         }
         ast::ExprData::Comma(<span class="kw-2">ref </span>a, <span class="kw-2">ref </span>b) =&gt; {
             <span class="comment">// Note: comma is left-to-right associative
@@ -4220,9 +4220,9 @@
             </span><span class="kw">if </span>a.precedence() &lt;= expr.precedence() {
                 show_expr(f, a, state)<span class="question-mark">?</span>;
             } <span class="kw">else </span>{
-                f.write_char(<span class="string">&#39;(&#39;</span>)<span class="question-mark">?</span>;
+                f.write_char(<span class="string">'('</span>)<span class="question-mark">?</span>;
                 show_expr(f, a, state)<span class="question-mark">?</span>;
-                f.write_char(<span class="string">&#39;)&#39;</span>)<span class="question-mark">?</span>;
+                f.write_char(<span class="string">')'</span>)<span class="question-mark">?</span>;
             }
 
             state.write_list_separator(f)<span class="question-mark">?</span>;
@@ -4230,22 +4230,22 @@
             <span class="kw">if </span>b.precedence() &lt; expr.precedence() {
                 show_expr(f, b, state)
             } <span class="kw">else </span>{
-                f.write_char(<span class="string">&#39;(&#39;</span>)<span class="question-mark">?</span>;
+                f.write_char(<span class="string">'('</span>)<span class="question-mark">?</span>;
                 show_expr(f, b, state)<span class="question-mark">?</span>;
-                f.write_char(<span class="string">&#39;)&#39;</span>)
+                f.write_char(<span class="string">')'</span>)
             }
         }
     }
 }
 
 <span class="doccomment">/// Transpile a path&lt;F&gt;(f: &amp;mut F, path: &amp;ast::Path, _: &amp;mut FormattingState to GLSL
-</span><span class="kw">pub fn </span>show_path&lt;F&gt;(f: <span class="kw-2">&amp;mut </span>F, path: <span class="kw-2">&amp;</span>ast::Path, <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result
+</span><span class="kw">pub fn </span>show_path&lt;F&gt;(f: <span class="kw-2">&amp;mut </span>F, path: <span class="kw-2">&amp;</span>ast::Path, <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
     <span class="kw">match </span><span class="kw-2">**</span>path {
-        ast::PathData::Absolute(<span class="kw-2">ref </span>s) =&gt; <span class="macro">write!</span>(f, <span class="string">&quot;&lt;{}&gt;&quot;</span>, s),
-        ast::PathData::Relative(<span class="kw-2">ref </span>s) =&gt; <span class="macro">write!</span>(f, <span class="string">&quot;\&quot;{}\&quot;&quot;</span>, s),
+        ast::PathData::Absolute(<span class="kw-2">ref </span>s) =&gt; <span class="macro">write!</span>(f, <span class="string">"&lt;{}&gt;"</span>, s),
+        ast::PathData::Relative(<span class="kw-2">ref </span>s) =&gt; <span class="macro">write!</span>(f, <span class="string">"\"{}\""</span>, s),
     }
 }
 
@@ -4253,18 +4253,18 @@
 </span><span class="kw">pub fn </span>show_unary_op&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     op: <span class="kw-2">&amp;</span>ast::UnaryOp,
-    <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
     <span class="kw">match </span><span class="kw-2">**</span>op {
-        ast::UnaryOpData::Inc =&gt; f.write_str(<span class="string">&quot;++&quot;</span>),
-        ast::UnaryOpData::Dec =&gt; f.write_str(<span class="string">&quot;--&quot;</span>),
-        ast::UnaryOpData::Add =&gt; f.write_str(<span class="string">&quot;+&quot;</span>),
-        ast::UnaryOpData::Minus =&gt; f.write_str(<span class="string">&quot;-&quot;</span>),
-        ast::UnaryOpData::Not =&gt; f.write_str(<span class="string">&quot;!&quot;</span>),
-        ast::UnaryOpData::Complement =&gt; f.write_str(<span class="string">&quot;~&quot;</span>),
+        ast::UnaryOpData::Inc =&gt; f.write_str(<span class="string">"++"</span>),
+        ast::UnaryOpData::Dec =&gt; f.write_str(<span class="string">"--"</span>),
+        ast::UnaryOpData::Add =&gt; f.write_str(<span class="string">"+"</span>),
+        ast::UnaryOpData::Minus =&gt; f.write_str(<span class="string">"-"</span>),
+        ast::UnaryOpData::Not =&gt; f.write_str(<span class="string">"!"</span>),
+        ast::UnaryOpData::Complement =&gt; f.write_str(<span class="string">"~"</span>),
     }
 }
 
@@ -4272,31 +4272,31 @@
 </span><span class="kw">pub fn </span>show_binary_op&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     op: <span class="kw-2">&amp;</span>ast::BinaryOp,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
     <span class="kw">match </span><span class="kw-2">**</span>op {
-        ast::BinaryOpData::Or =&gt; state.write_binary_op(f, <span class="string">&quot;||&quot;</span>),
-        ast::BinaryOpData::Xor =&gt; state.write_binary_op(f, <span class="string">&quot;^^&quot;</span>),
-        ast::BinaryOpData::And =&gt; state.write_binary_op(f, <span class="string">&quot;&amp;&amp;&quot;</span>),
-        ast::BinaryOpData::BitOr =&gt; state.write_binary_op(f, <span class="string">&quot;|&quot;</span>),
-        ast::BinaryOpData::BitXor =&gt; state.write_binary_op(f, <span class="string">&quot;^&quot;</span>),
-        ast::BinaryOpData::BitAnd =&gt; state.write_binary_op(f, <span class="string">&quot;&amp;&quot;</span>),
-        ast::BinaryOpData::Equal =&gt; state.write_binary_op(f, <span class="string">&quot;==&quot;</span>),
-        ast::BinaryOpData::NonEqual =&gt; state.write_binary_op(f, <span class="string">&quot;!=&quot;</span>),
-        ast::BinaryOpData::Lt =&gt; state.write_binary_op(f, <span class="string">&quot;&lt;&quot;</span>),
-        ast::BinaryOpData::Gt =&gt; state.write_binary_op(f, <span class="string">&quot;&gt;&quot;</span>),
-        ast::BinaryOpData::Lte =&gt; state.write_binary_op(f, <span class="string">&quot;&lt;=&quot;</span>),
-        ast::BinaryOpData::Gte =&gt; state.write_binary_op(f, <span class="string">&quot;&gt;=&quot;</span>),
-        ast::BinaryOpData::LShift =&gt; state.write_binary_op(f, <span class="string">&quot;&lt;&lt;&quot;</span>),
-        ast::BinaryOpData::RShift =&gt; state.write_binary_op(f, <span class="string">&quot;&gt;&gt;&quot;</span>),
-        ast::BinaryOpData::Add =&gt; state.write_binary_op(f, <span class="string">&quot;+&quot;</span>),
-        ast::BinaryOpData::Sub =&gt; state.write_binary_op(f, <span class="string">&quot;-&quot;</span>),
-        ast::BinaryOpData::Mult =&gt; state.write_binary_op(f, <span class="string">&quot;*&quot;</span>),
-        ast::BinaryOpData::Div =&gt; state.write_binary_op(f, <span class="string">&quot;/&quot;</span>),
-        ast::BinaryOpData::Mod =&gt; state.write_binary_op(f, <span class="string">&quot;%&quot;</span>),
+        ast::BinaryOpData::Or =&gt; state.write_binary_op(f, <span class="string">"||"</span>),
+        ast::BinaryOpData::Xor =&gt; state.write_binary_op(f, <span class="string">"^^"</span>),
+        ast::BinaryOpData::And =&gt; state.write_binary_op(f, <span class="string">"&amp;&amp;"</span>),
+        ast::BinaryOpData::BitOr =&gt; state.write_binary_op(f, <span class="string">"|"</span>),
+        ast::BinaryOpData::BitXor =&gt; state.write_binary_op(f, <span class="string">"^"</span>),
+        ast::BinaryOpData::BitAnd =&gt; state.write_binary_op(f, <span class="string">"&amp;"</span>),
+        ast::BinaryOpData::Equal =&gt; state.write_binary_op(f, <span class="string">"=="</span>),
+        ast::BinaryOpData::NonEqual =&gt; state.write_binary_op(f, <span class="string">"!="</span>),
+        ast::BinaryOpData::Lt =&gt; state.write_binary_op(f, <span class="string">"&lt;"</span>),
+        ast::BinaryOpData::Gt =&gt; state.write_binary_op(f, <span class="string">"&gt;"</span>),
+        ast::BinaryOpData::Lte =&gt; state.write_binary_op(f, <span class="string">"&lt;="</span>),
+        ast::BinaryOpData::Gte =&gt; state.write_binary_op(f, <span class="string">"&gt;="</span>),
+        ast::BinaryOpData::LShift =&gt; state.write_binary_op(f, <span class="string">"&lt;&lt;"</span>),
+        ast::BinaryOpData::RShift =&gt; state.write_binary_op(f, <span class="string">"&gt;&gt;"</span>),
+        ast::BinaryOpData::Add =&gt; state.write_binary_op(f, <span class="string">"+"</span>),
+        ast::BinaryOpData::Sub =&gt; state.write_binary_op(f, <span class="string">"-"</span>),
+        ast::BinaryOpData::Mult =&gt; state.write_binary_op(f, <span class="string">"*"</span>),
+        ast::BinaryOpData::Div =&gt; state.write_binary_op(f, <span class="string">"/"</span>),
+        ast::BinaryOpData::Mod =&gt; state.write_binary_op(f, <span class="string">"%"</span>),
     }
 }
 
@@ -4304,23 +4304,23 @@
 </span><span class="kw">pub fn </span>show_assignment_op&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     op: <span class="kw-2">&amp;</span>ast::AssignmentOp,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
     <span class="kw">match </span><span class="kw-2">**</span>op {
-        ast::AssignmentOpData::Equal =&gt; state.write_binary_op(f, <span class="string">&quot;=&quot;</span>),
-        ast::AssignmentOpData::Mult =&gt; state.write_binary_op(f, <span class="string">&quot;*=&quot;</span>),
-        ast::AssignmentOpData::Div =&gt; state.write_binary_op(f, <span class="string">&quot;/=&quot;</span>),
-        ast::AssignmentOpData::Mod =&gt; state.write_binary_op(f, <span class="string">&quot;%=&quot;</span>),
-        ast::AssignmentOpData::Add =&gt; state.write_binary_op(f, <span class="string">&quot;+=&quot;</span>),
-        ast::AssignmentOpData::Sub =&gt; state.write_binary_op(f, <span class="string">&quot;-=&quot;</span>),
-        ast::AssignmentOpData::LShift =&gt; state.write_binary_op(f, <span class="string">&quot;&lt;&lt;=&quot;</span>),
-        ast::AssignmentOpData::RShift =&gt; state.write_binary_op(f, <span class="string">&quot;&gt;&gt;=&quot;</span>),
-        ast::AssignmentOpData::And =&gt; state.write_binary_op(f, <span class="string">&quot;&amp;=&quot;</span>),
-        ast::AssignmentOpData::Xor =&gt; state.write_binary_op(f, <span class="string">&quot;^=&quot;</span>),
-        ast::AssignmentOpData::Or =&gt; state.write_binary_op(f, <span class="string">&quot;|=&quot;</span>),
+        ast::AssignmentOpData::Equal =&gt; state.write_binary_op(f, <span class="string">"="</span>),
+        ast::AssignmentOpData::Mult =&gt; state.write_binary_op(f, <span class="string">"*="</span>),
+        ast::AssignmentOpData::Div =&gt; state.write_binary_op(f, <span class="string">"/="</span>),
+        ast::AssignmentOpData::Mod =&gt; state.write_binary_op(f, <span class="string">"%="</span>),
+        ast::AssignmentOpData::Add =&gt; state.write_binary_op(f, <span class="string">"+="</span>),
+        ast::AssignmentOpData::Sub =&gt; state.write_binary_op(f, <span class="string">"-="</span>),
+        ast::AssignmentOpData::LShift =&gt; state.write_binary_op(f, <span class="string">"&lt;&lt;="</span>),
+        ast::AssignmentOpData::RShift =&gt; state.write_binary_op(f, <span class="string">"&gt;&gt;="</span>),
+        ast::AssignmentOpData::And =&gt; state.write_binary_op(f, <span class="string">"&amp;="</span>),
+        ast::AssignmentOpData::Xor =&gt; state.write_binary_op(f, <span class="string">"^="</span>),
+        ast::AssignmentOpData::Or =&gt; state.write_binary_op(f, <span class="string">"|="</span>),
     }
 }
 
@@ -4328,7 +4328,7 @@
 </span><span class="kw">pub fn </span>show_function_identifier&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     i: <span class="kw-2">&amp;</span>ast::FunIdentifier,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
@@ -4343,7 +4343,7 @@
 </span><span class="kw">pub fn </span>show_declaration&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     d: <span class="kw-2">&amp;</span>ast::Declaration,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
@@ -4357,15 +4357,15 @@
         }
         ast::DeclarationData::Precision(<span class="kw-2">ref </span>qual, <span class="kw-2">ref </span>ty) =&gt; {
             show_precision_qualifier(f, qual, state)<span class="question-mark">?</span>;
-            f.write_str(<span class="string">&quot; &quot;</span>)<span class="question-mark">?</span>;
+            f.write_str(<span class="string">" "</span>)<span class="question-mark">?</span>;
             show_type_specifier(f, ty, state)<span class="question-mark">?</span>;
         }
         ast::DeclarationData::Block(<span class="kw-2">ref </span>block) =&gt; {
             show_block(f, block, state)<span class="question-mark">?</span>;
         }
         ast::DeclarationData::Invariant(<span class="kw-2">ref </span>ident) =&gt; {
-            f.write_str(<span class="string">&quot;invariant&quot;</span>)<span class="question-mark">?</span>;
-            f.write_char(<span class="string">&#39; &#39;</span>)<span class="question-mark">?</span>;
+            f.write_str(<span class="string">"invariant"</span>)<span class="question-mark">?</span>;
+            f.write_char(<span class="string">' '</span>)<span class="question-mark">?</span>;
             show_identifier(f, ident, state)<span class="question-mark">?</span>;
         }
     }
@@ -4377,16 +4377,16 @@
 </span><span class="kw">pub fn </span>show_function_prototype&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     fp: <span class="kw-2">&amp;</span>ast::FunctionPrototype,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
     show_fully_specified_type(f, <span class="kw-2">&amp;</span>fp.ty, state)<span class="question-mark">?</span>;
-    f.write_char(<span class="string">&#39; &#39;</span>)<span class="question-mark">?</span>;
+    f.write_char(<span class="string">' '</span>)<span class="question-mark">?</span>;
     show_identifier(f, <span class="kw-2">&amp;</span>fp.name, state)<span class="question-mark">?</span>;
 
-    f.write_char(<span class="string">&#39;(&#39;</span>)<span class="question-mark">?</span>;
+    f.write_char(<span class="string">'('</span>)<span class="question-mark">?</span>;
 
     <span class="kw">if </span>!fp.parameters.is_empty() {
         <span class="kw">let </span><span class="kw-2">mut </span>iter = fp.parameters.iter();
@@ -4399,13 +4399,13 @@
         }
     }
 
-    f.write_char(<span class="string">&#39;)&#39;</span>)
+    f.write_char(<span class="string">')'</span>)
 }
 <span class="doccomment">/// Transpile a function_parameter_declaration to GLSL
 </span><span class="kw">pub fn </span>show_function_parameter_declaration&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     p: <span class="kw-2">&amp;</span>ast::FunctionParameterDeclaration,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
@@ -4414,7 +4414,7 @@
         ast::FunctionParameterDeclarationData::Named(<span class="kw-2">ref </span>qual, <span class="kw-2">ref </span>fpd) =&gt; {
             <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">ref </span>q) = <span class="kw-2">*</span>qual {
                 show_type_qualifier(f, q, state)<span class="question-mark">?</span>;
-                f.write_char(<span class="string">&#39; &#39;</span>)<span class="question-mark">?</span>;
+                f.write_char(<span class="string">' '</span>)<span class="question-mark">?</span>;
             }
 
             show_function_parameter_declarator(f, fpd, state)
@@ -4422,7 +4422,7 @@
         ast::FunctionParameterDeclarationData::Unnamed(<span class="kw-2">ref </span>qual, <span class="kw-2">ref </span>ty) =&gt; {
             <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">ref </span>q) = <span class="kw-2">*</span>qual {
                 show_type_qualifier(f, q, state)<span class="question-mark">?</span>;
-                f.write_char(<span class="string">&#39; &#39;</span>)<span class="question-mark">?</span>;
+                f.write_char(<span class="string">' '</span>)<span class="question-mark">?</span>;
             }
 
             show_type_specifier(f, ty, state)
@@ -4434,13 +4434,13 @@
 </span><span class="kw">pub fn </span>show_function_parameter_declarator&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     p: <span class="kw-2">&amp;</span>ast::FunctionParameterDeclarator,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
     show_type_specifier(f, <span class="kw-2">&amp;</span>p.ty, state)<span class="question-mark">?</span>;
-    f.write_char(<span class="string">&#39; &#39;</span>)<span class="question-mark">?</span>;
+    f.write_char(<span class="string">' '</span>)<span class="question-mark">?</span>;
     show_arrayed_identifier(f, <span class="kw-2">&amp;</span>p.ident, state)
 }
 
@@ -4448,7 +4448,7 @@
 </span><span class="kw">pub fn </span>show_init_declarator_list&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     i: <span class="kw-2">&amp;</span>ast::InitDeclaratorList,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
@@ -4467,7 +4467,7 @@
 </span><span class="kw">pub fn </span>show_single_declaration&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     d: <span class="kw-2">&amp;</span>ast::SingleDeclaration,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
@@ -4475,7 +4475,7 @@
     show_fully_specified_type(f, <span class="kw-2">&amp;</span>d.ty, state)<span class="question-mark">?</span>;
 
     <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">ref </span>name) = d.name {
-        f.write_char(<span class="string">&#39; &#39;</span>)<span class="question-mark">?</span>;
+        f.write_char(<span class="string">' '</span>)<span class="question-mark">?</span>;
         show_identifier(f, name, state)<span class="question-mark">?</span>;
     }
 
@@ -4484,7 +4484,7 @@
     }
 
     <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">ref </span>initializer) = d.initializer {
-        state.write_binary_op(f, <span class="string">&quot;=&quot;</span>)<span class="question-mark">?</span>;
+        state.write_binary_op(f, <span class="string">"="</span>)<span class="question-mark">?</span>;
         show_initializer(f, initializer, state)<span class="question-mark">?</span>;
     }
 
@@ -4495,7 +4495,7 @@
 </span><span class="kw">pub fn </span>show_single_declaration_no_type&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     d: <span class="kw-2">&amp;</span>ast::SingleDeclarationNoType,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
@@ -4503,7 +4503,7 @@
     show_arrayed_identifier(f, <span class="kw-2">&amp;</span>d.ident, state)<span class="question-mark">?</span>;
 
     <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">ref </span>initializer) = d.initializer {
-        state.write_binary_op(f, <span class="string">&quot;=&quot;</span>)<span class="question-mark">?</span>;
+        state.write_binary_op(f, <span class="string">"="</span>)<span class="question-mark">?</span>;
         show_initializer(f, initializer, state)<span class="question-mark">?</span>;
     }
 
@@ -4514,7 +4514,7 @@
 </span><span class="kw">pub fn </span>show_initializer&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     i: <span class="kw-2">&amp;</span>ast::Initializer,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
@@ -4540,12 +4540,12 @@
 }
 
 <span class="doccomment">/// Transpile a block&lt;F&gt;(f: &amp;mut F, b: &amp;ast::Block, state: &amp;mut FormattingState to GLSL
-</span><span class="kw">pub fn </span>show_block&lt;F&gt;(f: <span class="kw-2">&amp;mut </span>F, b: <span class="kw-2">&amp;</span>ast::Block, state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result
+</span><span class="kw">pub fn </span>show_block&lt;F&gt;(f: <span class="kw-2">&amp;mut </span>F, b: <span class="kw-2">&amp;</span>ast::Block, state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
     show_type_qualifier(f, <span class="kw-2">&amp;</span>b.qualifier, state)<span class="question-mark">?</span>;
-    f.write_char(<span class="string">&#39; &#39;</span>)<span class="question-mark">?</span>;
+    f.write_char(<span class="string">' '</span>)<span class="question-mark">?</span>;
     show_identifier(f, <span class="kw-2">&amp;</span>b.name, state)<span class="question-mark">?</span>;
 
     state.enter_block(f)<span class="question-mark">?</span>;
@@ -4569,7 +4569,7 @@
 </span><span class="kw">pub fn </span>show_function_definition&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     fd: <span class="kw-2">&amp;</span>ast::FunctionDefinition,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
@@ -4585,7 +4585,7 @@
 </span><span class="kw">pub fn </span>show_compound_statement&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     cst: <span class="kw-2">&amp;</span>ast::CompoundStatement,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
@@ -4621,7 +4621,7 @@
 </span><span class="kw">pub fn </span>show_statement&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     st: <span class="kw-2">&amp;</span>ast::Statement,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
@@ -4644,7 +4644,7 @@
 </span><span class="kw">pub fn </span>show_expression_statement&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     est: <span class="kw-2">&amp;</span>ast::ExprStatement,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
@@ -4660,12 +4660,12 @@
 </span><span class="kw">pub fn </span>show_selection_statement&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     sst: <span class="kw-2">&amp;</span>ast::SelectionStatement,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
-    f.write_str(<span class="string">&quot;if&quot;</span>)<span class="question-mark">?</span>;
+    f.write_str(<span class="string">"if"</span>)<span class="question-mark">?</span>;
     state.write_statement_opening_parenthesis(f)<span class="question-mark">?</span>;
     show_expr(f, <span class="kw-2">&amp;</span>sst.cond, state)<span class="question-mark">?</span>;
     state.write_statement_closing_parenthesis(f)<span class="question-mark">?</span>;
@@ -4676,7 +4676,7 @@
 </span><span class="kw">pub fn </span>show_selection_rest_statement&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     sst: <span class="kw-2">&amp;</span>ast::SelectionRestStatement,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
@@ -4686,7 +4686,7 @@
         ast::SelectionRestStatementData::Else(<span class="kw-2">ref </span>if_st, <span class="kw-2">ref </span>else_st) =&gt; {
             show_statement(f, if_st, state)<span class="question-mark">?</span>;
             state.write_else(f)<span class="question-mark">?</span>;
-            <span class="comment">// TODO: This should be configurable instead of relying on show_statement&#39;s calling
+            <span class="comment">// TODO: This should be configurable instead of relying on show_statement's calling
             // flush_line
             </span>state.consume_newline();
             show_statement(f, else_st, state)
@@ -4698,17 +4698,17 @@
 </span><span class="kw">pub fn </span>show_switch_statement&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     sst: <span class="kw-2">&amp;</span>ast::SwitchStatement,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
-    f.write_str(<span class="string">&quot;switch&quot;</span>)<span class="question-mark">?</span>;
+    f.write_str(<span class="string">"switch"</span>)<span class="question-mark">?</span>;
     state.write_statement_opening_parenthesis(f)<span class="question-mark">?</span>;
     show_expr(f, <span class="kw-2">&amp;</span>sst.head, state)<span class="question-mark">?</span>;
     <span class="comment">// Do not call write_statement_closing_parenthesis to maybe save an unexpected
     // whitespace before the block
-    </span>f.write_char(<span class="string">&#39;)&#39;</span>)<span class="question-mark">?</span>;
+    </span>f.write_char(<span class="string">')'</span>)<span class="question-mark">?</span>;
 
     state.enter_block(f)<span class="question-mark">?</span>;
 
@@ -4723,19 +4723,19 @@
 </span><span class="kw">pub fn </span>show_case_label&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     cl: <span class="kw-2">&amp;</span>ast::CaseLabel,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
     <span class="kw">match </span><span class="kw-2">**</span>cl {
         ast::CaseLabelData::Case(<span class="kw-2">ref </span>e) =&gt; {
-            f.write_str(<span class="string">&quot;case &quot;</span>)<span class="question-mark">?</span>;
+            f.write_str(<span class="string">"case "</span>)<span class="question-mark">?</span>;
             show_expr(f, e, state)<span class="question-mark">?</span>;
             state.enter_case_label(f)
         }
         ast::CaseLabelData::Def =&gt; {
-            f.write_str(<span class="string">&quot;default&quot;</span>)<span class="question-mark">?</span>;
+            f.write_str(<span class="string">"default"</span>)<span class="question-mark">?</span>;
             state.enter_case_label(f)
         }
     }
@@ -4745,32 +4745,32 @@
 </span><span class="kw">pub fn </span>show_iteration_statement&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     ist: <span class="kw-2">&amp;</span>ast::IterationStatement,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
     <span class="kw">match </span><span class="kw-2">**</span>ist {
         ast::IterationStatementData::While(<span class="kw-2">ref </span>cond, <span class="kw-2">ref </span>body) =&gt; {
-            f.write_str(<span class="string">&quot;while&quot;</span>)<span class="question-mark">?</span>;
+            f.write_str(<span class="string">"while"</span>)<span class="question-mark">?</span>;
             state.write_statement_opening_parenthesis(f)<span class="question-mark">?</span>;
             show_condition(f, cond, state)<span class="question-mark">?</span>;
             state.write_statement_closing_parenthesis(f)<span class="question-mark">?</span>;
             show_statement(f, body, state)
         }
         ast::IterationStatementData::DoWhile(<span class="kw-2">ref </span>body, <span class="kw-2">ref </span>cond) =&gt; {
-            f.write_str(<span class="string">&quot;do &quot;</span>)<span class="question-mark">?</span>;
+            f.write_str(<span class="string">"do "</span>)<span class="question-mark">?</span>;
             show_statement(f, body, state)<span class="question-mark">?</span>;
-            f.write_str(<span class="string">&quot; while&quot;</span>)<span class="question-mark">?</span>;
+            f.write_str(<span class="string">" while"</span>)<span class="question-mark">?</span>;
             state.write_statement_opening_parenthesis(f)<span class="question-mark">?</span>;
             show_expr(f, cond, state)<span class="question-mark">?</span>;
             <span class="comment">// Do not call write_statement_closing_parenthesis to maybe save an unexpected
             // whitespace before the terminator
-            </span>f.write_char(<span class="string">&#39;)&#39;</span>)<span class="question-mark">?</span>;
+            </span>f.write_char(<span class="string">')'</span>)<span class="question-mark">?</span>;
             state.write_statement_terminator(f)
         }
         ast::IterationStatementData::For(<span class="kw-2">ref </span>init, <span class="kw-2">ref </span>rest, <span class="kw-2">ref </span>body) =&gt; {
-            f.write_str(<span class="string">&quot;for&quot;</span>)<span class="question-mark">?</span>;
+            f.write_str(<span class="string">"for"</span>)<span class="question-mark">?</span>;
             state.write_statement_opening_parenthesis(f)<span class="question-mark">?</span>;
             show_for_init_statement(f, init, state)<span class="question-mark">?</span>;
             state.flush_space(f)<span class="question-mark">?</span>;
@@ -4785,7 +4785,7 @@
 </span><span class="kw">pub fn </span>show_condition&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     c: <span class="kw-2">&amp;</span>ast::Condition,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
@@ -4794,9 +4794,9 @@
         ast::ConditionData::Expr(<span class="kw-2">ref </span>e) =&gt; show_expr(f, e, state),
         ast::ConditionData::Assignment(<span class="kw-2">ref </span>ty, <span class="kw-2">ref </span>name, <span class="kw-2">ref </span>initializer) =&gt; {
             show_fully_specified_type(f, ty, state)<span class="question-mark">?</span>;
-            f.write_char(<span class="string">&#39; &#39;</span>)<span class="question-mark">?</span>;
+            f.write_char(<span class="string">' '</span>)<span class="question-mark">?</span>;
             show_identifier(f, name, state)<span class="question-mark">?</span>;
-            state.write_binary_op(f, <span class="string">&quot;=&quot;</span>)<span class="question-mark">?</span>;
+            state.write_binary_op(f, <span class="string">"="</span>)<span class="question-mark">?</span>;
             show_initializer(f, initializer, state)
         }
     }
@@ -4806,7 +4806,7 @@
 </span><span class="kw">pub fn </span>show_for_init_statement&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     i: <span class="kw-2">&amp;</span>ast::ForInitStatement,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
@@ -4827,7 +4827,7 @@
 </span><span class="kw">pub fn </span>show_for_rest_statement&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     r: <span class="kw-2">&amp;</span>ast::ForRestStatement,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
@@ -4849,19 +4849,19 @@
 </span><span class="kw">pub fn </span>show_jump_statement&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     j: <span class="kw-2">&amp;</span>ast::JumpStatement,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
     <span class="kw">match </span><span class="kw-2">**</span>j {
-        ast::JumpStatementData::Continue =&gt; f.write_str(<span class="string">&quot;continue&quot;</span>)<span class="question-mark">?</span>,
-        ast::JumpStatementData::Break =&gt; f.write_str(<span class="string">&quot;break&quot;</span>)<span class="question-mark">?</span>,
-        ast::JumpStatementData::Discard =&gt; f.write_str(<span class="string">&quot;discard&quot;</span>)<span class="question-mark">?</span>,
+        ast::JumpStatementData::Continue =&gt; f.write_str(<span class="string">"continue"</span>)<span class="question-mark">?</span>,
+        ast::JumpStatementData::Break =&gt; f.write_str(<span class="string">"break"</span>)<span class="question-mark">?</span>,
+        ast::JumpStatementData::Discard =&gt; f.write_str(<span class="string">"discard"</span>)<span class="question-mark">?</span>,
         ast::JumpStatementData::Return(<span class="kw-2">ref </span>e) =&gt; {
-            f.write_str(<span class="string">&quot;return&quot;</span>)<span class="question-mark">?</span>;
+            f.write_str(<span class="string">"return"</span>)<span class="question-mark">?</span>;
             <span class="kw">if let </span><span class="prelude-val">Some</span>(e) = e {
-                f.write_char(<span class="string">&#39; &#39;</span>)<span class="question-mark">?</span>;
+                f.write_char(<span class="string">' '</span>)<span class="question-mark">?</span>;
                 show_expr(f, e, state)<span class="question-mark">?</span>;
             }
         }
@@ -4874,7 +4874,7 @@
 </span><span class="kw">pub fn </span>show_preprocessor&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     pp: <span class="kw-2">&amp;</span>ast::Preprocessor,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
@@ -4908,7 +4908,7 @@
 </span><span class="kw">pub fn </span>show_preprocessor_define&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     pd: <span class="kw-2">&amp;</span>ast::PreprocessorDefine,
-    <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
@@ -4917,90 +4917,90 @@
         ast::PreprocessorDefineData::ObjectLike {
             <span class="kw-2">ref </span>ident,
             <span class="kw-2">ref </span>value,
-        } =&gt; <span class="macro">write!</span>(f, <span class="string">&quot;#define {} {}&quot;</span>, ident, value),
+        } =&gt; <span class="macro">write!</span>(f, <span class="string">"#define {} {}"</span>, ident, value),
 
         ast::PreprocessorDefineData::FunctionLike {
             <span class="kw-2">ref </span>ident,
             <span class="kw-2">ref </span>args,
             <span class="kw-2">ref </span>value,
         } =&gt; {
-            <span class="macro">write!</span>(f, <span class="string">&quot;#define {}(&quot;</span>, ident)<span class="question-mark">?</span>;
+            <span class="macro">write!</span>(f, <span class="string">"#define {}("</span>, ident)<span class="question-mark">?</span>;
 
             <span class="kw">if </span>!args.is_empty() {
-                <span class="macro">write!</span>(f, <span class="string">&quot;{}&quot;</span>, <span class="kw-2">&amp;</span>args[<span class="number">0</span>])<span class="question-mark">?</span>;
+                <span class="macro">write!</span>(f, <span class="string">"{}"</span>, <span class="kw-2">&amp;</span>args[<span class="number">0</span>])<span class="question-mark">?</span>;
 
                 <span class="kw">for </span>arg <span class="kw">in </span><span class="kw-2">&amp;</span>args[<span class="number">1</span>..args.len()] {
-                    <span class="macro">write!</span>(f, <span class="string">&quot;, {}&quot;</span>, arg)<span class="question-mark">?</span>;
+                    <span class="macro">write!</span>(f, <span class="string">", {}"</span>, arg)<span class="question-mark">?</span>;
                 }
             }
 
-            <span class="macro">write!</span>(f, <span class="string">&quot;) {}&quot;</span>, value)
+            <span class="macro">write!</span>(f, <span class="string">") {}"</span>, value)
         }
     }
 }
 
 <span class="doccomment">/// Transpile a preprocessor_else&lt;F&gt;(f: &amp;mut F, _: &amp;mut FormattingState to GLSL
-</span><span class="kw">pub fn </span>show_preprocessor_else&lt;F&gt;(f: <span class="kw-2">&amp;mut </span>F, <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result
+</span><span class="kw">pub fn </span>show_preprocessor_else&lt;F&gt;(f: <span class="kw-2">&amp;mut </span>F, <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
-    f.write_str(<span class="string">&quot;#else&quot;</span>)
+    f.write_str(<span class="string">"#else"</span>)
 }
 
 <span class="doccomment">/// Transpile a preprocessor_elseif to GLSL
 </span><span class="kw">pub fn </span>show_preprocessor_elseif&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     pei: <span class="kw-2">&amp;</span>ast::PreprocessorElseIf,
-    <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
-    <span class="macro">write!</span>(f, <span class="string">&quot;#elif {}&quot;</span>, pei.condition)
+    <span class="macro">write!</span>(f, <span class="string">"#elif {}"</span>, pei.condition)
 }
 
 <span class="doccomment">/// Transpile a preprocessor_error to GLSL
 </span><span class="kw">pub fn </span>show_preprocessor_error&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     pe: <span class="kw-2">&amp;</span>ast::PreprocessorError,
-    <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
-    <span class="macro">write!</span>(f, <span class="string">&quot;#error {}&quot;</span>, pe.message)
+    <span class="macro">write!</span>(f, <span class="string">"#error {}"</span>, pe.message)
 }
 
 <span class="doccomment">/// Transpile a preprocessor_endif&lt;F&gt;(f: &amp;mut F, _: &amp;mut FormattingState to GLSL
-</span><span class="kw">pub fn </span>show_preprocessor_endif&lt;F&gt;(f: <span class="kw-2">&amp;mut </span>F, <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result
+</span><span class="kw">pub fn </span>show_preprocessor_endif&lt;F&gt;(f: <span class="kw-2">&amp;mut </span>F, <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
-    f.write_str(<span class="string">&quot;#endif&quot;</span>)
+    f.write_str(<span class="string">"#endif"</span>)
 }
 
 <span class="doccomment">/// Transpile a preprocessor_if to GLSL
 </span><span class="kw">pub fn </span>show_preprocessor_if&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     pi: <span class="kw-2">&amp;</span>ast::PreprocessorIf,
-    <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
-    <span class="macro">write!</span>(f, <span class="string">&quot;#if {}&quot;</span>, pi.condition)
+    <span class="macro">write!</span>(f, <span class="string">"#if {}"</span>, pi.condition)
 }
 
 <span class="doccomment">/// Transpile a preprocessor_ifdef to GLSL
 </span><span class="kw">pub fn </span>show_preprocessor_ifdef&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     pid: <span class="kw-2">&amp;</span>ast::PreprocessorIfDef,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
-    f.write_str(<span class="string">&quot;#ifdef &quot;</span>)<span class="question-mark">?</span>;
+    f.write_str(<span class="string">"#ifdef "</span>)<span class="question-mark">?</span>;
     show_identifier(f, <span class="kw-2">&amp;</span>pid.ident, state)
 }
 
@@ -5008,12 +5008,12 @@
 </span><span class="kw">pub fn </span>show_preprocessor_ifndef&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     pind: <span class="kw-2">&amp;</span>ast::PreprocessorIfNDef,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
-    f.write_str(<span class="string">&quot;#ifndef &quot;</span>)<span class="question-mark">?</span>;
+    f.write_str(<span class="string">"#ifndef "</span>)<span class="question-mark">?</span>;
     show_identifier(f, <span class="kw-2">&amp;</span>pind.ident, state)
 }
 
@@ -5021,12 +5021,12 @@
 </span><span class="kw">pub fn </span>show_preprocessor_include&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     pi: <span class="kw-2">&amp;</span>ast::PreprocessorInclude,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
-    f.write_str(<span class="string">&quot;#include &quot;</span>)<span class="question-mark">?</span>;
+    f.write_str(<span class="string">"#include "</span>)<span class="question-mark">?</span>;
     show_path(f, <span class="kw-2">&amp;</span>pi.path, state)
 }
 
@@ -5034,14 +5034,14 @@
 </span><span class="kw">pub fn </span>show_preprocessor_line&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     pl: <span class="kw-2">&amp;</span>ast::PreprocessorLine,
-    <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
-    <span class="macro">write!</span>(f, <span class="string">&quot;#line {}&quot;</span>, pl.line)<span class="question-mark">?</span>;
+    <span class="macro">write!</span>(f, <span class="string">"#line {}"</span>, pl.line)<span class="question-mark">?</span>;
     <span class="kw">if let </span><span class="prelude-val">Some</span>(source_string_number) = pl.source_string_number {
-        <span class="macro">write!</span>(f, <span class="string">&quot; {}&quot;</span>, source_string_number)<span class="question-mark">?</span>;
+        <span class="macro">write!</span>(f, <span class="string">" {}"</span>, source_string_number)<span class="question-mark">?</span>;
     }
     <span class="prelude-val">Ok</span>(())
 }
@@ -5050,24 +5050,24 @@
 </span><span class="kw">pub fn </span>show_preprocessor_pragma&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     pp: <span class="kw-2">&amp;</span>ast::PreprocessorPragma,
-    <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
-    <span class="macro">write!</span>(f, <span class="string">&quot;#pragma {}&quot;</span>, pp.command)
+    <span class="macro">write!</span>(f, <span class="string">"#pragma {}"</span>, pp.command)
 }
 
 <span class="doccomment">/// Transpile a preprocessor_undef to GLSL
 </span><span class="kw">pub fn </span>show_preprocessor_undef&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     pud: <span class="kw-2">&amp;</span>ast::PreprocessorUndef,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
-    f.write_str(<span class="string">&quot;#undef &quot;</span>)<span class="question-mark">?</span>;
+    f.write_str(<span class="string">"#undef "</span>)<span class="question-mark">?</span>;
     show_identifier(f, <span class="kw-2">&amp;</span>pud.name, state)
 }
 
@@ -5075,23 +5075,23 @@
 </span><span class="kw">pub fn </span>show_preprocessor_version&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     pv: <span class="kw-2">&amp;</span>ast::PreprocessorVersion,
-    <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
-    <span class="macro">write!</span>(f, <span class="string">&quot;#version {}&quot;</span>, pv.version)<span class="question-mark">?</span>;
+    <span class="macro">write!</span>(f, <span class="string">"#version {}"</span>, pv.version)<span class="question-mark">?</span>;
 
     <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">ref </span>profile) = pv.profile {
         <span class="kw">match </span><span class="kw-2">**</span>profile {
             ast::PreprocessorVersionProfileData::Core =&gt; {
-                f.write_str(<span class="string">&quot; core&quot;</span>)<span class="question-mark">?</span>;
+                f.write_str(<span class="string">" core"</span>)<span class="question-mark">?</span>;
             }
             ast::PreprocessorVersionProfileData::Compatibility =&gt; {
-                f.write_str(<span class="string">&quot; compatibility&quot;</span>)<span class="question-mark">?</span>;
+                f.write_str(<span class="string">" compatibility"</span>)<span class="question-mark">?</span>;
             }
             ast::PreprocessorVersionProfileData::Es =&gt; {
-                f.write_str(<span class="string">&quot; es&quot;</span>)<span class="question-mark">?</span>;
+                f.write_str(<span class="string">" es"</span>)<span class="question-mark">?</span>;
             }
         }
     }
@@ -5103,16 +5103,16 @@
 </span><span class="kw">pub fn </span>show_preprocessor_extension&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     pe: <span class="kw-2">&amp;</span>ast::PreprocessorExtension,
-    <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
 {
-    f.write_str(<span class="string">&quot;#extension &quot;</span>)<span class="question-mark">?</span>;
+    f.write_str(<span class="string">"#extension "</span>)<span class="question-mark">?</span>;
 
     <span class="kw">match </span><span class="kw-2">*</span>pe.name {
         ast::PreprocessorExtensionNameData::All =&gt; {
-            f.write_str(<span class="string">&quot;all&quot;</span>)<span class="question-mark">?</span>;
+            f.write_str(<span class="string">"all"</span>)<span class="question-mark">?</span>;
         }
         ast::PreprocessorExtensionNameData::Specific(<span class="kw-2">ref </span>n) =&gt; {
             f.write_str(n)<span class="question-mark">?</span>;
@@ -5122,16 +5122,16 @@
     <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">ref </span>behavior) = pe.behavior {
         <span class="kw">match </span><span class="kw-2">**</span>behavior {
             ast::PreprocessorExtensionBehaviorData::Require =&gt; {
-                f.write_str(<span class="string">&quot; : require&quot;</span>)<span class="question-mark">?</span>;
+                f.write_str(<span class="string">" : require"</span>)<span class="question-mark">?</span>;
             }
             ast::PreprocessorExtensionBehaviorData::Enable =&gt; {
-                f.write_str(<span class="string">&quot; : enable&quot;</span>)<span class="question-mark">?</span>;
+                f.write_str(<span class="string">" : enable"</span>)<span class="question-mark">?</span>;
             }
             ast::PreprocessorExtensionBehaviorData::Warn =&gt; {
-                f.write_str(<span class="string">&quot; : warn&quot;</span>)<span class="question-mark">?</span>;
+                f.write_str(<span class="string">" : warn"</span>)<span class="question-mark">?</span>;
             }
             ast::PreprocessorExtensionBehaviorData::Disable =&gt; {
-                f.write_str(<span class="string">&quot; : disable&quot;</span>)<span class="question-mark">?</span>;
+                f.write_str(<span class="string">" : disable"</span>)<span class="question-mark">?</span>;
             }
         }
     }
@@ -5143,7 +5143,7 @@
 </span><span class="kw">pub fn </span>show_external_declaration&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     ed: <span class="kw-2">&amp;</span>ast::ExternalDeclaration,
-    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    state: <span class="kw-2">&amp;mut </span>FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
@@ -5167,7 +5167,7 @@
 </span><span class="kw">pub fn </span>show_translation_unit&lt;F&gt;(
     f: <span class="kw-2">&amp;mut </span>F,
     tu: <span class="kw-2">&amp;</span>ast::TranslationUnit,
-    <span class="kw-2">mut </span>state: FormattingState&lt;<span class="lifetime">&#39;_</span>&gt;,
+    <span class="kw-2">mut </span>state: FormattingState&lt;<span class="lifetime">'_</span>&gt;,
 ) -&gt; std::fmt::Result
 <span class="kw">where
     </span>F: Write + <span class="question-mark">?</span>Sized,
@@ -5182,9 +5182,9 @@
 <span class="attr">#[cfg(all(
     test,
     any(
-        feature = <span class="string">&quot;lexer-v1&quot;</span>,
-        feature = <span class="string">&quot;lexer-v2-min&quot;</span>,
-        feature = <span class="string">&quot;lexer-v2-full&quot;
+        feature = <span class="string">"lexer-v1"</span>,
+        feature = <span class="string">"lexer-v2-min"</span>,
+        feature = <span class="string">"lexer-v2-full"
     </span>)
 ))]
 </span><span class="kw">mod </span>tests {
@@ -5205,14 +5205,14 @@
         state
     }
 
-    <span class="attr">#[cfg(not(feature = <span class="string">&quot;lexer-v2-full&quot;</span>))]
+    <span class="attr">#[cfg(not(feature = <span class="string">"lexer-v2-full"</span>))]
     </span><span class="kw">fn </span>parse_tu_with_preprocessor_directives(
         source: <span class="kw-2">&amp;</span>str,
     ) -&gt; <span class="prelude-ty">Result</span>&lt;ast::TranslationUnit, ParseError&lt;&lt;DefaultLexer <span class="kw">as </span>HasLexerError&gt;::Error&gt;&gt; {
         ast::TranslationUnit::parse(source)
     }
 
-    <span class="attr">#[cfg(feature = <span class="string">&quot;lexer-v2-full&quot;</span>)]
+    <span class="attr">#[cfg(feature = <span class="string">"lexer-v2-full"</span>)]
     </span><span class="kw">fn </span>parse_tu_with_preprocessor_directives(
         source: <span class="kw-2">&amp;</span>str,
     ) -&gt; <span class="prelude-ty">Result</span>&lt;ast::TranslationUnit, ParseError&lt;&lt;DefaultLexer <span class="kw">as </span>HasLexerError&gt;::Error&gt;&gt; {
@@ -5228,63 +5228,63 @@
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>unary_parentheses() {
-        check_expr(<span class="string">&quot;-a&quot;</span>, <span class="macro">expect!</span>[[<span class="string">&quot;-a&quot;</span>]]);
-        check_expr(<span class="string">&quot;-(a + b)&quot;</span>, <span class="macro">expect!</span>[[<span class="string">r#&quot;-(a + b)&quot;#</span>]]);
-        check_expr(<span class="string">&quot;-a.x&quot;</span>, <span class="macro">expect!</span>[[<span class="string">&quot;-a.x&quot;</span>]]);
+        check_expr(<span class="string">"-a"</span>, <span class="macro">expect!</span>[[<span class="string">"-a"</span>]]);
+        check_expr(<span class="string">"-(a + b)"</span>, <span class="macro">expect!</span>[[<span class="string">r#"-(a + b)"#</span>]]);
+        check_expr(<span class="string">"-a.x"</span>, <span class="macro">expect!</span>[[<span class="string">"-a.x"</span>]]);
 
-        check_expr(<span class="string">&quot;-(-a)&quot;</span>, <span class="macro">expect!</span>[[<span class="string">&quot;-(-a)&quot;</span>]]);
-        check_expr(<span class="string">&quot;+(+a)&quot;</span>, <span class="macro">expect!</span>[[<span class="string">&quot;+(+a)&quot;</span>]]);
-        check_expr(<span class="string">&quot;~~a&quot;</span>, <span class="macro">expect!</span>[[<span class="string">&quot;~~a&quot;</span>]]);
-        check_expr(<span class="string">&quot;--a&quot;</span>, <span class="macro">expect!</span>[[<span class="string">&quot;--a&quot;</span>]]);
-        check_expr(<span class="string">&quot;++a&quot;</span>, <span class="macro">expect!</span>[[<span class="string">&quot;++a&quot;</span>]]);
-        check_expr(<span class="string">&quot;+-a&quot;</span>, <span class="macro">expect!</span>[[<span class="string">&quot;+-a&quot;</span>]]);
+        check_expr(<span class="string">"-(-a)"</span>, <span class="macro">expect!</span>[[<span class="string">"-(-a)"</span>]]);
+        check_expr(<span class="string">"+(+a)"</span>, <span class="macro">expect!</span>[[<span class="string">"+(+a)"</span>]]);
+        check_expr(<span class="string">"~~a"</span>, <span class="macro">expect!</span>[[<span class="string">"~~a"</span>]]);
+        check_expr(<span class="string">"--a"</span>, <span class="macro">expect!</span>[[<span class="string">"--a"</span>]]);
+        check_expr(<span class="string">"++a"</span>, <span class="macro">expect!</span>[[<span class="string">"++a"</span>]]);
+        check_expr(<span class="string">"+-a"</span>, <span class="macro">expect!</span>[[<span class="string">"+-a"</span>]]);
     }
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>binary_parentheses() {
-        check_expr(<span class="string">&quot;a + b&quot;</span>, <span class="macro">expect!</span>[[<span class="string">r#&quot;a + b&quot;#</span>]]);
-        check_expr(<span class="string">&quot;a * b + c&quot;</span>, <span class="macro">expect!</span>[[<span class="string">r#&quot;a * b + c&quot;#</span>]]);
-        check_expr(<span class="string">&quot;(a + b) * c&quot;</span>, <span class="macro">expect!</span>[[<span class="string">r#&quot;(a + b) * c&quot;#</span>]]);
-        check_expr(<span class="string">&quot;a + (b * c)&quot;</span>, <span class="macro">expect!</span>[[<span class="string">r#&quot;a + b * c&quot;#</span>]]);
-        check_expr(<span class="string">&quot;a * (b + c)&quot;</span>, <span class="macro">expect!</span>[[<span class="string">r#&quot;a * (b + c)&quot;#</span>]]);
-        check_expr(<span class="string">&quot;(a * b) * c&quot;</span>, <span class="macro">expect!</span>[[<span class="string">r#&quot;a * b * c&quot;#</span>]]);
-        check_expr(<span class="string">&quot;a * (b * c)&quot;</span>, <span class="macro">expect!</span>[[<span class="string">r#&quot;a * (b * c)&quot;#</span>]]);
-        check_expr(<span class="string">&quot;a&amp;&amp;b&amp;&amp;c&quot;</span>, <span class="macro">expect!</span>[[<span class="string">r#&quot;a &amp;&amp; b &amp;&amp; c&quot;#</span>]]);
+        check_expr(<span class="string">"a + b"</span>, <span class="macro">expect!</span>[[<span class="string">r#"a + b"#</span>]]);
+        check_expr(<span class="string">"a * b + c"</span>, <span class="macro">expect!</span>[[<span class="string">r#"a * b + c"#</span>]]);
+        check_expr(<span class="string">"(a + b) * c"</span>, <span class="macro">expect!</span>[[<span class="string">r#"(a + b) * c"#</span>]]);
+        check_expr(<span class="string">"a + (b * c)"</span>, <span class="macro">expect!</span>[[<span class="string">r#"a + b * c"#</span>]]);
+        check_expr(<span class="string">"a * (b + c)"</span>, <span class="macro">expect!</span>[[<span class="string">r#"a * (b + c)"#</span>]]);
+        check_expr(<span class="string">"(a * b) * c"</span>, <span class="macro">expect!</span>[[<span class="string">r#"a * b * c"#</span>]]);
+        check_expr(<span class="string">"a * (b * c)"</span>, <span class="macro">expect!</span>[[<span class="string">r#"a * (b * c)"#</span>]]);
+        check_expr(<span class="string">"a&amp;&amp;b&amp;&amp;c"</span>, <span class="macro">expect!</span>[[<span class="string">r#"a &amp;&amp; b &amp;&amp; c"#</span>]]);
         check_expr(
-            <span class="string">&quot;n - p &gt; 0. &amp;&amp; u.y &lt; n &amp;&amp; u.y &gt; p&quot;</span>,
-            <span class="macro">expect!</span>[[<span class="string">r#&quot;n - p &gt; 0. &amp;&amp; u.y &lt; n &amp;&amp; u.y &gt; p&quot;#</span>]],
+            <span class="string">"n - p &gt; 0. &amp;&amp; u.y &lt; n &amp;&amp; u.y &gt; p"</span>,
+            <span class="macro">expect!</span>[[<span class="string">r#"n - p &gt; 0. &amp;&amp; u.y &lt; n &amp;&amp; u.y &gt; p"#</span>]],
         );
     }
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>ternary_parentheses() {
-        check_expr(<span class="string">&quot;a ? b : c ? d : e&quot;</span>, <span class="macro">expect!</span>[[<span class="string">&quot;a ? b : c ? d : e&quot;</span>]]);
-        check_expr(<span class="string">&quot;(a ? b : c) ? d : e&quot;</span>, <span class="macro">expect!</span>[[<span class="string">&quot;(a ? b : c) ? d : e&quot;</span>]]);
+        check_expr(<span class="string">"a ? b : c ? d : e"</span>, <span class="macro">expect!</span>[[<span class="string">"a ? b : c ? d : e"</span>]]);
+        check_expr(<span class="string">"(a ? b : c) ? d : e"</span>, <span class="macro">expect!</span>[[<span class="string">"(a ? b : c) ? d : e"</span>]]);
     }
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>assignment_parentheses() {
-        check_expr(<span class="string">&quot;a = b = c&quot;</span>, <span class="macro">expect!</span>[[<span class="string">&quot;a = b = c&quot;</span>]]);
-        check_expr(<span class="string">&quot;(a = b) = c&quot;</span>, <span class="macro">expect!</span>[[<span class="string">&quot;(a = b) = c&quot;</span>]]);
+        check_expr(<span class="string">"a = b = c"</span>, <span class="macro">expect!</span>[[<span class="string">"a = b = c"</span>]]);
+        check_expr(<span class="string">"(a = b) = c"</span>, <span class="macro">expect!</span>[[<span class="string">"(a = b) = c"</span>]]);
     }
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>dot_parentheses() {
-        check_expr(<span class="string">&quot;a.x&quot;</span>, <span class="macro">expect!</span>[[<span class="string">&quot;a.x&quot;</span>]]);
-        check_expr(<span class="string">&quot;(a + b).x&quot;</span>, <span class="macro">expect!</span>[[<span class="string">r#&quot;(a + b).x&quot;#</span>]]);
+        check_expr(<span class="string">"a.x"</span>, <span class="macro">expect!</span>[[<span class="string">"a.x"</span>]]);
+        check_expr(<span class="string">"(a + b).x"</span>, <span class="macro">expect!</span>[[<span class="string">r#"(a + b).x"#</span>]]);
     }
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>array_indexes() {
-        check_expr(<span class="string">&quot;arr[0][0]&quot;</span>, <span class="macro">expect!</span>[[<span class="string">&quot;arr[0][0]&quot;</span>]]);
+        check_expr(<span class="string">"arr[0][0]"</span>, <span class="macro">expect!</span>[[<span class="string">"arr[0][0]"</span>]]);
     }
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test_single_statement_function_is_not_collapsed() {
-        <span class="kw">const </span>SRC: <span class="kw-2">&amp;</span>str = <span class="string">r#&quot;vec2 main() {
+        <span class="kw">const </span>SRC: <span class="kw-2">&amp;</span>str = <span class="string">r#"vec2 main() {
 return vec2(0., 0.);
 }
-&quot;#</span>;
+"#</span>;
 
         <span class="kw">let </span><span class="kw-2">mut </span>s = String::new();
         show_function_definition(
@@ -5297,18 +5297,18 @@ return vec2(0., 0.);
         )
         .unwrap();
 
-        <span class="kw">let </span>expected = <span class="macro">expect!</span>[[<span class="string">r#&quot;
+        <span class="kw">let </span>expected = <span class="macro">expect!</span>[[<span class="string">r#"
             vec2 main() {
                 return vec2(0., 0.);
             }
-        &quot;#</span>]];
+        "#</span>]];
 
         expected.assert_eq(<span class="kw-2">&amp;</span>s);
     }
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test_minifying_statement_collapse() {
-        <span class="kw">const </span>SRC: <span class="kw-2">&amp;</span>str = <span class="string">r#&quot;
+        <span class="kw">const </span>SRC: <span class="kw-2">&amp;</span>str = <span class="string">r#"
             vec2 main() {
                 if (110 == 110) {
                     return vec2(0., 0.);
@@ -5316,7 +5316,7 @@ return vec2(0., 0.);
                     return vec2(1., 1.);
                 }
             }
-        &quot;#</span>;
+        "#</span>;
 
         <span class="kw">let </span><span class="kw-2">mut </span>s = String::new();
         show_function_definition(
@@ -5331,18 +5331,18 @@ return vec2(0., 0.);
         )
         .unwrap();
 
-        <span class="kw">let </span>expected = <span class="macro">expect!</span>[[<span class="string">r#&quot;
+        <span class="kw">let </span>expected = <span class="macro">expect!</span>[[<span class="string">r#"
             vec2 main() {
                 if (110 == 110) return vec2(0., 0.); else return vec2(1., 1.);
             }
-        &quot;#</span>]];
+        "#</span>]];
 
         expected.assert_eq(<span class="kw-2">&amp;</span>s);
     }
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test_pretty_statement_collapse() {
-        <span class="kw">const </span>SRC: <span class="kw-2">&amp;</span>str = <span class="string">r#&quot;
+        <span class="kw">const </span>SRC: <span class="kw-2">&amp;</span>str = <span class="string">r#"
             vec2 main() {
                 if (110 == 110) {
                     return vec2(0., 0.);
@@ -5350,7 +5350,7 @@ return vec2(0., 0.);
                     return vec2(1., 1.);
                 }
             }
-        &quot;#</span>;
+        "#</span>;
 
         <span class="kw">let </span><span class="kw-2">mut </span>s = String::new();
         show_function_definition(
@@ -5366,20 +5366,20 @@ return vec2(0., 0.);
         )
         .unwrap();
 
-        <span class="kw">let </span>expected = <span class="macro">expect!</span>[[<span class="string">r#&quot;
+        <span class="kw">let </span>expected = <span class="macro">expect!</span>[[<span class="string">r#"
             vec2 main() {
                 if (110 == 110) 
                     return vec2(0., 0.); else 
                     return vec2(1., 1.);
             }
-        &quot;#</span>]];
+        "#</span>]];
 
         expected.assert_eq(<span class="kw-2">&amp;</span>s);
     }
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test_parentheses() {
-        <span class="kw">const </span>SRC: <span class="kw-2">&amp;</span>str = <span class="string">r#&quot;
+        <span class="kw">const </span>SRC: <span class="kw-2">&amp;</span>str = <span class="string">r#"
             vec2 main() {
                 float n = 0.;
                 float p = 0.;
@@ -5387,7 +5387,7 @@ return vec2(0., 0.);
                 if (n-p&gt;0.&amp;&amp;u.y&lt;n&amp;&amp;u.y&gt;p) {}
                 return u;
             }
-        &quot;#</span>;
+        "#</span>;
 
         <span class="kw">let </span><span class="kw-2">mut </span>s = String::new();
         show_function_definition(
@@ -5397,7 +5397,7 @@ return vec2(0., 0.);
         )
         .unwrap();
 
-        <span class="kw">let </span>expected = <span class="macro">expect!</span>[[<span class="string">r#&quot;
+        <span class="kw">let </span>expected = <span class="macro">expect!</span>[[<span class="string">r#"
             vec2 main() {
                 float n = 0.;
                 float p = 0.;
@@ -5406,7 +5406,7 @@ return vec2(0., 0.);
                 }
                 return u;
             }
-        &quot;#</span>]];
+        "#</span>]];
 
         expected.assert_eq(<span class="kw-2">&amp;</span>s);
     }
@@ -5416,8 +5416,8 @@ return vec2(0., 0.);
         <span class="kw">use </span>lang_util::node::NodeContent;
 
         <span class="kw">let </span>zero = ast::ExprData::DoubleConst(<span class="number">0.</span>);
-        <span class="kw">let </span>ray = ast::ExprData::Variable(<span class="string">&quot;ray&quot;</span>.into_node());
-        <span class="kw">let </span>raydir = ast::ExprData::Dot(Box::new(ray.into()), <span class="string">&quot;dir&quot;</span>.into_node());
+        <span class="kw">let </span>ray = ast::ExprData::Variable(<span class="string">"ray"</span>.into_node());
+        <span class="kw">let </span>raydir = ast::ExprData::Dot(Box::new(ray.into()), <span class="string">"dir"</span>.into_node());
         <span class="kw">let </span>vec4 = ast::ExprData::FunCall(
             ast::FunIdentifierData::TypeSpecifier(Box::new(
                 ast::TypeSpecifierData::from(ast::TypeSpecifierNonArrayData::Vec4).into(),
@@ -5425,9 +5425,9 @@ return vec2(0., 0.);
             .into(),
             <span class="macro">vec!</span>[raydir.into(), zero.into()],
         );
-        <span class="kw">let </span>view = ast::ExprData::variable(<span class="string">&quot;view&quot;</span>);
+        <span class="kw">let </span>view = ast::ExprData::variable(<span class="string">"view"</span>);
         <span class="kw">let </span>iview = ast::ExprData::FunCall(
-            ast::FunIdentifierData::ident(<span class="string">&quot;inverse&quot;</span>).into(),
+            ast::FunIdentifierData::ident(<span class="string">"inverse"</span>).into(),
             <span class="macro">vec!</span>[view.into()],
         );
         <span class="kw">let </span>mul = ast::ExprData::Binary(
@@ -5435,9 +5435,9 @@ return vec2(0., 0.);
             Box::new(iview.into()),
             Box::new(vec4.into()),
         );
-        <span class="kw">let </span>xyz = ast::ExprData::Dot(Box::new(mul.into()), <span class="string">&quot;xyz&quot;</span>.into_node());
+        <span class="kw">let </span>xyz = ast::ExprData::Dot(Box::new(mul.into()), <span class="string">"xyz"</span>.into_node());
         <span class="kw">let </span>input = ast::ExprData::FunCall(
-            ast::FunIdentifierData::ident(<span class="string">&quot;normalize&quot;</span>).into(),
+            ast::FunIdentifierData::ident(<span class="string">"normalize"</span>).into(),
             <span class="macro">vec!</span>[xyz.into()],
         )
         .into();
@@ -5446,12 +5446,12 @@ return vec2(0., 0.);
         show_expr(<span class="kw-2">&amp;mut </span>output, <span class="kw-2">&amp;</span>input, <span class="kw-2">&amp;mut </span>FormattingState::default()).unwrap();
 
         <span class="kw">let </span>back = ast::Expr::parse(<span class="kw-2">&amp;</span>output).unwrap();
-        <span class="macro">assert_eq!</span>(back, input, <span class="string">&quot;intermediate source &#39;{}&#39;&quot;</span>, output);
+        <span class="macro">assert_eq!</span>(back, input, <span class="string">"intermediate source '{}'"</span>, output);
     }
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>block_decl_formatting() {
-        <span class="kw">let </span>src = <span class="string">r#&quot;uniform Global { float param; float param2; };&quot;#</span>;
+        <span class="kw">let </span>src = <span class="string">r#"uniform Global { float param; float param2; };"#</span>;
 
         <span class="kw">let </span><span class="kw-2">mut </span>s = String::new();
         show_external_declaration(
@@ -5461,18 +5461,18 @@ return vec2(0., 0.);
         )
         .unwrap();
 
-        <span class="kw">let </span>expected = <span class="macro">expect!</span>[[<span class="string">r#&quot;
+        <span class="kw">let </span>expected = <span class="macro">expect!</span>[[<span class="string">r#"
             uniform Global {
                 float param;
                 float param2;
-            };&quot;#</span>]];
+            };"#</span>]];
 
         expected.assert_eq(<span class="kw-2">&amp;</span>s);
     }
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>list_separator_formatting() {
-        <span class="kw">let </span>src = <span class="string">r#&quot;void main(vec2 x, vec3 y) {}&quot;#</span>;
+        <span class="kw">let </span>src = <span class="string">r#"void main(vec2 x, vec3 y) {}"#</span>;
 
         <span class="kw">let </span><span class="kw-2">mut </span>s = String::new();
         show_function_definition(
@@ -5485,23 +5485,23 @@ return vec2(0., 0.);
         )
         .unwrap();
 
-        <span class="kw">let </span>expected = <span class="macro">expect!</span>[[<span class="string">r#&quot;
+        <span class="kw">let </span>expected = <span class="macro">expect!</span>[[<span class="string">r#"
             void main(vec2 x,vec3 y) {
             }
-        &quot;#</span>]];
+        "#</span>]];
 
         expected.assert_eq(<span class="kw-2">&amp;</span>s);
     }
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>preprocessor_directives_are_always_put_in_newlines() {
-        <span class="kw">let </span>src = <span class="string">r#&quot;
+        <span class="kw">let </span>src = <span class="string">r#"
             #version 110
             vec3 u;
             vec3 v;
-            #pragma &quot;hi&quot;
+            #pragma "hi"
             vec3 w;
-        &quot;#</span>;
+        "#</span>;
 
         <span class="kw">let </span><span class="kw-2">mut </span>s = String::new();
         show_translation_unit(
@@ -5514,16 +5514,16 @@ return vec2(0., 0.);
         )
         .unwrap();
 
-        <span class="kw">let </span>expected = <span class="macro">expect!</span>[[<span class="string">r#&quot;
+        <span class="kw">let </span>expected = <span class="macro">expect!</span>[[<span class="string">r#"
             #version 110
             vec3 u;vec3 v;
-            #pragma &quot;hi&quot;
-            vec3 w;&quot;#</span>]];
+            #pragma "hi"
+            vec3 w;"#</span>]];
 
         expected.assert_eq(<span class="kw-2">&amp;</span>s);
     }
 
-    <span class="kw">static </span>COMPLEX_GLSL_SOURCE: <span class="kw-2">&amp;</span>str = <span class="string">r#&quot;
+    <span class="kw">static </span>COMPLEX_GLSL_SOURCE: <span class="kw-2">&amp;</span>str = <span class="string">r#"
         void main(smooth vec2[][] x, vec3 y) {
             if (var1)
                 return a;
@@ -5566,7 +5566,7 @@ return vec2(0., 0.);
                 continue;
             }
         }
-    &quot;#</span>;
+    "#</span>;
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>complex_pretty_formatting() {
@@ -5578,7 +5578,7 @@ return vec2(0., 0.);
         )
         .unwrap();
 
-        <span class="kw">let </span>expected = <span class="macro">expect!</span>[[<span class="string">r#&quot;
+        <span class="kw">let </span>expected = <span class="macro">expect!</span>[[<span class="string">r#"
             void main(smooth vec2[][] x, vec3 y) {
                 if (var1) return a; else return b;
                 if (var2) {
@@ -5611,17 +5611,17 @@ return vec2(0., 0.);
                     continue;
                 }
             }
-        &quot;#</span>]];
+        "#</span>]];
 
         expected.assert_eq(<span class="kw-2">&amp;</span>s);
     }
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>preprocessor_directives_are_always_put_in_newlines_2() {
-        <span class="kw">let </span>src = <span class="string">r#&quot;
+        <span class="kw">let </span>src = <span class="string">r#"
             vec3 u;
             #version 110
-        &quot;#</span>;
+        "#</span>;
 
         <span class="kw">let </span><span class="kw-2">mut </span>s = String::new();
         show_translation_unit(
@@ -5634,9 +5634,9 @@ return vec2(0., 0.);
         )
         .unwrap();
 
-        <span class="kw">let </span>expected = <span class="macro">expect!</span>[[<span class="string">r#&quot;
+        <span class="kw">let </span>expected = <span class="macro">expect!</span>[[<span class="string">r#"
             vec3 u;
-            #version 110&quot;#</span>]];
+            #version 110"#</span>]];
 
         expected.assert_eq(<span class="kw-2">&amp;</span>s);
     }
@@ -5651,7 +5651,7 @@ return vec2(0., 0.);
         )
         .unwrap();
 
-        <span class="kw">let </span>expected = <span class="macro">expect!</span>[<span class="string">&quot;void main(smooth vec2[][] x,vec3 y){if(var1)return a;else return b;if(var2)return --c;else if(var3){{vec2 x;vec2 y;}return d++;}else return q;const float e[3]=float[3](5.,7.2,1.1);int f[2]={3,4};switch(x){case 0:++x;break;case 1:return;default:discard;}while(x)--x;do --y; while(y);for(x=0;x&lt;5;++x)continue;}&quot;</span>];
+        <span class="kw">let </span>expected = <span class="macro">expect!</span>[<span class="string">"void main(smooth vec2[][] x,vec3 y){if(var1)return a;else return b;if(var2)return --c;else if(var3){{vec2 x;vec2 y;}return d++;}else return q;const float e[3]=float[3](5.,7.2,1.1);int f[2]={3,4};switch(x){case 0:++x;break;case 1:return;default:discard;}while(x)--x;do --y; while(y);for(x=0;x&lt;5;++x)continue;}"</span>];
 
         expected.assert_eq(<span class="kw-2">&amp;</span>s);
     }

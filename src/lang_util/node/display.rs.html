@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lang-util/src/node/display.rs`."><title>display.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-fa3bb1812debf86c.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="lang_util" data-themes="" data-resource-suffix="" data-rustdoc-version="1.74.1 (a28077b28 2023-12-04)" data-channel="1.74.1" data-search-js="search-8be46b629f5f14a8.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-c5bd66d33317d69f.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../lang_util/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lang-util/src/node/display.rs`."><title>display.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-dd39b87e5fcfba68.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="lang_util" data-themes="" data-resource-suffix="" data-rustdoc-version="1.80.1 (3f5fd8dd4 2024-08-06)" data-channel="1.80.1" data-search-js="search-d52510db62a78183.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -303,19 +303,19 @@
 
 <span class="doccomment">/// A wrapper for a syntax node to be displayed
 </span><span class="attr">#[derive(Clone, Copy)]
-</span><span class="kw">pub struct </span>NodeDisplayWrapper&lt;<span class="lifetime">&#39;a</span>, T: <span class="question-mark">?</span>Sized&gt; {
-    node: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>T,
+</span><span class="kw">pub struct </span>NodeDisplayWrapper&lt;<span class="lifetime">'a</span>, T: <span class="question-mark">?</span>Sized&gt; {
+    node: <span class="kw-2">&amp;</span><span class="lifetime">'a </span>T,
     current_level: usize,
 }
 
-<span class="kw">impl </span>NodeDisplayWrapper&lt;<span class="lifetime">&#39;static</span>, str&gt; {
+<span class="kw">impl </span>NodeDisplayWrapper&lt;<span class="lifetime">'static</span>, str&gt; {
     <span class="doccomment">/// Create a new [NodeDisplayWrapper]
     ///
     /// # Parameters
     ///
     /// * `name`: name of the node being displayed
     /// * `level`: current indentation level
-    </span><span class="kw">pub fn </span>new(name: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str, level: usize) -&gt; <span class="self">Self </span>{
+    </span><span class="kw">pub fn </span>new(name: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str, level: usize) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             node: name,
             current_level: level,
@@ -323,19 +323,19 @@
     }
 }
 
-<span class="kw">impl </span>fmt::Display <span class="kw">for </span>NodeDisplayWrapper&lt;<span class="lifetime">&#39;static</span>, str&gt; {
-    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
+<span class="kw">impl </span>fmt::Display <span class="kw">for </span>NodeDisplayWrapper&lt;<span class="lifetime">'static</span>, str&gt; {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
         <span class="kw">for _ in </span><span class="number">0</span>..<span class="self">self</span>.current_level {
-            <span class="macro">write!</span>(f, <span class="string">&quot;  &quot;</span>)<span class="question-mark">?</span>;
+            <span class="macro">write!</span>(f, <span class="string">"  "</span>)<span class="question-mark">?</span>;
         }
 
-        <span class="macro">writeln!</span>(f, <span class="string">&quot;{}&quot;</span>, <span class="self">self</span>.node)<span class="question-mark">?</span>;
+        <span class="macro">writeln!</span>(f, <span class="string">"{}"</span>, <span class="self">self</span>.node)<span class="question-mark">?</span>;
 
         <span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T&gt; NodeDisplayWrapper&lt;<span class="lifetime">&#39;a</span>, T&gt; {
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, T&gt; NodeDisplayWrapper&lt;<span class="lifetime">'a</span>, T&gt; {
     <span class="doccomment">/// Set the level of this display wrapper
     ///
     /// # Parameters
@@ -353,28 +353,28 @@
     }
 }
 
-<span class="kw">impl</span>&lt;T: NodeDisplay&gt; fmt::Display <span class="kw">for </span>NodeDisplayWrapper&lt;<span class="lifetime">&#39;_</span>, T&gt; {
-    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
+<span class="kw">impl</span>&lt;T: NodeDisplay&gt; fmt::Display <span class="kw">for </span>NodeDisplayWrapper&lt;<span class="lifetime">'_</span>, T&gt; {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(name) = T::name() {
             <span class="kw">for _ in </span><span class="number">0</span>..<span class="self">self</span>.current_level {
-                <span class="macro">write!</span>(f, <span class="string">&quot;  &quot;</span>)<span class="question-mark">?</span>;
+                <span class="macro">write!</span>(f, <span class="string">"  "</span>)<span class="question-mark">?</span>;
             }
 
             <span class="kw">if let </span>(<span class="prelude-val">Some</span>(start), <span class="prelude-val">Some</span>(end)) = (<span class="self">self</span>.node.start(), <span class="self">self</span>.node.end()) {
                 <span class="kw">if let </span><span class="prelude-val">Some</span>(source_id) = <span class="self">self</span>.node.source_id() {
                     <span class="macro">write!</span>(
                         f,
-                        <span class="string">&quot;{}@{}:{}..{}&quot;</span>,
+                        <span class="string">"{}@{}:{}..{}"</span>,
                         name,
                         source_id,
                         u32::from(start),
                         u32::from(end)
                     )<span class="question-mark">?</span>;
                 } <span class="kw">else </span>{
-                    <span class="macro">write!</span>(f, <span class="string">&quot;{}@{}..{}&quot;</span>, name, u32::from(start), u32::from(end))<span class="question-mark">?</span>;
+                    <span class="macro">write!</span>(f, <span class="string">"{}@{}..{}"</span>, name, u32::from(start), u32::from(end))<span class="question-mark">?</span>;
                 }
             } <span class="kw">else </span>{
-                <span class="macro">write!</span>(f, <span class="string">&quot;{}&quot;</span>, name)<span class="question-mark">?</span>;
+                <span class="macro">write!</span>(f, <span class="string">"{}"</span>, name)<span class="question-mark">?</span>;
             }
 
             <span class="self">self</span>.node.display_extra(f)<span class="question-mark">?</span>;
@@ -389,7 +389,7 @@
     }
 }
 
-<span class="doccomment">/// Trait for displaying an AST node&#39;s content
+<span class="doccomment">/// Trait for displaying an AST node's content
 </span><span class="kw">pub trait </span>NodeContentDisplay {
     <span class="doccomment">/// Name of the node
     ///
@@ -397,55 +397,55 @@
     ///
     /// `None` if this node is just a transparent wrapper (and should not be displayed), otherwise
     /// the name of the node type.
-    </span><span class="kw">fn </span>name() -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str&gt;;
+    </span><span class="kw">fn </span>name() -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">'static </span>str&gt;;
 
     <span class="doccomment">/// Display extra information for the node
     ///
     /// # Parameters
     ///
     /// * `f`: formatter to output to
-    </span><span class="kw">fn </span>display_extra(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result;
+    </span><span class="kw">fn </span>display_extra(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result;
 
-    <span class="doccomment">/// Display the node&#39;s children
+    <span class="doccomment">/// Display the node's children
     ///
     /// # Parameters
     ///
     /// * `level`: current indentation level
     /// * `f`: formatter to output to
-    </span><span class="kw">fn </span>display_children(<span class="kw-2">&amp;</span><span class="self">self</span>, level: usize, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result;
+    </span><span class="kw">fn </span>display_children(<span class="kw-2">&amp;</span><span class="self">self</span>, level: usize, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result;
 }
 
-<span class="macro">macro_rules! </span>forward_display {
+<span class="macro">macro_rules!</span> forward_display {
     (<span class="macro-nonterminal">$i</span>:ty =&gt; <span class="macro-nonterminal">$e</span>:expr) =&gt; {
         <span class="kw">impl </span>NodeContentDisplay <span class="kw">for </span><span class="macro-nonterminal">$i </span>{
-            <span class="kw">fn </span>name() -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str&gt; {
+            <span class="kw">fn </span>name() -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">'static </span>str&gt; {
                 <span class="prelude-val">Some</span>(<span class="macro-nonterminal">$e</span>)
             }
 
-            <span class="kw">fn </span>display_extra(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
-                <span class="macro">write!</span>(f, <span class="string">&quot; `{}`&quot;</span>, <span class="self">self</span>)
+            <span class="kw">fn </span>display_extra(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
+                <span class="macro">write!</span>(f, <span class="string">" `{}`"</span>, <span class="self">self</span>)
             }
 
-            <span class="kw">fn </span>display_children(<span class="kw-2">&amp;</span><span class="self">self</span>, _level: usize, _f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
+            <span class="kw">fn </span>display_children(<span class="kw-2">&amp;</span><span class="self">self</span>, _level: usize, _f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
                 <span class="prelude-val">Ok</span>(())
             }
         }
     }
 }
 
-<span class="macro">forward_display!</span>(smol_str::SmolStr =&gt; <span class="string">&quot;String&quot;</span>);
-<span class="macro">forward_display!</span>(String =&gt; <span class="string">&quot;String&quot;</span>);
-<span class="macro">forward_display!</span>(f32 =&gt; <span class="string">&quot;FloatConst&quot;</span>);
-<span class="macro">forward_display!</span>(f64 =&gt; <span class="string">&quot;DoubleConst&quot;</span>);
-<span class="macro">forward_display!</span>(i32 =&gt; <span class="string">&quot;IntConst&quot;</span>);
-<span class="macro">forward_display!</span>(u16 =&gt; <span class="string">&quot;ShortConst&quot;</span>);
-<span class="macro">forward_display!</span>(u32 =&gt; <span class="string">&quot;UIntConst&quot;</span>);
-<span class="macro">forward_display!</span>(bool =&gt; <span class="string">&quot;BoolConst&quot;</span>);
+<span class="macro">forward_display!</span>(smol_str::SmolStr =&gt; <span class="string">"String"</span>);
+<span class="macro">forward_display!</span>(String =&gt; <span class="string">"String"</span>);
+<span class="macro">forward_display!</span>(f32 =&gt; <span class="string">"FloatConst"</span>);
+<span class="macro">forward_display!</span>(f64 =&gt; <span class="string">"DoubleConst"</span>);
+<span class="macro">forward_display!</span>(i32 =&gt; <span class="string">"IntConst"</span>);
+<span class="macro">forward_display!</span>(u16 =&gt; <span class="string">"ShortConst"</span>);
+<span class="macro">forward_display!</span>(u32 =&gt; <span class="string">"UIntConst"</span>);
+<span class="macro">forward_display!</span>(bool =&gt; <span class="string">"BoolConst"</span>);
 
 <span class="doccomment">/// Trait for displaying a syntax node
 </span><span class="kw">pub trait </span>NodeDisplay: Sized {
-    <span class="doccomment">/// Name of the syntax node&#39;s type
-    </span><span class="kw">fn </span>name() -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str&gt;;
+    <span class="doccomment">/// Name of the syntax node's type
+    </span><span class="kw">fn </span>name() -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">'static </span>str&gt;;
 
     <span class="doccomment">/// Starting position of the node
     </span><span class="kw">fn </span>start(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;TextSize&gt;;
@@ -462,19 +462,19 @@
     /// # Parameters
     ///
     /// * `f`: formatter to output to
-    </span><span class="kw">fn </span>display_extra(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result;
+    </span><span class="kw">fn </span>display_extra(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result;
 
-    <span class="doccomment">/// Display the node&#39;s children
+    <span class="doccomment">/// Display the node's children
     ///
     /// # Parameters
     ///
     /// * `level`: current indentation level
     /// * `f`: formatter to output to
-    </span><span class="kw">fn </span>display_children(<span class="kw-2">&amp;</span><span class="self">self</span>, level: usize, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result;
+    </span><span class="kw">fn </span>display_children(<span class="kw-2">&amp;</span><span class="self">self</span>, level: usize, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result;
 }
 
 <span class="kw">impl</span>&lt;T: NodeContentDisplay + <span class="kw">super</span>::NodeContent&gt; NodeDisplay <span class="kw">for </span><span class="kw">super</span>::Node&lt;T&gt; {
-    <span class="kw">fn </span>name() -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str&gt; {
+    <span class="kw">fn </span>name() -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">'static </span>str&gt; {
         T::name()
     }
 
@@ -497,17 +497,17 @@
         }
     }
 
-    <span class="kw">fn </span>display_extra(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
+    <span class="kw">fn </span>display_extra(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
         (<span class="kw-2">**</span><span class="self">self</span>).display_extra(f)
     }
 
-    <span class="kw">fn </span>display_children(<span class="kw-2">&amp;</span><span class="self">self</span>, level: usize, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
+    <span class="kw">fn </span>display_children(<span class="kw-2">&amp;</span><span class="self">self</span>, level: usize, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
         (<span class="kw-2">**</span><span class="self">self</span>).display_children(level, f)
     }
 }
 
 <span class="kw">impl</span>&lt;T: NodeContentDisplay&gt; NodeDisplay <span class="kw">for </span>T {
-    <span class="kw">fn </span>name() -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str&gt; {
+    <span class="kw">fn </span>name() -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">'static </span>str&gt; {
         T::name()
     }
 
@@ -530,35 +530,35 @@
         }
     }
 
-    <span class="kw">fn </span>display_extra(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
+    <span class="kw">fn </span>display_extra(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
         <span class="self">self</span>.display_extra(f)
     }
 
-    <span class="kw">fn </span>display_children(<span class="kw-2">&amp;</span><span class="self">self</span>, level: usize, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
+    <span class="kw">fn </span>display_children(<span class="kw-2">&amp;</span><span class="self">self</span>, level: usize, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
         <span class="self">self</span>.display_children(level, f)
     }
 }
 
 <span class="kw">impl</span>&lt;T: NodeDisplay&gt; NodeContentDisplay <span class="kw">for </span>Box&lt;T&gt; {
-    <span class="kw">fn </span>name() -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str&gt; {
+    <span class="kw">fn </span>name() -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">'static </span>str&gt; {
         T::name()
     }
 
-    <span class="kw">fn </span>display_extra(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
+    <span class="kw">fn </span>display_extra(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
         (<span class="kw-2">**</span><span class="self">self</span>).display_extra(f)
     }
 
-    <span class="kw">fn </span>display_children(<span class="kw-2">&amp;</span><span class="self">self</span>, level: usize, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
+    <span class="kw">fn </span>display_children(<span class="kw-2">&amp;</span><span class="self">self</span>, level: usize, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
         (<span class="kw-2">**</span><span class="self">self</span>).display_children(level, f)
     }
 }
 
 <span class="kw">impl</span>&lt;T: NodeDisplay&gt; NodeContentDisplay <span class="kw">for </span><span class="prelude-ty">Option</span>&lt;T&gt; {
-    <span class="kw">fn </span>name() -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str&gt; {
+    <span class="kw">fn </span>name() -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">'static </span>str&gt; {
         <span class="prelude-val">None
     </span>}
 
-    <span class="kw">fn </span>display_extra(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
+    <span class="kw">fn </span>display_extra(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(inner) = <span class="self">self</span>.as_ref() {
             inner.display_extra(f)
         } <span class="kw">else </span>{
@@ -566,7 +566,7 @@
         }
     }
 
-    <span class="kw">fn </span>display_children(<span class="kw-2">&amp;</span><span class="self">self</span>, level: usize, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
+    <span class="kw">fn </span>display_children(<span class="kw-2">&amp;</span><span class="self">self</span>, level: usize, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(inner) = <span class="self">self</span>.as_ref() {
             inner.display_children(level, f)
         } <span class="kw">else </span>{
@@ -576,17 +576,17 @@
 }
 
 <span class="kw">impl</span>&lt;T: NodeDisplay&gt; NodeContentDisplay <span class="kw">for </span>Vec&lt;T&gt; {
-    <span class="kw">fn </span>name() -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str&gt; {
+    <span class="kw">fn </span>name() -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">'static </span>str&gt; {
         <span class="prelude-val">None
     </span>}
 
-    <span class="kw">fn </span>display_extra(<span class="kw-2">&amp;</span><span class="self">self</span>, _f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
+    <span class="kw">fn </span>display_extra(<span class="kw-2">&amp;</span><span class="self">self</span>, _f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">fn </span>display_children(<span class="kw-2">&amp;</span><span class="self">self</span>, level: usize, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
+    <span class="kw">fn </span>display_children(<span class="kw-2">&amp;</span><span class="self">self</span>, level: usize, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
         <span class="kw">for </span>item <span class="kw">in </span><span class="self">self</span>.iter() {
-            <span class="macro">write!</span>(f, <span class="string">&quot;{}&quot;</span>, item.display().set_level(level))<span class="question-mark">?</span>;
+            <span class="macro">write!</span>(f, <span class="string">"{}"</span>, item.display().set_level(level))<span class="question-mark">?</span>;
         }
 
         <span class="prelude-val">Ok</span>(())

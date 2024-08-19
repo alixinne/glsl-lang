@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lang-types/src/ast.rs`."><title>ast.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-fa3bb1812debf86c.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="glsl_lang_types" data-themes="" data-resource-suffix="" data-rustdoc-version="1.74.1 (a28077b28 2023-12-04)" data-channel="1.74.1" data-search-js="search-8be46b629f5f14a8.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-c5bd66d33317d69f.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../glsl_lang_types/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lang-types/src/ast.rs`."><title>ast.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-dd39b87e5fcfba68.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="glsl_lang_types" data-themes="" data-resource-suffix="" data-rustdoc-version="1.80.1 (3f5fd8dd4 2024-08-06)" data-channel="1.80.1" data-search-js="search-d52510db62a78183.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -2116,7 +2116,7 @@
 
 </span><span class="kw">use </span>std::{fmt, iter::FromIterator};
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]
+<span class="attr">#[cfg(feature = <span class="string">"serde"</span>)]
 </span><span class="kw">use </span>rserde::{Deserialize, Serialize};
 
 <span class="kw">pub use </span>lang_util::{
@@ -2125,7 +2125,7 @@
     FileId, NodeContent, NodeContentDisplay, SmolStr, TextRange, TextSize,
 };
 
-<span class="macro">macro_rules! </span>impl_node_content {
+<span class="macro">macro_rules!</span> impl_node_content {
     (
         $(<span class="attr">#[<span class="macro-nonterminal">$m</span>:meta]</span>)* <span class="macro-nonterminal">$v</span>:vis <span class="kw">type </span><span class="macro-nonterminal">$t</span>:ident = Node&lt;<span class="macro-nonterminal">$tdata</span>:ident&gt;;
     ) =&gt; {
@@ -2143,12 +2143,12 @@
 
 <span class="doccomment">/// A generic identifier.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Hash, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 #[lang_util(display(leaf))]
 </span><span class="kw">pub struct </span>IdentifierData(<span class="attr">#[lang_util(display(extra))] </span><span class="kw">pub </span>SmolStr);
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;IdentifierData&gt;`.
     </span><span class="kw">pub type </span>Identifier = Node&lt;IdentifierData&gt;;
 }
@@ -2161,7 +2161,7 @@
     /// `None` if this identifier is not a Rust identifier, otherwise returns the parsed
     /// identifier.
     </span><span class="kw">pub fn </span>as_rs_ident(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt; {
-        <span class="kw">if </span><span class="self">self</span>.<span class="number">0</span>.starts_with(<span class="string">&#39;#&#39;</span>) &amp; <span class="self">self</span>.<span class="number">0</span>.ends_with(<span class="string">&#39;)&#39;</span>) {
+        <span class="kw">if </span><span class="self">self</span>.<span class="number">0</span>.starts_with(<span class="string">'#'</span>) &amp; <span class="self">self</span>.<span class="number">0</span>.ends_with(<span class="string">')'</span>) {
             <span class="comment">// Remove #\s* and )
             </span><span class="kw">let </span>s = <span class="self">self</span>.<span class="number">0</span>[<span class="number">1</span>..<span class="self">self</span>.<span class="number">0</span>.len() - <span class="number">1</span>].trim();
             <span class="comment">// Remove ( and whitespace
@@ -2191,12 +2191,12 @@
 
 <span class="doccomment">/// Any type name.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Hash, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 #[lang_util(display(leaf))]
 </span><span class="kw">pub struct </span>TypeNameData(<span class="kw">pub </span>SmolStr);
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;TypeNameData&gt;`.
     </span><span class="kw">pub type </span>TypeName = Node&lt;TypeNameData&gt;;
 }
@@ -2228,8 +2228,8 @@
 
 <span class="doccomment">/// A path literal.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, Eq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub enum </span>PathData {
     <span class="doccomment">/// Specified with angle brackets.
     </span>Absolute(String),
@@ -2237,478 +2237,478 @@
     </span>Relative(String),
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;PathData&gt;`.
     </span><span class="kw">pub type </span>Path = Node&lt;PathData&gt;;
 }
 
 <span class="doccomment">/// Type specifier (non-array).
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub enum </span>TypeSpecifierNonArrayData {
     <span class="doccomment">/// `void` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;void&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"void"</span>))]
     </span>Void,
     <span class="doccomment">/// `bool` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;bool&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"bool"</span>))]
     </span>Bool,
     <span class="doccomment">/// `int` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;int&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"int"</span>))]
     </span>Int,
     <span class="doccomment">/// `uint` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;uint&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"uint"</span>))]
     </span>UInt,
     <span class="doccomment">/// `float` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;float&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"float"</span>))]
     </span>Float,
     <span class="doccomment">/// `double` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;double&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"double"</span>))]
     </span>Double,
     <span class="doccomment">/// `vec2` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;vec2&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"vec2"</span>))]
     </span>Vec2,
     <span class="doccomment">/// `vec3` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;vec3&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"vec3"</span>))]
     </span>Vec3,
     <span class="doccomment">/// `vec4` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;vec4&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"vec4"</span>))]
     </span>Vec4,
     <span class="doccomment">/// `dvec2` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;dvec2&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"dvec2"</span>))]
     </span>DVec2,
     <span class="doccomment">/// `dvec3` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;dvec3&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"dvec3"</span>))]
     </span>DVec3,
     <span class="doccomment">/// `dvec4` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;dvec4&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"dvec4"</span>))]
     </span>DVec4,
     <span class="doccomment">/// `bvec2` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;bvec2&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"bvec2"</span>))]
     </span>BVec2,
     <span class="doccomment">/// `bvec3` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;bvec3&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"bvec3"</span>))]
     </span>BVec3,
     <span class="doccomment">/// `bvec4` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;bvec4&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"bvec4"</span>))]
     </span>BVec4,
     <span class="doccomment">/// `ivec2` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;ivec2&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"ivec2"</span>))]
     </span>IVec2,
     <span class="doccomment">/// `ivec3` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;ivec3&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"ivec3"</span>))]
     </span>IVec3,
     <span class="doccomment">/// `ivec4` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;ivec4&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"ivec4"</span>))]
     </span>IVec4,
     <span class="doccomment">/// `uvec2` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;uvec2&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"uvec2"</span>))]
     </span>UVec2,
     <span class="doccomment">/// `uvec3` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;uvec3&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"uvec3"</span>))]
     </span>UVec3,
     <span class="doccomment">/// `uvec4` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;uvec4&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"uvec4"</span>))]
     </span>UVec4,
     <span class="doccomment">/// `mat2` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;mat2&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"mat2"</span>))]
     </span>Mat2,
     <span class="doccomment">/// `mat3` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;mat3&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"mat3"</span>))]
     </span>Mat3,
     <span class="doccomment">/// `mat4` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;mat4&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"mat4"</span>))]
     </span>Mat4,
     <span class="doccomment">/// `mat2x2` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;mat2x2&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"mat2x2"</span>))]
     </span>Mat22,
     <span class="doccomment">/// `mat2x3` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;mat2x3&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"mat2x3"</span>))]
     </span>Mat23,
     <span class="doccomment">/// `mat2x4` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;mat2x4&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"mat2x4"</span>))]
     </span>Mat24,
     <span class="doccomment">/// `mat3x2` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;mat3x2&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"mat3x2"</span>))]
     </span>Mat32,
     <span class="doccomment">/// `mat3x3` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;mat3x3&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"mat3x3"</span>))]
     </span>Mat33,
     <span class="doccomment">/// `mat3x4` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;mat3x4&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"mat3x4"</span>))]
     </span>Mat34,
     <span class="doccomment">/// `mat4x2` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;mat4x2&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"mat4x2"</span>))]
     </span>Mat42,
     <span class="doccomment">/// `mat4x3` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;mat4x3&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"mat4x3"</span>))]
     </span>Mat43,
     <span class="doccomment">/// `mat4x4` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;mat4x4&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"mat4x4"</span>))]
     </span>Mat44,
     <span class="doccomment">/// `dmat2` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;dmat2&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"dmat2"</span>))]
     </span>DMat2,
     <span class="doccomment">/// `dmat3` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;dmat3&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"dmat3"</span>))]
     </span>DMat3,
     <span class="doccomment">/// `dmat4` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;dmat4&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"dmat4"</span>))]
     </span>DMat4,
     <span class="doccomment">/// `dmat2x2` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;dmat2x2&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"dmat2x2"</span>))]
     </span>DMat22,
     <span class="doccomment">/// `dmat2x3` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;dmat2x3&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"dmat2x3"</span>))]
     </span>DMat23,
     <span class="doccomment">/// `dmat2x4` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;dmat2x4&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"dmat2x4"</span>))]
     </span>DMat24,
     <span class="doccomment">/// `dmat3x2` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;dmat3x2&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"dmat3x2"</span>))]
     </span>DMat32,
     <span class="doccomment">/// `dmat3x3` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;dmat3x3&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"dmat3x3"</span>))]
     </span>DMat33,
     <span class="doccomment">/// `dmat3x4` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;dmat3x4&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"dmat3x4"</span>))]
     </span>DMat34,
     <span class="doccomment">/// `dmat4x2` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;dmat4x2&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"dmat4x2"</span>))]
     </span>DMat42,
     <span class="doccomment">/// `dmat4x3` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;dmat4x3&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"dmat4x3"</span>))]
     </span>DMat43,
     <span class="doccomment">/// `dmat4x4` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;dmat4x4&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"dmat4x4"</span>))]
     </span>DMat44,
     <span class="comment">// floating point opaque types
     </span><span class="doccomment">/// `sampler1D` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;sampler1D&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"sampler1D"</span>))]
     </span>Sampler1D,
     <span class="doccomment">/// `image1D` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;image1D&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"image1D"</span>))]
     </span>Image1D,
     <span class="doccomment">/// `sampler2D` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;sampler2D&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"sampler2D"</span>))]
     </span>Sampler2D,
     <span class="doccomment">/// `image2D` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;image2D&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"image2D"</span>))]
     </span>Image2D,
     <span class="doccomment">/// `sampler3D` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;sampler3D&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"sampler3D"</span>))]
     </span>Sampler3D,
     <span class="doccomment">/// `image3D` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;image3D&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"image3D"</span>))]
     </span>Image3D,
     <span class="doccomment">/// `samplerCube` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;samplerCube&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"samplerCube"</span>))]
     </span>SamplerCube,
     <span class="doccomment">/// `imageCube` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;imageCube&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"imageCube"</span>))]
     </span>ImageCube,
     <span class="doccomment">/// `sampler2DRect` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;sampler2DRect&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"sampler2DRect"</span>))]
     </span>Sampler2DRect,
     <span class="doccomment">/// `image2DRect` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;image2DRect&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"image2DRect"</span>))]
     </span>Image2DRect,
     <span class="doccomment">/// `sampler1DArray` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;sampler1DArray&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"sampler1DArray"</span>))]
     </span>Sampler1DArray,
     <span class="doccomment">/// `image1DArray` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;image1DArray&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"image1DArray"</span>))]
     </span>Image1DArray,
     <span class="doccomment">/// `sampler2DArray` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;sampler2DArray&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"sampler2DArray"</span>))]
     </span>Sampler2DArray,
     <span class="doccomment">/// `image2DArray` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;image2DArray&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"image2DArray"</span>))]
     </span>Image2DArray,
     <span class="doccomment">/// `samplerBuffer` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;samplerBuffer&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"samplerBuffer"</span>))]
     </span>SamplerBuffer,
     <span class="doccomment">/// `imageBuffer` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;imageBuffer&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"imageBuffer"</span>))]
     </span>ImageBuffer,
     <span class="doccomment">/// `sampler2DMS` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;sampler2DMS&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"sampler2DMS"</span>))]
     </span>Sampler2DMs,
     <span class="doccomment">/// `image2DMS` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;image2DMS&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"image2DMS"</span>))]
     </span>Image2DMs,
     <span class="doccomment">/// `sampler2DMSArray` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;sampler2DMSArray&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"sampler2DMSArray"</span>))]
     </span>Sampler2DMsArray,
     <span class="doccomment">/// `image2DMSArray` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;image2DMSArray&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"image2DMSArray"</span>))]
     </span>Image2DMsArray,
     <span class="doccomment">/// `samplerCubeArray` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;samplerCubeArray&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"samplerCubeArray"</span>))]
     </span>SamplerCubeArray,
     <span class="doccomment">/// `imageCubeArray` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;imageCubeArray&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"imageCubeArray"</span>))]
     </span>ImageCubeArray,
     <span class="doccomment">/// `sampler1DShadow` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;sampler1DShadow&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"sampler1DShadow"</span>))]
     </span>Sampler1DShadow,
     <span class="doccomment">/// `sampler2DShadow` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;sampler2DShadow&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"sampler2DShadow"</span>))]
     </span>Sampler2DShadow,
     <span class="doccomment">/// `sampler2DRectShadow` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;sampler2DRectShadow&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"sampler2DRectShadow"</span>))]
     </span>Sampler2DRectShadow,
     <span class="doccomment">/// `sampler1DArrayShadow` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;sampler1DArrayShadow&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"sampler1DArrayShadow"</span>))]
     </span>Sampler1DArrayShadow,
     <span class="doccomment">/// `sampler2DArrayShadow` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;sampler2DArrayShadow&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"sampler2DArrayShadow"</span>))]
     </span>Sampler2DArrayShadow,
     <span class="doccomment">/// `samplerCubeShadow` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;samplerCubeShadow&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"samplerCubeShadow"</span>))]
     </span>SamplerCubeShadow,
     <span class="doccomment">/// `samplerCubeArrayShadow` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;samplerCubeArrayShadow&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"samplerCubeArrayShadow"</span>))]
     </span>SamplerCubeArrayShadow,
     <span class="comment">// signed integer opaque types
     </span><span class="doccomment">/// `isampler1D` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;isampler1D&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"isampler1D"</span>))]
     </span>ISampler1D,
     <span class="doccomment">/// `iimage1D` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;iimage1D&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"iimage1D"</span>))]
     </span>IImage1D,
     <span class="doccomment">/// `isampler2D` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;isampler2D&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"isampler2D"</span>))]
     </span>ISampler2D,
     <span class="doccomment">/// `iimage2D` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;iimage2D&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"iimage2D"</span>))]
     </span>IImage2D,
     <span class="doccomment">/// `isampler3D` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;isampler3D&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"isampler3D"</span>))]
     </span>ISampler3D,
     <span class="doccomment">/// `iimage3D` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;iimage3D&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"iimage3D"</span>))]
     </span>IImage3D,
     <span class="doccomment">/// `isamplerCube` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;isamplerCube&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"isamplerCube"</span>))]
     </span>ISamplerCube,
     <span class="doccomment">/// `iimageCube` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;iimageCube&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"iimageCube"</span>))]
     </span>IImageCube,
     <span class="doccomment">/// `isampler2DRect` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;isampler2DRect&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"isampler2DRect"</span>))]
     </span>ISampler2DRect,
     <span class="doccomment">/// `iimage2DRect` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;iimage2DRect&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"iimage2DRect"</span>))]
     </span>IImage2DRect,
     <span class="doccomment">/// `isampler1DArray` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;isampler1DArray&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"isampler1DArray"</span>))]
     </span>ISampler1DArray,
     <span class="doccomment">/// `iimage1DArray` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;iimage1DArray&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"iimage1DArray"</span>))]
     </span>IImage1DArray,
     <span class="doccomment">/// `isampler2DArray` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;isampler2DArray&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"isampler2DArray"</span>))]
     </span>ISampler2DArray,
     <span class="doccomment">/// `iimage2DArray` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;iimage2DArray&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"iimage2DArray"</span>))]
     </span>IImage2DArray,
     <span class="doccomment">/// `isamplerBuffer` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;isamplerBuffer&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"isamplerBuffer"</span>))]
     </span>ISamplerBuffer,
     <span class="doccomment">/// `iimageBuffer` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;iimageBuffer&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"iimageBuffer"</span>))]
     </span>IImageBuffer,
     <span class="doccomment">/// `isampler2DMS` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;isampler2DMS&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"isampler2DMS"</span>))]
     </span>ISampler2DMs,
     <span class="doccomment">/// `iimage2DMS` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;iimage2DMS&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"iimage2DMS"</span>))]
     </span>IImage2DMs,
     <span class="doccomment">/// `isampler2DMSArray` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;isampler2DMSArray&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"isampler2DMSArray"</span>))]
     </span>ISampler2DMsArray,
     <span class="doccomment">/// `iimage2DMSArray` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;iimage2DMSArray&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"iimage2DMSArray"</span>))]
     </span>IImage2DMsArray,
     <span class="doccomment">/// `isamplerCubeArray` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;isamplerCubeArray&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"isamplerCubeArray"</span>))]
     </span>ISamplerCubeArray,
     <span class="doccomment">/// `iimageCubeArray` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;iimageCubeArray&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"iimageCubeArray"</span>))]
     </span>IImageCubeArray,
     <span class="comment">// unsigned integer opaque types
     </span><span class="doccomment">/// `atomic_uint` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;atomic_uint&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"atomic_uint"</span>))]
     </span>AtomicUInt,
     <span class="doccomment">/// `usampler1D` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;usampler1D&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"usampler1D"</span>))]
     </span>USampler1D,
     <span class="doccomment">/// `uimage1D` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;uimage1D&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"uimage1D"</span>))]
     </span>UImage1D,
     <span class="doccomment">/// `usampler2D` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;usampler2D&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"usampler2D"</span>))]
     </span>USampler2D,
     <span class="doccomment">/// `uimage2D` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;uimage2D&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"uimage2D"</span>))]
     </span>UImage2D,
     <span class="doccomment">/// `usampler3D` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;usampler3D&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"usampler3D"</span>))]
     </span>USampler3D,
     <span class="doccomment">/// `uimage3D` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;uimage3D&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"uimage3D"</span>))]
     </span>UImage3D,
     <span class="doccomment">/// `usamplerCube` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;usamplerCube&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"usamplerCube"</span>))]
     </span>USamplerCube,
     <span class="doccomment">/// `uimageCube` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;uimageCube&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"uimageCube"</span>))]
     </span>UImageCube,
     <span class="doccomment">/// `usampler2DRect` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;usampler2DRect&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"usampler2DRect"</span>))]
     </span>USampler2DRect,
     <span class="doccomment">/// `uimage2DRect` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;uimage2DRect&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"uimage2DRect"</span>))]
     </span>UImage2DRect,
     <span class="doccomment">/// `usampler1DArray` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;usampler1DArray&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"usampler1DArray"</span>))]
     </span>USampler1DArray,
     <span class="doccomment">/// `uimage1DArray` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;uimage1DArray&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"uimage1DArray"</span>))]
     </span>UImage1DArray,
     <span class="doccomment">/// `usampler2DArray` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;usampler2DArray&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"usampler2DArray"</span>))]
     </span>USampler2DArray,
     <span class="doccomment">/// `uimage2DArray` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;uimage2DArray&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"uimage2DArray"</span>))]
     </span>UImage2DArray,
     <span class="doccomment">/// `usamplerBuffer` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;usamplerBuffer&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"usamplerBuffer"</span>))]
     </span>USamplerBuffer,
     <span class="doccomment">/// `uimageBuffer` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;uimageBuffer&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"uimageBuffer"</span>))]
     </span>UImageBuffer,
     <span class="doccomment">/// `usampler2DMS` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;usampler2DMS&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"usampler2DMS"</span>))]
     </span>USampler2DMs,
     <span class="doccomment">/// `uimage2DMS` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;uimage2DMS&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"uimage2DMS"</span>))]
     </span>UImage2DMs,
     <span class="doccomment">/// `usampler2DMSArray` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;usampler2DMSArray&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"usampler2DMSArray"</span>))]
     </span>USampler2DMsArray,
     <span class="doccomment">/// `uimage2DMSArray` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;uimage2DMSArray&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"uimage2DMSArray"</span>))]
     </span>UImage2DMsArray,
     <span class="doccomment">/// `usamplerCubeArray` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;usamplerCubeArray&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"usamplerCubeArray"</span>))]
     </span>USamplerCubeArray,
     <span class="doccomment">/// `uimageCubeArray` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;uimageCubeArray&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"uimageCubeArray"</span>))]
     </span>UImageCubeArray,
 
     <span class="comment">// GL_KHR_vulkan_glsl types
     </span><span class="doccomment">/// `texture1D` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;texture1D&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"texture1D"</span>))]
     </span>Texture1D,
     <span class="doccomment">/// `texture2D` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;texture2D&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"texture2D"</span>))]
     </span>Texture2D,
     <span class="doccomment">/// `texture3D` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;texture3D&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"texture3D"</span>))]
     </span>Texture3D,
     <span class="doccomment">/// `textureCube` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;textureCube&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"textureCube"</span>))]
     </span>TextureCube,
     <span class="doccomment">/// `texture2DRect` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;texture2DRect&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"texture2DRect"</span>))]
     </span>Texture2DRect,
     <span class="doccomment">/// `texture1DArray` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;texture1DArray&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"texture1DArray"</span>))]
     </span>Texture1DArray,
     <span class="doccomment">/// `texture2DArray` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;texture2DArray&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"texture2DArray"</span>))]
     </span>Texture2DArray,
     <span class="doccomment">/// `textureBuffer` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;textureBuffer&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"textureBuffer"</span>))]
     </span>TextureBuffer,
     <span class="doccomment">/// `texture2DMs` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;texture2DMS&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"texture2DMS"</span>))]
     </span>Texture2DMs,
     <span class="doccomment">/// `texture2DMsArray` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;texture2DMSArray&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"texture2DMSArray"</span>))]
     </span>Texture2DMsArray,
     <span class="doccomment">/// `textureCubeArray` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;textureCubeArray&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"textureCubeArray"</span>))]
     </span>TextureCubeArray,
     <span class="doccomment">/// `itexture1D` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;itexture1D&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"itexture1D"</span>))]
     </span>ITexture1D,
     <span class="doccomment">/// `itexture2D` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;itexture2D&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"itexture2D"</span>))]
     </span>ITexture2D,
     <span class="doccomment">/// `itexture3D` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;itexture3D&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"itexture3D"</span>))]
     </span>ITexture3D,
     <span class="doccomment">/// `itextureCube` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;itextureCube&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"itextureCube"</span>))]
     </span>ITextureCube,
     <span class="doccomment">/// `itexture2DRect` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;itexture2DRect&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"itexture2DRect"</span>))]
     </span>ITexture2DRect,
     <span class="doccomment">/// `itexture1DArray` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;itexture1DArray&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"itexture1DArray"</span>))]
     </span>ITexture1DArray,
     <span class="doccomment">/// `itexture2DArray` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;itexture2DArray&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"itexture2DArray"</span>))]
     </span>ITexture2DArray,
     <span class="doccomment">/// `itextureBuffer` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;itextureBuffer&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"itextureBuffer"</span>))]
     </span>ITextureBuffer,
     <span class="doccomment">/// `itexture2DMs` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;itexture2DMS&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"itexture2DMS"</span>))]
     </span>ITexture2DMs,
     <span class="doccomment">/// `itexture2DMsArray` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;itexture2DMSArray&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"itexture2DMSArray"</span>))]
     </span>ITexture2DMsArray,
     <span class="doccomment">/// `itextureCubeArray` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;itextureCubeArray&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"itextureCubeArray"</span>))]
     </span>ITextureCubeArray,
     <span class="doccomment">/// `sampler` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;sampler&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"sampler"</span>))]
     </span>Sampler,
     <span class="doccomment">/// `samplerShadow` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;samplerShadow&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"samplerShadow"</span>))]
     </span>SamplerShadow,
     <span class="doccomment">/// `subpassInput` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;subpassInput&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"subpassInput"</span>))]
     </span>SubpassInput,
     <span class="doccomment">/// `isubpassInput` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;isubpassInput&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"isubpassInput"</span>))]
     </span>ISubpassInput,
     <span class="doccomment">/// `usubpassInput` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;usubpassInput&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"usubpassInput"</span>))]
     </span>USubpassInput,
     <span class="doccomment">/// `subpassInputMs` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;subpassInputMS&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"subpassInputMS"</span>))]
     </span>SubpassInputMs,
     <span class="doccomment">/// `isubpassInputMs` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;isubpassInputMS&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"isubpassInputMS"</span>))]
     </span>ISubpassInputMs,
     <span class="doccomment">/// `usubpassInputMs` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;usubpassInputMS&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"usubpassInputMS"</span>))]
     </span>USubpassInputMs,
 
     <span class="comment">// end GL_KHR_vulkan_glsl types
     </span><span class="doccomment">/// `struct` type specifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;struct&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"struct"</span>))]
     </span>Struct(StructSpecifier),
     <span class="doccomment">/// Raw type name
     </span>TypeName(TypeName),
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;TypeSpecifierNonArrayData&gt;`.
     </span><span class="kw">pub type </span>TypeSpecifierNonArray = Node&lt;TypeSpecifierNonArrayData&gt;;
 }
@@ -2721,8 +2721,8 @@
 
 <span class="doccomment">/// Type specifier.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub struct </span>TypeSpecifierData {
     <span class="doccomment">/// Type name portion of the specifier
     </span><span class="kw">pub </span>ty: TypeSpecifierNonArray,
@@ -2730,7 +2730,7 @@
     </span><span class="kw">pub </span>array_specifier: <span class="prelude-ty">Option</span>&lt;ArraySpecifier&gt;,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;TypeSpecifierData&gt;`.
     </span><span class="kw">pub type </span>TypeSpecifier = Node&lt;TypeSpecifierData&gt;;
 }
@@ -2755,8 +2755,8 @@
 
 <span class="doccomment">/// Struct specifier. Used to create new, user-defined types.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub struct </span>StructSpecifierData {
     <span class="doccomment">/// Structure name
     </span><span class="kw">pub </span>name: <span class="prelude-ty">Option</span>&lt;TypeName&gt;,
@@ -2764,15 +2764,15 @@
     </span><span class="kw">pub </span>fields: Vec&lt;StructFieldSpecifier&gt;,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;StructSpecifierData&gt;`.
     </span><span class="kw">pub type </span>StructSpecifier = Node&lt;StructSpecifierData&gt;;
 }
 
 <span class="doccomment">/// Struct field specifier. Used to add fields to struct specifiers.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub struct </span>StructFieldSpecifierData {
     <span class="doccomment">/// Type qualifiers for the field
     </span><span class="kw">pub </span>qualifier: <span class="prelude-ty">Option</span>&lt;TypeQualifier&gt;,
@@ -2782,15 +2782,15 @@
     </span><span class="kw">pub </span>identifiers: Vec&lt;ArrayedIdentifier&gt;, <span class="comment">// several identifiers of the same type
 </span>}
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;StructFieldSpecifierData&gt;`.
     </span><span class="kw">pub type </span>StructFieldSpecifier = Node&lt;StructFieldSpecifierData&gt;;
 }
 
 <span class="doccomment">/// An identifier with an optional array specifier.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub struct </span>ArrayedIdentifierData {
     <span class="doccomment">/// Raw identifier
     </span><span class="kw">pub </span>ident: Identifier,
@@ -2798,7 +2798,7 @@
     </span><span class="kw">pub </span>array_spec: <span class="prelude-ty">Option</span>&lt;ArraySpecifier&gt;,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;ArrayedIdentifierData&gt;`.
     </span><span class="kw">pub type </span>ArrayedIdentifier = Node&lt;ArrayedIdentifierData&gt;;
 }
@@ -2828,22 +2828,22 @@
 
 <span class="doccomment">/// Type qualifier.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub struct </span>TypeQualifierData {
     <span class="doccomment">/// List of type qualifiers
     </span><span class="kw">pub </span>qualifiers: Vec&lt;TypeQualifierSpec&gt;,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;TypeQualifierData&gt;`.
     </span><span class="kw">pub type </span>TypeQualifier = Node&lt;TypeQualifierData&gt;;
 }
 
 <span class="doccomment">/// Type qualifier spec.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub enum </span>TypeQualifierSpecData {
     <span class="doccomment">/// Storage qualifier
     </span>Storage(StorageQualifier),
@@ -2859,156 +2859,156 @@
     </span>Precise,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;TypeQualifierSpecData&gt;`.
     </span><span class="kw">pub type </span>TypeQualifierSpec = Node&lt;TypeQualifierSpecData&gt;;
 }
 
 <span class="doccomment">/// Storage qualifier.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub enum </span>StorageQualifierData {
     <span class="doccomment">/// `const` storage qualifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;const&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"const"</span>))]
     </span>Const,
     <span class="doccomment">/// `inout` storage qualifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;inout&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"inout"</span>))]
     </span>InOut,
     <span class="doccomment">/// `in` storage qualifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;in&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"in"</span>))]
     </span>In,
     <span class="doccomment">/// `out` storage qualifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;out&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"out"</span>))]
     </span>Out,
     <span class="doccomment">/// `centroid` storage qualifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;centroid&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"centroid"</span>))]
     </span>Centroid,
     <span class="doccomment">/// `patch` storage qualifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;patch&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"patch"</span>))]
     </span>Patch,
     <span class="doccomment">/// `sample` storage qualifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;sample&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"sample"</span>))]
     </span>Sample,
     <span class="doccomment">/// `uniform` storage qualifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;uniform&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"uniform"</span>))]
     </span>Uniform,
     <span class="doccomment">/// `buffer` storage qualifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;buffer&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"buffer"</span>))]
     </span>Buffer,
     <span class="doccomment">/// `shared` storage qualifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;shared&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"shared"</span>))]
     </span>Shared,
     <span class="doccomment">/// `coherent` storage qualifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;coherent&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"coherent"</span>))]
     </span>Coherent,
     <span class="doccomment">/// `volatile` storage qualifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;volatile&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"volatile"</span>))]
     </span>Volatile,
     <span class="doccomment">/// `restrict` storage qualifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;restrict&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"restrict"</span>))]
     </span>Restrict,
     <span class="doccomment">/// `readonly` storage qualifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;readonly&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"readonly"</span>))]
     </span>ReadOnly,
     <span class="doccomment">/// `writeonly` storage qualifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;writeonly&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"writeonly"</span>))]
     </span>WriteOnly,
     <span class="doccomment">/// `attribute` storage qualifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;attribute&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"attribute"</span>))]
     </span>Attribute,
     <span class="doccomment">/// `varying` storage qualifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;varying&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"varying"</span>))]
     </span>Varying,
     <span class="comment">// Note: the grammar says TYPE_NAME but type_specifier makes more sense given the definition of
-    // subroutine. The reference implementation is marked &quot;to do&quot;.
+    // subroutine. The reference implementation is marked "to do".
     </span><span class="doccomment">/// `subroutine` storage qualifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;subroutine&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"subroutine"</span>))]
     </span>Subroutine(Vec&lt;TypeSpecifier&gt;),
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;StorageQualifierData&gt;`.
     </span><span class="kw">pub type </span>StorageQualifier = Node&lt;StorageQualifierData&gt;;
 }
 
 <span class="doccomment">/// Layout qualifier.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub struct </span>LayoutQualifierData {
     <span class="doccomment">/// List of layout qualifiers
     </span><span class="kw">pub </span>ids: Vec&lt;LayoutQualifierSpec&gt;,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;LayoutQualifierData&gt;`.
     </span><span class="kw">pub type </span>LayoutQualifier = Node&lt;LayoutQualifierData&gt;;
 }
 
 <span class="doccomment">/// Layout qualifier spec.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub enum </span>LayoutQualifierSpecData {
     <span class="doccomment">/// An `ident = expr` layout qualifier
     </span>Identifier(Identifier, <span class="prelude-ty">Option</span>&lt;Box&lt;Expr&gt;&gt;),
     <span class="doccomment">/// `shared` layout qualifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;shared&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"shared"</span>))]
     </span>Shared,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;LayoutQualifierSpecData&gt;`.
     </span><span class="kw">pub type </span>LayoutQualifierSpec = Node&lt;LayoutQualifierSpecData&gt;;
 }
 
 <span class="doccomment">/// Precision qualifier.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, Eq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub enum </span>PrecisionQualifierData {
     <span class="doccomment">/// `high` precision qualifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;high&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"high"</span>))]
     </span>High,
     <span class="doccomment">/// `medium` precision qualifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;medium&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"medium"</span>))]
     </span>Medium,
     <span class="doccomment">/// `low` precision qualifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;low&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"low"</span>))]
     </span>Low,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;PrecisionQualifierData&gt;`.
     </span><span class="kw">pub type </span>PrecisionQualifier = Node&lt;PrecisionQualifierData&gt;;
 }
 
 <span class="doccomment">/// Interpolation qualifier.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, Eq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub enum </span>InterpolationQualifierData {
     <span class="doccomment">/// `smooth` interpolation qualifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;smooth&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"smooth"</span>))]
     </span>Smooth,
     <span class="doccomment">/// `flat` interpolation qualifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;flat&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"flat"</span>))]
     </span>Flat,
     <span class="doccomment">/// `noperspective` interpolation qualifier
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;noperspective&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"noperspective"</span>))]
     </span>NoPerspective,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;InterpolationQualifierData&gt;`.
     </span><span class="kw">pub type </span>InterpolationQualifier = Node&lt;InterpolationQualifierData&gt;;
 }
 
 <span class="doccomment">/// Fully specified type.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub struct </span>FullySpecifiedTypeData {
     <span class="doccomment">/// Optional type qualifier
     </span><span class="kw">pub </span>qualifier: <span class="prelude-ty">Option</span>&lt;TypeQualifier&gt;,
@@ -3016,7 +3016,7 @@
     </span><span class="kw">pub </span>ty: TypeSpecifier,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;FullySpecifiedTypeData&gt;`.
     </span><span class="kw">pub type </span>FullySpecifiedType = Node&lt;FullySpecifiedTypeData&gt;;
 }
@@ -3044,22 +3044,22 @@
 
 <span class="doccomment">/// Dimensionality of an array.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub struct </span>ArraySpecifierData {
     <span class="doccomment">/// List of all the dimensions – possibly unsized or explicitly-sized.
     </span><span class="kw">pub </span>dimensions: Vec&lt;ArraySpecifierDimension&gt;,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;ArraySpecifierData&gt;`.
     </span><span class="kw">pub type </span>ArraySpecifier = Node&lt;ArraySpecifierData&gt;;
 }
 
 <span class="doccomment">/// One array specifier dimension.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub enum </span>ArraySpecifierDimensionData {
     <span class="doccomment">/// `[]` dimension
     </span>Unsized,
@@ -3067,15 +3067,15 @@
     </span>ExplicitlySized(Box&lt;Expr&gt;),
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;ArraySpecifierDimensionData&gt;`.
     </span><span class="kw">pub type </span>ArraySpecifierDimension = Node&lt;ArraySpecifierDimensionData&gt;;
 }
 
 <span class="doccomment">/// A declaration.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub enum </span>DeclarationData {
     <span class="doccomment">/// Function prototype declaration
     </span>FunctionPrototype(FunctionPrototype),
@@ -3089,7 +3089,7 @@
     </span>Invariant(Identifier),
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;DeclarationData&gt;`.
     </span><span class="kw">pub type </span>Declaration = Node&lt;DeclarationData&gt;;
 }
@@ -3097,8 +3097,8 @@
 <span class="doccomment">/// A general purpose block, containing fields and possibly a list of declared identifiers. Semantic
 /// is given with the storage qualifier.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub struct </span>BlockData {
     <span class="doccomment">/// Block type qualifier
     </span><span class="kw">pub </span>qualifier: TypeQualifier,
@@ -3110,15 +3110,15 @@
     </span><span class="kw">pub </span>identifier: <span class="prelude-ty">Option</span>&lt;ArrayedIdentifier&gt;,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;BlockData&gt;`.
     </span><span class="kw">pub type </span>Block = Node&lt;BlockData&gt;;
 }
 
 <span class="doccomment">/// Function identifier.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub enum </span>FunIdentifierData {
     <span class="doccomment">/// Type name used for the function name (as a constructor)
     </span>TypeSpecifier(Box&lt;TypeSpecifier&gt;),
@@ -3126,7 +3126,7 @@
     </span>Expr(Box&lt;Expr&gt;),
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;FunIdentifierData&gt;`.
     </span><span class="kw">pub type </span>FunIdentifier = Node&lt;FunIdentifierData&gt;;
 }
@@ -3171,8 +3171,8 @@
 
 <span class="doccomment">/// Function prototype.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub struct </span>FunctionPrototypeData {
     <span class="doccomment">/// Return type
     </span><span class="kw">pub </span>ty: FullySpecifiedType,
@@ -3182,15 +3182,15 @@
     </span><span class="kw">pub </span>parameters: Vec&lt;FunctionParameterDeclaration&gt;,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;FunctionPrototypeData&gt;`.
     </span><span class="kw">pub type </span>FunctionPrototype = Node&lt;FunctionPrototypeData&gt;;
 }
 
 <span class="doccomment">/// Function parameter declaration.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub enum </span>FunctionParameterDeclarationData {
     <span class="doccomment">/// Named parameter
     </span>Named(<span class="prelude-ty">Option</span>&lt;TypeQualifier&gt;, FunctionParameterDeclarator),
@@ -3198,15 +3198,15 @@
     </span>Unnamed(<span class="prelude-ty">Option</span>&lt;TypeQualifier&gt;, TypeSpecifier),
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;FunctionParameterDeclarationData&gt;`.
     </span><span class="kw">pub type </span>FunctionParameterDeclaration = Node&lt;FunctionParameterDeclarationData&gt;;
 }
 
 <span class="doccomment">/// Function parameter declarator.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub struct </span>FunctionParameterDeclaratorData {
     <span class="doccomment">/// Parameter type
     </span><span class="kw">pub </span>ty: TypeSpecifier,
@@ -3214,15 +3214,15 @@
     </span><span class="kw">pub </span>ident: ArrayedIdentifier,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;FunctionParameterDeclaratorData&gt;`.
     </span><span class="kw">pub type </span>FunctionParameterDeclarator = Node&lt;FunctionParameterDeclaratorData&gt;;
 }
 
 <span class="doccomment">/// Init declarator list.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub struct </span>InitDeclaratorListData {
     <span class="doccomment">/// First declaration
     </span><span class="kw">pub </span>head: SingleDeclaration,
@@ -3230,15 +3230,15 @@
     </span><span class="kw">pub </span>tail: Vec&lt;SingleDeclarationNoType&gt;,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;InitDeclaratorListData&gt;`.
     </span><span class="kw">pub type </span>InitDeclaratorList = Node&lt;InitDeclaratorListData&gt;;
 }
 
 <span class="doccomment">/// Single declaration.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub struct </span>SingleDeclarationData {
     <span class="doccomment">/// Declaration type
     </span><span class="kw">pub </span>ty: FullySpecifiedType,
@@ -3250,15 +3250,15 @@
     </span><span class="kw">pub </span>initializer: <span class="prelude-ty">Option</span>&lt;Initializer&gt;,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;SingleDeclarationData&gt;`.
     </span><span class="kw">pub type </span>SingleDeclaration = Node&lt;SingleDeclarationData&gt;;
 }
 
 <span class="doccomment">/// A single declaration with implicit, already-defined type.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub struct </span>SingleDeclarationNoTypeData {
     <span class="doccomment">/// Declared identifier
     </span><span class="kw">pub </span>ident: ArrayedIdentifier,
@@ -3266,15 +3266,15 @@
     </span><span class="kw">pub </span>initializer: <span class="prelude-ty">Option</span>&lt;Initializer&gt;,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;SingleDeclarationNoTypeData&gt;`.
     </span><span class="kw">pub type </span>SingleDeclarationNoType = Node&lt;SingleDeclarationNoTypeData&gt;;
 }
 
 <span class="doccomment">/// Initializer.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub enum </span>InitializerData {
     <span class="doccomment">/// Simple initializer
     </span>Simple(Box&lt;Expr&gt;),
@@ -3282,7 +3282,7 @@
     </span>List(Vec&lt;Initializer&gt;),
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;InitializerData&gt;`.
     </span><span class="kw">pub type </span>Initializer = Node&lt;InitializerData&gt;;
 }
@@ -3307,8 +3307,8 @@
 ///
 /// An expression is either an assignment or a list (comma) of assignments.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub enum </span>ExprData {
     <span class="doccomment">/// A variable expression, using an identifier.
     </span>Variable(Identifier),
@@ -3345,7 +3345,7 @@
     </span>Comma(Box&lt;Expr&gt;, Box&lt;Expr&gt;),
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;ExprData&gt;`.
     </span><span class="kw">pub type </span>Expr = Node&lt;ExprData&gt;;
 }
@@ -3397,160 +3397,160 @@
 
 <span class="doccomment">/// All unary operators that exist in GLSL.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, Eq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub enum </span>UnaryOpData {
     <span class="doccomment">/// `++` unary operator
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;++&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"++"</span>))]
     </span>Inc,
     <span class="doccomment">/// `--` unary operator
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;--&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"--"</span>))]
     </span>Dec,
     <span class="doccomment">/// `+` unary operator
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;+&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"+"</span>))]
     </span>Add,
     <span class="doccomment">/// `-` unary operator
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;-&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"-"</span>))]
     </span>Minus,
     <span class="doccomment">/// `!` unary operator
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;!&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"!"</span>))]
     </span>Not,
     <span class="doccomment">/// `~` unary operator
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;~&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"~"</span>))]
     </span>Complement,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;UnaryOpData&gt;`.
     </span><span class="kw">pub type </span>UnaryOp = Node&lt;UnaryOpData&gt;;
 }
 
 <span class="doccomment">/// All binary operators that exist in GLSL.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, Eq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub enum </span>BinaryOpData {
     <span class="doccomment">/// `||` binary operator
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;||&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"||"</span>))]
     </span>Or,
     <span class="doccomment">/// `^^` binary operator
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;^^&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"^^"</span>))]
     </span>Xor,
     <span class="doccomment">/// `&amp;&amp;` binary operator
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;&amp;&amp;&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"&amp;&amp;"</span>))]
     </span>And,
     <span class="doccomment">/// `|` binary operator
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;|&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"|"</span>))]
     </span>BitOr,
     <span class="doccomment">/// `^` binary operator
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;^&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"^"</span>))]
     </span>BitXor,
     <span class="doccomment">/// `&amp;` binary operator
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;&amp;&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"&amp;"</span>))]
     </span>BitAnd,
     <span class="doccomment">/// `==` binary operator
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;==&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"=="</span>))]
     </span>Equal,
     <span class="doccomment">/// `!=` binary operator
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;!=&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"!="</span>))]
     </span>NonEqual,
     <span class="doccomment">/// `&lt;` binary operator
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;&lt;&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"&lt;"</span>))]
     </span>Lt,
     <span class="doccomment">/// `&gt;` binary operator
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;&gt;&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"&gt;"</span>))]
     </span>Gt,
     <span class="doccomment">/// `&lt;=` binary operator
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;&lt;=&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"&lt;="</span>))]
     </span>Lte,
     <span class="doccomment">/// `&gt;=` binary operator
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;&gt;=&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"&gt;="</span>))]
     </span>Gte,
     <span class="doccomment">/// `&lt;&lt;` binary operator
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;&lt;&lt;&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"&lt;&lt;"</span>))]
     </span>LShift,
     <span class="doccomment">/// `&gt;&gt;` binary operator
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;&gt;&gt;&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"&gt;&gt;"</span>))]
     </span>RShift,
     <span class="doccomment">/// `+` binary operator
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;+&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"+"</span>))]
     </span>Add,
     <span class="doccomment">/// `-` binary operator
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;-&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"-"</span>))]
     </span>Sub,
     <span class="doccomment">/// `*` binary operator
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;*&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"*"</span>))]
     </span>Mult,
     <span class="doccomment">/// `/` binary operator
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;/&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"/"</span>))]
     </span>Div,
     <span class="doccomment">/// `%` binary operator
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;%&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"%"</span>))]
     </span>Mod,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;BinaryOpData&gt;`.
     </span><span class="kw">pub type </span>BinaryOp = Node&lt;BinaryOpData&gt;;
 }
 
 <span class="doccomment">/// All possible operators for assigning expressions.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, Eq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub enum </span>AssignmentOpData {
     <span class="doccomment">/// `=` assignment operator
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;=&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"="</span>))]
     </span>Equal,
     <span class="doccomment">/// `*` assignment operator
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;*&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"*"</span>))]
     </span>Mult,
     <span class="doccomment">/// `/=` assignment operator
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;/=&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"/="</span>))]
     </span>Div,
     <span class="doccomment">/// `%=` assignment operator
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;%=&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"%="</span>))]
     </span>Mod,
     <span class="doccomment">/// `+=` assignment operator
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;+=&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"+="</span>))]
     </span>Add,
     <span class="doccomment">/// `-=` assignment operator
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;-=&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"-="</span>))]
     </span>Sub,
     <span class="doccomment">/// `&lt;&lt;=` assignment operator
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;&lt;&lt;=&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"&lt;&lt;="</span>))]
     </span>LShift,
     <span class="doccomment">/// `&gt;&gt;=` assignment operator
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;&gt;&gt;=&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"&gt;&gt;="</span>))]
     </span>RShift,
     <span class="doccomment">/// `&amp;=` assignment operator
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;&amp;=&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"&amp;="</span>))]
     </span>And,
     <span class="doccomment">/// `^=` assignment operator
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;^=&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"^="</span>))]
     </span>Xor,
     <span class="doccomment">/// `|=` assignment operator
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;|=&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"|="</span>))]
     </span>Or,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;AssignmentOpData&gt;`.
     </span><span class="kw">pub type </span>AssignmentOp = Node&lt;AssignmentOpData&gt;;
 }
 
 <span class="doccomment">/// Starting rule.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub struct </span>TranslationUnit(<span class="kw">pub </span>Vec&lt;ExternalDeclaration&gt;);
 
 <span class="kw">impl </span>NodeContent <span class="kw">for </span>TranslationUnit {}
 
 <span class="doccomment">/// External declaration.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub enum </span>ExternalDeclarationData {
     <span class="doccomment">/// Preprocessor directive
     </span>Preprocessor(Preprocessor),
@@ -3560,15 +3560,15 @@
     </span>Declaration(Declaration),
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;ExternalDeclarationData&gt;`.
     </span><span class="kw">pub type </span>ExternalDeclaration = Node&lt;ExternalDeclarationData&gt;;
 }
 
 <span class="doccomment">/// Function definition.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub struct </span>FunctionDefinitionData {
     <span class="doccomment">/// Function prototype
     </span><span class="kw">pub </span>prototype: FunctionPrototype,
@@ -3576,21 +3576,21 @@
     </span><span class="kw">pub </span>statement: CompoundStatement,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;FunctionDefinitionData&gt;`.
     </span><span class="kw">pub type </span>FunctionDefinition = Node&lt;FunctionDefinitionData&gt;;
 }
 
 <span class="doccomment">/// Compound statement (with no new scope).
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub struct </span>CompoundStatementData {
     <span class="doccomment">/// List of statements
     </span><span class="kw">pub </span>statement_list: Vec&lt;Statement&gt;,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;CompoundStatementData&gt;`.
     </span><span class="kw">pub type </span>CompoundStatement = Node&lt;CompoundStatementData&gt;;
 }
@@ -3608,8 +3608,8 @@
 
 <span class="doccomment">/// Statement.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub enum </span>StatementData {
     <span class="doccomment">/// Declaration
     </span>Declaration(Declaration),
@@ -3629,7 +3629,7 @@
     </span>Compound(CompoundStatement),
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;StatementData&gt;`.
     </span><span class="kw">pub type </span>Statement = Node&lt;StatementData&gt;;
 }
@@ -3668,19 +3668,19 @@
 
 <span class="doccomment">/// Expression statement.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub struct </span>ExprStatementData(<span class="kw">pub </span><span class="prelude-ty">Option</span>&lt;Expr&gt;);
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;ExprStatementData&gt;`.
     </span><span class="kw">pub type </span>ExprStatement = Node&lt;ExprStatementData&gt;;
 }
 
 <span class="doccomment">/// Selection statement.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub struct </span>SelectionStatementData {
     <span class="doccomment">/// Condition to evaluate
     </span><span class="kw">pub </span>cond: Box&lt;Expr&gt;,
@@ -3688,15 +3688,15 @@
     </span><span class="kw">pub </span>rest: SelectionRestStatement,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;SelectionStatementData&gt;`.
     </span><span class="kw">pub type </span>SelectionStatement = Node&lt;SelectionStatementData&gt;;
 }
 
 <span class="doccomment">/// Condition.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub enum </span>ConditionData {
     <span class="doccomment">/// An expression
     </span>Expr(Expr),
@@ -3704,15 +3704,15 @@
     </span>Assignment(Box&lt;FullySpecifiedType&gt;, Identifier, Initializer),
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;ConditionData&gt;`.
     </span><span class="kw">pub type </span>Condition = Node&lt;ConditionData&gt;;
 }
 
 <span class="doccomment">/// Selection rest statement.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub enum </span>SelectionRestStatementData {
     <span class="doccomment">/// Body of the if.
     </span>Statement(Box&lt;Statement&gt;),
@@ -3720,15 +3720,15 @@
     </span>Else(Box&lt;Statement&gt;, Box&lt;Statement&gt;),
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;SelectionRestStatementData&gt;`.
     </span><span class="kw">pub type </span>SelectionRestStatement = Node&lt;SelectionRestStatementData&gt;;
 }
 
 <span class="doccomment">/// Switch statement.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub struct </span>SwitchStatementData {
     <span class="doccomment">/// Expression to evaluate and switch on
     </span><span class="kw">pub </span>head: Box&lt;Expr&gt;,
@@ -3736,15 +3736,15 @@
     </span><span class="kw">pub </span>body: Vec&lt;Statement&gt;,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;SwitchStatementData&gt;`.
     </span><span class="kw">pub type </span>SwitchStatement = Node&lt;SwitchStatementData&gt;;
 }
 
 <span class="doccomment">/// Case label statement.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub enum </span>CaseLabelData {
     <span class="doccomment">/// `case:` case label
     </span>Case(Box&lt;Expr&gt;),
@@ -3752,36 +3752,36 @@
     </span>Def,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;CaseLabelData&gt;`.
     </span><span class="kw">pub type </span>CaseLabel = Node&lt;CaseLabelData&gt;;
 }
 
 <span class="doccomment">/// Iteration statement.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub enum </span>IterationStatementData {
     <span class="doccomment">/// `while` iteration statement
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;while&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"while"</span>))]
     </span>While(Condition, Box&lt;Statement&gt;),
     <span class="doccomment">/// `do` iteration statement
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;do&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"do"</span>))]
     </span>DoWhile(Box&lt;Statement&gt;, Box&lt;Expr&gt;),
     <span class="doccomment">/// `for` iteration statement
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;for&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"for"</span>))]
     </span>For(ForInitStatement, ForRestStatement, Box&lt;Statement&gt;),
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;IterationStatementData&gt;`.
     </span><span class="kw">pub type </span>IterationStatement = Node&lt;IterationStatementData&gt;;
 }
 
 <span class="doccomment">/// For init statement.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub enum </span>ForInitStatementData {
     <span class="doccomment">/// Expression
     </span>Expression(<span class="prelude-ty">Option</span>&lt;Expr&gt;),
@@ -3789,15 +3789,15 @@
     </span>Declaration(Box&lt;Declaration&gt;),
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;ForInitStatementData&gt;`.
     </span><span class="kw">pub type </span>ForInitStatement = Node&lt;ForInitStatementData&gt;;
 }
 
 <span class="doccomment">/// For init statement.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub struct </span>ForRestStatementData {
     <span class="doccomment">/// Loop condition
     </span><span class="kw">pub </span>condition: <span class="prelude-ty">Option</span>&lt;Condition&gt;,
@@ -3805,31 +3805,31 @@
     </span><span class="kw">pub </span>post_expr: <span class="prelude-ty">Option</span>&lt;Box&lt;Expr&gt;&gt;,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;ForRestStatementData&gt;`.
     </span><span class="kw">pub type </span>ForRestStatement = Node&lt;ForRestStatementData&gt;;
 }
 
 <span class="doccomment">/// Jump statement.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub enum </span>JumpStatementData {
     <span class="doccomment">/// `continue` jump statement
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;continue&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"continue"</span>))]
     </span>Continue,
     <span class="doccomment">/// `break` jump statement
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;break&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"break"</span>))]
     </span>Break,
     <span class="doccomment">/// `return` jump statement
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;return&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"return"</span>))]
     </span>Return(<span class="prelude-ty">Option</span>&lt;Box&lt;Expr&gt;&gt;),
     <span class="doccomment">/// `discard` jump statement
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;discard&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"discard"</span>))]
     </span>Discard,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;JumpStatementData&gt;`.
     </span><span class="kw">pub type </span>JumpStatement = Node&lt;JumpStatementData&gt;;
 }
@@ -3840,54 +3840,54 @@
 /// preprocessor (they’re used by GPU’s compilers), those preprocessor directives are available for
 /// inspection.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, Eq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub enum </span>PreprocessorData {
     <span class="doccomment">/// `#define` preprocessor directive
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;#define&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"#define"</span>))]
     </span>Define(PreprocessorDefine),
     <span class="doccomment">/// `#else` preprocessor directive
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;#else&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"#else"</span>))]
     </span>Else,
     <span class="doccomment">/// `#elseif` preprocessor directive
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;#elseif&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"#elseif"</span>))]
     </span>ElseIf(PreprocessorElseIf),
     <span class="doccomment">/// `#endif` preprocessor directive
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;#endif&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"#endif"</span>))]
     </span>EndIf,
     <span class="doccomment">/// `#error` preprocessor directive
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;#error&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"#error"</span>))]
     </span>Error(PreprocessorError),
     <span class="doccomment">/// `#if` preprocessor directive
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;#if&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"#if"</span>))]
     </span>If(PreprocessorIf),
     <span class="doccomment">/// `#ifdef` preprocessor directive
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;#ifdef&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"#ifdef"</span>))]
     </span>IfDef(PreprocessorIfDef),
     <span class="doccomment">/// `#ifndef` preprocessor directive
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;#ifndef&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"#ifndef"</span>))]
     </span>IfNDef(PreprocessorIfNDef),
     <span class="doccomment">/// `#include` preprocessor directive
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;#include&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"#include"</span>))]
     </span>Include(PreprocessorInclude),
     <span class="doccomment">/// `#line` preprocessor directive
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;#line&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"#line"</span>))]
     </span>Line(PreprocessorLine),
     <span class="doccomment">/// `#pragma` preprocessor directive
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;#pragma&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"#pragma"</span>))]
     </span>Pragma(PreprocessorPragma),
     <span class="doccomment">/// `#undef` preprocessor directive
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;#undef&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"#undef"</span>))]
     </span>Undef(PreprocessorUndef),
     <span class="doccomment">/// `#version` preprocessor directive
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;#version&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"#version"</span>))]
     </span>Version(PreprocessorVersion),
     <span class="doccomment">/// `#extension` preprocessor directive
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;#extension&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"#extension"</span>))]
     </span>Extension(PreprocessorExtension),
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;PreprocessorData&gt;`.
     </span><span class="kw">pub type </span>Preprocessor = Node&lt;PreprocessorData&gt;;
 }
@@ -3896,8 +3896,8 @@
 ///
 /// Allows any expression but only Integer and Float literals make sense
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, Eq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub enum </span>PreprocessorDefineData {
     <span class="doccomment">/// A preprocessor definition
     </span>ObjectLike {
@@ -3918,104 +3918,104 @@
     },
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;PreprocessorDefineData&gt;`.
     </span><span class="kw">pub type </span>PreprocessorDefine = Node&lt;PreprocessorDefineData&gt;;
 }
 
 <span class="doccomment">/// An #else preprocessor directive.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, Eq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub struct </span>PreprocessorElseIfData {
     <span class="doccomment">/// Condition expression
     </span><span class="attr">#[lang_util(display(extra))]
     </span><span class="kw">pub </span>condition: String,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;PreprocessorElseIfData&gt;`.
     </span><span class="kw">pub type </span>PreprocessorElseIf = Node&lt;PreprocessorElseIfData&gt;;
 }
 
 <span class="doccomment">/// An #error preprocessor directive.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, Eq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub struct </span>PreprocessorErrorData {
     <span class="doccomment">/// Error message
     </span><span class="attr">#[lang_util(display(extra))]
     </span><span class="kw">pub </span>message: String,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;PreprocessorErrorData&gt;`.
     </span><span class="kw">pub type </span>PreprocessorError = Node&lt;PreprocessorErrorData&gt;;
 }
 
 <span class="doccomment">/// An #if preprocessor directive.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, Eq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub struct </span>PreprocessorIfData {
     <span class="doccomment">/// Condition expression
     </span><span class="attr">#[lang_util(display(extra))]
     </span><span class="kw">pub </span>condition: String,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;PreprocessorIfData&gt;`.
     </span><span class="kw">pub type </span>PreprocessorIf = Node&lt;PreprocessorIfData&gt;;
 }
 
 <span class="doccomment">/// An #ifdef preprocessor directive.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, Eq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub struct </span>PreprocessorIfDefData {
     <span class="doccomment">/// Identifier to test
     </span><span class="attr">#[lang_util(display(extra))]
     </span><span class="kw">pub </span>ident: Identifier,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;PreprocessorIfDefData&gt;`.
     </span><span class="kw">pub type </span>PreprocessorIfDef = Node&lt;PreprocessorIfDefData&gt;;
 }
 
 <span class="doccomment">/// A #ifndef preprocessor directive.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, Eq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub struct </span>PreprocessorIfNDefData {
     <span class="doccomment">/// Identifier to test
     </span><span class="attr">#[lang_util(display(extra))]
     </span><span class="kw">pub </span>ident: Identifier,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;PreprocessorIfNDefData&gt;`.
     </span><span class="kw">pub type </span>PreprocessorIfNDef = Node&lt;PreprocessorIfNDefData&gt;;
 }
 
 <span class="doccomment">/// An #include name annotation.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, Eq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub struct </span>PreprocessorIncludeData {
     <span class="doccomment">/// Include path
     </span><span class="kw">pub </span>path: Path,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;PreprocessorIncludeData&gt;`.
     </span><span class="kw">pub type </span>PreprocessorInclude = Node&lt;PreprocessorIncludeData&gt;;
 }
 
 <span class="doccomment">/// A #line preprocessor directive.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, Eq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub struct </span>PreprocessorLineData {
     <span class="doccomment">/// Line index
     </span><span class="attr">#[lang_util(display(extra))]
@@ -4024,7 +4024,7 @@
     </span><span class="kw">pub </span>source_string_number: <span class="prelude-ty">Option</span>&lt;u32&gt;,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;PreprocessorLineData&gt;`.
     </span><span class="kw">pub type </span>PreprocessorLine = Node&lt;PreprocessorLineData&gt;;
 }
@@ -4032,38 +4032,38 @@
 <span class="doccomment">/// A #pragma preprocessor directive.
 /// Holds compiler-specific command.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, Eq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub struct </span>PreprocessorPragmaData {
     <span class="doccomment">/// Raw pragma text
     </span><span class="attr">#[lang_util(display(extra))]
     </span><span class="kw">pub </span>command: String,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;PreprocessorPragmaData&gt;`.
     </span><span class="kw">pub type </span>PreprocessorPragma = Node&lt;PreprocessorPragmaData&gt;;
 }
 
 <span class="doccomment">/// A #undef preprocessor directive.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, Eq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub struct </span>PreprocessorUndefData {
     <span class="doccomment">/// Identifier to undefine
     </span><span class="attr">#[lang_util(display(extra))]
     </span><span class="kw">pub </span>name: Identifier,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;PreprocessorUndefData&gt;`.
     </span><span class="kw">pub type </span>PreprocessorUndef = Node&lt;PreprocessorUndefData&gt;;
 }
 
 <span class="doccomment">/// A #version preprocessor directive.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, Eq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub struct </span>PreprocessorVersionData {
     <span class="doccomment">/// Version number
     </span><span class="attr">#[lang_util(display(extra))]
@@ -4072,36 +4072,36 @@
     </span><span class="kw">pub </span>profile: <span class="prelude-ty">Option</span>&lt;PreprocessorVersionProfile&gt;,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;PreprocessorVersionData&gt;`.
     </span><span class="kw">pub type </span>PreprocessorVersion = Node&lt;PreprocessorVersionData&gt;;
 }
 
 <span class="doccomment">/// A #version profile annotation.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, Eq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub enum </span>PreprocessorVersionProfileData {
     <span class="doccomment">/// `core` version profile
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;core&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"core"</span>))]
     </span>Core,
     <span class="doccomment">/// `compatibility` version profile
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;compatibility&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"compatibility"</span>))]
     </span>Compatibility,
     <span class="doccomment">/// `es` version profile
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;es&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"es"</span>))]
     </span>Es,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;PreprocessorVersionProfileData&gt;`.
     </span><span class="kw">pub type </span>PreprocessorVersionProfile = Node&lt;PreprocessorVersionProfileData&gt;;
 }
 
 <span class="doccomment">/// An #extension preprocessor directive.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, Eq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub struct </span>PreprocessorExtensionData {
     <span class="doccomment">/// Name of the target extension
     </span><span class="kw">pub </span>name: PreprocessorExtensionName,
@@ -4109,56 +4109,56 @@
     </span><span class="kw">pub </span>behavior: <span class="prelude-ty">Option</span>&lt;PreprocessorExtensionBehavior&gt;,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;PreprocessorExtensionData&gt;`.
     </span><span class="kw">pub type </span>PreprocessorExtension = Node&lt;PreprocessorExtensionData&gt;;
 }
 
 <span class="doccomment">/// An #extension name annotation.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, Eq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub enum </span>PreprocessorExtensionNameData {
     <span class="doccomment">/// All extensions you could ever imagine in your whole lifetime (how crazy is that!).
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;all&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"all"</span>))]
     </span>All,
     <span class="doccomment">/// A specific extension.
     </span>Specific(SmolStr),
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;PreprocessorExtensionNameData&gt;`.
     </span><span class="kw">pub type </span>PreprocessorExtensionName = Node&lt;PreprocessorExtensionNameData&gt;;
 }
 
 <span class="doccomment">/// An #extension behavior annotation.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, Eq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub enum </span>PreprocessorExtensionBehaviorData {
     <span class="doccomment">/// `require` preprocessor extension behavior
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;require&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"require"</span>))]
     </span>Require,
     <span class="doccomment">/// `enable` preprocessor extension behavior
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;enable&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"enable"</span>))]
     </span>Enable,
     <span class="doccomment">/// `warn` preprocessor extension behavior
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;warn&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"warn"</span>))]
     </span>Warn,
     <span class="doccomment">/// `disable` preprocessor extension behavior
-    </span><span class="attr">#[lang_util(display(extra = <span class="string">&quot;disable&quot;</span>))]
+    </span><span class="attr">#[lang_util(display(extra = <span class="string">"disable"</span>))]
     </span>Disable,
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;PreprocessorExtensionBehaviorData&gt;`.
     </span><span class="kw">pub type </span>PreprocessorExtensionBehavior = Node&lt;PreprocessorExtensionBehaviorData&gt;;
 }
 
 <span class="doccomment">/// A comment
 </span><span class="attr">#[derive(Debug, Clone, PartialEq, Eq, NodeContentDisplay)]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
-#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(<span class="kw">crate </span>= <span class="string">&quot;rserde&quot;</span>))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">"serde"</span>, serde(<span class="kw">crate </span>= <span class="string">"rserde"</span>))]
 </span><span class="kw">pub enum </span>CommentData {
     <span class="doccomment">/// Single-line comment
     </span>Single(String),
@@ -4166,13 +4166,13 @@
     </span>Multi(String),
 }
 
-<span class="macro">impl_node_content! </span>{
+<span class="macro">impl_node_content!</span> {
     <span class="doccomment">/// Type alias for `Node&lt;CommentData&gt;`.
     </span><span class="kw">pub type </span>Comment = Node&lt;CommentData&gt;;
 }
 
 <span class="kw">impl </span>CommentData {
-    <span class="doccomment">/// Get the comment&#39;s text, regardless of its type
+    <span class="doccomment">/// Get the comment's text, regardless of its type
     </span><span class="kw">pub fn </span>text(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>str {
         <span class="kw">match </span><span class="self">self </span>{
             <span class="self">Self</span>::Single(s) =&gt; s,

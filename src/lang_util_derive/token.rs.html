@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lang-util-derive/src/token.rs`."><title>token.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-fa3bb1812debf86c.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="lang_util_derive" data-themes="" data-resource-suffix="" data-rustdoc-version="1.74.1 (a28077b28 2023-12-04)" data-channel="1.74.1" data-search-js="search-8be46b629f5f14a8.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-c5bd66d33317d69f.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../lang_util_derive/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lang-util-derive/src/token.rs`."><title>token.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-dd39b87e5fcfba68.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="lang_util_derive" data-themes="" data-resource-suffix="" data-rustdoc-version="1.80.1 (3f5fd8dd4 2024-08-06)" data-channel="1.80.1" data-search-js="search-d52510db62a78183.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -605,12 +605,16 @@
 <a href="#605" id="605">605</a>
 <a href="#606" id="606">606</a>
 <a href="#607" id="607">607</a>
+<a href="#608" id="608">608</a>
+<a href="#609" id="609">609</a>
+<a href="#610" id="610">610</a>
+<a href="#611" id="611">611</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::collections::HashMap;
 
 <span class="kw">use </span>darling::{FromDeriveInput, FromField, FromMeta, FromVariant};
 <span class="kw">use </span>proc_macro2::{Span, TokenStream};
 <span class="kw">use </span>quote::{format_ident, quote, quote_spanned};
-<span class="kw">use </span>syn::{parse_macro_input, spanned::Spanned, DeriveInput, Token};
+<span class="kw">use </span>syn::{parse_macro_input, spanned::Spanned, DeriveInput, LitStr, Token};
 
 <span class="attr">#[derive(FromField)]
 </span><span class="kw">struct </span>TokenVariantField {
@@ -630,12 +634,12 @@
         })
     }
 
-    <span class="kw">fn </span>from_list(items: <span class="kw-2">&amp;</span>[syn::NestedMeta]) -&gt; darling::Result&lt;<span class="self">Self</span>&gt; {
+    <span class="kw">fn </span>from_list(items: <span class="kw-2">&amp;</span>[darling::ast::NestedMeta]) -&gt; darling::Result&lt;<span class="self">Self</span>&gt; {
         <span class="prelude-val">Ok</span>(<span class="self">Self </span>{
             format: String::from_nested_meta(
                 items
                     .first()
-                    .ok_or_else(|| darling::Error::custom(<span class="string">&quot;missing format string&quot;</span>))<span class="question-mark">?</span>,
+                    .ok_or_else(|| darling::Error::custom(<span class="string">"missing format string"</span>))<span class="question-mark">?</span>,
             )<span class="question-mark">?</span>,
             args: items
                 .iter()
@@ -651,12 +655,12 @@
 }
 
 <span class="kw">impl </span>FromMeta <span class="kw">for </span>TokenAttr {
-    <span class="kw">fn </span>from_list(items: <span class="kw-2">&amp;</span>[syn::NestedMeta]) -&gt; darling::Result&lt;<span class="self">Self</span>&gt; {
+    <span class="kw">fn </span>from_list(items: <span class="kw-2">&amp;</span>[darling::ast::NestedMeta]) -&gt; darling::Result&lt;<span class="self">Self</span>&gt; {
         <span class="prelude-val">Ok</span>(<span class="self">Self </span>{
             token: String::from_nested_meta(
                 items
                     .first()
-                    .ok_or_else(|| darling::Error::custom(<span class="string">&quot;missing token literal&quot;</span>))<span class="question-mark">?</span>,
+                    .ok_or_else(|| darling::Error::custom(<span class="string">"missing token literal"</span>))<span class="question-mark">?</span>,
             )<span class="question-mark">?</span>,
         })
     }
@@ -672,19 +676,19 @@
         <span class="prelude-val">Ok</span>(<span class="self">Self</span>::RawString(value.to_owned()))
     }
 
-    <span class="kw">fn </span>from_nested_meta(item: <span class="kw-2">&amp;</span>syn::NestedMeta) -&gt; darling::Result&lt;<span class="self">Self</span>&gt; {
+    <span class="kw">fn </span>from_nested_meta(item: <span class="kw-2">&amp;</span>darling::ast::NestedMeta) -&gt; darling::Result&lt;<span class="self">Self</span>&gt; {
         <span class="kw">match </span>item {
-            syn::NestedMeta::Meta(syn::Meta::Path(p)) =&gt; <span class="prelude-val">Ok</span>(<span class="self">Self</span>::Path(p.to_owned())),
-            <span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(darling::Error::unsupported_format(<span class="string">&quot;meta&quot;</span>)),
+            darling::ast::NestedMeta::Meta(syn::Meta::Path(p)) =&gt; <span class="prelude-val">Ok</span>(<span class="self">Self</span>::Path(p.to_owned())),
+            <span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(darling::Error::unsupported_format(<span class="string">"meta"</span>)),
         }
     }
 
-    <span class="kw">fn </span>from_list(items: <span class="kw-2">&amp;</span>[syn::NestedMeta]) -&gt; darling::Result&lt;<span class="self">Self</span>&gt; {
+    <span class="kw">fn </span>from_list(items: <span class="kw-2">&amp;</span>[darling::ast::NestedMeta]) -&gt; darling::Result&lt;<span class="self">Self</span>&gt; {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(item) = items.first() {
             <span class="kw">return </span><span class="self">Self</span>::from_nested_meta(item);
         }
 
-        <span class="prelude-val">Err</span>(darling::Error::unsupported_format(<span class="string">&quot;list&quot;</span>))
+        <span class="prelude-val">Err</span>(darling::Error::unsupported_format(<span class="string">"list"</span>))
     }
 }
 
@@ -696,22 +700,22 @@
     attrs: Vec&lt;syn::Attribute&gt;,
     <span class="attr">#[darling(default)]
     </span>display: <span class="prelude-ty">Option</span>&lt;TokenDisplay&gt;,
-    <span class="attr">#[darling(default, rename = <span class="string">&quot;as&quot;</span>)]
+    <span class="attr">#[darling(default, rename = <span class="string">"parser"</span>)]
     </span>as_parser: <span class="prelude-ty">Option</span>&lt;AsParser&gt;,
-    <span class="attr">#[darling(default, rename = <span class="string">&quot;token&quot;</span>)]
+    <span class="attr">#[darling(default, rename = <span class="string">"token"</span>)]
     </span>fallback_token: <span class="prelude-ty">Option</span>&lt;String&gt;,
-    <span class="attr">#[darling(multiple, rename = <span class="string">&quot;kind&quot;</span>)]
+    <span class="attr">#[darling(multiple, rename = <span class="string">"kind"</span>)]
     </span>kinds: Vec&lt;String&gt;,
 }
 
-<span class="kw">struct </span>Token&lt;<span class="lifetime">&#39;s</span>&gt; {
-    base_ident: <span class="kw-2">&amp;</span><span class="lifetime">&#39;s </span>syn::Ident,
-    variant: <span class="kw-2">&amp;</span><span class="lifetime">&#39;s </span>TokenVariant,
-    token: TokenAttrTy&lt;<span class="lifetime">&#39;s</span>&gt;,
+<span class="kw">struct </span>Token&lt;<span class="lifetime">'s</span>&gt; {
+    base_ident: <span class="kw-2">&amp;</span><span class="lifetime">'s </span>syn::Ident,
+    variant: <span class="kw-2">&amp;</span><span class="lifetime">'s </span>TokenVariant,
+    token: TokenAttrTy&lt;<span class="lifetime">'s</span>&gt;,
     as_parser: <span class="prelude-ty">Result</span>&lt;String, AsParserError&gt;,
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;s</span>&gt; Token&lt;<span class="lifetime">&#39;s</span>&gt; {
+<span class="kw">impl</span>&lt;<span class="lifetime">'s</span>&gt; Token&lt;<span class="lifetime">'s</span>&gt; {
     <span class="kw">fn </span>empty_variant_header(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; TokenStream {
         <span class="kw">let </span>variant_name = <span class="kw-2">&amp;</span><span class="self">self</span>.variant.ident;
         <span class="kw">let </span>variant_header = <span class="kw">match </span><span class="kw-2">&amp;</span><span class="self">self</span>.variant.fields.style {
@@ -723,16 +727,16 @@
                     .iter()
                     .map(|<span class="kw">_</span>| <span class="macro">Token!</span>[<span class="kw">_</span>](Span::call_site()));
 
-                <span class="macro">quote! </span>{ #variant_name ( #(#fields),* ) }
+                <span class="macro">quote!</span> { #variant_name ( #(#fields),* ) }
             }
             darling::ast::Style::Struct =&gt; {
-                <span class="macro">quote! </span>{ .. }
+                <span class="macro">quote!</span> { .. }
             }
-            darling::ast::Style::Unit =&gt; <span class="macro">quote! </span>{ #variant_name },
+            darling::ast::Style::Unit =&gt; <span class="macro">quote!</span> { #variant_name },
         };
 
         <span class="kw">let </span>base_ident = <span class="self">self</span>.base_ident;
-        <span class="macro">quote_spanned! </span>{ <span class="self">self</span>.variant.ident.span() =&gt; #base_ident :: #variant_header }
+        <span class="macro">quote_spanned!</span> { <span class="self">self</span>.variant.ident.span() =&gt; #base_ident :: #variant_header }
     }
 
     <span class="kw">fn </span>variant_name_arm(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; TokenStream {
@@ -740,10 +744,10 @@
 
         <span class="kw">let </span>body = {
             <span class="kw">let </span>value = <span class="kw-2">&amp;</span><span class="self">self</span>.variant.ident.to_string();
-            <span class="macro">quote_spanned! </span>{ <span class="self">self</span>.variant.ident.span() =&gt; #value }
+            <span class="macro">quote_spanned!</span> { <span class="self">self</span>.variant.ident.span() =&gt; #value }
         };
 
-        <span class="macro">quote_spanned! </span>{
+        <span class="macro">quote_spanned!</span> {
             <span class="self">self</span>.variant.ident.span() =&gt;
                 #variant_header =&gt; #body
         }
@@ -751,10 +755,10 @@
 
     <span class="kw">fn </span>parser_token_body(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; TokenStream {
         <span class="kw">match </span><span class="kw-2">&amp;</span><span class="self">self</span>.as_parser {
-            <span class="prelude-val">Ok</span>(value) =&gt; <span class="macro">quote_spanned! </span>{ <span class="self">self</span>.variant.ident.span() =&gt; #value },
+            <span class="prelude-val">Ok</span>(value) =&gt; <span class="macro">quote_spanned!</span> { <span class="self">self</span>.variant.ident.span() =&gt; #value },
             <span class="prelude-val">Err</span>(error) =&gt; {
                 <span class="kw">let </span>error = error.to_string();
-                <span class="macro">quote_spanned! </span>{
+                <span class="macro">quote_spanned!</span> {
                     <span class="self">self</span>.variant.ident.span() =&gt;
                         <span class="macro">compile_error!</span>(#error)
                 }
@@ -766,7 +770,7 @@
         <span class="kw">let </span>variant_header = <span class="self">self</span>.empty_variant_header();
         <span class="kw">let </span>body = <span class="self">self</span>.parser_token_body();
 
-        <span class="macro">quote_spanned! </span>{
+        <span class="macro">quote_spanned!</span> {
             <span class="self">self</span>.variant.ident.span() =&gt;
                 #variant_header =&gt; #body
         }
@@ -778,20 +782,20 @@
                 <span class="kw">match </span>token {
                     <span class="prelude-val">Ok</span>(value) =&gt; {
                         <span class="kw">let </span>value = <span class="kw-2">&amp;</span>value.token;
-                        <span class="macro">quote_spanned! </span>{ <span class="self">self</span>.variant.ident.span() =&gt; <span class="kw-2">&amp;</span>[#value] }
+                        <span class="macro">quote_spanned!</span> { <span class="self">self</span>.variant.ident.span() =&gt; <span class="kw-2">&amp;</span>[#value] }
                     }
                     <span class="prelude-val">Err</span>(error) =&gt; {
-                        <span class="kw">let </span>s = <span class="macro">format!</span>(<span class="string">&quot;invalid token attribute: {}&quot;</span>, error);
-                        <span class="macro">quote_spanned! </span>{
+                        <span class="kw">let </span>s = <span class="macro">format!</span>(<span class="string">"invalid token attribute: {}"</span>, error);
+                        <span class="macro">quote_spanned!</span> {
                             attr.span() =&gt;
                                 <span class="macro">compile_error!</span>(#s)
                         }
                     }
                 }
             } <span class="kw">else </span>{
-                <span class="macro">quote_spanned! </span>{
+                <span class="macro">quote_spanned!</span> {
                     <span class="self">self</span>.variant.ident.span() =&gt;
-                        <span class="macro">compile_error!</span>(<span class="string">&quot;cannot determine token kind for this token&quot;</span>)
+                        <span class="macro">compile_error!</span>(<span class="string">"cannot determine token kind for this token"</span>)
                 }
             }
         } <span class="kw">else </span>{
@@ -799,9 +803,9 @@
 
             <span class="kw">if let </span><span class="prelude-val">Some</span>((<span class="prelude-val">Ok</span>(token), <span class="kw">_</span>)) = <span class="kw-2">&amp;</span><span class="self">self</span>.token {
                 <span class="kw">let </span>value = <span class="kw-2">&amp;</span>token.token;
-                <span class="macro">quote_spanned! </span>{ <span class="self">self</span>.variant.ident.span() =&gt; <span class="kw-2">&amp;</span>[#(#kinds),<span class="kw-2">*</span>, #value] }
+                <span class="macro">quote_spanned!</span> { <span class="self">self</span>.variant.ident.span() =&gt; <span class="kw-2">&amp;</span>[#(#kinds),<span class="kw-2">*</span>, #value] }
             } <span class="kw">else </span>{
-                <span class="macro">quote_spanned! </span>{ <span class="self">self</span>.variant.ident.span() =&gt; <span class="kw-2">&amp;</span>[#(#kinds),<span class="kw-2">*</span>] }
+                <span class="macro">quote_spanned!</span> { <span class="self">self</span>.variant.ident.span() =&gt; <span class="kw-2">&amp;</span>[#(#kinds),<span class="kw-2">*</span>] }
             }
         }
     }
@@ -810,7 +814,7 @@
         <span class="kw">let </span>variant_header = <span class="self">self</span>.empty_variant_header();
         <span class="kw">let </span>body = <span class="self">self</span>.kinds_body();
 
-        <span class="macro">quote_spanned! </span>{
+        <span class="macro">quote_spanned!</span> {
             <span class="self">self</span>.variant.ident.span() =&gt;
                 #variant_header =&gt; #body
         }
@@ -818,9 +822,9 @@
 
     <span class="kw">fn </span>get_prefixed_fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, base_fmt: <span class="kw-2">&amp;</span>str) -&gt; String {
         <span class="kw">if </span><span class="self">self</span>.variant.kinds.is_empty() {
-            <span class="macro">format!</span>(<span class="string">&quot;`{}`&quot;</span>, base_fmt)
+            <span class="macro">format!</span>(<span class="string">"`{}`"</span>, base_fmt)
         } <span class="kw">else </span>{
-            <span class="macro">format!</span>(<span class="string">&quot;{} `{}`&quot;</span>, <span class="self">self</span>.variant.kinds.last().unwrap(), base_fmt)
+            <span class="macro">format!</span>(<span class="string">"{} `{}`"</span>, <span class="self">self</span>.variant.kinds.last().unwrap(), base_fmt)
         }
     }
 
@@ -832,19 +836,19 @@
 
                     <span class="comment">// TODO: Better than this ugly format string parsing?
                     </span><span class="kw">let </span>args = <span class="kw">if </span>display.args.is_empty() {
-                        <span class="kw">if </span>declared_fields.len() == <span class="number">1 </span>&amp;&amp; display.format.contains(<span class="string">&quot;{}&quot;</span>) {
+                        <span class="kw">if </span>declared_fields.len() == <span class="number">1 </span>&amp;&amp; display.format.contains(<span class="string">"{}"</span>) {
                             <span class="kw">let </span>f = <span class="kw-2">&amp;</span>declared_fields[<span class="number">0</span>];
-                            <span class="macro">vec!</span>[<span class="macro">quote_spanned! </span>{ <span class="self">self</span>.variant.ident.span() =&gt; #f }]
+                            <span class="macro">vec!</span>[<span class="macro">quote_spanned!</span> { <span class="self">self</span>.variant.ident.span() =&gt; #f }]
                         } <span class="kw">else </span>{
                             declared_fields
                                 .iter()
                                 .enumerate()
                                 .filter_map(|(i, df)| {
-                                    <span class="kw">let </span>ph = <span class="macro">format!</span>(<span class="string">&quot;_{}&quot;</span>, i);
+                                    <span class="kw">let </span>ph = <span class="macro">format!</span>(<span class="string">"_{}"</span>, i);
 
                                     <span class="kw">if </span>fmt.contains(<span class="kw-2">&amp;</span>ph) {
-                                        <span class="kw">let </span>ph = <span class="macro">format_ident!</span>(<span class="string">&quot;{}&quot;</span>, ph);
-                                        <span class="prelude-val">Some</span>(<span class="macro">quote_spanned! </span>{ <span class="self">self</span>.variant.ident.span() =&gt; #ph = #df })
+                                        <span class="kw">let </span>ph = <span class="macro">format_ident!</span>(<span class="string">"{}"</span>, ph);
+                                        <span class="prelude-val">Some</span>(<span class="macro">quote_spanned!</span> { <span class="self">self</span>.variant.ident.span() =&gt; #ph = #df })
                                     } <span class="kw">else </span>{
                                         <span class="prelude-val">None
                                     </span>}
@@ -854,7 +858,7 @@
                     } <span class="kw">else </span>{
                         <span class="kw">let </span><span class="kw-2">mut </span>repl = Vec::new();
                         <span class="kw">for </span>(i, df) <span class="kw">in </span>declared_fields.iter().enumerate() {
-                            repl.push((<span class="macro">format!</span>(<span class="string">&quot;_{}&quot;</span>, i), df.to_string()));
+                            repl.push((<span class="macro">format!</span>(<span class="string">"_{}"</span>, i), df.to_string()));
                         }
 
                         display
@@ -866,13 +870,13 @@
                                     arg = arg.replace(src, dst);
                                 }
 
-                                syn::parse_str(<span class="kw-2">&amp;</span>arg).expect(<span class="string">&quot;parsing error&quot;</span>)
+                                syn::parse_str(<span class="kw-2">&amp;</span>arg).expect(<span class="string">"parsing error"</span>)
                             })
                             .collect()
                     };
 
                     <span class="kw">let </span>fmt = <span class="self">self</span>.get_prefixed_fmt(fmt);
-                    <span class="kw">return </span><span class="macro">quote_spanned! </span>{
+                    <span class="kw">return </span><span class="macro">quote_spanned!</span> {
                         <span class="self">self</span>.variant.ident.span() =&gt;
                             <span class="macro">write!</span>(f, #fmt, #(#args),<span class="kw-2">*</span>)
                     };
@@ -880,8 +884,8 @@
                     <span class="comment">// No display attribute, check if we can have a sensible default
                     </span><span class="kw">if </span>declared_fields.len() == <span class="number">1 </span>{
                         <span class="kw">let </span>v1 = <span class="kw-2">&amp;</span>declared_fields[<span class="number">0</span>];
-                        <span class="kw">let </span>fmt = <span class="self">self</span>.get_prefixed_fmt(<span class="string">&quot;{}&quot;</span>);
-                        <span class="kw">return </span><span class="macro">quote_spanned! </span>{
+                        <span class="kw">let </span>fmt = <span class="self">self</span>.get_prefixed_fmt(<span class="string">"{}"</span>);
+                        <span class="kw">return </span><span class="macro">quote_spanned!</span> {
                             <span class="self">self</span>.variant.ident.span() =&gt;
                                 <span class="macro">write!</span>(f, #fmt, #v1)
                         };
@@ -889,9 +893,9 @@
                 }
             }
             darling::ast::Style::Struct =&gt; {
-                <span class="kw">return </span><span class="macro">quote_spanned! </span>{
+                <span class="kw">return </span><span class="macro">quote_spanned!</span> {
                     <span class="self">self</span>.variant.ident.span() =&gt;
-                        <span class="macro">compile_error!</span>(<span class="string">&quot;struct variants are not supported yet by derive(Token)&quot;</span>)
+                        <span class="macro">compile_error!</span>(<span class="string">"struct variants are not supported yet by derive(Token)"</span>)
                 };
             }
             darling::ast::Style::Unit =&gt; {
@@ -900,12 +904,12 @@
                     <span class="kw">return match </span>token {
                         <span class="prelude-val">Ok</span>(value) =&gt; {
                             <span class="kw">let </span>value = <span class="kw-2">&amp;</span>value.token;
-                            <span class="kw">let </span>fmt = <span class="self">self</span>.get_prefixed_fmt(<span class="string">&quot;{}&quot;</span>);
-                            <span class="macro">quote_spanned! </span>{ <span class="self">self</span>.variant.ident.span() =&gt; <span class="macro">write!</span>(f, #fmt, #value) }
+                            <span class="kw">let </span>fmt = <span class="self">self</span>.get_prefixed_fmt(<span class="string">"{}"</span>);
+                            <span class="macro">quote_spanned!</span> { <span class="self">self</span>.variant.ident.span() =&gt; <span class="macro">write!</span>(f, #fmt, #value) }
                         }
                         <span class="prelude-val">Err</span>(error) =&gt; {
-                            <span class="kw">let </span>s = <span class="macro">format!</span>(<span class="string">&quot;invalid token attribute: {}&quot;</span>, error);
-                            <span class="macro">quote_spanned! </span>{
+                            <span class="kw">let </span>s = <span class="macro">format!</span>(<span class="string">"invalid token attribute: {}"</span>, error);
+                            <span class="macro">quote_spanned!</span> {
                                 attr.span() =&gt;
                                     <span class="macro">compile_error!</span>(#s)
                             }
@@ -913,15 +917,15 @@
                     };
                 } <span class="kw">else if let </span><span class="prelude-val">Some</span>(display) = <span class="kw-2">&amp;</span><span class="self">self</span>.variant.display {
                     <span class="kw">let </span>value = <span class="kw-2">&amp;</span>display.format;
-                    <span class="kw">let </span>fmt = <span class="self">self</span>.get_prefixed_fmt(<span class="string">&quot;{}&quot;</span>);
-                    <span class="kw">return </span><span class="macro">quote_spanned! </span>{ <span class="self">self</span>.variant.ident.span() =&gt; <span class="macro">write!</span>(f, #fmt, #value) };
+                    <span class="kw">let </span>fmt = <span class="self">self</span>.get_prefixed_fmt(<span class="string">"{}"</span>);
+                    <span class="kw">return </span><span class="macro">quote_spanned!</span> { <span class="self">self</span>.variant.ident.span() =&gt; <span class="macro">write!</span>(f, #fmt, #value) };
                 }
             }
         }
 
-        <span class="macro">quote_spanned! </span>{
+        <span class="macro">quote_spanned!</span> {
             <span class="self">self</span>.variant.ident.span() =&gt;
-                <span class="macro">compile_error!</span>(<span class="string">&quot;missing token or lang_util(display(...)) attributes&quot;</span>)
+                <span class="macro">compile_error!</span>(<span class="string">"missing token or lang_util(display(...)) attributes"</span>)
         }
     }
 
@@ -936,11 +940,11 @@
                     .fields
                     .iter()
                     .enumerate()
-                    .map(|(i, _field)| <span class="macro">format_ident!</span>(<span class="string">&quot;value_{}&quot;</span>, i))
+                    .map(|(i, _field)| <span class="macro">format_ident!</span>(<span class="string">"value_{}"</span>, i))
                     .collect();
 
                 (
-                    <span class="macro">quote_spanned! </span>{ <span class="self">self</span>.variant.ident.span() =&gt; #variant_name ( #(#fields),* ) },
+                    <span class="macro">quote_spanned!</span> { <span class="self">self</span>.variant.ident.span() =&gt; #variant_name ( #(#fields),* ) },
                     fields,
                 )
             }
@@ -954,18 +958,18 @@
                     .collect();
 
                 (
-                    <span class="macro">quote_spanned! </span>{ <span class="self">self</span>.variant.ident.span() =&gt; #variant_name { #(#fields),* } },
+                    <span class="macro">quote_spanned!</span> { <span class="self">self</span>.variant.ident.span() =&gt; #variant_name { #(#fields),* } },
                     fields,
                 )
             }
-            darling::ast::Style::Unit =&gt; (<span class="macro">quote! </span>{ #variant_name }, <span class="macro">vec!</span>[]),
+            darling::ast::Style::Unit =&gt; (<span class="macro">quote!</span> { #variant_name }, <span class="macro">vec!</span>[]),
         };
 
         <span class="comment">// Create arm body
         </span><span class="kw">let </span>body = <span class="self">self</span>.display_arm_body(<span class="kw-2">&amp;</span>declared_fields);
 
         <span class="kw">let </span>base_ident = <span class="self">self</span>.base_ident;
-        <span class="macro">quote_spanned! </span>{
+        <span class="macro">quote_spanned!</span> {
             <span class="self">self</span>.variant.ident.span() =&gt;
                 #base_ident :: #variant_header =&gt; { #body }
         }
@@ -976,28 +980,29 @@
         <span class="kw">let </span>parser_token = <span class="self">self</span>.parser_token_body();
         <span class="kw">let </span>kinds = <span class="self">self</span>.kinds_body();
 
-        <span class="macro">quote_spanned! </span>{
+        <span class="macro">quote_spanned!</span> {
             <span class="self">self</span>.variant.ident.span() =&gt;
                 ::lang_util::token::TokenDescriptor::new(#variant_name, #parser_token, #kinds)
         }
     }
 }
 
-<span class="kw">type </span>TokenAttrTy&lt;<span class="lifetime">&#39;s</span>&gt; = <span class="prelude-ty">Option</span>&lt;(darling::Result&lt;TokenAttr&gt;, proc_macro2::Span)&gt;;
+<span class="kw">type </span>TokenAttrTy&lt;<span class="lifetime">'s</span>&gt; = <span class="prelude-ty">Option</span>&lt;(darling::Result&lt;TokenAttr&gt;, proc_macro2::Span)&gt;;
 
 <span class="kw">fn </span>parse_token_attr(variant: <span class="kw-2">&amp;</span>TokenVariant) -&gt; TokenAttrTy {
     <span class="comment">// Unit struct, is there a token impl?
     </span><span class="kw">for </span>attr <span class="kw">in </span>variant.attrs.iter() {
-        <span class="kw">if </span>attr
-            .path
-            .get_ident()
-            .map(|ident| ident == <span class="string">&quot;token&quot;</span>)
-            .unwrap_or(<span class="bool-val">false</span>)
-        {
+        <span class="kw">if </span>attr.path().is_ident(<span class="string">"token"</span>) {
             <span class="kw">return </span><span class="prelude-val">Some</span>((
-                attr.parse_meta()
-                    .map_err(darling::Error::custom)
-                    .and_then(|meta| TokenAttr::from_meta(<span class="kw-2">&amp;</span>meta)),
+                <span class="kw">if let </span><span class="prelude-val">Ok</span>(result) = attr.parse_args::&lt;LitStr&gt;() {
+                    <span class="prelude-val">Ok</span>(TokenAttr {
+                        token: result.value(),
+                    })
+                } <span class="kw">else </span>{
+                    attr.parse_args()
+                        .map_err(darling::Error::custom)
+                        .and_then(|meta| TokenAttr::from_meta(<span class="kw-2">&amp;</span>meta))
+                },
                 attr.span(),
             ));
         }
@@ -1025,12 +1030,12 @@
 }
 
 <span class="kw">impl </span>std::fmt::Display <span class="kw">for </span>AsParserError {
-    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; std::fmt::Result {
         <span class="kw">match </span><span class="self">self </span>{
-            <span class="self">Self</span>::MissingDisplayImpl =&gt; <span class="macro">write!</span>(f, <span class="string">&quot;in lang_util attribute, `as = display` specified but not display implementation provided&quot;</span>),
-            <span class="self">Self</span>::InvalidAs =&gt; <span class="macro">write!</span>(f, <span class="string">&quot;invalid `as` value, expected display or a literal string&quot;</span>),
-            <span class="self">Self</span>::InvalidTokenAttribute(error) =&gt; <span class="macro">write!</span>(f, <span class="string">&quot;invalid token attribute: {}&quot;</span>, error),
-            <span class="self">Self</span>::NoTokenOrAs =&gt; <span class="macro">write!</span>(f, <span class="string">&quot;missing token or lang_util(as = \&quot;...\&quot;) attributes&quot;</span>),
+            <span class="self">Self</span>::MissingDisplayImpl =&gt; <span class="macro">write!</span>(f, <span class="string">"in lang_util attribute, `parser = display` specified but not display implementation provided"</span>),
+            <span class="self">Self</span>::InvalidAs =&gt; <span class="macro">write!</span>(f, <span class="string">"invalid `parser` value, expected display or a literal string"</span>),
+            <span class="self">Self</span>::InvalidTokenAttribute(error) =&gt; <span class="macro">write!</span>(f, <span class="string">"invalid token attribute: {}"</span>, error),
+            <span class="self">Self</span>::NoTokenOrAs =&gt; <span class="macro">write!</span>(f, <span class="string">"missing token or lang_util(parser = \"...\") attributes"</span>),
         }
     }
 }
@@ -1039,9 +1044,9 @@
     <span class="kw">if let </span><span class="prelude-val">Some</span>(as_parser) = <span class="kw-2">&amp;</span>variant.as_parser {
         <span class="kw">match </span>as_parser {
             AsParser::Path(path) =&gt; {
-                <span class="kw">if </span>path.get_ident().map(|id| id == <span class="string">&quot;display&quot;</span>).unwrap_or(<span class="bool-val">false</span>) {
+                <span class="kw">if </span>path.get_ident().map(|id| id == <span class="string">"display"</span>).unwrap_or(<span class="bool-val">false</span>) {
                     <span class="kw">if let </span><span class="prelude-val">Some</span>(display) = <span class="kw-2">&amp;</span>variant.display {
-                        <span class="prelude-val">Ok</span>(<span class="macro">format!</span>(<span class="string">&quot;\&quot;{}\&quot;&quot;</span>, <span class="kw-2">&amp;</span>display.format))
+                        <span class="prelude-val">Ok</span>(<span class="macro">format!</span>(<span class="string">"\"{}\""</span>, <span class="kw-2">&amp;</span>display.format))
                     } <span class="kw">else </span>{
                         <span class="prelude-val">Err</span>(AsParserError::MissingDisplayImpl)
                     }
@@ -1055,7 +1060,7 @@
         <span class="kw">match </span>token {
             <span class="prelude-val">Ok</span>(value) =&gt; {
                 <span class="comment">// Tokens would be wrapped with quotes
-                </span><span class="prelude-val">Ok</span>(<span class="macro">format!</span>(<span class="string">&quot;\&quot;{}\&quot;&quot;</span>, <span class="kw-2">&amp;</span>value.token))
+                </span><span class="prelude-val">Ok</span>(<span class="macro">format!</span>(<span class="string">"\"{}\""</span>, <span class="kw-2">&amp;</span>value.token))
             }
             <span class="prelude-val">Err</span>(error) =&gt; <span class="prelude-val">Err</span>(AsParserError::InvalidTokenAttribute(error.to_string())),
         }
@@ -1064,8 +1069,8 @@
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;s</span>&gt; From&lt;(<span class="kw-2">&amp;</span><span class="lifetime">&#39;s </span>syn::Ident, <span class="kw-2">&amp;</span><span class="lifetime">&#39;s </span>TokenVariant)&gt; <span class="kw">for </span>Token&lt;<span class="lifetime">&#39;s</span>&gt; {
-    <span class="kw">fn </span>from((base_ident, variant): (<span class="kw-2">&amp;</span><span class="lifetime">&#39;s </span>syn::Ident, <span class="kw-2">&amp;</span><span class="lifetime">&#39;s </span>TokenVariant)) -&gt; <span class="self">Self </span>{
+<span class="kw">impl</span>&lt;<span class="lifetime">'s</span>&gt; From&lt;(<span class="kw-2">&amp;</span><span class="lifetime">'s </span>syn::Ident, <span class="kw-2">&amp;</span><span class="lifetime">'s </span>TokenVariant)&gt; <span class="kw">for </span>Token&lt;<span class="lifetime">'s</span>&gt; {
+    <span class="kw">fn </span>from((base_ident, variant): (<span class="kw-2">&amp;</span><span class="lifetime">'s </span>syn::Ident, <span class="kw-2">&amp;</span><span class="lifetime">'s </span>TokenVariant)) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>token = parse_token_attr(variant);
         <span class="kw">let </span>as_parser = parse_as_parser(variant, <span class="kw-2">&amp;</span>token);
 
@@ -1093,10 +1098,10 @@
 ) -&gt; TokenStream {
     <span class="kw">let </span>arms = variants.iter().map(Token::display_arm);
 
-    <span class="macro">quote_spanned! </span>{
+    <span class="macro">quote_spanned!</span> {
         base_ident.span() =&gt;
             <span class="kw">impl </span>::std::fmt::Display <span class="kw">for </span>#enum_name {
-                <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>::std::fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; ::std::fmt::Result {
+                <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>::std::fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; ::std::fmt::Result {
                     <span class="kw">match </span><span class="self">self </span>{
                         #(#arms),*
                     }
@@ -1111,35 +1116,35 @@
     <span class="kw">let </span>kinds_arms = variants.iter().map(Token::kinds_arm);
     <span class="kw">let </span>all_tokens_arms = variants.iter().map(Token::all_tokens_arm);
 
-    <span class="kw">let </span>id = <span class="macro">format_ident!</span>(<span class="string">&quot;__{}_TOKENS&quot;</span>, base_ident.to_string().to_uppercase());
+    <span class="kw">let </span>id = <span class="macro">format_ident!</span>(<span class="string">"__{}_TOKENS"</span>, base_ident.to_string().to_uppercase());
     <span class="kw">let </span>cnt = variants.len();
 
-    <span class="macro">quote_spanned! </span>{
+    <span class="macro">quote_spanned!</span> {
         base_ident.span() =&gt;
             <span class="kw">static </span>#id: [::lang_util::token::TokenDescriptor; #cnt] = [
                 #(#all_tokens_arms),*
             ];
 
             <span class="kw">impl </span>::lang_util::token::Token <span class="kw">for </span>#enum_name {
-                <span class="kw">fn </span>variant_name(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str {
+                <span class="kw">fn </span>variant_name(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str {
                     <span class="kw">match </span><span class="self">self </span>{
                         #(#variant_name_arms),*
                     }
                 }
 
-                <span class="kw">fn </span>parser_token(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str {
+                <span class="kw">fn </span>parser_token(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str {
                     <span class="kw">match </span><span class="self">self </span>{
                         #(#parser_token_arms),*
                     }
                 }
 
-                <span class="kw">fn </span>kinds(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>[<span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str] {
+                <span class="kw">fn </span>kinds(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">'static </span>[<span class="kw-2">&amp;</span><span class="lifetime">'static </span>str] {
                     <span class="kw">match </span><span class="self">self </span>{
                         #(#kinds_arms),*
                     }
                 }
 
-                <span class="kw">fn </span>all_tokens() -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>[::lang_util::token::TokenDescriptor] {
+                <span class="kw">fn </span>all_tokens() -&gt; <span class="kw-2">&amp;</span><span class="lifetime">'static </span>[::lang_util::token::TokenDescriptor] {
                     <span class="kw-2">&amp;</span>#id
                 }
             }
@@ -1151,7 +1156,10 @@
         <span class="comment">// Parse the input tokens into a syntax tree
         </span><span class="kw">let </span>input = <span class="macro">parse_macro_input!</span>(input <span class="kw">as </span>DeriveInput);
         <span class="comment">// Find out enum-level options
-        </span>TokenOpts::from_derive_input(<span class="kw-2">&amp;</span>input).expect(<span class="string">&quot;failed to parse options&quot;</span>)
+        </span><span class="kw">match </span>TokenOpts::from_derive_input(<span class="kw-2">&amp;</span>input) {
+            <span class="prelude-val">Ok</span>(res) =&gt; res,
+            <span class="prelude-val">Err</span>(err) =&gt; <span class="kw">return </span>err.write_errors().into(),
+        }
     };
 
     <span class="kw">let </span>base_ident = <span class="kw-2">&amp;</span>opts.ident;
@@ -1160,9 +1168,9 @@
     </span><span class="kw">let </span>fields = <span class="kw">match </span><span class="kw-2">&amp;</span>opts.data {
         darling::ast::Data::Enum(fields) =&gt; fields,
         darling::ast::Data::Struct(<span class="kw">_</span>) =&gt; {
-            <span class="kw">return </span>proc_macro::TokenStream::from(<span class="macro">quote_spanned! </span>{
+            <span class="kw">return </span>proc_macro::TokenStream::from(<span class="macro">quote_spanned!</span> {
                 opts.ident.span() =&gt;
-                    <span class="macro">compile_error!</span>(<span class="string">&quot;only enums can be used as tokens with derive(Token)&quot;</span>)
+                    <span class="macro">compile_error!</span>(<span class="string">"only enums can be used as tokens with derive(Token)"</span>)
             })
         }
     };
@@ -1182,10 +1190,10 @@
         <span class="kw">if let </span><span class="prelude-val">Ok</span>(as_parser) = <span class="kw-2">&amp;</span>decl.as_parser {
             <span class="kw">if let </span><span class="prelude-val">Some</span>(previous) = seen.get(as_parser) {
                 <span class="kw">let </span>s = <span class="macro">format!</span>(
-                    <span class="string">&quot;`{}` parser token already declared by variant {}&quot;</span>,
+                    <span class="string">"`{}` parser token already declared by variant {}"</span>,
                     as_parser, previous.variant.ident
                 );
-                decls.push(<span class="macro">quote_spanned! </span>{ decl.variant.ident.span() =&gt; <span class="macro">compile_error!</span>(#s); });
+                decls.push(<span class="macro">quote_spanned!</span> { decl.variant.ident.span() =&gt; <span class="macro">compile_error!</span>(#s); });
             } <span class="kw">else </span>{
                 seen.insert(as_parser, decl);
             }
@@ -1195,19 +1203,19 @@
     <span class="comment">// Compute enum name
     </span><span class="kw">let </span>enum_name = {
         <span class="comment">// Add anonymous lifetimes as needed
-        </span><span class="kw">let </span>lifetimes: Vec&lt;<span class="kw">_</span>&gt; = opts.generics.lifetimes().map(|<span class="kw">_</span>| <span class="macro">quote! </span>{ <span class="lifetime">&#39;_ </span>}).collect();
+        </span><span class="kw">let </span>lifetimes: Vec&lt;<span class="kw">_</span>&gt; = opts.generics.lifetimes().map(|<span class="kw">_</span>| <span class="macro">quote!</span> { <span class="lifetime">'_ </span>}).collect();
 
         <span class="kw">if </span>lifetimes.is_empty() {
-            <span class="macro">quote! </span>{ #base_ident }
+            <span class="macro">quote!</span> { #base_ident }
         } <span class="kw">else </span>{
-            <span class="macro">quote! </span>{ #base_ident&lt;#(#lifetimes),<span class="kw-2">*</span>&gt; }
+            <span class="macro">quote!</span> { #base_ident&lt;#(#lifetimes),<span class="kw-2">*</span>&gt; }
         }
     };
 
     decls.push(display_impl(base_ident, <span class="kw-2">&amp;</span>enum_name, <span class="kw-2">&amp;</span>fields));
     decls.push(token_impl(base_ident, <span class="kw-2">&amp;</span>enum_name, <span class="kw-2">&amp;</span>fields));
 
-    proc_macro::TokenStream::from(<span class="macro">quote_spanned! </span>{
+    proc_macro::TokenStream::from(<span class="macro">quote_spanned!</span> {
         opts.ident.span() =&gt;
             #(#decls)*
     })

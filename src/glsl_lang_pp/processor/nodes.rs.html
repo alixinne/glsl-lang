@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lang-pp/src/processor/nodes.rs`."><title>nodes.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-fa3bb1812debf86c.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="glsl_lang_pp" data-themes="" data-resource-suffix="" data-rustdoc-version="1.74.1 (a28077b28 2023-12-04)" data-channel="1.74.1" data-search-js="search-8be46b629f5f14a8.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-c5bd66d33317d69f.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../glsl_lang_pp/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lang-pp/src/processor/nodes.rs`."><title>nodes.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-dd39b87e5fcfba68.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="glsl_lang_pp" data-themes="" data-resource-suffix="" data-rustdoc-version="1.80.1 (3f5fd8dd4 2024-08-06)" data-channel="1.80.1" data-search-js="search-d52510db62a78183.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -1275,7 +1275,6 @@
 <a href="#1275" id="1275">1275</a>
 <a href="#1276" id="1276">1276</a>
 <a href="#1277" id="1277">1277</a>
-<a href="#1278" id="1278">1278</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{borrow::Cow, cmp::Ordering, convert::TryFrom, str::FromStr};
 
 <span class="kw">use </span>arrayvec::ArrayVec;
@@ -1401,17 +1400,17 @@
 
 <span class="attr">#[derive(Debug, Clone, PartialEq, Eq, Error)]
 </span><span class="kw">pub enum </span>VersionError {
-    <span class="attr">#[error(<span class="string">&quot;missing version number in #version directive&quot;</span>)]
+    <span class="attr">#[error(<span class="string">"missing version number in #version directive"</span>)]
     </span>MissingVersionNumber,
-    <span class="attr">#[error(<span class="string">&quot;invalid version number in #version directive&quot;</span>)]
+    <span class="attr">#[error(<span class="string">"invalid version number in #version directive"</span>)]
     </span>InvalidVersionNumber { version_number: String },
-    <span class="attr">#[error(<span class="string">&quot;unsupported version number in #version directive&quot;</span>)]
+    <span class="attr">#[error(<span class="string">"unsupported version number in #version directive"</span>)]
     </span>UnsupportedVersionNumber,
-    <span class="attr">#[error(<span class="string">&quot;invalid version profile&quot;</span>)]
+    <span class="attr">#[error(<span class="string">"invalid version profile"</span>)]
     </span>InvalidVersionProfile { version_number: u16 },
-    <span class="attr">#[error(<span class="string">&quot;cannot specify a profile&quot;</span>)]
+    <span class="attr">#[error(<span class="string">"cannot specify a profile"</span>)]
     </span>ProfileUnsupported { version_number: u16 },
-    <span class="attr">#[error(<span class="string">&quot;es profile is required&quot;</span>)]
+    <span class="attr">#[error(<span class="string">"es profile is required"</span>)]
     </span>EsProfileRequired { version_number: u16 },
 }
 
@@ -1425,16 +1424,16 @@
     <span class="kw">fn </span>try_from((_file_id, value): (FileId, SyntaxNode)) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt; {
         <span class="comment">// Parse version number
         // The GLSL spec refers to the ISO/IEC 14882:1998 (C++) standard for preprocessor
-        // directives, and mentions that #version, due to it &quot;following the same convention&quot;
-        // as __VERSION__, is &quot;a decimal integer&quot;. The cited standard, section 2.9
-        // &quot;Preprocessing numbers&quot;, says that such numbers &quot;lexically include all integral
-        // literal tokens&quot;. These correspond to the &quot;integer-constant&quot; (for the GLSL grammar)
-        // or &quot;integer-literal&quot; (for the C++ grammar) grammar symbols. But, because #version
-        // is a decimal integer, it is understood that the only &quot;integer-constant&quot; production
+        // directives, and mentions that #version, due to it "following the same convention"
+        // as __VERSION__, is "a decimal integer". The cited standard, section 2.9
+        // "Preprocessing numbers", says that such numbers "lexically include all integral
+        // literal tokens". These correspond to the "integer-constant" (for the GLSL grammar)
+        // or "integer-literal" (for the C++ grammar) grammar symbols. But, because #version
+        // is a decimal integer, it is understood that the only "integer-constant" production
         // rule we have to accept is the one for decimal constants, which are sequences of
         // decimal digits beginning with a nonzero digit and followed by an optional
-        // &quot;integer-suffix&quot; (u or U character). This is a subset of what we can parse as
-        // (U)INT_CONST tokens, but other implementations are likely to observe Postel&#39;s law
+        // "integer-suffix" (u or U character). This is a subset of what we can parse as
+        // (U)INT_CONST tokens, but other implementations are likely to observe Postel's law
         </span><span class="kw">let </span>version_number: u16 = value
             .children()
             .find_map(|token| {
@@ -1542,9 +1541,9 @@
 
     <span class="kw">fn </span>from_str(s: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Err&gt; {
         <span class="prelude-val">Ok</span>(<span class="kw">match </span>s {
-            <span class="string">&quot;core&quot; </span>=&gt; <span class="self">Self</span>::Core,
-            <span class="string">&quot;compatibility&quot; </span>=&gt; <span class="self">Self</span>::Compatibility,
-            <span class="string">&quot;es&quot; </span>=&gt; <span class="self">Self</span>::Es,
+            <span class="string">"core" </span>=&gt; <span class="self">Self</span>::Core,
+            <span class="string">"compatibility" </span>=&gt; <span class="self">Self</span>::Compatibility,
+            <span class="string">"es" </span>=&gt; <span class="self">Self</span>::Es,
             <span class="kw">_ </span>=&gt; {
                 <span class="kw">return </span><span class="prelude-val">Err</span>(());
             }
@@ -1570,8 +1569,7 @@
 
 <span class="kw">impl </span>PartialOrd <span class="kw">for </span>VersionProfile {
     <span class="kw">fn </span>partial_cmp(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;Ordering&gt; {
-        <span class="self">self</span>.as_feature_set_size_index()
-            .partial_cmp(<span class="kw-2">&amp;</span>other.as_feature_set_size_index())
+        <span class="prelude-val">Some</span>(<span class="self">self</span>.cmp(other))
     }
 }
 
@@ -1605,10 +1603,10 @@
 
     <span class="kw">fn </span>from_str(s: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Err&gt; {
         <span class="prelude-val">Ok</span>(<span class="kw">match </span>s {
-            <span class="string">&quot;require&quot; </span>=&gt; <span class="self">Self</span>::Require,
-            <span class="string">&quot;enable&quot; </span>=&gt; <span class="self">Self</span>::Enable,
-            <span class="string">&quot;warn&quot; </span>=&gt; <span class="self">Self</span>::Warn,
-            <span class="string">&quot;disable&quot; </span>=&gt; <span class="self">Self</span>::Disable,
+            <span class="string">"require" </span>=&gt; <span class="self">Self</span>::Require,
+            <span class="string">"enable" </span>=&gt; <span class="self">Self</span>::Enable,
+            <span class="string">"warn" </span>=&gt; <span class="self">Self</span>::Warn,
+            <span class="string">"disable" </span>=&gt; <span class="self">Self</span>::Disable,
             <span class="kw">_ </span>=&gt; {
                 <span class="kw">return </span><span class="prelude-val">Err</span>(());
             }
@@ -1626,7 +1624,7 @@
 }
 
 <span class="kw">impl </span>ExtensionName {
-    <span class="kw">pub fn </span>new(name: Cow&lt;<span class="lifetime">&#39;_</span>, str&gt;) -&gt; <span class="self">Self </span>{
+    <span class="kw">pub fn </span>new(name: Cow&lt;<span class="lifetime">'_</span>, str&gt;) -&gt; <span class="self">Self </span>{
         <span class="self">Self</span>::from(name.as_ref())
     }
 }
@@ -1641,17 +1639,17 @@
 }
 
 <span class="kw">impl </span>std::fmt::Display <span class="kw">for </span>ExtensionName {
-    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; std::fmt::Result {
         <span class="kw">match </span><span class="self">self </span>{
-            ExtensionName::All =&gt; <span class="macro">write!</span>(f, <span class="string">&quot;all&quot;</span>),
-            ExtensionName::Specific(name) =&gt; <span class="macro">write!</span>(f, <span class="string">&quot;{}&quot;</span>, name),
+            ExtensionName::All =&gt; <span class="macro">write!</span>(f, <span class="string">"all"</span>),
+            ExtensionName::Specific(name) =&gt; <span class="macro">write!</span>(f, <span class="string">"{}"</span>, name),
         }
     }
 }
 
 <span class="kw">impl </span>From&lt;<span class="kw-2">&amp;</span>str&gt; <span class="kw">for </span>ExtensionName {
     <span class="kw">fn </span>from(name: <span class="kw-2">&amp;</span>str) -&gt; <span class="self">Self </span>{
-        <span class="kw">if </span>name == <span class="string">&quot;all&quot; </span>{
+        <span class="kw">if </span>name == <span class="string">"all" </span>{
             <span class="self">Self</span>::All
         } <span class="kw">else </span>{
             <span class="self">Self</span>::Specific(ExtNameAtom::from(name))
@@ -1661,7 +1659,7 @@
 
 <span class="kw">impl </span>From&lt;ExtNameAtom&gt; <span class="kw">for </span>ExtensionName {
     <span class="kw">fn </span>from(name: ExtNameAtom) -&gt; <span class="self">Self </span>{
-        <span class="kw">if </span>name.as_ref() == <span class="string">&quot;all&quot; </span>{
+        <span class="kw">if </span>name.as_ref() == <span class="string">"all" </span>{
             <span class="self">Self</span>::All
         } <span class="kw">else </span>{
             <span class="self">Self</span>::Specific(name)
@@ -1707,13 +1705,13 @@
 
 <span class="attr">#[derive(Debug, Clone, PartialEq, Eq, Error)]
 </span><span class="kw">pub enum </span>ExtensionError {
-    <span class="attr">#[error(<span class="string">&quot;missing extension name in #extension directive&quot;</span>)]
+    <span class="attr">#[error(<span class="string">"missing extension name in #extension directive"</span>)]
     </span>MissingExtensionName,
-    <span class="attr">#[error(<span class="string">&quot;missing extension behavior in #extension directive&quot;</span>)]
+    <span class="attr">#[error(<span class="string">"missing extension behavior in #extension directive"</span>)]
     </span>MissingExtensionBehavior { name: ExtensionName },
-    <span class="attr">#[error(<span class="string">&quot;invalid extension behavior in #extension directive&quot;</span>)]
+    <span class="attr">#[error(<span class="string">"invalid extension behavior in #extension directive"</span>)]
     </span>InvalidExtensionBehavior { name: ExtensionName },
-    <span class="attr">#[error(<span class="string">&quot;invalid behavior in #extension all directive&quot;</span>)]
+    <span class="attr">#[error(<span class="string">"invalid behavior in #extension all directive"</span>)]
     </span>InvalidAllBehavior { behavior: ExtensionBehavior },
 }
 
@@ -1740,7 +1738,7 @@
             .collect();
 
         <span class="kw">let </span>name = idents
-            .get(<span class="number">0</span>)
+            .first()
             .ok_or(<span class="self">Self</span>::Error::MissingExtensionName)
             .map(|name| ExtensionName::new(Unescaped::new(name.text()).to_string()))<span class="question-mark">?</span>;
 
@@ -1774,7 +1772,7 @@
     }
 
     <span class="kw">pub fn </span>one() -&gt; <span class="self">Self </span>{
-        <span class="self">Self</span>::from_str(<span class="string">&quot;1&quot;</span>).unwrap()
+        <span class="self">Self</span>::from_str(<span class="string">"1"</span>).unwrap()
     }
 
     <span class="kw">pub fn </span>body(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>SyntaxNode {
@@ -1827,7 +1825,7 @@
     </span>name: SmolStr,
     <span class="doccomment">/// Type of this definition
     </span>kind: DefineKind,
-    <span class="doccomment">/// true if this definition can&#39;t be #undef-ined
+    <span class="doccomment">/// true if this definition can't be #undef-ined
     </span>protected: bool,
 }
 
@@ -1863,9 +1861,9 @@
 
 <span class="attr">#[derive(Debug, Clone, PartialEq, Eq, Error)]
 </span><span class="kw">pub enum </span>DefineError {
-    <span class="attr">#[error(<span class="string">&quot;missing name for #define&quot;</span>)]
+    <span class="attr">#[error(<span class="string">"missing name for #define"</span>)]
     </span>MissingName,
-    <span class="attr">#[error(<span class="string">&quot;missing body for #define&quot;</span>)]
+    <span class="attr">#[error(<span class="string">"missing body for #define"</span>)]
     </span>MissingBody { name: SmolStr },
 }
 
@@ -1930,7 +1928,7 @@
 
 <span class="attr">#[derive(Debug, Clone, PartialEq, Eq, Error)]
 </span><span class="kw">pub enum </span>IfDefError {
-    <span class="attr">#[error(<span class="string">&quot;identifier for #ifdef is missing&quot;</span>)]
+    <span class="attr">#[error(<span class="string">"identifier for #ifdef is missing"</span>)]
     </span>MissingIdentifier,
 }
 
@@ -1993,7 +1991,7 @@
 
 <span class="attr">#[derive(Debug, Clone, PartialEq, Eq, Error)]
 </span><span class="kw">pub enum </span>ErrorError {
-    <span class="attr">#[error(<span class="string">&quot;missing body for #error&quot;</span>)]
+    <span class="attr">#[error(<span class="string">"missing body for #error"</span>)]
     </span>MissingBody,
 }
 
@@ -2088,13 +2086,13 @@
 
 <span class="attr">#[derive(Debug, Clone, PartialEq, Eq, Error)]
 </span><span class="kw">pub enum </span>IncludeError {
-    <span class="attr">#[error(<span class="string">&quot;missing path for #include directive&quot;</span>)]
+    <span class="attr">#[error(<span class="string">"missing path for #include directive"</span>)]
     </span>MissingPath,
-    <span class="attr">#[error(<span class="string">&quot;malformed path&quot;</span>)]
+    <span class="attr">#[error(<span class="string">"malformed path"</span>)]
     </span>MalformedPath { tokens: Vec&lt;SendEvent&gt; },
-    <span class="attr">#[error(<span class="string">&quot;extra tokens in #include path&quot;</span>)]
+    <span class="attr">#[error(<span class="string">"extra tokens in #include path"</span>)]
     </span>ExtraTokens { tokens: Vec&lt;OutputToken&gt; },
-    <span class="attr">#[error(<span class="string">&quot;invalid path literal&quot;</span>)]
+    <span class="attr">#[error(<span class="string">"invalid path literal"</span>)]
     </span>InvalidPathLiteral { token: OutputToken },
 }
 
@@ -2236,17 +2234,17 @@
 
 <span class="attr">#[derive(Debug, Clone, PartialEq, Eq, Error)]
 </span><span class="kw">pub enum </span>LineError {
-    <span class="attr">#[error(<span class="string">&quot;missing body for #line directive&quot;</span>)]
+    <span class="attr">#[error(<span class="string">"missing body for #line directive"</span>)]
     </span>MissingBody,
-    <span class="attr">#[error(<span class="string">&quot;malformed line&quot;</span>)]
+    <span class="attr">#[error(<span class="string">"malformed line"</span>)]
     </span>MalformedLine { tokens: Vec&lt;SendEvent&gt; },
-    <span class="attr">#[error(<span class="string">&quot;missing line number&quot;</span>)]
+    <span class="attr">#[error(<span class="string">"missing line number"</span>)]
     </span>MissingLineNumber,
-    <span class="attr">#[error(<span class="string">&quot;extra tokens in #line path&quot;</span>)]
+    <span class="attr">#[error(<span class="string">"extra tokens in #line path"</span>)]
     </span>ExtraTokens { tokens: Vec&lt;EvalResult&gt; },
-    <span class="attr">#[error(<span class="string">&quot;invalid line number&quot;</span>)]
+    <span class="attr">#[error(<span class="string">"invalid line number"</span>)]
     </span>InvalidLineNumber { token: EvalResult },
-    <span class="attr">#[error(<span class="string">&quot;invalid path&quot;</span>)]
+    <span class="attr">#[error(<span class="string">"invalid path"</span>)]
     </span>InvalidPath { token: EvalResult },
 }
 
@@ -2266,13 +2264,13 @@
 
 <span class="attr">#[derive(Debug, Clone, PartialEq, Eq, Error)]
 </span><span class="kw">pub enum </span>IfEvalError {
-    <span class="attr">#[error(<span class="string">&quot;malformed expression&quot;</span>)]
+    <span class="attr">#[error(<span class="string">"malformed expression"</span>)]
     </span>MalformedExpr { tokens: Vec&lt;SendEvent&gt; },
-    <span class="attr">#[error(<span class="string">&quot;missing expression&quot;</span>)]
+    <span class="attr">#[error(<span class="string">"missing expression"</span>)]
     </span>MissingExpr,
-    <span class="attr">#[error(<span class="string">&quot;extra tokens at end of expression&quot;</span>)]
+    <span class="attr">#[error(<span class="string">"extra tokens at end of expression"</span>)]
     </span>ExtraTokens { tokens: Vec&lt;EvalResult&gt; },
-    <span class="attr">#[error(<span class="string">&quot;invalid constant expression&quot;</span>)]
+    <span class="attr">#[error(<span class="string">"invalid constant expression"</span>)]
     </span>InvalidExpr { token: EvalResult },
 }
 
@@ -2307,7 +2305,7 @@
     )
     .collect();
 
-    <span class="comment">// Check that we have at least &quot;something&quot; to evaluate
+    <span class="comment">// Check that we have at least "something" to evaluate
     </span><span class="kw">if </span>eval_results.is_empty() {
         <span class="kw">return </span>(<span class="bool-val">true</span>, <span class="prelude-val">Some</span>(IfEvalError::MissingExpr));
     }
@@ -2345,7 +2343,7 @@
 
 <span class="attr">#[derive(Debug, Clone, PartialEq, Eq, Error)]
 </span><span class="kw">pub enum </span>IfError {
-    <span class="attr">#[error(<span class="string">&quot;missing body for #if directive&quot;</span>)]
+    <span class="attr">#[error(<span class="string">"missing body for #if directive"</span>)]
     </span>MissingBody,
     <span class="attr">#[error(transparent)]
     </span>Eval(<span class="attr">#[from] </span>IfEvalError),
@@ -2399,7 +2397,7 @@
 
 <span class="attr">#[derive(Debug, Clone, PartialEq, Eq, Error)]
 </span><span class="kw">pub enum </span>ElifError {
-    <span class="attr">#[error(<span class="string">&quot;missing body for #elif directive&quot;</span>)]
+    <span class="attr">#[error(<span class="string">"missing body for #elif directive"</span>)]
     </span>MissingBody,
     <span class="attr">#[error(transparent)]
     </span>Eval(<span class="attr">#[from] </span>IfEvalError),
@@ -2467,9 +2465,9 @@
             <span class="kw">let </span>value = Unescaped::new(tokens[<span class="number">2</span>].text()).to_string();
 
             <span class="kw">if </span>tokens[<span class="number">1</span>].kind() == LPAREN &amp;&amp; tokens[<span class="number">3</span>].kind() == RPAREN {
-                <span class="kw">if </span>value == <span class="string">&quot;on&quot; </span>{
+                <span class="kw">if </span>value == <span class="string">"on" </span>{
                     <span class="kw">return </span><span class="prelude-val">Some</span>(<span class="bool-val">true</span>);
-                } <span class="kw">else if </span>value == <span class="string">&quot;off&quot; </span>{
+                } <span class="kw">else if </span>value == <span class="string">"off" </span>{
                     <span class="kw">return </span><span class="prelude-val">Some</span>(<span class="bool-val">false</span>);
                 }
             }
@@ -2489,9 +2487,9 @@
 
 <span class="attr">#[derive(Debug, Clone, PartialEq, Eq, Error)]
 </span><span class="kw">pub enum </span>PragmaError {
-    <span class="attr">#[error(<span class="string">&quot;missing body&quot;</span>)]
+    <span class="attr">#[error(<span class="string">"missing body"</span>)]
     </span>MissingBody,
-    <span class="attr">#[error(<span class="string">&quot;{name} pragma syntax is incorrect&quot;</span>)]
+    <span class="attr">#[error(<span class="string">"{name} pragma syntax is incorrect"</span>)]
     </span>IncorrectSyntax { name: SmolStr },
 }
 
@@ -2517,13 +2515,13 @@
             <span class="kw">if </span>first_token.kind() == IDENT_KW {
                 <span class="kw">let </span>name = SmolStr::from(Unescaped::new(first_token.text()));
                 <span class="kw">match </span>name.as_str() {
-                    <span class="string">&quot;STDGL&quot; </span>=&gt; {
+                    <span class="string">"STDGL" </span>=&gt; {
                         <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="self">Self </span>{
                             value: ParsedPragma::StdGl(body),
                             raw,
                         });
                     }
-                    <span class="string">&quot;optimize&quot; </span>=&gt; {
+                    <span class="string">"optimize" </span>=&gt; {
                         <span class="kw">return if let </span><span class="prelude-val">Some</span>(value) = <span class="self">Self</span>::parse_function_pragma(<span class="kw-2">&amp;</span>tokens) {
                             <span class="prelude-val">Ok</span>(<span class="self">Self </span>{
                                 value: ParsedPragma::Optimize(value),
@@ -2533,7 +2531,7 @@
                             <span class="prelude-val">Err</span>(<span class="self">Self</span>::Error::IncorrectSyntax { name })
                         };
                     }
-                    <span class="string">&quot;debug&quot; </span>=&gt; {
+                    <span class="string">"debug" </span>=&gt; {
                         <span class="kw">return if let </span><span class="prelude-val">Some</span>(value) = <span class="self">Self</span>::parse_function_pragma(<span class="kw-2">&amp;</span>tokens) {
                             <span class="prelude-val">Ok</span>(<span class="self">Self </span>{
                                 value: ParsedPragma::Debug(value),

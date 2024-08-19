@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lang-lexer/src/token.rs`."><title>token.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-fa3bb1812debf86c.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="glsl_lang_lexer" data-themes="" data-resource-suffix="" data-rustdoc-version="1.74.1 (a28077b28 2023-12-04)" data-channel="1.74.1" data-search-js="search-8be46b629f5f14a8.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-c5bd66d33317d69f.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../glsl_lang_lexer/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lang-lexer/src/token.rs`."><title>token.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-dd39b87e5fcfba68.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="glsl_lang_lexer" data-themes="" data-resource-suffix="" data-rustdoc-version="1.80.1 (3f5fd8dd4 2024-08-06)" data-channel="1.80.1" data-search-js="search-d52510db62a78183.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -1121,1065 +1121,1073 @@
 <a href="#1121" id="1121">1121</a>
 <a href="#1122" id="1122">1122</a>
 <a href="#1123" id="1123">1123</a>
+<a href="#1124" id="1124">1124</a>
+<a href="#1125" id="1125">1125</a>
+<a href="#1126" id="1126">1126</a>
+<a href="#1127" id="1127">1127</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>lang_util::SmolStr;
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;v1&quot;</span>)]
+<span class="attr">#[cfg(feature = <span class="string">"v1"</span>)]
 </span><span class="kw">use </span><span class="kw">super</span>::v1::parsers::{
     parse_cmt, parse_f32, parse_f64, parse_ident, parse_int, parse_rs_ident, parse_uint,
 };
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;v1&quot;</span>)]
+<span class="attr">#[cfg(feature = <span class="string">"v1"</span>)]
 </span><span class="kw">use </span>logos::Logos;
 
 <span class="attr">#[derive(Debug, Clone, PartialEq, lang_util::Token)]
-#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, derive(Logos))]
-#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, logos(extras = (<span class="kw">crate</span>::ParseContext, <span class="kw">crate</span>::ParseOptions)))]
+#[cfg_attr(feature = <span class="string">"v1"</span>, derive(Logos))]
+#[cfg_attr(feature = <span class="string">"v1"</span>, logos(extras = (<span class="kw">crate</span>::ParseContext, <span class="kw">crate</span>::ParseOptions)))]
 #[allow(missing_docs)]
 </span><span class="kw">pub enum </span>Token {
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;const&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;const&quot;</span>, kind = <span class="string">&quot;storage qualifier&quot;</span>, kind = <span class="string">&quot;type qualifier&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"const"</span>))]
+    #[lang_util(token = <span class="string">"const"</span>, kind = <span class="string">"storage qualifier"</span>, kind = <span class="string">"type qualifier"</span>)]
     </span>Const,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;bool&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;bool&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"bool"</span>))]
+    #[lang_util(token = <span class="string">"bool"</span>, kind = <span class="string">"type name"</span>)]
     </span>Bool,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;float&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;float&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"float"</span>))]
+    #[lang_util(token = <span class="string">"float"</span>, kind = <span class="string">"type name"</span>)]
     </span>Float,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;int&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;int&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"int"</span>))]
+    #[lang_util(token = <span class="string">"int"</span>, kind = <span class="string">"type name"</span>)]
     </span>Int,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;uint&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;uint&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"uint"</span>))]
+    #[lang_util(token = <span class="string">"uint"</span>, kind = <span class="string">"type name"</span>)]
     </span>UInt,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;double&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;double&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"double"</span>))]
+    #[lang_util(token = <span class="string">"double"</span>, kind = <span class="string">"type name"</span>)]
     </span>Double,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;bvec2&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;bvec2&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"bvec2"</span>))]
+    #[lang_util(token = <span class="string">"bvec2"</span>, kind = <span class="string">"type name"</span>)]
     </span>BVec2,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;bvec3&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;bvec3&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"bvec3"</span>))]
+    #[lang_util(token = <span class="string">"bvec3"</span>, kind = <span class="string">"type name"</span>)]
     </span>BVec3,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;bvec4&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;bvec4&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"bvec4"</span>))]
+    #[lang_util(token = <span class="string">"bvec4"</span>, kind = <span class="string">"type name"</span>)]
     </span>BVec4,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;ivec2&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;ivec2&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"ivec2"</span>))]
+    #[lang_util(token = <span class="string">"ivec2"</span>, kind = <span class="string">"type name"</span>)]
     </span>IVec2,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;ivec3&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;ivec3&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"ivec3"</span>))]
+    #[lang_util(token = <span class="string">"ivec3"</span>, kind = <span class="string">"type name"</span>)]
     </span>IVec3,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;ivec4&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;ivec4&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"ivec4"</span>))]
+    #[lang_util(token = <span class="string">"ivec4"</span>, kind = <span class="string">"type name"</span>)]
     </span>IVec4,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;uvec2&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;uvec2&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"uvec2"</span>))]
+    #[lang_util(token = <span class="string">"uvec2"</span>, kind = <span class="string">"type name"</span>)]
     </span>UVec2,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;uvec3&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;uvec3&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"uvec3"</span>))]
+    #[lang_util(token = <span class="string">"uvec3"</span>, kind = <span class="string">"type name"</span>)]
     </span>UVec3,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;uvec4&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;uvec4&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"uvec4"</span>))]
+    #[lang_util(token = <span class="string">"uvec4"</span>, kind = <span class="string">"type name"</span>)]
     </span>UVec4,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;vec2&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;vec2&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"vec2"</span>))]
+    #[lang_util(token = <span class="string">"vec2"</span>, kind = <span class="string">"type name"</span>)]
     </span>Vec2,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;vec3&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;vec3&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"vec3"</span>))]
+    #[lang_util(token = <span class="string">"vec3"</span>, kind = <span class="string">"type name"</span>)]
     </span>Vec3,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;vec4&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;vec4&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"vec4"</span>))]
+    #[lang_util(token = <span class="string">"vec4"</span>, kind = <span class="string">"type name"</span>)]
     </span>Vec4,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;mat2&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;mat2&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"mat2"</span>))]
+    #[lang_util(token = <span class="string">"mat2"</span>, kind = <span class="string">"type name"</span>)]
     </span>Mat2,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;mat3&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;mat3&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"mat3"</span>))]
+    #[lang_util(token = <span class="string">"mat3"</span>, kind = <span class="string">"type name"</span>)]
     </span>Mat3,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;mat4&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;mat4&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"mat4"</span>))]
+    #[lang_util(token = <span class="string">"mat4"</span>, kind = <span class="string">"type name"</span>)]
     </span>Mat4,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;mat2x2&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;mat2x2&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"mat2x2"</span>))]
+    #[lang_util(token = <span class="string">"mat2x2"</span>, kind = <span class="string">"type name"</span>)]
     </span>Mat2x2,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;mat2x3&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;mat2x3&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"mat2x3"</span>))]
+    #[lang_util(token = <span class="string">"mat2x3"</span>, kind = <span class="string">"type name"</span>)]
     </span>Mat2x3,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;mat2x4&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;mat2x4&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"mat2x4"</span>))]
+    #[lang_util(token = <span class="string">"mat2x4"</span>, kind = <span class="string">"type name"</span>)]
     </span>Mat2x4,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;mat3x2&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;mat3x2&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"mat3x2"</span>))]
+    #[lang_util(token = <span class="string">"mat3x2"</span>, kind = <span class="string">"type name"</span>)]
     </span>Mat3x2,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;mat3x3&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;mat3x3&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"mat3x3"</span>))]
+    #[lang_util(token = <span class="string">"mat3x3"</span>, kind = <span class="string">"type name"</span>)]
     </span>Mat3x3,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;mat3x4&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;mat3x4&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"mat3x4"</span>))]
+    #[lang_util(token = <span class="string">"mat3x4"</span>, kind = <span class="string">"type name"</span>)]
     </span>Mat3x4,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;mat4x2&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;mat4x2&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"mat4x2"</span>))]
+    #[lang_util(token = <span class="string">"mat4x2"</span>, kind = <span class="string">"type name"</span>)]
     </span>Mat4x2,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;mat4x3&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;mat4x3&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"mat4x3"</span>))]
+    #[lang_util(token = <span class="string">"mat4x3"</span>, kind = <span class="string">"type name"</span>)]
     </span>Mat4x3,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;mat4x4&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;mat4x4&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"mat4x4"</span>))]
+    #[lang_util(token = <span class="string">"mat4x4"</span>, kind = <span class="string">"type name"</span>)]
     </span>Mat4x4,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;dvec2&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;dvec2&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"dvec2"</span>))]
+    #[lang_util(token = <span class="string">"dvec2"</span>, kind = <span class="string">"type name"</span>)]
     </span>DVec2,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;dvec3&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;dvec3&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"dvec3"</span>))]
+    #[lang_util(token = <span class="string">"dvec3"</span>, kind = <span class="string">"type name"</span>)]
     </span>DVec3,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;dvec4&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;dvec4&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"dvec4"</span>))]
+    #[lang_util(token = <span class="string">"dvec4"</span>, kind = <span class="string">"type name"</span>)]
     </span>DVec4,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;dmat2&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;dmat2&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"dmat2"</span>))]
+    #[lang_util(token = <span class="string">"dmat2"</span>, kind = <span class="string">"type name"</span>)]
     </span>DMat2,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;dmat3&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;dmat3&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"dmat3"</span>))]
+    #[lang_util(token = <span class="string">"dmat3"</span>, kind = <span class="string">"type name"</span>)]
     </span>DMat3,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;dmat4&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;dmat4&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"dmat4"</span>))]
+    #[lang_util(token = <span class="string">"dmat4"</span>, kind = <span class="string">"type name"</span>)]
     </span>DMat4,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;dmat2x2&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;dmat2x2&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"dmat2x2"</span>))]
+    #[lang_util(token = <span class="string">"dmat2x2"</span>, kind = <span class="string">"type name"</span>)]
     </span>DMat2x2,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;dmat2x3&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;dmat2x3&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"dmat2x3"</span>))]
+    #[lang_util(token = <span class="string">"dmat2x3"</span>, kind = <span class="string">"type name"</span>)]
     </span>DMat2x3,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;dmat2x4&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;dmat2x4&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"dmat2x4"</span>))]
+    #[lang_util(token = <span class="string">"dmat2x4"</span>, kind = <span class="string">"type name"</span>)]
     </span>DMat2x4,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;dmat3x2&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;dmat3x2&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"dmat3x2"</span>))]
+    #[lang_util(token = <span class="string">"dmat3x2"</span>, kind = <span class="string">"type name"</span>)]
     </span>DMat3x2,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;dmat3x3&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;dmat3x3&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"dmat3x3"</span>))]
+    #[lang_util(token = <span class="string">"dmat3x3"</span>, kind = <span class="string">"type name"</span>)]
     </span>DMat3x3,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;dmat3x4&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;dmat3x4&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"dmat3x4"</span>))]
+    #[lang_util(token = <span class="string">"dmat3x4"</span>, kind = <span class="string">"type name"</span>)]
     </span>DMat3x4,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;dmat4x2&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;dmat4x2&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"dmat4x2"</span>))]
+    #[lang_util(token = <span class="string">"dmat4x2"</span>, kind = <span class="string">"type name"</span>)]
     </span>DMat4x2,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;dmat4x3&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;dmat4x3&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"dmat4x3"</span>))]
+    #[lang_util(token = <span class="string">"dmat4x3"</span>, kind = <span class="string">"type name"</span>)]
     </span>DMat4x3,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;dmat4x4&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;dmat4x4&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"dmat4x4"</span>))]
+    #[lang_util(token = <span class="string">"dmat4x4"</span>, kind = <span class="string">"type name"</span>)]
     </span>DMat4x4,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;centroid&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"centroid"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;centroid&quot;</span>,
-        kind = <span class="string">&quot;storage qualifier&quot;</span>,
-        kind = <span class="string">&quot;type qualifier&quot;
+        token = <span class="string">"centroid"</span>,
+        kind = <span class="string">"storage qualifier"</span>,
+        kind = <span class="string">"type qualifier"
     </span>)]
     </span>Centroid,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;in&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;in&quot;</span>, kind = <span class="string">&quot;storage qualifier&quot;</span>, kind = <span class="string">&quot;type qualifier&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"in"</span>))]
+    #[lang_util(token = <span class="string">"in"</span>, kind = <span class="string">"storage qualifier"</span>, kind = <span class="string">"type qualifier"</span>)]
     </span>In,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;out&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;out&quot;</span>, kind = <span class="string">&quot;storage qualifier&quot;</span>, kind = <span class="string">&quot;type qualifier&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"out"</span>))]
+    #[lang_util(token = <span class="string">"out"</span>, kind = <span class="string">"storage qualifier"</span>, kind = <span class="string">"type qualifier"</span>)]
     </span>Out,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;inout&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;inout&quot;</span>, kind = <span class="string">&quot;storage qualifier&quot;</span>, kind = <span class="string">&quot;type qualifier&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"inout"</span>))]
+    #[lang_util(token = <span class="string">"inout"</span>, kind = <span class="string">"storage qualifier"</span>, kind = <span class="string">"type qualifier"</span>)]
     </span>InOut,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;uniform&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;uniform&quot;</span>, kind = <span class="string">&quot;storage qualifier&quot;</span>, kind = <span class="string">&quot;type qualifier&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"uniform"</span>))]
+    #[lang_util(token = <span class="string">"uniform"</span>, kind = <span class="string">"storage qualifier"</span>, kind = <span class="string">"type qualifier"</span>)]
     </span>Uniform,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;patch&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;patch&quot;</span>, kind = <span class="string">&quot;storage qualifier&quot;</span>, kind = <span class="string">&quot;type qualifier&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"patch"</span>))]
+    #[lang_util(token = <span class="string">"patch"</span>, kind = <span class="string">"storage qualifier"</span>, kind = <span class="string">"type qualifier"</span>)]
     </span>Patch,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;sample&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;sample&quot;</span>, kind = <span class="string">&quot;storage qualifier&quot;</span>, kind = <span class="string">&quot;type qualifier&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"sample"</span>))]
+    #[lang_util(token = <span class="string">"sample"</span>, kind = <span class="string">"storage qualifier"</span>, kind = <span class="string">"type qualifier"</span>)]
     </span>Sample,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;buffer&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;buffer&quot;</span>, kind = <span class="string">&quot;storage qualifier&quot;</span>, kind = <span class="string">&quot;type qualifier&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"buffer"</span>))]
+    #[lang_util(token = <span class="string">"buffer"</span>, kind = <span class="string">"storage qualifier"</span>, kind = <span class="string">"type qualifier"</span>)]
     </span>Buffer,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;shared&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;shared&quot;</span>, kind = <span class="string">&quot;storage qualifier&quot;</span>, kind = <span class="string">&quot;type qualifier&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"shared"</span>))]
+    #[lang_util(token = <span class="string">"shared"</span>, kind = <span class="string">"storage qualifier"</span>, kind = <span class="string">"type qualifier"</span>)]
     </span>Shared,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;coherent&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"coherent"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;coherent&quot;</span>,
-        kind = <span class="string">&quot;storage qualifier&quot;</span>,
-        kind = <span class="string">&quot;type qualifier&quot;
+        token = <span class="string">"coherent"</span>,
+        kind = <span class="string">"storage qualifier"</span>,
+        kind = <span class="string">"type qualifier"
     </span>)]
     </span>Coherent,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;volatile&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"volatile"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;volatile&quot;</span>,
-        kind = <span class="string">&quot;storage qualifier&quot;</span>,
-        kind = <span class="string">&quot;type qualifier&quot;
+        token = <span class="string">"volatile"</span>,
+        kind = <span class="string">"storage qualifier"</span>,
+        kind = <span class="string">"type qualifier"
     </span>)]
     </span>Volatile,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;restrict&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"restrict"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;restrict&quot;</span>,
-        kind = <span class="string">&quot;storage qualifier&quot;</span>,
-        kind = <span class="string">&quot;type qualifier&quot;
+        token = <span class="string">"restrict"</span>,
+        kind = <span class="string">"storage qualifier"</span>,
+        kind = <span class="string">"type qualifier"
     </span>)]
     </span>Restrict,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;readonly&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"readonly"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;readonly&quot;</span>,
-        kind = <span class="string">&quot;storage qualifier&quot;</span>,
-        kind = <span class="string">&quot;type qualifier&quot;
+        token = <span class="string">"readonly"</span>,
+        kind = <span class="string">"storage qualifier"</span>,
+        kind = <span class="string">"type qualifier"
     </span>)]
     </span>ReadOnly,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;writeonly&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"writeonly"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;writeonly&quot;</span>,
-        kind = <span class="string">&quot;storage qualifier&quot;</span>,
-        kind = <span class="string">&quot;type qualifier&quot;
+        token = <span class="string">"writeonly"</span>,
+        kind = <span class="string">"storage qualifier"</span>,
+        kind = <span class="string">"type qualifier"
     </span>)]
     </span>WriteOnly,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;attribute&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"attribute"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;attribute&quot;</span>,
-        kind = <span class="string">&quot;storage qualifier&quot;</span>,
-        kind = <span class="string">&quot;type qualifier&quot;
+        token = <span class="string">"attribute"</span>,
+        kind = <span class="string">"storage qualifier"</span>,
+        kind = <span class="string">"type qualifier"
     </span>)]
     </span>Attribute,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;varying&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;varying&quot;</span>, kind = <span class="string">&quot;storage qualifier&quot;</span>, kind = <span class="string">&quot;type qualifier&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"varying"</span>))]
+    #[lang_util(token = <span class="string">"varying"</span>, kind = <span class="string">"storage qualifier"</span>, kind = <span class="string">"type qualifier"</span>)]
     </span>Varying,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;noperspective&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"noperspective"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;noperspective&quot;</span>,
-        kind = <span class="string">&quot;interpolation qualifier&quot;</span>,
-        kind = <span class="string">&quot;type qualifier&quot;
+        token = <span class="string">"noperspective"</span>,
+        kind = <span class="string">"interpolation qualifier"</span>,
+        kind = <span class="string">"type qualifier"
     </span>)]
     </span>NoPerspective,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;flat&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"flat"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;flat&quot;</span>,
-        kind = <span class="string">&quot;interpolation qualifier&quot;</span>,
-        kind = <span class="string">&quot;type qualifier&quot;
+        token = <span class="string">"flat"</span>,
+        kind = <span class="string">"interpolation qualifier"</span>,
+        kind = <span class="string">"type qualifier"
     </span>)]
     </span>Flat,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;smooth&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"smooth"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;smooth&quot;</span>,
-        kind = <span class="string">&quot;interpolation qualifier&quot;</span>,
-        kind = <span class="string">&quot;type qualifier&quot;
+        token = <span class="string">"smooth"</span>,
+        kind = <span class="string">"interpolation qualifier"</span>,
+        kind = <span class="string">"type qualifier"
     </span>)]
     </span>Smooth,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;layout&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;layout&quot;</span>, kind = <span class="string">&quot;layout qualifier&quot;</span>, kind = <span class="string">&quot;type qualifier&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"layout"</span>))]
+    #[lang_util(token = <span class="string">"layout"</span>, kind = <span class="string">"layout qualifier"</span>, kind = <span class="string">"type qualifier"</span>)]
     </span>Layout,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;atomic_uint&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;atomic_uint&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"atomic_uint"</span>))]
+    #[lang_util(token = <span class="string">"atomic_uint"</span>, kind = <span class="string">"type name"</span>)]
     </span>AtomicUInt,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;sampler1D&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;sampler1D&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"sampler1D"</span>))]
+    #[lang_util(token = <span class="string">"sampler1D"</span>, kind = <span class="string">"type name"</span>)]
     </span>Sampler1D,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;sampler1DShadow&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"sampler1DShadow"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;sampler1DShadow&quot;</span>,
-        kind = <span class="string">&quot;type name&quot;</span>,
-        kind = <span class="string">&quot;vulkan type name&quot;
+        token = <span class="string">"sampler1DShadow"</span>,
+        kind = <span class="string">"type name"</span>,
+        kind = <span class="string">"vulkan type name"
     </span>)]
     </span>Sampler1DShadow,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;sampler1DArray&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"sampler1DArray"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;sampler1DArray&quot;</span>,
-        kind = <span class="string">&quot;type name&quot;</span>,
-        kind = <span class="string">&quot;vulkan type name&quot;
+        token = <span class="string">"sampler1DArray"</span>,
+        kind = <span class="string">"type name"</span>,
+        kind = <span class="string">"vulkan type name"
     </span>)]
     </span>Sampler1DArray,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;sampler1DArrayShadow&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"sampler1DArrayShadow"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;sampler1DArrayShadow&quot;</span>,
-        kind = <span class="string">&quot;type name&quot;</span>,
-        kind = <span class="string">&quot;vulkan type name&quot;
+        token = <span class="string">"sampler1DArrayShadow"</span>,
+        kind = <span class="string">"type name"</span>,
+        kind = <span class="string">"vulkan type name"
     </span>)]
     </span>Sampler1DArrayShadow,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;isampler1D&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;isampler1D&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"isampler1D"</span>))]
+    #[lang_util(token = <span class="string">"isampler1D"</span>, kind = <span class="string">"type name"</span>)]
     </span>ISampler1D,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;isampler1DArray&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"isampler1DArray"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;isampler1DArray&quot;</span>,
-        kind = <span class="string">&quot;type name&quot;</span>,
-        kind = <span class="string">&quot;vulkan type name&quot;
+        token = <span class="string">"isampler1DArray"</span>,
+        kind = <span class="string">"type name"</span>,
+        kind = <span class="string">"vulkan type name"
     </span>)]
     </span>ISampler1DArray,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;usampler1D&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;usampler1D&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"usampler1D"</span>))]
+    #[lang_util(token = <span class="string">"usampler1D"</span>, kind = <span class="string">"type name"</span>)]
     </span>USampler1D,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;usampler1DArray&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"usampler1DArray"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;usampler1DArray&quot;</span>,
-        kind = <span class="string">&quot;type name&quot;</span>,
-        kind = <span class="string">&quot;vulkan type name&quot;
+        token = <span class="string">"usampler1DArray"</span>,
+        kind = <span class="string">"type name"</span>,
+        kind = <span class="string">"vulkan type name"
     </span>)]
     </span>USampler1DArray,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;sampler2D&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;sampler2D&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"sampler2D"</span>))]
+    #[lang_util(token = <span class="string">"sampler2D"</span>, kind = <span class="string">"type name"</span>)]
     </span>Sampler2D,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;sampler2DShadow&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"sampler2DShadow"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;sampler2DShadow&quot;</span>,
-        kind = <span class="string">&quot;type name&quot;</span>,
-        kind = <span class="string">&quot;vulkan type name&quot;
+        token = <span class="string">"sampler2DShadow"</span>,
+        kind = <span class="string">"type name"</span>,
+        kind = <span class="string">"vulkan type name"
     </span>)]
     </span>Sampler2DShadow,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;sampler2DArray&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"sampler2DArray"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;sampler2DArray&quot;</span>,
-        kind = <span class="string">&quot;type name&quot;</span>,
-        kind = <span class="string">&quot;vulkan type name&quot;
+        token = <span class="string">"sampler2DArray"</span>,
+        kind = <span class="string">"type name"</span>,
+        kind = <span class="string">"vulkan type name"
     </span>)]
     </span>Sampler2DArray,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;sampler2DArrayShadow&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"sampler2DArrayShadow"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;sampler2DArrayShadow&quot;</span>,
-        kind = <span class="string">&quot;type name&quot;</span>,
-        kind = <span class="string">&quot;vulkan type name&quot;
+        token = <span class="string">"sampler2DArrayShadow"</span>,
+        kind = <span class="string">"type name"</span>,
+        kind = <span class="string">"vulkan type name"
     </span>)]
     </span>Sampler2DArrayShadow,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;isampler2D&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;isampler2D&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"isampler2D"</span>))]
+    #[lang_util(token = <span class="string">"isampler2D"</span>, kind = <span class="string">"type name"</span>)]
     </span>ISampler2D,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;isampler2DArray&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"isampler2DArray"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;isampler2DArray&quot;</span>,
-        kind = <span class="string">&quot;type name&quot;</span>,
-        kind = <span class="string">&quot;vulkan type name&quot;
+        token = <span class="string">"isampler2DArray"</span>,
+        kind = <span class="string">"type name"</span>,
+        kind = <span class="string">"vulkan type name"
     </span>)]
     </span>ISampler2DArray,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;usampler2D&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;usampler2D&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"usampler2D"</span>))]
+    #[lang_util(token = <span class="string">"usampler2D"</span>, kind = <span class="string">"type name"</span>)]
     </span>USampler2D,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;usampler2DArray&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"usampler2DArray"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;usampler2DArray&quot;</span>,
-        kind = <span class="string">&quot;type name&quot;</span>,
-        kind = <span class="string">&quot;vulkan type name&quot;
+        token = <span class="string">"usampler2DArray"</span>,
+        kind = <span class="string">"type name"</span>,
+        kind = <span class="string">"vulkan type name"
     </span>)]
     </span>USampler2DArray,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;sampler2DRect&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;sampler2DRect&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"sampler2DRect"</span>))]
+    #[lang_util(token = <span class="string">"sampler2DRect"</span>, kind = <span class="string">"type name"</span>)]
     </span>Sampler2DRect,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;sampler2DRectShadow&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"sampler2DRectShadow"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;sampler2DRectShadow&quot;</span>,
-        kind = <span class="string">&quot;type name&quot;</span>,
-        kind = <span class="string">&quot;vulkan type name&quot;
+        token = <span class="string">"sampler2DRectShadow"</span>,
+        kind = <span class="string">"type name"</span>,
+        kind = <span class="string">"vulkan type name"
     </span>)]
     </span>Sampler2DRectShadow,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;isampler2DRect&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"isampler2DRect"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;isampler2DRect&quot;</span>,
-        kind = <span class="string">&quot;type name&quot;</span>,
-        kind = <span class="string">&quot;vulkan type name&quot;
+        token = <span class="string">"isampler2DRect"</span>,
+        kind = <span class="string">"type name"</span>,
+        kind = <span class="string">"vulkan type name"
     </span>)]
     </span>ISampler2DRect,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;usampler2DRect&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"usampler2DRect"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;usampler2DRect&quot;</span>,
-        kind = <span class="string">&quot;type name&quot;</span>,
-        kind = <span class="string">&quot;vulkan type name&quot;
+        token = <span class="string">"usampler2DRect"</span>,
+        kind = <span class="string">"type name"</span>,
+        kind = <span class="string">"vulkan type name"
     </span>)]
     </span>USampler2DRect,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;sampler2DMS&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;sampler2DMS&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"sampler2DMS"</span>))]
+    #[lang_util(token = <span class="string">"sampler2DMS"</span>, kind = <span class="string">"type name"</span>)]
     </span>Sampler2DMs,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;isampler2DMS&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;isampler2DMS&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"isampler2DMS"</span>))]
+    #[lang_util(token = <span class="string">"isampler2DMS"</span>, kind = <span class="string">"type name"</span>)]
     </span>ISampler2DMs,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;usampler2DMS&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;usampler2DMS&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"usampler2DMS"</span>))]
+    #[lang_util(token = <span class="string">"usampler2DMS"</span>, kind = <span class="string">"type name"</span>)]
     </span>USampler2DMs,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;sampler2DMSArray&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"sampler2DMSArray"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;sampler2DMSArray&quot;</span>,
-        kind = <span class="string">&quot;type name&quot;</span>,
-        kind = <span class="string">&quot;vulkan type name&quot;
+        token = <span class="string">"sampler2DMSArray"</span>,
+        kind = <span class="string">"type name"</span>,
+        kind = <span class="string">"vulkan type name"
     </span>)]
     </span>Sampler2DMsArray,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;isampler2DMSArray&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"isampler2DMSArray"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;isampler2DMSArray&quot;</span>,
-        kind = <span class="string">&quot;type name&quot;</span>,
-        kind = <span class="string">&quot;vulkan type name&quot;
+        token = <span class="string">"isampler2DMSArray"</span>,
+        kind = <span class="string">"type name"</span>,
+        kind = <span class="string">"vulkan type name"
     </span>)]
     </span>ISampler2DMsArray,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;usampler2DMSArray&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"usampler2DMSArray"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;usampler2DMSArray&quot;</span>,
-        kind = <span class="string">&quot;type name&quot;</span>,
-        kind = <span class="string">&quot;vulkan type name&quot;
+        token = <span class="string">"usampler2DMSArray"</span>,
+        kind = <span class="string">"type name"</span>,
+        kind = <span class="string">"vulkan type name"
     </span>)]
     </span>USampler2DMsArray,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;sampler3D&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;sampler3D&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"sampler3D"</span>))]
+    #[lang_util(token = <span class="string">"sampler3D"</span>, kind = <span class="string">"type name"</span>)]
     </span>Sampler3D,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;isampler3D&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;isampler3D&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"isampler3D"</span>))]
+    #[lang_util(token = <span class="string">"isampler3D"</span>, kind = <span class="string">"type name"</span>)]
     </span>ISampler3D,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;usampler3D&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;usampler3D&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"usampler3D"</span>))]
+    #[lang_util(token = <span class="string">"usampler3D"</span>, kind = <span class="string">"type name"</span>)]
     </span>USampler3D,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;samplerCube&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;samplerCube&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"samplerCube"</span>))]
+    #[lang_util(token = <span class="string">"samplerCube"</span>, kind = <span class="string">"type name"</span>)]
     </span>SamplerCube,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;samplerCubeShadow&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"samplerCubeShadow"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;samplerCubeShadow&quot;</span>,
-        kind = <span class="string">&quot;type name&quot;</span>,
-        kind = <span class="string">&quot;vulkan type name&quot;
+        token = <span class="string">"samplerCubeShadow"</span>,
+        kind = <span class="string">"type name"</span>,
+        kind = <span class="string">"vulkan type name"
     </span>)]
     </span>SamplerCubeShadow,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;isamplerCube&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;isamplerCube&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"isamplerCube"</span>))]
+    #[lang_util(token = <span class="string">"isamplerCube"</span>, kind = <span class="string">"type name"</span>)]
     </span>ISamplerCube,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;usamplerCube&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;usamplerCube&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"usamplerCube"</span>))]
+    #[lang_util(token = <span class="string">"usamplerCube"</span>, kind = <span class="string">"type name"</span>)]
     </span>USamplerCube,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;samplerCubeArray&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"samplerCubeArray"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;samplerCubeArray&quot;</span>,
-        kind = <span class="string">&quot;type name&quot;</span>,
-        kind = <span class="string">&quot;vulkan type name&quot;
+        token = <span class="string">"samplerCubeArray"</span>,
+        kind = <span class="string">"type name"</span>,
+        kind = <span class="string">"vulkan type name"
     </span>)]
     </span>SamplerCubeArray,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;samplerCubeArrayShadow&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"samplerCubeArrayShadow"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;samplerCubeArrayShadow&quot;</span>,
-        kind = <span class="string">&quot;type name&quot;</span>,
-        kind = <span class="string">&quot;vulkan type name&quot;
+        token = <span class="string">"samplerCubeArrayShadow"</span>,
+        kind = <span class="string">"type name"</span>,
+        kind = <span class="string">"vulkan type name"
     </span>)]
     </span>SamplerCubeArrayShadow,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;isamplerCubeArray&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"isamplerCubeArray"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;isamplerCubeArray&quot;</span>,
-        kind = <span class="string">&quot;type name&quot;</span>,
-        kind = <span class="string">&quot;vulkan type name&quot;
+        token = <span class="string">"isamplerCubeArray"</span>,
+        kind = <span class="string">"type name"</span>,
+        kind = <span class="string">"vulkan type name"
     </span>)]
     </span>ISamplerCubeArray,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;usamplerCubeArray&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"usamplerCubeArray"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;usamplerCubeArray&quot;</span>,
-        kind = <span class="string">&quot;type name&quot;</span>,
-        kind = <span class="string">&quot;vulkan type name&quot;
+        token = <span class="string">"usamplerCubeArray"</span>,
+        kind = <span class="string">"type name"</span>,
+        kind = <span class="string">"vulkan type name"
     </span>)]
     </span>USamplerCubeArray,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;samplerBuffer&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;samplerBuffer&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"samplerBuffer"</span>))]
+    #[lang_util(token = <span class="string">"samplerBuffer"</span>, kind = <span class="string">"type name"</span>)]
     </span>SamplerBuffer,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;isamplerBuffer&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"isamplerBuffer"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;isamplerBuffer&quot;</span>,
-        kind = <span class="string">&quot;type name&quot;</span>,
-        kind = <span class="string">&quot;vulkan type name&quot;
+        token = <span class="string">"isamplerBuffer"</span>,
+        kind = <span class="string">"type name"</span>,
+        kind = <span class="string">"vulkan type name"
     </span>)]
     </span>ISamplerBuffer,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;usamplerBuffer&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"usamplerBuffer"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;usamplerBuffer&quot;</span>,
-        kind = <span class="string">&quot;type name&quot;</span>,
-        kind = <span class="string">&quot;vulkan type name&quot;
+        token = <span class="string">"usamplerBuffer"</span>,
+        kind = <span class="string">"type name"</span>,
+        kind = <span class="string">"vulkan type name"
     </span>)]
     </span>USamplerBuffer,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;image1D&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;image1D&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"image1D"</span>))]
+    #[lang_util(token = <span class="string">"image1D"</span>, kind = <span class="string">"type name"</span>)]
     </span>Image1D,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;iimage1D&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;iimage1D&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"iimage1D"</span>))]
+    #[lang_util(token = <span class="string">"iimage1D"</span>, kind = <span class="string">"type name"</span>)]
     </span>IImage1D,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;uimage1D&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;uimage1D&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"uimage1D"</span>))]
+    #[lang_util(token = <span class="string">"uimage1D"</span>, kind = <span class="string">"type name"</span>)]
     </span>UImage1D,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;image1DArray&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;image1DArray&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"image1DArray"</span>))]
+    #[lang_util(token = <span class="string">"image1DArray"</span>, kind = <span class="string">"type name"</span>)]
     </span>Image1DArray,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;iimage1DArray&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;iimage1DArray&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"iimage1DArray"</span>))]
+    #[lang_util(token = <span class="string">"iimage1DArray"</span>, kind = <span class="string">"type name"</span>)]
     </span>IImage1DArray,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;uimage1DArray&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;uimage1DArray&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"uimage1DArray"</span>))]
+    #[lang_util(token = <span class="string">"uimage1DArray"</span>, kind = <span class="string">"type name"</span>)]
     </span>UImage1DArray,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;image2D&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;image2D&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"image2D"</span>))]
+    #[lang_util(token = <span class="string">"image2D"</span>, kind = <span class="string">"type name"</span>)]
     </span>Image2D,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;iimage2D&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;iimage2D&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"iimage2D"</span>))]
+    #[lang_util(token = <span class="string">"iimage2D"</span>, kind = <span class="string">"type name"</span>)]
     </span>IImage2D,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;uimage2D&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;uimage2D&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"uimage2D"</span>))]
+    #[lang_util(token = <span class="string">"uimage2D"</span>, kind = <span class="string">"type name"</span>)]
     </span>UImage2D,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;image2DArray&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;image2DArray&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"image2DArray"</span>))]
+    #[lang_util(token = <span class="string">"image2DArray"</span>, kind = <span class="string">"type name"</span>)]
     </span>Image2DArray,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;iimage2DArray&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;iimage2DArray&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"iimage2DArray"</span>))]
+    #[lang_util(token = <span class="string">"iimage2DArray"</span>, kind = <span class="string">"type name"</span>)]
     </span>IImage2DArray,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;uimage2DArray&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;uimage2DArray&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"uimage2DArray"</span>))]
+    #[lang_util(token = <span class="string">"uimage2DArray"</span>, kind = <span class="string">"type name"</span>)]
     </span>UImage2DArray,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;image2DRect&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;image2DRect&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"image2DRect"</span>))]
+    #[lang_util(token = <span class="string">"image2DRect"</span>, kind = <span class="string">"type name"</span>)]
     </span>Image2DRect,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;iimage2DRect&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;iimage2DRect&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"iimage2DRect"</span>))]
+    #[lang_util(token = <span class="string">"iimage2DRect"</span>, kind = <span class="string">"type name"</span>)]
     </span>IImage2DRect,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;uimage2DRect&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;uimage2DRect&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"uimage2DRect"</span>))]
+    #[lang_util(token = <span class="string">"uimage2DRect"</span>, kind = <span class="string">"type name"</span>)]
     </span>UImage2DRect,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;image2DMS&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;image2DMS&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"image2DMS"</span>))]
+    #[lang_util(token = <span class="string">"image2DMS"</span>, kind = <span class="string">"type name"</span>)]
     </span>Image2DMs,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;iimage2DMS&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;iimage2DMS&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"iimage2DMS"</span>))]
+    #[lang_util(token = <span class="string">"iimage2DMS"</span>, kind = <span class="string">"type name"</span>)]
     </span>IImage2DMs,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;uimage2DMS&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;uimage2DMS&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"uimage2DMS"</span>))]
+    #[lang_util(token = <span class="string">"uimage2DMS"</span>, kind = <span class="string">"type name"</span>)]
     </span>UImage2DMs,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;image2DMSArray&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"image2DMSArray"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;image2DMSArray&quot;</span>,
-        kind = <span class="string">&quot;type name&quot;</span>,
-        kind = <span class="string">&quot;vulkan type name&quot;
+        token = <span class="string">"image2DMSArray"</span>,
+        kind = <span class="string">"type name"</span>,
+        kind = <span class="string">"vulkan type name"
     </span>)]
     </span>Image2DMsArray,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;iimage2DMSArray&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"iimage2DMSArray"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;iimage2DMSArray&quot;</span>,
-        kind = <span class="string">&quot;type name&quot;</span>,
-        kind = <span class="string">&quot;vulkan type name&quot;
+        token = <span class="string">"iimage2DMSArray"</span>,
+        kind = <span class="string">"type name"</span>,
+        kind = <span class="string">"vulkan type name"
     </span>)]
     </span>IImage2DMsArray,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;uimage2DMSArray&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"uimage2DMSArray"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;uimage2DMSArray&quot;</span>,
-        kind = <span class="string">&quot;type name&quot;</span>,
-        kind = <span class="string">&quot;vulkan type name&quot;
+        token = <span class="string">"uimage2DMSArray"</span>,
+        kind = <span class="string">"type name"</span>,
+        kind = <span class="string">"vulkan type name"
     </span>)]
     </span>UImage2DMsArray,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;image3D&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;image3D&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"image3D"</span>))]
+    #[lang_util(token = <span class="string">"image3D"</span>, kind = <span class="string">"type name"</span>)]
     </span>Image3D,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;iimage3D&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;iimage3D&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"iimage3D"</span>))]
+    #[lang_util(token = <span class="string">"iimage3D"</span>, kind = <span class="string">"type name"</span>)]
     </span>IImage3D,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;uimage3D&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;uimage3D&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"uimage3D"</span>))]
+    #[lang_util(token = <span class="string">"uimage3D"</span>, kind = <span class="string">"type name"</span>)]
     </span>UImage3D,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;imageCube&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;imageCube&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"imageCube"</span>))]
+    #[lang_util(token = <span class="string">"imageCube"</span>, kind = <span class="string">"type name"</span>)]
     </span>ImageCube,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;iimageCube&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;iimageCube&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"iimageCube"</span>))]
+    #[lang_util(token = <span class="string">"iimageCube"</span>, kind = <span class="string">"type name"</span>)]
     </span>IImageCube,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;uimageCube&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;uimageCube&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"uimageCube"</span>))]
+    #[lang_util(token = <span class="string">"uimageCube"</span>, kind = <span class="string">"type name"</span>)]
     </span>UImageCube,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;imageCubeArray&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"imageCubeArray"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;imageCubeArray&quot;</span>,
-        kind = <span class="string">&quot;type name&quot;</span>,
-        kind = <span class="string">&quot;vulkan type name&quot;
+        token = <span class="string">"imageCubeArray"</span>,
+        kind = <span class="string">"type name"</span>,
+        kind = <span class="string">"vulkan type name"
     </span>)]
     </span>ImageCubeArray,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;iimageCubeArray&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"iimageCubeArray"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;iimageCubeArray&quot;</span>,
-        kind = <span class="string">&quot;type name&quot;</span>,
-        kind = <span class="string">&quot;vulkan type name&quot;
+        token = <span class="string">"iimageCubeArray"</span>,
+        kind = <span class="string">"type name"</span>,
+        kind = <span class="string">"vulkan type name"
     </span>)]
     </span>IImageCubeArray,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;uimageCubeArray&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"uimageCubeArray"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;uimageCubeArray&quot;</span>,
-        kind = <span class="string">&quot;type name&quot;</span>,
-        kind = <span class="string">&quot;vulkan type name&quot;
+        token = <span class="string">"uimageCubeArray"</span>,
+        kind = <span class="string">"type name"</span>,
+        kind = <span class="string">"vulkan type name"
     </span>)]
     </span>UImageCubeArray,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;imageBuffer&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;imageBuffer&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"imageBuffer"</span>))]
+    #[lang_util(token = <span class="string">"imageBuffer"</span>, kind = <span class="string">"type name"</span>)]
     </span>ImageBuffer,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;iimageBuffer&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;iimageBuffer&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"iimageBuffer"</span>))]
+    #[lang_util(token = <span class="string">"iimageBuffer"</span>, kind = <span class="string">"type name"</span>)]
     </span>IImageBuffer,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;uimageBuffer&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;uimageBuffer&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"uimageBuffer"</span>))]
+    #[lang_util(token = <span class="string">"uimageBuffer"</span>, kind = <span class="string">"type name"</span>)]
     </span>UImageBuffer,
 
     <span class="comment">// Begin Vulkan-target keywords
-    </span><span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;texture1D&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;texture1D&quot;</span>)]
+    </span><span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"texture1D"</span>))]
+    #[lang_util(token = <span class="string">"texture1D"</span>)]
     </span>Texture1D,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;texture1DArray&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;texture1DArray&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"texture1DArray"</span>))]
+    #[lang_util(token = <span class="string">"texture1DArray"</span>)]
     </span>Texture1DArray,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;itexture1D&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;itexture1D&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"itexture1D"</span>))]
+    #[lang_util(token = <span class="string">"itexture1D"</span>)]
     </span>ITexture1D,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;itexture1DArray&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;itexture1DArray&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"itexture1DArray"</span>))]
+    #[lang_util(token = <span class="string">"itexture1DArray"</span>)]
     </span>ITexture1DArray,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;utexture1D&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;utexture1D&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"utexture1D"</span>))]
+    #[lang_util(token = <span class="string">"utexture1D"</span>)]
     </span>UTexture1D,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;utexture1DArray&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;utexture1DArray&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"utexture1DArray"</span>))]
+    #[lang_util(token = <span class="string">"utexture1DArray"</span>)]
     </span>UTexture1DArray,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;texture2D&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;texture2D&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"texture2D"</span>))]
+    #[lang_util(token = <span class="string">"texture2D"</span>)]
     </span>Texture2D,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;texture2DArray&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;texture2DArray&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"texture2DArray"</span>))]
+    #[lang_util(token = <span class="string">"texture2DArray"</span>)]
     </span>Texture2DArray,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;itexture2D&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;itexture2D&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"itexture2D"</span>))]
+    #[lang_util(token = <span class="string">"itexture2D"</span>)]
     </span>ITexture2D,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;itexture2DArray&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;itexture2DArray&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"itexture2DArray"</span>))]
+    #[lang_util(token = <span class="string">"itexture2DArray"</span>)]
     </span>ITexture2DArray,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;utexture2D&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;utexture2D&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"utexture2D"</span>))]
+    #[lang_util(token = <span class="string">"utexture2D"</span>)]
     </span>UTexture2D,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;utexture2DArray&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;utexture2DArray&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"utexture2DArray"</span>))]
+    #[lang_util(token = <span class="string">"utexture2DArray"</span>)]
     </span>UTexture2DArray,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;texture2DRect&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;texture2DRect&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"texture2DRect"</span>))]
+    #[lang_util(token = <span class="string">"texture2DRect"</span>)]
     </span>Texture2DRect,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;itexture2DRect&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;itexture2DRect&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"itexture2DRect"</span>))]
+    #[lang_util(token = <span class="string">"itexture2DRect"</span>)]
     </span>ITexture2DRect,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;utexture2DRect&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;utexture2DRect&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"utexture2DRect"</span>))]
+    #[lang_util(token = <span class="string">"utexture2DRect"</span>)]
     </span>UTexture2DRect,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;texture2DMS&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;texture2DMS&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"texture2DMS"</span>))]
+    #[lang_util(token = <span class="string">"texture2DMS"</span>)]
     </span>Texture2DMs,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;itexture2DMS&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;itexture2DMS&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"itexture2DMS"</span>))]
+    #[lang_util(token = <span class="string">"itexture2DMS"</span>)]
     </span>ITexture2DMs,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;utexture2DMS&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;utexture2DMS&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"utexture2DMS"</span>))]
+    #[lang_util(token = <span class="string">"utexture2DMS"</span>)]
     </span>UTexture2DMs,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;texture2DMSArray&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;texture2DMSArray&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"texture2DMSArray"</span>))]
+    #[lang_util(token = <span class="string">"texture2DMSArray"</span>)]
     </span>Texture2DMsArray,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;itexture2DMSArray&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;itexture2DMSArray&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"itexture2DMSArray"</span>))]
+    #[lang_util(token = <span class="string">"itexture2DMSArray"</span>)]
     </span>ITexture2DMsArray,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;utexture2DMSArray&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;utexture2DMSArray&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"utexture2DMSArray"</span>))]
+    #[lang_util(token = <span class="string">"utexture2DMSArray"</span>)]
     </span>UTexture2DMsArray,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;texture3D&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;texture3D&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"texture3D"</span>))]
+    #[lang_util(token = <span class="string">"texture3D"</span>)]
     </span>Texture3D,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;itexture3D&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;itexture3D&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"itexture3D"</span>))]
+    #[lang_util(token = <span class="string">"itexture3D"</span>)]
     </span>ITexture3D,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;utexture3D&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;utexture3D&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"utexture3D"</span>))]
+    #[lang_util(token = <span class="string">"utexture3D"</span>)]
     </span>UTexture3D,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;textureCube&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;textureCube&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"textureCube"</span>))]
+    #[lang_util(token = <span class="string">"textureCube"</span>)]
     </span>TextureCube,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;itextureCube&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;itextureCube&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"itextureCube"</span>))]
+    #[lang_util(token = <span class="string">"itextureCube"</span>)]
     </span>ITextureCube,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;utextureCube&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;utextureCube&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"utextureCube"</span>))]
+    #[lang_util(token = <span class="string">"utextureCube"</span>)]
     </span>UTextureCube,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;textureCubeArray&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;textureCubeArray&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"textureCubeArray"</span>))]
+    #[lang_util(token = <span class="string">"textureCubeArray"</span>)]
     </span>TextureCubeArray,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;itextureCubeArray&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;itextureCubeArray&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"itextureCubeArray"</span>))]
+    #[lang_util(token = <span class="string">"itextureCubeArray"</span>)]
     </span>ITextureCubeArray,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;utextureCubeArray&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;utextureCubeArray&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"utextureCubeArray"</span>))]
+    #[lang_util(token = <span class="string">"utextureCubeArray"</span>)]
     </span>UTextureCubeArray,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;textureBuffer&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;textureBuffer&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"textureBuffer"</span>))]
+    #[lang_util(token = <span class="string">"textureBuffer"</span>)]
     </span>TextureBuffer,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;itextureBuffer&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;itextureBuffer&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"itextureBuffer"</span>))]
+    #[lang_util(token = <span class="string">"itextureBuffer"</span>)]
     </span>ITextureBuffer,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;utextureBuffer&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;utextureBuffer&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"utextureBuffer"</span>))]
+    #[lang_util(token = <span class="string">"utextureBuffer"</span>)]
     </span>UTextureBuffer,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;sampler&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;sampler&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"sampler"</span>))]
+    #[lang_util(token = <span class="string">"sampler"</span>)]
     </span>Sampler,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;samplerShadow&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;samplerShadow&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"samplerShadow"</span>))]
+    #[lang_util(token = <span class="string">"samplerShadow"</span>)]
     </span>SamplerShadow,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;subpassInput&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;subpassInput&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"subpassInput"</span>))]
+    #[lang_util(token = <span class="string">"subpassInput"</span>)]
     </span>SubpassInput,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;isubpassInput&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;isubpassInput&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"isubpassInput"</span>))]
+    #[lang_util(token = <span class="string">"isubpassInput"</span>)]
     </span>ISubpassInput,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;usubpassInput&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;usubpassInput&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"usubpassInput"</span>))]
+    #[lang_util(token = <span class="string">"usubpassInput"</span>)]
     </span>USubpassInput,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;subpassInputMS&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;subpassInputMS&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"subpassInputMS"</span>))]
+    #[lang_util(token = <span class="string">"subpassInputMS"</span>)]
     </span>SubpassInputMs,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;isubpassInputMS&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;isubpassInputMS&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"isubpassInputMS"</span>))]
+    #[lang_util(token = <span class="string">"isubpassInputMS"</span>)]
     </span>ISubpassInputMs,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;usubpassInputMS&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;usubpassInputMS&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"usubpassInputMS"</span>))]
+    #[lang_util(token = <span class="string">"usubpassInputMS"</span>)]
     </span>USubpassInputMs,
     <span class="comment">// End Vulkan-target keywords
-    </span><span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;struct&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;struct&quot;</span>, kind = <span class="string">&quot;struct&quot;</span>, kind = <span class="string">&quot;keyword&quot;</span>)]
+    </span><span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"struct"</span>))]
+    #[lang_util(token = <span class="string">"struct"</span>, kind = <span class="string">"struct"</span>, kind = <span class="string">"keyword"</span>)]
     </span>Struct,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;void&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;void&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"void"</span>))]
+    #[lang_util(token = <span class="string">"void"</span>, kind = <span class="string">"type name"</span>)]
     </span>Void,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;while&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;while&quot;</span>, kind = <span class="string">&quot;keyword&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"while"</span>))]
+    #[lang_util(token = <span class="string">"while"</span>, kind = <span class="string">"keyword"</span>)]
     </span>While,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;break&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;break&quot;</span>, kind = <span class="string">&quot;keyword&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"break"</span>))]
+    #[lang_util(token = <span class="string">"break"</span>, kind = <span class="string">"keyword"</span>)]
     </span>Break,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;continue&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;continue&quot;</span>, kind = <span class="string">&quot;keyword&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"continue"</span>))]
+    #[lang_util(token = <span class="string">"continue"</span>, kind = <span class="string">"keyword"</span>)]
     </span>Continue,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;do&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;do&quot;</span>, kind = <span class="string">&quot;keyword&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"do"</span>))]
+    #[lang_util(token = <span class="string">"do"</span>, kind = <span class="string">"keyword"</span>)]
     </span>Do,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;else&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;else&quot;</span>, kind = <span class="string">&quot;keyword&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"else"</span>))]
+    #[lang_util(token = <span class="string">"else"</span>, kind = <span class="string">"keyword"</span>)]
     </span>Else,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;for&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;for&quot;</span>, kind = <span class="string">&quot;keyword&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"for"</span>))]
+    #[lang_util(token = <span class="string">"for"</span>, kind = <span class="string">"keyword"</span>)]
     </span>For,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;if&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;if&quot;</span>, kind = <span class="string">&quot;keyword&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"if"</span>))]
+    #[lang_util(token = <span class="string">"if"</span>, kind = <span class="string">"keyword"</span>)]
     </span>If,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;discard&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;discard&quot;</span>, kind = <span class="string">&quot;keyword&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"discard"</span>))]
+    #[lang_util(token = <span class="string">"discard"</span>, kind = <span class="string">"keyword"</span>)]
     </span>Discard,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;return&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;return&quot;</span>, kind = <span class="string">&quot;keyword&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"return"</span>))]
+    #[lang_util(token = <span class="string">"return"</span>, kind = <span class="string">"keyword"</span>)]
     </span>Return,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;switch&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;switch&quot;</span>, kind = <span class="string">&quot;keyword&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"switch"</span>))]
+    #[lang_util(token = <span class="string">"switch"</span>, kind = <span class="string">"keyword"</span>)]
     </span>Switch,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;case&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;case&quot;</span>, kind = <span class="string">&quot;keyword&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"case"</span>))]
+    #[lang_util(token = <span class="string">"case"</span>, kind = <span class="string">"keyword"</span>)]
     </span>Case,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;default&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;default&quot;</span>, kind = <span class="string">&quot;keyword&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"default"</span>))]
+    #[lang_util(token = <span class="string">"default"</span>, kind = <span class="string">"keyword"</span>)]
     </span>Default,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;subroutine&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"subroutine"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;subroutine&quot;</span>,
-        kind = <span class="string">&quot;storage qualifier&quot;</span>,
-        kind = <span class="string">&quot;type qualifier&quot;
+        token = <span class="string">"subroutine"</span>,
+        kind = <span class="string">"storage qualifier"</span>,
+        kind = <span class="string">"type qualifier"
     </span>)]
     </span>Subroutine,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, regex(<span class="string">&quot;[a-zA-Z_][a-zA-Z_0-9]*&quot;</span>, parse_ident))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, regex(<span class="string">"[a-zA-Z_][a-zA-Z_0-9]*"</span>, parse_ident))]
     #[cfg_attr(
-        feature = <span class="string">&quot;v1&quot;</span>,
-        regex(<span class="string">&quot;#\\s*\\(\\s*[a-zA-Z_][a-zA-Z_0-9]*\\s*\\)&quot;</span>, parse_rs_ident)
+        feature = <span class="string">"v1"</span>,
+        regex(<span class="string">"#\\s*\\(\\s*[a-zA-Z_][a-zA-Z_0-9]*\\s*\\)"</span>, parse_rs_ident)
     )]
-    #[lang_util(<span class="kw">as </span>= <span class="string">&quot;ident&quot;</span>, kind = <span class="string">&quot;identifier&quot;</span>)]
+    #[lang_util(parser = <span class="string">"ident"</span>, kind = <span class="string">"identifier"</span>)]
     </span>Identifier(SmolStr),
-    <span class="attr">#[lang_util(<span class="kw">as </span>= <span class="string">&quot;ty_name&quot;</span>, kind = <span class="string">&quot;type name&quot;</span>)]
+    <span class="attr">#[lang_util(parser = <span class="string">"ty_name"</span>, kind = <span class="string">"type name"</span>)]
     </span>TypeName(SmolStr), <span class="comment">// Cast from Identifier depending on known type names
     </span><span class="attr">#[cfg_attr(
-        feature = <span class="string">&quot;v1&quot;</span>,
+        feature = <span class="string">"v1"</span>,
         regex(
-            <span class="string">r&quot;([0-9]+\.[0-9]+|[0-9]+\.|\.[0-9]+)([eE][+-]?[0-9]+)?(f|F)?&quot;</span>,
+            <span class="string">r"([0-9]+\.[0-9]+|[0-9]+\.|\.[0-9]+)([eE][+-]?[0-9]+)?(f|F)?"</span>,
             parse_f32
         )
     )]
-    #[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, regex(<span class="string">r&quot;[0-9]+[eE][+-]?[0-9]+(f|F)?&quot;</span>, parse_f32))]
-    #[lang_util(<span class="kw">as </span>= <span class="string">&quot;float_constant&quot;</span>, kind = <span class="string">&quot;literal&quot;</span>)]
+    #[cfg_attr(feature = <span class="string">"v1"</span>, regex(<span class="string">r"[0-9]+[eE][+-]?[0-9]+(f|F)?"</span>, parse_f32))]
+    #[lang_util(parser = <span class="string">"float_constant"</span>, kind = <span class="string">"literal"</span>)]
     </span>FloatConstant(f32),
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, regex(<span class="string">r&quot;0[0-7]*&quot;</span>, |lex| parse_int(lex, <span class="number">8</span>)))]
-    #[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, regex(<span class="string">r&quot;[1-9][0-9]*&quot;</span>, |lex| parse_int(lex, <span class="number">10</span>)))]
-    #[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, regex(<span class="string">r&quot;0[xX][0-9A-Fa-f]+&quot;</span>, |lex| parse_int(lex, <span class="number">16</span>)))]
-    #[lang_util(<span class="kw">as </span>= <span class="string">&quot;int_constant&quot;</span>, kind = <span class="string">&quot;literal&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, regex(<span class="string">r"0[0-7]*"</span>, |lex| parse_int(lex, <span class="number">8</span>)))]
+    #[cfg_attr(feature = <span class="string">"v1"</span>, regex(<span class="string">r"[1-9][0-9]*"</span>, |lex| parse_int(lex, <span class="number">10</span>)))]
+    #[cfg_attr(feature = <span class="string">"v1"</span>, regex(<span class="string">r"0[xX][0-9A-Fa-f]+"</span>, |lex| parse_int(lex, <span class="number">16</span>)))]
+    #[lang_util(parser = <span class="string">"int_constant"</span>, kind = <span class="string">"literal"</span>)]
     </span>IntConstant(i32),
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, regex(<span class="string">r&quot;0[0-7]*[uU]&quot;</span>, |lex| parse_uint(lex, <span class="number">8</span>)))]
-    #[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, regex(<span class="string">r&quot;[1-9][0-9]*[uU]&quot;</span>, |lex| parse_uint(lex, <span class="number">10</span>)))]
-    #[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, regex(<span class="string">r&quot;0[xX][0-9A-Fa-f]+[uU]&quot;</span>, |lex| parse_uint(lex, <span class="number">16</span>)))]
-    #[lang_util(<span class="kw">as </span>= <span class="string">&quot;uint_constant&quot;</span>, kind = <span class="string">&quot;literal&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, regex(<span class="string">r"0[0-7]*[uU]"</span>, |lex| parse_uint(lex, <span class="number">8</span>)))]
+    #[cfg_attr(feature = <span class="string">"v1"</span>, regex(<span class="string">r"[1-9][0-9]*[uU]"</span>, |lex| parse_uint(lex, <span class="number">10</span>)))]
+    #[cfg_attr(feature = <span class="string">"v1"</span>, regex(<span class="string">r"0[xX][0-9A-Fa-f]+[uU]"</span>, |lex| parse_uint(lex, <span class="number">16</span>)))]
+    #[lang_util(parser = <span class="string">"uint_constant"</span>, kind = <span class="string">"literal"</span>)]
     </span>UIntConstant(u32),
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;true&quot;</span>, |<span class="kw">_</span>| <span class="bool-val">true</span>))]
-    #[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;false&quot;</span>, |<span class="kw">_</span>| <span class="bool-val">false</span>))]
-    #[lang_util(<span class="kw">as </span>= <span class="string">&quot;bool_constant&quot;</span>, kind = <span class="string">&quot;literal&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"true"</span>, |<span class="kw">_</span>| <span class="bool-val">true</span>))]
+    #[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"false"</span>, |<span class="kw">_</span>| <span class="bool-val">false</span>))]
+    #[lang_util(parser = <span class="string">"bool_constant"</span>, kind = <span class="string">"literal"</span>)]
     </span>BoolConstant(bool),
     <span class="attr">#[cfg_attr(
-        feature = <span class="string">&quot;v1&quot;</span>,
+        feature = <span class="string">"v1"</span>,
         regex(
-            <span class="string">r&quot;([0-9]+\.[0-9]+|[0-9]+\.|\.[0-9]+)([eE][+-]?[0-9]+)?(lf|LF)&quot;</span>,
+            <span class="string">r"([0-9]+\.[0-9]+|[0-9]+\.|\.[0-9]+)([eE][+-]?[0-9]+)?(lf|LF)"</span>,
             parse_f64
         )
     )]
-    #[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, regex(<span class="string">r&quot;[0-9]+[eE][+-]?[0-9]+(lf|LF)&quot;</span>, parse_f64))]
-    #[lang_util(<span class="kw">as </span>= <span class="string">&quot;double_constant&quot;</span>, kind = <span class="string">&quot;literal&quot;</span>)]
+    #[cfg_attr(feature = <span class="string">"v1"</span>, regex(<span class="string">r"[0-9]+[eE][+-]?[0-9]+(lf|LF)"</span>, parse_f64))]
+    #[lang_util(parser = <span class="string">"double_constant"</span>, kind = <span class="string">"literal"</span>)]
     </span>DoubleConstant(f64),
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;&lt;&lt;&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;&lt;&lt;&quot;</span>, kind = <span class="string">&quot;binary operator&quot;</span>, kind = <span class="string">&quot;operator&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"&lt;&lt;"</span>))]
+    #[lang_util(token = <span class="string">"&lt;&lt;"</span>, kind = <span class="string">"binary operator"</span>, kind = <span class="string">"operator"</span>)]
     </span>LeftOp,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;&gt;&gt;&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;&gt;&gt;&quot;</span>, kind = <span class="string">&quot;binary operator&quot;</span>, kind = <span class="string">&quot;operator&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"&gt;&gt;"</span>))]
+    #[lang_util(token = <span class="string">"&gt;&gt;"</span>, kind = <span class="string">"binary operator"</span>, kind = <span class="string">"operator"</span>)]
     </span>RightOp,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;++&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;++&quot;</span>, kind = <span class="string">&quot;unary operator&quot;</span>, kind = <span class="string">&quot;operator&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"++"</span>))]
+    #[lang_util(token = <span class="string">"++"</span>, kind = <span class="string">"unary operator"</span>, kind = <span class="string">"operator"</span>)]
     </span>IncOp,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;--&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;--&quot;</span>, kind = <span class="string">&quot;unary operator&quot;</span>, kind = <span class="string">&quot;operator&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"--"</span>))]
+    #[lang_util(token = <span class="string">"--"</span>, kind = <span class="string">"unary operator"</span>, kind = <span class="string">"operator"</span>)]
     </span>DecOp,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;&lt;=&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;&lt;=&quot;</span>, kind = <span class="string">&quot;binary operator&quot;</span>, kind = <span class="string">&quot;operator&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"&lt;="</span>))]
+    #[lang_util(token = <span class="string">"&lt;="</span>, kind = <span class="string">"binary operator"</span>, kind = <span class="string">"operator"</span>)]
     </span>LeOp,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;&gt;=&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;&gt;=&quot;</span>, kind = <span class="string">&quot;binary operator&quot;</span>, kind = <span class="string">&quot;operator&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"&gt;="</span>))]
+    #[lang_util(token = <span class="string">"&gt;="</span>, kind = <span class="string">"binary operator"</span>, kind = <span class="string">"operator"</span>)]
     </span>GeOp,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;==&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;==&quot;</span>, kind = <span class="string">&quot;binary operator&quot;</span>, kind = <span class="string">&quot;operator&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"=="</span>))]
+    #[lang_util(token = <span class="string">"=="</span>, kind = <span class="string">"binary operator"</span>, kind = <span class="string">"operator"</span>)]
     </span>EqOp,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;!=&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;!=&quot;</span>, kind = <span class="string">&quot;binary operator&quot;</span>, kind = <span class="string">&quot;operator&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"!="</span>))]
+    #[lang_util(token = <span class="string">"!="</span>, kind = <span class="string">"binary operator"</span>, kind = <span class="string">"operator"</span>)]
     </span>NeOp,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;&amp;&amp;&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;&amp;&amp;&quot;</span>, kind = <span class="string">&quot;binary operator&quot;</span>, kind = <span class="string">&quot;operator&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"&amp;&amp;"</span>))]
+    #[lang_util(token = <span class="string">"&amp;&amp;"</span>, kind = <span class="string">"binary operator"</span>, kind = <span class="string">"operator"</span>)]
     </span>AndOp,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;||&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;||&quot;</span>, kind = <span class="string">&quot;binary operator&quot;</span>, kind = <span class="string">&quot;operator&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"||"</span>))]
+    #[lang_util(token = <span class="string">"||"</span>, kind = <span class="string">"binary operator"</span>, kind = <span class="string">"operator"</span>)]
     </span>OrOp,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;^^&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;^^&quot;</span>, kind = <span class="string">&quot;binary operator&quot;</span>, kind = <span class="string">&quot;operator&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"^^"</span>))]
+    #[lang_util(token = <span class="string">"^^"</span>, kind = <span class="string">"binary operator"</span>, kind = <span class="string">"operator"</span>)]
     </span>XorOp,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;*=&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;*=&quot;</span>, kind = <span class="string">&quot;binary operator&quot;</span>, kind = <span class="string">&quot;operator&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"*="</span>))]
+    #[lang_util(token = <span class="string">"*="</span>, kind = <span class="string">"binary operator"</span>, kind = <span class="string">"operator"</span>)]
     </span>MulAssign,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;/=&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;/=&quot;</span>, kind = <span class="string">&quot;binary operator&quot;</span>, kind = <span class="string">&quot;operator&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"/="</span>))]
+    #[lang_util(token = <span class="string">"/="</span>, kind = <span class="string">"binary operator"</span>, kind = <span class="string">"operator"</span>)]
     </span>DivAssign,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;+=&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;+=&quot;</span>, kind = <span class="string">&quot;binary operator&quot;</span>, kind = <span class="string">&quot;operator&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"+="</span>))]
+    #[lang_util(token = <span class="string">"+="</span>, kind = <span class="string">"binary operator"</span>, kind = <span class="string">"operator"</span>)]
     </span>AddAssign,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;%=&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;%=&quot;</span>, kind = <span class="string">&quot;binary operator&quot;</span>, kind = <span class="string">&quot;operator&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"%="</span>))]
+    #[lang_util(token = <span class="string">"%="</span>, kind = <span class="string">"binary operator"</span>, kind = <span class="string">"operator"</span>)]
     </span>ModAssign,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;&lt;&lt;=&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;&lt;&lt;=&quot;</span>, kind = <span class="string">&quot;binary operator&quot;</span>, kind = <span class="string">&quot;operator&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"&lt;&lt;="</span>))]
+    #[lang_util(token = <span class="string">"&lt;&lt;="</span>, kind = <span class="string">"binary operator"</span>, kind = <span class="string">"operator"</span>)]
     </span>LeftAssign,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;&gt;&gt;=&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;&gt;&gt;=&quot;</span>, kind = <span class="string">&quot;binary operator&quot;</span>, kind = <span class="string">&quot;operator&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"&gt;&gt;="</span>))]
+    #[lang_util(token = <span class="string">"&gt;&gt;="</span>, kind = <span class="string">"binary operator"</span>, kind = <span class="string">"operator"</span>)]
     </span>RightAssign,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;&amp;=&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;&amp;=&quot;</span>, kind = <span class="string">&quot;binary operator&quot;</span>, kind = <span class="string">&quot;operator&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"&amp;="</span>))]
+    #[lang_util(token = <span class="string">"&amp;="</span>, kind = <span class="string">"binary operator"</span>, kind = <span class="string">"operator"</span>)]
     </span>AndAssign,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;^=&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;^=&quot;</span>, kind = <span class="string">&quot;binary operator&quot;</span>, kind = <span class="string">&quot;operator&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"^="</span>))]
+    #[lang_util(token = <span class="string">"^="</span>, kind = <span class="string">"binary operator"</span>, kind = <span class="string">"operator"</span>)]
     </span>XorAssign,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;|=&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;|=&quot;</span>, kind = <span class="string">&quot;binary operator&quot;</span>, kind = <span class="string">&quot;operator&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"|="</span>))]
+    #[lang_util(token = <span class="string">"|="</span>, kind = <span class="string">"binary operator"</span>, kind = <span class="string">"operator"</span>)]
     </span>OrAssign,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;-=&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;-=&quot;</span>, kind = <span class="string">&quot;binary operator&quot;</span>, kind = <span class="string">&quot;operator&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"-="</span>))]
+    #[lang_util(token = <span class="string">"-="</span>, kind = <span class="string">"binary operator"</span>, kind = <span class="string">"operator"</span>)]
     </span>SubAssign,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;(&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;(&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"("</span>))]
+    #[lang_util(token = <span class="string">"("</span>)]
     </span>LeftParen,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;)&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;)&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">")"</span>))]
+    #[lang_util(token = <span class="string">")"</span>)]
     </span>RightParen,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;[&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;[&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"["</span>))]
+    #[lang_util(token = <span class="string">"["</span>)]
     </span>LeftBracket,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;]&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;]&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"]"</span>))]
+    #[lang_util(token = <span class="string">"]"</span>)]
     </span>RightBracket,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;{&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;{&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"{"</span>))]
+    #[lang_util(token = <span class="string">"{"</span>)]
     </span>LeftBrace,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;}&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;}&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"}"</span>))]
+    #[lang_util(token = <span class="string">"}"</span>)]
     </span>RightBrace,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;.&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;.&quot;</span>, kind = <span class="string">&quot;binary operator&quot;</span>, kind = <span class="string">&quot;operator&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"."</span>))]
+    #[lang_util(token = <span class="string">"."</span>, kind = <span class="string">"binary operator"</span>, kind = <span class="string">"operator"</span>)]
     </span>Dot,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;,&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;,&quot;</span>, kind = <span class="string">&quot;operator&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">","</span>))]
+    #[lang_util(token = <span class="string">","</span>, kind = <span class="string">"operator"</span>)]
     </span>Comma,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;:&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;:&quot;</span>, kind = <span class="string">&quot;operator&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">":"</span>))]
+    #[lang_util(token = <span class="string">":"</span>, kind = <span class="string">"operator"</span>)]
     </span>Colon,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;=&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;=&quot;</span>, kind = <span class="string">&quot;binary operator&quot;</span>, kind = <span class="string">&quot;operator&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"="</span>))]
+    #[lang_util(token = <span class="string">"="</span>, kind = <span class="string">"binary operator"</span>, kind = <span class="string">"operator"</span>)]
     </span>Equal,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;;&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;;&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">";"</span>))]
+    #[lang_util(token = <span class="string">";"</span>)]
     </span>Semicolon,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;!&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;!&quot;</span>, kind = <span class="string">&quot;unary operator&quot;</span>, kind = <span class="string">&quot;operator&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"!"</span>))]
+    #[lang_util(token = <span class="string">"!"</span>, kind = <span class="string">"unary operator"</span>, kind = <span class="string">"operator"</span>)]
     </span>Bang,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;-&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"-"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;-&quot;</span>,
-        kind = <span class="string">&quot;binary operator&quot;</span>,
-        kind = <span class="string">&quot;unary operator&quot;</span>,
-        kind = <span class="string">&quot;operator&quot;
+        token = <span class="string">"-"</span>,
+        kind = <span class="string">"binary operator"</span>,
+        kind = <span class="string">"unary operator"</span>,
+        kind = <span class="string">"operator"
     </span>)]
     </span>Dash,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;~&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;~&quot;</span>, kind = <span class="string">&quot;unary operator&quot;</span>, kind = <span class="string">&quot;operator&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"~"</span>))]
+    #[lang_util(token = <span class="string">"~"</span>, kind = <span class="string">"unary operator"</span>, kind = <span class="string">"operator"</span>)]
     </span>Tilde,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;+&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"+"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;+&quot;</span>,
-        kind = <span class="string">&quot;binary operator&quot;</span>,
-        kind = <span class="string">&quot;unary operator&quot;</span>,
-        kind = <span class="string">&quot;operator&quot;
+        token = <span class="string">"+"</span>,
+        kind = <span class="string">"binary operator"</span>,
+        kind = <span class="string">"unary operator"</span>,
+        kind = <span class="string">"operator"
     </span>)]
     </span>Plus,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;*&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;*&quot;</span>, kind = <span class="string">&quot;binary operator&quot;</span>, kind = <span class="string">&quot;operator&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"*"</span>))]
+    #[lang_util(token = <span class="string">"*"</span>, kind = <span class="string">"binary operator"</span>, kind = <span class="string">"operator"</span>)]
     </span>Star,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;/&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;/&quot;</span>, kind = <span class="string">&quot;binary operator&quot;</span>, kind = <span class="string">&quot;operator&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"/"</span>))]
+    #[lang_util(token = <span class="string">"/"</span>, kind = <span class="string">"binary operator"</span>, kind = <span class="string">"operator"</span>)]
     </span>Slash,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;%&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;%&quot;</span>, kind = <span class="string">&quot;binary operator&quot;</span>, kind = <span class="string">&quot;operator&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"%"</span>))]
+    #[lang_util(token = <span class="string">"%"</span>, kind = <span class="string">"binary operator"</span>, kind = <span class="string">"operator"</span>)]
     </span>Percent,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;&lt;&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;&lt;&quot;</span>, kind = <span class="string">&quot;binary operator&quot;</span>, kind = <span class="string">&quot;operator&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"&lt;"</span>))]
+    #[lang_util(token = <span class="string">"&lt;"</span>, kind = <span class="string">"binary operator"</span>, kind = <span class="string">"operator"</span>)]
     </span>LeftAngle,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;&gt;&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;&gt;&quot;</span>, kind = <span class="string">&quot;binary operator&quot;</span>, kind = <span class="string">&quot;operator&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"&gt;"</span>))]
+    #[lang_util(token = <span class="string">"&gt;"</span>, kind = <span class="string">"binary operator"</span>, kind = <span class="string">"operator"</span>)]
     </span>RightAngle,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;|&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;|&quot;</span>, kind = <span class="string">&quot;binary operator&quot;</span>, kind = <span class="string">&quot;operator&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"|"</span>))]
+    #[lang_util(token = <span class="string">"|"</span>, kind = <span class="string">"binary operator"</span>, kind = <span class="string">"operator"</span>)]
     </span>VerticalBar,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;^&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;^&quot;</span>, kind = <span class="string">&quot;binary operator&quot;</span>, kind = <span class="string">&quot;operator&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"^"</span>))]
+    #[lang_util(token = <span class="string">"^"</span>, kind = <span class="string">"binary operator"</span>, kind = <span class="string">"operator"</span>)]
     </span>Caret,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;&amp;&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;&amp;&quot;</span>, kind = <span class="string">&quot;binary operator&quot;</span>, kind = <span class="string">&quot;operator&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"&amp;"</span>))]
+    #[lang_util(token = <span class="string">"&amp;"</span>, kind = <span class="string">"binary operator"</span>, kind = <span class="string">"operator"</span>)]
     </span>Ampersand,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;?&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;?&quot;</span>, kind = <span class="string">&quot;operator&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"?"</span>))]
+    #[lang_util(token = <span class="string">"?"</span>, kind = <span class="string">"operator"</span>)]
     </span>Question,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;invariant&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;invariant&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"invariant"</span>))]
+    #[lang_util(token = <span class="string">"invariant"</span>)]
     </span>Invariant,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;precise&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;precise&quot;</span>, kind = <span class="string">&quot;type qualifier&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"precise"</span>))]
+    #[lang_util(token = <span class="string">"precise"</span>, kind = <span class="string">"type qualifier"</span>)]
     </span>Precise,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;highp&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;highp&quot;</span>, kind = <span class="string">&quot;precision qualifier&quot;</span>, kind = <span class="string">&quot;type qualifier&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"highp"</span>))]
+    #[lang_util(token = <span class="string">"highp"</span>, kind = <span class="string">"precision qualifier"</span>, kind = <span class="string">"type qualifier"</span>)]
     </span>HighPrecision,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;mediump&quot;</span>))]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"mediump"</span>))]
     #[lang_util(
-        token = <span class="string">&quot;mediump&quot;</span>,
-        kind = <span class="string">&quot;precision qualifier&quot;</span>,
-        kind = <span class="string">&quot;type qualifier&quot;
+        token = <span class="string">"mediump"</span>,
+        kind = <span class="string">"precision qualifier"</span>,
+        kind = <span class="string">"type qualifier"
     </span>)]
     </span>MediumPrecision,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;lowp&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;lowp&quot;</span>, kind = <span class="string">&quot;precision qualifier&quot;</span>, kind = <span class="string">&quot;type qualifier&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"lowp"</span>))]
+    #[lang_util(token = <span class="string">"lowp"</span>, kind = <span class="string">"precision qualifier"</span>, kind = <span class="string">"type qualifier"</span>)]
     </span>LowPrecision,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, token(<span class="string">&quot;precision&quot;</span>))]
-    #[lang_util(token = <span class="string">&quot;precision&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, token(<span class="string">"precision"</span>))]
+    #[lang_util(token = <span class="string">"precision"</span>)]
     </span>Precision,
 
     <span class="comment">// TODO: Line continuation can happen inside tokens
-    </span><span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, regex(<span class="string">&quot;([ \t\r\n]|\\\\\r?\n)+&quot;</span>, logos::skip))]
-    #[lang_util(display = <span class="string">&quot;&lt;whitespace&gt;&quot;</span>, <span class="kw">as</span>(display), kind = <span class="string">&quot;trivia&quot;</span>)]
+    </span><span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, regex(<span class="string">"([ \t\r\n]|\\\\\r?\n)+"</span>, logos::skip))]
+    #[lang_util(display = <span class="string">"&lt;whitespace&gt;"</span>, parser(display), kind = <span class="string">"trivia"</span>)]
     </span>Whitespace,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, regex(<span class="string">&quot;//(.|\\\\\r?\n)*&quot;</span>, |lex| { parse_cmt(lex, <span class="bool-val">true</span>); logos::Skip }))]
-    #[lang_util(display = <span class="string">&quot;&lt;single line comment&gt;&quot;</span>, <span class="kw">as</span>(display), kind = <span class="string">&quot;trivia&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, regex(<span class="string">"//(.|\\\\\r?\n)*"</span>, |lex| { parse_cmt(lex, <span class="bool-val">true</span>); logos::Skip }))]
+    #[lang_util(display = <span class="string">"&lt;single line comment&gt;"</span>, parser(display), kind = <span class="string">"trivia"</span>)]
     </span>SingleLineComment,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, regex(<span class="string">&quot;/\\*([^*]|\\*[^/])+\\*/&quot;</span>, |lex| { parse_cmt(lex, <span class="bool-val">false</span>); logos::Skip }))]
-    #[lang_util(display = <span class="string">&quot;&lt;multi line comment&gt;&quot;</span>, <span class="kw">as</span>(display), kind = <span class="string">&quot;trivia&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, regex(<span class="string">"/\\*([^*]|\\*[^/])+\\*/"</span>, |lex| { parse_cmt(lex, <span class="bool-val">false</span>); logos::Skip }))]
+    #[lang_util(display = <span class="string">"&lt;multi line comment&gt;"</span>, parser(display), kind = <span class="string">"trivia"</span>)]
     </span>MultiLineComment,
 
     <span class="comment">// TODO: Line continuations in preprocessor pragmas?
-    </span><span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, regex(<span class="string">&quot;#([ \t]|\\\\\r?\n)*define&quot;</span>))]
-    #[lang_util(display = <span class="string">&quot;#define&quot;</span>, <span class="kw">as</span>(display), kind = <span class="string">&quot;preprocessor directive&quot;</span>)]
+    </span><span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, regex(<span class="string">"#([ \t]|\\\\\r?\n)*define"</span>))]
+    #[lang_util(display = <span class="string">"#define"</span>, parser(display), kind = <span class="string">"preprocessor directive"</span>)]
     </span>PpDefine,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, regex(<span class="string">&quot;#([ \t]|\\\\\r?\n)*else&quot;</span>))]
-    #[lang_util(display = <span class="string">&quot;#else&quot;</span>, <span class="kw">as</span>(display), kind = <span class="string">&quot;preprocessor directive&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, regex(<span class="string">"#([ \t]|\\\\\r?\n)*else"</span>))]
+    #[lang_util(display = <span class="string">"#else"</span>, parser(display), kind = <span class="string">"preprocessor directive"</span>)]
     </span>PpElse,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, regex(<span class="string">&quot;#([ \t]|\\\\\r?\n)*elif&quot;</span>))]
-    #[lang_util(display = <span class="string">&quot;#elif&quot;</span>, <span class="kw">as</span>(display), kind = <span class="string">&quot;preprocessor directive&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, regex(<span class="string">"#([ \t]|\\\\\r?\n)*elif"</span>))]
+    #[lang_util(display = <span class="string">"#elif"</span>, parser(display), kind = <span class="string">"preprocessor directive"</span>)]
     </span>PpElif,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, regex(<span class="string">&quot;#([ \t]|\\\\\r?\n)*endif&quot;</span>))]
-    #[lang_util(display = <span class="string">&quot;#endif&quot;</span>, <span class="kw">as</span>(display), kind = <span class="string">&quot;preprocessor directive&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, regex(<span class="string">"#([ \t]|\\\\\r?\n)*endif"</span>))]
+    #[lang_util(display = <span class="string">"#endif"</span>, parser(display), kind = <span class="string">"preprocessor directive"</span>)]
     </span>PpEndIf,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, regex(<span class="string">&quot;#([ \t]|\\\\\r?\n)*error&quot;</span>))]
-    #[lang_util(display = <span class="string">&quot;#error&quot;</span>, <span class="kw">as</span>(display), kind = <span class="string">&quot;preprocessor directive&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, regex(<span class="string">"#([ \t]|\\\\\r?\n)*error"</span>))]
+    #[lang_util(display = <span class="string">"#error"</span>, parser(display), kind = <span class="string">"preprocessor directive"</span>)]
     </span>PpError,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, regex(<span class="string">&quot;#([ \t]|\\\\\r?\n)*if&quot;</span>))]
-    #[lang_util(display = <span class="string">&quot;#if&quot;</span>, <span class="kw">as</span>(display), kind = <span class="string">&quot;preprocessor directive&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, regex(<span class="string">"#([ \t]|\\\\\r?\n)*if"</span>))]
+    #[lang_util(display = <span class="string">"#if"</span>, parser(display), kind = <span class="string">"preprocessor directive"</span>)]
     </span>PpIf,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, regex(<span class="string">&quot;#([ \t]|\\\\\r?\n)*ifdef&quot;</span>))]
-    #[lang_util(display = <span class="string">&quot;#ifdef&quot;</span>, <span class="kw">as</span>(display), kind = <span class="string">&quot;preprocessor directive&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, regex(<span class="string">"#([ \t]|\\\\\r?\n)*ifdef"</span>))]
+    #[lang_util(display = <span class="string">"#ifdef"</span>, parser(display), kind = <span class="string">"preprocessor directive"</span>)]
     </span>PpIfDef,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, regex(<span class="string">&quot;#([ \t]|\\\\\r?\n)*ifndef&quot;</span>))]
-    #[lang_util(display = <span class="string">&quot;#ifndef&quot;</span>, <span class="kw">as</span>(display), kind = <span class="string">&quot;preprocessor directive&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, regex(<span class="string">"#([ \t]|\\\\\r?\n)*ifndef"</span>))]
+    #[lang_util(display = <span class="string">"#ifndef"</span>, parser(display), kind = <span class="string">"preprocessor directive"</span>)]
     </span>PpIfNDef,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, regex(<span class="string">&quot;#([ \t]|\\\\\r?\n)*include&quot;</span>))]
-    #[lang_util(display = <span class="string">&quot;#include&quot;</span>, <span class="kw">as</span>(display), kind = <span class="string">&quot;preprocessor directive&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, regex(<span class="string">"#([ \t]|\\\\\r?\n)*include"</span>))]
+    #[lang_util(display = <span class="string">"#include"</span>, parser(display), kind = <span class="string">"preprocessor directive"</span>)]
     </span>PpInclude,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, regex(<span class="string">&quot;#([ \t]|\\\\\r?\n)*line&quot;</span>))]
-    #[lang_util(display = <span class="string">&quot;#line&quot;</span>, <span class="kw">as</span>(display), kind = <span class="string">&quot;preprocessor directive&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, regex(<span class="string">"#([ \t]|\\\\\r?\n)*line"</span>))]
+    #[lang_util(display = <span class="string">"#line"</span>, parser(display), kind = <span class="string">"preprocessor directive"</span>)]
     </span>PpLine,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, regex(<span class="string">&quot;#([ \t]|\\\\\r?\n)*pragma&quot;</span>))]
-    #[lang_util(display = <span class="string">&quot;#pragma&quot;</span>, <span class="kw">as</span>(display), kind = <span class="string">&quot;preprocessor directive&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, regex(<span class="string">"#([ \t]|\\\\\r?\n)*pragma"</span>))]
+    #[lang_util(display = <span class="string">"#pragma"</span>, parser(display), kind = <span class="string">"preprocessor directive"</span>)]
     </span>PpPragma,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, regex(<span class="string">&quot;#([ \t]|\\\\\r?\n)*undef&quot;</span>))]
-    #[lang_util(display = <span class="string">&quot;#undef&quot;</span>, <span class="kw">as</span>(display), kind = <span class="string">&quot;preprocessor directive&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, regex(<span class="string">"#([ \t]|\\\\\r?\n)*undef"</span>))]
+    #[lang_util(display = <span class="string">"#undef"</span>, parser(display), kind = <span class="string">"preprocessor directive"</span>)]
     </span>PpUndef,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, regex(<span class="string">&quot;#([ \t]|\\\\\r?\n)*version&quot;</span>))]
-    #[lang_util(display = <span class="string">&quot;#version&quot;</span>, <span class="kw">as</span>(display), kind = <span class="string">&quot;preprocessor directive&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, regex(<span class="string">"#([ \t]|\\\\\r?\n)*version"</span>))]
+    #[lang_util(display = <span class="string">"#version"</span>, parser(display), kind = <span class="string">"preprocessor directive"</span>)]
     </span>PpVersion,
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, regex(<span class="string">&quot;#([ \t]|\\\\\r?\n)*extension&quot;</span>))]
-    #[lang_util(display = <span class="string">&quot;#extension&quot;</span>, <span class="kw">as</span>(display), kind = <span class="string">&quot;preprocessor directive&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, regex(<span class="string">"#([ \t]|\\\\\r?\n)*extension"</span>))]
+    #[lang_util(
+        display = <span class="string">"#extension"</span>,
+        parser(display),
+        kind = <span class="string">"preprocessor directive"
+    </span>)]
     </span>PpExtension,
 
     <span class="attr">#[lang_util(
-        display = <span class="string">&quot;&lt;preprocessor string&gt;&quot;</span>,
-        <span class="kw">as</span>(display),
-        kind = <span class="string">&quot;preprocessor string&quot;
+        display = <span class="string">"&lt;preprocessor string&gt;"</span>,
+        parser(display),
+        kind = <span class="string">"preprocessor string"
     </span>)]
     </span>PpRest(String),
 
-    <span class="attr">#[lang_util(display = <span class="string">&quot;core&quot;</span>, <span class="kw">as</span>(display), kind = <span class="string">&quot;version profile&quot;</span>)]
+    <span class="attr">#[lang_util(display = <span class="string">"core"</span>, parser(display), kind = <span class="string">"version profile"</span>)]
     </span>PpCore,
-    <span class="attr">#[lang_util(display = <span class="string">&quot;compatibility&quot;</span>, <span class="kw">as</span>(display), kind = <span class="string">&quot;version profile&quot;</span>)]
+    <span class="attr">#[lang_util(display = <span class="string">"compatibility"</span>, parser(display), kind = <span class="string">"version profile"</span>)]
     </span>PpCompatibility,
-    <span class="attr">#[lang_util(display = <span class="string">&quot;es&quot;</span>, <span class="kw">as</span>(display), kind = <span class="string">&quot;version profile&quot;</span>)]
+    <span class="attr">#[lang_util(display = <span class="string">"es"</span>, parser(display), kind = <span class="string">"version profile"</span>)]
     </span>PpEs,
 
-    <span class="attr">#[lang_util(display = <span class="string">&quot;require&quot;</span>, <span class="kw">as</span>(display), kind = <span class="string">&quot;extension behavior&quot;</span>)]
+    <span class="attr">#[lang_util(display = <span class="string">"require"</span>, parser(display), kind = <span class="string">"extension behavior"</span>)]
     </span>PpExtRequire,
-    <span class="attr">#[lang_util(display = <span class="string">&quot;enable&quot;</span>, <span class="kw">as</span>(display), kind = <span class="string">&quot;extension behavior&quot;</span>)]
+    <span class="attr">#[lang_util(display = <span class="string">"enable"</span>, parser(display), kind = <span class="string">"extension behavior"</span>)]
     </span>PpExtEnable,
-    <span class="attr">#[lang_util(display = <span class="string">&quot;warn&quot;</span>, <span class="kw">as</span>(display), kind = <span class="string">&quot;extension behavior&quot;</span>)]
+    <span class="attr">#[lang_util(display = <span class="string">"warn"</span>, parser(display), kind = <span class="string">"extension behavior"</span>)]
     </span>PpExtWarn,
-    <span class="attr">#[lang_util(display = <span class="string">&quot;disable&quot;</span>, <span class="kw">as</span>(display), kind = <span class="string">&quot;extension behavior&quot;</span>)]
+    <span class="attr">#[lang_util(display = <span class="string">"disable"</span>, parser(display), kind = <span class="string">"extension behavior"</span>)]
     </span>PpExtDisable,
 
-    <span class="attr">#[lang_util(display = <span class="string">&quot;&lt;{}&gt;&quot;</span>, <span class="kw">as</span>(display), kind = <span class="string">&quot;include path&quot;</span>)]
+    <span class="attr">#[lang_util(display = <span class="string">"&lt;{}&gt;"</span>, parser(display), kind = <span class="string">"include path"</span>)]
     </span>PpPathAbsolute(String),
-    <span class="attr">#[lang_util(display = <span class="string">&quot;\&quot;{}\&quot;&quot;</span>, <span class="kw">as</span>(display), kind = <span class="string">&quot;include path&quot;</span>)]
+    <span class="attr">#[lang_util(display = <span class="string">"\"{}\""</span>, parser(display), kind = <span class="string">"include path"</span>)]
     </span>PpPathRelative(String),
 
-    <span class="attr">#[cfg_attr(feature = <span class="string">&quot;v1&quot;</span>, error)]
-    #[lang_util(display = <span class="string">&quot;&lt;invalid token&gt;&quot;</span>, <span class="kw">as</span>(display), kind = <span class="string">&quot;error&quot;</span>)]
+    <span class="attr">#[cfg_attr(feature = <span class="string">"v1"</span>, error)]
+    #[lang_util(display = <span class="string">"&lt;invalid token&gt;"</span>, parser(display), kind = <span class="string">"error"</span>)]
     </span>Error,
 }
 
@@ -2205,25 +2213,25 @@
         )
     }
 
-    <span class="doccomment">/// Return this token&#39;s inner text as a string slice
+    <span class="doccomment">/// Return this token's inner text as a string slice
     </span><span class="kw">pub fn </span>as_str(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>str {
         <span class="kw">match </span><span class="self">self </span>{
             <span class="self">Self</span>::Identifier(s) =&gt; s,
             <span class="self">Self</span>::TypeName(s) =&gt; s,
             <span class="self">Self</span>::PpPathRelative(s) =&gt; s,
             <span class="self">Self</span>::PpPathAbsolute(s) =&gt; s,
-            <span class="kw">_ </span>=&gt; <span class="macro">panic!</span>(<span class="string">&quot;cannot convert token {:?}, to str&quot;</span>, <span class="self">self</span>),
+            <span class="kw">_ </span>=&gt; <span class="macro">panic!</span>(<span class="string">"cannot convert token {:?}, to str"</span>, <span class="self">self</span>),
         }
     }
 }
 
-<span class="macro">macro_rules! </span>impl_from {
+<span class="macro">macro_rules!</span> impl_from {
     (<span class="macro-nonterminal">$t</span>:ty =&gt; <span class="macro-nonterminal">$i</span>:ident) =&gt; {
         <span class="kw">impl </span>From&lt;Token&gt; <span class="kw">for </span><span class="macro-nonterminal">$t </span>{
             <span class="kw">fn </span>from(value: Token) -&gt; <span class="self">Self </span>{
                 <span class="kw">match </span>value {
                     Token::<span class="macro-nonterminal">$i</span>(i) =&gt; i,
-                    other =&gt; <span class="macro">panic!</span>(<span class="macro">concat!</span>(<span class="string">&quot;cannot convert {:?} into &quot;</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$i</span>)), other),
+                    other =&gt; <span class="macro">panic!</span>(<span class="macro">concat!</span>(<span class="string">"cannot convert {:?} into "</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$i</span>)), other),
                 }
             }
         }
@@ -2240,7 +2248,7 @@
     <span class="kw">fn </span>from(value: Token) -&gt; <span class="self">Self </span>{
         <span class="kw">match </span>value {
             Token::PpRest(s) =&gt; s,
-            other =&gt; <span class="macro">panic!</span>(<span class="string">&quot;cannot convert {:?} into String&quot;</span>, other),
+            other =&gt; <span class="macro">panic!</span>(<span class="string">"cannot convert {:?} into String"</span>, other),
         }
     }
 }

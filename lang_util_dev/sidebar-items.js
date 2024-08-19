@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["test_util"]};
+window.SIDEBAR_ITEMS = {"derive":["Display"],"mod":["test_util"],"trait":["Display"]};

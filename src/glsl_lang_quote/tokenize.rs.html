@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lang-quote/src/tokenize.rs`."><title>tokenize.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-fa3bb1812debf86c.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="glsl_lang_quote" data-themes="" data-resource-suffix="" data-rustdoc-version="1.74.1 (a28077b28 2023-12-04)" data-channel="1.74.1" data-search-js="search-8be46b629f5f14a8.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-c5bd66d33317d69f.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../glsl_lang_quote/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lang-quote/src/tokenize.rs`."><title>tokenize.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-dd39b87e5fcfba68.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="glsl_lang_quote" data-themes="" data-resource-suffix="" data-rustdoc-version="1.80.1 (3f5fd8dd4 2024-08-06)" data-channel="1.80.1" data-search-js="search-d52510db62a78183.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -1970,7 +1970,7 @@
     }
 }
 
-<span class="macro">macro_rules! </span>impl_tokenize {
+<span class="macro">macro_rules!</span> impl_tokenize {
     (<span class="macro-nonterminal">$type_name</span>:ty, <span class="macro-nonterminal">$tokenizer</span>:ident) =&gt; {
         <span class="kw">impl </span>Tokenize <span class="kw">for </span><span class="macro-nonterminal">$type_name </span>{
             <span class="kw">fn </span>tokenize(<span class="kw-2">&amp;</span><span class="self">self</span>, stream: <span class="kw-2">&amp;mut </span>TokenStream) {
@@ -2052,16 +2052,16 @@
 
     <span class="kw">match </span>p {
         ast::PathData::Absolute(<span class="kw-2">ref </span>s) =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::Path::new(glsl_lang::ast::PathData::Absolute(#s.to_owned()), #span) }
+            <span class="macro">quote!</span> { glsl_lang::ast::Path::new(glsl_lang::ast::PathData::Absolute(#s.to_owned()), #span) }
         }
         ast::PathData::Relative(<span class="kw-2">ref </span>s) =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::Path::new(glsl_lang::ast::PathData::Relative(#s.to_owned()), #span) }
+            <span class="macro">quote!</span> { glsl_lang::ast::Path::new(glsl_lang::ast::PathData::Relative(#s.to_owned()), #span) }
         }
     }
 }
 
 <span class="kw">fn </span>tokenize_rs_ident(rs_ident: <span class="kw-2">&amp;</span>str) -&gt; TokenStream {
-    TokenStream::from_str(rs_ident).expect(<span class="string">&quot;invalid rust code in interpolation&quot;</span>)
+    TokenStream::from_str(rs_ident).expect(<span class="string">"invalid rust code in interpolation"</span>)
 }
 
 <span class="kw">fn </span>tokenize_identifier(i: <span class="kw-2">&amp;</span>ast::Identifier) -&gt; TokenStream {
@@ -2071,482 +2071,482 @@
         <span class="comment">// Regular identifier
         </span><span class="kw">let </span>t = i.<span class="number">0</span>.to_owned().quote();
         <span class="kw">let </span>span = tokenize_span(<span class="kw-2">&amp;</span>i.span);
-        <span class="macro">quote! </span>{ glsl_lang::ast::Identifier::new(glsl_lang::ast::IdentifierData(#t), #span) }
+        <span class="macro">quote!</span> { glsl_lang::ast::Identifier::new(glsl_lang::ast::IdentifierData(#t), #span) }
     }
 }
 
 <span class="kw">fn </span>tokenize_type_name(tn: <span class="kw-2">&amp;</span>ast::TypeName) -&gt; TokenStream {
     <span class="kw">let </span>t = tn.<span class="number">0</span>.to_owned().quote();
     <span class="kw">let </span>span = tokenize_span(<span class="kw-2">&amp;</span>tn.span);
-    <span class="macro">quote! </span>{ glsl_lang::ast::TypeName::new(glsl_lang::ast::TypeNameData(#t), #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::TypeName::new(glsl_lang::ast::TypeNameData(#t), #span) }
 }
 
 <span class="kw">fn </span>tokenize_type_specifier_non_array(t: <span class="kw-2">&amp;</span>ast::TypeSpecifierNonArray) -&gt; TokenStream {
     <span class="kw">let </span>span = tokenize_span(<span class="kw-2">&amp;</span>t.span);
     <span class="kw">let </span>t = <span class="kw">match </span><span class="kw-2">**</span>t {
         ast::TypeSpecifierNonArrayData::Void =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Void }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Void }
         }
         ast::TypeSpecifierNonArrayData::Bool =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Bool }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Bool }
         }
         ast::TypeSpecifierNonArrayData::Int =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Int }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Int }
         }
         ast::TypeSpecifierNonArrayData::UInt =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::UInt }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::UInt }
         }
         ast::TypeSpecifierNonArrayData::Float =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Float }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Float }
         }
         ast::TypeSpecifierNonArrayData::Double =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Double }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Double }
         }
         ast::TypeSpecifierNonArrayData::Vec2 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Vec2 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Vec2 }
         }
         ast::TypeSpecifierNonArrayData::Vec3 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Vec3 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Vec3 }
         }
         ast::TypeSpecifierNonArrayData::Vec4 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Vec4 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Vec4 }
         }
         ast::TypeSpecifierNonArrayData::DVec2 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::DVec2 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::DVec2 }
         }
         ast::TypeSpecifierNonArrayData::DVec3 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::DVec3 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::DVec3 }
         }
         ast::TypeSpecifierNonArrayData::DVec4 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::DVec4 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::DVec4 }
         }
         ast::TypeSpecifierNonArrayData::BVec2 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::BVec2 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::BVec2 }
         }
         ast::TypeSpecifierNonArrayData::BVec3 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::BVec3 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::BVec3 }
         }
         ast::TypeSpecifierNonArrayData::BVec4 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::BVec4 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::BVec4 }
         }
         ast::TypeSpecifierNonArrayData::IVec2 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::IVec2 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::IVec2 }
         }
         ast::TypeSpecifierNonArrayData::IVec3 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::IVec3 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::IVec3 }
         }
         ast::TypeSpecifierNonArrayData::IVec4 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::IVec4 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::IVec4 }
         }
         ast::TypeSpecifierNonArrayData::UVec2 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::UVec2 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::UVec2 }
         }
         ast::TypeSpecifierNonArrayData::UVec3 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::UVec3 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::UVec3 }
         }
         ast::TypeSpecifierNonArrayData::UVec4 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::UVec4 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::UVec4 }
         }
         ast::TypeSpecifierNonArrayData::Mat2 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Mat2 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Mat2 }
         }
         ast::TypeSpecifierNonArrayData::Mat3 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Mat3 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Mat3 }
         }
         ast::TypeSpecifierNonArrayData::Mat4 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Mat4 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Mat4 }
         }
         ast::TypeSpecifierNonArrayData::Mat22 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Mat22 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Mat22 }
         }
         ast::TypeSpecifierNonArrayData::Mat23 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Mat23 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Mat23 }
         }
         ast::TypeSpecifierNonArrayData::Mat24 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Mat24 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Mat24 }
         }
         ast::TypeSpecifierNonArrayData::Mat32 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Mat32 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Mat32 }
         }
         ast::TypeSpecifierNonArrayData::Mat33 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Mat33 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Mat33 }
         }
         ast::TypeSpecifierNonArrayData::Mat34 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Mat34 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Mat34 }
         }
         ast::TypeSpecifierNonArrayData::Mat42 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Mat42 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Mat42 }
         }
         ast::TypeSpecifierNonArrayData::Mat43 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Mat43 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Mat43 }
         }
         ast::TypeSpecifierNonArrayData::Mat44 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Mat44 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Mat44 }
         }
         ast::TypeSpecifierNonArrayData::DMat2 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::DMat2 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::DMat2 }
         }
         ast::TypeSpecifierNonArrayData::DMat3 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::DMat3 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::DMat3 }
         }
         ast::TypeSpecifierNonArrayData::DMat4 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::DMat4 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::DMat4 }
         }
         ast::TypeSpecifierNonArrayData::DMat22 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::DMat22 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::DMat22 }
         }
         ast::TypeSpecifierNonArrayData::DMat23 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::DMat23 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::DMat23 }
         }
         ast::TypeSpecifierNonArrayData::DMat24 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::DMat24 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::DMat24 }
         }
         ast::TypeSpecifierNonArrayData::DMat32 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::DMat32 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::DMat32 }
         }
         ast::TypeSpecifierNonArrayData::DMat33 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::DMat33 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::DMat33 }
         }
         ast::TypeSpecifierNonArrayData::DMat34 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::DMat34 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::DMat34 }
         }
         ast::TypeSpecifierNonArrayData::DMat42 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::DMat42 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::DMat42 }
         }
         ast::TypeSpecifierNonArrayData::DMat43 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::DMat43 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::DMat43 }
         }
         ast::TypeSpecifierNonArrayData::DMat44 =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::DMat44 }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::DMat44 }
         }
         ast::TypeSpecifierNonArrayData::Sampler1D =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Sampler1D }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Sampler1D }
         }
         ast::TypeSpecifierNonArrayData::Image1D =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Image1D }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Image1D }
         }
         ast::TypeSpecifierNonArrayData::Sampler2D =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Sampler2D }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Sampler2D }
         }
         ast::TypeSpecifierNonArrayData::Image2D =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Image2D }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Image2D }
         }
         ast::TypeSpecifierNonArrayData::Sampler3D =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Sampler3D }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Sampler3D }
         }
         ast::TypeSpecifierNonArrayData::Image3D =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Image3D }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Image3D }
         }
         ast::TypeSpecifierNonArrayData::SamplerCube =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::SamplerCube }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::SamplerCube }
         }
         ast::TypeSpecifierNonArrayData::ImageCube =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::ImageCube }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::ImageCube }
         }
         ast::TypeSpecifierNonArrayData::Sampler2DRect =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Sampler2DRect }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Sampler2DRect }
         }
         ast::TypeSpecifierNonArrayData::Image2DRect =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Image2DRect }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Image2DRect }
         }
         ast::TypeSpecifierNonArrayData::Sampler1DArray =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Sampler1DArray }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Sampler1DArray }
         }
         ast::TypeSpecifierNonArrayData::Image1DArray =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Image1DArray }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Image1DArray }
         }
         ast::TypeSpecifierNonArrayData::Sampler2DArray =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Sampler2DArray }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Sampler2DArray }
         }
         ast::TypeSpecifierNonArrayData::Image2DArray =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Image2DArray }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Image2DArray }
         }
         ast::TypeSpecifierNonArrayData::SamplerBuffer =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::SamplerBuffer }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::SamplerBuffer }
         }
         ast::TypeSpecifierNonArrayData::ImageBuffer =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::ImageBuffer }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::ImageBuffer }
         }
         ast::TypeSpecifierNonArrayData::Sampler2DMs =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Sampler2DMs }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Sampler2DMs }
         }
         ast::TypeSpecifierNonArrayData::Image2DMs =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Image2DMs }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Image2DMs }
         }
         ast::TypeSpecifierNonArrayData::Sampler2DMsArray =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Sampler2DMsArray }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Sampler2DMsArray }
         }
         ast::TypeSpecifierNonArrayData::Image2DMsArray =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Image2DMsArray }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Image2DMsArray }
         }
         ast::TypeSpecifierNonArrayData::SamplerCubeArray =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::SamplerCubeArray }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::SamplerCubeArray }
         }
         ast::TypeSpecifierNonArrayData::ImageCubeArray =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::ImageCubeArray }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::ImageCubeArray }
         }
         ast::TypeSpecifierNonArrayData::Sampler1DShadow =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Sampler1DShadow }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Sampler1DShadow }
         }
         ast::TypeSpecifierNonArrayData::Sampler2DShadow =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Sampler2DShadow }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Sampler2DShadow }
         }
         ast::TypeSpecifierNonArrayData::Sampler2DRectShadow =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Sampler2DRectShadow }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Sampler2DRectShadow }
         }
         ast::TypeSpecifierNonArrayData::Sampler1DArrayShadow =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Sampler1DArrayShadow }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Sampler1DArrayShadow }
         }
         ast::TypeSpecifierNonArrayData::Sampler2DArrayShadow =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Sampler2DArrayShadow }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Sampler2DArrayShadow }
         }
         ast::TypeSpecifierNonArrayData::SamplerCubeShadow =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::SamplerCubeShadow }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::SamplerCubeShadow }
         }
         ast::TypeSpecifierNonArrayData::SamplerCubeArrayShadow =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::SamplerCubeArrayShadow }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::SamplerCubeArrayShadow }
         }
         ast::TypeSpecifierNonArrayData::ISampler1D =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::ISampler1D }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::ISampler1D }
         }
         ast::TypeSpecifierNonArrayData::IImage1D =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::IImage1D }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::IImage1D }
         }
         ast::TypeSpecifierNonArrayData::ISampler2D =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::ISampler2D }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::ISampler2D }
         }
         ast::TypeSpecifierNonArrayData::IImage2D =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::IImage2D }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::IImage2D }
         }
         ast::TypeSpecifierNonArrayData::ISampler3D =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::ISampler3D }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::ISampler3D }
         }
         ast::TypeSpecifierNonArrayData::IImage3D =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::IImage3D }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::IImage3D }
         }
         ast::TypeSpecifierNonArrayData::ISamplerCube =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::ISamplerCube }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::ISamplerCube }
         }
         ast::TypeSpecifierNonArrayData::IImageCube =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::IImageCube }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::IImageCube }
         }
         ast::TypeSpecifierNonArrayData::ISampler2DRect =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::ISampler2DRect }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::ISampler2DRect }
         }
         ast::TypeSpecifierNonArrayData::IImage2DRect =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::IImage2DRect }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::IImage2DRect }
         }
         ast::TypeSpecifierNonArrayData::ISampler1DArray =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::ISampler1DArray }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::ISampler1DArray }
         }
         ast::TypeSpecifierNonArrayData::IImage1DArray =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::IImage1DArray }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::IImage1DArray }
         }
         ast::TypeSpecifierNonArrayData::ISampler2DArray =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::ISampler2DArray }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::ISampler2DArray }
         }
         ast::TypeSpecifierNonArrayData::IImage2DArray =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::IImage2DArray }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::IImage2DArray }
         }
         ast::TypeSpecifierNonArrayData::ISamplerBuffer =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::ISamplerBuffer }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::ISamplerBuffer }
         }
         ast::TypeSpecifierNonArrayData::IImageBuffer =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::IImageBuffer }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::IImageBuffer }
         }
         ast::TypeSpecifierNonArrayData::ISampler2DMs =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::ISampler2DMs }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::ISampler2DMs }
         }
         ast::TypeSpecifierNonArrayData::IImage2DMs =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::IImage2DMs }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::IImage2DMs }
         }
         ast::TypeSpecifierNonArrayData::ISampler2DMsArray =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::ISampler2DMsArray }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::ISampler2DMsArray }
         }
         ast::TypeSpecifierNonArrayData::IImage2DMsArray =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::IImage2DMsArray }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::IImage2DMsArray }
         }
         ast::TypeSpecifierNonArrayData::ISamplerCubeArray =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::ISamplerCubeArray }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::ISamplerCubeArray }
         }
         ast::TypeSpecifierNonArrayData::IImageCubeArray =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::IImageCubeArray }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::IImageCubeArray }
         }
         ast::TypeSpecifierNonArrayData::AtomicUInt =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::AtomicUInt }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::AtomicUInt }
         }
         ast::TypeSpecifierNonArrayData::USampler1D =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::USampler1D }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::USampler1D }
         }
         ast::TypeSpecifierNonArrayData::UImage1D =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::UImage1D }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::UImage1D }
         }
         ast::TypeSpecifierNonArrayData::USampler2D =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::USampler2D }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::USampler2D }
         }
         ast::TypeSpecifierNonArrayData::UImage2D =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::UImage2D }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::UImage2D }
         }
         ast::TypeSpecifierNonArrayData::USampler3D =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::USampler3D }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::USampler3D }
         }
         ast::TypeSpecifierNonArrayData::UImage3D =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::UImage3D }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::UImage3D }
         }
         ast::TypeSpecifierNonArrayData::USamplerCube =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::USamplerCube }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::USamplerCube }
         }
         ast::TypeSpecifierNonArrayData::UImageCube =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::UImageCube }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::UImageCube }
         }
         ast::TypeSpecifierNonArrayData::USampler2DRect =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::USampler2DRect }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::USampler2DRect }
         }
         ast::TypeSpecifierNonArrayData::UImage2DRect =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::UImage2DRect }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::UImage2DRect }
         }
         ast::TypeSpecifierNonArrayData::USampler1DArray =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::USampler1DArray }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::USampler1DArray }
         }
         ast::TypeSpecifierNonArrayData::UImage1DArray =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::UImage1DArray }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::UImage1DArray }
         }
         ast::TypeSpecifierNonArrayData::USampler2DArray =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::USampler2DArray }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::USampler2DArray }
         }
         ast::TypeSpecifierNonArrayData::UImage2DArray =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::UImage2DArray }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::UImage2DArray }
         }
         ast::TypeSpecifierNonArrayData::USamplerBuffer =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::USamplerBuffer }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::USamplerBuffer }
         }
         ast::TypeSpecifierNonArrayData::UImageBuffer =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::UImageBuffer }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::UImageBuffer }
         }
         ast::TypeSpecifierNonArrayData::USampler2DMs =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::USampler2DMs }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::USampler2DMs }
         }
         ast::TypeSpecifierNonArrayData::UImage2DMs =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::UImage2DMs }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::UImage2DMs }
         }
         ast::TypeSpecifierNonArrayData::USampler2DMsArray =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::USampler2DMsArray }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::USampler2DMsArray }
         }
         ast::TypeSpecifierNonArrayData::UImage2DMsArray =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::UImage2DMsArray }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::UImage2DMsArray }
         }
         ast::TypeSpecifierNonArrayData::USamplerCubeArray =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::USamplerCubeArray }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::USamplerCubeArray }
         }
         ast::TypeSpecifierNonArrayData::UImageCubeArray =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::UImageCubeArray }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::UImageCubeArray }
         }
 
         <span class="comment">// GL_KHR_vulkan_glsl types
         </span>ast::TypeSpecifierNonArrayData::Texture1D =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Texture1D }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Texture1D }
         }
         ast::TypeSpecifierNonArrayData::Texture2D =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Texture2D }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Texture2D }
         }
         ast::TypeSpecifierNonArrayData::Texture3D =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Texture3D }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Texture3D }
         }
         ast::TypeSpecifierNonArrayData::TextureCube =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::TextureCube }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::TextureCube }
         }
         ast::TypeSpecifierNonArrayData::Texture2DRect =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Texture2DRect }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Texture2DRect }
         }
         ast::TypeSpecifierNonArrayData::Texture1DArray =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Texture1DArray }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Texture1DArray }
         }
         ast::TypeSpecifierNonArrayData::Texture2DArray =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Texture2DArray }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Texture2DArray }
         }
         ast::TypeSpecifierNonArrayData::TextureBuffer =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::TextureBuffer }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::TextureBuffer }
         }
         ast::TypeSpecifierNonArrayData::Texture2DMs =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Texture2DMs }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Texture2DMs }
         }
         ast::TypeSpecifierNonArrayData::Texture2DMsArray =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Texture2DMsArray }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Texture2DMsArray }
         }
         ast::TypeSpecifierNonArrayData::TextureCubeArray =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::TextureCubeArray }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::TextureCubeArray }
         }
         ast::TypeSpecifierNonArrayData::ITexture1D =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::ITexture1D }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::ITexture1D }
         }
         ast::TypeSpecifierNonArrayData::ITexture2D =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::ITexture2D }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::ITexture2D }
         }
         ast::TypeSpecifierNonArrayData::ITexture3D =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::ITexture3D }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::ITexture3D }
         }
         ast::TypeSpecifierNonArrayData::ITextureCube =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::ITextureCube }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::ITextureCube }
         }
         ast::TypeSpecifierNonArrayData::ITexture2DRect =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::ITexture2DRect }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::ITexture2DRect }
         }
         ast::TypeSpecifierNonArrayData::ITexture1DArray =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::ITexture1DArray }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::ITexture1DArray }
         }
         ast::TypeSpecifierNonArrayData::ITexture2DArray =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::ITexture2DArray }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::ITexture2DArray }
         }
         ast::TypeSpecifierNonArrayData::ITextureBuffer =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::ITextureBuffer }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::ITextureBuffer }
         }
         ast::TypeSpecifierNonArrayData::ITexture2DMs =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::ITexture2DMs }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::ITexture2DMs }
         }
         ast::TypeSpecifierNonArrayData::ITexture2DMsArray =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::ITexture2DMsArray }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::ITexture2DMsArray }
         }
         ast::TypeSpecifierNonArrayData::ITextureCubeArray =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::ITextureCubeArray }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::ITextureCubeArray }
         }
         ast::TypeSpecifierNonArrayData::Sampler =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Sampler }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Sampler }
         }
         ast::TypeSpecifierNonArrayData::SamplerShadow =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::SamplerShadow }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::SamplerShadow }
         }
         ast::TypeSpecifierNonArrayData::SubpassInput =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::SubpassInput }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::SubpassInput }
         }
         ast::TypeSpecifierNonArrayData::ISubpassInput =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::ISubpassInput }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::ISubpassInput }
         }
         ast::TypeSpecifierNonArrayData::USubpassInput =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::USubpassInput }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::USubpassInput }
         }
         ast::TypeSpecifierNonArrayData::SubpassInputMs =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::SubpassInputMs }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::SubpassInputMs }
         }
         ast::TypeSpecifierNonArrayData::ISubpassInputMs =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::ISubpassInputMs }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::ISubpassInputMs }
         }
         ast::TypeSpecifierNonArrayData::USubpassInputMs =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::USubpassInputMs }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::USubpassInputMs }
         }
 
         <span class="comment">// end GL_KHR_vulkan_glsl types
         </span>ast::TypeSpecifierNonArrayData::Struct(<span class="kw-2">ref </span>s) =&gt; {
             <span class="kw">let </span>s = tokenize_struct_non_declaration(s);
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::Struct(#s) }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::Struct(#s) }
         }
 
         ast::TypeSpecifierNonArrayData::TypeName(<span class="kw-2">ref </span>tn) =&gt; {
             <span class="kw">let </span>tn = tokenize_type_name(tn);
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArrayData::TypeName(#tn) }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArrayData::TypeName(#tn) }
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::TypeSpecifierNonArray::new(#t, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::TypeSpecifierNonArray::new(#t, #span) }
 }
 
 <span class="kw">fn </span>tokenize_type_specifier(t: <span class="kw-2">&amp;</span>ast::TypeSpecifier) -&gt; TokenStream {
@@ -2555,7 +2555,7 @@
         <span class="kw">let </span>ty = tokenize_type_specifier_non_array(<span class="kw-2">&amp;</span>t.ty);
         <span class="kw">let </span>array_specifier = t.array_specifier.as_ref().map(tokenize_array_spec).quote();
 
-        <span class="macro">quote! </span>{
+        <span class="macro">quote!</span> {
           glsl_lang::ast::TypeSpecifierData {
             ty: #ty,
             array_specifier: #array_specifier
@@ -2563,7 +2563,7 @@
         }
     };
 
-    <span class="macro">quote! </span>{
+    <span class="macro">quote!</span> {
         glsl_lang::ast::TypeSpecifier::new(#data, #span)
     }
 }
@@ -2574,7 +2574,7 @@
         <span class="kw">let </span>qual = t.qualifier.as_ref().map(tokenize_type_qualifier).quote();
         <span class="kw">let </span>ty = tokenize_type_specifier(<span class="kw-2">&amp;</span>t.ty);
 
-        <span class="macro">quote! </span>{
+        <span class="macro">quote!</span> {
           glsl_lang::ast::FullySpecifiedTypeData {
             qualifier: #qual,
             ty: #ty
@@ -2582,7 +2582,7 @@
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::FullySpecifiedType::new(#t, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::FullySpecifiedType::new(#t, #span) }
 }
 
 <span class="kw">fn </span>tokenize_struct_non_declaration(s: <span class="kw-2">&amp;</span>ast::StructSpecifier) -&gt; TokenStream {
@@ -2591,7 +2591,7 @@
         <span class="kw">let </span>name = s.name.as_ref().map(tokenize_type_name);
         <span class="kw">let </span>fields = s.fields.iter().map(tokenize_struct_field);
 
-        <span class="macro">quote! </span>{
+        <span class="macro">quote!</span> {
           glsl_lang::ast::StructSpecifierData {
             name: <span class="prelude-val">Some</span>(#name),
             fields: <span class="macro">vec!</span>[#(#fields),<span class="kw-2">*</span>]
@@ -2599,7 +2599,7 @@
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::StructSpecifier::new(#s, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::StructSpecifier::new(#s, #span) }
 }
 
 <span class="kw">fn </span>tokenize_struct_field(field: <span class="kw-2">&amp;</span>ast::StructFieldSpecifier) -&gt; TokenStream {
@@ -2613,7 +2613,7 @@
         <span class="kw">let </span>ty = tokenize_type_specifier(<span class="kw-2">&amp;</span>field.ty);
         <span class="kw">let </span>identifiers = field.identifiers.iter().map(tokenize_arrayed_identifier);
 
-        <span class="macro">quote! </span>{
+        <span class="macro">quote!</span> {
           glsl_lang::ast::StructFieldSpecifierData {
             qualifier: #qual,
             ty: #ty,
@@ -2622,7 +2622,7 @@
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::StructFieldSpecifier::new(#field, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::StructFieldSpecifier::new(#field, #span) }
 }
 
 <span class="kw">fn </span>tokenize_array_spec(a: <span class="kw-2">&amp;</span>ast::ArraySpecifier) -&gt; TokenStream {
@@ -2630,27 +2630,27 @@
     <span class="kw">let </span>a = {
         <span class="kw">let </span>dimensions = a.dimensions.iter().map(tokenize_array_spec_dim);
 
-        <span class="macro">quote! </span>{
+        <span class="macro">quote!</span> {
           glsl_lang::ast::ArraySpecifierData { dimensions: <span class="macro">vec!</span>[#(#dimensions),<span class="kw-2">*</span>] }
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::ArraySpecifier::new(#a, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::ArraySpecifier::new(#a, #span) }
 }
 
 <span class="kw">fn </span>tokenize_array_spec_dim(a: <span class="kw-2">&amp;</span>ast::ArraySpecifierDimension) -&gt; TokenStream {
     <span class="kw">let </span>span = tokenize_span(<span class="kw-2">&amp;</span>a.span);
     <span class="kw">let </span>a = <span class="kw">match </span>a.content {
         ast::ArraySpecifierDimensionData::Unsized =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::ArraySpecifierDimensionData::Unsized }
+            <span class="macro">quote!</span> { glsl_lang::ast::ArraySpecifierDimensionData::Unsized }
         }
         ast::ArraySpecifierDimensionData::ExplicitlySized(<span class="kw-2">ref </span>e) =&gt; {
             <span class="kw">let </span>expr = (<span class="kw-2">&amp;</span>tokenize_expr(e)).quote();
-            <span class="macro">quote! </span>{ glsl_lang::ast::ArraySpecifierDimensionData::ExplicitlySized(#expr) }
+            <span class="macro">quote!</span> { glsl_lang::ast::ArraySpecifierDimensionData::ExplicitlySized(#expr) }
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::ArraySpecifierDimension::new(#a, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::ArraySpecifierDimension::new(#a, #span) }
 }
 
 <span class="kw">fn </span>tokenize_arrayed_identifier(identifier: <span class="kw-2">&amp;</span>ast::ArrayedIdentifier) -&gt; TokenStream {
@@ -2663,12 +2663,12 @@
             .map(tokenize_array_spec)
             .quote();
 
-        <span class="macro">quote! </span>{
+        <span class="macro">quote!</span> {
           glsl_lang::ast::ArrayedIdentifierData::new(#ident, #array_spec)
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::ArrayedIdentifier::new(#identifier, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::ArrayedIdentifier::new(#identifier, #span) }
 }
 
 <span class="kw">fn </span>tokenize_type_qualifier(q: <span class="kw-2">&amp;</span>ast::TypeQualifier) -&gt; TokenStream {
@@ -2676,14 +2676,14 @@
     <span class="kw">let </span>q = {
         <span class="kw">let </span>quals = q.qualifiers.iter().map(tokenize_type_qualifier_spec);
 
-        <span class="macro">quote! </span>{
+        <span class="macro">quote!</span> {
           glsl_lang::ast::TypeQualifierData {
             qualifiers: <span class="macro">vec!</span>[#(#quals),<span class="kw-2">*</span>]
           }
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::TypeQualifier::new(#q, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::TypeQualifier::new(#q, #span) }
 }
 
 <span class="kw">fn </span>tokenize_type_qualifier_spec(q: <span class="kw-2">&amp;</span>ast::TypeQualifierSpec) -&gt; TokenStream {
@@ -2691,97 +2691,97 @@
     <span class="kw">let </span>q = <span class="kw">match </span><span class="kw-2">**</span>q {
         ast::TypeQualifierSpecData::Storage(<span class="kw-2">ref </span>s) =&gt; {
             <span class="kw">let </span>s = tokenize_storage_qualifier(s);
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeQualifierSpecData::Storage(#s) }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeQualifierSpecData::Storage(#s) }
         }
 
         ast::TypeQualifierSpecData::Layout(<span class="kw-2">ref </span>l) =&gt; {
             <span class="kw">let </span>l = tokenize_layout_qualifier(l);
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeQualifierSpecData::Layout(#l) }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeQualifierSpecData::Layout(#l) }
         }
 
         ast::TypeQualifierSpecData::Precision(<span class="kw-2">ref </span>p) =&gt; {
             <span class="kw">let </span>p = tokenize_precision_qualifier(p);
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeQualifierSpecData::Precision(#p) }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeQualifierSpecData::Precision(#p) }
         }
 
         ast::TypeQualifierSpecData::Interpolation(<span class="kw-2">ref </span>i) =&gt; {
             <span class="kw">let </span>i = tokenize_interpolation_qualifier(i);
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeQualifierSpecData::Interpolation(#i) }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeQualifierSpecData::Interpolation(#i) }
         }
 
         ast::TypeQualifierSpecData::Invariant =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeQualifierSpecData::Invariant }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeQualifierSpecData::Invariant }
         }
 
         ast::TypeQualifierSpecData::Precise =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::TypeQualifierSpecData::Precise }
+            <span class="macro">quote!</span> { glsl_lang::ast::TypeQualifierSpecData::Precise }
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::TypeQualifierSpec::new(#q, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::TypeQualifierSpec::new(#q, #span) }
 }
 
 <span class="kw">fn </span>tokenize_storage_qualifier(q: <span class="kw-2">&amp;</span>ast::StorageQualifier) -&gt; TokenStream {
     <span class="kw">let </span>span = tokenize_span(<span class="kw-2">&amp;</span>q.span);
     <span class="kw">let </span>q = <span class="kw">match </span><span class="kw-2">**</span>q {
         ast::StorageQualifierData::Const =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::StorageQualifierData::Const }
+            <span class="macro">quote!</span> { glsl_lang::ast::StorageQualifierData::Const }
         }
         ast::StorageQualifierData::InOut =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::StorageQualifierData::InOut }
+            <span class="macro">quote!</span> { glsl_lang::ast::StorageQualifierData::InOut }
         }
-        ast::StorageQualifierData::In =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::StorageQualifierData::In },
-        ast::StorageQualifierData::Out =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::StorageQualifierData::Out },
+        ast::StorageQualifierData::In =&gt; <span class="macro">quote!</span> { glsl_lang::ast::StorageQualifierData::In },
+        ast::StorageQualifierData::Out =&gt; <span class="macro">quote!</span> { glsl_lang::ast::StorageQualifierData::Out },
         ast::StorageQualifierData::Centroid =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::StorageQualifierData::Centroid }
+            <span class="macro">quote!</span> { glsl_lang::ast::StorageQualifierData::Centroid }
         }
         ast::StorageQualifierData::Patch =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::StorageQualifierData::Patch }
+            <span class="macro">quote!</span> { glsl_lang::ast::StorageQualifierData::Patch }
         }
         ast::StorageQualifierData::Sample =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::StorageQualifierData::Sample }
+            <span class="macro">quote!</span> { glsl_lang::ast::StorageQualifierData::Sample }
         }
         ast::StorageQualifierData::Uniform =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::StorageQualifierData::Uniform }
+            <span class="macro">quote!</span> { glsl_lang::ast::StorageQualifierData::Uniform }
         }
         ast::StorageQualifierData::Buffer =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::StorageQualifierData::Buffer }
+            <span class="macro">quote!</span> { glsl_lang::ast::StorageQualifierData::Buffer }
         }
         ast::StorageQualifierData::Shared =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::StorageQualifierData::Shared }
+            <span class="macro">quote!</span> { glsl_lang::ast::StorageQualifierData::Shared }
         }
         ast::StorageQualifierData::Coherent =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::StorageQualifierData::Coherent }
+            <span class="macro">quote!</span> { glsl_lang::ast::StorageQualifierData::Coherent }
         }
         ast::StorageQualifierData::Volatile =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::StorageQualifierData::Volatile }
+            <span class="macro">quote!</span> { glsl_lang::ast::StorageQualifierData::Volatile }
         }
         ast::StorageQualifierData::Restrict =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::StorageQualifierData::Restrict }
+            <span class="macro">quote!</span> { glsl_lang::ast::StorageQualifierData::Restrict }
         }
         ast::StorageQualifierData::ReadOnly =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::StorageQualifierData::ReadOnly }
+            <span class="macro">quote!</span> { glsl_lang::ast::StorageQualifierData::ReadOnly }
         }
         ast::StorageQualifierData::WriteOnly =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::StorageQualifierData::WriteOnly }
+            <span class="macro">quote!</span> { glsl_lang::ast::StorageQualifierData::WriteOnly }
         }
         ast::StorageQualifierData::Attribute =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::StorageQualifierData::Attribute }
+            <span class="macro">quote!</span> { glsl_lang::ast::StorageQualifierData::Attribute }
         }
         ast::StorageQualifierData::Varying =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::StorageQualifierData::Varying }
+            <span class="macro">quote!</span> { glsl_lang::ast::StorageQualifierData::Varying }
         }
 
         ast::StorageQualifierData::Subroutine(<span class="kw-2">ref </span>n) =&gt; {
             <span class="kw">let </span>n = n.iter().map(tokenize_type_specifier);
 
-            <span class="macro">quote! </span>{
+            <span class="macro">quote!</span> {
                 glsl_lang::ast::StorageQualifierData::Subroutine(<span class="macro">vec!</span>[#(#n),<span class="kw-2">*</span>])
             }
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::StorageQualifier::new(#q, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::StorageQualifier::new(#q, #span) }
 }
 
 <span class="kw">fn </span>tokenize_layout_qualifier(l: <span class="kw-2">&amp;</span>ast::LayoutQualifier) -&gt; TokenStream {
@@ -2789,14 +2789,14 @@
     <span class="kw">let </span>l = {
         <span class="kw">let </span>ids = l.ids.iter().map(tokenize_layout_qualifier_spec);
 
-        <span class="macro">quote! </span>{
+        <span class="macro">quote!</span> {
           glsl_lang::ast::LayoutQualifierData {
             ids: <span class="macro">vec!</span>[#(#ids),<span class="kw-2">*</span>]
           }
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::LayoutQualifier::new(#l, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::LayoutQualifier::new(#l, #span) }
 }
 
 <span class="kw">fn </span>tokenize_layout_qualifier_spec(l: <span class="kw-2">&amp;</span>ast::LayoutQualifierSpec) -&gt; TokenStream {
@@ -2805,47 +2805,47 @@
         ast::LayoutQualifierSpecData::Identifier(<span class="kw-2">ref </span>i, <span class="kw-2">ref </span>e) =&gt; {
             <span class="kw">let </span>i = tokenize_identifier(i);
             <span class="kw">let </span>expr = e.as_ref().map(|e| (<span class="kw-2">&amp;</span>tokenize_expr(e)).quote()).quote();
-            <span class="macro">quote! </span>{ glsl_lang::ast::LayoutQualifierSpecData::Identifier(#i, #expr) }
+            <span class="macro">quote!</span> { glsl_lang::ast::LayoutQualifierSpecData::Identifier(#i, #expr) }
         }
 
         ast::LayoutQualifierSpecData::Shared =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::LayoutQualifierSpecData::Shared }
+            <span class="macro">quote!</span> { glsl_lang::ast::LayoutQualifierSpecData::Shared }
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::LayoutQualifierSpec::new(#l, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::LayoutQualifierSpec::new(#l, #span) }
 }
 
 <span class="kw">fn </span>tokenize_precision_qualifier(p: <span class="kw-2">&amp;</span>ast::PrecisionQualifier) -&gt; TokenStream {
     <span class="kw">let </span>span = tokenize_span(<span class="kw-2">&amp;</span>p.span);
     <span class="kw">let </span>p = <span class="kw">match </span>p.content {
         ast::PrecisionQualifierData::High =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::PrecisionQualifierData::High }
+            <span class="macro">quote!</span> { glsl_lang::ast::PrecisionQualifierData::High }
         }
         ast::PrecisionQualifierData::Medium =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::PrecisionQualifierData::Medium }
+            <span class="macro">quote!</span> { glsl_lang::ast::PrecisionQualifierData::Medium }
         }
-        ast::PrecisionQualifierData::Low =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::PrecisionQualifierData::Low },
+        ast::PrecisionQualifierData::Low =&gt; <span class="macro">quote!</span> { glsl_lang::ast::PrecisionQualifierData::Low },
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::PrecisionQualifier::new(#p, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::PrecisionQualifier::new(#p, #span) }
 }
 
 <span class="kw">fn </span>tokenize_interpolation_qualifier(i: <span class="kw-2">&amp;</span>ast::InterpolationQualifier) -&gt; TokenStream {
     <span class="kw">let </span>span = tokenize_span(<span class="kw-2">&amp;</span>i.span);
     <span class="kw">let </span>i = <span class="kw">match </span>i.content {
         ast::InterpolationQualifierData::Smooth =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::InterpolationQualifierData::Smooth }
+            <span class="macro">quote!</span> { glsl_lang::ast::InterpolationQualifierData::Smooth }
         }
         ast::InterpolationQualifierData::Flat =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::InterpolationQualifierData::Flat }
+            <span class="macro">quote!</span> { glsl_lang::ast::InterpolationQualifierData::Flat }
         }
         ast::InterpolationQualifierData::NoPerspective =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::InterpolationQualifierData::NoPerspective }
+            <span class="macro">quote!</span> { glsl_lang::ast::InterpolationQualifierData::NoPerspective }
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::InterpolationQualifier::new(#i, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::InterpolationQualifier::new(#i, #span) }
 }
 
 <span class="kw">fn </span>tokenize_expr(expr: <span class="kw-2">&amp;</span>ast::Expr) -&gt; TokenStream {
@@ -2857,143 +2857,143 @@
     <span class="kw">let </span>expr = <span class="kw">match </span>expr.content {
         ast::ExprData::Variable(<span class="kw-2">ref </span>i) =&gt; {
             <span class="kw">let </span>i = tokenize_identifier(i);
-            <span class="macro">quote! </span>{ glsl_lang::ast::ExprData::Variable(#i) }
+            <span class="macro">quote!</span> { glsl_lang::ast::ExprData::Variable(#i) }
         }
 
-        ast::ExprData::IntConst(<span class="kw-2">ref </span>x) =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::ExprData::IntConst(#x) },
+        ast::ExprData::IntConst(<span class="kw-2">ref </span>x) =&gt; <span class="macro">quote!</span> { glsl_lang::ast::ExprData::IntConst(#x) },
 
-        ast::ExprData::UIntConst(<span class="kw-2">ref </span>x) =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::ExprData::UIntConst(#x) },
+        ast::ExprData::UIntConst(<span class="kw-2">ref </span>x) =&gt; <span class="macro">quote!</span> { glsl_lang::ast::ExprData::UIntConst(#x) },
 
-        ast::ExprData::BoolConst(<span class="kw-2">ref </span>x) =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::ExprData::BoolConst(#x) },
+        ast::ExprData::BoolConst(<span class="kw-2">ref </span>x) =&gt; <span class="macro">quote!</span> { glsl_lang::ast::ExprData::BoolConst(#x) },
 
-        ast::ExprData::FloatConst(<span class="kw-2">ref </span>x) =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::ExprData::FloatConst(#x) },
+        ast::ExprData::FloatConst(<span class="kw-2">ref </span>x) =&gt; <span class="macro">quote!</span> { glsl_lang::ast::ExprData::FloatConst(#x) },
 
-        ast::ExprData::DoubleConst(<span class="kw-2">ref </span>x) =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::ExprData::DoubleConst(#x) },
+        ast::ExprData::DoubleConst(<span class="kw-2">ref </span>x) =&gt; <span class="macro">quote!</span> { glsl_lang::ast::ExprData::DoubleConst(#x) },
 
         ast::ExprData::Unary(<span class="kw-2">ref </span>op, <span class="kw-2">ref </span>e) =&gt; {
             <span class="kw">let </span>op = tokenize_unary_op(op);
             <span class="kw">let </span>e = (<span class="kw-2">&amp;</span>tokenize_expr(e)).quote();
-            <span class="macro">quote! </span>{ glsl_lang::ast::ExprData::Unary(#op, #e) }
+            <span class="macro">quote!</span> { glsl_lang::ast::ExprData::Unary(#op, #e) }
         }
 
         ast::ExprData::Binary(<span class="kw-2">ref </span>op, <span class="kw-2">ref </span>l, <span class="kw-2">ref </span>r) =&gt; {
             <span class="kw">let </span>op = tokenize_binary_op(op);
             <span class="kw">let </span>l = (<span class="kw-2">&amp;</span>tokenize_expr(l)).quote();
             <span class="kw">let </span>r = (<span class="kw-2">&amp;</span>tokenize_expr(r)).quote();
-            <span class="macro">quote! </span>{ glsl_lang::ast::ExprData::Binary(#op, #l, #r) }
+            <span class="macro">quote!</span> { glsl_lang::ast::ExprData::Binary(#op, #l, #r) }
         }
 
         ast::ExprData::Ternary(<span class="kw-2">ref </span>c, <span class="kw-2">ref </span>s, <span class="kw-2">ref </span>e) =&gt; {
             <span class="kw">let </span>c = (<span class="kw-2">&amp;</span>tokenize_expr(c)).quote();
             <span class="kw">let </span>s = (<span class="kw-2">&amp;</span>tokenize_expr(s)).quote();
             <span class="kw">let </span>e = (<span class="kw-2">&amp;</span>tokenize_expr(e)).quote();
-            <span class="macro">quote! </span>{ glsl_lang::ast::ExprData::Ternary(#c, #s, #e) }
+            <span class="macro">quote!</span> { glsl_lang::ast::ExprData::Ternary(#c, #s, #e) }
         }
 
         ast::ExprData::Assignment(<span class="kw-2">ref </span>v, <span class="kw-2">ref </span>op, <span class="kw-2">ref </span>e) =&gt; {
             <span class="kw">let </span>v = (<span class="kw-2">&amp;</span>tokenize_expr(v)).quote();
             <span class="kw">let </span>op = tokenize_assignment_op(op);
             <span class="kw">let </span>e = (<span class="kw-2">&amp;</span>tokenize_expr(e)).quote();
-            <span class="macro">quote! </span>{ glsl_lang::ast::ExprData::Assignment(#v, #op, #e) }
+            <span class="macro">quote!</span> { glsl_lang::ast::ExprData::Assignment(#v, #op, #e) }
         }
 
         ast::ExprData::Bracket(<span class="kw-2">ref </span>e, <span class="kw-2">ref </span>a) =&gt; {
             <span class="kw">let </span>e = (<span class="kw-2">&amp;</span>tokenize_expr(e)).quote();
             <span class="kw">let </span>a = tokenize_expr(a);
-            <span class="macro">quote! </span>{ glsl_lang::ast::ExprData::Bracket(#e, #a) }
+            <span class="macro">quote!</span> { glsl_lang::ast::ExprData::Bracket(#e, #a) }
         }
 
         ast::ExprData::FunCall(<span class="kw-2">ref </span>fun, <span class="kw-2">ref </span>args) =&gt; {
             <span class="kw">let </span>fun = tokenize_function_identifier(fun);
             <span class="kw">let </span>args = args.iter().map(tokenize_expr);
-            <span class="macro">quote! </span>{ glsl_lang::ast::ExprData::FunCall(#fun, <span class="macro">vec!</span>[#(#args),<span class="kw-2">*</span>]) }
+            <span class="macro">quote!</span> { glsl_lang::ast::ExprData::FunCall(#fun, <span class="macro">vec!</span>[#(#args),<span class="kw-2">*</span>]) }
         }
 
         ast::ExprData::Dot(<span class="kw-2">ref </span>e, <span class="kw-2">ref </span>i) =&gt; {
             <span class="kw">let </span>e = (<span class="kw-2">&amp;</span>tokenize_expr(e)).quote();
             <span class="kw">let </span>i = tokenize_identifier(i);
 
-            <span class="macro">quote! </span>{ glsl_lang::ast::ExprData::Dot(#e, #i) }
+            <span class="macro">quote!</span> { glsl_lang::ast::ExprData::Dot(#e, #i) }
         }
 
         ast::ExprData::PostInc(<span class="kw-2">ref </span>e) =&gt; {
             <span class="kw">let </span>e = (<span class="kw-2">&amp;</span>tokenize_expr(e)).quote();
-            <span class="macro">quote! </span>{ glsl_lang::ast::ExprData::PostInc(#e) }
+            <span class="macro">quote!</span> { glsl_lang::ast::ExprData::PostInc(#e) }
         }
 
         ast::ExprData::PostDec(<span class="kw-2">ref </span>e) =&gt; {
             <span class="kw">let </span>e = (<span class="kw-2">&amp;</span>tokenize_expr(e)).quote();
-            <span class="macro">quote! </span>{ glsl_lang::ast::ExprData::PostDec(#e) }
+            <span class="macro">quote!</span> { glsl_lang::ast::ExprData::PostDec(#e) }
         }
 
         ast::ExprData::Comma(<span class="kw-2">ref </span>a, <span class="kw-2">ref </span>b) =&gt; {
             <span class="kw">let </span>a = (<span class="kw-2">&amp;</span>tokenize_expr(a)).quote();
             <span class="kw">let </span>b = (<span class="kw-2">&amp;</span>tokenize_expr(b)).quote();
-            <span class="macro">quote! </span>{ glsl_lang::ast::ExprData::Comma(#a, #b) }
+            <span class="macro">quote!</span> { glsl_lang::ast::ExprData::Comma(#a, #b) }
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::Expr::new(#expr, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::Expr::new(#expr, #span) }
 }
 
 <span class="kw">fn </span>tokenize_unary_op(op: <span class="kw-2">&amp;</span>ast::UnaryOp) -&gt; TokenStream {
     <span class="kw">let </span>span = tokenize_span(<span class="kw-2">&amp;</span>op.span);
     <span class="kw">let </span>op = <span class="kw">match </span>op.content {
-        ast::UnaryOpData::Inc =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::UnaryOpData::Inc },
-        ast::UnaryOpData::Dec =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::UnaryOpData::Dec },
-        ast::UnaryOpData::Add =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::UnaryOpData::Add },
-        ast::UnaryOpData::Minus =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::UnaryOpData::Minus },
-        ast::UnaryOpData::Not =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::UnaryOpData::Not },
-        ast::UnaryOpData::Complement =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::UnaryOpData::Complement },
+        ast::UnaryOpData::Inc =&gt; <span class="macro">quote!</span> { glsl_lang::ast::UnaryOpData::Inc },
+        ast::UnaryOpData::Dec =&gt; <span class="macro">quote!</span> { glsl_lang::ast::UnaryOpData::Dec },
+        ast::UnaryOpData::Add =&gt; <span class="macro">quote!</span> { glsl_lang::ast::UnaryOpData::Add },
+        ast::UnaryOpData::Minus =&gt; <span class="macro">quote!</span> { glsl_lang::ast::UnaryOpData::Minus },
+        ast::UnaryOpData::Not =&gt; <span class="macro">quote!</span> { glsl_lang::ast::UnaryOpData::Not },
+        ast::UnaryOpData::Complement =&gt; <span class="macro">quote!</span> { glsl_lang::ast::UnaryOpData::Complement },
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::UnaryOp::new(#op, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::UnaryOp::new(#op, #span) }
 }
 
 <span class="kw">fn </span>tokenize_binary_op(op: <span class="kw-2">&amp;</span>ast::BinaryOp) -&gt; TokenStream {
     <span class="kw">let </span>span = tokenize_span(<span class="kw-2">&amp;</span>op.span);
     <span class="kw">let </span>op = <span class="kw">match </span>op.content {
-        ast::BinaryOpData::Or =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::BinaryOpData::Or },
-        ast::BinaryOpData::Xor =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::BinaryOpData::Xor },
-        ast::BinaryOpData::And =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::BinaryOpData::And },
-        ast::BinaryOpData::BitOr =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::BinaryOpData::BitOr },
-        ast::BinaryOpData::BitXor =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::BinaryOpData::BitXor },
-        ast::BinaryOpData::BitAnd =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::BinaryOpData::BitAnd },
-        ast::BinaryOpData::Equal =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::BinaryOpData::Equal },
-        ast::BinaryOpData::NonEqual =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::BinaryOpData::NonEqual },
-        ast::BinaryOpData::Lt =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::BinaryOpData::Lt },
-        ast::BinaryOpData::Gt =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::BinaryOpData::Gt },
-        ast::BinaryOpData::Lte =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::BinaryOpData::Lte },
-        ast::BinaryOpData::Gte =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::BinaryOpData::Gte },
-        ast::BinaryOpData::LShift =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::BinaryOpData::LShift },
-        ast::BinaryOpData::RShift =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::BinaryOpData::RShift },
-        ast::BinaryOpData::Add =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::BinaryOpData::Add },
-        ast::BinaryOpData::Sub =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::BinaryOpData::Sub },
-        ast::BinaryOpData::Mult =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::BinaryOpData::Mult },
-        ast::BinaryOpData::Div =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::BinaryOpData::Div },
-        ast::BinaryOpData::Mod =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::BinaryOpData::Mod },
+        ast::BinaryOpData::Or =&gt; <span class="macro">quote!</span> { glsl_lang::ast::BinaryOpData::Or },
+        ast::BinaryOpData::Xor =&gt; <span class="macro">quote!</span> { glsl_lang::ast::BinaryOpData::Xor },
+        ast::BinaryOpData::And =&gt; <span class="macro">quote!</span> { glsl_lang::ast::BinaryOpData::And },
+        ast::BinaryOpData::BitOr =&gt; <span class="macro">quote!</span> { glsl_lang::ast::BinaryOpData::BitOr },
+        ast::BinaryOpData::BitXor =&gt; <span class="macro">quote!</span> { glsl_lang::ast::BinaryOpData::BitXor },
+        ast::BinaryOpData::BitAnd =&gt; <span class="macro">quote!</span> { glsl_lang::ast::BinaryOpData::BitAnd },
+        ast::BinaryOpData::Equal =&gt; <span class="macro">quote!</span> { glsl_lang::ast::BinaryOpData::Equal },
+        ast::BinaryOpData::NonEqual =&gt; <span class="macro">quote!</span> { glsl_lang::ast::BinaryOpData::NonEqual },
+        ast::BinaryOpData::Lt =&gt; <span class="macro">quote!</span> { glsl_lang::ast::BinaryOpData::Lt },
+        ast::BinaryOpData::Gt =&gt; <span class="macro">quote!</span> { glsl_lang::ast::BinaryOpData::Gt },
+        ast::BinaryOpData::Lte =&gt; <span class="macro">quote!</span> { glsl_lang::ast::BinaryOpData::Lte },
+        ast::BinaryOpData::Gte =&gt; <span class="macro">quote!</span> { glsl_lang::ast::BinaryOpData::Gte },
+        ast::BinaryOpData::LShift =&gt; <span class="macro">quote!</span> { glsl_lang::ast::BinaryOpData::LShift },
+        ast::BinaryOpData::RShift =&gt; <span class="macro">quote!</span> { glsl_lang::ast::BinaryOpData::RShift },
+        ast::BinaryOpData::Add =&gt; <span class="macro">quote!</span> { glsl_lang::ast::BinaryOpData::Add },
+        ast::BinaryOpData::Sub =&gt; <span class="macro">quote!</span> { glsl_lang::ast::BinaryOpData::Sub },
+        ast::BinaryOpData::Mult =&gt; <span class="macro">quote!</span> { glsl_lang::ast::BinaryOpData::Mult },
+        ast::BinaryOpData::Div =&gt; <span class="macro">quote!</span> { glsl_lang::ast::BinaryOpData::Div },
+        ast::BinaryOpData::Mod =&gt; <span class="macro">quote!</span> { glsl_lang::ast::BinaryOpData::Mod },
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::BinaryOp::new(#op, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::BinaryOp::new(#op, #span) }
 }
 
 <span class="kw">fn </span>tokenize_assignment_op(op: <span class="kw-2">&amp;</span>ast::AssignmentOp) -&gt; TokenStream {
     <span class="kw">let </span>span = tokenize_span(<span class="kw-2">&amp;</span>op.span);
     <span class="kw">let </span>op = <span class="kw">match </span>op.content {
-        ast::AssignmentOpData::Equal =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::AssignmentOpData::Equal },
-        ast::AssignmentOpData::Mult =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::AssignmentOpData::Mult },
-        ast::AssignmentOpData::Div =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::AssignmentOpData::Div },
-        ast::AssignmentOpData::Mod =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::AssignmentOpData::Mod },
-        ast::AssignmentOpData::Add =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::AssignmentOpData::Add },
-        ast::AssignmentOpData::Sub =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::AssignmentOpData::Sub },
-        ast::AssignmentOpData::LShift =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::AssignmentOpData::LShift },
-        ast::AssignmentOpData::RShift =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::AssignmentOpData::RShift },
-        ast::AssignmentOpData::And =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::AssignmentOpData::And },
-        ast::AssignmentOpData::Xor =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::AssignmentOpData::Xor },
-        ast::AssignmentOpData::Or =&gt; <span class="macro">quote! </span>{ AssignmentOpData::Or },
+        ast::AssignmentOpData::Equal =&gt; <span class="macro">quote!</span> { glsl_lang::ast::AssignmentOpData::Equal },
+        ast::AssignmentOpData::Mult =&gt; <span class="macro">quote!</span> { glsl_lang::ast::AssignmentOpData::Mult },
+        ast::AssignmentOpData::Div =&gt; <span class="macro">quote!</span> { glsl_lang::ast::AssignmentOpData::Div },
+        ast::AssignmentOpData::Mod =&gt; <span class="macro">quote!</span> { glsl_lang::ast::AssignmentOpData::Mod },
+        ast::AssignmentOpData::Add =&gt; <span class="macro">quote!</span> { glsl_lang::ast::AssignmentOpData::Add },
+        ast::AssignmentOpData::Sub =&gt; <span class="macro">quote!</span> { glsl_lang::ast::AssignmentOpData::Sub },
+        ast::AssignmentOpData::LShift =&gt; <span class="macro">quote!</span> { glsl_lang::ast::AssignmentOpData::LShift },
+        ast::AssignmentOpData::RShift =&gt; <span class="macro">quote!</span> { glsl_lang::ast::AssignmentOpData::RShift },
+        ast::AssignmentOpData::And =&gt; <span class="macro">quote!</span> { glsl_lang::ast::AssignmentOpData::And },
+        ast::AssignmentOpData::Xor =&gt; <span class="macro">quote!</span> { glsl_lang::ast::AssignmentOpData::Xor },
+        ast::AssignmentOpData::Or =&gt; <span class="macro">quote!</span> { AssignmentOpData::Or },
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::AssignmentOp::new(#op, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::AssignmentOp::new(#op, #span) }
 }
 
 <span class="kw">fn </span>tokenize_function_identifier(i: <span class="kw-2">&amp;</span>ast::FunIdentifier) -&gt; TokenStream {
@@ -3005,49 +3005,49 @@
     <span class="kw">let </span>i = <span class="kw">match </span>i.content {
         ast::FunIdentifierData::TypeSpecifier(<span class="kw-2">ref </span>n) =&gt; {
             <span class="kw">let </span>n = (<span class="kw-2">&amp;</span>tokenize_type_specifier(n)).quote();
-            <span class="macro">quote! </span>{ glsl_lang::ast::FunIdentifierData::TypeSpecifier(#n) }
+            <span class="macro">quote!</span> { glsl_lang::ast::FunIdentifierData::TypeSpecifier(#n) }
         }
 
         ast::FunIdentifierData::Expr(<span class="kw-2">ref </span>e) =&gt; {
             <span class="kw">let </span>e = (<span class="kw-2">&amp;</span>tokenize_expr(e)).quote();
-            <span class="macro">quote! </span>{ glsl_lang::ast::FunIdentifierData::Expr(#e) }
+            <span class="macro">quote!</span> { glsl_lang::ast::FunIdentifierData::Expr(#e) }
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::FunIdentifier::new(#i, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::FunIdentifier::new(#i, #span) }
 }
 
 <span class="kw">fn </span>tokenize_declaration(d: <span class="kw-2">&amp;</span>ast::Declaration) -&gt; TokenStream {
     <span class="kw">let </span>decl = <span class="kw">match </span><span class="kw-2">**</span>d {
         ast::DeclarationData::FunctionPrototype(<span class="kw-2">ref </span>proto) =&gt; {
             <span class="kw">let </span>p = tokenize_function_prototype(proto);
-            <span class="macro">quote! </span>{ glsl_lang::ast::DeclarationData::FunctionPrototype(#p) }
+            <span class="macro">quote!</span> { glsl_lang::ast::DeclarationData::FunctionPrototype(#p) }
         }
 
         ast::DeclarationData::InitDeclaratorList(<span class="kw-2">ref </span>list) =&gt; {
             <span class="kw">let </span>l = tokenize_init_declarator_list(list);
-            <span class="macro">quote! </span>{ glsl_lang::ast::DeclarationData::InitDeclaratorList(#l) }
+            <span class="macro">quote!</span> { glsl_lang::ast::DeclarationData::InitDeclaratorList(#l) }
         }
 
         ast::DeclarationData::Precision(<span class="kw-2">ref </span>qual, <span class="kw-2">ref </span>ty) =&gt; {
             <span class="kw">let </span>qual = tokenize_precision_qualifier(qual);
             <span class="kw">let </span>ty = tokenize_type_specifier(ty);
-            <span class="macro">quote! </span>{ glsl_lang::ast::DeclarationData::Precision(#qual, #ty) }
+            <span class="macro">quote!</span> { glsl_lang::ast::DeclarationData::Precision(#qual, #ty) }
         }
 
         ast::DeclarationData::Block(<span class="kw-2">ref </span>block) =&gt; {
             <span class="kw">let </span>block = tokenize_block(block);
-            <span class="macro">quote! </span>{ glsl_lang::ast::DeclarationData::Block(#block) }
+            <span class="macro">quote!</span> { glsl_lang::ast::DeclarationData::Block(#block) }
         }
 
         ast::DeclarationData::Invariant(<span class="kw-2">ref </span>ident) =&gt; {
             <span class="kw">let </span>ident = tokenize_identifier(ident);
-            <span class="macro">quote! </span>{ glsl_lang::ast::DeclarationData::Invariant(#ident) }
+            <span class="macro">quote!</span> { glsl_lang::ast::DeclarationData::Invariant(#ident) }
         }
     };
 
     <span class="kw">let </span>span = tokenize_span(<span class="kw-2">&amp;</span>d.span);
-    <span class="macro">quote! </span>{ glsl_lang::ast::Declaration::new(#decl, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::Declaration::new(#decl, #span) }
 }
 
 <span class="kw">fn </span>tokenize_function_prototype(fp: <span class="kw-2">&amp;</span>ast::FunctionPrototype) -&gt; TokenStream {
@@ -3059,7 +3059,7 @@
         .map(tokenize_function_parameter_declaration);
 
     <span class="kw">let </span>span = tokenize_span(<span class="kw-2">&amp;</span>fp.span);
-    <span class="macro">quote! </span>{
+    <span class="macro">quote!</span> {
       glsl_lang::ast::FunctionPrototype::new(
         glsl_lang::ast::FunctionPrototypeData {
           ty: #ty,
@@ -3076,18 +3076,18 @@
         ast::FunctionParameterDeclarationData::Named(<span class="kw-2">ref </span>qual, <span class="kw-2">ref </span>fpd) =&gt; {
             <span class="kw">let </span>qual = qual.as_ref().map(tokenize_type_qualifier).quote();
             <span class="kw">let </span>fpd = tokenize_function_parameter_declarator(fpd);
-            <span class="macro">quote! </span>{ glsl_lang::ast::FunctionParameterDeclarationData::Named(#qual, #fpd) }
+            <span class="macro">quote!</span> { glsl_lang::ast::FunctionParameterDeclarationData::Named(#qual, #fpd) }
         }
 
         ast::FunctionParameterDeclarationData::Unnamed(<span class="kw-2">ref </span>qual, <span class="kw-2">ref </span>ty) =&gt; {
             <span class="kw">let </span>qual = qual.as_ref().map(tokenize_type_qualifier).quote();
             <span class="kw">let </span>ty = tokenize_type_specifier(ty);
-            <span class="macro">quote! </span>{ glsl_lang::ast::FunctionParameterDeclarationData::Unnamed(#qual, #ty) }
+            <span class="macro">quote!</span> { glsl_lang::ast::FunctionParameterDeclarationData::Unnamed(#qual, #ty) }
         }
     };
 
     <span class="kw">let </span>span = tokenize_span(<span class="kw-2">&amp;</span>p.span);
-    <span class="macro">quote! </span>{ glsl_lang::ast::FunctionParameterDeclaration::new(#decl, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::FunctionParameterDeclaration::new(#decl, #span) }
 }
 
 <span class="kw">fn </span>tokenize_function_parameter_declarator(p: <span class="kw-2">&amp;</span>ast::FunctionParameterDeclarator) -&gt; TokenStream {
@@ -3096,7 +3096,7 @@
         <span class="kw">let </span>ty = tokenize_type_specifier(<span class="kw-2">&amp;</span>p.ty);
         <span class="kw">let </span>ident = tokenize_arrayed_identifier(<span class="kw-2">&amp;</span>p.ident);
 
-        <span class="macro">quote! </span>{
+        <span class="macro">quote!</span> {
           glsl_lang::ast::FunctionParameterDeclaratorData {
             ty: #ty,
             ident: #ident
@@ -3104,7 +3104,7 @@
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::FunctionParameterDeclarator::new(#p, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::FunctionParameterDeclarator::new(#p, #span) }
 }
 
 <span class="kw">fn </span>tokenize_init_declarator_list(i: <span class="kw-2">&amp;</span>ast::InitDeclaratorList) -&gt; TokenStream {
@@ -3113,7 +3113,7 @@
         <span class="kw">let </span>head = tokenize_single_declaration(<span class="kw-2">&amp;</span>i.head);
         <span class="kw">let </span>tail = i.tail.iter().map(tokenize_single_declaration_no_type);
 
-        <span class="macro">quote! </span>{
+        <span class="macro">quote!</span> {
           glsl_lang::ast::InitDeclaratorListData {
             head: #head,
             tail: <span class="macro">vec!</span>[#(#tail),<span class="kw-2">*</span>]
@@ -3121,7 +3121,7 @@
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::InitDeclaratorList::new(#i, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::InitDeclaratorList::new(#i, #span) }
 }
 
 <span class="kw">fn </span>tokenize_single_declaration(d: <span class="kw-2">&amp;</span>ast::SingleDeclaration) -&gt; TokenStream {
@@ -3132,7 +3132,7 @@
         <span class="kw">let </span>array_specifier = d.array_specifier.as_ref().map(tokenize_array_spec).quote();
         <span class="kw">let </span>initializer = d.initializer.as_ref().map(tokenize_initializer).quote();
 
-        <span class="macro">quote! </span>{
+        <span class="macro">quote!</span> {
           glsl_lang::ast::SingleDeclarationData {
             ty: #ty,
             name: #name,
@@ -3142,7 +3142,7 @@
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::SingleDeclaration::new(#d, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::SingleDeclaration::new(#d, #span) }
 }
 
 <span class="kw">fn </span>tokenize_single_declaration_no_type(d: <span class="kw-2">&amp;</span>ast::SingleDeclarationNoType) -&gt; TokenStream {
@@ -3151,7 +3151,7 @@
         <span class="kw">let </span>ident = tokenize_arrayed_identifier(<span class="kw-2">&amp;</span>d.ident);
         <span class="kw">let </span>initializer = d.initializer.as_ref().map(tokenize_initializer).quote();
 
-        <span class="macro">quote! </span>{
+        <span class="macro">quote!</span> {
           glsl_lang::ast::SingleDeclarationNoTypeData {
             ident: #ident,
             initializer: #initializer
@@ -3159,7 +3159,7 @@
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::SingleDeclarationNoType::new(#d, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::SingleDeclarationNoType::new(#d, #span) }
 }
 
 <span class="kw">fn </span>tokenize_initializer(i: <span class="kw-2">&amp;</span>ast::Initializer) -&gt; TokenStream {
@@ -3167,16 +3167,16 @@
     <span class="kw">let </span>i = <span class="kw">match </span>i.content {
         ast::InitializerData::Simple(<span class="kw-2">ref </span>e) =&gt; {
             <span class="kw">let </span>e = (<span class="kw-2">&amp;</span>tokenize_expr(e)).quote();
-            <span class="macro">quote! </span>{ glsl_lang::ast::InitializerData::Simple(#e) }
+            <span class="macro">quote!</span> { glsl_lang::ast::InitializerData::Simple(#e) }
         }
 
         ast::InitializerData::List(<span class="kw-2">ref </span>list) =&gt; {
             <span class="kw">let </span>l = list.iter().map(tokenize_initializer);
-            <span class="macro">quote! </span>{ glsl_lang::ast::InitializerData::List(<span class="macro">vec!</span>[#(#l),<span class="kw-2">*</span>]) }
+            <span class="macro">quote!</span> { glsl_lang::ast::InitializerData::List(<span class="macro">vec!</span>[#(#l),<span class="kw-2">*</span>]) }
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::Initializer::new(#i, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::Initializer::new(#i, #span) }
 }
 
 <span class="kw">fn </span>tokenize_block(b: <span class="kw-2">&amp;</span>ast::Block) -&gt; TokenStream {
@@ -3191,7 +3191,7 @@
             .map(tokenize_arrayed_identifier)
             .quote();
 
-        <span class="macro">quote! </span>{
+        <span class="macro">quote!</span> {
           glsl_lang::ast::BlockData {
             qualifier: #qual,
             name: #name,
@@ -3201,7 +3201,7 @@
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::Block::new(#b, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::Block::new(#b, #span) }
 }
 
 <span class="kw">fn </span>tokenize_function_definition(fd: <span class="kw-2">&amp;</span>ast::FunctionDefinition) -&gt; TokenStream {
@@ -3209,7 +3209,7 @@
     <span class="kw">let </span>s = tokenize_compound_statement(<span class="kw-2">&amp;</span>fd.statement);
 
     <span class="kw">let </span>span = tokenize_span(<span class="kw-2">&amp;</span>fd.span);
-    <span class="macro">quote! </span>{
+    <span class="macro">quote!</span> {
       glsl_lang::ast::FunctionDefinition::new(
         glsl_lang::ast::FunctionDefinitionData {
           prototype: #p,
@@ -3224,7 +3224,7 @@
     <span class="kw">let </span>s = cst.statement_list.iter().map(tokenize_statement);
 
     <span class="kw">let </span>span = tokenize_span(<span class="kw-2">&amp;</span>cst.span);
-    <span class="macro">quote! </span>{
+    <span class="macro">quote!</span> {
       glsl_lang::ast::CompoundStatement::new(
         glsl_lang::ast::CompoundStatementData {
           statement_list: <span class="macro">vec!</span>[#(#s),<span class="kw-2">*</span>]
@@ -3238,57 +3238,57 @@
     <span class="kw">let </span>st = <span class="kw">match </span><span class="kw-2">**</span>sst {
         ast::StatementData::Declaration(<span class="kw-2">ref </span>d) =&gt; {
             <span class="kw">let </span>d = tokenize_declaration(d);
-            <span class="macro">quote! </span>{ glsl_lang::ast::StatementData::Declaration(#d) }
+            <span class="macro">quote!</span> { glsl_lang::ast::StatementData::Declaration(#d) }
         }
 
         ast::StatementData::Expression(<span class="kw-2">ref </span>e) =&gt; {
             <span class="kw">let </span>e = tokenize_expr_statement(e);
-            <span class="macro">quote! </span>{ glsl_lang::ast::StatementData::Expression(#e) }
+            <span class="macro">quote!</span> { glsl_lang::ast::StatementData::Expression(#e) }
         }
 
         ast::StatementData::Selection(<span class="kw-2">ref </span>s) =&gt; {
             <span class="kw">let </span>s = tokenize_selection_statement(s);
-            <span class="macro">quote! </span>{ glsl_lang::ast::StatementData::Selection(#s) }
+            <span class="macro">quote!</span> { glsl_lang::ast::StatementData::Selection(#s) }
         }
 
         ast::StatementData::Switch(<span class="kw-2">ref </span>s) =&gt; {
             <span class="kw">let </span>s = tokenize_switch_statement(s);
-            <span class="macro">quote! </span>{ glsl_lang::ast::StatementData::Switch(#s) }
+            <span class="macro">quote!</span> { glsl_lang::ast::StatementData::Switch(#s) }
         }
 
         ast::StatementData::CaseLabel(<span class="kw-2">ref </span>cl) =&gt; {
             <span class="kw">let </span>cl = tokenize_case_label(cl);
-            <span class="macro">quote! </span>{ glsl_lang::ast::StatementData::CaseLabel(#cl) }
+            <span class="macro">quote!</span> { glsl_lang::ast::StatementData::CaseLabel(#cl) }
         }
 
         ast::StatementData::Iteration(<span class="kw-2">ref </span>i) =&gt; {
             <span class="kw">let </span>i = tokenize_iteration_statement(i);
-            <span class="macro">quote! </span>{ glsl_lang::ast::StatementData::Iteration(#i) }
+            <span class="macro">quote!</span> { glsl_lang::ast::StatementData::Iteration(#i) }
         }
 
         ast::StatementData::Jump(<span class="kw-2">ref </span>j) =&gt; {
             <span class="kw">let </span>j = tokenize_jump_statement(j);
-            <span class="macro">quote! </span>{ glsl_lang::ast::StatementData::Jump(#j) }
+            <span class="macro">quote!</span> { glsl_lang::ast::StatementData::Jump(#j) }
         }
 
         ast::StatementData::Compound(<span class="kw-2">ref </span>c) =&gt; {
             <span class="kw">let </span>c = tokenize_compound_statement(c);
-            <span class="macro">quote! </span>{ glsl_lang::ast::StatementData::Compound(#c) }
+            <span class="macro">quote!</span> { glsl_lang::ast::StatementData::Compound(#c) }
         }
     };
 
     <span class="kw">let </span>span = tokenize_span(<span class="kw-2">&amp;</span>sst.span);
-    <span class="macro">quote! </span>{ glsl_lang::ast::Statement::new(#st, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::Statement::new(#st, #span) }
 }
 
 <span class="kw">fn </span>tokenize_expr_statement(est: <span class="kw-2">&amp;</span>ast::ExprStatement) -&gt; TokenStream {
     <span class="kw">let </span>span = tokenize_span(<span class="kw-2">&amp;</span>est.span);
     <span class="kw">let </span>est = {
         <span class="kw">let </span>e = est.<span class="number">0</span>.as_ref().map(tokenize_expr).quote();
-        <span class="macro">quote! </span>{ glsl_lang::ast::ExprStatementData(#e) }
+        <span class="macro">quote!</span> { glsl_lang::ast::ExprStatementData(#e) }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::ExprStatement::new(#est, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::ExprStatement::new(#est, #span) }
 }
 
 <span class="kw">fn </span>tokenize_selection_statement(sst: <span class="kw-2">&amp;</span>ast::SelectionStatement) -&gt; TokenStream {
@@ -3297,7 +3297,7 @@
         <span class="kw">let </span>cond = (<span class="kw-2">&amp;</span>tokenize_expr(<span class="kw-2">&amp;</span>sst.cond)).quote();
         <span class="kw">let </span>rest = tokenize_selection_rest_statement(<span class="kw-2">&amp;</span>sst.rest);
 
-        <span class="macro">quote! </span>{
+        <span class="macro">quote!</span> {
           glsl_lang::ast::SelectionStatementData {
             cond: #cond,
             rest: #rest
@@ -3305,7 +3305,7 @@
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::SelectionStatement::new(#sst, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::SelectionStatement::new(#sst, #span) }
 }
 
 <span class="kw">fn </span>tokenize_selection_rest_statement(sst: <span class="kw-2">&amp;</span>ast::SelectionRestStatement) -&gt; TokenStream {
@@ -3313,17 +3313,17 @@
     <span class="kw">let </span>sst = <span class="kw">match </span>sst.content {
         ast::SelectionRestStatementData::Statement(<span class="kw-2">ref </span>if_st) =&gt; {
             <span class="kw">let </span>e = (<span class="kw-2">&amp;</span>tokenize_statement(if_st)).quote();
-            <span class="macro">quote! </span>{ glsl_lang::ast::SelectionRestStatementData::Statement(#e) }
+            <span class="macro">quote!</span> { glsl_lang::ast::SelectionRestStatementData::Statement(#e) }
         }
 
         ast::SelectionRestStatementData::Else(<span class="kw-2">ref </span>if_st, <span class="kw-2">ref </span>else_st) =&gt; {
             <span class="kw">let </span>if_st = (<span class="kw-2">&amp;</span>tokenize_statement(if_st)).quote();
             <span class="kw">let </span>else_st = (<span class="kw-2">&amp;</span>tokenize_statement(else_st)).quote();
-            <span class="macro">quote! </span>{ glsl_lang::ast::SelectionRestStatementData::Else(#if_st, #else_st) }
+            <span class="macro">quote!</span> { glsl_lang::ast::SelectionRestStatementData::Else(#if_st, #else_st) }
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::SelectionRestStatement::new(#sst, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::SelectionRestStatement::new(#sst, #span) }
 }
 
 <span class="kw">fn </span>tokenize_switch_statement(sst: <span class="kw-2">&amp;</span>ast::SwitchStatement) -&gt; TokenStream {
@@ -3332,7 +3332,7 @@
         <span class="kw">let </span>head = (<span class="kw-2">&amp;</span>tokenize_expr(<span class="kw-2">&amp;</span>sst.head)).quote();
         <span class="kw">let </span>body = sst.body.iter().map(tokenize_statement);
 
-        <span class="macro">quote! </span>{
+        <span class="macro">quote!</span> {
           glsl_lang::ast::SwitchStatementData {
             head: #head,
             body: <span class="macro">vec!</span>[#(#body),<span class="kw-2">*</span>]
@@ -3340,7 +3340,7 @@
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::SwitchStatement::new(#sst, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::SwitchStatement::new(#sst, #span) }
 }
 
 <span class="kw">fn </span>tokenize_case_label(cl: <span class="kw-2">&amp;</span>ast::CaseLabel) -&gt; TokenStream {
@@ -3348,13 +3348,13 @@
     <span class="kw">let </span>cl = <span class="kw">match </span>cl.content {
         ast::CaseLabelData::Case(<span class="kw-2">ref </span>e) =&gt; {
             <span class="kw">let </span>e = (<span class="kw-2">&amp;</span>tokenize_expr(e)).quote();
-            <span class="macro">quote! </span>{ glsl_lang::ast::CaseLabelData::Case(#e) }
+            <span class="macro">quote!</span> { glsl_lang::ast::CaseLabelData::Case(#e) }
         }
 
-        ast::CaseLabelData::Def =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::CaseLabelData::Def },
+        ast::CaseLabelData::Def =&gt; <span class="macro">quote!</span> { glsl_lang::ast::CaseLabelData::Def },
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::CaseLabel::new(#cl, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::CaseLabel::new(#cl, #span) }
 }
 
 <span class="kw">fn </span>tokenize_iteration_statement(ist: <span class="kw-2">&amp;</span>ast::IterationStatement) -&gt; TokenStream {
@@ -3363,24 +3363,24 @@
         ast::IterationStatementData::While(<span class="kw-2">ref </span>cond, <span class="kw-2">ref </span>body) =&gt; {
             <span class="kw">let </span>cond = tokenize_condition(cond);
             <span class="kw">let </span>body = (<span class="kw-2">&amp;</span>tokenize_statement(body)).quote();
-            <span class="macro">quote! </span>{ glsl_lang::ast::IterationStatementData::While(#cond, #body) }
+            <span class="macro">quote!</span> { glsl_lang::ast::IterationStatementData::While(#cond, #body) }
         }
 
         ast::IterationStatementData::DoWhile(<span class="kw-2">ref </span>body, <span class="kw-2">ref </span>cond) =&gt; {
             <span class="kw">let </span>body = (<span class="kw-2">&amp;</span>tokenize_statement(body)).quote();
             <span class="kw">let </span>cond = (<span class="kw-2">&amp;</span>tokenize_expr(cond)).quote();
-            <span class="macro">quote! </span>{ glsl_lang::ast::IterationStatementData::DoWhile(#body, #cond) }
+            <span class="macro">quote!</span> { glsl_lang::ast::IterationStatementData::DoWhile(#body, #cond) }
         }
 
         ast::IterationStatementData::For(<span class="kw-2">ref </span>init, <span class="kw-2">ref </span>rest, <span class="kw-2">ref </span>body) =&gt; {
             <span class="kw">let </span>init = tokenize_for_init_statement(init);
             <span class="kw">let </span>rest = tokenize_for_rest_statement(rest);
             <span class="kw">let </span>body = (<span class="kw-2">&amp;</span>tokenize_statement(body)).quote();
-            <span class="macro">quote! </span>{ glsl_lang::ast::IterationStatementData::For(#init, #rest, #body) }
+            <span class="macro">quote!</span> { glsl_lang::ast::IterationStatementData::For(#init, #rest, #body) }
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::IterationStatement::new(#ist, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::IterationStatement::new(#ist, #span) }
 }
 
 <span class="kw">fn </span>tokenize_condition(c: <span class="kw-2">&amp;</span>ast::Condition) -&gt; TokenStream {
@@ -3388,7 +3388,7 @@
     <span class="kw">let </span>c = <span class="kw">match </span>c.content {
         ast::ConditionData::Expr(<span class="kw-2">ref </span>e) =&gt; {
             <span class="kw">let </span>e = (<span class="kw-2">&amp;</span>tokenize_expr(e)).quote();
-            <span class="macro">quote! </span>{ glsl_lang::ast::ConditionData::Expr(#e) }
+            <span class="macro">quote!</span> { glsl_lang::ast::ConditionData::Expr(#e) }
         }
 
         ast::ConditionData::Assignment(<span class="kw-2">ref </span>ty, <span class="kw-2">ref </span>name, <span class="kw-2">ref </span>initializer) =&gt; {
@@ -3396,11 +3396,11 @@
             <span class="kw">let </span>name = tokenize_identifier(name);
             <span class="kw">let </span>initializer = tokenize_initializer(initializer);
 
-            <span class="macro">quote! </span>{ glsl_lang::ast::ConditionData::Assignment(#ty, #name, #initializer) }
+            <span class="macro">quote!</span> { glsl_lang::ast::ConditionData::Assignment(#ty, #name, #initializer) }
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::Condition::new(#c, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::Condition::new(#c, #span) }
 }
 
 <span class="kw">fn </span>tokenize_for_init_statement(i: <span class="kw-2">&amp;</span>ast::ForInitStatement) -&gt; TokenStream {
@@ -3408,16 +3408,16 @@
     <span class="kw">let </span>i = <span class="kw">match </span>i.content {
         ast::ForInitStatementData::Expression(<span class="kw-2">ref </span>expr) =&gt; {
             <span class="kw">let </span>e = expr.as_ref().map(tokenize_expr).quote();
-            <span class="macro">quote! </span>{ glsl_lang::ast::ForInitStatementData::Expression(#e) }
+            <span class="macro">quote!</span> { glsl_lang::ast::ForInitStatementData::Expression(#e) }
         }
 
         ast::ForInitStatementData::Declaration(<span class="kw-2">ref </span>d) =&gt; {
             <span class="kw">let </span>d = (<span class="kw-2">&amp;</span>tokenize_declaration(d)).quote();
-            <span class="macro">quote! </span>{ glsl_lang::ast::ForInitStatementData::Declaration(#d) }
+            <span class="macro">quote!</span> { glsl_lang::ast::ForInitStatementData::Declaration(#d) }
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::ForInitStatement::new(#i, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::ForInitStatement::new(#i, #span) }
 }
 
 <span class="kw">fn </span>tokenize_for_rest_statement(r: <span class="kw-2">&amp;</span>ast::ForRestStatement) -&gt; TokenStream {
@@ -3430,7 +3430,7 @@
             .map(|e| (<span class="kw-2">&amp;</span>tokenize_expr(e)).quote())
             .quote();
 
-        <span class="macro">quote! </span>{
+        <span class="macro">quote!</span> {
           glsl_lang::ast::ForRestStatement {
             condition: #cond,
             post: #post
@@ -3438,97 +3438,97 @@
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::ForRestStatement::new(#r, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::ForRestStatement::new(#r, #span) }
 }
 
 <span class="kw">fn </span>tokenize_jump_statement(j: <span class="kw-2">&amp;</span>ast::JumpStatement) -&gt; TokenStream {
     <span class="kw">let </span>span = tokenize_span(<span class="kw-2">&amp;</span>j.span);
     <span class="kw">let </span>j = <span class="kw">match </span>j.content {
-        ast::JumpStatementData::Continue =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::JumpStatementData::Continue },
-        ast::JumpStatementData::Break =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::JumpStatementData::Break },
-        ast::JumpStatementData::Discard =&gt; <span class="macro">quote! </span>{ glsl_lang::ast::JumpStatementData::Discard },
+        ast::JumpStatementData::Continue =&gt; <span class="macro">quote!</span> { glsl_lang::ast::JumpStatementData::Continue },
+        ast::JumpStatementData::Break =&gt; <span class="macro">quote!</span> { glsl_lang::ast::JumpStatementData::Break },
+        ast::JumpStatementData::Discard =&gt; <span class="macro">quote!</span> { glsl_lang::ast::JumpStatementData::Discard },
         ast::JumpStatementData::Return(<span class="kw-2">ref </span>e) =&gt; {
             <span class="kw">let </span>e = e.as_ref().map(|e| (<span class="kw-2">&amp;</span>tokenize_expr(e)).quote()).quote();
-            <span class="macro">quote! </span>{ glsl_lang::ast::JumpStatementData::Return(#e) }
+            <span class="macro">quote!</span> { glsl_lang::ast::JumpStatementData::Return(#e) }
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::JumpStatement::new(#j, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::JumpStatement::new(#j, #span) }
 }
 
 <span class="kw">fn </span>tokenize_preprocessor(pp: <span class="kw-2">&amp;</span>ast::Preprocessor) -&gt; TokenStream {
     <span class="kw">let </span>decl = <span class="kw">match </span><span class="kw-2">**</span>pp {
         ast::PreprocessorData::Define(<span class="kw-2">ref </span>pd) =&gt; {
             <span class="kw">let </span>pd = tokenize_preprocessor_define(pd);
-            <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorData::Define(#pd) }
+            <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorData::Define(#pd) }
         }
 
         ast::PreprocessorData::Else =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorData::Else }
+            <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorData::Else }
         }
 
         ast::PreprocessorData::ElseIf(<span class="kw-2">ref </span>pei) =&gt; {
             <span class="kw">let </span>pei = tokenize_preprocessor_elseif(pei);
-            <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorData::ElseIf(#pei) }
+            <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorData::ElseIf(#pei) }
         }
 
         ast::PreprocessorData::EndIf =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorData::EndIf }
+            <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorData::EndIf }
         }
 
         ast::PreprocessorData::Error(<span class="kw-2">ref </span>pe) =&gt; {
             <span class="kw">let </span>pe = tokenize_preprocessor_error(pe);
-            <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorData::Error(#pe) }
+            <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorData::Error(#pe) }
         }
 
         ast::PreprocessorData::If(<span class="kw-2">ref </span>pi) =&gt; {
             <span class="kw">let </span>pi = tokenize_preprocessor_if(pi);
-            <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorData::If(#pi) }
+            <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorData::If(#pi) }
         }
 
         ast::PreprocessorData::IfDef(<span class="kw-2">ref </span>pid) =&gt; {
             <span class="kw">let </span>pid = tokenize_preprocessor_ifdef(pid);
-            <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorData::IfDef(#pid) }
+            <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorData::IfDef(#pid) }
         }
 
         ast::PreprocessorData::IfNDef(<span class="kw-2">ref </span>pind) =&gt; {
             <span class="kw">let </span>pind = tokenize_preprocessor_ifndef(pind);
-            <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorData::IfNDef(#pind) }
+            <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorData::IfNDef(#pind) }
         }
 
         ast::PreprocessorData::Include(<span class="kw-2">ref </span>pi) =&gt; {
             <span class="kw">let </span>pi = tokenize_preprocessor_include(pi);
-            <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorData::Include(#pi) }
+            <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorData::Include(#pi) }
         }
 
         ast::PreprocessorData::Line(<span class="kw-2">ref </span>pl) =&gt; {
             <span class="kw">let </span>pl = tokenize_preprocessor_line(pl);
-            <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorData::Line(#pl) }
+            <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorData::Line(#pl) }
         }
 
         ast::PreprocessorData::Pragma(<span class="kw-2">ref </span>pp) =&gt; {
             <span class="kw">let </span>pp = tokenize_preprocessor_pragma(pp);
-            <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorData::Pragma(#pp) }
+            <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorData::Pragma(#pp) }
         }
 
         ast::PreprocessorData::Undef(<span class="kw-2">ref </span>pu) =&gt; {
             <span class="kw">let </span>pu = tokenize_preprocessor_undef(pu);
-            <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorData::Undef(#pu) }
+            <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorData::Undef(#pu) }
         }
 
         ast::PreprocessorData::Version(<span class="kw-2">ref </span>pv) =&gt; {
             <span class="kw">let </span>pv = tokenize_preprocessor_version(pv);
-            <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorData::Version(#pv) }
+            <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorData::Version(#pv) }
         }
 
         ast::PreprocessorData::Extension(<span class="kw-2">ref </span>pe) =&gt; {
             <span class="kw">let </span>pe = tokenize_preprocessor_extension(pe);
-            <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorData::Extension(#pe) }
+            <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorData::Extension(#pe) }
         }
     };
 
     <span class="kw">let </span>span = tokenize_span(<span class="kw-2">&amp;</span>pp.span);
-    <span class="macro">quote! </span>{ glsl_lang::ast::Preprocessor::new(#decl, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::Preprocessor::new(#decl, #span) }
 }
 
 <span class="kw">fn </span>tokenize_preprocessor_define(pd: <span class="kw-2">&amp;</span>ast::PreprocessorDefine) -&gt; TokenStream {
@@ -3541,7 +3541,7 @@
             <span class="kw">let </span>ident = tokenize_identifier(ident);
             <span class="kw">let </span>value = value.quote();
 
-            <span class="macro">quote! </span>{
+            <span class="macro">quote!</span> {
               glsl_lang::ast::PreprocessorDefineData::ObjectLike {
                 ident: #ident,
                 value: #value
@@ -3558,7 +3558,7 @@
             <span class="kw">let </span>args = args.iter().map(tokenize_identifier);
             <span class="kw">let </span>value = value.quote();
 
-            <span class="macro">quote! </span>{
+            <span class="macro">quote!</span> {
               glsl_lang::ast::PreprocessorDefineData::FunctionLike {
                 ident: #ident,
                 args: <span class="macro">vec!</span>[#(#args),<span class="kw-2">*</span>],
@@ -3568,7 +3568,7 @@
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorDefine::new(#pd, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorDefine::new(#pd, #span) }
 }
 
 <span class="kw">fn </span>tokenize_preprocessor_elseif(pei: <span class="kw-2">&amp;</span>ast::PreprocessorElseIf) -&gt; TokenStream {
@@ -3576,14 +3576,14 @@
     <span class="kw">let </span>pei = {
         <span class="kw">let </span>condition = pei.condition.quote();
 
-        <span class="macro">quote! </span>{
+        <span class="macro">quote!</span> {
           glsl_lang::ast::PreprocessorElseIfData {
             condition: #condition
           }
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorElseIf::new(#pei, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorElseIf::new(#pei, #span) }
 }
 
 <span class="kw">fn </span>tokenize_preprocessor_error(pe: <span class="kw-2">&amp;</span>ast::PreprocessorError) -&gt; TokenStream {
@@ -3591,14 +3591,14 @@
     <span class="kw">let </span>pe = {
         <span class="kw">let </span>message = <span class="kw-2">&amp;</span>pe.message;
 
-        <span class="macro">quote! </span>{
+        <span class="macro">quote!</span> {
           glsl_lang::ast::PreprocessorErrorData {
             message: #message.to_owned()
           }
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorError::new(#pe, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorError::new(#pe, #span) }
 }
 
 <span class="kw">fn </span>tokenize_preprocessor_if(pi: <span class="kw-2">&amp;</span>ast::PreprocessorIf) -&gt; TokenStream {
@@ -3606,14 +3606,14 @@
     <span class="kw">let </span>pi = {
         <span class="kw">let </span>condition = pi.condition.quote();
 
-        <span class="macro">quote! </span>{
+        <span class="macro">quote!</span> {
           glsl_lang::ast::PreprocessorIfData {
             condition: #condition
           }
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorIf::new(#pi, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorIf::new(#pi, #span) }
 }
 
 <span class="kw">fn </span>tokenize_preprocessor_ifdef(pid: <span class="kw-2">&amp;</span>ast::PreprocessorIfDef) -&gt; TokenStream {
@@ -3621,14 +3621,14 @@
     <span class="kw">let </span>pid = {
         <span class="kw">let </span>ident = tokenize_identifier(<span class="kw-2">&amp;</span>pid.ident);
 
-        <span class="macro">quote! </span>{
+        <span class="macro">quote!</span> {
           glsl_lang::ast::PreprocessorIfDefData {
             ident: #ident
           }
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorIfDef::new(#pid, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorIfDef::new(#pid, #span) }
 }
 
 <span class="kw">fn </span>tokenize_preprocessor_ifndef(pind: <span class="kw-2">&amp;</span>ast::PreprocessorIfNDef) -&gt; TokenStream {
@@ -3636,14 +3636,14 @@
     <span class="kw">let </span>pind = {
         <span class="kw">let </span>ident = tokenize_identifier(<span class="kw-2">&amp;</span>pind.ident);
 
-        <span class="macro">quote! </span>{
+        <span class="macro">quote!</span> {
           glsl_lang::ast::PreprocessorIfNDefData {
             ident: #ident
           }
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorIfNDef::new(#pind, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorIfNDef::new(#pind, #span) }
 }
 
 <span class="kw">fn </span>tokenize_preprocessor_include(pi: <span class="kw-2">&amp;</span>ast::PreprocessorInclude) -&gt; TokenStream {
@@ -3651,14 +3651,14 @@
     <span class="kw">let </span>pi = {
         <span class="kw">let </span>path = tokenize_path(<span class="kw-2">&amp;</span>pi.path);
 
-        <span class="macro">quote! </span>{
+        <span class="macro">quote!</span> {
           glsl_lang::ast::PreprocessorIncludeData {
             path: #path
           }
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorInclude::new(#pi, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorInclude::new(#pi, #span) }
 }
 
 <span class="kw">fn </span>tokenize_preprocessor_line(pl: <span class="kw-2">&amp;</span>ast::PreprocessorLine) -&gt; TokenStream {
@@ -3667,7 +3667,7 @@
         <span class="kw">let </span>line = pl.line;
         <span class="kw">let </span>source_string_number = pl.source_string_number.quote();
 
-        <span class="macro">quote! </span>{
+        <span class="macro">quote!</span> {
           glsl_lang::ast::PreprocessorLineData {
             line: #line,
             source_string_number: #source_string_number
@@ -3675,7 +3675,7 @@
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorLine::new(#pl, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorLine::new(#pl, #span) }
 }
 
 <span class="kw">fn </span>tokenize_preprocessor_pragma(pp: <span class="kw-2">&amp;</span>ast::PreprocessorPragma) -&gt; TokenStream {
@@ -3683,14 +3683,14 @@
     <span class="kw">let </span>pp = {
         <span class="kw">let </span>command = <span class="kw-2">&amp;</span>pp.command;
 
-        <span class="macro">quote! </span>{
+        <span class="macro">quote!</span> {
           glsl_lang::ast::PreprocessorPragmaData {
             command: #command.to_owned()
           }
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorPragma::new(#pp, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorPragma::new(#pp, #span) }
 }
 
 <span class="kw">fn </span>tokenize_preprocessor_undef(pu: <span class="kw-2">&amp;</span>ast::PreprocessorUndef) -&gt; TokenStream {
@@ -3698,14 +3698,14 @@
     <span class="kw">let </span>pu = {
         <span class="kw">let </span>name = tokenize_identifier(<span class="kw-2">&amp;</span>pu.name);
 
-        <span class="macro">quote! </span>{
+        <span class="macro">quote!</span> {
           glsl_lang::ast::PreprocessorUndefData {
             name: #name
           }
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorUndef::new(#pu, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorUndef::new(#pu, #span) }
 }
 
 <span class="kw">fn </span>tokenize_preprocessor_version(pv: <span class="kw-2">&amp;</span>ast::PreprocessorVersion) -&gt; TokenStream {
@@ -3718,7 +3718,7 @@
             .map(tokenize_preprocessor_version_profile)
             .quote();
 
-        <span class="macro">quote! </span>{
+        <span class="macro">quote!</span> {
           glsl_lang::ast::PreprocessorVersionData {
             version: #version,
             profile: #profile
@@ -3726,24 +3726,24 @@
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorVersion::new(#pv, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorVersion::new(#pv, #span) }
 }
 
 <span class="kw">fn </span>tokenize_preprocessor_version_profile(profile: <span class="kw-2">&amp;</span>ast::PreprocessorVersionProfile) -&gt; TokenStream {
     <span class="kw">let </span>span = tokenize_span(<span class="kw-2">&amp;</span>profile.span);
     <span class="kw">let </span>profile = <span class="kw">match </span>profile.content {
         ast::PreprocessorVersionProfileData::Core =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorVersionProfileData::Core }
+            <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorVersionProfileData::Core }
         }
         ast::PreprocessorVersionProfileData::Compatibility =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorVersionProfileData::Compatibility }
+            <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorVersionProfileData::Compatibility }
         }
         ast::PreprocessorVersionProfileData::Es =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorVersionProfileData::Es }
+            <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorVersionProfileData::Es }
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorVersionProfile::new(#profile, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorVersionProfile::new(#profile, #span) }
 }
 
 <span class="kw">fn </span>tokenize_preprocessor_extension(pe: <span class="kw-2">&amp;</span>ast::PreprocessorExtension) -&gt; TokenStream {
@@ -3756,7 +3756,7 @@
             .map(tokenize_preprocessor_extension_behavior)
             .quote();
 
-        <span class="macro">quote! </span>{
+        <span class="macro">quote!</span> {
           glsl_lang::ast::PreprocessorExtensionData {
             name: #name,
             behavior: #behavior
@@ -3764,22 +3764,22 @@
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorExtension::new(#pe, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorExtension::new(#pe, #span) }
 }
 
 <span class="kw">fn </span>tokenize_preprocessor_extension_name(name: <span class="kw-2">&amp;</span>ast::PreprocessorExtensionName) -&gt; TokenStream {
     <span class="kw">let </span>span = tokenize_span(<span class="kw-2">&amp;</span>name.span);
     <span class="kw">let </span>name = <span class="kw">match </span>name.content {
         ast::PreprocessorExtensionNameData::All =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorExtensionNameData::All }
+            <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorExtensionNameData::All }
         }
         ast::PreprocessorExtensionNameData::Specific(<span class="kw-2">ref </span>n) =&gt; {
             <span class="kw">let </span>n = n.quote();
-            <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorExtensionNameData::Specific(#n) }
+            <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorExtensionNameData::Specific(#n) }
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorExtensionName::new(#name, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorExtensionName::new(#name, #span) }
 }
 
 <span class="kw">fn </span>tokenize_preprocessor_extension_behavior(
@@ -3788,31 +3788,31 @@
     <span class="kw">let </span>span = tokenize_span(<span class="kw-2">&amp;</span>behavior.span);
     <span class="kw">let </span>behavior = <span class="kw">match </span>behavior.content {
         ast::PreprocessorExtensionBehaviorData::Require =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorExtensionBehaviorData::Require }
+            <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorExtensionBehaviorData::Require }
         }
         ast::PreprocessorExtensionBehaviorData::Enable =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorExtensionBehaviorData::Enable }
+            <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorExtensionBehaviorData::Enable }
         }
         ast::PreprocessorExtensionBehaviorData::Warn =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorExtensionBehaviorData::Warn }
+            <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorExtensionBehaviorData::Warn }
         }
         ast::PreprocessorExtensionBehaviorData::Disable =&gt; {
-            <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorExtensionBehaviorData::Disable }
+            <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorExtensionBehaviorData::Disable }
         }
     };
 
-    <span class="macro">quote! </span>{ glsl_lang::ast::PreprocessorExtensionBehavior::new(#behavior, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::PreprocessorExtensionBehavior::new(#behavior, #span) }
 }
 
 <span class="kw">fn </span>tokenize_text_size(text_size: glsl_lang::ast::TextSize) -&gt; TokenStream {
     <span class="kw">let </span>inner = u32::from(text_size);
-    <span class="macro">quote! </span>{ glsl_lang::ast::TextSize::from(#inner) }
+    <span class="macro">quote!</span> { glsl_lang::ast::TextSize::from(#inner) }
 }
 
 <span class="kw">fn </span>tokenize_text_range(text_range: glsl_lang::ast::TextRange) -&gt; TokenStream {
     <span class="kw">let </span>start = tokenize_text_size(text_range.start());
     <span class="kw">let </span>end = tokenize_text_size(text_range.end());
-    <span class="macro">quote! </span>{ glsl_lang::ast::TextRange::new(#start, #end) }
+    <span class="macro">quote!</span> { glsl_lang::ast::TextRange::new(#start, #end) }
 }
 
 <span class="kw">fn </span>tokenize_span(s: <span class="kw-2">&amp;</span><span class="prelude-ty">Option</span>&lt;ast::NodeSpan&gt;) -&gt; TokenStream {
@@ -3820,9 +3820,9 @@
         <span class="kw">let </span>source_id = u32::from(s.source_id());
         <span class="kw">let </span>range = tokenize_text_range(s.range());
 
-        <span class="macro">quote! </span>{ <span class="prelude-val">Some</span>(glsl_lang::ast::NodeSpan::new(#source_id.into(), #range)) }
+        <span class="macro">quote!</span> { <span class="prelude-val">Some</span>(glsl_lang::ast::NodeSpan::new(#source_id.into(), #range)) }
     } <span class="kw">else </span>{
-        <span class="macro">quote! </span>{ <span class="prelude-val">None </span>}
+        <span class="macro">quote!</span> { <span class="prelude-val">None </span>}
     }
 }
 
@@ -3830,26 +3830,26 @@
     <span class="kw">let </span>contents = <span class="kw">match </span><span class="kw-2">**</span>ed {
         ast::ExternalDeclarationData::Preprocessor(<span class="kw-2">ref </span>pp) =&gt; {
             <span class="kw">let </span>pp = tokenize_preprocessor(pp);
-            <span class="macro">quote! </span>{ glsl_lang::ast::ExternalDeclarationData::Preprocessor(#pp) }
+            <span class="macro">quote!</span> { glsl_lang::ast::ExternalDeclarationData::Preprocessor(#pp) }
         }
 
         ast::ExternalDeclarationData::FunctionDefinition(<span class="kw-2">ref </span>fd) =&gt; {
             <span class="kw">let </span>fd = tokenize_function_definition(fd);
-            <span class="macro">quote! </span>{ glsl_lang::ast::ExternalDeclarationData::FunctionDefinition(#fd) }
+            <span class="macro">quote!</span> { glsl_lang::ast::ExternalDeclarationData::FunctionDefinition(#fd) }
         }
 
         ast::ExternalDeclarationData::Declaration(<span class="kw-2">ref </span>d) =&gt; {
             <span class="kw">let </span>d = tokenize_declaration(d);
-            <span class="macro">quote! </span>{ glsl_lang::ast::ExternalDeclarationData::Declaration(#d) }
+            <span class="macro">quote!</span> { glsl_lang::ast::ExternalDeclarationData::Declaration(#d) }
         }
     };
 
     <span class="kw">let </span>span = tokenize_span(<span class="kw-2">&amp;</span>ed.span);
-    <span class="macro">quote! </span>{ glsl_lang::ast::Node::new(#contents, #span) }
+    <span class="macro">quote!</span> { glsl_lang::ast::Node::new(#contents, #span) }
 }
 
 <span class="kw">fn </span>tokenize_translation_unit(tu: <span class="kw-2">&amp;</span>ast::TranslationUnit) -&gt; TokenStream {
     <span class="kw">let </span>tu = (tu.<span class="number">0</span>).iter().map(tokenize_external_declaration);
-    <span class="macro">quote! </span>{ glsl_lang::ast::TranslationUnit(<span class="macro">vec!</span>[#(#tu),<span class="kw-2">*</span>]) }
+    <span class="macro">quote!</span> { glsl_lang::ast::TranslationUnit(<span class="macro">vec!</span>[#(#tu),<span class="kw-2">*</span>]) }
 }
 </code></pre></div></section></main></body></html>

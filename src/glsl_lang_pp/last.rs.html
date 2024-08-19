@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lang-pp/src/last.rs`."><title>last.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-fa3bb1812debf86c.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="glsl_lang_pp" data-themes="" data-resource-suffix="" data-rustdoc-version="1.74.1 (a28077b28 2023-12-04)" data-channel="1.74.1" data-search-js="search-8be46b629f5f14a8.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-c5bd66d33317d69f.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../glsl_lang_pp/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lang-pp/src/last.rs`."><title>last.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-dd39b87e5fcfba68.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="glsl_lang_pp" data-themes="" data-resource-suffix="" data-rustdoc-version="1.80.1 (3f5fd8dd4 2024-08-06)" data-channel="1.80.1" data-search-js="search-d52510db62a78183.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -419,6 +419,53 @@
 <a href="#419" id="419">419</a>
 <a href="#420" id="420">420</a>
 <a href="#421" id="421">421</a>
+<a href="#422" id="422">422</a>
+<a href="#423" id="423">423</a>
+<a href="#424" id="424">424</a>
+<a href="#425" id="425">425</a>
+<a href="#426" id="426">426</a>
+<a href="#427" id="427">427</a>
+<a href="#428" id="428">428</a>
+<a href="#429" id="429">429</a>
+<a href="#430" id="430">430</a>
+<a href="#431" id="431">431</a>
+<a href="#432" id="432">432</a>
+<a href="#433" id="433">433</a>
+<a href="#434" id="434">434</a>
+<a href="#435" id="435">435</a>
+<a href="#436" id="436">436</a>
+<a href="#437" id="437">437</a>
+<a href="#438" id="438">438</a>
+<a href="#439" id="439">439</a>
+<a href="#440" id="440">440</a>
+<a href="#441" id="441">441</a>
+<a href="#442" id="442">442</a>
+<a href="#443" id="443">443</a>
+<a href="#444" id="444">444</a>
+<a href="#445" id="445">445</a>
+<a href="#446" id="446">446</a>
+<a href="#447" id="447">447</a>
+<a href="#448" id="448">448</a>
+<a href="#449" id="449">449</a>
+<a href="#450" id="450">450</a>
+<a href="#451" id="451">451</a>
+<a href="#452" id="452">452</a>
+<a href="#453" id="453">453</a>
+<a href="#454" id="454">454</a>
+<a href="#455" id="455">455</a>
+<a href="#456" id="456">456</a>
+<a href="#457" id="457">457</a>
+<a href="#458" id="458">458</a>
+<a href="#459" id="459">459</a>
+<a href="#460" id="460">460</a>
+<a href="#461" id="461">461</a>
+<a href="#462" id="462">462</a>
+<a href="#463" id="463">463</a>
+<a href="#464" id="464">464</a>
+<a href="#465" id="465">465</a>
+<a href="#466" id="466">466</a>
+<a href="#467" id="467">467</a>
+<a href="#468" id="468">468</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Last preprocessing stage definitions
 
 </span><span class="kw">use </span>std::{collections::HashMap, iter::FusedIterator, path::PathBuf};
@@ -496,16 +543,16 @@
     }
 }
 
-<span class="kw">struct </span>TypeTable&lt;<span class="lifetime">&#39;r</span>&gt; {
+<span class="kw">struct </span>TypeTable&lt;<span class="lifetime">'r</span>&gt; {
     type_names: HashMap&lt;TypeNameAtom, <span class="prelude-ty">Option</span>&lt;(ExtNameAtom, ExtensionBehavior)&gt;&gt;,
     extensions: HashMap&lt;ExtNameAtom, ExtensionBehavior&gt;,
-    registry: <span class="kw-2">&amp;</span><span class="lifetime">&#39;r </span>Registry,
+    registry: <span class="kw-2">&amp;</span><span class="lifetime">'r </span>Registry,
     target_vulkan: bool,
     current_version: u16,
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;r</span>&gt; TypeTable&lt;<span class="lifetime">&#39;r</span>&gt; {
-    <span class="kw">fn </span>new(registry: <span class="kw-2">&amp;</span><span class="lifetime">&#39;r </span>Registry, current_version: u16, target_vulkan: bool) -&gt; <span class="self">Self </span>{
+<span class="kw">impl</span>&lt;<span class="lifetime">'r</span>&gt; TypeTable&lt;<span class="lifetime">'r</span>&gt; {
+    <span class="kw">fn </span>new(registry: <span class="kw-2">&amp;</span><span class="lifetime">'r </span>Registry, current_version: u16, target_vulkan: bool) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             type_names: Default::default(),
             extensions: Default::default(),
@@ -636,18 +683,18 @@
     }
 }
 
-<span class="kw">pub struct </span>Tokenizer&lt;<span class="lifetime">&#39;r</span>, I&gt; {
+<span class="kw">pub struct </span>Tokenizer&lt;<span class="lifetime">'r</span>, I&gt; {
     inner: I,
-    type_table: TypeTable&lt;<span class="lifetime">&#39;r</span>&gt;,
+    type_table: TypeTable&lt;<span class="lifetime">'r</span>&gt;,
     pending_error: <span class="prelude-ty">Option</span>&lt;Error&gt;,
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;r</span>, I: LocatedIterator&gt; Tokenizer&lt;<span class="lifetime">&#39;r</span>, I&gt; {
+<span class="kw">impl</span>&lt;<span class="lifetime">'r</span>, I: LocatedIterator&gt; Tokenizer&lt;<span class="lifetime">'r</span>, I&gt; {
     <span class="kw">pub fn </span>new(
         inner: <span class="kw">impl </span>IntoIterator&lt;IntoIter = I&gt;,
         current_version: u16,
         target_vulkan: bool,
-        registry: <span class="kw-2">&amp;</span><span class="lifetime">&#39;r </span>Registry,
+        registry: <span class="kw-2">&amp;</span><span class="lifetime">'r </span>Registry,
     ) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             inner: inner.into_iter(),
@@ -673,8 +720,8 @@
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;r</span>, E, I: Iterator&lt;Item = <span class="prelude-ty">Result</span>&lt;event::Event, E&gt;&gt; + LocatedIterator&gt; Iterator
-    <span class="kw">for </span>Tokenizer&lt;<span class="lifetime">&#39;r</span>, I&gt;
+<span class="kw">impl</span>&lt;<span class="lifetime">'r</span>, E, I: Iterator&lt;Item = <span class="prelude-ty">Result</span>&lt;event::Event, E&gt;&gt; + LocatedIterator&gt; Iterator
+    <span class="kw">for </span>Tokenizer&lt;<span class="lifetime">'r</span>, I&gt;
 {
     <span class="kw">type </span>Item = <span class="prelude-ty">Result</span>&lt;Event, E&gt;;
 
@@ -743,12 +790,12 @@
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;r</span>, E, I: Iterator&lt;Item = <span class="prelude-ty">Result</span>&lt;event::Event, E&gt;&gt; + LocatedIterator&gt; FusedIterator
-    <span class="kw">for </span>Tokenizer&lt;<span class="lifetime">&#39;r</span>, I&gt;
+<span class="kw">impl</span>&lt;<span class="lifetime">'r</span>, E, I: Iterator&lt;Item = <span class="prelude-ty">Result</span>&lt;event::Event, E&gt;&gt; + LocatedIterator&gt; FusedIterator
+    <span class="kw">for </span>Tokenizer&lt;<span class="lifetime">'r</span>, I&gt;
 {
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;r</span>, I: FileIdResolver&gt; FileIdResolver <span class="kw">for </span>Tokenizer&lt;<span class="lifetime">&#39;r</span>, I&gt; {
+<span class="kw">impl</span>&lt;<span class="lifetime">'r</span>, I: FileIdResolver&gt; FileIdResolver <span class="kw">for </span>Tokenizer&lt;<span class="lifetime">'r</span>, I&gt; {
     <span class="kw">fn </span>resolve(<span class="kw-2">&amp;</span><span class="self">self</span>, file_id: FileId) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>std::path::Path&gt; {
         <span class="self">self</span>.inner.resolve(file_id)
     }
@@ -759,7 +806,7 @@
     <span class="kw">use </span>lang_util::FileId;
     <span class="kw">use </span>rowan::NodeOrToken;
 
-    <span class="kw">use </span><span class="kw">crate</span>::processor::event::DirectiveKind;
+    <span class="kw">use crate</span>::{processor::event::DirectiveKind, types::Token};
 
     <span class="kw">use super</span>::{Event, MaybeToken};
 
@@ -774,11 +821,11 @@
                 .collect()
         }
 
-        <span class="macro">assert_eq!</span>(parse(<span class="string">&quot;1e-34&quot;</span>), <span class="kw-2">&amp;</span>[FLOAT_CONST(<span class="number">1E-34</span>)]);
-        <span class="macro">assert_eq!</span>(parse(<span class="string">&quot;1e-34f&quot;</span>), <span class="kw-2">&amp;</span>[FLOAT_CONST(<span class="number">1E-34</span>)]);
-        <span class="macro">assert_eq!</span>(parse(<span class="string">&quot;1E-34f&quot;</span>), <span class="kw-2">&amp;</span>[FLOAT_CONST(<span class="number">1E-34</span>)]);
-        <span class="macro">assert_eq!</span>(parse(<span class="string">&quot;1e-34F&quot;</span>), <span class="kw-2">&amp;</span>[FLOAT_CONST(<span class="number">1E-34</span>)]);
-        <span class="macro">assert_eq!</span>(parse(<span class="string">&quot;1E-34F&quot;</span>), <span class="kw-2">&amp;</span>[FLOAT_CONST(<span class="number">1E-34</span>)]);
+        <span class="macro">assert_eq!</span>(parse(<span class="string">"1e-34"</span>), <span class="kw-2">&amp;</span>[FLOAT_CONST(<span class="number">1E-34</span>)]);
+        <span class="macro">assert_eq!</span>(parse(<span class="string">"1e-34f"</span>), <span class="kw-2">&amp;</span>[FLOAT_CONST(<span class="number">1E-34</span>)]);
+        <span class="macro">assert_eq!</span>(parse(<span class="string">"1E-34f"</span>), <span class="kw-2">&amp;</span>[FLOAT_CONST(<span class="number">1E-34</span>)]);
+        <span class="macro">assert_eq!</span>(parse(<span class="string">"1e-34F"</span>), <span class="kw-2">&amp;</span>[FLOAT_CONST(<span class="number">1E-34</span>)]);
+        <span class="macro">assert_eq!</span>(parse(<span class="string">"1E-34F"</span>), <span class="kw-2">&amp;</span>[FLOAT_CONST(<span class="number">1E-34</span>)]);
     }
 
     <span class="attr">#[test]
@@ -791,53 +838,100 @@
     </span><span class="kw">fn </span>test_hash_ident() {
         <span class="kw">use </span><span class="kw">super</span>::Token::<span class="kw-2">*</span>;
 
-        <span class="kw">let </span><span class="kw-2">mut </span>tokens = Vec::new();
-
-        <span class="kw">let </span><span class="kw-2">mut </span>tokenizer = <span class="kw">crate</span>::processor::str::process(
-            <span class="string">&quot;#(ident) = hello&quot;</span>,
-            <span class="kw">crate</span>::processor::ProcessorState::default(),
-        )
-        .tokenize(<span class="number">100</span>, <span class="bool-val">false</span>, <span class="kw-2">&amp;</span><span class="kw">crate</span>::exts::DEFAULT_REGISTRY);
-
-        <span class="attr">#[allow(clippy::while_let_on_iterator)]
-        </span><span class="kw">while let </span><span class="prelude-val">Some</span>(result) = tokenizer.next() {
-            <span class="kw">if let </span><span class="prelude-val">Ok</span>(event) = result {
-                <span class="kw">match </span>event {
-                    Event::Token { token_kind, .. } =&gt; {
-                        tokens.push(token_kind);
-                    }
-                    Event::Directive { directive, .. }
-                        <span class="kw">if </span><span class="macro">matches!</span>(directive.kind(), DirectiveKind::Invalid(<span class="kw">_</span>)) =&gt;
-                    {
-                        <span class="comment">// Extract the tokens from the directive parse tree
-                        </span>tokens.extend(
-                            directive
-                                .node
-                                .descendants_with_tokens()
-                                .filter_map(NodeOrToken::into_token)
-                                .map(|token| {
-                                    tokenizer.tokenize_single(<span class="kw-2">&amp;</span>(<span class="kw-2">&amp;</span>token, FileId::default())).<span class="number">0
-                                </span>}),
-                        );
-                    }
-                    <span class="kw">_ </span>=&gt; {}
-                }
-            }
-        }
-
-        <span class="macro">assert_eq!</span>(
-            <span class="kw-2">&amp;</span>tokens,
+        <span class="kw">let </span>inputs = [
+            <span class="string">"#(ident) = hello"</span>,
+            <span class="string">"# (ident) = hello"</span>,
+            <span class="string">"#(ident.clone()) = hello"</span>,
+            <span class="string">"# (ident.clone()) = hello"</span>,
+        ];
+        <span class="kw">let </span>outputs: [<span class="kw-2">&amp;</span>[Token]; <span class="number">4</span>] = [
             <span class="kw-2">&amp;</span>[
                 HASH,
                 LPAREN,
-                IDENT(<span class="string">&quot;ident&quot;</span>.into()),
+                IDENT(<span class="string">"ident"</span>.into()),
                 RPAREN,
                 WS,
                 EQUAL,
                 WS,
-                IDENT(<span class="string">&quot;hello&quot;</span>.into())
-            ]
-        );
+                IDENT(<span class="string">"hello"</span>.into()),
+            ],
+            <span class="kw-2">&amp;</span>[
+                HASH,
+                WS,
+                LPAREN,
+                IDENT(<span class="string">"ident"</span>.into()),
+                RPAREN,
+                WS,
+                EQUAL,
+                WS,
+                IDENT(<span class="string">"hello"</span>.into()),
+            ],
+            <span class="kw-2">&amp;</span>[
+                HASH,
+                LPAREN,
+                IDENT(<span class="string">"ident"</span>.into()),
+                PERIOD,
+                IDENT(<span class="string">"clone"</span>.into()),
+                LPAREN,
+                RPAREN,
+                RPAREN,
+                WS,
+                EQUAL,
+                WS,
+                IDENT(<span class="string">"hello"</span>.into()),
+            ],
+            <span class="kw-2">&amp;</span>[
+                HASH,
+                WS,
+                LPAREN,
+                IDENT(<span class="string">"ident"</span>.into()),
+                PERIOD,
+                IDENT(<span class="string">"clone"</span>.into()),
+                LPAREN,
+                RPAREN,
+                RPAREN,
+                WS,
+                EQUAL,
+                WS,
+                IDENT(<span class="string">"hello"</span>.into()),
+            ],
+        ];
+
+        <span class="kw">for </span>(input, output) <span class="kw">in </span>inputs.iter().zip(outputs.iter()) {
+            <span class="kw">let </span><span class="kw-2">mut </span>tokens = Vec::new();
+
+            <span class="kw">let </span><span class="kw-2">mut </span>tokenizer =
+                <span class="kw">crate</span>::processor::str::process(input, <span class="kw">crate</span>::processor::ProcessorState::default())
+                    .tokenize(<span class="number">100</span>, <span class="bool-val">false</span>, <span class="kw-2">&amp;</span><span class="kw">crate</span>::exts::DEFAULT_REGISTRY);
+
+            <span class="attr">#[allow(clippy::while_let_on_iterator)]
+            </span><span class="kw">while let </span><span class="prelude-val">Some</span>(result) = tokenizer.next() {
+                <span class="kw">if let </span><span class="prelude-val">Ok</span>(event) = result {
+                    <span class="kw">match </span>event {
+                        Event::Token { token_kind, .. } =&gt; {
+                            tokens.push(token_kind);
+                        }
+                        Event::Directive { directive, .. }
+                            <span class="kw">if </span><span class="macro">matches!</span>(directive.kind(), DirectiveKind::Invalid(<span class="kw">_</span>)) =&gt;
+                        {
+                            <span class="comment">// Extract the tokens from the directive parse tree
+                            </span>tokens.extend(
+                                directive
+                                    .node
+                                    .descendants_with_tokens()
+                                    .filter_map(NodeOrToken::into_token)
+                                    .map(|token| {
+                                        tokenizer.tokenize_single(<span class="kw-2">&amp;</span>(<span class="kw-2">&amp;</span>token, FileId::default())).<span class="number">0
+                                    </span>}),
+                            );
+                        }
+                        <span class="kw">_ </span>=&gt; {}
+                    }
+                }
+            }
+
+            <span class="macro">assert_eq!</span>(<span class="kw-2">&amp;</span>tokens, output);
+        }
     }
 }
 </code></pre></div></section></main></body></html>

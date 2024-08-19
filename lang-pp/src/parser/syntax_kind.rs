@@ -287,7 +287,7 @@ impl From<lexer::Token> for SyntaxKind {
         }
 
         // SAFETY: Aside from LINECONT, SyntaxKind is a superset of lexer::Token
-        unsafe { std::mem::transmute(std::mem::transmute::<_, u16>(s)) }
+        unsafe { std::mem::transmute(std::mem::transmute::<lexer::Token, u16>(s)) }
     }
 }
 

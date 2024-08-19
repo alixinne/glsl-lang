@@ -132,6 +132,6 @@ impl Token {
 impl From<crate::lexer::PreToken> for Token {
     fn from(pre: crate::lexer::PreToken) -> Self {
         // SAFETY: Token is a superset of PreToken
-        unsafe { std::mem::transmute(std::mem::transmute::<_, u16>(pre)) }
+        unsafe { std::mem::transmute(std::mem::transmute::<crate::lexer::PreToken, u16>(pre)) }
     }
 }

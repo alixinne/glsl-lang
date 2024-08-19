@@ -23,7 +23,7 @@ impl FromMeta for TokenDisplay {
         })
     }
 
-    fn from_list(items: &[syn::NestedMeta]) -> darling::Result<Self> {
+    fn from_list(items: &[darling::ast::NestedMeta]) -> darling::Result<Self> {
         Ok(Self {
             format: String::from_nested_meta(
                 items
@@ -44,7 +44,7 @@ struct TokenAttr {
 }
 
 impl FromMeta for TokenAttr {
-    fn from_list(items: &[syn::NestedMeta]) -> darling::Result<Self> {
+    fn from_list(items: &[darling::ast::NestedMeta]) -> darling::Result<Self> {
         Ok(Self {
             token: String::from_nested_meta(
                 items
@@ -65,14 +65,14 @@ impl FromMeta for AsParser {
         Ok(Self::RawString(value.to_owned()))
     }
 
-    fn from_nested_meta(item: &syn::NestedMeta) -> darling::Result<Self> {
+    fn from_nested_meta(item: &darling::ast::NestedMeta) -> darling::Result<Self> {
         match item {
-            syn::NestedMeta::Meta(syn::Meta::Path(p)) => Ok(Self::Path(p.to_owned())),
+            darling::ast::NestedMeta::Meta(syn::Meta::Path(p)) => Ok(Self::Path(p.to_owned())),
             _ => Err(darling::Error::unsupported_format("meta")),
         }
     }
 
-    fn from_list(items: &[syn::NestedMeta]) -> darling::Result<Self> {
+    fn from_list(items: &[darling::ast::NestedMeta]) -> darling::Result<Self> {
         if let Some(item) = items.first() {
             return Self::from_nested_meta(item);
         }
@@ -89,7 +89,7 @@ struct TokenVariant {
     attrs: Vec<syn::Attribute>,
     #[darling(default)]
     display: Option<TokenDisplay>,
-    #[darling(default, rename = "as")]
+    #[darling(default, rename = "parser")]
     as_parser: Option<AsParser>,
     #[darling(default, rename = "token")]
     fallback_token: Option<String>,
@@ -381,14 +381,9 @@ type TokenAttrTy<'s> = Option<(darling::Result<TokenAttr>, proc_macro2::Span)>;
 fn parse_token_attr(variant: &TokenVariant) -> TokenAttrTy {
     // Unit struct, is there a token impl?
     for attr in variant.attrs.iter() {
-        if attr
-            .path
-            .get_ident()
-            .map(|ident| ident == "token")
-            .unwrap_or(false)
-        {
+        if attr.path().is_ident("token") {
             return Some((
-                attr.parse_meta()
+                attr.parse_args()
                     .map_err(darling::Error::custom)
                     .and_then(|meta| TokenAttr::from_meta(&meta)),
                 attr.span(),
@@ -420,10 +415,10 @@ enum AsParserError {
 impl std::fmt::Display for AsParserError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Self::MissingDisplayImpl => write!(f, "in lang_util attribute, `as = display` specified but not display implementation provided"),
-            Self::InvalidAs => write!(f, "invalid `as` value, expected display or a literal string"),
+            Self::MissingDisplayImpl => write!(f, "in lang_util attribute, `parser = display` specified but not display implementation provided"),
+            Self::InvalidAs => write!(f, "invalid `parser` value, expected display or a literal string"),
             Self::InvalidTokenAttribute(error) => write!(f, "invalid token attribute: {}", error),
-            Self::NoTokenOrAs => write!(f, "missing token or lang_util(as = \"...\") attributes"),
+            Self::NoTokenOrAs => write!(f, "missing token or lang_util(parser = \"...\") attributes"),
         }
     }
 }
@@ -544,7 +539,10 @@ pub(crate) fn token(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
         // Parse the input tokens into a syntax tree
         let input = parse_macro_input!(input as DeriveInput);
         // Find out enum-level options
-        TokenOpts::from_derive_input(&input).expect("failed to parse options")
+        match TokenOpts::from_derive_input(&input) {
+            Ok(res) => res,
+            Err(err) => return err.write_errors().into(),
+        }
     };
 
     let base_ident = &opts.ident;

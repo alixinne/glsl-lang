@@ -10,7 +10,7 @@ use logos::Logos;
 
 #[derive(Debug, Clone, PartialEq, lang_util::Token)]
 #[cfg_attr(feature = "v1", derive(Logos))]
-#[cfg_attr(feature = "v1", logos(extras = (crate::ParseContext, crate::ParseOptions)))]
+#[cfg_attr(feature = "v1", logos(extrparser = (crate::ParseContext, crate::ParseOptions)))]
 #[allow(missing_docs)]
 pub enum Token {
     #[cfg_attr(feature = "v1", token("const"))]
@@ -766,9 +766,9 @@ pub enum Token {
         feature = "v1",
         regex("#\\s*\\(\\s*[a-zA-Z_][a-zA-Z_0-9]*\\s*\\)", parse_rs_ident)
     )]
-    #[lang_util(as = "ident", kind = "identifier")]
+    #[lang_util(parser = "ident", kind = "identifier")]
     Identifier(SmolStr),
-    #[lang_util(as = "ty_name", kind = "type name")]
+    #[lang_util(parser = "ty_name", kind = "type name")]
     TypeName(SmolStr), // Cast from Identifier depending on known type names
     #[cfg_attr(
         feature = "v1",
@@ -778,21 +778,21 @@ pub enum Token {
         )
     )]
     #[cfg_attr(feature = "v1", regex(r"[0-9]+[eE][+-]?[0-9]+(f|F)?", parse_f32))]
-    #[lang_util(as = "float_constant", kind = "literal")]
+    #[lang_util(parser = "float_constant", kind = "literal")]
     FloatConstant(f32),
     #[cfg_attr(feature = "v1", regex(r"0[0-7]*", |lex| parse_int(lex, 8)))]
     #[cfg_attr(feature = "v1", regex(r"[1-9][0-9]*", |lex| parse_int(lex, 10)))]
     #[cfg_attr(feature = "v1", regex(r"0[xX][0-9A-Fa-f]+", |lex| parse_int(lex, 16)))]
-    #[lang_util(as = "int_constant", kind = "literal")]
+    #[lang_util(parser = "int_constant", kind = "literal")]
     IntConstant(i32),
     #[cfg_attr(feature = "v1", regex(r"0[0-7]*[uU]", |lex| parse_uint(lex, 8)))]
     #[cfg_attr(feature = "v1", regex(r"[1-9][0-9]*[uU]", |lex| parse_uint(lex, 10)))]
     #[cfg_attr(feature = "v1", regex(r"0[xX][0-9A-Fa-f]+[uU]", |lex| parse_uint(lex, 16)))]
-    #[lang_util(as = "uint_constant", kind = "literal")]
+    #[lang_util(parser = "uint_constant", kind = "literal")]
     UIntConstant(u32),
     #[cfg_attr(feature = "v1", token("true", |_| true))]
     #[cfg_attr(feature = "v1", token("false", |_| false))]
-    #[lang_util(as = "bool_constant", kind = "literal")]
+    #[lang_util(parser = "bool_constant", kind = "literal")]
     BoolConstant(bool),
     #[cfg_attr(
         feature = "v1",
@@ -802,7 +802,7 @@ pub enum Token {
         )
     )]
     #[cfg_attr(feature = "v1", regex(r"[0-9]+[eE][+-]?[0-9]+(lf|LF)", parse_f64))]
-    #[lang_util(as = "double_constant", kind = "literal")]
+    #[lang_util(parser = "double_constant", kind = "literal")]
     DoubleConstant(f64),
     #[cfg_attr(feature = "v1", token("<<"))]
     #[lang_util(token = "<<", kind = "binary operator", kind = "operator")]
@@ -974,89 +974,93 @@ pub enum Token {
 
     // TODO: Line continuation can happen inside tokens
     #[cfg_attr(feature = "v1", regex("([ \t\r\n]|\\\\\r?\n)+", logos::skip))]
-    #[lang_util(display = "<whitespace>", as(display), kind = "trivia")]
+    #[lang_util(display = "<whitespace>", parser(display), kind = "trivia")]
     Whitespace,
     #[cfg_attr(feature = "v1", regex("//(.|\\\\\r?\n)*", |lex| { parse_cmt(lex, true); logos::Skip }))]
-    #[lang_util(display = "<single line comment>", as(display), kind = "trivia")]
+    #[lang_util(display = "<single line comment>", parser(display), kind = "trivia")]
     SingleLineComment,
     #[cfg_attr(feature = "v1", regex("/\\*([^*]|\\*[^/])+\\*/", |lex| { parse_cmt(lex, false); logos::Skip }))]
-    #[lang_util(display = "<multi line comment>", as(display), kind = "trivia")]
+    #[lang_util(display = "<multi line comment>", parser(display), kind = "trivia")]
     MultiLineComment,
 
     // TODO: Line continuations in preprocessor pragmas?
     #[cfg_attr(feature = "v1", regex("#([ \t]|\\\\\r?\n)*define"))]
-    #[lang_util(display = "#define", as(display), kind = "preprocessor directive")]
+    #[lang_util(display = "#define", parser(display), kind = "preprocessor directive")]
     PpDefine,
     #[cfg_attr(feature = "v1", regex("#([ \t]|\\\\\r?\n)*else"))]
-    #[lang_util(display = "#else", as(display), kind = "preprocessor directive")]
+    #[lang_util(display = "#else", parser(display), kind = "preprocessor directive")]
     PpElse,
     #[cfg_attr(feature = "v1", regex("#([ \t]|\\\\\r?\n)*elif"))]
-    #[lang_util(display = "#elif", as(display), kind = "preprocessor directive")]
+    #[lang_util(display = "#elif", parser(display), kind = "preprocessor directive")]
     PpElif,
     #[cfg_attr(feature = "v1", regex("#([ \t]|\\\\\r?\n)*endif"))]
-    #[lang_util(display = "#endif", as(display), kind = "preprocessor directive")]
+    #[lang_util(display = "#endif", parser(display), kind = "preprocessor directive")]
     PpEndIf,
     #[cfg_attr(feature = "v1", regex("#([ \t]|\\\\\r?\n)*error"))]
-    #[lang_util(display = "#error", as(display), kind = "preprocessor directive")]
+    #[lang_util(display = "#error", parser(display), kind = "preprocessor directive")]
     PpError,
     #[cfg_attr(feature = "v1", regex("#([ \t]|\\\\\r?\n)*if"))]
-    #[lang_util(display = "#if", as(display), kind = "preprocessor directive")]
+    #[lang_util(display = "#if", parser(display), kind = "preprocessor directive")]
     PpIf,
     #[cfg_attr(feature = "v1", regex("#([ \t]|\\\\\r?\n)*ifdef"))]
-    #[lang_util(display = "#ifdef", as(display), kind = "preprocessor directive")]
+    #[lang_util(display = "#ifdef", parser(display), kind = "preprocessor directive")]
     PpIfDef,
     #[cfg_attr(feature = "v1", regex("#([ \t]|\\\\\r?\n)*ifndef"))]
-    #[lang_util(display = "#ifndef", as(display), kind = "preprocessor directive")]
+    #[lang_util(display = "#ifndef", parser(display), kind = "preprocessor directive")]
     PpIfNDef,
     #[cfg_attr(feature = "v1", regex("#([ \t]|\\\\\r?\n)*include"))]
-    #[lang_util(display = "#include", as(display), kind = "preprocessor directive")]
+    #[lang_util(display = "#include", parser(display), kind = "preprocessor directive")]
     PpInclude,
     #[cfg_attr(feature = "v1", regex("#([ \t]|\\\\\r?\n)*line"))]
-    #[lang_util(display = "#line", as(display), kind = "preprocessor directive")]
+    #[lang_util(display = "#line", parser(display), kind = "preprocessor directive")]
     PpLine,
     #[cfg_attr(feature = "v1", regex("#([ \t]|\\\\\r?\n)*pragma"))]
-    #[lang_util(display = "#pragma", as(display), kind = "preprocessor directive")]
+    #[lang_util(display = "#pragma", parser(display), kind = "preprocessor directive")]
     PpPragma,
     #[cfg_attr(feature = "v1", regex("#([ \t]|\\\\\r?\n)*undef"))]
-    #[lang_util(display = "#undef", as(display), kind = "preprocessor directive")]
+    #[lang_util(display = "#undef", parser(display), kind = "preprocessor directive")]
     PpUndef,
     #[cfg_attr(feature = "v1", regex("#([ \t]|\\\\\r?\n)*version"))]
-    #[lang_util(display = "#version", as(display), kind = "preprocessor directive")]
+    #[lang_util(display = "#version", parser(display), kind = "preprocessor directive")]
     PpVersion,
     #[cfg_attr(feature = "v1", regex("#([ \t]|\\\\\r?\n)*extension"))]
-    #[lang_util(display = "#extension", as(display), kind = "preprocessor directive")]
+    #[lang_util(
+        display = "#extension",
+        parser(display),
+        kind = "preprocessor directive"
+    )]
     PpExtension,
 
     #[lang_util(
         display = "<preprocessor string>",
-        as(display),
+        parser(display),
         kind = "preprocessor string"
     )]
     PpRest(String),
 
-    #[lang_util(display = "core", as(display), kind = "version profile")]
+    #[lang_util(display = "core", parser(display), kind = "version profile")]
     PpCore,
-    #[lang_util(display = "compatibility", as(display), kind = "version profile")]
+    #[lang_util(display = "compatibility", parser(display), kind = "version profile")]
     PpCompatibility,
-    #[lang_util(display = "es", as(display), kind = "version profile")]
+    #[lang_util(display = "es", parser(display), kind = "version profile")]
     PpEs,
 
-    #[lang_util(display = "require", as(display), kind = "extension behavior")]
+    #[lang_util(display = "require", parser(display), kind = "extension behavior")]
     PpExtRequire,
-    #[lang_util(display = "enable", as(display), kind = "extension behavior")]
+    #[lang_util(display = "enable", parser(display), kind = "extension behavior")]
     PpExtEnable,
-    #[lang_util(display = "warn", as(display), kind = "extension behavior")]
+    #[lang_util(display = "warn", parser(display), kind = "extension behavior")]
     PpExtWarn,
-    #[lang_util(display = "disable", as(display), kind = "extension behavior")]
+    #[lang_util(display = "disable", parser(display), kind = "extension behavior")]
     PpExtDisable,
 
-    #[lang_util(display = "<{}>", as(display), kind = "include path")]
+    #[lang_util(display = "<{}>", parser(display), kind = "include path")]
     PpPathAbsolute(String),
-    #[lang_util(display = "\"{}\"", as(display), kind = "include path")]
+    #[lang_util(display = "\"{}\"", parser(display), kind = "include path")]
     PpPathRelative(String),
 
     #[cfg_attr(feature = "v1", error)]
-    #[lang_util(display = "<invalid token>", as(display), kind = "error")]
+    #[lang_util(display = "<invalid token>", parser(display), kind = "error")]
     Error,
 }
 

@@ -6,6 +6,10 @@ use lang_util::position::LexerPosition;
 pub use token::*;
 
 #[cfg(feature = "v1")]
+#[deprecated(
+    since = "0.6.0",
+    note = "the v1 lexer is not spec-compliant and relies on outdated dependencies. It will be removed in glsl-lang 0.7.0"
+)]
 pub mod v1;
 
 #[cfg(any(feature = "v2-min", feature = "v2-full"))]

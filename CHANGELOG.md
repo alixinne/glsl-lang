@@ -1,6 +1,33 @@
 ## [Unreleased]
 
 - - -
+## v0.6.0-beta.1 - 2024-08-19
+#### Bug Fixes
+- **(deps)** update rust crate derive_more to v1 - (0315528) - renovate[bot]
+- **(deps)** update all non-major dependencies - (65b144f) - renovate[bot]
+- **(glsl-lang-quote)** correctly parse #(ident) at line start - (c47f7fc) - *alixinne*
+- update github profile information - (2beea1f) - Alix Tavernier
+#### Build system
+- set resolver to 2 - (73544c2) - alixinne
+#### Features
+- rename lang_util(as) to lang_util(parser) - (1902047) - alixinne
+#### Miscellaneous Chores
+- **(cog)** allow releases on next branch - (8a47fde) - *alixinne*
+- **(deps)** update softprops/action-gh-release action to v2 - (2c27d68) - renovate[bot]
+- **(deps)** update peaceiris/actions-gh-pages action to v4 - (37d2da5) - renovate[bot]
+- **(deps)** update rust crate glsl to v7 - (e8782ee) - renovate[bot]
+- **(deps)** update actions/cache action to v4 - (76c7bd2) - renovate[bot]
+- **(deps)** update actions/checkout action to v4 - (be49ea6) - renovate[bot]
+- **(deps)** update actions/cache action to v3 - (b159bfb) - renovate[bot]
+- **(version)** v0.5.3 [skip ci] - (ef30eef) - glsl-lang
+- **(version)** v0.5.2 [skip ci] - (c0ada55) - glsl-lang
+- fix script headers - (d746dcf) - alixinne
+- fix clippy warnings - (b0ccc3f) - alixinne
+- fix clippy warnings - (c28f583) - alixinne
+- bump rust version to 1.74.0 - (23a3c9b) - alixinne
+
+- - -
+
 ## v0.5.3 - 2024-07-23
 #### Bug Fixes
 - **(glsl-lang-quote)** correctly parse #(ident) at line start - (c47f7fc) - *alixinne*

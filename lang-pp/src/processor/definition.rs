@@ -838,7 +838,7 @@ impl<'d> MacroInvocation<'d> {
         // spec-defined expected result.
         let result: Vec<_> = events
             .into_iter()
-            .group_by(Event::is_token)
+            .chunk_by(Event::is_token)
             .into_iter()
             .flat_map(|(is_token, events)| {
                 if is_token {

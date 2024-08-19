@@ -1160,25 +1160,25 @@ impl TypeName {
 #[allow(non_camel_case_types)]
 pub enum Token {
     /// Identifier
-    #[lang_util(as = "IDENT", kind = "identifier")]
+    #[lang_util(parser = "IDENT", kind = "identifier")]
     IDENT(SmolStr),
     /// Type name
-    #[lang_util(as = "TYPE_NAME", kind = "type name")]
+    #[lang_util(parser = "TYPE_NAME", kind = "type name")]
     TYPE_NAME(TypeName),
     /// Float constant
-    #[lang_util(as = "FLOAT_CONST", kind = "float constant", kind = "literal")]
+    #[lang_util(parser = "FLOAT_CONST", kind = "float constant", kind = "literal")]
     FLOAT_CONST(f32),
     /// Int constant
-    #[lang_util(as = "INT_CONST", kind = "int constant", kind = "literal")]
+    #[lang_util(parser = "INT_CONST", kind = "int constant", kind = "literal")]
     INT_CONST(i32),
     /// Unsigned int constant
-    #[lang_util(as = "UINT_CONST", kind = "uint constant", kind = "literal")]
+    #[lang_util(parser = "UINT_CONST", kind = "uint constant", kind = "literal")]
     UINT_CONST(u32),
     /// Bool constant
-    #[lang_util(as = "BOOL_CONST", kind = "bool constant", kind = "literal")]
+    #[lang_util(parser = "BOOL_CONST", kind = "bool constant", kind = "literal")]
     BOOL_CONST(bool),
     /// Double constant
-    #[lang_util(as = "DOUBLE_CONST", kind = "double constant", kind = "literal")]
+    #[lang_util(parser = "DOUBLE_CONST", kind = "double constant", kind = "literal")]
     DOUBLE_CONST(f64),
     // Multi-char tokens
     /// <<
@@ -1601,13 +1601,13 @@ pub enum Token {
     USING,
     // Other
     /// Whitespaace
-    #[lang_util(display = "<whitespace>", as(display), kind = "trivia")]
+    #[lang_util(display = "<whitespace>", parser(display), kind = "trivia")]
     WS,
     /// Comment (single-line or multi-line)
-    #[lang_util(display = "<comment>", as(display), kind = "trivia")]
+    #[lang_util(display = "<comment>", parser(display), kind = "trivia")]
     COMMENT,
     /// Marker for invalid tokens
-    #[lang_util(display = "<invalid token>", as(display), kind = "error")]
+    #[lang_util(display = "<invalid token>", parser(display), kind = "error")]
     ERROR(ErrorKind),
 }
 

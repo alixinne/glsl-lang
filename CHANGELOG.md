@@ -1,6 +1,32 @@
 ## [Unreleased]
 
 - - -
+## v0.6.0 - 2024-08-19
+#### Continuous Integration
+- **(docs)** add permissions for github_token - (2e9f4ca) - *alixinne*
+#### Miscellaneous Chores
+- manually bump dev-dependencies - (7d74c9b) - alixinne
+- add deprecation notice for v1 lexer - (653ffd9) - alixinne
+
+- - -
+
+## v0.6.0-beta.1 - 2024-08-19
+#### Bug Fixes
+- **(deps)** update rust crate derive_more to v1 - (0315528) - renovate[bot]
+- **(deps)** update all non-major dependencies - (65b144f) - renovate[bot]
+#### Features
+- rename lang_util(as) to lang_util(parser) - (1902047) - alixinne
+#### Miscellaneous Chores
+- **(cog)** allow releases on next branch - (8a47fde) - *alixinne*
+- **(deps)** update softprops/action-gh-release action to v2 - (2c27d68) - renovate[bot]
+- **(deps)** update peaceiris/actions-gh-pages action to v4 - (37d2da5) - renovate[bot]
+- **(version)** v0.6.0-beta.1 [skip ci] - (9cbd402) - *alixinne*
+- **(version)** v0.5.3 [skip ci] - (ef30eef) - glsl-lang
+- fix script headers - (d746dcf) - alixinne
+- fix clippy warnings - (b0ccc3f) - alixinne
+
+- - -
+
 ## v0.6.0-beta.1 - 2024-08-19
 #### Bug Fixes
 - **(deps)** update rust crate derive_more to v1 - (0315528) - renovate[bot]

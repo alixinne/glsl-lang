@@ -461,7 +461,7 @@ impl TryFrom<(FileId, SyntaxNode)> for Extension {
             .collect();
 
         let name = idents
-            .get(0)
+            .first()
             .ok_or(Self::Error::MissingExtensionName)
             .map(|name| ExtensionName::new(Unescaped::new(name.text()).to_string()))?;
 

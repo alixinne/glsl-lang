@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # This script validates shaders (if successfully compiled) using spirv-val.
 # It is not meant to preclude the possible addition of the validator to

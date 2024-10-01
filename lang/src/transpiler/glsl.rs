@@ -1527,6 +1527,7 @@ where
             show_init_declarator_list(f, list, state)?;
         }
         ast::DeclarationData::Precision(ref qual, ref ty) => {
+            f.write_str("precision ")?;
             show_precision_qualifier(f, qual, state)?;
             f.write_str(" ")?;
             show_type_specifier(f, ty, state)?;

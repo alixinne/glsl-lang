@@ -1,6 +1,14 @@
 ## [Unreleased]
 
 - - -
+## v0.6.1 - 2024-10-01
+#### Bug Fixes
+- **(transpiler)** append "precision" for precision decl (#53) - (1596970) - Yorkie Makoto
+#### Miscellaneous Chores
+- **(version)** v0.6.0 [skip ci] - (222af29) - glsl-lang
+
+- - -
+
 ## v0.6.0 - 2024-08-19
 #### Continuous Integration
 - **(docs)** add permissions for github_token - (2e9f4ca) - *alixinne*

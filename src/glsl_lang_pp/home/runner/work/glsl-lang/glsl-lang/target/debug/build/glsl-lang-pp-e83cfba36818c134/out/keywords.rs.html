@@ -1,0 +1,462 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/work/glsl-lang/glsl-lang/target/debug/build/glsl-lang-pp-e83cfba36818c134/out/keywords.rs`."><title>keywords.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../../../../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../../../../../../../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../../../../../../../../../static.files/rustdoc-c5d6553a23f1e5a6.css"><meta name="rustdoc-vars" data-root-path="../../../../../../../../../../../../" data-static-root-path="../../../../../../../../../../../../static.files/" data-current-crate="glsl_lang_pp" data-themes="" data-resource-suffix="" data-rustdoc-version="1.81.0 (eeb90cda1 2024-09-04)" data-channel="1.81.0" data-search-js="search-d234aafac6c221dd.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../../../../../../../../../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../../../../../../../../../../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../../../../../../../../../../../src-files.js"></script><script defer src="../../../../../../../../../../../../static.files/main-d2fab2bf619172d3.js"></script><noscript><link rel="stylesheet" href="../../../../../../../../../../../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../../../../../../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../../../../../../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<a href="#2" id="2">2</a>
+<a href="#3" id="3">3</a>
+<a href="#4" id="4">4</a>
+<a href="#5" id="5">5</a>
+<a href="#6" id="6">6</a>
+<a href="#7" id="7">7</a>
+<a href="#8" id="8">8</a>
+<a href="#9" id="9">9</a>
+<a href="#10" id="10">10</a>
+<a href="#11" id="11">11</a>
+<a href="#12" id="12">12</a>
+<a href="#13" id="13">13</a>
+<a href="#14" id="14">14</a>
+<a href="#15" id="15">15</a>
+<a href="#16" id="16">16</a>
+<a href="#17" id="17">17</a>
+<a href="#18" id="18">18</a>
+<a href="#19" id="19">19</a>
+<a href="#20" id="20">20</a>
+<a href="#21" id="21">21</a>
+<a href="#22" id="22">22</a>
+<a href="#23" id="23">23</a>
+<a href="#24" id="24">24</a>
+<a href="#25" id="25">25</a>
+<a href="#26" id="26">26</a>
+<a href="#27" id="27">27</a>
+<a href="#28" id="28">28</a>
+<a href="#29" id="29">29</a>
+<a href="#30" id="30">30</a>
+<a href="#31" id="31">31</a>
+<a href="#32" id="32">32</a>
+<a href="#33" id="33">33</a>
+<a href="#34" id="34">34</a>
+<a href="#35" id="35">35</a>
+<a href="#36" id="36">36</a>
+<a href="#37" id="37">37</a>
+<a href="#38" id="38">38</a>
+<a href="#39" id="39">39</a>
+<a href="#40" id="40">40</a>
+<a href="#41" id="41">41</a>
+<a href="#42" id="42">42</a>
+<a href="#43" id="43">43</a>
+<a href="#44" id="44">44</a>
+<a href="#45" id="45">45</a>
+<a href="#46" id="46">46</a>
+<a href="#47" id="47">47</a>
+<a href="#48" id="48">48</a>
+<a href="#49" id="49">49</a>
+<a href="#50" id="50">50</a>
+<a href="#51" id="51">51</a>
+<a href="#52" id="52">52</a>
+<a href="#53" id="53">53</a>
+<a href="#54" id="54">54</a>
+<a href="#55" id="55">55</a>
+<a href="#56" id="56">56</a>
+<a href="#57" id="57">57</a>
+<a href="#58" id="58">58</a>
+<a href="#59" id="59">59</a>
+<a href="#60" id="60">60</a>
+<a href="#61" id="61">61</a>
+<a href="#62" id="62">62</a>
+<a href="#63" id="63">63</a>
+<a href="#64" id="64">64</a>
+<a href="#65" id="65">65</a>
+<a href="#66" id="66">66</a>
+<a href="#67" id="67">67</a>
+<a href="#68" id="68">68</a>
+<a href="#69" id="69">69</a>
+<a href="#70" id="70">70</a>
+<a href="#71" id="71">71</a>
+<a href="#72" id="72">72</a>
+<a href="#73" id="73">73</a>
+<a href="#74" id="74">74</a>
+<a href="#75" id="75">75</a>
+<a href="#76" id="76">76</a>
+<a href="#77" id="77">77</a>
+<a href="#78" id="78">78</a>
+<a href="#79" id="79">79</a>
+<a href="#80" id="80">80</a>
+<a href="#81" id="81">81</a>
+<a href="#82" id="82">82</a>
+<a href="#83" id="83">83</a>
+<a href="#84" id="84">84</a>
+<a href="#85" id="85">85</a>
+<a href="#86" id="86">86</a>
+<a href="#87" id="87">87</a>
+<a href="#88" id="88">88</a>
+<a href="#89" id="89">89</a>
+<a href="#90" id="90">90</a>
+<a href="#91" id="91">91</a>
+<a href="#92" id="92">92</a>
+<a href="#93" id="93">93</a>
+<a href="#94" id="94">94</a>
+<a href="#95" id="95">95</a>
+<a href="#96" id="96">96</a>
+<a href="#97" id="97">97</a>
+<a href="#98" id="98">98</a>
+<a href="#99" id="99">99</a>
+<a href="#100" id="100">100</a>
+<a href="#101" id="101">101</a>
+<a href="#102" id="102">102</a>
+<a href="#103" id="103">103</a>
+<a href="#104" id="104">104</a>
+<a href="#105" id="105">105</a>
+<a href="#106" id="106">106</a>
+<a href="#107" id="107">107</a>
+<a href="#108" id="108">108</a>
+<a href="#109" id="109">109</a>
+<a href="#110" id="110">110</a>
+<a href="#111" id="111">111</a>
+<a href="#112" id="112">112</a>
+<a href="#113" id="113">113</a>
+<a href="#114" id="114">114</a>
+<a href="#115" id="115">115</a>
+<a href="#116" id="116">116</a>
+<a href="#117" id="117">117</a>
+<a href="#118" id="118">118</a>
+<a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
+<a href="#121" id="121">121</a>
+<a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
+<a href="#125" id="125">125</a>
+<a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
+<a href="#128" id="128">128</a>
+<a href="#129" id="129">129</a>
+<a href="#130" id="130">130</a>
+<a href="#131" id="131">131</a>
+<a href="#132" id="132">132</a>
+<a href="#133" id="133">133</a>
+<a href="#134" id="134">134</a>
+<a href="#135" id="135">135</a>
+<a href="#136" id="136">136</a>
+<a href="#137" id="137">137</a>
+<a href="#138" id="138">138</a>
+<a href="#139" id="139">139</a>
+<a href="#140" id="140">140</a>
+<a href="#141" id="141">141</a>
+<a href="#142" id="142">142</a>
+<a href="#143" id="143">143</a>
+<a href="#144" id="144">144</a>
+<a href="#145" id="145">145</a>
+<a href="#146" id="146">146</a>
+<a href="#147" id="147">147</a>
+<a href="#148" id="148">148</a>
+<a href="#149" id="149">149</a>
+<a href="#150" id="150">150</a>
+<a href="#151" id="151">151</a>
+<a href="#152" id="152">152</a>
+<a href="#153" id="153">153</a>
+<a href="#154" id="154">154</a>
+<a href="#155" id="155">155</a>
+<a href="#156" id="156">156</a>
+<a href="#157" id="157">157</a>
+<a href="#158" id="158">158</a>
+<a href="#159" id="159">159</a>
+<a href="#160" id="160">160</a>
+<a href="#161" id="161">161</a>
+<a href="#162" id="162">162</a>
+<a href="#163" id="163">163</a>
+<a href="#164" id="164">164</a>
+<a href="#165" id="165">165</a>
+<a href="#166" id="166">166</a>
+<a href="#167" id="167">167</a>
+<a href="#168" id="168">168</a>
+<a href="#169" id="169">169</a>
+<a href="#170" id="170">170</a>
+<a href="#171" id="171">171</a>
+<a href="#172" id="172">172</a>
+<a href="#173" id="173">173</a>
+<a href="#174" id="174">174</a>
+<a href="#175" id="175">175</a>
+<a href="#176" id="176">176</a>
+<a href="#177" id="177">177</a>
+<a href="#178" id="178">178</a>
+<a href="#179" id="179">179</a>
+<a href="#180" id="180">180</a>
+<a href="#181" id="181">181</a>
+<a href="#182" id="182">182</a>
+<a href="#183" id="183">183</a>
+<a href="#184" id="184">184</a>
+<a href="#185" id="185">185</a>
+<a href="#186" id="186">186</a>
+<a href="#187" id="187">187</a>
+<a href="#188" id="188">188</a>
+<a href="#189" id="189">189</a>
+<a href="#190" id="190">190</a>
+<a href="#191" id="191">191</a>
+<a href="#192" id="192">192</a>
+<a href="#193" id="193">193</a>
+<a href="#194" id="194">194</a>
+<a href="#195" id="195">195</a>
+<a href="#196" id="196">196</a>
+<a href="#197" id="197">197</a>
+<a href="#198" id="198">198</a>
+<a href="#199" id="199">199</a>
+<a href="#200" id="200">200</a>
+<a href="#201" id="201">201</a>
+<a href="#202" id="202">202</a>
+<a href="#203" id="203">203</a>
+<a href="#204" id="204">204</a>
+<a href="#205" id="205">205</a>
+<a href="#206" id="206">206</a>
+<a href="#207" id="207">207</a>
+<a href="#208" id="208">208</a>
+<a href="#209" id="209">209</a>
+<a href="#210" id="210">210</a>
+<a href="#211" id="211">211</a>
+<a href="#212" id="212">212</a>
+<a href="#213" id="213">213</a>
+<a href="#214" id="214">214</a>
+<a href="#215" id="215">215</a>
+<a href="#216" id="216">216</a>
+<a href="#217" id="217">217</a>
+<a href="#218" id="218">218</a>
+<a href="#219" id="219">219</a>
+<a href="#220" id="220">220</a>
+<a href="#221" id="221">221</a>
+<a href="#222" id="222">222</a>
+<a href="#223" id="223">223</a>
+<a href="#224" id="224">224</a>
+<a href="#225" id="225">225</a>
+<a href="#226" id="226">226</a>
+<a href="#227" id="227">227</a>
+<a href="#228" id="228">228</a>
+<a href="#229" id="229">229</a>
+<a href="#230" id="230">230</a>
+<a href="#231" id="231">231</a>
+</pre></div><pre class="rust"><code><span class="kw">pub type </span>KeywordAtom = :: string_cache :: Atom &lt; KeywordAtomStaticSet &gt; ;
+# [derive (PartialEq , Eq , PartialOrd , Ord)] <span class="kw">pub struct </span>KeywordAtomStaticSet ;
+<span class="kw">impl </span>:: string_cache :: StaticAtomSet <span class="kw">for </span>KeywordAtomStaticSet { <span class="kw">fn </span>get () -&gt; &amp; <span class="lifetime">'static </span>:: string_cache :: PhfStrSet { <span class="kw">static </span>SET : :: string_cache :: PhfStrSet = :: string_cache :: PhfStrSet { key : <span class="number">15467950696543387533u64 </span>, disps : &amp; [(<span class="number">1u32 </span>, <span class="number">0u32</span>) , (<span class="number">41u32 </span>, <span class="number">2u32</span>) , (<span class="number">0u32 </span>, <span class="number">1u32</span>) , (<span class="number">0u32 </span>, <span class="number">4u32</span>) , (<span class="number">0u32 </span>, <span class="number">26u32</span>) , (<span class="number">3u32 </span>, <span class="number">64u32</span>) , (<span class="number">2u32 </span>, <span class="number">17u32</span>) , (<span class="number">0u32 </span>, <span class="number">25u32</span>) , (<span class="number">1u32 </span>, <span class="number">0u32</span>) , (<span class="number">0u32 </span>, <span class="number">6u32</span>) , (<span class="number">9u32 </span>, <span class="number">26u32</span>) , (<span class="number">4u32 </span>, <span class="number">22u32</span>) , (<span class="number">6u32 </span>, <span class="number">24u32</span>) , (<span class="number">0u32 </span>, <span class="number">12u32</span>) , (<span class="number">34u32 </span>, <span class="number">61u32</span>) , (<span class="number">2u32 </span>, <span class="number">33u32</span>)] , atoms : &amp; [<span class="string">"in"</span>,
+<span class="string">"extern"</span>,
+<span class="string">"highp"</span>,
+<span class="string">"struct"</span>,
+<span class="string">"noinline"</span>,
+<span class="string">"subroutine"</span>,
+<span class="string">"true"</span>,
+<span class="string">"discard"</span>,
+<span class="string">"filter"</span>,
+<span class="string">"uniform"</span>,
+<span class="string">"common"</span>,
+<span class="string">""</span>,
+<span class="string">"enum"</span>,
+<span class="string">"false"</span>,
+<span class="string">"static"</span>,
+<span class="string">"inout"</span>,
+<span class="string">"class"</span>,
+<span class="string">"if"</span>,
+<span class="string">"restrict"</span>,
+<span class="string">"else"</span>,
+<span class="string">"break"</span>,
+<span class="string">"union"</span>,
+<span class="string">"return"</span>,
+<span class="string">"short"</span>,
+<span class="string">"const"</span>,
+<span class="string">"case"</span>,
+<span class="string">"centroid"</span>,
+<span class="string">"varying"</span>,
+<span class="string">"unsigned"</span>,
+<span class="string">"precise"</span>,
+<span class="string">"coherent"</span>,
+<span class="string">"namespace"</span>,
+<span class="string">"external"</span>,
+<span class="string">"do"</span>,
+<span class="string">"active"</span>,
+<span class="string">"for"</span>,
+<span class="string">"using"</span>,
+<span class="string">"public"</span>,
+<span class="string">"inline"</span>,
+<span class="string">"layout"</span>,
+<span class="string">"shared"</span>,
+<span class="string">"asm"</span>,
+<span class="string">"sizeof"</span>,
+<span class="string">"input"</span>,
+<span class="string">"invariant"</span>,
+<span class="string">"template"</span>,
+<span class="string">"writeonly"</span>,
+<span class="string">"noperspective"</span>,
+<span class="string">"out"</span>,
+<span class="string">"continue"</span>,
+<span class="string">"interface"</span>,
+<span class="string">"buffer"</span>,
+<span class="string">"partition"</span>,
+<span class="string">"smooth"</span>,
+<span class="string">"volatile"</span>,
+<span class="string">"superp"</span>,
+<span class="string">"switch"</span>,
+<span class="string">"flat"</span>,
+<span class="string">"half"</span>,
+<span class="string">"precision"</span>,
+<span class="string">"goto"</span>,
+<span class="string">"attribute"</span>,
+<span class="string">"patch"</span>,
+<span class="string">"this"</span>,
+<span class="string">"long"</span>,
+<span class="string">"typedef"</span>,
+<span class="string">"sample"</span>,
+<span class="string">"lowp"</span>,
+<span class="string">"mediump"</span>,
+<span class="string">"fixed"</span>,
+<span class="string">"readonly"</span>,
+<span class="string">"cast"</span>,
+<span class="string">"while"</span>,
+<span class="string">"default"</span>,
+<span class="string">"resource"</span>,
+<span class="string">"output"</span>] , hashes : &amp; [<span class="number">2865160471u32 </span>, <span class="number">2051278875u32 </span>, <span class="number">1660886437u32 </span>, <span class="number">4278444821u32 </span>, <span class="number">1986687719u32 </span>, <span class="number">2976415845u32 </span>, <span class="number">2597594058u32 </span>, <span class="number">2617717781u32 </span>, <span class="number">791856090u32 </span>, <span class="number">1822750634u32 </span>, <span class="number">3857529674u32 </span>, <span class="number">811901650u32 </span>, <span class="number">3609314594u32 </span>, <span class="number">4233829126u32 </span>, <span class="number">173178831u32 </span>, <span class="number">3361401001u32 </span>, <span class="number">3624073997u32 </span>, <span class="number">2979646725u32 </span>, <span class="number">2074721420u32 </span>, <span class="number">1204823467u32 </span>, <span class="number">1238268924u32 </span>, <span class="number">473174567u32 </span>, <span class="number">4050459160u32 </span>, <span class="number">2784593313u32 </span>, <span class="number">3014625331u32 </span>, <span class="number">3548835915u32 </span>, <span class="number">2688566432u32 </span>, <span class="number">661134765u32 </span>, <span class="number">4096943216u32 </span>, <span class="number">389322822u32 </span>, <span class="number">2639162939u32 </span>, <span class="number">4106387055u32 </span>, <span class="number">530860641u32 </span>, <span class="number">2720806188u32 </span>, <span class="number">268392956u32 </span>, <span class="number">3617551922u32 </span>, <span class="number">178609087u32 </span>, <span class="number">568045095u32 </span>, <span class="number">2947822252u32 </span>, <span class="number">22368075u32 </span>, <span class="number">2727162544u32 </span>, <span class="number">2219864532u32 </span>, <span class="number">364199237u32 </span>, <span class="number">370116534u32 </span>, <span class="number">2804051496u32 </span>, <span class="number">3279303524u32 </span>, <span class="number">503223681u32 </span>, <span class="number">1387992288u32 </span>, <span class="number">2490656065u32 </span>, <span class="number">1077993305u32 </span>, <span class="number">3537848730u32 </span>, <span class="number">3292955827u32 </span>, <span class="number">2835061629u32 </span>, <span class="number">2120754873u32 </span>, <span class="number">3965298409u32 </span>, <span class="number">1078562425u32 </span>, <span class="number">2927042396u32 </span>, <span class="number">4154498475u32 </span>, <span class="number">1270664286u32 </span>, <span class="number">1796295813u32 </span>, <span class="number">1655450979u32 </span>, <span class="number">1334918056u32 </span>, <span class="number">3491687576u32 </span>, <span class="number">1201887447u32 </span>, <span class="number">3113272454u32 </span>, <span class="number">2660054922u32 </span>, <span class="number">296506759u32 </span>, <span class="number">3606924403u32 </span>, <span class="number">833499373u32 </span>, <span class="number">3074989705u32 </span>, <span class="number">1651168966u32 </span>, <span class="number">3227720004u32 </span>, <span class="number">3454909782u32 </span>, <span class="number">2272517955u32 </span>, <span class="number">1787236063u32 </span>, <span class="number">3904180460u32</span>] } ;
+&amp; SET } <span class="kw">fn </span>empty_string_index () -&gt; u32 { <span class="number">11u32 </span>} } <span class="kw">pub const </span>ATOM_KEYWORDATOM__69_6E : KeywordAtom = KeywordAtom :: pack_static (<span class="number">0u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__65_78_74_65_72_6E : KeywordAtom = KeywordAtom :: pack_static (<span class="number">1u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__68_69_67_68_70 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">2u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__73_74_72_75_63_74 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">3u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__6E_6F_69_6E_6C_69_6E_65 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">4u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__73_75_62_72_6F_75_74_69_6E_65 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">5u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__74_72_75_65 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">6u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__64_69_73_63_61_72_64 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">7u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__66_69_6C_74_65_72 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">8u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__75_6E_69_66_6F_72_6D : KeywordAtom = KeywordAtom :: pack_static (<span class="number">9u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__63_6F_6D_6D_6F_6E : KeywordAtom = KeywordAtom :: pack_static (<span class="number">10u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM_ : KeywordAtom = KeywordAtom :: pack_static (<span class="number">11u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__65_6E_75_6D : KeywordAtom = KeywordAtom :: pack_static (<span class="number">12u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__66_61_6C_73_65 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">13u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__73_74_61_74_69_63 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">14u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__69_6E_6F_75_74 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">15u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__63_6C_61_73_73 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">16u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__69_66 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">17u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__72_65_73_74_72_69_63_74 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">18u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__65_6C_73_65 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">19u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__62_72_65_61_6B : KeywordAtom = KeywordAtom :: pack_static (<span class="number">20u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__75_6E_69_6F_6E : KeywordAtom = KeywordAtom :: pack_static (<span class="number">21u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__72_65_74_75_72_6E : KeywordAtom = KeywordAtom :: pack_static (<span class="number">22u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__73_68_6F_72_74 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">23u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__63_6F_6E_73_74 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">24u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__63_61_73_65 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">25u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__63_65_6E_74_72_6F_69_64 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">26u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__76_61_72_79_69_6E_67 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">27u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__75_6E_73_69_67_6E_65_64 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">28u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__70_72_65_63_69_73_65 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">29u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__63_6F_68_65_72_65_6E_74 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">30u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__6E_61_6D_65_73_70_61_63_65 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">31u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__65_78_74_65_72_6E_61_6C : KeywordAtom = KeywordAtom :: pack_static (<span class="number">32u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__64_6F : KeywordAtom = KeywordAtom :: pack_static (<span class="number">33u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__61_63_74_69_76_65 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">34u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__66_6F_72 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">35u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__75_73_69_6E_67 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">36u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__70_75_62_6C_69_63 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">37u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__69_6E_6C_69_6E_65 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">38u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__6C_61_79_6F_75_74 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">39u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__73_68_61_72_65_64 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">40u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__61_73_6D : KeywordAtom = KeywordAtom :: pack_static (<span class="number">41u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__73_69_7A_65_6F_66 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">42u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__69_6E_70_75_74 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">43u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__69_6E_76_61_72_69_61_6E_74 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">44u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__74_65_6D_70_6C_61_74_65 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">45u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__77_72_69_74_65_6F_6E_6C_79 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">46u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__6E_6F_70_65_72_73_70_65_63_74_69_76_65 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">47u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__6F_75_74 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">48u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__63_6F_6E_74_69_6E_75_65 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">49u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__69_6E_74_65_72_66_61_63_65 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">50u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__62_75_66_66_65_72 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">51u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__70_61_72_74_69_74_69_6F_6E : KeywordAtom = KeywordAtom :: pack_static (<span class="number">52u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__73_6D_6F_6F_74_68 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">53u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__76_6F_6C_61_74_69_6C_65 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">54u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__73_75_70_65_72_70 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">55u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__73_77_69_74_63_68 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">56u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__66_6C_61_74 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">57u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__68_61_6C_66 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">58u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__70_72_65_63_69_73_69_6F_6E : KeywordAtom = KeywordAtom :: pack_static (<span class="number">59u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__67_6F_74_6F : KeywordAtom = KeywordAtom :: pack_static (<span class="number">60u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__61_74_74_72_69_62_75_74_65 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">61u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__70_61_74_63_68 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">62u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__74_68_69_73 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">63u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__6C_6F_6E_67 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">64u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__74_79_70_65_64_65_66 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">65u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__73_61_6D_70_6C_65 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">66u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__6C_6F_77_70 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">67u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__6D_65_64_69_75_6D_70 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">68u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__66_69_78_65_64 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">69u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__72_65_61_64_6F_6E_6C_79 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">70u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__63_61_73_74 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">71u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__77_68_69_6C_65 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">72u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__64_65_66_61_75_6C_74 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">73u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__72_65_73_6F_75_72_63_65 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">74u32</span>) ;
+<span class="kw">pub const </span>ATOM_KEYWORDATOM__6F_75_74_70_75_74 : KeywordAtom = KeywordAtom :: pack_static (<span class="number">75u32</span>) ;
+# [macro_export] macro_rules ! keyword { (<span class="string">"in"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__69_6E } ;
+(<span class="string">"extern"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__65_78_74_65_72_6E } ;
+(<span class="string">"highp"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__68_69_67_68_70 } ;
+(<span class="string">"struct"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__73_74_72_75_63_74 } ;
+(<span class="string">"noinline"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__6E_6F_69_6E_6C_69_6E_65 } ;
+(<span class="string">"subroutine"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__73_75_62_72_6F_75_74_69_6E_65 } ;
+(<span class="string">"true"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__74_72_75_65 } ;
+(<span class="string">"discard"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__64_69_73_63_61_72_64 } ;
+(<span class="string">"filter"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__66_69_6C_74_65_72 } ;
+(<span class="string">"uniform"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__75_6E_69_66_6F_72_6D } ;
+(<span class="string">"common"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__63_6F_6D_6D_6F_6E } ;
+(<span class="string">""</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM_ } ;
+(<span class="string">"enum"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__65_6E_75_6D } ;
+(<span class="string">"false"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__66_61_6C_73_65 } ;
+(<span class="string">"static"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__73_74_61_74_69_63 } ;
+(<span class="string">"inout"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__69_6E_6F_75_74 } ;
+(<span class="string">"class"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__63_6C_61_73_73 } ;
+(<span class="string">"if"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__69_66 } ;
+(<span class="string">"restrict"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__72_65_73_74_72_69_63_74 } ;
+(<span class="string">"else"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__65_6C_73_65 } ;
+(<span class="string">"break"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__62_72_65_61_6B } ;
+(<span class="string">"union"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__75_6E_69_6F_6E } ;
+(<span class="string">"return"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__72_65_74_75_72_6E } ;
+(<span class="string">"short"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__73_68_6F_72_74 } ;
+(<span class="string">"const"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__63_6F_6E_73_74 } ;
+(<span class="string">"case"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__63_61_73_65 } ;
+(<span class="string">"centroid"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__63_65_6E_74_72_6F_69_64 } ;
+(<span class="string">"varying"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__76_61_72_79_69_6E_67 } ;
+(<span class="string">"unsigned"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__75_6E_73_69_67_6E_65_64 } ;
+(<span class="string">"precise"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__70_72_65_63_69_73_65 } ;
+(<span class="string">"coherent"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__63_6F_68_65_72_65_6E_74 } ;
+(<span class="string">"namespace"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__6E_61_6D_65_73_70_61_63_65 } ;
+(<span class="string">"external"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__65_78_74_65_72_6E_61_6C } ;
+(<span class="string">"do"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__64_6F } ;
+(<span class="string">"active"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__61_63_74_69_76_65 } ;
+(<span class="string">"for"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__66_6F_72 } ;
+(<span class="string">"using"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__75_73_69_6E_67 } ;
+(<span class="string">"public"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__70_75_62_6C_69_63 } ;
+(<span class="string">"inline"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__69_6E_6C_69_6E_65 } ;
+(<span class="string">"layout"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__6C_61_79_6F_75_74 } ;
+(<span class="string">"shared"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__73_68_61_72_65_64 } ;
+(<span class="string">"asm"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__61_73_6D } ;
+(<span class="string">"sizeof"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__73_69_7A_65_6F_66 } ;
+(<span class="string">"input"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__69_6E_70_75_74 } ;
+(<span class="string">"invariant"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__69_6E_76_61_72_69_61_6E_74 } ;
+(<span class="string">"template"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__74_65_6D_70_6C_61_74_65 } ;
+(<span class="string">"writeonly"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__77_72_69_74_65_6F_6E_6C_79 } ;
+(<span class="string">"noperspective"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__6E_6F_70_65_72_73_70_65_63_74_69_76_65 } ;
+(<span class="string">"out"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__6F_75_74 } ;
+(<span class="string">"continue"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__63_6F_6E_74_69_6E_75_65 } ;
+(<span class="string">"interface"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__69_6E_74_65_72_66_61_63_65 } ;
+(<span class="string">"buffer"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__62_75_66_66_65_72 } ;
+(<span class="string">"partition"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__70_61_72_74_69_74_69_6F_6E } ;
+(<span class="string">"smooth"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__73_6D_6F_6F_74_68 } ;
+(<span class="string">"volatile"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__76_6F_6C_61_74_69_6C_65 } ;
+(<span class="string">"superp"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__73_75_70_65_72_70 } ;
+(<span class="string">"switch"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__73_77_69_74_63_68 } ;
+(<span class="string">"flat"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__66_6C_61_74 } ;
+(<span class="string">"half"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__68_61_6C_66 } ;
+(<span class="string">"precision"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__70_72_65_63_69_73_69_6F_6E } ;
+(<span class="string">"goto"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__67_6F_74_6F } ;
+(<span class="string">"attribute"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__61_74_74_72_69_62_75_74_65 } ;
+(<span class="string">"patch"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__70_61_74_63_68 } ;
+(<span class="string">"this"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__74_68_69_73 } ;
+(<span class="string">"long"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__6C_6F_6E_67 } ;
+(<span class="string">"typedef"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__74_79_70_65_64_65_66 } ;
+(<span class="string">"sample"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__73_61_6D_70_6C_65 } ;
+(<span class="string">"lowp"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__6C_6F_77_70 } ;
+(<span class="string">"mediump"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__6D_65_64_69_75_6D_70 } ;
+(<span class="string">"fixed"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__66_69_78_65_64 } ;
+(<span class="string">"readonly"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__72_65_61_64_6F_6E_6C_79 } ;
+(<span class="string">"cast"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__63_61_73_74 } ;
+(<span class="string">"while"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__77_68_69_6C_65 } ;
+(<span class="string">"default"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__64_65_66_61_75_6C_74 } ;
+(<span class="string">"resource"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__72_65_73_6F_75_72_63_65 } ;
+(<span class="string">"output"</span>) =&gt; { $ <span class="kw">crate </span>:: types :: keywords :: ATOM_KEYWORDATOM__6F_75_74_70_75_74 } ;
+}</code></pre></div></section></main></body></html>

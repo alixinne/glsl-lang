@@ -1539,6 +1539,9 @@ where
             f.write_char(' ')?;
             show_identifier(f, ident, state)?;
         }
+        ast::DeclarationData::TypeOnly(ref q) => {
+            show_type_qualifier(f, q, state)?;
+        }
     }
 
     state.write_declaration_terminator(f)

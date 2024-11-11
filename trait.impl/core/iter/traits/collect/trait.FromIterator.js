@@ -1,3 +1,9 @@
-(function() {var implementors = {
-"glsl_lang_types":[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.81.0/core/iter/traits/collect/trait.FromIterator.html\" title=\"trait core::iter::traits::collect::FromIterator\">FromIterator</a>&lt;<a class=\"struct\" href=\"glsl_lang_types/ast/struct.Node.html\" title=\"struct glsl_lang_types::ast::Node\">Node</a>&lt;<a class=\"enum\" href=\"glsl_lang_types/ast/enum.StatementData.html\" title=\"enum glsl_lang_types::ast::StatementData\">StatementData</a>&gt;&gt; for <a class=\"struct\" href=\"glsl_lang_types/ast/struct.CompoundStatementData.html\" title=\"struct glsl_lang_types::ast::CompoundStatementData\">CompoundStatementData</a>"]]
-};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
+(function() {
+    var implementors = Object.fromEntries([["glsl_lang_types",[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.82.0/core/iter/traits/collect/trait.FromIterator.html\" title=\"trait core::iter::traits::collect::FromIterator\">FromIterator</a>&lt;<a class=\"struct\" href=\"glsl_lang_types/ast/struct.Node.html\" title=\"struct glsl_lang_types::ast::Node\">Node</a>&lt;<a class=\"enum\" href=\"glsl_lang_types/ast/enum.StatementData.html\" title=\"enum glsl_lang_types::ast::StatementData\">StatementData</a>&gt;&gt; for <a class=\"struct\" href=\"glsl_lang_types/ast/struct.CompoundStatementData.html\" title=\"struct glsl_lang_types::ast::CompoundStatementData\">CompoundStatementData</a>"]]]]);
+    if (window.register_implementors) {
+        window.register_implementors(implementors);
+    } else {
+        window.pending_implementors = implementors;
+    }
+})()
+//{"start":57,"fragment_lengths":[662]}

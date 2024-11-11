@@ -1,3 +1,9 @@
-(function() {var implementors = {
-"lang_util":[["impl&lt;U, T: <a class=\"trait\" href=\"lang_util/node/content/trait.NodeContent.html\" title=\"trait lang_util::node::content::NodeContent\">NodeContent</a> + <a class=\"trait\" href=\"https://doc.rust-lang.org/1.81.0/core/convert/trait.AsRef.html\" title=\"trait core::convert::AsRef\">AsRef</a>&lt;U&gt;&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/1.81.0/core/convert/trait.AsRef.html\" title=\"trait core::convert::AsRef\">AsRef</a>&lt;U&gt; for <a class=\"struct\" href=\"lang_util/node/content/struct.Node.html\" title=\"struct lang_util::node::content::Node\">Node</a>&lt;T&gt;"]]
-};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
+(function() {
+    var implementors = Object.fromEntries([["lang_util",[["impl&lt;U, T: <a class=\"trait\" href=\"lang_util/node/content/trait.NodeContent.html\" title=\"trait lang_util::node::content::NodeContent\">NodeContent</a> + <a class=\"trait\" href=\"https://doc.rust-lang.org/1.82.0/core/convert/trait.AsRef.html\" title=\"trait core::convert::AsRef\">AsRef</a>&lt;U&gt;&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/1.82.0/core/convert/trait.AsRef.html\" title=\"trait core::convert::AsRef\">AsRef</a>&lt;U&gt; for <a class=\"struct\" href=\"lang_util/node/content/struct.Node.html\" title=\"struct lang_util::node::content::Node\">Node</a>&lt;T&gt;"]]]]);
+    if (window.register_implementors) {
+        window.register_implementors(implementors);
+    } else {
+        window.pending_implementors = implementors;
+    }
+})()
+//{"start":57,"fragment_lengths":[616]}

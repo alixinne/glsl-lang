@@ -1,1 +1,2 @@
 window.ALL_CRATES = ["glsl_lang","glsl_lang_cli","glsl_lang_lexer","glsl_lang_pp","glsl_lang_quote","glsl_lang_types","lang_util","lang_util_derive","lang_util_dev"];
+//{"start":21,"fragment_lengths":[11,16,18,15,18,18,12,19,16]}

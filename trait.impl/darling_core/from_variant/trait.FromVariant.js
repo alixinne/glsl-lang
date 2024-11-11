@@ -1,3 +1,9 @@
-(function() {var implementors = {
-"lang_util_derive":[["impl FromVariant for <a class=\"struct\" href=\"lang_util_derive/node_display/struct.NodeDisplayVariant.html\" title=\"struct lang_util_derive::node_display::NodeDisplayVariant\">NodeDisplayVariant</a>"],["impl FromVariant for <a class=\"struct\" href=\"lang_util_derive/token/struct.TokenVariant.html\" title=\"struct lang_util_derive::token::TokenVariant\">TokenVariant</a>"]]
-};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
+(function() {
+    var implementors = Object.fromEntries([["lang_util_derive",[["impl FromVariant for <a class=\"struct\" href=\"lang_util_derive/node_display/struct.NodeDisplayVariant.html\" title=\"struct lang_util_derive::node_display::NodeDisplayVariant\">NodeDisplayVariant</a>"],["impl FromVariant for <a class=\"struct\" href=\"lang_util_derive/token/struct.TokenVariant.html\" title=\"struct lang_util_derive::token::TokenVariant\">TokenVariant</a>"]]]]);
+    if (window.register_implementors) {
+        window.register_implementors(implementors);
+    } else {
+        window.pending_implementors = implementors;
+    }
+})()
+//{"start":57,"fragment_lengths":[402]}

@@ -578,6 +578,11 @@
 <a href="#578" id="578">578</a>
 <a href="#579" id="579">579</a>
 <a href="#580" id="580">580</a>
+<a href="#581" id="581">581</a>
+<a href="#582" id="582">582</a>
+<a href="#583" id="583">583</a>
+<a href="#584" id="584">584</a>
+<a href="#585" id="585">585</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::collections::HashMap;
 
 <span class="kw">use </span>once_cell::sync::Lazy;
@@ -625,6 +630,10 @@
 
     <span class="kw">pub fn </span>get(<span class="kw-2">&amp;</span><span class="self">self</span>, name: <span class="kw-2">&amp;</span>ExtNameAtom) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>ExtensionSpec&gt; {
         <span class="self">self</span>.extensions.get(name)
+    }
+
+    <span class="kw">pub fn </span>add(<span class="kw-2">&amp;mut </span><span class="self">self</span>, spec: ExtensionSpec) {
+        <span class="self">self</span>.extensions.insert(spec.name.clone(), spec);
     }
 }
 
@@ -1148,6 +1157,7 @@
                     ],
                 ),
                 ExtensionSpec::new(ExtNameAtom::from(<span class="string">"GL_OVR_multiview"</span>), <span class="macro">vec!</span>[]),
+                ExtensionSpec::new(ExtNameAtom::from(<span class="string">"GL_OVR_multiview2"</span>), <span class="macro">vec!</span>[]),
             ]
             .into_iter()
             .map(|spec| (spec.name.clone(), spec))

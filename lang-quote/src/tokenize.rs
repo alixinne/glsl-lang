@@ -1117,6 +1117,11 @@ fn tokenize_declaration(d: &ast::Declaration) -> TokenStream {
             let ident = tokenize_identifier(ident);
             quote! { glsl_lang::ast::DeclarationData::Invariant(#ident) }
         }
+
+        ast::DeclarationData::TypeOnly(ref q) => {
+            let q = tokenize_type_qualifier(q);
+            quote! { glsl_lang::ast::DeclarationData::TypeOnly(#q) }
+        }
     };
 
     let span = tokenize_span(&d.span);

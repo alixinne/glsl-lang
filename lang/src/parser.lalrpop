@@ -694,6 +694,7 @@ declaration: ast::Declaration = {
     <l:@L> <p:precision_declaration> ";" <r:@R> => p.spanned(l, r),
     <l:@L> <b:block_declaration> ";"     <r:@R> => ast::DeclarationData::Block(b).spanned(l, r),
     <l:@L> "invariant" <i:identifier> ";" <r:@R> => ast::DeclarationData::Invariant(i).spanned(l, r),
+    <l:@L> <q:type_qualifier> ";" <r:@R> => ast::DeclarationData::TypeOnly(q).spanned(l, r),
 };
 
 function_definition: ast::FunctionDefinition = {

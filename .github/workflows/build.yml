@@ -17,12 +17,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: cocogitto/cocogitto-action@v3.8
-        with:
-          check-latest-tag-only: true
-          git-user: glsl-lang
-          git-user-email: glsl-lang@alixinne.github.io
-
       - uses: actions/cache@v4
         with:
           key: ${{ runner.os }}
@@ -43,6 +37,12 @@ jobs:
 
       - name: Check clippy lints
         run: cargo clippy -- -D warnings -A clippy::result_large_err
+
+      - uses: cocogitto/cocogitto-action@v3.8
+        with:
+          check-latest-tag-only: true
+          git-user: glsl-lang
+          git-user-email: glsl-lang@alixinne.github.io
 
   test:
     name: Test crate

@@ -1,6 +1,17 @@
 ## [Unreleased]
 
 - - -
+## v0.7.1 - 2024-11-11
+#### Bug Fixes
+- **(pp)** add GL_OVR_multiview2 and provide a new method to custom exts (#55) - (b84eec0) - Yorkie Makoto
+#### Continuous Integration
+- **(check)** move cocogitto check to last step - (c0f26e7) - *alixinne*
+#### Miscellaneous Chores
+- **(version)** v0.7.0 [skip ci] - (add0b17) - glsl-lang
+- update deprecation messages - (783b8b8) - alixinne
+
+- - -
+
 ## v0.7.0 - 2024-11-11
 #### Features
 - **(parser)** add type_qualifier only in decls (#56) - (b71dd7b) - Yorkie Makoto

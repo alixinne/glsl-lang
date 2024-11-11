@@ -1,6 +1,14 @@
 ## [Unreleased]
 
 - - -
+## v0.7.0 - 2024-11-11
+#### Features
+- **(parser)** add type_qualifier only in decls (#56) - (b71dd7b) - Yorkie Makoto
+#### Miscellaneous Chores
+- **(version)** v0.6.1 [skip ci] - (8759d96) - glsl-lang
+
+- - -
+
 ## v0.6.1 - 2024-10-01
 #### Bug Fixes
 - **(transpiler)** append "precision" for precision decl (#53) - (1596970) - Yorkie Makoto

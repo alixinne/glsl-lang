@@ -46,6 +46,10 @@ impl Registry {
     pub fn get(&self, name: &ExtNameAtom) -> Option<&ExtensionSpec> {
         self.extensions.get(name)
     }
+
+    pub fn add(&mut self, spec: ExtensionSpec) {
+        self.extensions.insert(spec.name.clone(), spec);
+    }
 }
 
 // TODO: Fill registry with extension data from Khronos
@@ -568,6 +572,7 @@ impl Default for Registry {
                     ],
                 ),
                 ExtensionSpec::new(ExtNameAtom::from("GL_OVR_multiview"), vec![]),
+                ExtensionSpec::new(ExtNameAtom::from("GL_OVR_multiview2"), vec![]),
             ]
             .into_iter()
             .map(|spec| (spec.name.clone(), spec))

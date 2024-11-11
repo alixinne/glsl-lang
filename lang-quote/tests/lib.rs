@@ -125,3 +125,10 @@ fn statement_var_decl() {
         }
     };
 }
+
+#[test]
+fn typeonly_multiview_qualifier() {
+    let _ = glsl! {
+        layout (num_views = 2) in;
+    };
+}

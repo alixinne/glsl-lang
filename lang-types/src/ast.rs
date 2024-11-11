@@ -991,6 +991,8 @@ pub enum DeclarationData {
     Block(Block),
     /// Invariant declaration
     Invariant(Identifier),
+    /// Type-only declaration
+    TypeOnly(TypeQualifier),
 }
 
 impl_node_content! {

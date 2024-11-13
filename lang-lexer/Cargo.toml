@@ -16,7 +16,7 @@ categories = ["parser-implementations", "rendering"]
 glsl-lang-types = "=0.7.1"
 lang-util = { version = "=0.7.1", features = ["lalrpop"] }
 
-thiserror = "1.0"
+thiserror = "2.0"
 
 rserde = { version = "1.0", optional = true, features = ["derive"], package = "serde" }
 

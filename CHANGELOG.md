@@ -1,6 +1,14 @@
 ## [Unreleased]
 
 - - -
+## v0.7.2 - 2024-11-22
+#### Bug Fixes
+- **(deps)** update rust crate thiserror to v2 (#57) - (bb7082c) - renovate[bot]
+#### Miscellaneous Chores
+- **(version)** v0.7.1 [skip ci] - (336ef5e) - glsl-lang
+
+- - -
+
 ## v0.7.1 - 2024-11-11
 #### Bug Fixes
 - **(pp)** add GL_OVR_multiview2 and provide a new method to custom exts (#55) - (b84eec0) - Yorkie Makoto

@@ -1,6 +1,6 @@
 use expect_test::{expect, Expect};
 use glsl_lang::{
-    lexer::v2_full::fs::PreprocessorExt,
+    lexer::full::fs::PreprocessorExt,
     parse::{IntoParseBuilderExt, ParseOptions},
 };
 use lang_util::FileId;

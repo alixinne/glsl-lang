@@ -13,11 +13,6 @@ pub use builder::*;
 
 mod parsable;
 pub use parsable::Extractable;
-#[cfg(any(
-    feature = "lexer-v1",
-    feature = "lexer-v2-min",
-    feature = "lexer-v2-full"
-))]
 pub use parsable::Parsable;
 
 /// GLSL language parser
@@ -96,26 +91,14 @@ pub type ParseResult<L, E, T> = Result<(T, ParseContext, L), ParseError<E>>;
 pub type ParseError<E> = lang_util::error::ParseError<E>;
 
 /// Default lexer to use for parsing sources
-#[cfg(all(
-    feature = "lexer-v1",
-    not(any(feature = "lexer-v2-min", feature = "lexer-v2-full"))
-))]
-pub type DefaultLexer<'i> = glsl_lang_lexer::v1::Lexer<'i>;
+#[cfg(not(feature = "lexer-full"))]
+pub type DefaultLexer<'i> = glsl_lang_lexer::min::str::Lexer<'i>;
 
 /// Default lexer to use for parsing sources
-#[cfg(all(feature = "lexer-v2-min", not(feature = "lexer-v2-full")))]
-pub type DefaultLexer<'i> = glsl_lang_lexer::v2_min::str::Lexer<'i>;
-
-/// Default lexer to use for parsing sources
-#[cfg(feature = "lexer-v2-full")]
-pub type DefaultLexer<'i> = glsl_lang_lexer::v2_full::str::Lexer<'i>;
+#[cfg(feature = "lexer-full")]
+pub type DefaultLexer<'i> = glsl_lang_lexer::full::str::Lexer<'i>;
 
 /// GLSL parsing with the default lexer
-#[cfg(any(
-    feature = "lexer-v1",
-    feature = "lexer-v2-min",
-    feature = "lexer-v2-full"
-))]
 pub trait DefaultParse: Parse {
     /// Parse the input source
     fn parse<'i>(
@@ -143,11 +126,6 @@ pub trait DefaultParse: Parse {
     >;
 }
 
-#[cfg(any(
-    feature = "lexer-v1",
-    feature = "lexer-v2-min",
-    feature = "lexer-v2-full"
-))]
 impl<T: Parse> DefaultParse for T {
     fn parse<'i>(
         source: <DefaultLexer<'i> as LangLexer<'i>>::Input,

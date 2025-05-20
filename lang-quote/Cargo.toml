@@ -18,7 +18,7 @@ proc-macro = true
 path = "src/lib.rs"
 
 [dependencies]
-glsl-lang = { version = "=0.7.2", default-features = false, features = ["lexer-v2-full"] }
+glsl-lang = { version = "=0.7.2", default-features = false, features = ["lexer-full"] }
 
 proc-macro2 = "1"
 quote = "1"

@@ -2354,14 +2354,7 @@ where
     Ok(())
 }
 
-#[cfg(all(
-    test,
-    any(
-        feature = "lexer-v1",
-        feature = "lexer-v2-min",
-        feature = "lexer-v2-full"
-    )
-))]
+#[cfg(test)]
 mod tests {
     use super::*;
     use crate::parse::{DefaultLexer, Parsable, ParseError};
@@ -2380,14 +2373,14 @@ mod tests {
         state
     }
 
-    #[cfg(not(feature = "lexer-v2-full"))]
+    #[cfg(not(feature = "lexer-full"))]
     fn parse_tu_with_preprocessor_directives(
         source: &str,
     ) -> Result<ast::TranslationUnit, ParseError<<DefaultLexer as HasLexerError>::Error>> {
         ast::TranslationUnit::parse(source)
     }
 
-    #[cfg(feature = "lexer-v2-full")]
+    #[cfg(feature = "lexer-full")]
     fn parse_tu_with_preprocessor_directives(
         source: &str,
     ) -> Result<ast::TranslationUnit, ParseError<<DefaultLexer as HasLexerError>::Error>> {

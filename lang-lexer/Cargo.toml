@@ -14,6 +14,7 @@ categories = ["parser-implementations", "rendering"]
 rust-version = "1.82.0"
 
 [dependencies]
+glsl-lang-pp = "=0.7.2"
 glsl-lang-types = "=0.7.2"
 lang-util = { version = "=0.7.2", features = ["lalrpop"] }
 
@@ -21,19 +22,10 @@ thiserror = "2.0"
 
 rserde = { version = "1.0", optional = true, features = ["derive"], package = "serde" }
 
-# v1 lexer dependencies
-logos = { version = "0.12", optional = true }
-
-# v2 lexer dependencies
-glsl-lang-pp = { version = "=0.7.2", optional = true }
-lalrpop-util = { version = "0.20.0", default-features = false, optional = true }
+lalrpop-util = { version = "0.20.0", default-features = false }
 
 [features]
-default = []
-v1 = ["logos", "lalrpop"]
-v2-min = ["glsl-lang-pp", "lalrpop"]
-v2-full = ["glsl-lang-pp/full", "lalrpop"]
-lalrpop = ["lalrpop-util"]
+full = ["glsl-lang-pp/full"]
 
 # AST Serialization
 serde = ["rserde", "glsl-lang-types/serde", "lang-util/serde"]

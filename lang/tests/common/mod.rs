@@ -6,19 +6,8 @@ use lang_util_dev::test_util::PathKey;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, lang_util_dev::Display)]
 enum Output {
-    #[cfg_attr(
-        all(
-            feature = "lexer-v1",
-            not(feature = "lexer-v2-min"),
-            not(feature = "lexer-v2-full")
-        ),
-        display("ast-v1")
-    )]
-    #[cfg_attr(
-        all(feature = "lexer-v2-min", not(feature = "lexer-v2-full")),
-        display("ast-v1")
-    )]
-    #[cfg_attr(feature = "lexer-v2-full", display("ast-v2-full"))]
+    #[cfg_attr(not(feature = "lexer-full"), display("ast-v1"))]
+    #[cfg_attr(feature = "lexer-full", display("ast-v2-full"))]
     Ast,
 }
 
@@ -32,10 +21,7 @@ impl PathKey for Output {
 
 type Paths = lang_util_dev::test_util::Paths<Output>;
 
-#[cfg(all(
-    any(feature = "lexer-v1", feature = "lexer-v2-min"),
-    not(feature = "lexer-v2-full")
-))]
+#[cfg(not(feature = "lexer-full"))]
 fn parse_tu<'i>(
     path: &Path,
 ) -> Result<
@@ -50,15 +36,15 @@ fn parse_tu<'i>(
     glsl_lang::ast::TranslationUnit::parse(&source)
 }
 
-#[cfg(feature = "lexer-v2-full")]
+#[cfg(feature = "lexer-full")]
 fn parse_tu(
     path: &Path,
 ) -> Result<
     ast::TranslationUnit,
-    glsl_lang::parse::ParseError<<glsl_lang::lexer::v2_full::fs::Lexer<glsl_lang_pp::processor::fs::Std> as glsl_lang::lexer::HasLexerError>::Error>,
+    glsl_lang::parse::ParseError<<glsl_lang::lexer::full::fs::Lexer<glsl_lang_pp::processor::fs::Std> as glsl_lang::lexer::HasLexerError>::Error>,
 >{
     use glsl_lang::{
-        lexer::v2_full::fs::PreprocessorExt,
+        lexer::full::fs::PreprocessorExt,
         parse::{IntoParseBuilderExt, ParseOptions},
     };
 
@@ -73,15 +59,6 @@ fn parse_tu(
         })
         .parse()
         .map(|(tu, _, _)| tu)
-}
-
-#[cfg(not(any(
-    feature = "lexer-v1",
-    feature = "lexer-v2-min",
-    feature = "lexer-v2-full"
-)))]
-fn parse_tu(_path: &Path) -> Result<ast::TranslationUnit, &'static str> {
-    panic!("no lexer selected")
 }
 
 pub fn test_file(path: impl AsRef<Path>) {

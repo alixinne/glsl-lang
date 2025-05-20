@@ -112,9 +112,7 @@ The preprocessor also supports include directives:
 * `GL_GOOGLE_include_directive`: compile-time includes
 
 The preprocessor and lexer based on `glsl-lang-pp` can be used in `glsl-lang`
-by enabling the `glsl-lang/lexer-v2` feature. If it is used, the
-`glsl-lang/lexer-v1` feature including the old non-preprocessing lexer can be
-disabled.
+by enabling the `glsl-lang/lexer-full` feature.
 
 #### Tested on the glslangValidator test suite
 

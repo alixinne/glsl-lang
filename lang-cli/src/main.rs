@@ -21,7 +21,7 @@ use argh::FromArgs;
 
 use glsl_lang::{
     ast::{NodeDisplay, TranslationUnit},
-    lexer::v2_full::fs::PreprocessorExt,
+    lexer::full::fs::PreprocessorExt,
     parse::IntoParseBuilderExt,
 };
 

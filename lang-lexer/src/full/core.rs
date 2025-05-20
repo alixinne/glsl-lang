@@ -123,7 +123,7 @@ impl LexerCore {
         token_kind: types::Token,
     ) -> Result<(LexerPosition, Token, LexerPosition), (types::Token, types::token::ErrorKind)>
     {
-        crate::v2::lang_token(
+        crate::lang_token::lang_token(
             &self.ctx,
             source_token.text(),
             source_token.text_range(),

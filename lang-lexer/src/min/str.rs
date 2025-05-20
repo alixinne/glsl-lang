@@ -122,7 +122,7 @@ impl<'i> Iterator for LexerIterator<'i> {
             let source_token = self
                 .pending_tokens
                 .pop_front()
-                .inspect(|token| {
+                .inspect(|_| {
                     buffered = true;
                 })
                 .or_else(|| self.inner.next())?;
@@ -253,7 +253,7 @@ impl<'i> Iterator for LexerIterator<'i> {
             let text = text.into_unescaped();
             let text = text.try_as_str().unwrap();
 
-            match crate::v2::lang_token(&self.ctx, text, pos, token) {
+            match crate::lang_token::lang_token(&self.ctx, text, pos, token) {
                 Ok(token) => {
                     // Try to get the next token when we encounter trivia
                     match token.1 {
@@ -431,7 +431,6 @@ impl HasLexerError for LexerIterator<'_> {
 }
 
 impl<'i> LangLexerIterator for LexerIterator<'i> {
-    #[cfg(feature = "lalrpop")]
     fn resolve_err(
         &self,
         err: lalrpop_util::ParseError<LexerPosition, Token, Self::Error>,

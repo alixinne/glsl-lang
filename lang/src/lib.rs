@@ -52,11 +52,6 @@
 
 use lalrpop_util::lalrpop_mod;
 
-#[cfg(any(
-    feature = "lexer-v1",
-    feature = "lexer-v2-min",
-    feature = "lexer-v2-full"
-))]
 pub use glsl_lang_lexer as lexer;
 pub use glsl_lang_types::ast;
 lalrpop_mod!(
@@ -67,12 +62,5 @@ pub mod parse;
 pub mod transpiler;
 pub mod visitor;
 
-#[cfg(all(
-    test,
-    any(
-        feature = "lexer-v1",
-        feature = "lexer-v2-min",
-        feature = "lexer-v2-full"
-    )
-))]
+#[cfg(test)]
 mod parse_tests;

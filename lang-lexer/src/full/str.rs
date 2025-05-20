@@ -146,7 +146,6 @@ impl HasLexerError for LexerIterator<'_> {
 }
 
 impl<'i> LangLexerIterator for LexerIterator<'i> {
-    #[cfg(feature = "lalrpop")]
     fn resolve_err(
         &self,
         err: lalrpop_util::ParseError<LexerPosition, Token, Self::Error>,

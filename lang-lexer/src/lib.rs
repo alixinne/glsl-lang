@@ -5,21 +5,12 @@ mod token;
 use lang_util::position::LexerPosition;
 pub use token::*;
 
-#[cfg(feature = "v1")]
-#[deprecated(
-    since = "0.6.0",
-    note = "the v1 lexer is not spec-compliant and relies on outdated dependencies. It will be removed in glsl-lang 0.8.0"
-)]
-pub mod v1;
+mod lang_token;
 
-#[cfg(any(feature = "v2-min", feature = "v2-full"))]
-mod v2;
+pub mod min;
 
-#[cfg(feature = "v2-min")]
-pub mod v2_min;
-
-#[cfg(feature = "v2-full")]
-pub mod v2_full;
+#[cfg(feature = "full")]
+pub mod full;
 
 /// Language lexer error definition
 pub trait HasLexerError {
@@ -50,7 +41,6 @@ pub trait LangLexer<'i>: HasLexerError + Sized {
 pub trait LangLexerIterator:
     Iterator<Item = Result<(LexerPosition, Token, LexerPosition), Self::Error>> + HasLexerError
 {
-    #[cfg(feature = "lalrpop")]
     fn resolve_err(
         &self,
         err: lalrpop_util::ParseError<LexerPosition, Token, Self::Error>,
@@ -69,10 +59,9 @@ mod tests {
         assert!(tokens.len() > 1);
     }
 
-    #[cfg(feature = "v2-min")]
     #[test]
-    fn test_hash_ident_v2_min() {
-        test_hash_ident_with_lexer(v2_min::str::Lexer::new(
+    fn test_hash_ident_min() {
+        test_hash_ident_with_lexer(min::str::Lexer::new(
             HASH_IDENT_TEST_CASE,
             &ParseOptions {
                 allow_rs_ident: true,
@@ -81,10 +70,10 @@ mod tests {
         ));
     }
 
-    #[cfg(feature = "v2-full")]
+    #[cfg(feature = "full")]
     #[test]
-    fn test_hash_ident_v2_full() {
-        test_hash_ident_with_lexer(v2_full::str::Lexer::new(
+    fn test_hash_ident_full() {
+        test_hash_ident_with_lexer(full::str::Lexer::new(
             HASH_IDENT_TEST_CASE,
             &ParseOptions {
                 allow_rs_ident: true,

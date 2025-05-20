@@ -121,11 +121,6 @@ impl<'i, 'o, 'c, 'p, L: LangLexer<'i>, T: HasParser> ParseBuilder<'i, 'o, 'c, 'p
     }
 }
 
-#[cfg(any(
-    feature = "lexer-v1",
-    feature = "lexer-v2-min",
-    feature = "lexer-v2-full"
-))]
 impl<'i, 'o, 'c, 'p, T: HasParser> ParseBuilder<'i, 'o, 'c, 'p, super::DefaultLexer<'i>, T> {
     /// Create a new parse builder from the given input string
     pub fn default(source: <super::DefaultLexer<'i> as LangLexer<'i>>::Input) -> Self {
@@ -150,11 +145,6 @@ pub trait IntoParseBuilderExt<'i> {
         T: HasParser;
 }
 
-#[cfg(any(
-    feature = "lexer-v1",
-    feature = "lexer-v2-min",
-    feature = "lexer-v2-full"
-))]
 impl<'i> IntoParseBuilderExt<'i> for &'i str {
     type Lexer = super::DefaultLexer<'i>;
 
@@ -166,13 +156,13 @@ impl<'i> IntoParseBuilderExt<'i> for &'i str {
     }
 }
 
-#[cfg(feature = "lexer-v2-full")]
-impl<'r, 'p, F: glsl_lang_lexer::v2_full::fs::FileSystem> IntoParseBuilderExt<'p>
-    for glsl_lang_lexer::v2_full::fs::File<'r, 'p, F>
+#[cfg(feature = "lexer-full")]
+impl<'r, 'p, F: glsl_lang_lexer::full::fs::FileSystem> IntoParseBuilderExt<'p>
+    for glsl_lang_lexer::full::fs::File<'r, 'p, F>
 where
-    glsl_lang_lexer::v2_full::fs::File<'r, 'p, F>: 'p,
+    glsl_lang_lexer::full::fs::File<'r, 'p, F>: 'p,
 {
-    type Lexer = glsl_lang_lexer::v2_full::fs::Lexer<'r, 'p, F>;
+    type Lexer = glsl_lang_lexer::full::fs::Lexer<'r, 'p, F>;
 
     fn builder<'o, 'c, 'q, T>(self) -> ParseBuilder<'p, 'o, 'c, 'q, Self::Lexer, T>
     where

@@ -70,7 +70,7 @@ use miette::{Diagnostic, SourceSpan};
 struct ParseError<I: std::error::Error + 'static> {
     inner: lang_util::located::Located<I>,
     #[source_code]
-    src: NamedSource,
+    src: NamedSource<String>,
     snip: SourceSpan,
     #[label = "Error occurred here."]
     bad_bit: SourceSpan,

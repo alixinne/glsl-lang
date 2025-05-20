@@ -23,7 +23,7 @@ enum State {
     /// Building an identifier
     Ident,
     /// Building a digit sequence
-    Digits { seen_e: bool },
+    Digits { seen_e: bool, seen_dot: bool },
     /// Single-line comment
     SingleComment,
     /// Multi-line comment
@@ -145,7 +145,10 @@ impl<'i> Iterator for PreLexer<'i> {
                             ..
                         }) => {
                             // Start a digit sequence
-                            State::Digits { seen_e: false }
+                            State::Digits {
+                                seen_e: false,
+                                seen_dot: false,
+                            }
                         }
                         Some(NewlineToken {
                             token: NewlineTokenKind::PUNCT,
@@ -302,7 +305,7 @@ impl<'i> Iterator for PreLexer<'i> {
                     }
                 }
 
-                State::Digits { seen_e } => {
+                State::Digits { seen_e, seen_dot } => {
                     match self.peek_token() {
                         Some((
                             NewlineToken {
@@ -312,7 +315,7 @@ impl<'i> Iterator for PreLexer<'i> {
                             _,
                         )) => {
                             self.next_token();
-                            State::Digits { seen_e: false }
+                            State::Digits { seen_e, seen_dot }
                         }
                         Some((
                             NewlineToken {
@@ -320,9 +323,14 @@ impl<'i> Iterator for PreLexer<'i> {
                                 ..
                             },
                             punct,
-                        )) if punct == "." || seen_e && (punct == "+" || punct == "-") => {
+                        )) if (!seen_dot && punct == ".")
+                            || seen_e && (punct == "+" || punct == "-") =>
+                        {
                             self.next_token();
-                            State::Digits { seen_e: false }
+                            State::Digits {
+                                seen_e,
+                                seen_dot: punct == "." || seen_dot,
+                            }
                         }
                         Some((
                             NewlineToken {
@@ -334,15 +342,16 @@ impl<'i> Iterator for PreLexer<'i> {
                             self.next_token();
                             State::Digits {
                                 seen_e: ch == "e" || ch == "E",
+                                seen_dot,
                             }
                         }
                         Some((_, "\\")) => {
                             self.next_token();
-                            self.return_to = State::Digits { seen_e };
+                            self.return_to = State::Digits { seen_e, seen_dot };
                             State::Backslash
                         }
                         _ => {
-                            // Not an ident anymore, return the ident
+                            // Not a digit sequence anymore, return the digit sequence
                             return Some(TextToken::new(Token::DIGITS, self.start));
                         }
                     }

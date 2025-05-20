@@ -108,3 +108,9 @@ fn test_unterminated_comment() {
     assert_eq!(&tokenize("/* comment *")[..], &[ERROR]);
     assert_eq!(&tokenize("/* comment */")[..], &[COMMENT]);
 }
+
+#[test]
+fn test_literal_swizzle() {
+    // See https://github.com/alixinne/glsl-lang/issues/58
+    assert_eq!(&tokenize("1.0.xxxx")[..], &[DIGITS, PERIOD, IDENT_KW]);
+}

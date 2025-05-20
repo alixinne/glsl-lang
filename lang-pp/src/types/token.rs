@@ -1983,7 +1983,7 @@ impl Token {
     }
 
     fn strip_suffix(text: &str) -> (bool, &str) {
-        if let Some(stripped) = text.strip_suffix(&['u', 'U']) {
+        if let Some(stripped) = text.strip_suffix(['u', 'U']) {
             (true, stripped)
         } else {
             (false, text)
@@ -2019,7 +2019,7 @@ impl Token {
         let result = if (text.ends_with('f')
             || text.ends_with('F')
             || text.contains('.')
-            || (text.contains(|ch| ch == 'e' || ch == 'E')))
+            || (text.contains(['e', 'E'])))
             && hex_prefix.is_none()
         {
             // Floating-point constant
@@ -2029,7 +2029,7 @@ impl Token {
                     .parse()
                     .map(DOUBLE_CONST)
                     .map_err(|_| ErrorKind::InvalidDoubleLiteral)
-            } else if let Some(float) = text.strip_suffix(&['f', 'F']).or(Some(text)) {
+            } else if let Some(float) = text.strip_suffix(['f', 'F']).or(Some(text)) {
                 float
                     .parse()
                     .map(FLOAT_CONST)

@@ -122,9 +122,8 @@ impl<'i> Iterator for LexerIterator<'i> {
             let source_token = self
                 .pending_tokens
                 .pop_front()
-                .map(|token| {
+                .inspect(|token| {
                     buffered = true;
-                    token
                 })
                 .or_else(|| self.inner.next())?;
 

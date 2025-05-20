@@ -18,6 +18,10 @@
 //! [`Expr`]: crate::ast::Expr
 //! [`FunctionDefinition`]: crate::ast::FunctionDefinition
 
+// Ideally, we'd use an arena or similar, but for now avoid clippy requesting non-recursive structs
+// to be moved to the heap
+#![allow(clippy::large_enum_variant)]
+
 use std::{fmt, iter::FromIterator};
 
 #[cfg(feature = "serde")]

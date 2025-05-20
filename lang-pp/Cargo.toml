@@ -12,6 +12,7 @@ readme = "README.md"
 keywords = ["glsl", "language", "preprocessor"]
 categories = ["parser-implementations", "rendering"]
 build = "build.rs"
+rust-version = "1.82.0"
 
 [dependencies]
 lang-util = "=0.7.2"

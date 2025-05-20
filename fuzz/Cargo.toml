@@ -3,6 +3,7 @@ name = "glsl-lang-fuzz"
 version = "0.2.1"
 edition = "2021"
 default-run = "pp-test"
+rust-version = "1.82.0"
 
 [[bin]]
 name = "pp-fuzz"

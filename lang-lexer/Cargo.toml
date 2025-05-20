@@ -11,6 +11,7 @@ repository = "https://github.com/alixinne/glsl-lang"
 readme = "README.md"
 keywords = ["glsl", "language", "parser"]
 categories = ["parser-implementations", "rendering"]
+rust-version = "1.82.0"
 
 [dependencies]
 glsl-lang-types = "=0.7.2"

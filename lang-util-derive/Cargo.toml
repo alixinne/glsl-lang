@@ -11,6 +11,7 @@ repository = "https://github.com/alixinne/glsl-lang"
 readme = "README.md"
 keywords = ["language", "parser", "ast", "macro"]
 categories = ["parsing"]
+rust-version = "1.82.0"
 
 [lib]
 path = "src/lib.rs"

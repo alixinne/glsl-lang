@@ -443,7 +443,7 @@ Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 1385..1
 Ok(Token { source_token: NEWLINE@NodeSpan { source_id: FileId(0), range: 1387..1389 } "\r\n", token_kind: WS, state: Active })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 1389..1391 } "in", token_kind: IN, state: Active })
 Ok(Token { source_token: WS@NodeSpan { source_id: FileId(0), range: 1391..1392 } " ", token_kind: WS, state: Active })
-Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 1392..1398 } "double", token_kind: TYPE_NAME(RESERVED(Atom('double' type=static))), state: Active })
+Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 1392..1398 } "double", token_kind: TYPE_NAME(RESERVED(Atom('double' type=inline))), state: Active })
 Ok(Token { source_token: WS@NodeSpan { source_id: FileId(0), range: 1398..1399 } " ", token_kind: WS, state: Active })
 Ok(Token { source_token: IDENT_KW@NodeSpan { source_id: FileId(0), range: 1399..1404 } "type1", token_kind: IDENT("type1"), state: Active })
 Ok(Token { source_token: SEMICOLON@NodeSpan { source_id: FileId(0), range: 1404..1405 } ";", token_kind: SEMICOLON, state: Active })

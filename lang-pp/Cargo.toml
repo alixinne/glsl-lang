@@ -23,21 +23,21 @@ arrayvec = "0.7"
 derive_more = { version = "2.0", features = ["display"] }
 
 # Preprocessor
-rowan = { version = "0.15", optional = true }
+rowan = { version = "0.16", optional = true }
 cbitset = { version = "0.2", optional = true }
 static_assertions = { version = "1.1", optional = true }
 bimap = { version = "0.6", optional = true }
-itertools = { version = "0.13", optional = true }
+itertools = { version = "0.14", optional = true }
 
 # Extension registry
-once_cell = { version = "1.17.1", optional = true }
+once_cell = { version = "1.21.3", optional = true }
 
 [dev-dependencies]
 lang-util-dev = "=0.7.2"
 
-expect-test = "1.3"
+expect-test = "1.5"
 encoding_rs = "0.8"
-regex = "1.5"
+regex = "1.11"
 
 [build-dependencies]
 string_cache_codegen = "0.5"

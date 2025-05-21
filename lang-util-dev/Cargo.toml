@@ -15,4 +15,4 @@ rust-version = "1.82.0"
 
 [dependencies]
 derive_more = { version = "2.0", features = ["display"] }
-similar-asserts = "1.4"
+similar-asserts = "1.7"

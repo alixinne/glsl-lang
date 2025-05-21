@@ -5,7 +5,7 @@
 
 `lang-util` is a crate that implements utilities to parse and represent syntax trees.
 It also provides error formatting facilities for parsers using
-[`lalrpop`](https://crates.io/crates/lalrpop) and [`logos`](https://crates.io/crates/logos).
+[`lalrpop`](https://crates.io/crates/lalrpop).
 
 This crate is tailored for use in the [`glsl-lang`](https://crates.io/crates/glsl-lang) crate,
 but you may use its utilities for implementing your own language parsers:

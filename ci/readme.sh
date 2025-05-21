@@ -54,6 +54,6 @@ fi
 
 export -f make_readme
 export -f process_readme
-cargo workspaces exec --no-bail /bin/bash -c process_readme
+cargo workspaces exec --no-bail /usr/bin/env bash -c process_readme
 
 exit $EXIT_CODE

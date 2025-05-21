@@ -29,6 +29,12 @@ jobs:
             cargo install --force cargo-readme && cargo-readme -V
           )
 
+      - name: Install cargo-workspaces
+        run: |
+          cargo-workspaces -V || (
+            cargo install --force cargo-workspaces && cargo-workspaces -V
+          )
+
       - name: Check READMEs
         run: ./ci/readme.sh -c
 

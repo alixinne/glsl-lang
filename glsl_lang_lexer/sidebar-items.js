@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["IdentifierContext","Token"],"mod":["context","token","v2","v2_full"],"struct":["GlslTypeTablePolicy","ParseContext","ParseContextData","ParseOptions"],"trait":["HasLexerError","LangLexer","LangLexerIterator","TypeTablePolicy"],"type":["CommentList"]};
+window.SIDEBAR_ITEMS = {"enum":["IdentifierContext","Token"],"mod":["context","full","lang_token","min","token"],"struct":["GlslTypeTablePolicy","ParseContext","ParseContextData","ParseOptions"],"trait":["HasLexerError","LangLexer","LangLexerIterator","TypeTablePolicy"],"type":["CommentList"]};

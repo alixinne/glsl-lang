@@ -1,5 +1,5 @@
 (function() {
-    var implementors = Object.fromEntries([["glsl_lang_pp",[["impl&lt;'p, F: <a class=\"trait\" href=\"glsl_lang_pp/processor/fs/trait.FileSystem.html\" title=\"trait glsl_lang_pp::processor::fs::FileSystem\">FileSystem</a>&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/1.82.0/core/iter/traits/collect/trait.IntoIterator.html\" title=\"trait core::iter::traits::collect::IntoIterator\">IntoIterator</a> for <a class=\"struct\" href=\"glsl_lang_pp/processor/fs/struct.ParsedFile.html\" title=\"struct glsl_lang_pp::processor::fs::ParsedFile\">ParsedFile</a>&lt;'p, F&gt;"]]]]);
+    var implementors = Object.fromEntries([["glsl_lang_pp",[["impl&lt;'p, F: <a class=\"trait\" href=\"glsl_lang_pp/processor/fs/trait.FileSystem.html\" title=\"trait glsl_lang_pp::processor::fs::FileSystem\">FileSystem</a>&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/1.87.0/core/iter/traits/collect/trait.IntoIterator.html\" title=\"trait core::iter::traits::collect::IntoIterator\">IntoIterator</a> for <a class=\"struct\" href=\"glsl_lang_pp/processor/fs/struct.ParsedFile.html\" title=\"struct glsl_lang_pp::processor::fs::ParsedFile\">ParsedFile</a>&lt;'p, F&gt;"]]]]);
     if (window.register_implementors) {
         window.register_implementors(implementors);
     } else {

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="What `#[derive(Display)]` generates"><title>Display in lang_util_dev - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-492a78a4a87dcc01.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="lang_util_dev" data-themes="" data-resource-suffix="" data-rustdoc-version="1.82.0 (f6e511eec 2024-10-15)" data-channel="1.82.0" data-search-js="search-a99f1315e7cc5121.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../static.files/storage-118b08c4c78b968e.js"></script><script defer src="sidebar-items.js"></script><script defer src="../static.files/main-921df33f47b8780c.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-3b12f09e550e0385.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc derive"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../lang_util_dev/index.html">lang_<wbr>util_<wbr>dev</a><span class="version">0.7.1</span></h2></div><div class="sidebar-elems"></div></nav><div class="sidebar-resizer"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1>Derive Macro <a href="index.html">lang_util_dev</a>::<wbr><a class="derive" href="#">Display</a><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><span class="out-of-band"><button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><code>#[derive(Display)]
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="What `#[derive(Display)]` generates"><title>Display in lang_util_dev - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../static.files/rustdoc-916cea96.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="lang_util_dev" data-themes="" data-resource-suffix="" data-rustdoc-version="1.87.0 (17067e9ac 2025-05-09)" data-channel="1.87.0" data-search-js="search-e7298875.js" data-settings-js="settings-d72f25bb.js" ><script src="../static.files/storage-82c7156e.js"></script><script defer src="sidebar-items.js"></script><script defer src="../static.files/main-fb8c74a8.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-893ab5e7.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-044be391.svg"></head><body class="rustdoc derive"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../lang_util_dev/index.html">lang_<wbr>util_<wbr>dev</a><span class="version">0.7.2</span></h2></div><div class="sidebar-elems"><section id="rustdoc-toc"><h2 class="location"><a href="#">Display</a></h2><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#what-derivedisplay-generates" title="What `#[derive(Display)]` generates">What <code>#[derive(Display)]</code> generates</a><ul><li><a href="#the-format-of-the-format" title="The format of the format">The format of the format</a></li><li><a href="#example-usage" title="Example usage">Example usage</a></li></ul></li></ul></section><div id="rustdoc-modnav"><h2 class="in-crate"><a href="index.html">In crate lang_<wbr>util_<wbr>dev</a></h2></div></div></nav><div class="sidebar-resizer"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><div class="rustdoc-breadcrumbs"><a href="index.html">lang_util_dev</a></div><h1>Derive Macro <span class="derive">Display</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"></span></div><pre class="rust item-decl"><code>#[derive(Display)]
 {
     <span class="comment">// Attributes available to this derive:</span>
     #[display]
@@ -35,11 +35,6 @@ reference to the field:</p>
 
 <span class="kw">let </span>a = <span class="kw-2">&amp;</span><span class="number">123</span>;
 <span class="macro">assert_eq!</span>(<span class="macro">format!</span>(<span class="string">"{}"</span>, RefInt{field: <span class="kw-2">&amp;</span>a}), <span class="macro">format!</span>(<span class="string">"{a:p} {:p}"</span>, a));</code></pre></div>
-<p>For enums you can also specify a shared format on the enum itself instead of
-the variant. This format is used for each of the variants, and can be
-customized per variant by including the special <code>{_variant}</code> placeholder in
-this shared format, which is then replaced by the format string that’s provided
-on the variant.</p>
 <h4 id="other-formatting-traits"><a class="doc-anchor" href="#other-formatting-traits">§</a>Other formatting traits</h4>
 <p>The syntax does not change, but the name of the attribute is the snake case version of the trait.
 E.g. <code>Octal</code> -&gt; <code>octal</code>, <code>Pointer</code> -&gt; <code>pointer</code>, <code>UpperHex</code> -&gt; <code>upper_hex</code>.</p>
@@ -127,6 +122,44 @@ either with the <a href="https://doc.rust-lang.org/stable/std/macro.format_args.
 
 <span class="comment">// and so, additional formatting parameters have no effect
 </span><span class="macro">assert_eq!</span>(<span class="macro">format!</span>(<span class="string">"{:07}"</span>, MyOctalInt(<span class="number">9</span>)), <span class="string">"11"</span>);</code></pre></div>
+<h4 id="shared-enum-format"><a class="doc-anchor" href="#shared-enum-format">§</a>Shared enum format</h4>
+<p>Enums can have shared top-level <code>#[display("...", args...)]</code> attribute. Depending on its contents,
+it can act either as a default format or a wrapping one.</p>
+<h5 id="wrapping-enum-format"><a class="doc-anchor" href="#wrapping-enum-format">§</a>Wrapping enum format</h5>
+<p>To act as a wrapping format, the shared top-level <code>#[display("...", args...)]</code> attribute should
+contain at least one special <code>{_variant}</code> placeholder, which is then replaced by the format string
+that’s provided (or inferred) on the variant.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attr">#[derive(Display)]
+#[display(<span class="string">"Variant: {_variant} &amp; {}"</span>, _variant)]
+</span><span class="kw">enum </span>Enum {
+    <span class="attr">#[display(<span class="string">"A {_0}"</span>)]
+    </span>A(i32),
+    B { field: i32 },
+    <span class="attr">#[display(<span class="string">"c"</span>)]
+    </span>C,
+}
+
+<span class="macro">assert_eq!</span>(Enum::A(<span class="number">1</span>).to_string(), <span class="string">"Variant: A 1 &amp; A 1"</span>);
+<span class="macro">assert_eq!</span>(Enum::B { field: <span class="number">2 </span>}.to_string(), <span class="string">"Variant: 2 &amp; 2"</span>);
+<span class="macro">assert_eq!</span>(Enum::C.to_string(), <span class="string">"Variant: c &amp; c"</span>);</code></pre></div>
+<h5 id="default-enum-format"><a class="doc-anchor" href="#default-enum-format">§</a>Default enum format</h5>
+<p>If the shared top-level <code>#[display("...", args...)]</code> attribute contains no <code>{_variant}</code> placeholders,
+then it acts as the default one for the variants without its own format.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attr">#[derive(Display)]
+#[display(<span class="string">"Variant: {_0} &amp; {}"</span>, _0)] </span><span class="comment">// fields can be used too!
+</span><span class="kw">enum </span>Enum {
+    <span class="attr">#[display(<span class="string">"A {_0}"</span>)]
+    </span>A(i32),
+    B(u32),
+    <span class="attr">#[display(<span class="string">"c"</span>)]
+    </span>C,
+}
+
+<span class="macro">assert_eq!</span>(Enum::A(<span class="number">1</span>).to_string(), <span class="string">"A 1"</span>);
+<span class="macro">assert_eq!</span>(Enum::B(<span class="number">2</span>).to_string(), <span class="string">"Variant: 2 &amp; 2"</span>);
+<span class="macro">assert_eq!</span>(Enum::C.to_string(), <span class="string">"c"</span>);</code></pre></div>
 <h3 id="example-usage"><a class="doc-anchor" href="#example-usage">§</a>Example usage</h3>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attr">#[derive(Display)]
 </span><span class="kw">struct </span>MyInt(i32);

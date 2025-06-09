@@ -1,6 +1,6 @@
 [package]
 name = "glsl-lang-lexer"
-version = "0.7.2"
+version = "0.8.0"
 authors = ["Alixinne <alixinne@pm.me>"]
 edition = "2021"
 license = "BSD-3-Clause"
@@ -14,9 +14,9 @@ categories = ["parser-implementations", "rendering"]
 rust-version = "1.82.0"
 
 [dependencies]
-glsl-lang-pp = "=0.7.2"
-glsl-lang-types = "=0.7.2"
-lang-util = { version = "=0.7.2", features = ["lalrpop"] }
+glsl-lang-pp = "=0.8.0"
+glsl-lang-types = "=0.8.0"
+lang-util = { version = "=0.8.0", features = ["lalrpop"] }
 
 thiserror = "2.0"
 

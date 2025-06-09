@@ -1,6 +1,25 @@
 ## [Unreleased]
 
 - - -
+## v0.8.0 - 2025-06-09
+#### Bug Fixes
+- **(deps)** update rust crate derive_more to v2 - (251a365) - renovate[bot]
+- **(glsl-lang-pp)** properly parse swizzled literals - (a23282f) - *alixinne*
+#### Continuous Integration
+- fix readme generation - (e168463) - alixinne
+#### Features
+- remove deprecated v1 parser - (7dd72a7) - alixinne
+- set MSRV to 1.82.0 - (6580d64) - alixinne
+#### Miscellaneous Chores
+- **(deps)** update dependencies - (c8d2add) - *alixinne*
+- **(deps)** update miette to v7 - (4538ddd) - *alixinne*
+- **(version)** v0.7.2 [skip ci] - (33c5930) - glsl-lang
+- fix clippy warnings - (e96c1bf) - alixinne
+#### Tests
+- update snapshots because of formatting changes - (06d8074) - alixinne
+
+- - -
+
 ## v0.7.2 - 2024-11-22
 #### Bug Fixes
 - **(deps)** update rust crate thiserror to v2 (#57) - (bb7082c) - renovate[bot]

@@ -1,6 +1,6 @@
 [package]
 name = "lang-util"
-version = "0.7.2"
+version = "0.8.0"
 authors = ["Alixinne <alixinne@pm.me>"]
 edition = "2021"
 license = "BSD-3-Clause"
@@ -14,7 +14,7 @@ categories = ["parsing"]
 rust-version = "1.82.0"
 
 [dependencies]
-lang-util-derive = "=0.7.2"
+lang-util-derive = "=0.8.0"
 line-span = "0.1"
 smol_str = "0.3"
 text-size = "1.1"

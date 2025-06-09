@@ -1,6 +1,6 @@
 [package]
 name = "glsl-lang-pp"
-version = "0.7.2"
+version = "0.8.0"
 authors = ["Alixinne <alixinne@pm.me>"]
 edition = "2021"
 license = "BSD-3-Clause"
@@ -15,7 +15,7 @@ build = "build.rs"
 rust-version = "1.82.0"
 
 [dependencies]
-lang-util = "=0.7.2"
+lang-util = "=0.8.0"
 
 string_cache = "0.8"
 thiserror = "2.0"
@@ -33,7 +33,7 @@ itertools = { version = "0.14", optional = true }
 once_cell = { version = "1.21.3", optional = true }
 
 [dev-dependencies]
-lang-util-dev = "=0.7.2"
+lang-util-dev = "=0.8.0"
 
 expect-test = "1.5"
 encoding_rs = "0.8"

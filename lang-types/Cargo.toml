@@ -1,6 +1,6 @@
 [package]
 name = "glsl-lang-types"
-version = "0.7.2"
+version = "0.8.0"
 authors = ["Alixinne <alixinne@pm.me>"]
 edition = "2021"
 license = "BSD-3-Clause"
@@ -14,7 +14,7 @@ categories = ["rendering"]
 rust-version = "1.82.0"
 
 [dependencies]
-lang-util = "=0.7.2"
+lang-util = "=0.8.0"
 thiserror = "2.0"
 
 rserde = { version = "1.0", optional = true, features = ["derive"], package = "serde" }

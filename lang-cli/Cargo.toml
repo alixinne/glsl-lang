@@ -1,6 +1,6 @@
 [package]
 name = "glsl-lang-cli"
-version = "0.7.2"
+version = "0.8.0"
 authors = ["Alixinne <alixinne@pm.me>"]
 edition = "2021"
 license = "BSD-3-Clause"
@@ -14,9 +14,9 @@ categories = ["command-line-interface", "parser-implementations", "rendering"]
 rust-version = "1.82.0"
 
 [dependencies]
-glsl-lang = { version = "=0.7.2", features = ["lexer-full"] }
-glsl-lang-pp = { version = "=0.7.2" }
-lang-util = "=0.7.2"
+glsl-lang = { version = "=0.8.0", features = ["lexer-full"] }
+glsl-lang-pp = { version = "=0.8.0" }
+lang-util = "=0.8.0"
 argh = "0.1"
 
 serde_json = { version = "1.0", optional = true }

@@ -55,7 +55,7 @@ mod tests {
 
     fn test_hash_ident_with_lexer<'i>(lexer: impl LangLexer<'i, Input = &'i str>) {
         let tokens: Vec<_> = lexer.run(ParseContext::default()).collect();
-        eprintln!("{:#?}", tokens);
+        eprintln!("{tokens:#?}");
         assert!(tokens.len() > 1);
     }
 

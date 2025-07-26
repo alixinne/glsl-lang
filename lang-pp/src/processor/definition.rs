@@ -463,7 +463,7 @@ impl Definition {
                 let (string, kind) = if string.is_number() {
                     (string.to_string(), DIGITS)
                 } else {
-                    (format!("\"{}\"", string), QUOTE_STRING)
+                    (format!("\"{string}\""), QUOTE_STRING)
                 };
 
                 Self::substitute_string(&string, kind, entire_range)

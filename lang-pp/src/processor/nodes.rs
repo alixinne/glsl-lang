@@ -365,7 +365,7 @@ impl std::fmt::Display for ExtensionName {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             ExtensionName::All => write!(f, "all"),
-            ExtensionName::Specific(name) => write!(f, "{}", name),
+            ExtensionName::Specific(name) => write!(f, "{name}"),
         }
     }
 }

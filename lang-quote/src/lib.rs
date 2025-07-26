@@ -96,7 +96,7 @@ where
 
         stream.into()
     } else {
-        panic!("GLSL error: {:?}", parsed);
+        panic!("GLSL error: {parsed:?}");
     }
 }
 

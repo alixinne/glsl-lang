@@ -55,7 +55,7 @@ impl<K: PathKey + 'static> Paths<K> {
 
         let paths: HashMap<_, _> = K::all()
             .iter()
-            .map(|key| (key.clone(), PathBuf::from(format!("{}.{}", file_name, key))))
+            .map(|key| (key.clone(), PathBuf::from(format!("{file_name}.{key}"))))
             .collect();
 
         // Pre-run cleanup

@@ -44,7 +44,7 @@ jobs:
       - name: Check clippy lints
         run: cargo clippy -- -D warnings -A clippy::result_large_err
 
-      - uses: cocogitto/cocogitto-action@v3.8
+      - uses: cocogitto/cocogitto-action@v3.11
         with:
           check-latest-tag-only: true
           git-user: glsl-lang
@@ -159,7 +159,7 @@ jobs:
               && cargo-workspaces -V
           )
 
-      - uses: cocogitto/cocogitto-action@v3.8
+      - uses: cocogitto/cocogitto-action@v3.11
         id: release
         # Set to true because the action fails if there's nothing to release
         continue-on-error: true

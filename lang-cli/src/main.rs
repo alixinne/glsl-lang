@@ -46,7 +46,7 @@ fn output_glsl(output: &mut dyn std::io::Write, tu: TranslationUnit) -> std::io:
     )
     .unwrap();
 
-    write!(output, "{}", s)?;
+    write!(output, "{s}")?;
 
     Ok(())
 }
@@ -153,7 +153,7 @@ fn main() -> Result<(), std::io::Error> {
         #[cfg(feature = "json")]
         "json" => output_json,
         "glsl" => output_glsl,
-        other => panic!("unknown output format: {}", other),
+        other => panic!("unknown output format: {other}"),
     };
 
     let mut s = String::new();
@@ -177,7 +177,7 @@ fn main() -> Result<(), std::io::Error> {
             output_fn(&mut std::io::stdout(), tu)?;
         }
         Err(diag) => {
-            eprintln!("{:?}", diag);
+            eprintln!("{diag:?}");
             std::process::exit(1);
         }
     }

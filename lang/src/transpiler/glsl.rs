@@ -908,7 +908,7 @@ where
     f.write_str("struct ")?;
 
     if let Some(ref name) = st.name {
-        write!(f, "{}", name)?;
+        write!(f, "{name}")?;
     }
 
     state.enter_block(f)?;
@@ -1195,9 +1195,9 @@ where
     F: Write + ?Sized,
 {
     if x.fract() == 0. {
-        write!(f, "{}.", x)
+        write!(f, "{x}.")
     } else {
-        write!(f, "{}", x)
+        write!(f, "{x}")
     }
 }
 
@@ -1207,9 +1207,9 @@ where
     F: Write + ?Sized,
 {
     if x.fract() == 0. {
-        write!(f, "{}.lf", x)
+        write!(f, "{x}.lf")
     } else {
-        write!(f, "{}lf", x)
+        write!(f, "{x}lf")
     }
 }
 
@@ -1224,9 +1224,9 @@ where
 {
     match **expr {
         ast::ExprData::Variable(ref i) => show_identifier(f, i, state),
-        ast::ExprData::IntConst(ref x) => write!(f, "{}", x),
-        ast::ExprData::UIntConst(ref x) => write!(f, "{}u", x),
-        ast::ExprData::BoolConst(ref x) => write!(f, "{}", x),
+        ast::ExprData::IntConst(ref x) => write!(f, "{x}"),
+        ast::ExprData::UIntConst(ref x) => write!(f, "{x}u"),
+        ast::ExprData::BoolConst(ref x) => write!(f, "{x}"),
         ast::ExprData::FloatConst(ref x) => show_float(f, *x, state),
         ast::ExprData::DoubleConst(ref x) => show_double(f, *x, state),
         ast::ExprData::Unary(ref op, ref e) => {
@@ -1415,8 +1415,8 @@ where
     F: Write + ?Sized,
 {
     match **path {
-        ast::PathData::Absolute(ref s) => write!(f, "<{}>", s),
-        ast::PathData::Relative(ref s) => write!(f, "\"{}\"", s),
+        ast::PathData::Absolute(ref s) => write!(f, "<{s}>"),
+        ast::PathData::Relative(ref s) => write!(f, "\"{s}\""),
     }
 }
 
@@ -2092,24 +2092,24 @@ where
         ast::PreprocessorDefineData::ObjectLike {
             ref ident,
             ref value,
-        } => write!(f, "#define {} {}", ident, value),
+        } => write!(f, "#define {ident} {value}"),
 
         ast::PreprocessorDefineData::FunctionLike {
             ref ident,
             ref args,
             ref value,
         } => {
-            write!(f, "#define {}(", ident)?;
+            write!(f, "#define {ident}(")?;
 
             if !args.is_empty() {
                 write!(f, "{}", &args[0])?;
 
                 for arg in &args[1..args.len()] {
-                    write!(f, ", {}", arg)?;
+                    write!(f, ", {arg}")?;
                 }
             }
 
-            write!(f, ") {}", value)
+            write!(f, ") {value}")
         }
     }
 }
@@ -2216,7 +2216,7 @@ where
 {
     write!(f, "#line {}", pl.line)?;
     if let Some(source_string_number) = pl.source_string_number {
-        write!(f, " {}", source_string_number)?;
+        write!(f, " {source_string_number}")?;
     }
     Ok(())
 }
@@ -2614,7 +2614,7 @@ return vec2(0., 0.);
         show_expr(&mut output, &input, &mut FormattingState::default()).unwrap();
 
         let back = ast::Expr::parse(&output).unwrap();
-        assert_eq!(back, input, "intermediate source '{}'", output);
+        assert_eq!(back, input, "intermediate source '{output}'");
     }
 
     #[test]

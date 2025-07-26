@@ -77,7 +77,7 @@ impl<T: NodeDisplay> fmt::Display for NodeDisplayWrapper<'_, T> {
                     write!(f, "{}@{}..{}", name, u32::from(start), u32::from(end))?;
                 }
             } else {
-                write!(f, "{}", name)?;
+                write!(f, "{name}")?;
             }
 
             self.node.display_extra(f)?;

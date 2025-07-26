@@ -91,22 +91,20 @@ impl std::fmt::Display for ProcessingErrorKind {
                 if ident.starts_with("GL_") {
                     write!(
                         f,
-                        "'#{}' : names beginning with \"GL_\" can't be (un)defined: {}",
-                        directive, ident
+                        "'#{directive}' : names beginning with \"GL_\" can't be (un)defined: {ident}"
                     )
                 } else {
                     write!(
                         f,
-                        "'#{}' : predefined names can't be (un)defined: {}",
-                        directive, ident
+                        "'#{directive}' : predefined names can't be (un)defined: {ident}"
                     )
                 }
             }
             ProcessingErrorKind::ErrorDirective { message } => {
-                write!(f, "'#error' : {}", message)
+                write!(f, "'#error' : {message}")
             }
             ProcessingErrorKind::UnterminatedMacroInvocation { ident } => {
-                write!(f, "'macro expansion' : end of input in macro {}", ident)
+                write!(f, "'macro expansion' : end of input in macro {ident}")
             }
             ProcessingErrorKind::UnexpectedDirective { ident, node } => {
                 write!(f, "'macro expansion' : unexpected directive while scanning for macro invocation {} argument list: \"{}\"", ident, node.text())
@@ -116,20 +114,20 @@ impl std::fmt::Display for ProcessingErrorKind {
                 expected,
                 actual,
             } => {
-                write!(f, "'macro expansion' : wrong number of arguments in input of macro {} : expected {}, got {}", ident, expected, actual)
+                write!(f, "'macro expansion' : wrong number of arguments in input of macro {ident} : expected {expected}, got {actual}")
             }
             ProcessingErrorKind::IncludeNotSupported => {
                 write!(f, "'#include' : required extension not requested: GL_GOOGLE_include_directive or GL_ARB_shading_language_include")
             }
             ProcessingErrorKind::IncludeNotFound { path } => {
-                write!(f, "'#include' : could not find file for {}", path)
+                write!(f, "'#include' : could not find file for {path}")
             }
             ProcessingErrorKind::InvalidTokenPaste { token } => {
                 if let Some(token) = token {
                     if token.ends_with(" ##") {
                         write!(f, "'##' : invalid use of paste operator")
                     } else {
-                        write!(f, "'##' : invalid pasted token : {}", token)
+                        write!(f, "'##' : invalid pasted token : {token}")
                     }
                 } else {
                     write!(f, "'##' : invalid use of paste operator")
@@ -139,46 +137,46 @@ impl std::fmt::Display for ProcessingErrorKind {
                 write!(f, "'#line' : required extension not requested: GL_GOOGLE_cpp_style_line_directive")
             }
             ProcessingErrorKind::DirectiveVersion(inner) => {
-                write!(f, "'#version' : {}", inner)
+                write!(f, "'#version' : {inner}")
             }
             ProcessingErrorKind::DirectiveExtension(inner) => {
-                write!(f, "'#extension' : {}", inner)
+                write!(f, "'#extension' : {inner}")
             }
             ProcessingErrorKind::DirectiveDefine(inner) => {
-                write!(f, "'#define' : {}", inner)
+                write!(f, "'#define' : {inner}")
             }
             ProcessingErrorKind::DirectiveIfDef(inner) => {
-                write!(f, "'#ifdef' : {}", inner)
+                write!(f, "'#ifdef' : {inner}")
             }
             ProcessingErrorKind::DirectiveIfNDef(inner) => {
-                write!(f, "'#ifndef' : {}", inner)
+                write!(f, "'#ifndef' : {inner}")
             }
             ProcessingErrorKind::DirectiveIf(inner) => {
-                write!(f, "'#if' : {}", inner)
+                write!(f, "'#if' : {inner}")
             }
             ProcessingErrorKind::DirectiveElif(inner) => {
-                write!(f, "'#elif' : {}", inner)
+                write!(f, "'#elif' : {inner}")
             }
             ProcessingErrorKind::DirectiveElse(inner) => {
-                write!(f, "'#else' : {}", inner)
+                write!(f, "'#else' : {inner}")
             }
             ProcessingErrorKind::DirectiveEndIf(inner) => {
-                write!(f, "'#endif' : {}", inner)
+                write!(f, "'#endif' : {inner}")
             }
             ProcessingErrorKind::DirectiveUndef(inner) => {
-                write!(f, "'#undef' : {}", inner)
+                write!(f, "'#undef' : {inner}")
             }
             ProcessingErrorKind::DirectiveError(inner) => {
-                write!(f, "'#error' : {}", inner)
+                write!(f, "'#error' : {inner}")
             }
             ProcessingErrorKind::DirectiveInclude(inner) => {
-                write!(f, "'#include' : {}", inner)
+                write!(f, "'#include' : {inner}")
             }
             ProcessingErrorKind::DirectiveLine(inner) => {
-                write!(f, "'#line' : {}", inner)
+                write!(f, "'#line' : {inner}")
             }
             ProcessingErrorKind::DirectivePragma(inner) => {
-                write!(f, "'#pragma' : {}", inner)
+                write!(f, "'#pragma' : {inner}")
             }
         }
     }
@@ -208,11 +206,11 @@ impl std::error::Error for ErrorKind {}
 impl std::fmt::Display for ErrorKind {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            ErrorKind::Parse(parse) => write!(f, "{}", parse),
-            ErrorKind::Processing(processing) => write!(f, "{}", processing),
-            ErrorKind::WarnExtUse { extension, .. } => write!(f, "warning use of '{}'", extension),
+            ErrorKind::Parse(parse) => write!(f, "{parse}"),
+            ErrorKind::Processing(processing) => write!(f, "{processing}"),
+            ErrorKind::WarnExtUse { extension, .. } => write!(f, "warning use of '{extension}'"),
             ErrorKind::UnsupportedExt { extension, .. } => {
-                write!(f, "extension not supported: {}", extension)
+                write!(f, "extension not supported: {extension}")
             }
         }
     }
@@ -382,7 +380,7 @@ impl std::fmt::Debug for OutputToken {
         for idx in 21..25 {
             if text.is_char_boundary(idx) {
                 let text = format!("{} ...", &text[..idx]);
-                return write!(f, " {:?}", text);
+                return write!(f, " {text:?}");
             }
         }
 

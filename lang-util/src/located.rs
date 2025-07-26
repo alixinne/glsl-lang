@@ -37,8 +37,8 @@ impl fmt::Display for FileOverride {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             FileOverride::None => Ok(()),
-            FileOverride::Number(number) => write!(f, "{}", number),
-            FileOverride::Path(path) => write!(f, "{}", path),
+            FileOverride::Number(number) => write!(f, "{number}"),
+            FileOverride::Path(path) => write!(f, "{path}"),
         }
     }
 }
@@ -53,7 +53,7 @@ pub trait Resolver {
     fn resolve(&self, offset: TextSize) -> (u32, u32);
 }
 
-impl<'s> Resolver for &'s str {
+impl Resolver for &str {
     fn resolve(&self, offset: TextSize) -> (u32, u32) {
         let offset: usize = offset.into();
         let offset = if offset >= self.len() {
@@ -313,7 +313,7 @@ impl<E: std::fmt::Display> std::fmt::Display for Located<E> {
             if let Some(path) = self.path.as_ref() {
                 write!(f, "{}:", path.display())?;
             } else if let Some(current_file) = self.current_file {
-                write!(f, "{}:", current_file)?;
+                write!(f, "{current_file}:")?;
             }
         } else {
             write!(f, "{}:", self.file_override)?;

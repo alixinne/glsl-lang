@@ -303,9 +303,9 @@ impl<E: LexicalError> fmt::Display for ParseErrorKind<E> {
                 )
             }
             ParseErrorKind::ExtraToken { token } => {
-                write!(f, "extra {} at end of input", token)
+                write!(f, "extra {token} at end of input")
             }
-            ParseErrorKind::LexicalError { error } => write!(f, "{}", error),
+            ParseErrorKind::LexicalError { error } => write!(f, "{error}"),
         }
     }
 }

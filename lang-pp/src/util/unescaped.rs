@@ -194,8 +194,8 @@ impl<'s> std::fmt::Display for TokenText<'s> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match &self.0 {
             TokenTextRepr::Raw(s) => write!(f, "{}", Unescaped::from(*s)),
-            TokenTextRepr::Unescaped(s) => write!(f, "{}", s),
-            TokenTextRepr::JustUnescaped(s) => write!(f, "{}", s),
+            TokenTextRepr::Unescaped(s) => write!(f, "{s}"),
+            TokenTextRepr::JustUnescaped(s) => write!(f, "{s}"),
         }
     }
 }

@@ -66,8 +66,8 @@ impl LocationString<'_> {
 impl std::fmt::Display for LocationString<'_> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            LocationString::Number(num) => write!(f, "{}", num),
-            LocationString::String(path) => write!(f, "{}", path),
+            LocationString::Number(num) => write!(f, "{num}"),
+            LocationString::String(path) => write!(f, "{path}"),
         }
     }
 }

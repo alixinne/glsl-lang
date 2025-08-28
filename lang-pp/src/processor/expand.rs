@@ -407,17 +407,18 @@ impl ExpandOne {
                 let expr = match &directive {
                     Ok(elif_) => {
                         if self.if_stack.if_group_active() {
-                            let (value, error) = if active {
-                                elif_.eval(current_state, &self.location)
+                            if !self.if_stack.none() {
+                                // Always false if the last if state was activated once
+                                false
+                            } else if active {
+                                let (value, error) = elif_.eval(current_state, &self.location);
+                                if let Some(error) = error {
+                                    errors.push(ProcessingErrorKind::DirectiveElif(error));
+                                }
+                                value
                             } else {
-                                (true, None)
-                            };
-
-                            if let Some(error) = error {
-                                errors.push(ProcessingErrorKind::DirectiveElif(error));
+                                true
                             }
-
-                            value
                         } else {
                             // Do not evaluate if the group is not active
                             true

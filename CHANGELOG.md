@@ -1,6 +1,14 @@
 ## [Unreleased]
 
 - - -
+## v0.8.1 - 2025-09-15
+#### Bug Fixes
+- **(glsl-lang-pp)** eval and expand #elif only if the last is none (#61) - (c8a070b) - Yorkie
+#### Miscellaneous Chores
+- **(version)** v0.8.0 [skip ci] - (962911b) - glsl-lang
+
+- - -
+
 ## v0.8.0 - 2025-06-09
 #### Bug Fixes
 - **(deps)** update rust crate derive_more to v2 - (251a365) - renovate[bot]

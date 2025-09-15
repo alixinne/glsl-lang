@@ -1,6 +1,6 @@
 [package]
 name = "lang-util-dev"
-version = "0.8.0"
+version = "0.8.1"
 authors = ["Alixinne <alixinne@pm.me>"]
 edition = "2021"
 license = "BSD-3-Clause"

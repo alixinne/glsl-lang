@@ -417,7 +417,12 @@ impl ExpandOne {
                                 errors.push(ProcessingErrorKind::DirectiveElif(error));
                             }
 
-                            value
+                            if !self.if_stack.none() {
+                                // Always false if the last if state was activated once
+                                false
+                            } else {
+                                value
+                            }
                         } else {
                             // Do not evaluate if the group is not active
                             true

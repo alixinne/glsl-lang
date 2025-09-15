@@ -110,6 +110,9 @@ jobs:
         env:
           IGNORE_TESTS: ${{ matrix.ignore_tests }}
 
+      - name: Run glsl-lang-pp/additional tests
+        run: cargo test -p glsl-lang-pp --test additional --features full
+
       - name: Run glsl-lang-pp/glslang tests
         run: cargo test -p glsl-lang-pp --test glslang --features full
 

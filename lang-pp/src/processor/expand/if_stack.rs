@@ -20,6 +20,10 @@ impl IfState {
         }
     }
 
+    pub fn none(&self) -> bool {
+        matches!(self, Self::None)
+    }
+
     pub fn active(&self) -> bool {
         matches!(self, Self::Active { .. })
     }
@@ -93,6 +97,10 @@ impl IfStack {
 
     pub fn active(&self) -> bool {
         self.stack.last().map(|top| top.active()).unwrap_or(true)
+    }
+
+    pub fn none(&self) -> bool {
+        self.stack.last().map(|top| top.none()).unwrap_or(false)
     }
 
     pub fn on_if_like(&mut self, expr: bool) {

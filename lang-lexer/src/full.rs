@@ -56,7 +56,7 @@ impl<E: std::error::Error + 'static> std::cmp::PartialEq for LexicalError<E> {
 impl<E: std::error::Error + 'static> std::fmt::Display for LexicalError<E> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            LexicalError::Token { kind, .. } => write!(f, "{}", kind),
+            LexicalError::Token { kind, .. } => write!(f, "{kind}"),
             LexicalError::Processor(error) => write!(f, "{}", error.inner()),
             LexicalError::Io(io) => write!(f, "{}", io.inner()),
         }

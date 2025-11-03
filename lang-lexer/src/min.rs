@@ -24,7 +24,7 @@ pub enum LexicalError {
 impl std::fmt::Display for LexicalError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            LexicalError::Token { kind, .. } => write!(f, "{}", kind),
+            LexicalError::Token { kind, .. } => write!(f, "{kind}"),
         }
     }
 }

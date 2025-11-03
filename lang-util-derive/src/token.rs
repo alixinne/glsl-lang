@@ -174,7 +174,7 @@ impl<'s> Token<'s> {
                         quote_spanned! { self.variant.ident.span() => &[#value] }
                     }
                     Err(error) => {
-                        let s = format!("invalid token attribute: {}", error);
+                        let s = format!("invalid token attribute: {error}");
                         quote_spanned! {
                             attr.span() =>
                                 compile_error!(#s)
@@ -211,7 +211,7 @@ impl<'s> Token<'s> {
 
     fn get_prefixed_fmt(&self, base_fmt: &str) -> String {
         if self.variant.kinds.is_empty() {
-            format!("`{}`", base_fmt)
+            format!("`{base_fmt}`")
         } else {
             format!("{} `{}`", self.variant.kinds.last().unwrap(), base_fmt)
         }
@@ -233,7 +233,7 @@ impl<'s> Token<'s> {
                                 .iter()
                                 .enumerate()
                                 .filter_map(|(i, df)| {
-                                    let ph = format!("_{}", i);
+                                    let ph = format!("_{i}");
 
                                     if fmt.contains(&ph) {
                                         let ph = format_ident!("{}", ph);
@@ -247,7 +247,7 @@ impl<'s> Token<'s> {
                     } else {
                         let mut repl = Vec::new();
                         for (i, df) in declared_fields.iter().enumerate() {
-                            repl.push((format!("_{}", i), df.to_string()));
+                            repl.push((format!("_{i}"), df.to_string()));
                         }
 
                         display
@@ -297,7 +297,7 @@ impl<'s> Token<'s> {
                             quote_spanned! { self.variant.ident.span() => write!(f, #fmt, #value) }
                         }
                         Err(error) => {
-                            let s = format!("invalid token attribute: {}", error);
+                            let s = format!("invalid token attribute: {error}");
                             quote_spanned! {
                                 attr.span() =>
                                     compile_error!(#s)
@@ -423,7 +423,7 @@ impl std::fmt::Display for AsParserError {
         match self {
             Self::MissingDisplayImpl => write!(f, "in lang_util attribute, `parser = display` specified but not display implementation provided"),
             Self::InvalidAs => write!(f, "invalid `parser` value, expected display or a literal string"),
-            Self::InvalidTokenAttribute(error) => write!(f, "invalid token attribute: {}", error),
+            Self::InvalidTokenAttribute(error) => write!(f, "invalid token attribute: {error}"),
             Self::NoTokenOrAs => write!(f, "missing token or lang_util(parser = \"...\") attributes"),
         }
     }

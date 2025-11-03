@@ -87,7 +87,7 @@ impl Extractable<ast::TranslationUnit> for ast::FunctionDefinition {
 
 impl Extractable<ast::TranslationUnit> for ast::UnaryOp {
     fn wrap(source: &str) -> Cow<str> {
-        format!("void main() {{ {}x; }}", source).into()
+        format!("void main() {{ {source}x; }}").into()
     }
 
     fn extract(ast::TranslationUnit(extdecls): ast::TranslationUnit) -> Option<Self> {
@@ -127,7 +127,7 @@ impl Extractable<ast::TranslationUnit> for ast::UnaryOp {
 
 impl Extractable<ast::TranslationUnit> for ast::AssignmentOp {
     fn wrap(source: &str) -> Cow<str> {
-        format!("void main() {{ x {} 2; }}", source).into()
+        format!("void main() {{ x {source} 2; }}").into()
     }
 
     fn extract(ast::TranslationUnit(extdecls): ast::TranslationUnit) -> Option<Self> {
@@ -214,7 +214,7 @@ impl_parsable_statement!(Compound => ast::CompoundStatement);
 
 impl Extractable<ast::TranslationUnit> for ast::ArraySpecifierDimension {
     fn wrap(source: &str) -> Cow<str> {
-        format!("void main() {{ vec2{}(); }}", source).into()
+        format!("void main() {{ vec2{source}(); }}").into()
     }
 
     fn extract(ast::TranslationUnit(extdecls): ast::TranslationUnit) -> Option<Self> {
@@ -271,7 +271,7 @@ impl Extractable<ast::TranslationUnit> for ast::ArraySpecifierDimension {
 
 impl Extractable<ast::TranslationUnit> for ast::ArraySpecifier {
     fn wrap(source: &str) -> Cow<str> {
-        format!("void main() {{ vec2{}(); }}", source).into()
+        format!("void main() {{ vec2{source}(); }}").into()
     }
 
     fn extract(ast::TranslationUnit(extdecls): ast::TranslationUnit) -> Option<Self> {
@@ -328,7 +328,7 @@ impl Extractable<ast::TranslationUnit> for ast::ArraySpecifier {
 
 impl Extractable<ast::TranslationUnit> for ast::FunIdentifier {
     fn wrap(source: &str) -> Cow<str> {
-        format!("void main() {{ {}(); }}", source).into()
+        format!("void main() {{ {source}(); }}").into()
     }
 
     fn extract(ast::TranslationUnit(extdecls): ast::TranslationUnit) -> Option<Self> {
@@ -368,7 +368,7 @@ impl Extractable<ast::TranslationUnit> for ast::FunIdentifier {
 
 impl Extractable<ast::TranslationUnit> for ast::InterpolationQualifier {
     fn wrap(source: &str) -> Cow<str> {
-        format!("{} float x;", source).into()
+        format!("{source} float x;").into()
     }
 
     fn extract(ast::TranslationUnit(extdecls): ast::TranslationUnit) -> Option<Self> {
@@ -425,7 +425,7 @@ impl Extractable<ast::TranslationUnit> for ast::InterpolationQualifier {
 
 impl Extractable<ast::TranslationUnit> for ast::ArrayedIdentifier {
     fn wrap(source: &str) -> Cow<str> {
-        format!("uniform Block {{ float x; }} {};", source).into()
+        format!("uniform Block {{ float x; }} {source};").into()
     }
 
     fn extract(ast::TranslationUnit(extdecls): ast::TranslationUnit) -> Option<Self> {
@@ -455,7 +455,7 @@ impl Extractable<ast::TranslationUnit> for ast::ArrayedIdentifier {
 
 impl Extractable<ast::TranslationUnit> for ast::PrecisionQualifier {
     fn wrap(source: &str) -> Cow<str> {
-        format!("{} float x;", source).into()
+        format!("{source} float x;").into()
     }
 
     fn extract(ast::TranslationUnit(extdecls): ast::TranslationUnit) -> Option<Self> {
@@ -512,7 +512,7 @@ impl Extractable<ast::TranslationUnit> for ast::PrecisionQualifier {
 
 impl Extractable<ast::TranslationUnit> for ast::StorageQualifier {
     fn wrap(source: &str) -> Cow<str> {
-        format!("{} float x;", source).into()
+        format!("{source} float x;").into()
     }
 
     fn extract(ast::TranslationUnit(extdecls): ast::TranslationUnit) -> Option<Self> {
@@ -569,7 +569,7 @@ impl Extractable<ast::TranslationUnit> for ast::StorageQualifier {
 
 impl Extractable<ast::TranslationUnit> for ast::LayoutQualifier {
     fn wrap(source: &str) -> Cow<str> {
-        format!("{} float x;", source).into()
+        format!("{source} float x;").into()
     }
 
     fn extract(ast::TranslationUnit(extdecls): ast::TranslationUnit) -> Option<Self> {
@@ -626,7 +626,7 @@ impl Extractable<ast::TranslationUnit> for ast::LayoutQualifier {
 
 impl Extractable<ast::TranslationUnit> for ast::TypeQualifier {
     fn wrap(source: &str) -> Cow<str> {
-        format!("{} float x;", source).into()
+        format!("{source} float x;").into()
     }
 
     fn extract(ast::TranslationUnit(extdecls): ast::TranslationUnit) -> Option<Self> {
@@ -672,7 +672,7 @@ impl Extractable<ast::TranslationUnit> for ast::TypeQualifier {
 
 impl Extractable<ast::TranslationUnit> for ast::TypeSpecifier {
     fn wrap(source: &str) -> Cow<str> {
-        format!("{} x;", source).into()
+        format!("{source} x;").into()
     }
 
     fn extract(ast::TranslationUnit(extdecls): ast::TranslationUnit) -> Option<Self> {
@@ -717,7 +717,7 @@ impl Extractable<ast::TranslationUnit> for ast::TypeSpecifier {
 
 impl Extractable<ast::TranslationUnit> for ast::TypeSpecifierNonArray {
     fn wrap(source: &str) -> Cow<str> {
-        format!("{} x;", source).into()
+        format!("{source} x;").into()
     }
 
     fn extract(ast::TranslationUnit(extdecls): ast::TranslationUnit) -> Option<Self> {
@@ -771,7 +771,7 @@ impl Extractable<ast::TranslationUnit> for ast::TypeSpecifierNonArray {
 
 impl Extractable<ast::TranslationUnit> for ast::FullySpecifiedType {
     fn wrap(source: &str) -> Cow<str> {
-        format!("{} x;", source).into()
+        format!("{source} x;").into()
     }
 
     fn extract(ast::TranslationUnit(extdecls): ast::TranslationUnit) -> Option<Self> {
@@ -805,7 +805,7 @@ impl Extractable<ast::TranslationUnit> for ast::FullySpecifiedType {
 
 impl Extractable<ast::TranslationUnit> for ast::Declaration {
     fn wrap(source: &str) -> Cow<str> {
-        format!("{};", source).into()
+        format!("{source};").into()
     }
 
     fn extract(ast::TranslationUnit(extdecls): ast::TranslationUnit) -> Option<Self> {
@@ -823,7 +823,7 @@ impl Extractable<ast::TranslationUnit> for ast::Declaration {
 
 impl Extractable<ast::TranslationUnit> for ast::StructFieldSpecifier {
     fn wrap(source: &str) -> Cow<str> {
-        format!("struct A {{ {} }};", source).into()
+        format!("struct A {{ {source} }};").into()
     }
 
     fn extract(ast::TranslationUnit(extdecls): ast::TranslationUnit) -> Option<Self> {
@@ -884,7 +884,7 @@ impl Extractable<ast::TranslationUnit> for ast::StructFieldSpecifier {
 
 impl Extractable<ast::TranslationUnit> for ast::StructSpecifier {
     fn wrap(source: &str) -> Cow<str> {
-        format!("{};", source).into()
+        format!("{source};").into()
     }
 
     fn extract(ast::TranslationUnit(extdecls): ast::TranslationUnit) -> Option<Self> {
@@ -937,7 +937,7 @@ impl Extractable<ast::TranslationUnit> for ast::StructSpecifier {
 
 impl Extractable<ast::TranslationUnit> for ast::Expr {
     fn wrap(source: &str) -> Cow<str> {
-        format!("void main() {{ {}; }}", source).into()
+        format!("void main() {{ {source}; }}").into()
     }
 
     fn extract(ast::TranslationUnit(extdecls): ast::TranslationUnit) -> Option<Self> {
@@ -991,7 +991,7 @@ impl Extractable<ast::TranslationUnit> for ast::Preprocessor {
 
 impl Extractable<ast::TranslationUnit> for ast::Statement {
     fn wrap(source: &str) -> Cow<str> {
-        format!("void main() {{ {} }}", source).into()
+        format!("void main() {{ {source} }}").into()
     }
 
     fn extract(ast::TranslationUnit(extdecls): ast::TranslationUnit) -> Option<Self> {

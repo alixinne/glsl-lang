@@ -790,7 +790,7 @@ impl Token {
             Self::TypeName(s) => s,
             Self::PpPathRelative(s) => s,
             Self::PpPathAbsolute(s) => s,
-            _ => panic!("cannot convert token {:?}, to str", self),
+            _ => panic!("cannot convert token {self:?}, to str"),
         }
     }
 }
@@ -818,7 +818,7 @@ impl From<Token> for String {
     fn from(value: Token) -> Self {
         match value {
             Token::PpRest(s) => s,
-            other => panic!("cannot convert {:?} into String", other),
+            other => panic!("cannot convert {other:?} into String"),
         }
     }
 }

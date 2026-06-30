@@ -17,7 +17,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         with:
           key: ${{ runner.os }}
           path: |
@@ -139,7 +139,7 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GH_PAT }}
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         with:
           key: ${{ runner.os }}-cargo-release-tools-v1
           path: |
